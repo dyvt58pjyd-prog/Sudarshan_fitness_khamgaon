@@ -797,27 +797,30 @@ body::after {
    LAYOUT IMPROVEMENTS & RESIZING
    ================================== */
 
-/* Make Sidebar Fixed (Persistent on scroll) */
-.page-container .sidebar-menu {
-  position: fixed !important;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1000 !important;
-  height: 100vh !important;
-  overflow-y: auto !important;
-  transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+/* Make Sidebar Fixed (Persistent on scroll) ONLY on desktop */
+@media (min-width: 768px) {
+  .page-container .sidebar-menu {
+    position: fixed !important;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000 !important;
+    height: 100vh !important;
+    overflow-y: auto !important;
+    transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  }
+
+  /* Adjust Main Content to not overlap with fixed sidebar */
+  .page-container {
+    padding-left: 280px !important;
+    transition: padding 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  }
+
+  .page-container.sidebar-collapsed {
+    padding-left: 65px !important;
+  }
 }
 
-/* Adjust Main Content to not overlap with fixed sidebar */
-.page-container {
-  padding-left: 280px !important;
-  transition: padding 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-}
-
-.page-container.sidebar-collapsed {
-  padding-left: 65px !important;
-}
 
 /* Make page container take full screen gracefully */
 .main-content {
