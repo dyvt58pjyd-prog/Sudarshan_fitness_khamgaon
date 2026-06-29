@@ -173,7 +173,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                             }
                         </style>
                         <div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
-                            <a href="#" onclick="alert(\'Congratulations on pre-booking! Please note that your official membership will begin on July 8th, 2026 when the gym officially opens!\'); window.location.href=\'register.php\';" 
+                            <a href="#" onclick="alert(\'Congratulations on pre-booking! Please note that your official membership will begin on July 8th, 2026 when the gym officially opens!\\n\\nअभिनंदन! कृपया नोंद घ्या की तुमची अधिकृत मेंबरशिप ८ जुलै २०२६ रोजी जिम सुरू झाल्यावर सुरू होईल!\'); window.location.href=\'register.php\';" 
                                class="btn" 
                                style="display: block; width: 100%; background: linear-gradient(270deg, #ff007f, #7928ca, #ff007f); background-size: 200% 200%; color: white !important; font-size: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; padding: 18px 20px; border-radius: 12px; border: none; text-decoration: none; animation: intense-pulse 1.5s infinite alternate, color-shift 3s ease infinite;">
                                ⚡ PRE-BOOK NOW! ⚡
