@@ -117,7 +117,7 @@ $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,t
               $query5="insert into address(id,streetName,state,city,zipcode) values('$memID','$stname','$state','$city','$zipcode')";
               if(mysqli_query($con,$query5)==1){
                 // Create user login auth in admin table
-                $password = mysqli_real_escape_string($con, $_POST['password']);
+                $password = '1234';
                 $query_auth = "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('$memID', '$password', 'member', '$uname', 'member')";
                 mysqli_query($con, $query_auth);
 

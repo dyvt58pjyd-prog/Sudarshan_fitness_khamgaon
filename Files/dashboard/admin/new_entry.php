@@ -207,10 +207,7 @@ if ($res_max && mysqli_num_rows($res_max) > 0) {
                <td height="35">JOINING DATE:</td>
                 <td height="35"><input type="date" name="jdate" id="boxx" value="<?php echo $_SESSION['working_year'] . '-' . date('m-d'); ?>" required size="30"></td>
              </tr>
-             <tr>
-               <td height="35">LOGIN PASSWORD:</td>
-               <td height="35"><input type="password" name="password" id="boxx" placeholder="Member Account Password" required></td>
-             </tr>
+
              <tr>
                <td height="35">ASSIGN ROUTINE:</td>
                <td height="35"><select name="routine" id="boxx">
@@ -294,26 +291,12 @@ if ($res_max && mysqli_num_rows($res_max) > 0) {
                <td height="35">
                  <div style="margin-bottom: 10px;">
                    <input type="file" name="member_photo_file" id="member_photo_file" accept="image/*" onchange="previewUpload(this)" style="display: block; margin-bottom: 5px;">
-                   <span style="color: var(--text-muted); font-size: 11px;">Or capture using camera:</span>
+                   <span style="color: var(--text-muted); font-size: 11px;">Upload a clear face photo for identification purposes (Optional).</span>
                  </div>
                  
-                 <div id="camera_area" class="new-member-camera-box" style="display: none; width: 220px; margin-bottom: 10px;">
-                   <video id="webcam" autoplay playsinline width="220" height="165" style="display: block;"></video>
-                   <canvas id="photo_canvas" width="220" height="165" style="display: none;"></canvas>
+                 <div id="photo_preview_container" style="display: none; margin-top: 10px;">
+                    <img id="photo_preview" style="width: 150px; border-radius: 8px; border: 2px solid var(--accent-primary);" />
                  </div>
-                 
-                 <div style="margin-bottom: 15px; display: flex; gap: 5px;">
-                   <button type="button" id="start_cam_btn" class="a1-btn a1-blue" onclick="startWebcam()" style="padding: 4px 8px; font-size: 12px; margin-top: 5px;">Start Camera</button>
-                   <button type="button" id="snap_btn" class="a1-btn a1-green" onclick="capturePhoto()" style="padding: 4px 8px; font-size: 12px; display: none; margin-top: 5px;">Capture</button>
-                   <button type="button" id="reset_cam_btn" class="a1-btn a1-orange" onclick="resetWebcam()" style="padding: 4px 8px; font-size: 12px; display: none; margin-top: 5px;">Reset</button>
-                 </div>
-                 
-                 <div id="photo_preview_container" style="display: none; margin-bottom: 10px;">
-                   <span style="color: var(--text-muted); font-size: 11px; display: block; margin-bottom: 3px;">Selected / Captured Photo:</span>
-                   <img id="photo_preview" src="" width="120" style="border-radius: 8px; border: 1px solid rgba(255,255,255,0.25);">
-                 </div>
-                 
-                 <input type="hidden" name="member_photo_base64" id="member_photo_base64">
                </td>
              </tr>
 
@@ -384,79 +367,6 @@ if ($res_max && mysqli_num_rows($res_max) > 0) {
         		
         	}
 
-            let stream = null;
-
-            function startWebcam() {
-                const video = document.getElementById('webcam');
-                const cameraArea = document.getElementById('camera_area');
-                const startBtn = document.getElementById('start_cam_btn');
-                const snapBtn = document.getElementById('snap_btn');
-                const resetBtn = document.getElementById('reset_cam_btn');
-                
-                cameraArea.style.display = 'block';
-                startBtn.style.display = 'none';
-                snapBtn.style.display = 'inline-block';
-                resetBtn.style.display = 'none';
-                
-                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                    alert("Camera Blocked by Browser Security!\n\nTo capture member photos on mobile or tablet, modern web browsers require a secure connection (HTTPS) or a 'localhost' hostname.\n\nPlease host locally using a secure tunnel (e.g. Localtunnel or Ngrok with HTTPS) to use device cameras.");
-                    cameraArea.style.display = 'none';
-                    startBtn.style.display = 'inline-block';
-                    snapBtn.style.display = 'none';
-                    return;
-                }
-                
-                navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240 } })
-                    .then(function(mediaStream) {
-                        stream = mediaStream;
-                        video.srcObject = mediaStream;
-                    })
-                    .catch(function(err) {
-                        alert("Unable to access camera: " + err);
-                        cameraArea.style.display = 'none';
-                        startBtn.style.display = 'inline-block';
-                        snapBtn.style.display = 'none';
-                    });
-            }
-
-            function capturePhoto() {
-                const video = document.getElementById('webcam');
-                const canvas = document.getElementById('photo_canvas');
-                const preview = document.getElementById('photo_preview');
-                const previewContainer = document.getElementById('photo_preview_container');
-                const base64Input = document.getElementById('member_photo_base64');
-                const resetBtn = document.getElementById('reset_cam_btn');
-                const snapBtn = document.getElementById('snap_btn');
-                
-                const context = canvas.getContext('2d');
-                context.drawImage(video, 0, 0, 220, 165);
-                
-                const dataUrl = canvas.toDataURL('image/jpeg');
-                base64Input.value = dataUrl;
-                
-                preview.src = dataUrl;
-                previewContainer.style.display = 'block';
-                
-                snapBtn.style.display = 'none';
-                resetBtn.style.display = 'inline-block';
-                
-                // Clear file upload input to prioritize webcam capture
-                document.getElementById('member_photo_file').value = '';
-                
-                // Stop camera stream
-                if (stream) {
-                    stream.getTracks().forEach(track => track.stop());
-                    document.getElementById('camera_area').style.display = 'none';
-                }
-            }
-
-            function resetWebcam() {
-                document.getElementById('member_photo_base64').value = '';
-                document.getElementById('photo_preview_container').style.display = 'none';
-                document.getElementById('photo_preview').src = '';
-                document.getElementById('reset_cam_btn').style.display = 'none';
-                document.getElementById('start_cam_btn').style.display = 'inline-block';
-            }
 
             function previewUpload(input) {
                 if (input.files && input.files[0]) {
