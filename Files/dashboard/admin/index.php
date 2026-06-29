@@ -790,7 +790,8 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			<!-- Live Capacity Speedometer -->
 			<?php include 'speedometer_widget.php'; ?>
 			
-			<div class="col-sm-3"><a href="revenue_month.php">			
+			<div class="row">
+				<div class="col-sm-3"><a href="revenue_month.php">			
 				<div class="tile-stats tile-red">
 					<div class="icon"><i class="entypo-credit-card"></i></div>
 						<div class="num" data-postfix="" data-duration="1500" data-delay="0">
@@ -886,6 +887,9 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 						</div>
 				</div></a>
 			</div>
+			
+			</div>
+			<!-- End of Metric Tiles Row -->
 			
 			<!-- Monthly Leaderboard Section -->
 			<?php include 'leaderboard_widget.php'; ?>
