@@ -27,8 +27,7 @@ if ($percentage >= 50 && $percentage < 80) {
 }
 ?>
 
-<div class="row" style="margin-bottom: 20px;">
-    <div class="col-md-12">
+<div class="col-md-12" style="margin-bottom: 20px;">
         <div style="background: var(--glass-bg); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 12px; padding: 25px; box-shadow: var(--glass-shadow); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
             
             <div style="flex: 1; min-width: 250px;">
@@ -59,6 +58,4 @@ if ($percentage >= 50 && $percentage < 80) {
                 <div style="font-size: 14px; font-weight: 700; color: <?php echo $status_color; ?>; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px;"><?php echo $status_text; ?></div>
             </div>
             
-        </div>
     </div>
-</div>
