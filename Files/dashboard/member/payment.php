@@ -442,7 +442,7 @@ if (isset($_POST['submit_payment'])) {
                 const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
                 const isMobile = isAndroid || isIOS || /webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
                 
-                const queryStr = `?pa=${cleanUpiId}&pn=${encodeURIComponent(gymName)}&am=${cleanAmount}&tn=${orderPrefix}-${timestamp}&cu=INR`;
+                const queryStr = `?pa=${cleanUpiId}&pn=${encodeURIComponent(gymName)}&am=${cleanAmount}&tn=${encodeURIComponent('Paying for Sudarshan Fitness Gym Khamgaon')}&cu=INR`;
                 let upiUrl = '';
                 if (isAndroid) {
                     upiUrl = `intent://pay${queryStr}#Intent;scheme=upi;end;`;

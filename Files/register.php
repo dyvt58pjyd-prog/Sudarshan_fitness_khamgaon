@@ -631,7 +631,7 @@ if (isset($_POST['submit_registration'])) {
                 const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
                 const isMobile = isAndroid || isIOS || /webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
                 
-                const queryStr = `?pa=${cleanUpiId}&pn=${encodeURIComponent(gymName)}&am=${cleanAmount}&tn=REG-${timestamp}&cu=INR`;
+                const queryStr = `?pa=${cleanUpiId}&pn=${encodeURIComponent(gymName)}&am=${cleanAmount}&tn=${encodeURIComponent('Paying for Sudarshan Fitness Gym Khamgaon')}&cu=INR`;
                 let upiUrl = '';
                 if (isAndroid) {
                     upiUrl = `intent://pay${queryStr}#Intent;scheme=upi;end;`;
@@ -717,6 +717,21 @@ if (isset($_POST['submit_registration'])) {
                     }
                 });
             }
+            
+            // Programmatic launcher for iOS buttons
+            const iosBtns = ['ios-phonepe', 'ios-gpay', 'ios-paytm', 'ios-other'];
+            iosBtns.forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const upiUrl = this.getAttribute('href');
+                        if (upiUrl && upiUrl !== '#') {
+                            window.location.href = upiUrl;
+                        }
+                    });
+                }
+            });
 
         });
         // ==========================================
