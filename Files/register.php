@@ -360,7 +360,7 @@ if (isset($_POST['submit_registration'])) {
                             </div>
                             <div class="form-group-premium">
                                 <label>State</label>
-                                <input type="text" name="state" class="form-control-premium" placeholder="State" required>
+                                <input type="text" name="state" class="form-control-premium" value="Maharashtra" readonly style="background-color: rgba(255,255,255,0.05); color: #888;" required>
                             </div>
                             <div class="form-group-premium">
                                 <label>Zipcode / Pin Code</label>

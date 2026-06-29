@@ -172,7 +172,7 @@ if ($res_max && mysqli_num_rows($res_max) > 0) {
              </tr>
             <tr>
                <td height="35">STATE:</td>
-               <td height="35"><input type="text" name="state" id="boxx" required/ size="30"></td>
+               <td height="35"><input type="text" name="state" id="boxx" value="Maharashtra" readonly style="background-color: #222; color: #888;" required size="30"></td>
              </tr>
             <tr>
                <td height="35">GENDER:</td>
