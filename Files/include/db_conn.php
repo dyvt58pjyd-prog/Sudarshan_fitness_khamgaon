@@ -490,6 +490,12 @@ if (!function_exists('send_member_email')) {
             ";
         }
 
+        $is_prebook = (date('Y-m-d') < '2026-07-08');
+        $welcome_heading = $is_prebook ? "Welcome to the Sudarshan Fitness Family! (Pre-Booking Confirmed)" : "Welcome to the Sudarshan Fitness Family!";
+        $welcome_text = $is_prebook ? 
+            "Congratulations on your Grand Opening Pre-Booking! Your spot is officially secured and your membership will begin on July 8th, 2026. Below are your membership details, portal credentials, and gate passcode. Your official payment receipt PDF has been attached." : 
+            "Congratulations! Your registration with the <strong>Sudarshan Fitness Family</strong> is confirmed. Below are your membership details, credentials, and gate passcode. Your official payment receipt PDF has been attached to this email.";
+
         // Construct HTML Email Body
         $mail_body = "
         <html>
@@ -513,9 +519,9 @@ if (!function_exists('send_member_email')) {
         <body>
             <div class='container'>
                 <div class='top-line'></div>
-                <h2>Welcome to the Sudarshan Fitness Family!</h2>
+                <h2>$welcome_heading</h2>
                 <p>Dear <strong>$name</strong>,</p>
-                <p>Congratulations! Your registration with the <strong>Sudarshan Fitness Family</strong> is confirmed. Below are your membership details, credentials, and gate passcode. Your official payment receipt PDF has been attached to this email.</p>
+                <p>$welcome_text</p>
                 
                 " . (!empty($entry_code) ? "
                 <div style='background: linear-gradient(135deg, #1e1e1e, #0c0c0c); border: 2px solid #ff6b00; border-radius: 12px; padding: 25px; margin: 25px 0; text-align: center; box-shadow: 0 4px 15px rgba(255, 107, 0, 0.15);'>

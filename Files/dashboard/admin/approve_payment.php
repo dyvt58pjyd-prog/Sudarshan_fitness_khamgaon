@@ -78,6 +78,12 @@ if (strpos($pid, 'PT_') === 0) {
         $plan_name = $plan_data['planName'];
         $validity = intval($plan_data['validity']);
         
+        $is_new_member = false;
+        $chk_prev_enroll = mysqli_query($con, "SELECT et_id FROM enrolls_to WHERE uid='$userid'");
+        if (mysqli_num_rows($chk_prev_enroll) == 0) {
+            $is_new_member = true;
+        }
+
         mysqli_query($con, "UPDATE enrolls_to SET renewal='no' WHERE uid='$userid'");
         
         $d = strtotime("+" . $validity . " Months", strtotime($calc_base_date));
@@ -92,7 +98,14 @@ if (strpos($pid, 'PT_') === 0) {
             mysqli_query($con, "UPDATE payment_requests SET status = 'approved' WHERE id = $req_id");
             
             require_once '../../include/smtp_mailer.php';
-            send_payment_email($con, $mem_email, $mem_name, $userid, $plan_name, $amount, $expiredate, $payment_mode, $received_by, $new_entry_code, 0, $amount);
+            if ($is_new_member) {
+                // Fetch gender for welcome email
+                $g_q = mysqli_query($con, "SELECT gender FROM users WHERE userid='$userid'");
+                $gender = ($g_q && mysqli_num_rows($g_q)>0) ? mysqli_fetch_assoc($g_q)['gender'] : '';
+                send_member_email($con, $mem_email, $mem_name, $userid, '1234', $plan_name, $amount, $expiredate, $new_entry_code, 0, $amount, $gender);
+            } else {
+                send_payment_email($con, $mem_email, $mem_name, $userid, $plan_name, $amount, $expiredate, $payment_mode, $received_by, $new_entry_code, 0, $amount);
+            }
             
             echo "<script>alert('Membership Payment Approved and Activated!'); window.location.href='payment_requests.php';</script>";
         } else {
