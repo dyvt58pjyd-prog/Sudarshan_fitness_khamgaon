@@ -100,7 +100,7 @@ if (isset($_POST['submit_payment'])) {
                             mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
                                                 VALUES ('$userid', '$pid', $amount, '$target_file', 'pending', '$utr')");
                             
-                            echo "<script>alert('Payment submitted! It is pending manual approval by Admin.'); window.location.href='index.php';</script>";
+                            echo "<script>alert('Payment submitted! Our AI could not automatically verify the screenshot. It has been sent to the Admin for manual approval.'); window.location.href='index.php';</script>";
                             exit();
                         }
                     } else {
@@ -149,7 +149,7 @@ if (isset($_POST['submit_payment'])) {
                         mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
                                             VALUES ('$userid', '$pid', $amount, '$target_file', 'pending', '$utr')");
                         
-                        echo "<script>alert('PT Payment submitted! It is pending manual approval by Admin.'); window.location.href='index.php';</script>";
+                        echo "<script>alert('PT Payment submitted! Our AI could not automatically verify the screenshot. It has been sent to the Admin for manual approval.'); window.location.href='index.php';</script>";
                         exit();
                     }
                 }

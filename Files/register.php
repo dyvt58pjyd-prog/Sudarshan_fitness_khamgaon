@@ -182,7 +182,7 @@ if (isset($_POST['submit_registration'])) {
                             // Fallback to manual approval
                             mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
                                                 VALUES ('$next_id', '$plan', $amount, '$db_screenshot_path', 'pending', '$utr')");
-                            $success_message = "Registration submitted successfully! Your payment is pending manual approval. Member ID: ";
+                            $success_message = "Registration submitted! Our AI could not automatically verify the payment screenshot. It has been sent to the Admin for manual approval. Member ID: ";
                         }
                         
                         $generated_id = $next_id;
