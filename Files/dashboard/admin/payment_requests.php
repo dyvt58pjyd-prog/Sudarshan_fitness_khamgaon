@@ -136,8 +136,12 @@ $res = mysqli_query($con, $query);
                 <?php while ($row = mysqli_fetch_assoc($res)): ?>
                     <div class="req-card">
                         <div>
-                            <a href="<?php echo htmlspecialchars($row['screenshot']); ?>" target="_blank">
-                                <img src="<?php echo htmlspecialchars($row['screenshot']); ?>" alt="Payment Proof">
+                            <?php
+                            $clean_path = ltrim($row['screenshot'], './');
+                            $url_path = '../../' . $clean_path;
+                            ?>
+                            <a href="<?php echo htmlspecialchars($url_path); ?>" target="_blank">
+                                <img src="<?php echo htmlspecialchars($url_path); ?>" alt="Payment Proof">
                             </a>
                             <div style="text-align: center; font-size: 10px; color: var(--text-muted); margin-top: 5px;">Click to Enlarge</div>
                         </div>
@@ -149,6 +153,9 @@ $res = mysqli_query($con, $query);
                             <p><strong>Mobile:</strong> <?php echo htmlspecialchars($row['mobile']); ?></p>
                         </div>
                         <div class="req-actions">
+                            <button class="btn btn-info" style="width: 100%; margin-bottom: 10px; font-weight: bold; background: #3b82f6; border-color: #3b82f6;" onclick="verifyPayment('<?php echo htmlspecialchars($row['screenshot']); ?>')">
+                                <i class="entypo-search"></i> Verify Authenticity
+                            </button>
                             <a href="approve_payment.php?id=<?php echo $row['id']; ?>" class="btn-approve" onclick="return confirm('Are you sure you want to approve this payment and instantly activate their membership?');">
                                 <i class="entypo-check"></i> Approve
                             </a>
