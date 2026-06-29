@@ -179,15 +179,36 @@ if (isset($_POST['submit_registration'])) {
     <link rel="stylesheet" href="./css/premium.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <style>
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -100;
+            background-color: #000;
+            object-fit: cover;
+        }
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75); /* Dark overlay */
+            z-index: -99;
+        }
         .register-container {
             max-width: 800px;
             margin: 40px auto;
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 107, 0, 0.4);
             border-radius: 20px;
             padding: 40px;
-            box-shadow: var(--glass-shadow);
+            box-shadow: 0 0 40px rgba(255, 107, 0, 0.15);
         }
         .form-section {
             margin-bottom: 30px;
@@ -275,15 +296,48 @@ if (isset($_POST['submit_registration'])) {
             margin: 0 0 5px 0;
             font-weight: 700;
         }
+        .btn-massive-pulse {
+            background: linear-gradient(45deg, #ff6b00, #ff2a00);
+            color: #fff;
+            font-size: 24px;
+            font-weight: 900;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.6);
+            transition: all 0.3s ease;
+            animation: pulse-glow 1.5s infinite;
+            width: 100%;
+            max-width: 400px;
+        }
+        .btn-massive-pulse:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(255, 107, 0, 0.9);
+        }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 30px rgba(255, 107, 0, 0.6); }
+            50% { box-shadow: 0 0 50px rgba(255, 107, 0, 0.9); }
+            100% { box-shadow: 0 0 30px rgba(255, 107, 0, 0.6); }
+        }
     </style>
 </head>
 <body class="page-body">
+    <!-- Live Video Background -->
+    <video autoplay loop muted playsinline class="video-bg">
+        <source src="https://cdn.coverr.co/videos/coverr-a-man-lifting-weights-in-a-gym-5339/1080p.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+
     <div id="container">
         <div class="register-container">
             <div style="text-align: center; margin-bottom: 30px;">
-                <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="max-height: 80px;" />
-                <h2 style="color: #ffffff; margin-top: 15px; font-weight: 700;">New Member Registration</h2>
-                <p style="color: var(--text-muted); font-size: 14px;">Fill out the form below, pay the membership fees via UPI, and submit to request activation.</p>
+                <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Sudarshan Fitness Logo" style="max-height: 80px;" />
+                <h1 style="color: #ff6b00; margin-top: 15px; font-weight: 900; font-style: italic; letter-spacing: 2px; text-shadow: 0 0 15px rgba(255,107,0,0.5); text-transform: uppercase;">SUDARSHAN FITNESS</h1>
+                <h3 style="color: #ffffff; font-weight: 700; margin-top: 5px; letter-spacing: 1px;">GRAND OPENING PRE-BOOKING</h3>
+                <p style="color: #ccc; font-size: 14px; margin-top: 10px;">Fill out the form below, pay via UPI, and secure your spot today.</p>
             </div>
 
             <?php if (!empty($success_message)): ?>
@@ -468,9 +522,9 @@ if (isset($_POST['submit_registration'])) {
                                 </span>
                             </div>
 
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
-                                <a href="index.php" class="link" style="font-weight: 600; color: var(--text-muted); text-decoration: none;">&larr; Back to Login</a>
-                                <input class="btn btn-primary" type="submit" name="submit_registration" value="Submit Registration Request" style="width: auto !important; display: inline-block; padding: 12px 30px; font-weight: 700;">
+                            <div style="display: flex; flex-direction: column; align-items: center; margin-top: 40px; gap: 20px;">
+                                <input type="submit" name="submit_registration" value="SECURE MY SPOT NOW!" class="btn-massive-pulse">
+                                <a href="index.php" class="link" style="font-weight: 600; color: #aaa; text-decoration: none; font-size: 14px;">&larr; Back to Login</a>
                             </div>
                         </div>
                     </div>
