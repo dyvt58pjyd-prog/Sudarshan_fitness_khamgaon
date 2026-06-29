@@ -57,17 +57,52 @@ if (isset($_POST['submit_payment'])) {
                     $pid = mysqli_real_escape_string($con, $_POST['plan_id']);
                     
                     // Get plan details
-                    $plan_q = mysqli_query($con, "SELECT amount FROM plan WHERE pid = '$pid'");
+                    $plan_q = mysqli_query($con, "SELECT amount, validity FROM plan WHERE pid = '$pid'");
                     if ($plan_q && mysqli_num_rows($plan_q) > 0) {
                         $plan_data = mysqli_fetch_assoc($plan_q);
                         $amount = intval($plan_data['amount']);
+                        $validity = intval($plan_data['validity']);
                         
-                        // Insert into payment_requests as pending
-                        mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
-                                            VALUES ('$userid', '$pid', $amount, '$target_file', 'pending', '$utr')");
+                        // Check Authenticity Automatically via AI OCR
+                        require_once '../../include/auto_verifier.php';
+                        $physical_path = __DIR__ . '/../../Sudarshan Data Folder/' . $new_file_name;
+                        $is_authentic = verify_payment_screenshot_ai($physical_path, $amount);
                         
-                        echo "<script>alert('Payment submitted successfully! Your membership will be activated once the Admin verifies the UTR.'); window.location.href='index.php';</script>";
-                        exit();
+                        if ($is_authentic) {
+                            // Automatically Approve Payment & Renew Membership
+                            date_default_timezone_set("Asia/Calcutta");
+                            $cdate = date('Y-m-d');
+                            $d = strtotime("+" . $validity . " Months", strtotime($cdate));
+                            $expiredate = date("Y-m-d", $d);
+                            
+                            $payment_mode = 'UPI';
+                            $received_by = 'Auto-Approved by AI';
+                            
+                            // Set old plans to not renewing
+                            mysqli_query($con, "UPDATE enrolls_to SET renewal = 'no' WHERE uid = '$userid'");
+                            
+                            // Insert active subscription
+                            mysqli_query($con, "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
+                                      VALUES ('$pid', '$userid', '$cdate', '$expiredate', 'yes', '$payment_mode', '$received_by', 0, $amount)");
+                                      
+                            // Log payment as approved
+                            mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
+                                                VALUES ('$userid', '$pid', $amount, '$target_file', 'approved', '$utr')");
+                                                
+                            // Send renewal receipt
+                            require_once '../../include/smtp_mailer.php';
+                            send_member_email($con, $userid, 'renewal');
+                            
+                            echo "<script>alert('Payment Auto-Verified via AI! Your membership has been instantly renewed.'); window.location.href='index.php';</script>";
+                            exit();
+                        } else {
+                            // Insert into payment_requests as pending
+                            mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
+                                                VALUES ('$userid', '$pid', $amount, '$target_file', 'pending', '$utr')");
+                            
+                            echo "<script>alert('Payment submitted! It is pending manual approval by Admin.'); window.location.href='index.php';</script>";
+                            exit();
+                        }
                     } else {
                         echo "<script>alert('Invalid plan selected.');</script>";
                     }
@@ -87,11 +122,36 @@ if (isset($_POST['submit_payment'])) {
                     // Use a special prefix for PT plans to identify them in the approval queue
                     $pid = "PT_" . $trainer_id . "_" . $duration;
                     
-                    mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
-                                        VALUES ('$userid', '$pid', $amount, '$target_file', 'pending', '$utr')");
-                    
-                    echo "<script>alert('PT Payment submitted successfully! Your PT session will be activated once the Admin verifies the UTR.'); window.location.href='index.php';</script>";
-                    exit();
+                    // Check Authenticity Automatically via AI OCR
+                    require_once '../../include/auto_verifier.php';
+                    $physical_path = __DIR__ . '/../../Sudarshan Data Folder/' . $new_file_name;
+                    $is_authentic = verify_payment_screenshot_ai($physical_path, $amount);
+
+                    if ($is_authentic) {
+                        // Automatically Approve PT Payment
+                        date_default_timezone_set("Asia/Calcutta");
+                        $cdate = date('Y-m-d');
+                        $d = strtotime("+" . $duration . " Months", strtotime($cdate));
+                        $expiredate = date("Y-m-d", $d);
+                        
+                        $payment_mode = 'UPI';
+                        $received_by = 'Auto-Approved by AI';
+                        
+                        mysqli_query($con, "INSERT INTO pt_enrollments (uid, trainer_id, enroll_date, expire_date, amount, payment_mode, received_by) 
+                                            VALUES ('$userid', '$trainer_id', '$cdate', '$expiredate', $amount, '$payment_mode', '$received_by')");
+                        
+                        mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
+                                            VALUES ('$userid', '$pid', $amount, '$target_file', 'approved', '$utr')");
+                        
+                        echo "<script>alert('PT Payment Auto-Verified via AI! Your PT session is now active.'); window.location.href='index.php';</script>";
+                        exit();
+                    } else {
+                        mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
+                                            VALUES ('$userid', '$pid', $amount, '$target_file', 'pending', '$utr')");
+                        
+                        echo "<script>alert('PT Payment submitted! It is pending manual approval by Admin.'); window.location.href='index.php';</script>";
+                        exit();
+                    }
                 }
             } else {
                 echo "<script>alert('Failed to save payment proof screenshot.');</script>";

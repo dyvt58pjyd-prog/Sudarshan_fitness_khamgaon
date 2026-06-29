@@ -138,19 +138,53 @@ if (isset($_POST['submit_registration'])) {
                                             VALUES ('$next_id', '$password', 'member', '$uname', 'member')");
                         
                         // Fetch plan details to log the amount
-                        $plan_q = mysqli_query($con, "SELECT amount FROM plan WHERE pid = '$plan'");
+                        $plan_q = mysqli_query($con, "SELECT amount, validity FROM plan WHERE pid = '$plan'");
                         $plan_data = mysqli_fetch_assoc($plan_q);
                         $amount = intval($plan_data['amount']);
+                        $validity = intval($plan_data['validity']);
                         
-                        // Insert payment request with pending status
                         // Save path relative to dashboard files for easy display in dashboard
                         $db_screenshot_path = "../../Sudarshan Data Folder/" . $new_file_name;
                         $utr = isset($_POST['utr']) ? mysqli_real_escape_string($con, $_POST['utr']) : '';
                         
-                        mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
-                                            VALUES ('$next_id', '$plan', $amount, '$db_screenshot_path', 'pending', '$utr')");
+                        // Check Authenticity Automatically via AI OCR
+                        require_once 'include/auto_verifier.php';
+                        $physical_path = __DIR__ . '/Sudarshan Data Folder/' . $new_file_name;
+                        $is_authentic = verify_payment_screenshot_ai($physical_path, $amount);
+
+                        if ($is_authentic) {
+                            // Automatically Approve Payment & Activate Membership
+                            date_default_timezone_set("Asia/Calcutta");
+                            $today_date = date('Y-m-d');
+                            $launch_date_ai = '2026-07-08';
+                            $cdate = ($today_date < $launch_date_ai) ? $launch_date_ai : $today_date;
+                            $d = strtotime("+" . $validity . " Months", strtotime($cdate));
+                            $expiredate = date("Y-m-d", $d);
+                            
+                            $payment_mode = 'UPI';
+                            $received_by = 'Auto-Approved by AI';
+                            
+                            // Insert active subscription
+                            $ins_q = "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
+                                      VALUES ('$plan', '$next_id', '$cdate', '$expiredate', 'yes', '$payment_mode', '$received_by', 0, $amount)";
+                            mysqli_query($con, $ins_q);
+                            
+                            // Log payment as approved
+                            mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
+                                                VALUES ('$next_id', '$plan', $amount, '$db_screenshot_path', 'approved', '$utr')");
+                            
+                            // Send Welcome/Receipt Email Immediately
+                            require_once 'include/smtp_mailer.php';
+                            send_member_email($con, $next_id, 'new');
+                            
+                            $success_message = "Payment Auto-Verified via AI! Registration complete. Your Member ID is: ";
+                        } else {
+                            // Fallback to manual approval
+                            mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
+                                                VALUES ('$next_id', '$plan', $amount, '$db_screenshot_path', 'pending', '$utr')");
+                            $success_message = "Registration submitted successfully! Your payment is pending manual approval. Member ID: ";
+                        }
                         
-                        $success_message = "Registration submitted successfully! Your generated Member ID is: ";
                         $generated_id = $next_id;
                     } else {
                         $error_message = "Failed to register user details: " . mysqli_error($con);
