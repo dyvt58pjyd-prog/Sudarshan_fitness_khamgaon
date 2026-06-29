@@ -17,24 +17,27 @@ if (!function_exists('send_smtp_email')) {
         
         $host = $smtp['smtp_host'];
         $port = intval($smtp['smtp_port']);
-        $password = $smtp['smtp_password'];
         $secure = strtolower($smtp['smtp_secure']); // 'ssl' or 'tls' or 'none'
 
         // Dynamic Role-Based Sender Configuration
-        // This assumes all accounts share the same master password configured in the settings.
         if ($sender_role === 'payments') {
-            $username = 'payments@sudarshanfitness.de';
-            $from_name = 'Sudarshan Fitness Billing';
+            $username = !empty($smtp['smtp_user_payments']) ? $smtp['smtp_user_payments'] : $smtp['smtp_username'];
+            $password = !empty($smtp['smtp_pass_payments']) ? $smtp['smtp_pass_payments'] : $smtp['smtp_password'];
+            $from_name = !empty($smtp['smtp_name_payments']) ? $smtp['smtp_name_payments'] : 'Sudarshan Fitness Billing';
         } else if ($sender_role === 'recovery') {
-            $username = 'recovery@support.sudarshanfitness.de';
-            $from_name = 'Sudarshan Fitness Security';
+            $username = !empty($smtp['smtp_user_recovery']) ? $smtp['smtp_user_recovery'] : $smtp['smtp_username'];
+            $password = !empty($smtp['smtp_pass_recovery']) ? $smtp['smtp_pass_recovery'] : $smtp['smtp_password'];
+            $from_name = !empty($smtp['smtp_name_recovery']) ? $smtp['smtp_name_recovery'] : 'Sudarshan Fitness Security';
         } else if ($sender_role === 'cyber.officer') {
-            $username = 'cyber.officer@support.sudarshanfitness.de';
-            $from_name = 'Sudarshan Fitness Cyber Defense';
+            $username = !empty($smtp['smtp_user_cyber']) ? $smtp['smtp_user_cyber'] : $smtp['smtp_username'];
+            $password = !empty($smtp['smtp_pass_cyber']) ? $smtp['smtp_pass_cyber'] : $smtp['smtp_password'];
+            $from_name = !empty($smtp['smtp_name_cyber']) ? $smtp['smtp_name_cyber'] : 'Sudarshan Fitness Cyber Defense';
         } else {
-            $username = 'admin@sudarshanfitness.de';
+            $username = $smtp['smtp_username'];
+            $password = $smtp['smtp_password'];
             $from_name = !empty($smtp['smtp_from_name']) ? $smtp['smtp_from_name'] : 'Sudarshan Fitness System';
         }
+        
         $from_email = $username;
         
         // Setup stream context to verify SSL/TLS against the original hostname (SNI)
