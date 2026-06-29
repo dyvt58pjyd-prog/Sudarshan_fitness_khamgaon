@@ -558,6 +558,14 @@ if (isset($_POST['submit_registration'])) {
                                     </div>
                                 </div>
 
+                                <div id="manual-upi-box" style="display: none; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; margin: 15px 0; text-align: left;">
+                                    <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px; font-weight: bold;"><i class="entypo-info-circled"></i> Transaction limit exceeded? Copy UPI ID below and pay manually:</p>
+                                    <div style="display: flex; gap: 10px;">
+                                        <input type="text" id="manual-upi-id" class="form-control-premium" style="margin: 0; padding: 10px; font-size: 14px; background: rgba(255,255,255,0.05) !important;" readonly>
+                                        <button type="button" class="btn btn-default" onclick="copyUpiId()" style="padding: 10px 15px; font-weight: bold; white-space: nowrap;"><i class="entypo-docs"></i> Copy</button>
+                                    </div>
+                                </div>
+
                                 <div id="no-qr-warning" style="display: none; color: var(--warning); padding: 30px; font-weight: bold;">
                                     ⚠️ Payment settings not fully configured by the gym administrator. Please pay in cash or ask support.
                                 </div>
@@ -599,6 +607,7 @@ if (isset($_POST['submit_registration'])) {
             if (!selectedOpt || selectedOpt.value === '') {
                 detailsBox.style.display = 'none';
                 qrPaymentArea.style.display = 'none';
+                document.getElementById('manual-upi-box').style.display = 'none';
                 return;
             }
 
@@ -659,6 +668,13 @@ if (isset($_POST['submit_registration'])) {
                 }
                 
                 qrImg.style.display = 'inline-block';
+                
+                const manualBox = document.getElementById('manual-upi-box');
+                const manualInput = document.getElementById('manual-upi-id');
+                if (manualBox && manualInput) {
+                    manualInput.value = cleanUpiId;
+                    manualBox.style.display = 'block';
+                }
                 
                 if (isMobile) {
                     upiWrapper.style.display = 'block';
@@ -734,6 +750,15 @@ if (isset($_POST['submit_registration'])) {
             });
 
         });
+        
+        function copyUpiId() {
+            var copyText = document.getElementById("manual-upi-id");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+            alert("UPI ID Copied: " + copyText.value + "\n\nYou can now open any UPI app and paste this ID to complete the payment.");
+        }
+        
         // ==========================================
         // PHOTO CAPTURE & WEBRTC LOGIC
         // ==========================================
