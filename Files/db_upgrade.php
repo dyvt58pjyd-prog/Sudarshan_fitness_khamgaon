@@ -1,5 +1,5 @@
 <?php
-require 'Files/include/db_conn.php';
+require 'include/db_conn.php';
 
 $columns_to_add = [
     'smtp_user_payments' => 'VARCHAR(255) DEFAULT NULL',
