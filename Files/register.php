@@ -29,11 +29,11 @@ $generated_id = "";
 
 if (isset($_POST['submit_registration'])) {
     $uname = mysqli_real_escape_string($con, $_POST['u_name']);
-    $password = '1234';
     $gender = mysqli_real_escape_string($con, $_POST['gender']);
     $phn = mysqli_real_escape_string($con, $_POST['mobile']);
     $email = mysqli_real_escape_string($con, $_POST['email']);
     $dob = mysqli_real_escape_string($con, $_POST['dob']);
+    $password = '1234';
     
     $stname = mysqli_real_escape_string($con, $_POST['street_name']);
     $city = mysqli_real_escape_string($con, $_POST['city']);
@@ -46,6 +46,8 @@ if (isset($_POST['submit_registration'])) {
     $chk_email = mysqli_query($con, "SELECT email FROM users WHERE email = '$email'");
     if ($chk_email && mysqli_num_rows($chk_email) > 0) {
         $error_message = "Duplicate Entry: Email address $email is already registered!";
+    } elseif (empty($_POST['captured_photo']) && (!isset($_FILES['upload_photo']) || $_FILES['upload_photo']['error'] !== UPLOAD_ERR_OK)) {
+        $error_message = "Please capture a live photo or upload a profile picture. This is mandatory for gym identification.";
     } else {
         // Handle payment proof screenshot upload
         if (isset($_FILES['screenshot']) && $_FILES['screenshot']['error'] === UPLOAD_ERR_OK) {
@@ -367,14 +369,40 @@ if (isset($_POST['submit_registration'])) {
                         </div>
                     </div>
 
-                    <!-- Section 3: Profile Photo -->
+                    <!-- Section 3: Profile Photo (Webcam or File Upload) -->
                     <div class="form-section">
                         <div class="form-section-title"><i class="entypo-camera"></i> 3. Profile Photo</div>
                         <div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; border: 1px solid var(--glass-border);">
-                            <label style="display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px;">Upload Identification Photo (Optional)</label>
-                            <input type="file" name="upload_photo" accept="image/*" class="form-control-premium" style="padding: 10px !important; margin: 0;">
-                            <div style="text-align: left; font-size: 11px; color: var(--text-muted); margin-top: 10px;">
-                                *Please provide a clear face photo. This is strictly used for visual identification by gym staff.
+                            
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <!-- Live Video Feed / Captured Snapshot -->
+                                <video id="webcam-video" autoplay playsinline style="width: 100%; max-width: 300px; border-radius: 12px; display: none; margin: 0 auto; border: 2px solid var(--accent-primary);"></video>
+                                <img id="photo-preview" style="width: 100%; max-width: 300px; border-radius: 12px; display: none; margin: 0 auto; border: 2px solid var(--success);" />
+                                <canvas id="photo-canvas" style="display: none;"></canvas>
+                                
+                                <!-- Hidden input to hold Base64 data -->
+                                <input type="hidden" name="captured_photo" id="captured_photo" value="">
+                            </div>
+
+                            <div class="row text-center">
+                                <div class="col-xs-6">
+                                    <button type="button" id="start-camera-btn" class="btn btn-primary" style="width: 100%; font-weight: bold;">
+                                        <i class="entypo-camera"></i> Use Camera
+                                    </button>
+                                    <button type="button" id="capture-btn" class="btn btn-success" style="width: 100%; font-weight: bold; display: none;">
+                                        <i class="entypo-record"></i> Take Photo
+                                    </button>
+                                    <button type="button" id="retake-btn" class="btn btn-warning" style="width: 100%; font-weight: bold; display: none; margin-top: 10px;">
+                                        <i class="entypo-ccw"></i> Retake
+                                    </button>
+                                </div>
+                                <div class="col-xs-6" style="border-left: 1px dashed rgba(255,255,255,0.2);">
+                                    <label style="display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px;">Or Upload File</label>
+                                    <input type="file" name="upload_photo" id="upload_photo" accept="image/*" class="form-control-premium" style="padding: 6px !important; margin: 0;" onchange="previewUploadedPhoto(this)">
+                                </div>
+                            </div>
+                            <div style="text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 15px;">
+                                *Please provide a clear face photo. You can either take a selfie now or upload a picture.
                             </div>
                         </div>
                     </div>
@@ -572,7 +600,81 @@ if (isset($_POST['submit_registration'])) {
             }
 
         });
+        // ==========================================
+        // PHOTO CAPTURE & WEBRTC LOGIC
+        // ==========================================
+        const video = document.getElementById('webcam-video');
+        const canvas = document.getElementById('photo-canvas');
+        const photoPreview = document.getElementById('photo-preview');
+        const capturedInput = document.getElementById('captured_photo');
+        const uploadInput = document.getElementById('upload_photo');
+        
+        const startBtn = document.getElementById('start-camera-btn');
+        const captureBtn = document.getElementById('capture-btn');
+        const retakeBtn = document.getElementById('retake-btn');
 
+        let stream = null;
+
+        startBtn.addEventListener('click', async () => {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+                video.srcObject = stream;
+                video.style.display = 'block';
+                photoPreview.style.display = 'none';
+                
+                startBtn.style.display = 'none';
+                captureBtn.style.display = 'inline-block';
+                retakeBtn.style.display = 'none';
+                uploadInput.value = ''; // clear upload if using camera
+            } catch (err) {
+                alert("Camera access denied or unavailable. Please upload a file instead.");
+                console.error(err);
+            }
+        });
+
+        captureBtn.addEventListener('click', () => {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+            photoPreview.src = dataUrl;
+            capturedInput.value = dataUrl; // Store base64 in hidden input
+            
+            // Stop camera stream
+            stream.getTracks().forEach(track => track.stop());
+            
+            video.style.display = 'none';
+            photoPreview.style.display = 'block';
+            captureBtn.style.display = 'none';
+            retakeBtn.style.display = 'inline-block';
+        });
+
+        retakeBtn.addEventListener('click', () => {
+            capturedInput.value = '';
+            startBtn.click(); // Restart camera
+        });
+
+        // If they upload a file, clear the webcam data and show preview
+        function previewUploadedPhoto(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    photoPreview.src = e.target.result;
+                    photoPreview.style.display = 'block';
+                    video.style.display = 'none';
+                    
+                    // Clear camera states
+                    capturedInput.value = '';
+                    if (stream) stream.getTracks().forEach(track => track.stop());
+                    
+                    startBtn.style.display = 'inline-block';
+                    captureBtn.style.display = 'none';
+                    retakeBtn.style.display = 'none';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
     </script>
 </body>
 </html>

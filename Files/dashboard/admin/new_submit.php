@@ -45,6 +45,13 @@ page_protect();
      echo "<meta http-equiv='refresh' content='0; url=new_entry.php'>";
      exit();
  }
+ // Require photo capture or upload
+ if (empty($_POST['member_photo_base64']) && (!isset($_FILES['member_photo_file']) || $_FILES['member_photo_file']['error'] !== UPLOAD_ERR_OK)) {
+     echo "<head><script>alert('Error: Please capture a live photo or upload a profile picture. This is mandatory for gym identification.');</script></head></html>";
+     echo "<meta http-equiv='refresh' content='0; url=new_entry.php'>";
+     exit();
+ }
+
 // Process Member Photo (Webcam or File Upload)
 $photo_path = NULL;
 $upload_dir = __DIR__ . '/../../uploads/';
