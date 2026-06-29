@@ -1,5 +1,5 @@
 <?php
-require 'Files/include/db_conn.php';
+require 'include/db_conn.php';
 
 echo "<h1>Setup Deferred Registration</h1>";
 
