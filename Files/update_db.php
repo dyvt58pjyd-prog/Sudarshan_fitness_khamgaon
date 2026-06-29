@@ -3,7 +3,7 @@ require 'include/db_conn.php';
 
 // 1. Update Gym Settings Email (Support Email)
 $support_email = 'cyber.officer@support.sudarshanfitness.de';
-$q1 = "UPDATE gym_settings SET gym_email = '$support_email'";
+$q1 = "UPDATE gym_details SET gym_email = '$support_email'";
 if (mysqli_query($con, $q1)) {
     echo "Gym Contact Email updated successfully to $support_email.<br>";
 } else {
