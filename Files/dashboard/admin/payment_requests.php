@@ -2,16 +2,16 @@
 require '../../include/db_conn.php';
 page_protect();
 
-if ($_SESSION['role'] !== 'super_admin' && $_SESSION['role'] !== 'owner') {
-    echo "<head><script>alert('Access Denied. Only Admins can approve payments.');</script></head></html>";
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['super_admin', 'owner', 'reception'])) {
+    echo "<head><script>alert('Access Denied. Admins and Receptionists only.');</script></head></html>";
     echo "<meta http-equiv='refresh' content='0; url=index.php'>";
     exit();
 }
 
 $gym = get_gym_details($con);
 
-// Fetch pending requests
-$query = "SELECT pr.*, u.username, u.mobile FROM payment_requests pr JOIN users u ON pr.uid = u.userid WHERE pr.status = 'pending' ORDER BY pr.id DESC";
+// Fetch pending requests using LEFT JOIN because new deferred registrations won't have a user record yet
+$query = "SELECT pr.*, u.username, u.mobile FROM payment_requests pr LEFT JOIN users u ON pr.uid = u.userid WHERE pr.status = 'pending' ORDER BY pr.id DESC";
 $res = mysqli_query($con, $query);
 ?>
 <!DOCTYPE html>
@@ -146,11 +146,26 @@ $res = mysqli_query($con, $query);
                             <div style="text-align: center; font-size: 10px; color: var(--text-muted); margin-top: 5px;">Click to Enlarge</div>
                         </div>
                         <div class="req-details">
-                            <h4><?php echo htmlspecialchars($row['username']); ?> (ID: <?php echo htmlspecialchars($row['uid']); ?>)</h4>
+                            <?php
+                            $disp_name = "";
+                            $disp_mobile = "";
+                            if ($row['is_new_registration'] == 1 && !empty($row['registration_payload'])) {
+                                $payload = json_decode($row['registration_payload'], true);
+                                $disp_name = $payload['uname'];
+                                $disp_mobile = $payload['phn'];
+                            ?>
+                                <h4><?php echo htmlspecialchars($disp_name); ?> <span style="color:#f59e0b; font-size: 12px;">(Pending New Reg.)</span></h4>
+                            <?php } else { 
+                                $disp_name = $row['username'];
+                                $disp_mobile = $row['mobile'];
+                            ?>
+                                <h4><?php echo htmlspecialchars($disp_name); ?> (ID: <?php echo htmlspecialchars($row['uid']); ?>)</h4>
+                            <?php } ?>
+                            
                             <p><strong>Package ID:</strong> <?php echo htmlspecialchars($row['pid']); ?></p>
                             <p><strong>Amount:</strong> ₹<?php echo number_format($row['amount']); ?></p>
                             <p style="color: var(--accent-primary);"><strong>UTR / Ref:</strong> <?php echo htmlspecialchars($row['utr']); ?></p>
-                            <p><strong>Mobile:</strong> <?php echo htmlspecialchars($row['mobile']); ?></p>
+                            <p><strong>Mobile:</strong> <?php echo htmlspecialchars($disp_mobile); ?></p>
                         </div>
                         <div class="req-actions">
                             <button class="btn btn-info" style="width: 100%; margin-bottom: 10px; font-weight: bold; background: #3b82f6; border-color: #3b82f6;" onclick="verifyPayment('<?php echo htmlspecialchars($row['screenshot']); ?>')">

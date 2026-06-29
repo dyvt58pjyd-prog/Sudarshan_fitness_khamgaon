@@ -62,24 +62,18 @@ if (isset($_POST['submit_registration'])) {
                     mkdir($target_dir, 0777, true);
                 }
                 
-                // Find next membership ID starting from 101
-                $next_id = 101;
-                $res_max = mysqli_query($con, "SELECT userid FROM users WHERE userid REGEXP '^[0-9]+$' AND CAST(userid AS UNSIGNED) < 100000000");
-                if ($res_max && mysqli_num_rows($res_max) > 0) {
-                    $max_val = 100;
-                    while ($row_max = mysqli_fetch_assoc($res_max)) {
-                        $val = intval($row_max['userid']);
-                        if ($val > $max_val) {
-                            $max_val = $val;
-                        }
-                    }
-                    $next_id = $max_val + 1;
-                }
-                
-                $new_file_name = "payment_proof_new_" . $next_id . "_" . time() . "." . $file_ext;
+                $new_file_name = "payment_proof_new_" . time() . "_" . rand(1000, 9999) . "." . $file_ext;
                 $target_file = $target_dir . $new_file_name;
                 
                 if (move_uploaded_file($file_tmp, $target_file)) {
+                    // Fetch plan details
+                    $plan_q = mysqli_query($con, "SELECT amount, validity FROM plan WHERE pid = '$plan'");
+                    $plan_data = mysqli_fetch_assoc($plan_q);
+                    $amount = intval($plan_data['amount']);
+                    $validity = intval($plan_data['validity']);
+                    $db_screenshot_path = "../../Sudarshan Data Folder/" . $new_file_name;
+                    $utr = isset($_POST['utr']) ? mysqli_real_escape_string($con, $_POST['utr']) : '';
+
                     // Handle Profile Photo (Webcam Base64 OR Uploaded File)
                     $photo_path_db = "";
                     if (!empty($_POST['captured_photo'])) {
@@ -88,7 +82,7 @@ if (isset($_POST['submit_registration'])) {
                         $image_parts = explode(";base64,", $base64_string);
                         if (count($image_parts) == 2) {
                             $image_base64 = base64_decode($image_parts[1]);
-                            $photo_filename = "member_photo_" . $next_id . "_" . time() . ".jpg";
+                            $photo_filename = "member_photo_" . time() . "_" . rand(1000, 9999) . ".jpg";
                             $photo_target = $target_dir . $photo_filename;
                             if (file_put_contents($photo_target, $image_base64)) {
                                 $photo_path_db = "../../Sudarshan Data Folder/" . $photo_filename;
@@ -100,71 +94,69 @@ if (isset($_POST['submit_registration'])) {
                         $p_file_name = $_FILES['upload_photo']['name'];
                         $p_file_ext = strtolower(pathinfo($p_file_name, PATHINFO_EXTENSION));
                         if (in_array($p_file_ext, array('jpg', 'jpeg', 'png'))) {
-                            $photo_filename = "member_photo_" . $next_id . "_" . time() . "." . $p_file_ext;
+                            $photo_filename = "member_photo_" . time() . "_" . rand(1000, 9999) . "." . $p_file_ext;
                             $photo_target = $target_dir . $photo_filename;
                             if (move_uploaded_file($p_file_tmp, $photo_target)) {
                                 $photo_path_db = "../../Sudarshan Data Folder/" . $photo_filename;
                             }
                         }
                     }
-
-                    // Generate random 6-digit gate code
-                    $entry_code = strval(rand(100000, 999999));
                     
-                    // Pre-Booking Logic
-                    $launch_date = '2026-07-08';
-                    $today = date('Y-m-d');
-                    $joining_date_val = ($today < $launch_date) ? "'$launch_date'" : "CURRENT_DATE()";
+                    // Check Authenticity Automatically via AI OCR
+                    require_once 'include/auto_verifier.php';
+                    $physical_path = __DIR__ . '/Sudarshan Data Folder/' . $new_file_name;
+                    $is_authentic = verify_payment_screenshot_ai($physical_path, $amount);
 
-                    // Insert into users
-                    $query_user = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, entry_code, biometric_id, biometric_enabled, photo) 
-                                   VALUES ('$uname', '$gender', '$phn', '$email', '$dob', $joining_date_val, '$next_id', '$entry_code', '$next_id', 1, '$photo_path_db')";
-                    
-                    if (mysqli_query($con, $query_user)) {
-                        // Insert into address
-                        mysqli_query($con, "INSERT INTO address (id, streetName, state, city, zipcode) 
-                                            VALUES ('$next_id', '$stname', '$state', '$city', '$zipcode')");
-                        
-                        // Insert into health status
-                        $weight = isset($_POST['weight']) ? mysqli_real_escape_string($con, $_POST['weight']) : '';
-                        $height = isset($_POST['height']) ? mysqli_real_escape_string($con, $_POST['height']) : '';
-                        mysqli_query($con, "INSERT INTO health_status (uid, weight, height) VALUES ('$next_id', '$weight', '$height')");
-                        if (!empty($weight) || !empty($height)) {
-                            mysqli_query($con, "INSERT INTO health_history (uid, weight, height, logged_date) VALUES ('$next_id', '$weight', '$height', CURRENT_DATE())");
+                    if ($is_authentic) {
+                        // AI VERIFIED: INSTANTLY GENERATE ID AND CREATE ACCOUNT
+                        $next_id = 101;
+                        $res_max = mysqli_query($con, "SELECT userid FROM users WHERE userid REGEXP '^[0-9]+$' AND CAST(userid AS UNSIGNED) < 100000000");
+                        if ($res_max && mysqli_num_rows($res_max) > 0) {
+                            $max_val = 100;
+                            while ($row_max = mysqli_fetch_assoc($res_max)) {
+                                $val = intval($row_max['userid']);
+                                if ($val > $max_val) $max_val = $val;
+                            }
+                            $next_id = $max_val + 1;
                         }
-                        
-                        // Create user login auth in admin table
-                        mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) 
-                                            VALUES ('$next_id', '$password', 'member', '$uname', 'member')");
-                        
-                        // Fetch plan details to log the amount
-                        $plan_q = mysqli_query($con, "SELECT amount, validity FROM plan WHERE pid = '$plan'");
-                        $plan_data = mysqli_fetch_assoc($plan_q);
-                        $amount = intval($plan_data['amount']);
-                        $validity = intval($plan_data['validity']);
-                        
-                        // Save path relative to dashboard files for easy display in dashboard
-                        $db_screenshot_path = "../../Sudarshan Data Folder/" . $new_file_name;
-                        $utr = isset($_POST['utr']) ? mysqli_real_escape_string($con, $_POST['utr']) : '';
-                        
-                        // Check Authenticity Automatically via AI OCR
-                        require_once 'include/auto_verifier.php';
-                        $physical_path = __DIR__ . '/Sudarshan Data Folder/' . $new_file_name;
-                        $is_authentic = verify_payment_screenshot_ai($physical_path, $amount);
 
-                        if ($is_authentic) {
-                            // Automatically Approve Payment & Activate Membership
+                        // Generate random 6-digit gate code
+                        $entry_code = strval(rand(100000, 999999));
+                        
+                        // Pre-Booking Logic
+                        $launch_date_ai = '2026-07-08';
+                        $today_date = date('Y-m-d');
+                        $joining_date_val = ($today_date < $launch_date_ai) ? "'$launch_date_ai'" : "CURRENT_DATE()";
+                        
+                        // Insert into users
+                        $query_user = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, entry_code, biometric_id, biometric_enabled, photo) 
+                                       VALUES ('$uname', '$gender', '$phn', '$email', '$dob', $joining_date_val, '$next_id', '$entry_code', '$next_id', 1, '$photo_path_db')";
+                        
+                        if (mysqli_query($con, $query_user)) {
+                            // Insert into address
+                            mysqli_query($con, "INSERT INTO address (id, streetName, state, city, zipcode) 
+                                                VALUES ('$next_id', '$stname', '$state', '$city', '$zipcode')");
+                            
+                            // Insert into health status
+                            $weight = isset($_POST['weight']) ? mysqli_real_escape_string($con, $_POST['weight']) : '';
+                            $height = isset($_POST['height']) ? mysqli_real_escape_string($con, $_POST['height']) : '';
+                            mysqli_query($con, "INSERT INTO health_status (uid, weight, height) VALUES ('$next_id', '$weight', '$height')");
+                            if (!empty($weight) || !empty($height)) {
+                                mysqli_query($con, "INSERT INTO health_history (uid, weight, height, logged_date) VALUES ('$next_id', '$weight', '$height', CURRENT_DATE())");
+                            }
+                            
+                            // Create admin login
+                            mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) 
+                                                VALUES ('$next_id', '$password', 'member', '$uname', 'member')");
+
+                            // Insert active subscription
                             date_default_timezone_set("Asia/Calcutta");
-                            $today_date = date('Y-m-d');
-                            $launch_date_ai = '2026-07-08';
                             $cdate = ($today_date < $launch_date_ai) ? $launch_date_ai : $today_date;
                             $d = strtotime("+" . $validity . " Months", strtotime($cdate));
                             $expiredate = date("Y-m-d", $d);
-                            
                             $payment_mode = 'UPI';
                             $received_by = 'Auto-Approved by AI';
                             
-                            // Insert active subscription
                             $ins_q = "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
                                       VALUES ('$plan', '$next_id', '$cdate', '$expiredate', 'yes', '$payment_mode', '$received_by', 0, $amount)";
                             mysqli_query($con, $ins_q);
@@ -178,16 +170,34 @@ if (isset($_POST['submit_registration'])) {
                             send_member_email($con, $next_id, 'new');
                             
                             $success_message = "Payment Auto-Verified via AI! Registration complete. Your Member ID is: ";
+                            $generated_id = $next_id;
                         } else {
-                            // Fallback to manual approval
-                            mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
-                                                VALUES ('$next_id', '$plan', $amount, '$db_screenshot_path', 'pending', '$utr')");
-                            $success_message = "Registration submitted! Our AI could not automatically verify the payment screenshot. It has been sent to the Admin for manual approval. Member ID: ";
+                            $error_message = "Failed to register user details: " . mysqli_error($con);
                         }
-                        
-                        $generated_id = $next_id;
                     } else {
-                        $error_message = "Failed to register user details: " . mysqli_error($con);
+                        // AI FAILED: DEFERRED REGISTRATION
+                        $payload = [
+                            'uname' => $_POST['uname'],
+                            'gender' => $_POST['gender'],
+                            'phn' => $_POST['phn'],
+                            'email' => $_POST['email'],
+                            'dob' => $_POST['dob'],
+                            'stname' => $_POST['stname'],
+                            'state' => $_POST['state'],
+                            'city' => $_POST['city'],
+                            'zipcode' => $_POST['zipcode'],
+                            'weight' => isset($_POST['weight']) ? $_POST['weight'] : '',
+                            'height' => isset($_POST['height']) ? $_POST['height'] : '',
+                            'password' => $_POST['password'],
+                            'photo_path_db' => $photo_path_db
+                        ];
+                        $json_payload = mysqli_real_escape_string($con, json_encode($payload));
+                        
+                        mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr, registration_payload, is_new_registration) 
+                                            VALUES ('PENDING', '$plan', $amount, '$db_screenshot_path', 'pending', '$utr', '$json_payload', 1)");
+                                            
+                        $success_message = "Registration submitted! Our AI could not automatically verify the payment screenshot. It has been sent to the Admin for manual approval. You will receive your Member ID once approved.";
+                        $generated_id = "";
                     }
                 } else {
                     $error_message = "Failed to save payment proof screenshot.";

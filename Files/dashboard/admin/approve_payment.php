@@ -24,20 +24,102 @@ $userid = $req['uid'];
 $pid = $req['pid'];
 $amount = intval($req['amount']);
 $utr = $req['utr'];
-
-// Fetch user details
-$user_q = mysqli_query($con, "SELECT username, email, mobile FROM users WHERE userid='$userid'");
-$user_row = mysqli_fetch_assoc($user_q);
-$mem_name = $user_row['username'];
-$mem_email = $user_row['email'];
-$mem_mobile = $user_row['mobile'];
+$is_new_reg = intval($req['is_new_registration']);
+$payload = json_decode($req['registration_payload'], true);
 
 date_default_timezone_set("Asia/Calcutta");
 $cdate = date('Y-m-d');
 $launch_date = '2026-07-08';
 $calc_base_date = ($cdate < $launch_date) ? $launch_date : $cdate;
 $payment_mode = 'UPI';
-$received_by = 'Admin Verification (' . $_SESSION['full_name'] . ')';
+$received_by = 'Admin Verification (' . (isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Admin') . ')';
+
+// ------------------------------------------------------------------------------------------
+// DEFERRED NEW REGISTRATION APPROVAL LOGIC
+// ------------------------------------------------------------------------------------------
+if ($is_new_reg == 1 && $userid === 'PENDING') {
+    // Generate ID
+    $next_id = 101;
+    $res_max = mysqli_query($con, "SELECT userid FROM users WHERE userid REGEXP '^[0-9]+$' AND CAST(userid AS UNSIGNED) < 100000000");
+    if ($res_max && mysqli_num_rows($res_max) > 0) {
+        $max_val = 100;
+        while ($row_max = mysqli_fetch_assoc($res_max)) {
+            $val = intval($row_max['userid']);
+            if ($val > $max_val) $max_val = $val;
+        }
+        $next_id = $max_val + 1;
+    }
+
+    $uname = mysqli_real_escape_string($con, $payload['uname']);
+    $gender = mysqli_real_escape_string($con, $payload['gender']);
+    $phn = mysqli_real_escape_string($con, $payload['phn']);
+    $email = mysqli_real_escape_string($con, $payload['email']);
+    $dob = mysqli_real_escape_string($con, $payload['dob']);
+    $joining_date_val = ($cdate < $launch_date) ? "'$launch_date'" : "CURRENT_DATE()";
+    $entry_code = strval(rand(100000, 999999));
+    $photo_path_db = mysqli_real_escape_string($con, $payload['photo_path_db']);
+    $password = mysqli_real_escape_string($con, $payload['password']);
+
+    // Create User
+    $query_user = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, entry_code, biometric_id, biometric_enabled, photo) 
+                   VALUES ('$uname', '$gender', '$phn', '$email', '$dob', $joining_date_val, '$next_id', '$entry_code', '$next_id', 1, '$photo_path_db')";
+    
+    if (mysqli_query($con, $query_user)) {
+        // Create Address
+        $stname = mysqli_real_escape_string($con, $payload['stname']);
+        $state = mysqli_real_escape_string($con, $payload['state']);
+        $city = mysqli_real_escape_string($con, $payload['city']);
+        $zipcode = mysqli_real_escape_string($con, $payload['zipcode']);
+        mysqli_query($con, "INSERT INTO address (id, streetName, state, city, zipcode) VALUES ('$next_id', '$stname', '$state', '$city', '$zipcode')");
+        
+        // Create Health
+        $weight = mysqli_real_escape_string($con, $payload['weight']);
+        $height = mysqli_real_escape_string($con, $payload['height']);
+        mysqli_query($con, "INSERT INTO health_status (uid, weight, height) VALUES ('$next_id', '$weight', '$height')");
+        if (!empty($weight) || !empty($height)) {
+            mysqli_query($con, "INSERT INTO health_history (uid, weight, height, logged_date) VALUES ('$next_id', '$weight', '$height', CURRENT_DATE())");
+        }
+        
+        // Create Login
+        mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('$next_id', '$password', 'member', '$uname', 'member')");
+
+        // Activate Subscription
+        $plan_q = mysqli_query($con, "SELECT validity FROM plan WHERE pid = '$pid'");
+        $validity = 1;
+        if ($plan_q && mysqli_num_rows($plan_q) > 0) {
+            $validity = intval(mysqli_fetch_assoc($plan_q)['validity']);
+        }
+        
+        $d = strtotime("+" . $validity . " Months", strtotime($calc_base_date));
+        $expiredate = date("Y-m-d", $d);
+        
+        mysqli_query($con, "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
+                            VALUES ('$pid', '$next_id', '$calc_base_date', '$expiredate', 'yes', '$payment_mode', '$received_by', 0, $amount)");
+        
+        // Update payment request
+        mysqli_query($con, "UPDATE payment_requests SET status = 'approved', uid = '$next_id' WHERE id = $req_id");
+        
+        // Send Welcome Email
+        require_once '../../include/smtp_mailer.php';
+        send_member_email($con, $next_id, 'new');
+        
+        echo "<script>alert('Registration Approved! ID Assigned and Activated.'); window.location.href='payment_requests.php';</script>";
+        exit();
+    } else {
+        echo "<script>alert('Failed to generate user account: " . mysqli_error($con) . "'); window.location.href='payment_requests.php';</script>";
+        exit();
+    }
+}
+
+// ------------------------------------------------------------------------------------------
+// STANDARD RENEWAL / PT APPROVAL LOGIC (For Existing Users)
+// ------------------------------------------------------------------------------------------
+// Fetch user details
+$user_q = mysqli_query($con, "SELECT username, email, mobile FROM users WHERE userid='$userid'");
+$user_row = mysqli_fetch_assoc($user_q);
+$mem_name = $user_row['username'];
+$mem_email = $user_row['email'];
+$mem_mobile = $user_row['mobile'];
 
 // Is this a PT plan or standard membership?
 if (strpos($pid, 'PT_') === 0) {
@@ -99,7 +181,6 @@ if (strpos($pid, 'PT_') === 0) {
             
             require_once '../../include/smtp_mailer.php';
             if ($is_new_member) {
-                // Fetch gender for welcome email
                 $g_q = mysqli_query($con, "SELECT gender FROM users WHERE userid='$userid'");
                 $gender = ($g_q && mysqli_num_rows($g_q)>0) ? mysqli_fetch_assoc($g_q)['gender'] : '';
                 send_member_email($con, $mem_email, $mem_name, $userid, '1234', $plan_name, $amount, $expiredate, $new_entry_code, 0, $amount, $gender);
