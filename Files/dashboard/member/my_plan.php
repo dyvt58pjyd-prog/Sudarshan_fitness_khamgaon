@@ -2,28 +2,23 @@
 require '../../include/db_conn.php';
 page_protect();
 
-$uid = $_SESSION['userid'];
-$query = "SELECT fitness_goal, username FROM users WHERE userid='$uid'";
-$result = mysqli_query($con, $query);
-$row = mysqli_fetch_assoc($result);
+$uid = $_SESSION['user_data'];
+$gym_settings_data = get_gym_details($con);
 
-$goal_key = !empty($row['fitness_goal']) ? $row['fitness_goal'] : 'general';
+// Fetch current stats to pre-fill form
+$sql_stats = "SELECT height, weight FROM health_status WHERE uid = '$uid' ORDER BY hid DESC LIMIT 1";
+$res_stats = mysqli_query($con, $sql_stats);
+$stats = ($res_stats && mysqli_num_rows($res_stats) > 0) ? mysqli_fetch_assoc($res_stats) : null;
 
-$plans_json = file_get_contents('../../api/fitness_plans.json');
-$plans = json_decode($plans_json, true);
-
-if (!isset($plans[$goal_key])) {
-    $goal_key = 'general';
-}
-
-$my_plan = $plans[$goal_key];
+$height = ($stats && !empty($stats['height'])) ? floatval($stats['height']) : '';
+$weight = ($stats && !empty($stats['weight'])) ? floatval($stats['weight']) : '';
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>SUDARSHAN FITNESS | My Smart Plan</title>
-    <link rel="stylesheet" href="../../css/style.css" id="style-resource-5">
+    <title><?php echo htmlspecialchars($gym_settings_data['gym_name']); ?> | AI Smart Plan</title>
+    <link rel="stylesheet" href="../../css/style.css">
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
@@ -31,126 +26,111 @@ $my_plan = $plans[$goal_key];
     
     <style>
         .page-container .sidebar-menu #main-menu li#myplan > a {
-            background-color: #2b303a;
-            color: #ffffff;
+            background-color: rgba(59, 130, 246, 0.1) !important;
+            color: var(--accent-primary) !important;
+            font-weight: 600 !important;
+            box-shadow: inset 3px 0 0 var(--accent-primary);
         }
-        .plan-header {
-            background: linear-gradient(135deg, rgba(255,107,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
-            border: 1px solid rgba(255,107,0,0.3);
-            border-radius: 12px;
+        .ai-header {
+            background: linear-gradient(135deg, rgba(255,107,0,0.1) 0%, rgba(0,0,0,0.4) 100%);
+            border: 1px solid rgba(255,107,0,0.2);
+            border-radius: 16px;
             padding: 30px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             text-align: center;
         }
-        .plan-header h2 {
-            color: #ff6b00;
-            font-size: 32px;
+        .ai-header h2 {
+            color: var(--accent-primary);
             font-weight: 800;
             margin-top: 0;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 15px rgba(255,107,0,0.4);
+            letter-spacing: 1px;
         }
-        .plan-header p {
-            color: #e2e8f0;
-            font-size: 16px;
-            max-width: 700px;
-            margin: 10px auto 0;
-            line-height: 1.6;
-        }
-        .split-card {
+        .form-card {
             background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .form-control-premium {
+            background: rgba(15, 23, 42, 0.6) !important;
+            border: 1px solid var(--glass-border) !important;
+            border-radius: 10px !important;
+            color: var(--text-main) !important;
+            padding: 12px !important;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        /* Results Styling */
+        #ai-results { display: none; }
+        
+        .stat-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .stat-box h4 { color: var(--text-muted); font-size: 13px; margin: 0 0 5px 0; text-transform: uppercase;}
+        .stat-box .val { color: var(--text-main); font-size: 24px; font-weight: bold; }
+        
+        .split-card {
+            background: rgba(255,255,255,0.02);
             border: 1px solid var(--glass-border);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 15px;
-            box-shadow: var(--glass-shadow);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
         }
         .split-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            border-color: rgba(255,107,0,0.5);
+            border-color: rgba(255,107,0,0.4);
         }
         .day-badge {
             display: inline-block;
             background: rgba(255,107,0,0.15);
             color: #ff6b00;
-            padding: 5px 12px;
+            padding: 4px 10px;
             border-radius: 6px;
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 11px;
+            font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-        }
-        .workout-focus {
-            font-size: 18px;
-            font-weight: 700;
-            color: #ffffff;
             margin-bottom: 8px;
         }
-        .workout-details {
-            color: #a3a3a3;
-            font-size: 14px;
-            line-height: 1.5;
+        .diet-item {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .nutrition-card {
-            background: linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(0,0,0,0.4) 100%);
-            border: 1px solid rgba(16,185,129,0.3);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 30px;
-        }
-        .macro-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .macro-box {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 8px;
+        .diet-item:last-child { border-bottom: none; }
+        .diet-item strong { color: var(--success); display: block; margin-bottom: 3px; font-size: 13px;}
+        
+        #loading-overlay {
+            display: none;
             text-align: center;
+            padding: 40px;
         }
-        .macro-value {
-            font-size: 16px;
-            font-weight: 700;
-            color: #10b981;
-            margin-top: 5px;
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,107,0,0.2);
+            border-top: 4px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px auto;
         }
-        .tips-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 20px;
-        }
-        .tips-list li {
-            padding: 8px 0;
-            color: #e2e8f0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .tips-list li i {
-            color: #10b981;
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="page-body page-fade" onload="collapseSidebar()">
-
-    <div class="page-container sidebar-collapsed" id="navbarcollapse">    
+    <div class="page-container sidebar-collapsed" id="navbarcollapse">
         <div class="sidebar-menu">
             <header class="logo-env">
                 <div class="logo">
-                    <a href="main.php">
-                        <img src="../../images/logo.png" alt="" width="192" height="80" />
-                    </a>
-                </div>
-                <div class="sidebar-collapse" onclick="collapseSidebar()">
-                    <a href="#" class="sidebar-collapse-icon with-animation">
-                        <i class="entypo-menu"></i>
+                    <a href="index.php">
+                        <img src="<?php echo htmlspecialchars($gym_settings_data['gym_logo']); ?>" alt="" style="max-height: 60px;" />
                     </a>
                 </div>
             </header>
@@ -158,148 +138,156 @@ $my_plan = $plans[$goal_key];
         </div>
 
         <div class="main-content">
-            <div class="row">
-                <div class="col-md-6 col-sm-8 clearfix"></div>
-                <div class="col-md-6 col-sm-4 clearfix hidden-xs">
-                    <ul class="list-inline links-list pull-right">
-                        <li>Welcome <?php echo $_SESSION['full_name']; ?></li>
-                        <li><a href="logout.php">Log Out <i class="entypo-logout right"></i></a></li>
-                    </ul>
-                </div>
+            <div class="ai-header">
+                <h2><i class="entypo-rocket"></i> AI Fitness Counselor</h2>
+                <p style="color: var(--text-muted); font-size: 15px;">Generate a custom, science-based workout and diet regimen tailored instantly to your unique body metrics and medical constraints.</p>
             </div>
 
-            <div class="plan-header">
-                <h2><?php echo htmlspecialchars($my_plan['title']); ?></h2>
-                <p><?php echo htmlspecialchars($my_plan['description']); ?></p>
+            <div class="form-card" id="ai-form-container">
+                <form id="ai-form" onsubmit="generatePlan(event)">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Primary Goal</label>
+                            <select id="goal" class="form-control-premium" required>
+                                <option value="Fat Loss">Fat Loss (Caloric Deficit)</option>
+                                <option value="Muscle Gain">Muscle Gain (Caloric Surplus)</option>
+                                <option value="Lean Builder">Lean Builder (Recomp)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Dietary Preference</label>
+                            <select id="diet" class="form-control-premium" required>
+                                <option value="Vegetarian">Vegetarian</option>
+                                <option value="Non-Vegetarian">Non-Vegetarian</option>
+                                <option value="Vegan">Vegan</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Current Weight (kg)</label>
+                            <input type="number" id="weight" class="form-control-premium" value="<?php echo $weight; ?>" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Height (cm)</label>
+                            <input type="number" id="height" class="form-control-premium" value="<?php echo $height; ?>" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>Medical Constraints / Injuries (Optional)</label>
+                            <input type="text" id="medical" class="form-control-premium" placeholder="e.g., Knee pain, lower back injury, shoulder issues... (The AI will adjust your plan)">
+                        </div>
+                    </div>
+                    <div style="text-align: right; margin-top: 10px;">
+                        <button type="submit" class="btn btn-primary" style="font-weight: bold; padding: 10px 25px; font-size: 15px;">
+                            <i class="entypo-light-down"></i> Generate My Plan
+                        </button>
+                    </div>
+                </form>
             </div>
             
-            <div class="row">
-                <!-- NUTRITION & MACROS -->
-                <div class="col-md-4">
-                    <div class="nutrition-card">
-                        <h3 style="margin-top: 0; color: #10b981; font-weight: 700; display: flex; align-items: center; gap: 8px;">
-                            <i class="entypo-leaf"></i> Nutrition Core
-                        </h3>
-                        
-                        <div class="macro-grid">
-                            <div class="macro-box">
-                                <div style="font-size: 11px; color: #a3a3a3; text-transform: uppercase;">Calories</div>
-                                <div class="macro-value"><?php echo htmlspecialchars($my_plan['diet']['calories']); ?></div>
-                            </div>
-                            <div class="macro-box">
-                                <div style="font-size: 11px; color: #a3a3a3; text-transform: uppercase;">Protein</div>
-                                <div class="macro-value" style="color: #60a5fa;"><?php echo htmlspecialchars($my_plan['diet']['protein']); ?></div>
-                            </div>
-                            <div class="macro-box">
-                                <div style="font-size: 11px; color: #a3a3a3; text-transform: uppercase;">Carbs</div>
-                                <div class="macro-value" style="color: #fbbf24;"><?php echo htmlspecialchars($my_plan['diet']['carbs']); ?></div>
-                            </div>
-                            <div class="macro-box">
-                                <div style="font-size: 11px; color: #a3a3a3; text-transform: uppercase;">Fats</div>
-                                <div class="macro-value" style="color: #f43f5e;"><?php echo htmlspecialchars($my_plan['diet']['fats']); ?></div>
-                            </div>
-                        </div>
-                        
-                        <h4 style="margin-top: 25px; color: #fff; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">Pro Tips</h4>
-                        <ul class="tips-list">
-                            <?php foreach ($my_plan['diet']['tips'] as $tip): ?>
-                                <li><i class="entypo-check"></i> <?php echo htmlspecialchars($tip); ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
+            <div id="loading-overlay">
+                <div class="spinner"></div>
+                <h4 style="color: var(--accent-primary);">Analyzing metrics and generating customized plan...</h4>
+            </div>
+
+            <div id="ai-results">
+                <!-- Metrics -->
+                <h3 style="color: #fff; margin-bottom: 20px;"><i class="entypo-chart-bar"></i> Your Body Metrics</h3>
+                <div class="row">
+                    <div class="col-sm-3 col-xs-6"><div class="stat-box"><h4>Current BMI</h4><div class="val" id="res-bmi"></div><div id="res-bmi-cat" style="font-size: 12px; color: var(--text-muted);"></div></div></div>
+                    <div class="col-sm-3 col-xs-6"><div class="stat-box"><h4>Maintenance Cal (BMR)</h4><div class="val" id="res-bmr"></div></div></div>
+                    <div class="col-sm-3 col-xs-6"><div class="stat-box"><h4>Target Cal (Goal)</h4><div class="val" id="res-target" style="color: var(--accent-primary);"></div></div></div>
+                    <div class="col-sm-3 col-xs-6"><div class="stat-box"><h4>Protein Goal</h4><div class="val" id="res-protein"></div></div></div>
                 </div>
 
-                <!-- 7-DAY WORKOUT SPLIT -->
-                <div class="col-md-5">
-                    <h3 style="margin-top: 0; margin-bottom: 20px; color: #fff; font-weight: 700; display: flex; align-items: center; gap: 8px;">
-                        <i class="entypo-calendar"></i> 7-Day Workout Split
-                    </h3>
-                    
-                    <?php foreach ($my_plan['workout'] as $workout): ?>
-                        <div class="split-card workout-item" data-focus="<?php echo htmlspecialchars(strtolower($workout['focus'])); ?>" onmouseenter="highlightMuscle(this.dataset.focus)" onmouseleave="resetMuscle()">
-                            <div class="day-badge"><?php echo htmlspecialchars($workout['day']); ?></div>
-                            <div class="workout-focus"><?php echo htmlspecialchars($workout['focus']); ?></div>
-                            <div class="workout-details"><?php echo htmlspecialchars($workout['details']); ?></div>
+                <div class="row" style="margin-top: 20px;">
+                    <!-- Workout Plan -->
+                    <div class="col-md-6">
+                        <h3 style="color: #fff; margin-bottom: 20px;"><i class="entypo-flash"></i> Generated Workout Split</h3>
+                        <div id="workout-container"></div>
+                    </div>
+                    <!-- Diet Plan -->
+                    <div class="col-md-6">
+                        <h3 style="color: var(--success); margin-bottom: 20px;"><i class="entypo-leaf"></i> Customized Nutrition</h3>
+                        <div class="form-card" style="padding: 10px;">
+                            <div id="diet-container"></div>
                         </div>
-                    <?php endforeach; ?>
+                    </div>
                 </div>
                 
-                <!-- INTERACTIVE MUSCLE MAP -->
-                <div class="col-md-3">
-                    <div style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,107,0,0.2); border-radius: 12px; padding: 20px; text-align: center; position: sticky; top: 20px;">
-                        <h4 style="color: #ff6b00; font-weight: bold; margin-top: 0; text-transform: uppercase; font-size: 12px; letter-spacing: 1px;">Target Muscle Tracker</h4>
-                        <p style="font-size: 11px; color: #a3a3a3; margin-bottom: 20px;">Hover over a workout day to see the targeted muscle group.</p>
-                        
-                        <svg viewBox="0 0 100 200" style="width: 100%; max-height: 400px; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));">
-                            <!-- Base Body -->
-                            <path d="M40,20 C40,10 60,10 60,20 C60,30 40,30 40,20 Z" fill="#333" /> <!-- Head -->
-                            <path d="M30,30 C50,25 50,25 70,30 L75,70 L65,70 L65,100 L35,100 L35,70 L25,70 Z" fill="#222" /> <!-- Torso Base -->
-                            
-                            <!-- Muscle Groups (Interactive) -->
-                            <path id="muscle-shoulders" d="M25,30 C35,25 65,25 75,30 L75,40 C65,35 35,35 25,40 Z" fill="#444" style="transition: all 0.3s;" />
-                            <path id="muscle-chest" d="M35,40 C50,45 50,45 65,40 L65,55 C50,60 50,60 35,55 Z" fill="#444" style="transition: all 0.3s;" />
-                            <path id="muscle-back" d="M30,40 L35,40 L35,70 L30,60 Z M65,40 L70,40 L70,60 L65,70 Z" fill="#444" style="transition: all 0.3s;" />
-                            <path id="muscle-arms" d="M25,40 L15,80 L20,80 L30,40 Z M75,40 L85,80 L80,80 L70,40 Z" fill="#444" style="transition: all 0.3s;" />
-                            <path id="muscle-core" d="M40,60 C50,65 50,65 60,60 L60,95 C50,90 50,90 40,95 Z" fill="#444" style="transition: all 0.3s;" />
-                            <path id="muscle-legs" d="M35,100 L45,100 L45,180 L35,180 Z M55,100 L65,100 L65,180 L55,180 Z" fill="#444" style="transition: all 0.3s;" />
-                            <path id="muscle-cardio" d="M45,45 C55,45 55,55 45,55 C35,55 35,45 45,45 Z" fill="transparent" stroke="#444" stroke-width="2" style="transition: all 0.3s;" /> <!-- Heart symbol -->
-                        </svg>
-                    </div>
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn btn-default" onclick="document.getElementById('ai-results').style.display='none'; document.getElementById('ai-form-container').style.display='block';">
+                        <i class="entypo-ccw"></i> Recalculate Plan
+                    </button>
                 </div>
             </div>
 
-            <script>
-                function highlightMuscle(focusStr) {
-                    const str = focusStr.toLowerCase();
-                    const muscles = {
-                        chest: ['chest'],
-                        back: ['back'],
-                        arm: ['arms'],
-                        tricep: ['arms'],
-                        bicep: ['arms'],
-                        shoulder: ['shoulders'],
-                        leg: ['legs'],
-                        quad: ['legs'],
-                        hamstring: ['legs'],
-                        calf: ['legs'],
-                        core: ['core'],
-                        ab: ['core'],
-                        full: ['chest', 'back', 'arms', 'shoulders', 'legs', 'core'],
-                        cardio: ['cardio'],
-                        hiit: ['cardio']
-                    };
-                    
-                    let found = false;
-                    Object.keys(muscles).forEach(key => {
-                        if (str.includes(key)) {
-                            found = true;
-                            muscles[key].forEach(m => {
-                                const el = document.getElementById('muscle-' + m);
-                                if (el) {
-                                    el.style.fill = (m === 'cardio') ? 'transparent' : '#ff6b00';
-                                    if (m === 'cardio') el.style.stroke = '#ff6b00';
-                                    el.style.filter = 'drop-shadow(0 0 8px #ff6b00)';
-                                }
-                            });
-                        }
-                    });
-                }
-                
-                function resetMuscle() {
-                    const allMuscles = ['chest', 'back', 'arms', 'shoulders', 'core', 'legs', 'cardio'];
-                    allMuscles.forEach(m => {
-                        const el = document.getElementById('muscle-' + m);
-                        if (el) {
-                            el.style.fill = (m === 'cardio') ? 'transparent' : '#444';
-                            if (m === 'cardio') el.style.stroke = '#444';
-                            el.style.filter = 'none';
-                        }
-                    });
-                }
-            </script>
-
-            <?php include('../admin/footer.php'); ?>
+            <?php include('footer.php'); ?>
         </div>
     </div>
+    
+    <script>
+    async function generatePlan(e) {
+        e.preventDefault();
+        
+        document.getElementById('ai-form-container').style.display = 'none';
+        document.getElementById('ai-results').style.display = 'none';
+        document.getElementById('loading-overlay').style.display = 'block';
+        
+        const payload = {
+            goal: document.getElementById('goal').value,
+            diet: document.getElementById('diet').value,
+            weight: document.getElementById('weight').value,
+            height: document.getElementById('height').value,
+            medical: document.getElementById('medical').value
+        };
+        
+        try {
+            const response = await fetch('../../api/get_ai_plan.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+            
+            // Populate Metrics
+            document.getElementById('res-bmi').innerText = data.metrics.bmi;
+            document.getElementById('res-bmi-cat').innerText = data.metrics.bmi_category;
+            document.getElementById('res-bmr').innerText = data.metrics.tdee + ' kcal';
+            document.getElementById('res-target').innerText = data.metrics.target_calories + ' kcal';
+            document.getElementById('res-protein').innerText = data.metrics.macros.protein;
+            
+            // Populate Workout
+            let wHtml = '';
+            for (const [day, desc] of Object.entries(data.workout_plan)) {
+                if(day === 'Notes') {
+                    wHtml += `<div style="margin-top:15px; color:var(--text-muted); font-size:12px;"><strong>Coach Note:</strong> ${desc}</div>`;
+                } else {
+                    wHtml += `<div class="split-card"><div class="day-badge">${day}</div><div style="color:#fff; font-size:15px;">${desc}</div></div>`;
+                }
+            }
+            document.getElementById('workout-container').innerHTML = wHtml;
+            
+            // Populate Diet
+            let dHtml = '';
+            for (const [meal, item] of Object.entries(data.diet_plan)) {
+                dHtml += `<div class="diet-item"><strong>${meal}</strong><span style="color:#e2e8f0;">${item}</span></div>`;
+            }
+            document.getElementById('diet-container').innerHTML = dHtml;
+            
+            // Show Results
+            document.getElementById('loading-overlay').style.display = 'none';
+            document.getElementById('ai-results').style.display = 'block';
+            
+        } catch (err) {
+            alert('Failed to connect to the AI engine. Please try again.');
+            console.error(err);
+            document.getElementById('loading-overlay').style.display = 'none';
+            document.getElementById('ai-form-container').style.display = 'block';
+        }
+    }
+    </script>
 </body>
 </html>

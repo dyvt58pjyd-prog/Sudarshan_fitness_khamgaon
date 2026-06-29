@@ -23,6 +23,11 @@ $input = json_decode(file_get_contents('php://input'), true);
 $goal = isset($input['goal']) ? trim($input['goal']) : 'Fat Loss';
 $diet = isset($input['diet']) ? trim($input['diet']) : 'Vegetarian';
 $medical = isset($input['medical']) ? trim($input['medical']) : 'None';
+
+// Override with POST values if provided
+if (isset($input['height']) && !empty($input['height'])) $height = floatval($input['height']);
+if (isset($input['weight']) && !empty($input['weight'])) $weight = floatval($input['weight']);
+
 $send_wa = isset($input['send_whatsapp']) && $input['send_whatsapp'] === true;
 
 // Compute BMI
