@@ -24,6 +24,15 @@ document.addEventListener("DOMContentLoaded", function() {
         document.head.appendChild(metaViewport);
     }
 
+    // Global Mobile Hamburger Menu Injection
+    var headerEnv = document.querySelector(".logo-env");
+    if (headerEnv && !document.querySelector(".sidebar-mobile-menu")) {
+        var mobileMenuDiv = document.createElement("div");
+        mobileMenuDiv.className = "sidebar-mobile-menu visible-xs";
+        mobileMenuDiv.innerHTML = '<a href="#" class="with-animation"><i class="entypo-menu"></i></a>';
+        headerEnv.appendChild(mobileMenuDiv);
+    }
+
     // Dynamic logo injection
     var logoImg = document.querySelector(".logo img");
     if (logoImg) {
