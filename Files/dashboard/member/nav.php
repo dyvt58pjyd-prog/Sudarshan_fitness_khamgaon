@@ -4,7 +4,7 @@ $gym_settings_data = get_gym_details($con);
 <ul id="main-menu" class="">
     <li id="dash"><a href="index.php"><i class="entypo-gauge"></i><span>My Dashboard</span></a></li>
     <li id="myplan"><a href="my_plan.php"><i class="entypo-star" style="color: #ff6b00;"></i><span style="color: #ff6b00; font-weight: bold;">My Smart Plan</span></a></li>
-    <li id="routine"><a href="routine.php"><i class="entypo-alert"></i><span>My Routine</span></a></li>
+    <li id="my_routine"><a href="my_routine.php"><i class="entypo-alert"></i><span>My Routine</span></a></li>
     <li id="profile"><a href="profile.php"><i class="entypo-folder"></i><span>My Profile</span></a></li>
     <li id="receipts"><a href="receipts.php"><i class="entypo-doc-text"></i><span>My Receipts</span></a></li>
     <li id="renew"><a href="payment.php"><i class="entypo-credit-card"></i><span>Membership Renewal</span></a></li>

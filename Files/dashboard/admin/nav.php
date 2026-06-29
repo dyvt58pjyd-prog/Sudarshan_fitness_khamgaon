@@ -65,6 +65,7 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
                 <li class="active"><a href="view_mem.php"><span>Edit Members</span></a></li>
             <?php endif; ?>
             <li><a href="table_view.php"><span>View Members</span></a></li>
+            <li id="assign_routine"><a href="assign_routine.php"><span>Assign Routines</span></a></li>
         </ul>
     </li>
 
