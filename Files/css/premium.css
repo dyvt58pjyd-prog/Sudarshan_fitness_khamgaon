@@ -1140,19 +1140,34 @@ body, html, .main-content, .sidebar-menu, .a1-card-8, .tile-stats, table, td, th
      MOBILE SIDEBAR (Overlay Drawer)
      ================================== */
   
+  /* Fix iOS Safari 100vh bug */
+  body, html {
+    height: -webkit-fill-available;
+  }
+  
   /* Reset container to block to prevent table-cell squishing */
   .page-container {
     padding-left: 0 !important;
     display: block !important;
-    width: 100% !important;
+    width: 100vw !important;
+    min-height: -webkit-fill-available !important;
     overflow-x: hidden !important;
   }
   
   .main-content {
     display: block !important;
-    width: 100% !important;
+    width: 100vw !important;
+    min-height: -webkit-fill-available !important;
     margin-left: 0 !important;
     padding: 80px 15px 30px 15px !important;
+  }
+
+  /* Improve touch targets for mobile buttons */
+  .btn, a.btn, button {
+    min-height: 44px !important; /* Apple Human Interface Guidelines minimum touch target */
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   /* The Sidebar Drawer */

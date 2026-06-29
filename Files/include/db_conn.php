@@ -1,7 +1,9 @@
 <?php
-// Suppress PHP deprecation warnings and notices to prevent breaking JSON/AJAX responses
-error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
+// Suppress PHP deprecation warnings, notices, and warnings to prevent breaking JSON/AJAX responses
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
 ini_set('display_errors', 0);
+ini_set('log_errors', 1); // Log them silently instead of breaking UI
+ini_set('error_log', __DIR__ . '/php_error_log.txt');
 
 // Dynamic Environment Detection (Local vs InfinityFree Production)
 $is_local = false;
