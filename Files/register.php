@@ -78,12 +78,40 @@ if (isset($_POST['submit_registration'])) {
                 $target_file = $target_dir . $new_file_name;
                 
                 if (move_uploaded_file($file_tmp, $target_file)) {
+                    // Handle Profile Photo (Webcam Base64 OR Uploaded File)
+                    $photo_path_db = "";
+                    if (!empty($_POST['captured_photo'])) {
+                        // It's a Base64 webcam image
+                        $base64_string = $_POST['captured_photo'];
+                        $image_parts = explode(";base64,", $base64_string);
+                        if (count($image_parts) == 2) {
+                            $image_base64 = base64_decode($image_parts[1]);
+                            $photo_filename = "member_photo_" . $next_id . "_" . time() . ".jpg";
+                            $photo_target = $target_dir . $photo_filename;
+                            if (file_put_contents($photo_target, $image_base64)) {
+                                $photo_path_db = "../../Sudarshan Data Folder/" . $photo_filename;
+                            }
+                        }
+                    } elseif (isset($_FILES['upload_photo']) && $_FILES['upload_photo']['error'] === UPLOAD_ERR_OK) {
+                        // It's a standard file upload
+                        $p_file_tmp = $_FILES['upload_photo']['tmp_name'];
+                        $p_file_name = $_FILES['upload_photo']['name'];
+                        $p_file_ext = strtolower(pathinfo($p_file_name, PATHINFO_EXTENSION));
+                        if (in_array($p_file_ext, array('jpg', 'jpeg', 'png'))) {
+                            $photo_filename = "member_photo_" . $next_id . "_" . time() . "." . $p_file_ext;
+                            $photo_target = $target_dir . $photo_filename;
+                            if (move_uploaded_file($p_file_tmp, $photo_target)) {
+                                $photo_path_db = "../../Sudarshan Data Folder/" . $photo_filename;
+                            }
+                        }
+                    }
+
                     // Generate random 6-digit gate code
                     $entry_code = strval(rand(100000, 999999));
                     
                     // Insert into users
-                    $query_user = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, entry_code, biometric_id, biometric_enabled) 
-                                   VALUES ('$uname', '$gender', '$phn', '$email', '$dob', CURRENT_DATE(), '$next_id', '$entry_code', '$next_id', 1)";
+                    $query_user = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, entry_code, biometric_id, biometric_enabled, photo) 
+                                   VALUES ('$uname', '$gender', '$phn', '$email', '$dob', CURRENT_DATE(), '$next_id', '$entry_code', '$next_id', 1, '$photo_path_db')";
                     
                     if (mysqli_query($con, $query_user)) {
                         // Insert into address
@@ -337,9 +365,47 @@ if (isset($_POST['submit_registration'])) {
                         </div>
                     </div>
 
-                    <!-- Section 3: Select Plan & Payment -->
+                    <!-- Section 3: Profile Photo (Webcam or File Upload) -->
                     <div class="form-section">
-                        <div class="form-section-title"><i class="entypo-credit-card"></i> 3. Select Membership & Pay</div>
+                        <div class="form-section-title"><i class="entypo-camera"></i> 3. Profile Photo</div>
+                        <div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; border: 1px solid var(--glass-border);">
+                            
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <!-- Live Video Feed / Captured Snapshot -->
+                                <video id="webcam-video" autoplay playsinline style="width: 100%; max-width: 300px; border-radius: 12px; display: none; margin: 0 auto; border: 2px solid var(--accent-primary);"></video>
+                                <img id="photo-preview" style="width: 100%; max-width: 300px; border-radius: 12px; display: none; margin: 0 auto; border: 2px solid var(--success);" />
+                                <canvas id="photo-canvas" style="display: none;"></canvas>
+                                
+                                <!-- Hidden input to hold Base64 data -->
+                                <input type="hidden" name="captured_photo" id="captured_photo" value="">
+                            </div>
+
+                            <div class="row text-center">
+                                <div class="col-xs-6">
+                                    <button type="button" id="start-camera-btn" class="btn btn-primary" style="width: 100%; font-weight: bold;">
+                                        <i class="entypo-camera"></i> Use Camera
+                                    </button>
+                                    <button type="button" id="capture-btn" class="btn btn-success" style="width: 100%; font-weight: bold; display: none;">
+                                        <i class="entypo-record"></i> Take Photo
+                                    </button>
+                                    <button type="button" id="retake-btn" class="btn btn-warning" style="width: 100%; font-weight: bold; display: none; margin-top: 10px;">
+                                        <i class="entypo-ccw"></i> Retake
+                                    </button>
+                                </div>
+                                <div class="col-xs-6" style="border-left: 1px dashed rgba(255,255,255,0.2);">
+                                    <label style="display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px;">Or Upload File</label>
+                                    <input type="file" name="upload_photo" id="upload_photo" accept="image/*" class="form-control-premium" style="padding: 6px !important; margin: 0;" onchange="previewUploadedPhoto(this)">
+                                </div>
+                            </div>
+                            <div style="text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 15px;">
+                                *Please provide a clear face photo. You can either take a selfie now or upload a picture.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Select Plan & Payment -->
+                    <div class="form-section">
+                        <div class="form-section-title"><i class="entypo-credit-card"></i> 4. Select Membership & Pay</div>
                         
                         <div class="form-group-premium" style="margin-bottom: 20px;">
                             <label>Choose Membership Plan</label>
@@ -530,6 +596,81 @@ if (isset($_POST['submit_registration'])) {
             }
 
         });
+        // ==========================================
+        // PHOTO CAPTURE & WEBRTC LOGIC
+        // ==========================================
+        const video = document.getElementById('webcam-video');
+        const canvas = document.getElementById('photo-canvas');
+        const photoPreview = document.getElementById('photo-preview');
+        const capturedInput = document.getElementById('captured_photo');
+        const uploadInput = document.getElementById('upload_photo');
+        
+        const startBtn = document.getElementById('start-camera-btn');
+        const captureBtn = document.getElementById('capture-btn');
+        const retakeBtn = document.getElementById('retake-btn');
+
+        let stream = null;
+
+        startBtn.addEventListener('click', async () => {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+                video.srcObject = stream;
+                video.style.display = 'block';
+                photoPreview.style.display = 'none';
+                
+                startBtn.style.display = 'none';
+                captureBtn.style.display = 'inline-block';
+                retakeBtn.style.display = 'none';
+                uploadInput.value = ''; // clear upload if using camera
+            } catch (err) {
+                alert("Camera access denied or unavailable. Please upload a file instead.");
+                console.error(err);
+            }
+        });
+
+        captureBtn.addEventListener('click', () => {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+            photoPreview.src = dataUrl;
+            capturedInput.value = dataUrl; // Store base64 in hidden input
+            
+            // Stop camera stream
+            stream.getTracks().forEach(track => track.stop());
+            
+            video.style.display = 'none';
+            photoPreview.style.display = 'block';
+            captureBtn.style.display = 'none';
+            retakeBtn.style.display = 'inline-block';
+        });
+
+        retakeBtn.addEventListener('click', () => {
+            capturedInput.value = '';
+            startBtn.click(); // Restart camera
+        });
+
+        // If they upload a file, clear the webcam data and show preview
+        function previewUploadedPhoto(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    photoPreview.src = e.target.result;
+                    photoPreview.style.display = 'block';
+                    video.style.display = 'none';
+                    
+                    // Clear camera states
+                    capturedInput.value = '';
+                    if (stream) stream.getTracks().forEach(track => track.stop());
+                    
+                    startBtn.style.display = 'inline-block';
+                    captureBtn.style.display = 'none';
+                    retakeBtn.style.display = 'none';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
     </script>
 </body>
 </html>
