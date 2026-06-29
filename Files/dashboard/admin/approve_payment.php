@@ -34,6 +34,8 @@ $mem_mobile = $user_row['mobile'];
 
 date_default_timezone_set("Asia/Calcutta");
 $cdate = date('Y-m-d');
+$launch_date = '2026-07-08';
+$calc_base_date = ($cdate < $launch_date) ? $launch_date : $cdate;
 $payment_mode = 'UPI';
 $received_by = 'Admin Verification (' . $_SESSION['full_name'] . ')';
 
@@ -48,7 +50,7 @@ if (strpos($pid, 'PT_') === 0) {
     $tr_q = mysqli_query($con, "SELECT Full_name FROM admin WHERE username='$trainer_id'");
     $trainer_name = ($tr_q && mysqli_num_rows($tr_q)>0) ? mysqli_fetch_assoc($tr_q)['Full_name'] : 'Assigned Trainer';
     
-    $d = strtotime("+" . $duration . " Months", strtotime($cdate));
+    $d = strtotime("+" . $duration . " Months", strtotime($calc_base_date));
     $expiredate = date("Y-m-d", $d);
     
     $ins_pt = "INSERT INTO pt_enrollments (uid, trainer_id, enroll_date, expire_date, amount, payment_mode, received_by) 
@@ -78,7 +80,7 @@ if (strpos($pid, 'PT_') === 0) {
         
         mysqli_query($con, "UPDATE enrolls_to SET renewal='no' WHERE uid='$userid'");
         
-        $d = strtotime("+" . $validity . " Months", strtotime($cdate));
+        $d = strtotime("+" . $validity . " Months", strtotime($calc_base_date));
         $expiredate = date("Y-m-d", $d);
         
         $ins_enroll = "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 

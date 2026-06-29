@@ -109,9 +109,14 @@ if (isset($_POST['submit_registration'])) {
                     // Generate random 6-digit gate code
                     $entry_code = strval(rand(100000, 999999));
                     
+                    // Pre-Booking Logic
+                    $launch_date = '2026-07-08';
+                    $today = date('Y-m-d');
+                    $joining_date_val = ($today < $launch_date) ? "'$launch_date'" : "CURRENT_DATE()";
+
                     // Insert into users
                     $query_user = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, entry_code, biometric_id, biometric_enabled, photo) 
-                                   VALUES ('$uname', '$gender', '$phn', '$email', '$dob', CURRENT_DATE(), '$next_id', '$entry_code', '$next_id', 1, '$photo_path_db')";
+                                   VALUES ('$uname', '$gender', '$phn', '$email', '$dob', $joining_date_val, '$next_id', '$entry_code', '$next_id', 1, '$photo_path_db')";
                     
                     if (mysqli_query($con, $query_user)) {
                         // Insert into address

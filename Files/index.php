@@ -153,7 +153,15 @@ if (substr($logo_path, 0, 6) === '../../') {
 
                     <div class="login-bottom-links" style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
                         <a href="forgot_password.php" class="link">Forgot your password?</a>
-                        <a href="register.php" class="link" style="color: var(--accent-primary); font-weight: bold; text-decoration: none;">Click for New Registration</a>
+                        <?php
+                        $launch_date = '2026-07-08';
+                        $today = date('Y-m-d');
+                        if ($today < $launch_date) {
+                            echo '<a href="#" onclick="alert(\'Congratulations on pre-booking! Please note that your official membership will begin on July 8th, 2026 when the gym officially opens!\'); window.location.href=\'register.php\';" class="btn" style="background: linear-gradient(135deg, #ff6b00, #ff8c00) !important; color: white !important; font-weight: bold; padding: 8px 15px; border-radius: 8px; border: none; text-decoration: none; animation: alert-pulse 1.5s infinite alternate;">Pre-Book Now!</a>';
+                        } else {
+                            echo '<a href="register.php" class="link" style="color: var(--accent-primary); font-weight: bold; text-decoration: none;">Click for New Registration</a>';
+                        }
+                        ?>
                     </div>
                     
                     <div style="margin-top: 25px; text-align: center;">
