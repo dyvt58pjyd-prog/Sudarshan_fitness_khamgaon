@@ -344,11 +344,22 @@ if (isset($_POST['submit_payment'])) {
                             </div>
 
                             <div id="upi-app-link-wrapper" style="display: none; margin: 15px 0;">
-                                <a id="upi-app-link" href="#" class="btn btn-primary" style="display: block; width: 100%; text-align: center; font-weight: 700; padding: 12px; font-size: 14px; background: var(--accent-primary); border-color: var(--accent-primary);">
-                                    <i class="entypo-phone"></i> Pay Instantly via UPI App
-                                </a>
+                                <div id="android-upi-btn">
+                                    <a id="upi-app-link" href="#" class="btn btn-primary" style="display: block; width: 100%; text-align: center; font-weight: 700; padding: 12px; font-size: 14px; background: var(--accent-primary); border-color: var(--accent-primary);">
+                                        <i class="entypo-phone"></i> Pay Instantly via UPI App
+                                    </a>
+                                </div>
+                                <div id="ios-upi-btns" style="display: none;">
+                                    <p style="font-size: 13px; font-weight: bold; margin-bottom: 8px; text-align: center;">Select your UPI App:</p>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                        <a id="ios-phonepe" href="#" class="btn btn-default" style="font-weight: bold; color: #5e239d; border-color: #5e239d; display: flex; align-items: center; justify-content: center; gap: 5px;">PhonePe</a>
+                                        <a id="ios-gpay" href="#" class="btn btn-default" style="font-weight: bold; color: #ea4335; border-color: #ea4335; display: flex; align-items: center; justify-content: center; gap: 5px;">GPay</a>
+                                        <a id="ios-paytm" href="#" class="btn btn-default" style="font-weight: bold; color: #00baf2; border-color: #00baf2; display: flex; align-items: center; justify-content: center; gap: 5px;">Paytm</a>
+                                        <a id="ios-other" href="#" class="btn btn-default" style="font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 5px;">Other</a>
+                                    </div>
+                                </div>
                                 <div style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 5px;">
-                                    (Click above if you are using your phone to pay)
+                                    (Tap an app above to open it)
                                 </div>
                             </div>
 
@@ -427,12 +438,17 @@ if (isset($_POST['submit_payment'])) {
                 const timestamp = Date.now();
                 const cleanUpiId = upiId.trim().replace(/\s+/g, '');
                 const cleanAmount = parseFloat(String(amount).replace(/,/g, '')).toFixed(2);
-                
                 const isAndroid = /Android/i.test(navigator.userAgent);
-                const intentPrefix = isAndroid ? 'intent://' : 'upi://';
-                const intentSuffix = isAndroid ? '#Intent;scheme=upi;end;' : '';
+                const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+                const isMobile = isAndroid || isIOS || /webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
                 
-                const upiUrl = `${intentPrefix}pay?pa=${cleanUpiId}&pn=${encodeURIComponent(gymName)}&am=${cleanAmount}&tn=${orderPrefix}-${timestamp}&cu=INR${intentSuffix}`;
+                const queryStr = `?pa=${cleanUpiId}&pn=${encodeURIComponent(gymName)}&am=${cleanAmount}&tn=${orderPrefix}-${timestamp}&cu=INR`;
+                let upiUrl = '';
+                if (isAndroid) {
+                    upiUrl = `intent://pay${queryStr}#Intent;scheme=upi;end;`;
+                } else {
+                    upiUrl = `upi://pay${queryStr}`;
+                }
                 
                 try {
                     if (typeof QRious !== 'undefined') {
@@ -454,14 +470,24 @@ if (isset($_POST['submit_payment'])) {
                 }
 
                 qrImg.style.display = 'inline-block';
-                const appLink = document.getElementById('upi-app-link');
-                appLink.setAttribute('data-upi-url', upiUrl);
-                appLink.href = upiUrl;
                 
-                // Show instant pay button only on mobile devices to prevent desktop protocol errors
-                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
                 if (isMobile) {
                     upiWrapper.style.display = 'block';
+                    if (isIOS) {
+                        document.getElementById('android-upi-btn').style.display = 'none';
+                        document.getElementById('ios-upi-btns').style.display = 'block';
+                        
+                        document.getElementById('ios-phonepe').href = `phonepe://pay${queryStr}`;
+                        document.getElementById('ios-gpay').href = `tez://upi/pay${queryStr}`;
+                        document.getElementById('ios-paytm').href = `paytmmp://pay${queryStr}`;
+                        document.getElementById('ios-other').href = `upi://pay${queryStr}`;
+                    } else {
+                        document.getElementById('android-upi-btn').style.display = 'block';
+                        document.getElementById('ios-upi-btns').style.display = 'none';
+                        const appLink = document.getElementById('upi-app-link');
+                        appLink.setAttribute('data-upi-url', upiUrl);
+                        appLink.href = upiUrl;
+                    }
                 } else {
                     upiWrapper.style.display = 'none';
                 }
@@ -563,6 +589,21 @@ if (isset($_POST['submit_payment'])) {
                     }
                 });
             }
+            
+            // Programmatic launcher for iOS buttons
+            const iosBtns = ['ios-phonepe', 'ios-gpay', 'ios-paytm', 'ios-other'];
+            iosBtns.forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const upiUrl = this.getAttribute('href');
+                        if (upiUrl && upiUrl !== '#') {
+                            window.location.href = upiUrl;
+                        }
+                    });
+                }
+            });
         });
     </script>
 </body>
