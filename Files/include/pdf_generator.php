@@ -143,7 +143,9 @@ if (!function_exists('generate_receipt_pdf_file')) {
         $pdf->SetX(42);
         $pdf->Cell(0, 4, $gym['gym_address'], 0, 1);
         $pdf->SetX(42);
-        $pdf->Cell(0, 4, 'Phone: ' . $gym['gym_contact'] . ' | Email: ' . $gym['gym_email'], 0, 1);
+        $res_smtp = mysqli_query($con, "SELECT smtp_username FROM smtp_settings WHERE id = 1");
+        $admin_email = ($res_smtp && mysqli_num_rows($res_smtp) > 0) ? mysqli_fetch_assoc($res_smtp)['smtp_username'] : 'admin@sudarshanfitness.de';
+        $pdf->Cell(0, 4, 'Phone: ' . $gym['gym_contact'] . ' | Email: ' . $gym['gym_email'] . ' | Admin: ' . $admin_email, 0, 1);
         
         // Invoice / Receipt Title and Metadata on Right
         $pdf->SetXY(140, 23);
@@ -454,7 +456,9 @@ if (!function_exists('generate_pt_receipt_pdf_file')) {
         $pdf->SetX(42);
         $pdf->Cell(0, 4, $gym['gym_address'], 0, 1);
         $pdf->SetX(42);
-        $pdf->Cell(0, 4, 'Phone: ' . $gym['gym_contact'] . ' | Email: ' . $gym['gym_email'], 0, 1);
+        $res_smtp = mysqli_query($con, "SELECT smtp_username FROM smtp_settings WHERE id = 1");
+        $admin_email = ($res_smtp && mysqli_num_rows($res_smtp) > 0) ? mysqli_fetch_assoc($res_smtp)['smtp_username'] : 'admin@sudarshanfitness.de';
+        $pdf->Cell(0, 4, 'Phone: ' . $gym['gym_contact'] . ' | Email: ' . $gym['gym_email'] . ' | Admin: ' . $admin_email, 0, 1);
         
         // Invoice / Receipt Title and Metadata on Right
         $pdf->SetXY(140, 23);
