@@ -136,7 +136,14 @@ if (!function_exists('generate_receipt_pdf_file')) {
         $pdf->SetFont('Helvetica', 'B', 7);
         $pdf->SetTextColor(255, 95, 0); // Premium Gym Orange
         $pdf->SetX(42);
-        $pdf->Cell(0, 4.5, 'YOUR TRANSFORMATION BEGINS FROM TODAY', 0, 1);
+        
+        $plan_start_date = isset($row['paid_date']) ? $row['paid_date'] : date('Y-m-d');
+        if ($plan_start_date > date('Y-m-d')) {
+            $formatted_start = date('F jS, Y', strtotime($plan_start_date));
+            $pdf->Cell(0, 4.5, 'YOUR TRANSFORMATION BEGINS ON ' . strtoupper($formatted_start), 0, 1);
+        } else {
+            $pdf->Cell(0, 4.5, 'YOUR TRANSFORMATION BEGINS FROM TODAY', 0, 1);
+        }
         
         $pdf->SetTextColor(100, 116, 139); // #64748B (Muted Slate)
         $pdf->SetFont('Helvetica', '', 8);

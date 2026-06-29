@@ -205,7 +205,7 @@ if ($res_max && mysqli_num_rows($res_max) > 0) {
              </tr>
 			 <tr>
                <td height="35">JOINING DATE:</td>
-                <td height="35"><input type="date" name="jdate" id="boxx" value="<?php echo $_SESSION['working_year'] . '-' . date('m-d'); ?>" required size="30"></td>
+                <td height="35"><input type="date" name="jdate" id="boxx" value="<?php echo (date('Y-m-d') < '2026-07-08') ? '2026-07-08' : date('Y-m-d'); ?>" required size="30"></td>
              </tr>
 
              <tr>

@@ -37,7 +37,8 @@ if (isset($_POST['approve_id'])) {
             
             // Calculate active subscription dates
             date_default_timezone_set("Asia/Calcutta");
-            $cdate = date('Y-m-d');
+            $today = date('Y-m-d');
+            $cdate = ($today < '2026-07-08') ? '2026-07-08' : $today;
             $d = strtotime("+" . $validity . " Months", strtotime($cdate));
             $expiredate = date("Y-m-d", $d);
             
@@ -258,8 +259,13 @@ $res_list = mysqli_query($con, $q_list);
                                             ₹<?php echo number_format($row_p['amount']); ?>
                                         </td>
                                         <td style="padding: 15px 12px; text-align: center;">
-                                            <?php if (!empty($row_p['screenshot']) && file_exists(__DIR__ . '/../../' . str_replace('../../', '', $row_p['screenshot']))): ?>
-                                                <img class="proof-thumbnail" src="<?php echo htmlspecialchars($row_p['screenshot']); ?>" alt="Proof Screenshot" onclick="showModal('<?php echo htmlspecialchars($row_p['screenshot']); ?>')">
+                                            <?php 
+                                            $clean_path = ltrim($row_p['screenshot'], './');
+                                            $physical_path = __DIR__ . '/../../' . $clean_path;
+                                            $url_path = '../../' . $clean_path;
+                                            
+                                            if (!empty($row_p['screenshot']) && file_exists($physical_path)): ?>
+                                                <img class="proof-thumbnail" src="<?php echo htmlspecialchars($url_path); ?>" alt="Proof Screenshot" onclick="showModal('<?php echo htmlspecialchars($url_path); ?>')">
                                             <?php else: ?>
                                                 <span style="color: var(--danger); font-size: 12px;">File missing or deleted</span>
                                             <?php endif; ?>
@@ -347,8 +353,13 @@ $res_list = mysqli_query($con, $q_list);
                                             ₹<?php echo number_format($row['amount']); ?>
                                         </td>
                                         <td style="padding: 15px 12px; text-align: center;">
-                                            <?php if (!empty($row['screenshot']) && file_exists($row['screenshot'])): ?>
-                                                <img class="proof-thumbnail" src="<?php echo htmlspecialchars($row['screenshot']); ?>" alt="Proof Screenshot" onclick="showModal('<?php echo htmlspecialchars($row['screenshot']); ?>')">
+                                            <?php 
+                                            $clean_path = ltrim($row['screenshot'], './');
+                                            $physical_path = __DIR__ . '/../../' . $clean_path;
+                                            $url_path = '../../' . $clean_path;
+                                            
+                                            if (!empty($row['screenshot']) && file_exists($physical_path)): ?>
+                                                <img class="proof-thumbnail" src="<?php echo htmlspecialchars($url_path); ?>" alt="Proof Screenshot" onclick="showModal('<?php echo htmlspecialchars($url_path); ?>')">
                                             <?php else: ?>
                                                 <span style="color: var(--danger); font-size: 12px;">File missing or deleted</span>
                                             <?php endif; ?>
