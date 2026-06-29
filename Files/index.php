@@ -34,7 +34,7 @@ if (substr($logo_path, 0, 6) === '../../') {
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title><?php echo htmlspecialchars($gym['gym_name']); ?> | Login</title>
-	<link rel="shortcut icon" href="images/favicon_fixed.jpg" type="image/jpeg">
+	<link rel="shortcut icon" href="images/favicon_fixed.jpg?v=2" type="image/jpeg">
 	<link rel="stylesheet" href="./css/style.css"/>
 	<link rel="stylesheet" type="text/css" href="./css/entypo.css">
 	<link rel="stylesheet" href="./css/premium.css"/>

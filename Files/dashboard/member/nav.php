@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function() {
     favicon.type = 'image/x-icon';
     favicon.rel = 'shortcut icon';
     // Use fixed favicon as requested by the user
-    favicon.href = "../../images/favicon_fixed.jpg";
+    favicon.href = "../../images/favicon_fixed.jpg?v=2";
     document.getElementsByTagName('head')[0].appendChild(favicon);
 });
 </script>
