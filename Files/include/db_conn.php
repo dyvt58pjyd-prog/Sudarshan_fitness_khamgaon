@@ -577,7 +577,7 @@ if (!function_exists('send_member_email')) {
         $pdf_path = generate_receipt_pdf_file($con, $memID);
 
         require_once __DIR__ . '/smtp_mailer.php';
-        $sent = send_smtp_email($email, $name, $subject, $mail_body, $pdf_path, basename($pdf_path));
+        $sent = send_smtp_email($email, $name, $subject, $mail_body, $pdf_path, basename($pdf_path), 'payments');
 
         // 2. Fetch mobile and send WhatsApp Welcome with PDF receipt attached
         $q_mob = mysqli_query($con, "SELECT mobile FROM users WHERE userid = '" . mysqli_real_escape_string($con, $memID) . "'");
@@ -714,7 +714,7 @@ if (!function_exists('send_payment_email')) {
         $pdf_path = generate_receipt_pdf_file($con, $memID);
 
         require_once __DIR__ . '/smtp_mailer.php';
-        $sent = send_smtp_email($email, $name, $subject, $mail_body, $pdf_path, basename($pdf_path));
+        $sent = send_smtp_email($email, $name, $subject, $mail_body, $pdf_path, basename($pdf_path), 'payments');
 
         // Send WhatsApp Payment Confirmation with PDF receipt attached
         $q_mob = mysqli_query($con, "SELECT mobile FROM users WHERE userid = '" . mysqli_real_escape_string($con, $memID) . "'");
@@ -825,7 +825,7 @@ if (!function_exists('send_pt_email')) {
         $pdf_path = generate_pt_receipt_pdf_file($con, $memID);
 
         require_once __DIR__ . '/smtp_mailer.php';
-        $sent = send_smtp_email($email, $name, $subject, $mail_body, $pdf_path, basename($pdf_path));
+        $sent = send_smtp_email($email, $name, $subject, $mail_body, $pdf_path, basename($pdf_path), 'payments');
 
         // Send WhatsApp PT Payment Confirmation with PDF receipt attached
         $q_mob = mysqli_query($con, "SELECT mobile FROM users WHERE userid = '" . mysqli_real_escape_string($con, $memID) . "'");

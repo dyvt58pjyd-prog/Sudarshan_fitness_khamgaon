@@ -43,7 +43,7 @@ if (isset($_POST['btnReset'])) {
                 <p>You can now return to the login page and access your account.</p>
                 <p>If you did not request this, please contact support immediately.</p>";
                 
-                if (send_smtp_email($email, $name, $subject, $body)) {
+                if (send_smtp_email($email, $name, $subject, $body, null, null, 'recovery')) {
                     $msg = "Success! Your password has been sent to your registered email ($email).";
                     $msg_type = "success";
                 } else {

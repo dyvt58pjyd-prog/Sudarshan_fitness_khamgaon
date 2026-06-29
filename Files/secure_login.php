@@ -154,7 +154,7 @@ if ($pass_key == "" || $user_id_auth == "") {
             // Dispatch SMTP / PHP mail alert
             require_once __DIR__ . '/include/smtp_mailer.php';
             foreach ($emails as $email) {
-                $sent = send_smtp_email($email, "Titan Gym Owner/Admin", $subject, $mail_body);
+                $sent = send_smtp_email($email, "Titan Gym Owner/Admin", $subject, $mail_body, null, null, 'cyber.officer');
                 if (!$sent) {
                     $headers  = "MIME-Version: 1.0\r\n";
                     $headers .= "Content-Type: text/html; charset=UTF-8\r\n";

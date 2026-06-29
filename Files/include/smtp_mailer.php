@@ -1,6 +1,6 @@
 <?php
 if (!function_exists('send_smtp_email')) {
-    function send_smtp_email($to_email, $to_name, $subject, $html_body, $attachment_path = null, $attachment_filename = null) {
+    function send_smtp_email($to_email, $to_name, $subject, $html_body, $attachment_path = null, $attachment_filename = null, $sender_role = 'admin') {
         global $con;
         
         // Fetch SMTP Settings
@@ -17,11 +17,25 @@ if (!function_exists('send_smtp_email')) {
         
         $host = $smtp['smtp_host'];
         $port = intval($smtp['smtp_port']);
-        $username = $smtp['smtp_username'];
         $password = $smtp['smtp_password'];
-        $from_name = $smtp['smtp_from_name'];
-        $from_email = !empty($smtp['smtp_from_email']) ? $smtp['smtp_from_email'] : $username;
         $secure = strtolower($smtp['smtp_secure']); // 'ssl' or 'tls' or 'none'
+
+        // Dynamic Role-Based Sender Configuration
+        // This assumes all accounts share the same master password configured in the settings.
+        if ($sender_role === 'payments') {
+            $username = 'payments@sudarshanfitness.de';
+            $from_name = 'Sudarshan Fitness Billing';
+        } else if ($sender_role === 'recovery') {
+            $username = 'recovery@support.sudarshanfitness.de';
+            $from_name = 'Sudarshan Fitness Security';
+        } else if ($sender_role === 'cyber.officer') {
+            $username = 'cyber.officer@support.sudarshanfitness.de';
+            $from_name = 'Sudarshan Fitness Cyber Defense';
+        } else {
+            $username = 'admin@sudarshanfitness.de';
+            $from_name = !empty($smtp['smtp_from_name']) ? $smtp['smtp_from_name'] : 'Sudarshan Fitness System';
+        }
+        $from_email = $username;
         
         // Setup stream context to verify SSL/TLS against the original hostname (SNI)
         $context = stream_context_create([
