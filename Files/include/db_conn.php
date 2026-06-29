@@ -493,8 +493,8 @@ if (!function_exists('send_member_email')) {
         $is_prebook = (date('Y-m-d') < '2026-07-08');
         $welcome_heading = $is_prebook ? "Welcome to the Sudarshan Fitness Family! (Pre-Booking Confirmed)" : "Welcome to the Sudarshan Fitness Family!";
         $welcome_text = $is_prebook ? 
-            "Congratulations on your Grand Opening Pre-Booking! Your spot is officially secured and your membership will begin on July 8th, 2026. Below are your membership details, portal credentials, and gate passcode. Your official payment receipt PDF has been attached." : 
-            "Congratulations! Your registration with the <strong>Sudarshan Fitness Family</strong> is confirmed. Below are your membership details, credentials, and gate passcode. Your official payment receipt PDF has been attached to this email.";
+            "Congratulations on your Grand Opening Pre-Booking! Your spot is officially secured and your membership will begin on July 8th, 2026. Below are your membership details and portal credentials. Your official payment receipt PDF has been attached." : 
+            "Congratulations! Your registration with the <strong>Sudarshan Fitness Family</strong> is confirmed. Below are your membership details and credentials. Your official payment receipt PDF has been attached to this email.";
 
         // Construct HTML Email Body
         $mail_body = "
@@ -523,13 +523,7 @@ if (!function_exists('send_member_email')) {
                 <p>Dear <strong>$name</strong>,</p>
                 <p>$welcome_text</p>
                 
-                " . (!empty($entry_code) ? "
-                <div style='background: linear-gradient(135deg, #1e1e1e, #0c0c0c); border: 2px solid #ff6b00; border-radius: 12px; padding: 25px; margin: 25px 0; text-align: center; box-shadow: 0 4px 15px rgba(255, 107, 0, 0.15);'>
-                    <span style='font-size: 11px; text-transform: uppercase; color: #a3a3a3; letter-spacing: 2px; font-weight: bold; display: block; margin-bottom: 8px;'>Gate Access Passcode</span>
-                    <span style='font-size: 32px; font-family: monospace; color: #ff6b00; font-weight: 800; letter-spacing: 8px;'>$entry_code</span>
-                    <p style='font-size: 12px; color: #a3a3a3; margin: 10px 0 0 0; line-height: 1.4;'>If Face ID matching fails at the entrance, enter this temporary passcode for immediate gate entry. Valid until your membership ends.</p>
-                </div>
-                " : "") . "
+
  
                  " . $whatsapp_section . "
  
@@ -629,7 +623,7 @@ if (!function_exists('send_payment_email')) {
         $gym_name = $gym['gym_name'];
         $gym_email = $gym['gym_email'];
         
-        $subject = "Payment Receipt & Gate Access Code - $gym_name";
+        $subject = "Payment Receipt - $gym_name";
         
         if ($paid_amount === NULL) {
             $paid_amount = intval($amount) - intval($discount);
@@ -664,13 +658,7 @@ if (!function_exists('send_payment_email')) {
                 <p>Dear <strong>$name</strong>,</p>
                 <p>Thank you for your payment. Below are the details of your subscription renewal transaction at <strong>$gym_name</strong>. Your official payment receipt PDF has been attached to this email.</p>
                 
-                " . (!empty($entry_code) ? "
-                <div style='background: linear-gradient(135deg, #1e1e1e, #0c0c0c); border: 2px solid #ff6b00; border-radius: 12px; padding: 25px; margin: 25px 0; text-align: center; box-shadow: 0 4px 15px rgba(255, 107, 0, 0.15);'>
-                    <span style='font-size: 11px; text-transform: uppercase; color: #a3a3a3; letter-spacing: 2px; font-weight: bold; display: block; margin-bottom: 8px;'>New Gate Access Passcode</span>
-                    <span style='font-size: 32px; font-family: monospace; color: #ff6b00; font-weight: 800; letter-spacing: 8px;'>$entry_code</span>
-                    <p style='font-size: 12px; color: #a3a3a3; margin: 10px 0 0 0; line-height: 1.4;'>Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.</p>
-                </div>
-                " : "") . "
+
 
                 <table class='details-table'>
                     <tr>
