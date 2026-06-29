@@ -458,13 +458,7 @@ if (isset($_POST['submit_registration'])) {
                                 </div>
                             </div>
 
-                            <div class="form-group-premium" style="margin-top: 20px;">
-                                <label>Enter 12-Digit UPI Ref No. / UTR <span style="color:var(--accent-primary)">*</span></label>
-                                <input class="form-control-premium" type="text" name="utr" placeholder="e.g. 345678901234" pattern="\d{12}" title="Please enter the exact 12-digit UPI UTR / Transaction reference number" required>
-                                <span class="help-block" style="color: var(--text-muted); font-size: 11px; display: block; margin-top: 5px;">
-                                    *Please enter the exact 12-digit transaction ref number from your payment receipt.
-                                </span>
-                            </div>
+
 
                             <div class="form-group-premium" style="margin-top: 20px;">
                                 <label>Upload Payment Screenshot (Receipt) <span style="color:var(--accent-primary)">*</span></label>
