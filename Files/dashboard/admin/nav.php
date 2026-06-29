@@ -41,26 +41,20 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
 </div>
 
 <ul id="main-menu" class="" >
+    <!-- 1. DASHBOARD -->
     <li id="dash"><a href="index.php"><i class="entypo-gauge"></i><span>Dashboard</span></a></li>
-    <li id="searchmem"><a href="search_member.php"><i class="entypo-search"></i><span>Search Member</span></a></li>
-    <li id="attendance_portal"><a href="attendance.php"><i class="entypo-camera"></i><span>Attendance Portal</span></a></li>
-    <li id="kiosk_link"><a href="kiosk.php" target="_blank"><i class="entypo-monitor"></i><span>Front Desk Kiosk</span></a></li>
-    <li id="biometric_manage"><a href="biometric_management.php"><i class="entypo-key"></i><span>Biometric Management</span></a></li>
-    <?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
-        <li id="biometric_logs_link"><a href="biometric_logs.php"><i class="entypo-list"></i><span>Biometric Logs</span></a></li>
-        <li id="biometric_simulator_link"><a href="biometric_simulator.php"><i class="entypo-switch"></i><span>Biometric Simulator</span></a></li>
-    <?php endif; ?>
     
+    <!-- 2. FRONT DESK / VISITORS -->
     <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
         <li id="visitor_entry"><a href="visitor_entry.php" style="color: #3b82f6;"><i class="entypo-vcard"></i><span>New Visitor Entry</span></a></li>
         <li id="visitors_list"><a href="visitors_list.php"><i class="entypo-folder"></i><span>Visitor Logs</span></a></li>
-        <li id="regis"><a href="new_entry.php"><i class="entypo-user-add"></i><span>New Registration</span></a></li>
-        <li id="paymnt"><a href="payments.php"><i class="entypo-star"></i><span>Payments</span></a></li>
-        <li id="payment_requests"><a href="payment_requests.php" style="color: #10b981;"><i class="entypo-check"></i><span>Payment Approvals (UPI)</span></a></li>
-        <li id="invoices_link"><a href="invoices.php"><i class="entypo-doc-text"></i><span>Invoices</span></a></li>
-        <li id="online_paymnt_records"><a href="online_payments_records.php"><i class="entypo-folder"></i><span>Online Payments Records</span></a></li>
     <?php endif; ?>
 
+    <!-- 3. MEMBERS & REGISTRATION -->
+    <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
+        <li id="regis"><a href="new_entry.php"><i class="entypo-user-add"></i><span>New Registration</span></a></li>
+    <?php endif; ?>
+    
     <li class="" id="hassubopen"><a href="#" onclick="memberExpand(1)"><i class="entypo-users"></i><span>Members</span></a>
         <ul id="memExpand">
             <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
@@ -70,9 +64,28 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
             <li id="assign_routine"><a href="assign_routine.php"><span>Assign Routines</span></a></li>
         </ul>
     </li>
+    <li id="searchmem"><a href="search_member.php"><i class="entypo-search"></i><span>Search Member</span></a></li>
 
+    <!-- 4. ATTENDANCE & ACCESS -->
+    <li id="attendance_portal"><a href="attendance.php"><i class="entypo-camera"></i><span>Attendance Portal</span></a></li>
+    <li id="kiosk_link"><a href="kiosk.php" target="_blank"><i class="entypo-monitor"></i><span>Front Desk Kiosk</span></a></li>
+    <li id="biometric_manage"><a href="biometric_management.php"><i class="entypo-key"></i><span>Biometric Management</span></a></li>
     <?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
-        <li class="" id="planhassubopen"><a href="#" onclick="memberExpand(2)"><i class="entypo-quote"></i><span>Plan</span></a>
+        <li id="biometric_logs_link"><a href="biometric_logs.php"><i class="entypo-list"></i><span>Biometric Logs</span></a></li>
+        <li id="biometric_simulator_link"><a href="biometric_simulator.php"><i class="entypo-switch"></i><span>Biometric Simulator</span></a></li>
+    <?php endif; ?>
+
+    <!-- 5. BILLING & PAYMENTS -->
+    <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
+        <li id="payment_requests"><a href="payment_requests.php" style="color: #10b981;"><i class="entypo-check"></i><span>Payment Approvals (UPI)</span></a></li>
+        <li id="paymnt"><a href="payments.php"><i class="entypo-star"></i><span>Make Payment</span></a></li>
+        <li id="online_paymnt_records"><a href="online_payments_records.php"><i class="entypo-folder"></i><span>Online Payments Records</span></a></li>
+        <li id="invoices_link"><a href="invoices.php"><i class="entypo-doc-text"></i><span>Invoices</span></a></li>
+    <?php endif; ?>
+
+    <!-- 6. ANALYTICS & SUBSCRIPTIONS -->
+    <?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
+        <li class="" id="planhassubopen"><a href="#" onclick="memberExpand(2)"><i class="entypo-quote"></i><span>Plan Details</span></a>
             <ul id="planExpand">
                 <li class="active"><a href="new_plan.php"><span>New Plan</span></a></li>
                 <li><a href="view_plan.php"><span>Edit Subscription Details</span></a></li>
@@ -89,16 +102,7 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
         <li id="renewal_pipeline"><a href="renewal_pipeline.php"><i class="entypo-chart-bar"></i><span>Renewal Pipeline</span></a></li>
     <?php endif; ?>
 
-    <li class="" id="routinehassubopen"><a href="#" onclick="memberExpand(4)"><i class="entypo-alert"></i><span>Exercise Routine</span></a>
-        <ul id="routineExpand">
-            <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'trainer'): ?>
-                <li class="active"><a href="addroutine.php"><span>Add Routine</span></a></li>
-                <li><a href="editroutine.php"><span>Edit Routine</span></a></li>
-            <?php endif; ?>
-            <li><a href="viewroutine.php"><span>View Routine</span></a></li>
-        </ul>
-    </li>
-
+    <!-- 7. PERSONAL TRAINING & ROUTINES -->
     <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'trainer' || $current_role === 'reception'): ?>
         <li class="" id="pthassubopen"><a href="#" onclick="memberExpand(5)"><i class="entypo-heart"></i><span>Personal Training</span></a>
             <ul id="ptExpand">
@@ -110,16 +114,30 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
                 <li><a href="view_pt.php"><span>View PT Session Logs</span></a></li>
             </ul>
         </li>
+    <?php endif; ?>
+    
+    <li class="" id="routinehassubopen"><a href="#" onclick="memberExpand(4)"><i class="entypo-alert"></i><span>Exercise Routine</span></a>
+        <ul id="routineExpand">
+            <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'trainer'): ?>
+                <li class="active"><a href="addroutine.php"><span>Add Routine</span></a></li>
+                <li><a href="editroutine.php"><span>Edit Routine</span></a></li>
+            <?php endif; ?>
+            <li><a href="viewroutine.php"><span>View Routine</span></a></li>
+        </ul>
+    </li>
+
+    <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'trainer' || $current_role === 'reception'): ?>
         <li id="bmicalc"><a href="bmi_calc.php"><i class="entypo-chart-bar"></i><span>BMI Calculator</span></a></li>
     <?php endif; ?>
 
+    <!-- 8. SETTINGS & ADMIN -->
     <?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
-        <li id="staffmanage"><a href="manage_staff.php"><i class="entypo-users"></i><span>Manage Staff</span></a></li>
         <li id="campaign_manager_link"><a href="campaign_manager.php"><i class="entypo-calendar"></i><span>Automated Campaigns</span></a></li>
-        <li id="gymsettings"><a href="gym_settings.php"><i class="entypo-cog"></i><span>Gym Settings</span></a></li>
-        <li id="whatsappsettings"><a href="whatsapp_setup.php"><i class="entypo-phone"></i><span>WhatsApp Settings</span></a></li>
         <li id="broadcastsettings"><a href="broadcast_campaign.php"><i class="entypo-megaphone"></i><span>WhatsApp Broadcast</span></a></li>
         <li id="expenses_ledger"><a href="expenses.php"><i class="entypo-book-open"></i><span>Expenses Ledger</span></a></li>
+        <li id="staffmanage"><a href="manage_staff.php"><i class="entypo-users"></i><span>Manage Staff</span></a></li>
+        <li id="gymsettings"><a href="gym_settings.php"><i class="entypo-cog"></i><span>Gym Settings</span></a></li>
+        <li id="whatsappsettings"><a href="whatsapp_setup.php"><i class="entypo-phone"></i><span>WhatsApp Settings</span></a></li>
         <?php if ($current_role === 'super_admin'): ?>
             <li id="smtpsettings"><a href="smtp_settings.php"><i class="entypo-mail"></i><span>SMTP Configuration</span></a></li>
             <li id="discountlock"><a href="discount_lock.php"><i class="entypo-lock"></i><span>Discount Lock</span></a></li>
@@ -127,6 +145,7 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
         <li id="databackup"><a href="backup_data.php"><i class="entypo-drive"></i><span>Data Import/Export</span></a></li>
     <?php endif; ?>
 
+    <!-- 9. PROFILE & LOGOUT -->
     <li id="adminprofile"><a href="more-userprofile.php"><i class="entypo-folder"></i><span>Profile</span></a></li>
     <li><a href="logout.php"><i class="entypo-logout"></i><span>Logout</span></a></li>
 </ul>
