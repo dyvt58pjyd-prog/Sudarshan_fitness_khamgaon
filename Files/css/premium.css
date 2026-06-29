@@ -1136,27 +1136,71 @@ body, html, .main-content, .sidebar-menu, .a1-card-8, .tile-stats, table, td, th
 
 /* 1. Mobile Devices (max-width: 767px) */
 @media (max-width: 767px) {
-  /* Remove hardcoded left padding for content, making it full width */
-  .page-container, 
-  .page-container.sidebar-collapsed {
+  /* ==================================
+     MOBILE SIDEBAR (Overlay Drawer)
+     ================================== */
+  
+  /* Reset container to block to prevent table-cell squishing */
+  .page-container {
     padding-left: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
   }
   
-  /* Make the menu toggle button visible properly on mobile */
+  .main-content {
+    display: block !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding: 80px 15px 30px 15px !important;
+  }
+
+  /* The Sidebar Drawer */
+  .page-container .sidebar-menu {
+    position: fixed !important;
+    top: 0;
+    bottom: 0;
+    left: 0 !important;
+    width: 260px !important;
+    z-index: 9999 !important;
+    display: block !important;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    box-shadow: 5px 0 25px rgba(0,0,0,0.5) !important;
+  }
+
+  /* When Menu is CLOSED (sidebar-collapsed) */
+  .page-container.sidebar-collapsed .sidebar-menu {
+    transform: translateX(-105%) !important;
+  }
+
+  /* When Menu is OPEN (not collapsed) */
+  .page-container:not(.sidebar-collapsed) .sidebar-menu {
+    transform: translateX(0) !important;
+  }
+
+  /* Make sure header doesn't overlap collapse button inside sidebar */
+  .logo-env {
+    padding-left: 50px !important;
+  }
+
+  /* Floating Hamburger Menu Button (Always Visible) */
   .page-container .sidebar-menu .sidebar-collapse {
-    position: relative !important;
-    display: inline-block !important;
-    background: rgba(255, 107, 0, 0.15) !important;
-    border: 1px solid rgba(255, 107, 0, 0.3) !important;
-    border-radius: 50% !important;
-    width: 38px !important;
-    height: 38px !important;
+    position: fixed !important;
+    top: 15px !important;
+    left: 15px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    background: rgba(255, 107, 0, 0.15) !important;
+    border: 1px solid rgba(255, 107, 0, 0.3) !important;
+    border-radius: 50% !important;
+    width: 42px !important;
+    height: 42px !important;
     cursor: pointer !important;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+    z-index: 10001 !important;
     transform: none !important;
+    backdrop-filter: blur(5px);
   }
   
   .page-container .sidebar-menu .sidebar-collapse a {
@@ -1164,11 +1208,8 @@ body, html, .main-content, .sidebar-menu, .a1-card-8, .tile-stats, table, td, th
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-  }
-
-  /* Make sure header doesn't overlap collapse button inside sidebar */
-  .logo-env {
-    padding-left: 70px !important;
+    width: 100%;
+    height: 100%;
   }
 
   /* Reposition the theme toggle button to top-right to prevent clash */
