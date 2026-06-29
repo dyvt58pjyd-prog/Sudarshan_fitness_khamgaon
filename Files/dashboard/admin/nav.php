@@ -54,6 +54,7 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
     <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
         <li id="regis"><a href="new_entry.php"><i class="entypo-user-add"></i><span>New Registration</span></a></li>
         <li id="paymnt"><a href="payments.php"><i class="entypo-star"></i><span>Payments</span></a></li>
+        <li id="payment_requests"><a href="payment_requests.php" style="color: #10b981;"><i class="entypo-check"></i><span>Payment Approvals (UPI)</span></a></li>
         <li id="invoices_link"><a href="invoices.php"><i class="entypo-doc-text"></i><span>Invoices</span></a></li>
         <li id="online_paymnt_records"><a href="online_payments_records.php"><i class="entypo-folder"></i><span>Online Payments Records</span></a></li>
     <?php endif; ?>

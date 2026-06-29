@@ -31,7 +31,7 @@ if ($trainers_res) {
     }
 }
 
-// Handle payment form submission (Direct Activation)
+// Handle payment form submission (Secure Pending State)
 if (isset($_POST['submit_payment'])) {
     $payment_type = mysqli_real_escape_string($con, $_POST['payment_type']);
     $utr = isset($_POST['utr']) ? mysqli_real_escape_string($con, $_POST['utr']) : '';
@@ -52,57 +52,22 @@ if (isset($_POST['submit_payment'])) {
             $target_file = $target_dir . $new_file_name;
 
             if (move_uploaded_file($file_tmp, $target_file)) {
-                // Fetch member details
-                $user_q = mysqli_query($con, "SELECT username, email, mobile FROM users WHERE userid='$userid'");
-                $user_row = mysqli_fetch_assoc($user_q);
-                $mem_name = $user_row['username'];
-                $mem_email = $user_row['email'];
-                $mem_mobile = $user_row['mobile'];
                 
                 if ($payment_type === 'membership') {
                     $pid = mysqli_real_escape_string($con, $_POST['plan_id']);
                     
                     // Get plan details
-                    $plan_q = mysqli_query($con, "SELECT planName, validity, amount FROM plan WHERE pid = '$pid'");
+                    $plan_q = mysqli_query($con, "SELECT amount FROM plan WHERE pid = '$pid'");
                     if ($plan_q && mysqli_num_rows($plan_q) > 0) {
                         $plan_data = mysqli_fetch_assoc($plan_q);
                         $amount = intval($plan_data['amount']);
-                        $plan_name = $plan_data['planName'];
-                        $validity = intval($plan_data['validity']);
                         
-                        // Direct activation: Set previous memberships to renewal='no'
-                        mysqli_query($con, "UPDATE enrolls_to SET renewal='no' WHERE uid='$userid'");
+                        // Insert into payment_requests as pending
+                        mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
+                                            VALUES ('$userid', '$pid', $amount, '$target_file', 'pending', '$utr')");
                         
-                        // Expiry calculation
-                        date_default_timezone_set("Asia/Calcutta");
-                        $cdate = date('Y-m-d');
-                        $d = strtotime("+" . $validity . " Months", strtotime($cdate));
-                        $expiredate = date("Y-m-d", $d);
-                        
-                        $payment_mode = 'UPI';
-                        $received_by = 'Member Self-Renewal';
-                        
-                        // Insert to enrolls_to
-                        $ins_enroll = "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
-                                       VALUES ('$pid', '$userid', '$cdate', '$expiredate', 'yes', '$payment_mode', '$received_by', 0, $amount)";
-                        
-                        if (mysqli_query($con, $ins_enroll)) {
-                            // Rotate gate code
-                            $new_entry_code = strval(rand(100000, 999999));
-                            mysqli_query($con, "UPDATE users SET entry_code = '$new_entry_code' WHERE userid = '$userid'");
-                            
-                            // Log payment request as approved immediately
-                            mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
-                                                VALUES ('$userid', '$pid', $amount, '$target_file', 'approved', '$utr')");
-                            
-                            // Send Email (which automatically triggers WhatsApp receipt with PDF)
-                            send_payment_email($con, $mem_email, $mem_name, $userid, $plan_name, $amount, $expiredate, $payment_mode, $received_by, $new_entry_code, 0, $amount);
-                            
-                            echo "<script>alert('Membership successfully renewed and activated! Confirmation receipt sent via Email/WhatsApp.'); window.location.href='index.php';</script>";
-                            exit();
-                        } else {
-                            echo "<script>alert('Database error: Failed to activate renewal plan.');</script>";
-                        }
+                        echo "<script>alert('Payment submitted successfully! Your membership will be activated once the Admin verifies the UTR.'); window.location.href='index.php';</script>";
+                        exit();
                     } else {
                         echo "<script>alert('Invalid plan selected.');</script>";
                     }
@@ -110,7 +75,6 @@ if (isset($_POST['submit_payment'])) {
                     $trainer_id = mysqli_real_escape_string($con, $_POST['trainer_id']);
                     $duration = intval($_POST['pt_duration']);
                     
-                    // Determine amount based on duration selection
                     $pt_rates = [
                         1 => 3000,
                         2 => 6000,
@@ -120,47 +84,14 @@ if (isset($_POST['submit_payment'])) {
                     ];
                     $amount = isset($pt_rates[$duration]) ? $pt_rates[$duration] : ($duration * 3000);
                     
-                    // Fetch trainer details
-                    $tr_q = mysqli_query($con, "SELECT Full_name FROM admin WHERE username='$trainer_id'");
-                    if ($tr_q && mysqli_num_rows($tr_q) > 0) {
-                        $tr_row = mysqli_fetch_assoc($tr_q);
-                        $trainer_name = $tr_row['Full_name'];
-                        
-                        // Expiry calculation
-                        date_default_timezone_set("Asia/Calcutta");
-                        $cdate = date('Y-m-d');
-                        $d = strtotime("+" . $duration . " Months", strtotime($cdate));
-                        $expiredate = date("Y-m-d", $d);
-                        
-                        $payment_mode = 'UPI';
-                        $received_by = 'Member Self-Renewal';
-                        
-                        // Insert to pt_enrollments
-                        $ins_pt = "INSERT INTO pt_enrollments (uid, trainer_id, enroll_date, expire_date, amount, payment_mode, received_by) 
-                                   VALUES ('$userid', '$trainer_id', '$cdate', '$expiredate', $amount, '$payment_mode', '$received_by')";
-                        
-                        if (mysqli_query($con, $ins_pt)) {
-                            // Update users table with active trainer
-                            mysqli_query($con, "UPDATE users SET trainer_id = '$trainer_id' WHERE userid = '$userid'");
-                            
-                            // Log payment request as approved using hidden PTPLAN record
-                            mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
-                                                VALUES ('$userid', 'PTPLAN', $amount, '$target_file', 'approved', '$utr')");
-                            
-                            // Send Email (which automatically triggers WhatsApp receipt with PDF)
-                            send_pt_email($con, $mem_email, $mem_name, $userid, $trainer_name, $amount, $expiredate, $payment_mode, $received_by);
-                            
-                            // Notify trainer of the new PT client assignment
-                            send_whatsapp_trainer_pt_notification($con, $trainer_id, $mem_name, $userid);
-                            
-                            echo "<script>alert('Personal Training successfully renewed and activated! Confirmation receipt sent via Email/WhatsApp.'); window.location.href='index.php';</script>";
-                            exit();
-                        } else {
-                            echo "<script>alert('Database error: Failed to activate PT plan.');</script>";
-                        }
-                    } else {
-                        echo "<script>alert('Selected trainer not found.');</script>";
-                    }
+                    // Use a special prefix for PT plans to identify them in the approval queue
+                    $pid = "PT_" . $trainer_id . "_" . $duration;
+                    
+                    mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
+                                        VALUES ('$userid', '$pid', $amount, '$target_file', 'pending', '$utr')");
+                    
+                    echo "<script>alert('PT Payment submitted successfully! Your PT session will be activated once the Admin verifies the UTR.'); window.location.href='index.php';</script>";
+                    exit();
                 }
             } else {
                 echo "<script>alert('Failed to save payment proof screenshot.');</script>";
