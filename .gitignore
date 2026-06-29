@@ -1,0 +1,14 @@
+node_modules/
+whatsapp_service/node_modules/
+whatsapp_service/sessions/
+.DS_Store
+*.zip
+*.pem
+*.log
+whatsapp_service/.wwebjs_cache/
+Files/uploads/backups/
+upload_chunk_*
+*.pdf
+*.docx
+*.pptx
+*.sql

@@ -1,0 +1,3071 @@
+========================================================
+DATE: 2026-06-17 16:22:33
+TO: exp1@example.com
+SUBJECT: Membership Expiry Notice - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #ff6b00, #ff8c00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .warning-box { background-color: rgba(255, 107, 0, 0.05); border: 1px dashed rgba(255, 107, 0, 0.3); padding: 25px; margin: 25px 0; border-radius: 12px; font-size: 14px; line-height: 1.6; }
+                .warning-box strong { color: #ff6b00; }
+                .warning-box code { background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+                .renew-msg { font-size: 16px; font-weight: bold; color: #ff6b00; text-align: center; margin: 20px 0; border: 1px solid rgba(255,107,0,0.2); padding: 15px; border-radius: 8px; background: rgba(255,107,0,0.02); }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Membership Expiry Alert
+                Dear Expiring One,
+                This is an automated notification from SUDARSHAN FITNESS KHAMGAON to inform you that your gym membership is expiring soon.
+                
+                
+                    Active Subscription Details:
+                    Current Plan: Monthly Plan
+                    Time Remaining: 1 day
+                    Expiration Date: 2026-06-18
+                
+                
+                
+                    renew on date = 2026-06-18
+                
+                
+                To prevent any service interruption at the front gate scanner, please renewal your membership package on or before the expiration date.
+                
+                
+                    This is an automated notification from SUDARSHAN FITNESS KHAMGAON.
+                    Need assistance? Contact us at: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-17 16:22:36
+TO: exp2@example.com
+SUBJECT: Membership Expiry Notice - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #ff6b00, #ff8c00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .warning-box { background-color: rgba(255, 107, 0, 0.05); border: 1px dashed rgba(255, 107, 0, 0.3); padding: 25px; margin: 25px 0; border-radius: 12px; font-size: 14px; line-height: 1.6; }
+                .warning-box strong { color: #ff6b00; }
+                .warning-box code { background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+                .renew-msg { font-size: 16px; font-weight: bold; color: #ff6b00; text-align: center; margin: 20px 0; border: 1px solid rgba(255,107,0,0.2); padding: 15px; border-radius: 8px; background: rgba(255,107,0,0.02); }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Membership Expiry Alert
+                Dear Expiring Three,
+                This is an automated notification from SUDARSHAN FITNESS KHAMGAON to inform you that your gym membership is expiring soon.
+                
+                
+                    Active Subscription Details:
+                    Current Plan: Monthly Plan
+                    Time Remaining: 3 days
+                    Expiration Date: 2026-06-20
+                
+                
+                
+                    renew on date = 2026-06-20
+                
+                
+                To prevent any service interruption at the front gate scanner, please renewal your membership package on or before the expiration date.
+                
+                
+                    This is an automated notification from SUDARSHAN FITNESS KHAMGAON.
+                    Need assistance? Contact us at: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-17 16:22:39
+TO: exp3@example.com
+SUBJECT: Membership Expiry Notice - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #ff6b00, #ff8c00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .warning-box { background-color: rgba(255, 107, 0, 0.05); border: 1px dashed rgba(255, 107, 0, 0.3); padding: 25px; margin: 25px 0; border-radius: 12px; font-size: 14px; line-height: 1.6; }
+                .warning-box strong { color: #ff6b00; }
+                .warning-box code { background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+                .renew-msg { font-size: 16px; font-weight: bold; color: #ff6b00; text-align: center; margin: 20px 0; border: 1px solid rgba(255,107,0,0.2); padding: 15px; border-radius: 8px; background: rgba(255,107,0,0.02); }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Membership Expiry Alert
+                Dear Expiring Five,
+                This is an automated notification from SUDARSHAN FITNESS KHAMGAON to inform you that your gym membership is expiring soon.
+                
+                
+                    Active Subscription Details:
+                    Current Plan: Monthly Plan
+                    Time Remaining: 5 days
+                    Expiration Date: 2026-06-22
+                
+                
+                
+                    renew on date = 2026-06-22
+                
+                
+                To prevent any service interruption at the front gate scanner, please renewal your membership package on or before the expiration date.
+                
+                
+                    This is an automated notification from SUDARSHAN FITNESS KHAMGAON.
+                    Need assistance? Contact us at: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-17 22:53:35
+TO: anuragbawaskar@icloud.com
+SUBJECT: Welcome to SUDARSHAN FITNESS KHAMGAON - Registration Confirmed
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .login-box { background-color: rgba(255, 107, 0, 0.05); border: 1px dashed rgba(255, 107, 0, 0.3); padding: 20px; margin: 25px 0; border-radius: 10px; font-size: 14px; line-height: 1.6; }
+                .login-box strong { color: #ff6b00; }
+                .login-box code { background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Welcome to SUDARSHAN FITNESS KHAMGAON!
+                Dear Anurag ,
+                Congratulations! Your registration with SUDARSHAN FITNESS KHAMGAON is confirmed. Below are your membership details, portal credentials, and manual gate access passcode.
+                
+                
+                
+                    Gate Access Passcode
+                    915308
+                    If Face ID matching fails at the entrance, enter this temporary passcode for immediate gate entry. Valid until your membership ends.
+                
+                
+ 
+                
+                    Portal Access Credentials:
+                    Portal Link: Go to Portal &rarr;
+                    Username ID: 106
+                    Password: 123
+                
+ 
+                
+                
+                    Join Our Members WhatsApp Group!
+                    Get real-time updates, fitness tips, and connect with fellow gym members in our exclusive community group.
+                    Join WhatsApp Group &rarr;
+                
+            
+ 
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Subscribed Plan
+                        Monthly Plan
+                    
+                    
+                        Plan Price
+                        ₹600
+                    
+                    
+                    
+                        Personal Training
+                        Trainer: Rishi Kamble (₹500)
+                    
+                    
+                        PT Expires On
+                        2026-07-17
+                    
+            
+                    
+                    
+                        Amount Paid
+                        ₹1100
+                    
+                    
+                        Expires On
+                        2026-07-17
+                    
+                
+
+                Log in to your dashboard to track your health status, daily routines, and renewals.
+                
+                
+                    This is an automated message from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-17 23:43:34
+TO: anuragbawaskar@icloud.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear Anurag ,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON.
+                
+                
+                
+                    New Gate Access Passcode
+                    168425
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Subscribed Plan
+                        Monthly Plan
+                    
+                    
+                        Plan Price
+                        ₹600
+                    
+                    
+                    
+                        Discount Applied
+                        - ₹200
+                    
+                    
+                    
+                        Amount Paid
+                        ₹400
+                    
+                    
+                        Payment Mode
+                        UPI
+                    
+                    
+                        Expires On
+                        2026-07-17
+                    
+                    
+                        Processed By
+                        Anurag Bawaskar
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-17 23:45:30
+TO: aayubawaskar@gmail.com
+SUBJECT: Welcome to SUDARSHAN FITNESS KHAMGAON - Registration Confirmed
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .login-box { background-color: rgba(255, 107, 0, 0.05); border: 1px dashed rgba(255, 107, 0, 0.3); padding: 20px; margin: 25px 0; border-radius: 10px; font-size: 14px; line-height: 1.6; }
+                .login-box strong { color: #ff6b00; }
+                .login-box code { background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Welcome to SUDARSHAN FITNESS KHAMGAON!
+                Dear Anurag B,
+                Congratulations! Your registration with SUDARSHAN FITNESS KHAMGAON is confirmed. Below are your membership details, portal credentials, and manual gate access passcode.
+                
+                
+                
+                    Gate Access Passcode
+                    416735
+                    If Face ID matching fails at the entrance, enter this temporary passcode for immediate gate entry. Valid until your membership ends.
+                
+                
+ 
+                 
+                
+                    Join Our Members WhatsApp Group!
+                    Get real-time updates, fitness tips, and connect with fellow gym members in our exclusive community group.
+                    Join WhatsApp Group &rarr;
+                
+            
+ 
+                 
+                    Portal Access Credentials:
+                    Portal Link: Go to Portal &rarr;
+                    Username ID: 107
+                    Password: 123
+                
+
+                
+                    
+                        Membership ID
+                        107
+                    
+                    
+                        Subscribed Plan
+                        Monthly Plan
+                    
+                    
+                        Plan Price
+                        ₹600
+                    
+                    
+                    
+                        Personal Training
+                        Trainer: Rishi Kamble (₹1500)
+                    
+                    
+                        PT Expires On
+                        2026-09-17
+                    
+            
+                    
+                    
+                        Amount Paid
+                        ₹2100
+                    
+                    
+                        Expires On
+                        2026-07-17
+                    
+                
+
+                Log in to your dashboard to track your health status, daily routines, and renewals.
+                
+                
+                    This is an automated message from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-18 09:56:14
+TO: anuragbawaskar@icloud.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear Anurag ,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON.
+                
+                
+                
+                    New Gate Access Passcode
+                    366286
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Subscribed Plan
+                        Monthly Plan
+                    
+                    
+                        Plan Price
+                        ₹600
+                    
+                    
+                    
+                        Amount Paid
+                        ₹600
+                    
+                    
+                        Payment Mode
+                        UPI
+                    
+                    
+                        Expires On
+                        2026-07-18
+                    
+                    
+                        Processed By
+                        Reception Test
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-18 12:04:29
+TO: anuragbawaskar@icloud.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear Anurag ,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON.
+                
+                
+                
+                    New Gate Access Passcode
+                    919494
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Subscribed Plan
+                        Yearly Plan
+                    
+                    
+                        Plan Price
+                        ₹5000
+                    
+                    
+                    
+                        Amount Paid
+                        ₹5000
+                    
+                    
+                        Payment Mode
+                        UPI
+                    
+                    
+                        Expires On
+                        2027-06-18
+                    
+                    
+                        Processed By
+                        Approved by Dipak Dahake
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-18 12:24:45
+TO: anuragbawaskar@icloud.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear Anurag ,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON.
+                
+                
+                
+                    New Gate Access Passcode
+                    164270
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Subscribed Plan
+                        Monthly Plan
+                    
+                    
+                        Plan Price
+                        ₹600
+                    
+                    
+                    
+                        Amount Paid
+                        ₹600
+                    
+                    
+                        Payment Mode
+                        UPI
+                    
+                    
+                        Expires On
+                        2026-07-18
+                    
+                    
+                        Processed By
+                        Member Self-Renewal
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-18 12:48:02
+TO: gauravsinghthakur713@gmail.com
+SUBJECT: Welcome to SUDARSHAN FITNESS KHAMGAON - Registration Confirmed
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .login-box { background-color: rgba(255, 107, 0, 0.05); border: 1px dashed rgba(255, 107, 0, 0.3); padding: 20px; margin: 25px 0; border-radius: 10px; font-size: 14px; line-height: 1.6; }
+                .login-box strong { color: #ff6b00; }
+                .login-box code { background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Welcome to SUDARSHAN FITNESS KHAMGAON!
+                Dear deep,
+                Congratulations! Your registration with SUDARSHAN FITNESS KHAMGAON is confirmed. Below are your membership details, portal credentials, and manual gate access passcode.
+                
+                
+                
+                    Gate Access Passcode
+                    121593
+                    If Face ID matching fails at the entrance, enter this temporary passcode for immediate gate entry. Valid until your membership ends.
+                
+                
+ 
+                 
+                
+                    Join Our Members WhatsApp Group!
+                    Get real-time updates, fitness tips, and connect with fellow gym members in our exclusive community group.
+                    Join WhatsApp Group &rarr;
+                
+            
+ 
+                 
+                    Portal Access Credentials:
+                    Portal Link: Go to Portal &rarr;
+                    Username ID: 106
+                    Password: 123
+                
+
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Subscribed Plan
+                        Monthly Plan
+                    
+                    
+                        Plan Price
+                        ₹600
+                    
+                    
+                    
+                    
+                        Amount Paid
+                        ₹600
+                    
+                    
+                        Expires On
+                        2026-07-18
+                    
+                
+
+                Log in to your dashboard to track your health status, daily routines, and renewals.
+                
+                
+                    This is an automated message from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-18 12:55:12
+TO: gauravsinghthakur713@gmail.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear deep,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON.
+                
+                
+                
+                    New Gate Access Passcode
+                    569159
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Subscribed Plan
+                        Monthly Plan
+                    
+                    
+                        Plan Price
+                        ₹600
+                    
+                    
+                    
+                        Amount Paid
+                        ₹600
+                    
+                    
+                        Payment Mode
+                        UPI
+                    
+                    
+                        Expires On
+                        2026-07-18
+                    
+                    
+                        Processed By
+                        Member Self-Renewal
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-18 13:07:18
+TO: gauravsinghthakur713@gmail.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear deep,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON.
+                
+                
+                
+                    New Gate Access Passcode
+                    958820
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Subscribed Plan
+                        6 Months
+                    
+                    
+                        Plan Price
+                        ₹8000
+                    
+                    
+                    
+                        Discount Applied
+                        - ₹400
+                    
+                    
+                    
+                        Amount Paid
+                        ₹7600
+                    
+                    
+                        Payment Mode
+                        UPI
+                    
+                    
+                        Expires On
+                        2026-12-18
+                    
+                    
+                        Processed By
+                        Tanisha Gauravsingh Thakur
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-18 16:05:45
+TO: anurag.bawaskar@outlook.com
+SUBJECT: Welcome to the Sudarshan Fitness Family - Registration Confirmed
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .login-box { background-color: rgba(255, 107, 0, 0.05); border: 1px dashed rgba(255, 107, 0, 0.3); padding: 20px; margin: 25px 0; border-radius: 10px; font-size: 14px; line-height: 1.6; }
+                .login-box strong { color: #ff6b00; }
+                .login-box code { background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Welcome to the Sudarshan Fitness Family!
+                Dear anurag c,
+                Congratulations! Your registration with the Sudarshan Fitness Family is confirmed. Below are your membership details, portal credentials, and manual gate access passcode.
+                
+                
+                
+                    Gate Access Passcode
+                    348980
+                    If Face ID matching fails at the entrance, enter this temporary passcode for immediate gate entry. Valid until your membership ends.
+                
+                
+ 
+                 
+                
+                    Join Our Members WhatsApp Group!
+                    Get real-time updates, fitness tips, and connect with fellow gym members in our exclusive community group.
+                    Join WhatsApp Group &rarr;
+                
+            
+ 
+                 
+                    Portal Access Credentials:
+                    Portal Link: Go to Portal &rarr;
+                    Username ID: 107
+                    Password: 123
+                
+
+                
+                    Download PDF Receipt &rarr;
+                
+
+                
+                    
+                        Membership ID
+                        107
+                    
+                    
+                        Subscribed Plan
+                        Yearly Plan
+                    
+                    
+                        Plan Price
+                        ₹12000
+                    
+                    
+                    
+                        Personal Training
+                        Trainer: Deepak Dahake (₹1500)
+                    
+                    
+                        PT Expires On
+                        2026-09-18
+                    
+            
+                    
+                    
+                        Discount Applied
+                        - ₹2000
+                    
+                    
+                    
+                        Amount Paid
+                        ₹11500
+                    
+                    
+                        Expires On
+                        2027-06-18
+                    
+                
+
+                Log in to your dashboard to track your health status, daily routines, and renewals.
+                
+                
+                    This is an automated message from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-18 16:14:11
+TO: anurag.bawaskar@outlook.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear anurag c,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON.
+                
+                
+                
+                    New Gate Access Passcode
+                    116998
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    Download PDF Receipt &rarr;
+                
+
+                
+                    
+                        Membership ID
+                        107
+                    
+                    
+                        Subscribed Plan
+                        6 Months
+                    
+                    
+                        Plan Price
+                        ₹8000
+                    
+                    
+                    
+                        Discount Applied
+                        - ₹1000
+                    
+                    
+                    
+                        Amount Paid
+                        ₹7000
+                    
+                    
+                        Payment Mode
+                        Cash
+                    
+                    
+                        Expires On
+                        2026-12-18
+                    
+                    
+                        Processed By
+                        Deep Sapkal
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+[2026-06-18 17:03:39] [SMTP DISPATCH ERROR] Server rejected message. Response: 
+========================================================
+DATE: 2026-06-18 17:03:39
+TO: anurag.bawaskar@outlook.com
+SUBJECT: Welcome to the Sudarshan Fitness Family - Registration Confirmed
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .login-box { background-color: rgba(255, 107, 0, 0.05); border: 1px dashed rgba(255, 107, 0, 0.3); padding: 20px; margin: 25px 0; border-radius: 10px; font-size: 14px; line-height: 1.6; }
+                .login-box strong { color: #ff6b00; }
+                .login-box code { background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Welcome to the Sudarshan Fitness Family!
+                Dear ANURAG,
+                Congratulations! Your registration with the Sudarshan Fitness Family is confirmed. Below are your membership details, credentials, and gate passcode. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    Gate Access Passcode
+                    291255
+                    If Face ID matching fails at the entrance, enter this temporary passcode for immediate gate entry. Valid until your membership ends.
+                
+                
+ 
+                 
+                
+                    Join Our Members WhatsApp Group!
+                    Get real-time updates, fitness tips, and connect with fellow gym members in our exclusive community group.
+                    Join WhatsApp Group &rarr;
+                
+            
+ 
+                 
+                    Portal Access Credentials:
+                    Portal Link: Go to Portal &rarr;
+                    Username ID: 106
+                    Password: 123
+                
+
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Subscribed Plan
+                        Monthly Plan
+                    
+                    
+                        Plan Price
+                        ₹1500
+                    
+                    
+                    
+                    
+                        Discount Applied
+                        - ₹200
+                    
+                    
+                    
+                        Amount Paid
+                        ₹1300
+                    
+                    
+                        Expires On
+                        2026-07-18
+                    
+                
+
+                Log in to your dashboard to track your health status, daily routines, and renewals.
+                
+                
+                    This is an automated message from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+[2026-06-18 17:13:15] [SMTP DISPATCH ERROR] Server rejected message. Response: 
+========================================================
+DATE: 2026-06-18 17:13:16
+TO: gauravsinghthakur713@gmail.com
+SUBJECT: Welcome to the Sudarshan Fitness Family - Registration Confirmed
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .login-box { background-color: rgba(255, 107, 0, 0.05); border: 1px dashed rgba(255, 107, 0, 0.3); padding: 20px; margin: 25px 0; border-radius: 10px; font-size: 14px; line-height: 1.6; }
+                .login-box strong { color: #ff6b00; }
+                .login-box code { background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Welcome to the Sudarshan Fitness Family!
+                Dear Gauravsingh Thakur,
+                Congratulations! Your registration with the Sudarshan Fitness Family is confirmed. Below are your membership details, credentials, and gate passcode. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    Gate Access Passcode
+                    250246
+                    If Face ID matching fails at the entrance, enter this temporary passcode for immediate gate entry. Valid until your membership ends.
+                
+                
+ 
+                 
+                
+                    Join Our Members WhatsApp Group!
+                    Get real-time updates, fitness tips, and connect with fellow gym members in our exclusive community group.
+                    Join WhatsApp Group &rarr;
+                
+            
+ 
+                 
+                    Portal Access Credentials:
+                    Portal Link: Go to Portal &rarr;
+                    Username ID: 107
+                    Password: 123
+                
+
+                
+                    
+                        Membership ID
+                        107
+                    
+                    
+                        Subscribed Plan
+                        Yearly Plan
+                    
+                    
+                        Plan Price
+                        ₹12000
+                    
+                    
+                    
+                        Personal Training
+                        Trainer: Deepak Dahake (₹1500)
+                    
+                    
+                        PT Expires On
+                        2026-09-18
+                    
+            
+                    
+                    
+                        Amount Paid
+                        ₹13500
+                    
+                    
+                        Expires On
+                        2027-06-18
+                    
+                
+
+                Log in to your dashboard to track your health status, daily routines, and renewals.
+                
+                
+                    This is an automated message from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-18 17:16:22
+TO: gauravsinghthakur713@gmail.com
+SUBJECT: Welcome to the Sudarshan Fitness Family - Registration Confirmed
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .login-box { background-color: rgba(255, 107, 0, 0.05); border: 1px dashed rgba(255, 107, 0, 0.3); padding: 20px; margin: 25px 0; border-radius: 10px; font-size: 14px; line-height: 1.6; }
+                .login-box strong { color: #ff6b00; }
+                .login-box code { background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Welcome to the Sudarshan Fitness Family!
+                Dear Gauravsingh Thakur,
+                Congratulations! Your registration with the Sudarshan Fitness Family is confirmed. Below are your membership details, credentials, and gate passcode. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    Gate Access Passcode
+                    181943
+                    If Face ID matching fails at the entrance, enter this temporary passcode for immediate gate entry. Valid until your membership ends.
+                
+                
+ 
+                 
+                
+                    Join Our Members WhatsApp Group!
+                    Get real-time updates, fitness tips, and connect with fellow gym members in our exclusive community group.
+                    Join WhatsApp Group &rarr;
+                
+            
+ 
+                 
+                    Portal Access Credentials:
+                    Portal Link: Go to Portal &rarr;
+                    Username ID: 107
+                    Password: 123
+                
+
+                
+                    
+                        Membership ID
+                        107
+                    
+                    
+                        Subscribed Plan
+                        Monthly Plan
+                    
+                    
+                        Plan Price
+                        ₹1500
+                    
+                    
+                    
+                        Personal Training
+                        Trainer: Deepak Dahake (₹1500)
+                    
+                    
+                        PT Expires On
+                        2026-09-18
+                    
+            
+                    
+                    
+                        Amount Paid
+                        ₹3000
+                    
+                    
+                        Expires On
+                        2026-07-18
+                    
+                
+
+                Log in to your dashboard to track your health status, daily routines, and renewals.
+                
+                
+                    This is an automated message from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-18 22:00:51
+TO: anurag.bawaskar@outlook.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear ANURAG,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    New Gate Access Passcode
+                    400123
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Subscribed Plan
+                        1 Month
+                    
+                    
+                        Plan Price
+                        ₹1500
+                    
+                    
+                    
+                        Amount Paid
+                        ₹1500
+                    
+                    
+                        Payment Mode
+                        UPI
+                    
+                    
+                        Expires On
+                        2026-07-18
+                    
+                    
+                        Processed By
+                        Member Self-Renewal
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-18 22:21:23
+TO: anurag.bawaskar@outlook.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear ANURAG,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    New Gate Access Passcode
+                    355583
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Subscribed Plan
+                        1 Year
+                    
+                    
+                        Plan Price
+                        ₹12000
+                    
+                    
+                    
+                        Amount Paid
+                        ₹12000
+                    
+                    
+                        Payment Mode
+                        UPI
+                    
+                    
+                        Expires On
+                        2027-06-18
+                    
+                    
+                        Processed By
+                        Anurag Bawaskar
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-18 22:22:55
+TO: anuragbawaskar@icloud.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear ANURAG,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    New Gate Access Passcode
+                    925298
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Subscribed Plan
+                        1 Year
+                    
+                    
+                        Plan Price
+                        ₹12000
+                    
+                    
+                    
+                        Amount Paid
+                        ₹12000
+                    
+                    
+                        Payment Mode
+                        Cash
+                    
+                    
+                        Expires On
+                        2027-06-18
+                    
+                    
+                        Processed By
+                        Anurag Bawaskar
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-19 03:22:22
+TO: anuragbawaskar@icloud.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear ANURAG,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    New Gate Access Passcode
+                    836377
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Subscribed Plan
+                        6 Months
+                    
+                    
+                        Plan Price
+                        ₹8000
+                    
+                    
+                    
+                        Amount Paid
+                        ₹8000
+                    
+                    
+                        Payment Mode
+                        Cash
+                    
+                    
+                        Expires On
+                        2026-12-19
+                    
+                    
+                        Processed By
+                        Anurag Bawaskar
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+[2026-06-19 06:43:56] [SMTP DISPATCH ERROR] Server rejected message. Response: 
+========================================================
+DATE: 2026-06-19 06:43:56
+TO: anuragbawaskar@icloud.com
+SUBJECT: Personal Training Enrollment Confirmed - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #ff6b00, #ff8c00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Personal Training Receipt
+                Dear ANURAG,
+                Thank you for enrolling in our Personal Training program at SUDARSHAN FITNESS KHAMGAON. Your personal training session plan has been activated. Below are your transaction details and assigned personal trainer. Your official receipt PDF has been attached directly to this email:
+                
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Personal Trainer
+                        Dipak Dahake
+                    
+                    
+                        PT Enrollment Date
+                        2026-06-19
+                    
+                    
+                        PT Validity Until
+                        2026-07-19
+                    
+                    
+                        Amount Paid
+                        ₹6000
+                    
+                    
+                        Payment Mode
+                        UPI
+                    
+                    
+                        Processed By
+                        Anurag Bawaskar
+                    
+                
+
+                Your personal trainer will work directly with you to outline your customized workout routines, diet logs, and monitor your physical achievements. You can view your training history anytime in the member portal.
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+[2026-06-19 12:26:42] [SMTP DISPATCH ERROR] Server rejected message. Response: 
+========================================================
+DATE: 2026-06-19 12:26:42
+TO: anuragbawaskar@icloud.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear ANURAG,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    New Gate Access Passcode
+                    620988
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Subscribed Plan
+                        6 Months
+                    
+                    
+                        Plan Price
+                        ₹8000
+                    
+                    
+                    
+                        Amount Paid
+                        ₹8000
+                    
+                    
+                        Payment Mode
+                        Cash
+                    
+                    
+                        Expires On
+                        2026-12-19
+                    
+                    
+                        Processed By
+                        Anurag Bawaskar
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+[2026-06-19 12:37:58] [SMTP DISPATCH ERROR] Server rejected message. Response: 
+========================================================
+DATE: 2026-06-19 12:38:03
+TO: gauravsinghthakur713@gmail.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear Gauravsingh Thakur,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    New Gate Access Passcode
+                    310736
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        107
+                    
+                    
+                        Subscribed Plan
+                        1 Month
+                    
+                    
+                        Plan Price
+                        ₹1500
+                    
+                    
+                    
+                        Amount Paid
+                        ₹1500
+                    
+                    
+                        Payment Mode
+                        Cash
+                    
+                    
+                        Expires On
+                        2026-07-19
+                    
+                    
+                        Processed By
+                        Anurag Bawaskar
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+[2026-06-19 12:43:39] [SMTP DISPATCH ERROR] Server rejected message. Response: 
+========================================================
+DATE: 2026-06-19 12:43:39
+TO: ompadole3767@gmail.com
+SUBJECT: Welcome to the Sudarshan Fitness Family - Registration Confirmed
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .login-box { background-color: rgba(255, 107, 0, 0.05); border: 1px dashed rgba(255, 107, 0, 0.3); padding: 20px; margin: 25px 0; border-radius: 10px; font-size: 14px; line-height: 1.6; }
+                .login-box strong { color: #ff6b00; }
+                .login-box code { background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Welcome to the Sudarshan Fitness Family!
+                Dear Om Padole,
+                Congratulations! Your registration with the Sudarshan Fitness Family is confirmed. Below are your membership details, credentials, and gate passcode. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    Gate Access Passcode
+                    649069
+                    If Face ID matching fails at the entrance, enter this temporary passcode for immediate gate entry. Valid until your membership ends.
+                
+                
+ 
+                 
+                
+                    Join Our Members WhatsApp Group!
+                    Get real-time updates, fitness tips, and connect with fellow gym members in our exclusive community group.
+                    Join WhatsApp Group &rarr;
+                
+            
+ 
+                 
+                    Portal Access Credentials:
+                    Portal Link: Go to Portal &rarr;
+                    Username ID: 108
+                    Password: 123
+                
+
+                
+                    
+                        Membership ID
+                        108
+                    
+                    
+                        Subscribed Plan
+                        1 Month
+                    
+                    
+                        Plan Price
+                        ₹1500
+                    
+                    
+                    
+                        Personal Training
+                        Trainer: Dipak Dahake (₹1500)
+                    
+                    
+                        PT Expires On
+                        2026-07-19
+                    
+            
+                    
+                    
+                        Discount Applied
+                        - ₹200
+                    
+                    
+                    
+                        Amount Paid
+                        ₹2800
+                    
+                    
+                        Expires On
+                        2026-07-19
+                    
+                
+
+                Log in to your dashboard to track your health status, daily routines, and renewals.
+                
+                
+                    This is an automated message from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+[2026-06-19 07:18:53] [SMTP DISPATCH ERROR] Server rejected message. Response: 
+========================================================
+DATE: 2026-06-19 12:59:15
+TO: ompadole3767@gmail.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear Om Padole,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    New Gate Access Passcode
+                    494532
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        108
+                    
+                    
+                        Subscribed Plan
+                        6 Months
+                    
+                    
+                        Plan Price
+                        ₹8000
+                    
+                    
+                    
+                        Amount Paid
+                        ₹8000
+                    
+                    
+                        Payment Mode
+                        Cash
+                    
+                    
+                        Expires On
+                        2026-12-19
+                    
+                    
+                        Processed By
+                        Anurag Bawaskar
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-19 13:09:32
+TO: ompadole3767@gmail.com
+SUBJECT: Personal Training Enrollment Confirmed - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #ff6b00, #ff8c00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Personal Training Receipt
+                Dear Om Padole,
+                Thank you for enrolling in our Personal Training program at SUDARSHAN FITNESS KHAMGAON. Your personal training session plan has been activated. Below are your transaction details and assigned personal trainer. Your official receipt PDF has been attached directly to this email:
+                
+                
+                    
+                        Membership ID
+                        108
+                    
+                    
+                        Personal Trainer
+                        Dipak Dahake
+                    
+                    
+                        PT Enrollment Date
+                        2026-06-19
+                    
+                    
+                        PT Validity Until
+                        2026-09-19
+                    
+                    
+                        Amount Paid
+                        ₹9000
+                    
+                    
+                        Payment Mode
+                        UPI
+                    
+                    
+                        Processed By
+                        Member Self-Renewal
+                    
+                
+
+                Your personal trainer will work directly with you to outline your customized workout routines, diet logs, and monitor your physical achievements. You can view your training history anytime in the member portal.
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-19 13:24:05
+TO: ompadoleTest@gmail.com
+SUBJECT: Welcome to the Sudarshan Fitness Family - Registration Confirmed
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .login-box { background-color: rgba(255, 107, 0, 0.05); border: 1px dashed rgba(255, 107, 0, 0.3); padding: 20px; margin: 25px 0; border-radius: 10px; font-size: 14px; line-height: 1.6; }
+                .login-box strong { color: #ff6b00; }
+                .login-box code { background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Welcome to the Sudarshan Fitness Family!
+                Dear Test Self Registration,
+                Congratulations! Your registration with the Sudarshan Fitness Family is confirmed. Below are your membership details, credentials, and gate passcode. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    Gate Access Passcode
+                    453727
+                    If Face ID matching fails at the entrance, enter this temporary passcode for immediate gate entry. Valid until your membership ends.
+                
+                
+ 
+                 
+                
+                    Join Our Members WhatsApp Group!
+                    Get real-time updates, fitness tips, and connect with fellow gym members in our exclusive community group.
+                    Join WhatsApp Group &rarr;
+                
+            
+ 
+                 
+                    Portal Access Credentials:
+                    Portal Link: Go to Portal &rarr;
+                    Username ID: 109
+                    Password: testpass
+                
+
+                
+                    
+                        Membership ID
+                        109
+                    
+                    
+                        Subscribed Plan
+                        6 Months
+                    
+                    
+                        Plan Price
+                        ₹8000
+                    
+                    
+                    
+                    
+                        Amount Paid
+                        ₹8000
+                    
+                    
+                        Expires On
+                        2026-12-19
+                    
+                
+
+                Log in to your dashboard to track your health status, daily routines, and renewals.
+                
+                
+                    This is an automated message from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-19 13:27:31
+TO: cli_test_member@example.com
+SUBJECT: Welcome to the Sudarshan Fitness Family - Registration Confirmed
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .login-box { background-color: rgba(255, 107, 0, 0.05); border: 1px dashed rgba(255, 107, 0, 0.3); padding: 20px; margin: 25px 0; border-radius: 10px; font-size: 14px; line-height: 1.6; }
+                .login-box strong { color: #ff6b00; }
+                .login-box code { background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Welcome to the Sudarshan Fitness Family!
+                Dear CLI Test Member,
+                Congratulations! Your registration with the Sudarshan Fitness Family is confirmed. Below are your membership details, credentials, and gate passcode. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    Gate Access Passcode
+                    785334
+                    If Face ID matching fails at the entrance, enter this temporary passcode for immediate gate entry. Valid until your membership ends.
+                
+                
+ 
+                 
+                
+                    Join Our Members WhatsApp Group!
+                    Get real-time updates, fitness tips, and connect with fellow gym members in our exclusive community group.
+                    Join WhatsApp Group &rarr;
+                
+            
+ 
+                 
+                    Portal Access Credentials:
+                    Portal Link: Go to Portal &rarr;
+                    Username ID: 109
+                    Password: clipassword
+                
+
+                
+                    
+                        Membership ID
+                        109
+                    
+                    
+                        Subscribed Plan
+                        1 Month
+                    
+                    
+                        Plan Price
+                        ₹1500
+                    
+                    
+                    
+                    
+                        Amount Paid
+                        ₹1500
+                    
+                    
+                        Expires On
+                        2026-07-19
+                    
+                
+
+                Log in to your dashboard to track your health status, daily routines, and renewals.
+                
+                
+                    This is an automated message from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-19 15:21:29
+TO: gauravsinghthakur713@gmail.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear Gauravsingh Thakur,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    New Gate Access Passcode
+                    971499
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        107
+                    
+                    
+                        Subscribed Plan
+                        1 Month
+                    
+                    
+                        Plan Price
+                        ₹1500
+                    
+                    
+                    
+                        Amount Paid
+                        ₹1500
+                    
+                    
+                        Payment Mode
+                        Cash
+                    
+                    
+                        Expires On
+                        2026-07-19
+                    
+                    
+                        Processed By
+                        Anurag Bawaskar
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-19 15:23:31
+TO: ompadole3767@gmail.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear Om Padole,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    New Gate Access Passcode
+                    191163
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        108
+                    
+                    
+                        Subscribed Plan
+                        3 Months
+                    
+                    
+                        Plan Price
+                        ₹4000
+                    
+                    
+                    
+                        Amount Paid
+                        ₹4000
+                    
+                    
+                        Payment Mode
+                        Cash
+                    
+                    
+                        Expires On
+                        2026-09-19
+                    
+                    
+                        Processed By
+                        Anurag Bawaskar
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-19 15:23:58
+TO: anuragbawaskar@icloud.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear ANURAG,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    New Gate Access Passcode
+                    314391
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Subscribed Plan
+                        6 Months
+                    
+                    
+                        Plan Price
+                        ₹8000
+                    
+                    
+                    
+                        Amount Paid
+                        ₹8000
+                    
+                    
+                        Payment Mode
+                        Cash
+                    
+                    
+                        Expires On
+                        2026-12-19
+                    
+                    
+                        Processed By
+                        Anurag Bawaskar
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-19 23:35:00
+TO: anuragbawaskar@icloud.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear ANURAG,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    New Gate Access Passcode
+                    409939
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Subscribed Plan
+                        1 Year
+                    
+                    
+                        Plan Price
+                        ₹12000
+                    
+                    
+                    
+                        Amount Paid
+                        ₹12000
+                    
+                    
+                        Payment Mode
+                        UPI
+                    
+                    
+                        Expires On
+                        2027-06-19
+                    
+                    
+                        Processed By
+                        Deep Sapkal
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-19 23:41:24
+TO: anuragbawaskar@icloud.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear ANURAG,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    New Gate Access Passcode
+                    412765
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        106
+                    
+                    
+                        Subscribed Plan
+                        6 Months
+                    
+                    
+                        Plan Price
+                        ₹8000
+                    
+                    
+                    
+                        Amount Paid
+                        ₹8000
+                    
+                    
+                        Payment Mode
+                        Cash
+                    
+                    
+                        Expires On
+                        2026-12-19
+                    
+                    
+                        Processed By
+                        Deep Sapkal
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-20 00:05:02
+TO: anuragbawaskar@icloud.com
+SUBJECT: Welcome to the Sudarshan Fitness Family - Registration Confirmed
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .login-box { background-color: rgba(255, 107, 0, 0.05); border: 1px dashed rgba(255, 107, 0, 0.3); padding: 20px; margin: 25px 0; border-radius: 10px; font-size: 14px; line-height: 1.6; }
+                .login-box strong { color: #ff6b00; }
+                .login-box code { background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Welcome to the Sudarshan Fitness Family!
+                Dear anurag bawaskar,
+                Congratulations! Your registration with the Sudarshan Fitness Family is confirmed. Below are your membership details, credentials, and gate passcode. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    Gate Access Passcode
+                    665634
+                    If Face ID matching fails at the entrance, enter this temporary passcode for immediate gate entry. Valid until your membership ends.
+                
+                
+ 
+                 
+                
+                    Join Our Members WhatsApp Group!
+                    Get real-time updates, fitness tips, and connect with fellow gym members in our exclusive community group.
+                    Join WhatsApp Group &rarr;
+                
+            
+ 
+                 
+                    Portal Access Credentials:
+                    Portal Link: Go to Portal &rarr;
+                    Username ID: 109
+                    Password: 123
+                
+
+                
+                    
+                        Membership ID
+                        109
+                    
+                    
+                        Subscribed Plan
+                        6 Months
+                    
+                    
+                        Plan Price
+                        ₹8000
+                    
+                    
+                    
+                    
+                        Discount Applied
+                        - ₹400
+                    
+                    
+                    
+                        Amount Paid
+                        ₹7600
+                    
+                    
+                        Expires On
+                        2026-12-19
+                    
+                
+
+                Log in to your dashboard to track your health status, daily routines, and renewals.
+                
+                
+                    This is an automated message from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-20 15:55:22
+TO: anuragbawaskar@icloud.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS KHAMGAON
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear anurag bawaskar,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS KHAMGAON. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    New Gate Access Passcode
+                    836848
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        109
+                    
+                    
+                        Subscribed Plan
+                        1 Year
+                    
+                    
+                        Plan Price
+                        ₹12000
+                    
+                    
+                    
+                        Amount Paid
+                        ₹12000
+                    
+                    
+                        Payment Mode
+                        Cash
+                    
+                    
+                        Expires On
+                        2027-06-20
+                    
+                    
+                        Processed By
+                        Reception Test
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS KHAMGAON.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-22 01:22:21
+TO: nrgbvskr8@gmail.com
+SUBJECT: Payment Receipt & Gate Access Code - SUDARSHAN FITNESS
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Payment Received - Confirmation Receipt
+                Dear Anil Bawaskar,
+                Thank you for your payment. Below are the details of your subscription renewal transaction at SUDARSHAN FITNESS. Your official payment receipt PDF has been attached to this email.
+                
+                
+                
+                    New Gate Access Passcode
+                    523940
+                    Your passcode has rotated. Please use this new code at the entrance screen if Face ID matching fails.
+                
+                
+
+                
+                    
+                        Membership ID
+                        111
+                    
+                    
+                        Subscribed Plan
+                        1 Year
+                    
+                    
+                        Plan Price
+                        ₹12000
+                    
+                    
+                    
+                        Amount Paid
+                        ₹12000
+                    
+                    
+                        Payment Mode
+                        Cash
+                    
+                    
+                        Expires On
+                        2027-06-22
+                    
+                    
+                        Processed By
+                        Reception Test
+                    
+                
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+
+========================================================
+DATE: 2026-06-21 20:04:31
+TO: nrgbvskr8@gmail.com
+SUBJECT: Personal Training Enrollment Confirmed - SUDARSHAN FITNESS
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #ff6b00, #ff8c00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Personal Training Receipt
+                Dear Anil Bawaskar,
+                Thank you for enrolling in our Personal Training program at SUDARSHAN FITNESS. Your personal training session plan has been activated. Below are your transaction details and assigned personal trainer. Your official receipt PDF has been attached directly to this email:
+                
+                
+                    
+                        Membership ID
+                        111
+                    
+                    
+                        Personal Trainer
+                        Dipak Dahake
+                    
+                    
+                        PT Enrollment Date
+                        2026-06-21
+                    
+                    
+                        PT Validity Until
+                        2026-08-21
+                    
+                    
+                        Amount Paid
+                        ₹5000
+                    
+                    
+                        Payment Mode
+                        Card
+                    
+                    
+                        Processed By
+                        Anurag Bawaskar
+                    
+                
+
+                Your personal trainer will work directly with you to outline your customized workout routines, diet logs, and monitor your physical achievements. You can view your training history anytime in the member portal.
+                
+                
+                    This is an automated transaction confirmation from SUDARSHAN FITNESS.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                
+            
+        
+        
+========================================================
+

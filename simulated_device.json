@@ -1,0 +1,29 @@
+{
+    "users": [
+        {
+            "uid": 106,
+            "name": "ANURAG",
+            "privilege": 0
+        },
+        {
+            "uid": 109,
+            "name": "anurag bawaskar",
+            "privilege": 0
+        }
+    ],
+    "templates": [],
+    "logs": [
+        {
+            "user_id": "106",
+            "timestamp": "2026-06-18 21:42:01",
+            "status": 0,
+            "punch": 1
+        },
+        {
+            "user_id": "106",
+            "timestamp": "2026-06-18 21:42:33",
+            "status": 0,
+            "punch": 1
+        }
+    ]
+}

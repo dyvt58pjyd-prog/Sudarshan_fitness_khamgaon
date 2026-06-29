@@ -1,0 +1,74 @@
+{
+    "weight_loss": {
+        "title": "Ultimate Shred & Tone",
+        "description": "A high-intensity plan focused on maximizing caloric burn, improving cardiovascular health, and preserving lean muscle mass.",
+        "diet": {
+            "calories": "Maintenance minus 500 kcal",
+            "protein": "High (1.2g per lb of bodyweight)",
+            "carbs": "Low/Moderate (Focus on complex carbs)",
+            "fats": "Moderate",
+            "tips": [
+                "Drink at least 3-4 liters of water daily.",
+                "Avoid liquid calories (soda, juices).",
+                "Eat a lean protein source with every meal."
+            ]
+        },
+        "workout": [
+            { "day": "Monday", "focus": "Full Body HIIT", "details": "45 mins of High-Intensity Interval Training. 40s work, 20s rest. (Kettlebell swings, burpees, mountain climbers)." },
+            { "day": "Tuesday", "focus": "Upper Body & Core", "details": "Push-ups (3x15), Dumbbell Rows (3x12), Shoulder Press (3x12), Planks (3x60s)." },
+            { "day": "Wednesday", "focus": "Active Recovery", "details": "45 mins of light cardio (brisk walking, cycling, or swimming)." },
+            { "day": "Thursday", "focus": "Lower Body Power", "details": "Squats (4x12), Lunges (3x15 per leg), Leg Press (3x12), Calf Raises (4x20)." },
+            { "day": "Friday", "focus": "Cardio Blast", "details": "30 mins treadmill (incline walking) + 15 mins stairmaster." },
+            { "day": "Saturday", "focus": "Full Body Circuit", "details": "3 rounds: Deadlifts (10), Bench Press (10), Pull-ups (max), Box Jumps (15)." },
+            { "day": "Sunday", "focus": "Rest & Stretch", "details": "Complete rest. 15 mins of deep stretching or yoga." }
+        ]
+    },
+    "muscle_gain": {
+        "title": "Titan Muscle Builder",
+        "description": "A hypertrophy-focused split designed to pack on lean muscle mass through progressive overload and high protein intake.",
+        "diet": {
+            "calories": "Maintenance plus 300-500 kcal",
+            "protein": "Very High (1.5g per lb of bodyweight)",
+            "carbs": "High (Fuel for heavy workouts)",
+            "fats": "Moderate",
+            "tips": [
+                "Ensure you are in a caloric surplus.",
+                "Consume a protein shake within 30 minutes post-workout.",
+                "Get 7-8 hours of sleep for optimal recovery."
+            ]
+        },
+        "workout": [
+            { "day": "Monday", "focus": "Chest & Triceps", "details": "Bench Press (4x8-10), Incline DB Press (3x10), Cable Crossovers (3x12), Tricep Pushdowns (4x12), Skull Crushers (3x10)." },
+            { "day": "Tuesday", "focus": "Back & Biceps", "details": "Deadlifts (4x6-8), Barbell Rows (3x10), Lat Pulldowns (3x12), Barbell Curls (4x10), Hammer Curls (3x12)." },
+            { "day": "Wednesday", "focus": "Rest & Recover", "details": "Rest day. Focus on eating and hydration." },
+            { "day": "Thursday", "focus": "Shoulders & Abs", "details": "Overhead Press (4x8), Lateral Raises (4x15), Front Raises (3x12), Face Pulls (3x15), Cable Crunches (4x15)." },
+            { "day": "Friday", "focus": "Legs (Quad Dominant)", "details": "Squats (4x8), Leg Press (3x10), Leg Extensions (4x15), Calf Raises (5x20)." },
+            { "day": "Saturday", "focus": "Legs (Hamstring Dominant)", "details": "Romanian Deadlifts (4x10), Lying Leg Curls (4x12), Walking Lunges (3x12 per leg)." },
+            { "day": "Sunday", "focus": "Rest", "details": "Complete rest day." }
+        ]
+    },
+    "general": {
+        "title": "Healthy & Active Lifestyle",
+        "description": "A balanced routine combining strength and cardiovascular health for overall longevity and fitness.",
+        "diet": {
+            "calories": "Maintenance kcal",
+            "protein": "Moderate (1.0g per lb of bodyweight)",
+            "carbs": "Moderate",
+            "fats": "Moderate",
+            "tips": [
+                "Focus on whole, unprocessed foods.",
+                "Incorporate fruits and vegetables into every meal.",
+                "Limit added sugars and trans fats."
+            ]
+        },
+        "workout": [
+            { "day": "Monday", "focus": "Push (Upper Body)", "details": "Push-ups/Bench Press (3x10), Shoulder Press (3x10), Tricep Extensions (3x12)." },
+            { "day": "Tuesday", "focus": "Cardio", "details": "30 mins of moderate-intensity cardio (jogging, cycling)." },
+            { "day": "Wednesday", "focus": "Pull (Upper Body)", "details": "Lat Pulldowns (3x10), Seated Rows (3x12), Bicep Curls (3x12)." },
+            { "day": "Thursday", "focus": "Rest", "details": "Active recovery or rest." },
+            { "day": "Friday", "focus": "Legs & Core", "details": "Goblet Squats (3x12), Lunges (3x10/leg), Planks (3x60s)." },
+            { "day": "Saturday", "focus": "Full Body Fun", "details": "Play a sport, go hiking, or do a light full-body machine circuit." },
+            { "day": "Sunday", "focus": "Rest", "details": "Rest and prepare for the week ahead." }
+        ]
+    }
+}

@@ -1,0 +1,15 @@
+<?php
+/**
+ * Database Configuration File Template
+ * 
+ * Instructions:
+ * 1. Copy this file and rename it to 'db_config.php' in the same directory (Files/include/).
+ * 2. Fill in your Clever Cloud database credentials below.
+ * 3. The system will automatically use these settings when running locally.
+ */
+
+$db_host = "your-clever-cloud-mysql-host.services.clever-cloud.com";
+$db_user = "your-clever-cloud-username";
+$db_pass = "your-clever-cloud-password";
+$db_name = "your-clever-cloud-database-name";
+$db_port = 3306; // standard MySQL port

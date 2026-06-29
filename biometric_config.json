@@ -1,0 +1,10 @@
+{
+    "device_ip": "192.168.1.201",
+    "device_port": 4370,
+    "api_sync_url": "http://localhost:8000/api/biometric_sync.php",
+    "api_log_url": "http://localhost:8000/api/log_attendance.php",
+    "sync_interval_seconds": 10,
+    "simulation_mode": true,
+    "templates_cache_dir": "templates_cache",
+    "checkpoint_file": "sync_checkpoint.txt"
+}
