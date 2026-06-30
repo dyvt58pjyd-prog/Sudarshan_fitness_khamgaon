@@ -255,205 +255,18 @@ if (isset($_POST['submit_registration'])) {
     <link rel="stylesheet" href="./css/premium.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <style>
-        /* Living Button Advanced CSS */
-        .magnetic-wrapper {
-            position: relative;
-            width: 300px; /* Slightly wider for the main form CTA */
-            height: 70px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto;
-        }
-
-        .living-btn {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            border: none;
-            outline: none;
-            background: rgba(255, 107, 0, 0.15); /* Tinted with primary gym orange */
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 100px;
-            cursor: pointer;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 
-                0 15px 35px rgba(0, 0, 0, 0.5), 
-                inset 0 1px 1px rgba(255, 255, 255, 0.1);
-            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease;
-        }
-
-        .living-btn::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(
-                from 0deg,
-                transparent 0%,
-                rgba(255, 107, 0, 0.4) 25%, /* Gym Orange */
-                rgba(121, 40, 202, 0.4) 50%,
-                rgba(255, 107, 0, 0.4) 75%,
-                transparent 100%
-            );
-            animation: spinBtn 6s linear infinite, pulseOpacity 4s ease-in-out infinite alternate;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .living-btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(
-                80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-                rgba(255, 255, 255, 0.3),
-                transparent 40%
-            );
-            z-index: 1;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            mix-blend-mode: overlay;
-        }
-
-        .living-btn .btn-text {
-            position: relative;
-            z-index: 2;
-            color: #ffffff;
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-shadow: 0 0 15px rgba(255, 107, 0, 0.8);
-            pointer-events: none;
-            transition: transform 0.2s ease;
-        }
-
-        .magnetic-wrapper:hover .living-btn::after {
-            opacity: 1;
-        }
-
-        .magnetic-wrapper:hover .living-btn {
-            box-shadow: 
-                0 20px 45px rgba(255, 107, 0, 0.25), 
-                inset 0 1px 1px rgba(255, 255, 255, 0.2),
-                inset 0 0 20px rgba(255, 107, 0, 0.2);
-            transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .living-btn:active {
-            transform: scale(0.95) !important;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), inset 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
-
-        .living-btn:active .btn-text {
-            transform: scale(0.95);
-        }
-
-        .shockwave {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            pointer-events: none;
-            z-index: 3;
-        }
-
-        .shockwave.active {
-            animation: shockwaveAnim 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-        }
-
-        @keyframes spinBtn {
-            0% { transform: rotate(0deg) scale(1.5); }
-            100% { transform: rotate(360deg) scale(1.5); }
-        }
-
-        @keyframes pulseOpacity {
-            0% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes shockwaveAnim {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(40); opacity: 0; }
-        }
-
-        /* Cyberpunk Glitch Text */
-        .glitch-text { position: relative; display: inline-block; }
-        .glitch-text::before, .glitch-text::after {
-            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent;
-        }
-        .glitch-text::before {
-            left: 2px; text-shadow: -2px 0 #ff00c1; clip: rect(44px, 450px, 56px, 0); animation: glitch-anim 3s infinite linear alternate-reverse;
-        }
-        .glitch-text::after {
-            left: -2px; text-shadow: -2px 0 #00fff9; clip: rect(44px, 450px, 56px, 0); animation: glitch-anim2 2.5s infinite linear alternate-reverse;
-        }
-        @keyframes glitch-anim {
-            0% { clip: rect(10px, 9999px, 31px, 0); }
-            5% { clip: rect(70px, 9999px, 73px, 0); }
-            10% { clip: rect(29px, 9999px, 86px, 0); }
-            15% { clip: rect(15px, 9999px, 120px, 0); }
-            20% { clip: rect(50px, 9999px, 11px, 0); }
-            100% { clip: rect(10px, 9999px, 31px, 0); }
-        }
-        @keyframes glitch-anim2 {
-            0% { clip: rect(65px, 9999px, 100px, 0); }
-            5% { clip: rect(12px, 9999px, 59px, 0); }
-            10% { clip: rect(89px, 9999px, 120px, 0); }
-            15% { clip: rect(23px, 9999px, 15px, 0); }
-            20% { clip: rect(90px, 9999px, 51px, 0); }
-            100% { clip: rect(65px, 9999px, 100px, 0); }
-        }
-
-        .video-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            z-index: -100;
-            background-color: #000;
-            object-fit: cover;
-        }
-        .video-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.75); /* Dark overlay */
-            z-index: -99;
+        body {
+            background-color: #111;
+            color: #fff;
         }
         .register-container {
             position: relative;
             max-width: 850px;
             margin: 40px auto;
-            background: rgba(5, 5, 10, 0.6);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
+            background: rgba(30, 30, 30, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
             padding: 50px;
-            box-shadow: 
-                0 30px 60px rgba(0, 0, 0, 0.6), 
-                0 0 80px rgba(255, 107, 0, 0.15),
                 inset 0 0 20px rgba(255, 255, 255, 0.02);
             overflow: hidden;
         }
@@ -643,15 +456,7 @@ if (isset($_POST['submit_registration'])) {
         .holo-validity { font-size: 14px; color: rgba(255,255,255,0.7); font-weight: 600; }
     </style>
 </head>
-<body class="page-body" style="opacity: 0; transition: opacity 0.8s ease;">
-
-    <!-- Particle Network Background -->
-    <div id="particles-js" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;"></div>
-    <!-- Live Video Background -->
-    <video autoplay loop muted playsinline class="video-bg">
-        <source src="https://cdn.coverr.co/videos/coverr-a-man-lifting-weights-in-a-gym-5339/1080p.mp4" type="video/mp4">
-    </video>
-    <div class="video-overlay"></div>
+<body class="page-body">
 
     <div id="container">
         <div class="register-container">
@@ -665,7 +470,7 @@ if (isset($_POST['submit_registration'])) {
 
             <div style="text-align: center; margin-bottom: 30px;">
                 <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Sudarshan Fitness Logo" style="max-height: 80px;" />
-                <h1 class="glitch-text" data-text="SUDARSHAN FITNESS" style="color: #ff6b00; margin-top: 15px; font-weight: 900; font-style: italic; letter-spacing: 2px; text-shadow: 0 0 15px rgba(255,107,0,0.5); text-transform: uppercase;">SUDARSHAN FITNESS</h1>
+                <h1 style="color: #ff6b00; margin-top: 15px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;">SUDARSHAN FITNESS</h1>
                 <h3 style="color: #ffffff; font-weight: 700; margin-top: 5px; letter-spacing: 1px;">GRAND OPENING PRE-BOOKING</h3>
                 <p style="color: #ccc; font-size: 14px; margin-top: 10px;">Fill out the form below, pay via UPI, and secure your spot today.</p>
             </div>
@@ -910,12 +715,9 @@ if (isset($_POST['submit_registration'])) {
                             </div>
 
                             <div style="display: flex; flex-direction: column; align-items: center; margin-top: 40px; gap: 20px;">
-                                <div class="magnetic-wrapper" id="magnetic-area">
-                                    <button type="submit" name="submit_registration" class="living-btn" id="living-button" value="submit">
-                                        <span class="btn-text">SECURE MY SPOT NOW!</span>
-                                        <div class="shockwave" id="shockwave"></div>
-                                    </button>
-                                </div>
+                                <button type="submit" name="submit_registration" class="btn btn-primary btn-lg" value="submit" style="width: 200px; font-weight: bold;">
+                                    SECURE MY SPOT NOW!
+                                </button>
                                 <a href="index.php" class="link" style="font-weight: 600; color: #aaa; text-decoration: none; font-size: 14px;">&larr; Back to Login</a>
                             </div>
                         </div>
@@ -932,29 +734,6 @@ if (isset($_POST['submit_registration'])) {
         const hiddenPlanInput = document.getElementById('plan-select-hidden');
         
         holoCards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                const rotateX = ((y - centerY) / centerY) * -15;
-                const rotateY = ((x - centerX) / centerX) * 15;
-                
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-                
-                const glare = card.querySelector('.holo-glare');
-                glare.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.4), transparent 60%)`;
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-                const glare = card.querySelector('.holo-glare');
-                glare.style.background = `radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4), transparent 60%)`;
-            });
-            
             card.addEventListener('click', () => {
                 holoCards.forEach(c => c.classList.remove('selected'));
                 card.classList.add('selected');
@@ -1223,95 +1002,7 @@ if (isset($_POST['submit_registration'])) {
                 reader.readAsDataURL(input.files[0]);
             }
         }
-        // Magnetic Physics & Spotlight Tracking for the Living Button
-        const magneticArea = document.getElementById('magnetic-area');
-        const button = document.getElementById('living-button');
-        const shockwave = document.getElementById('shockwave');
 
-        if (magneticArea && button && shockwave) {
-            magneticArea.addEventListener('mousemove', (e) => {
-                const rect = magneticArea.getBoundingClientRect();
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
-                const deltaX = e.clientX - centerX;
-                const deltaY = e.clientY - centerY;
-                
-                // Magnetic strength
-                const moveX = deltaX * 0.3;
-                const moveY = deltaY * 0.3;
-                
-                button.style.transform = `translate(${moveX}px, ${moveY}px)`;
-
-                // Spotlight Tracking
-                const btnRect = button.getBoundingClientRect();
-                const mouseX = e.clientX - btnRect.left;
-                const mouseY = e.clientY - btnRect.top;
-
-                button.style.setProperty('--mouse-x', `${mouseX}px`);
-                button.style.setProperty('--mouse-y', `${mouseY}px`);
-            });
-
-            magneticArea.addEventListener('mouseleave', () => {
-                button.style.transform = `translate(0px, 0px)`;
-                button.style.setProperty('--mouse-x', `50%`);
-                button.style.setProperty('--mouse-y', `50%`);
-            });
-
-            button.addEventListener('click', (e) => {
-                shockwave.classList.remove('active');
-                void shockwave.offsetWidth; // Trigger reflow
-                
-                const btnRect = button.getBoundingClientRect();
-                const clickX = e.clientX - btnRect.left;
-                const clickY = e.clientY - btnRect.top;
-                
-                shockwave.style.left = `${clickX}px`;
-                shockwave.style.top = `${clickY}px`;
-                
-                shockwave.classList.add('active');
-            });
-        }
-
-        // --- GLOBAL EFFECTS JS ---
-        // Fluid Page Entrance
-        setTimeout(() => { document.body.style.opacity = '1'; }, 100);
-
-        // Load particles.js dynamically
-        const particleScript = document.createElement('script');
-        particleScript.src = "https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js";
-        particleScript.onload = function() {
-            if(window.particlesJS) {
-                particlesJS("particles-js", {
-                    "particles": {
-                        "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
-                        "color": { "value": "#ff6b00" },
-                        "shape": { "type": "circle" },
-                        "opacity": { "value": 0.5 },
-                        "size": { "value": 3, "random": true },
-                        "line_linked": { "enable": true, "distance": 150, "color": "#ff6b00", "opacity": 0.2, "width": 1 },
-                        "move": { "enable": true, "speed": 1.5, "direction": "none", "random": true, "out_mode": "out" }
-                    },
-                    "interactivity": {
-                        "detect_on": "canvas",
-                        "events": { "onhover": { "enable": true, "mode": "grab" }, "resize": true },
-                        "modes": { "grab": { "distance": 200, "line_linked": { "opacity": 0.6 } } }
-                    },
-                    "retina_detect": true
-                });
-            }
-        };
-        document.body.appendChild(particleScript);
-
-        // Fluid Page Exit
-        document.querySelectorAll('a[href]:not([target="_blank"]):not([href^="#"])').forEach(a => {
-            a.addEventListener('click', function(e) {
-                if (this.hostname === window.location.hostname && !this.href.includes('javascript:')) {
-                    e.preventDefault();
-                    document.body.style.opacity = '0';
-                    setTimeout(() => { window.location = this.href; }, 600);
-                }
-            });
-        });
     </script>
     
     <div style="text-align: center; margin-top: 50px; padding-bottom: 30px; color: #94a3b8; font-size: 12px; font-weight: 500;">
