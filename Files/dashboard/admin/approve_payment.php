@@ -84,10 +84,13 @@ if ($is_new_reg == 1 && $userid === 'PENDING') {
         mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('$next_id', '$password', 'member', '$uname', 'member')");
 
         // Activate Subscription
-        $plan_q = mysqli_query($con, "SELECT validity FROM plan WHERE pid = '$pid'");
+        $plan_q = mysqli_query($con, "SELECT planName, validity FROM plan WHERE pid = '$pid'");
         $validity = 1;
+        $planName = 'Premium Plan';
         if ($plan_q && mysqli_num_rows($plan_q) > 0) {
-            $validity = intval(mysqli_fetch_assoc($plan_q)['validity']);
+            $plan_data = mysqli_fetch_assoc($plan_q);
+            $validity = intval($plan_data['validity']);
+            $planName = $plan_data['planName'];
         }
         
         $d = strtotime("+" . $validity . " Months", strtotime($calc_base_date));
@@ -101,7 +104,7 @@ if ($is_new_reg == 1 && $userid === 'PENDING') {
         
         // Send Welcome Email
         require_once '../../include/smtp_mailer.php';
-        send_member_email($con, $next_id, 'new');
+        send_member_email($con, $email, $uname, $next_id, $password, $planName, $amount, $expiredate, $entry_code, 0, $amount, $gender);
         
         // Send WhatsApp Welcome Message
         require_once '../../include/whatsapp_api.php';

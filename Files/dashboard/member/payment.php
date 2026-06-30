@@ -57,7 +57,7 @@ if (isset($_POST['submit_payment'])) {
                     $pid = mysqli_real_escape_string($con, $_POST['plan_id']);
                     
                     // Get plan details
-                    $plan_q = mysqli_query($con, "SELECT amount, validity FROM plan WHERE pid = '$pid'");
+                    $plan_q = mysqli_query($con, "SELECT planName, amount, validity FROM plan WHERE pid = '$pid'");
                     if ($plan_q && mysqli_num_rows($plan_q) > 0) {
                         $plan_data = mysqli_fetch_assoc($plan_q);
                         $amount = intval($plan_data['amount']);
@@ -110,7 +110,12 @@ if (isset($_POST['submit_payment'])) {
                                                 
                             // Send renewal receipt
                             require_once '../../include/smtp_mailer.php';
-                            send_member_email($con, $userid, 'renewal');
+                            
+                            $mem_q = mysqli_query($con, "SELECT username, email, entry_code FROM users WHERE userid='$userid'");
+                            $mem_data = mysqli_fetch_assoc($mem_q);
+                            $planName = mysqli_fetch_assoc(mysqli_query($con, "SELECT planName FROM plan WHERE pid='$pid'"))['planName'];
+                            
+                            send_payment_email($con, $mem_data['email'], $mem_data['username'], $userid, $planName, $amount, $expiredate, $payment_mode, $received_by, $mem_data['entry_code'], $discount_amount, $amount);
                             
                             echo "<script>alert('Payment Auto-Verified via AI! Your membership has been instantly renewed.'); window.location.href='index.php';</script>";
                             exit();
