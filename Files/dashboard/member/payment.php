@@ -63,6 +63,23 @@ if (isset($_POST['submit_payment'])) {
                         $amount = intval($plan_data['amount']);
                         $validity = intval($plan_data['validity']);
                         
+                        // Apply Discount Logic for Pre-Booking
+                        $mem_count_q = mysqli_query($con, "SELECT COUNT(*) as count FROM users");
+                        $mem_count_row = mysqli_fetch_assoc($mem_count_q);
+                        $total_members = intval($mem_count_row['count']);
+                        $discount_active = ($total_members < 100);
+                        
+                        $discount_amount = 0;
+                        if ($discount_active) {
+                            if ($validity == 12) {
+                                $discount_amount = 2000;
+                            } elseif ($validity == 6) {
+                                $discount_amount = 1000;
+                            }
+                        }
+                        $amount -= $discount_amount;
+                        
+                        
                         // Check Authenticity Automatically via AI OCR
                         require_once '../../include/auto_verifier.php';
                         $physical_path = __DIR__ . '/../../Sudarshan Data Folder/' . $new_file_name;
@@ -85,7 +102,7 @@ if (isset($_POST['submit_payment'])) {
                             
                             // Insert active subscription
                             mysqli_query($con, "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
-                                      VALUES ('$pid', '$userid', '$cdate', '$expiredate', 'yes', '$payment_mode', '$received_by', 0, $amount)");
+                                      VALUES ('$pid', '$userid', '$cdate', '$expiredate', 'yes', '$payment_mode', '$received_by', $discount_amount, $amount)");
                                       
                             // Log payment as approved
                             mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr) 
@@ -298,9 +315,35 @@ if (isset($_POST['submit_payment'])) {
                         <label style="color: var(--text-main); font-weight: 600; margin-bottom: 8px; display: block;">Select Membership Plan</label>
                         <select class="form-control-premium" name="plan_id" id="plan-select" onchange="showPlanDetails()">
                             <option value="">-- Choose a package --</option>
-                            <?php foreach ($plans as $p): ?>
-                                <option value="<?php echo htmlspecialchars($p['pid']); ?>" data-amount="<?php echo $p['amount']; ?>" data-validity="<?php echo $p['validity']; ?>" data-desc="<?php echo htmlspecialchars($p['description']); ?>">
-                                    <?php echo htmlspecialchars($p['planName']); ?> - ₹<?php echo number_format($p['amount']); ?>
+                            <?php 
+                            // Check global member count for UI
+                            $mem_count_q_ui = mysqli_query($con, "SELECT COUNT(*) as count FROM users");
+                            $mem_count_row_ui = mysqli_fetch_assoc($mem_count_q_ui);
+                            $discount_active_ui = (intval($mem_count_row_ui['count']) < 100);
+                            
+                            foreach ($plans as $p): 
+                                $original_price = $p['amount'];
+                                $discounted_price = $original_price;
+                                $has_discount = false;
+                                
+                                if ($discount_active_ui) {
+                                    if ($p['validity'] == 12) {
+                                        $discounted_price -= 2000;
+                                        $has_discount = true;
+                                    } elseif ($p['validity'] == 6) {
+                                        $discounted_price -= 1000;
+                                        $has_discount = true;
+                                    }
+                                }
+                            ?>
+                                <option value="<?php echo htmlspecialchars($p['pid']); ?>" 
+                                        data-amount="<?php echo $discounted_price; ?>" 
+                                        data-original="<?php echo $original_price; ?>"
+                                        data-has-discount="<?php echo $has_discount ? '1' : '0'; ?>"
+                                        data-validity="<?php echo $p['validity']; ?>" 
+                                        data-desc="<?php echo htmlspecialchars($p['description']); ?>">
+                                    <?php echo htmlspecialchars($p['planName']); ?> - ₹<?php echo number_format($discounted_price); ?> 
+                                    <?php echo $has_discount ? "(WELCOME BONUS APPLIED!)" : ""; ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
