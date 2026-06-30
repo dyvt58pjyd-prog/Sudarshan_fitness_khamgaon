@@ -53,6 +53,7 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
     <!-- 3. MEMBERS & REGISTRATION -->
     <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
         <li id="regis"><a href="new_entry.php"><i class="entypo-user-add"></i><span>New Registration</span></a></li>
+        <li id="manual_approve"><a href="manual_approve.php" style="color: #f59e0b;"><i class="entypo-check"></i><span>Manual Approve (Bookings)</span></a></li>
     <?php endif; ?>
     
     <li class="" id="hassubopen"><a href="#" onclick="memberExpand(1)"><i class="entypo-users"></i><span>Members</span></a>

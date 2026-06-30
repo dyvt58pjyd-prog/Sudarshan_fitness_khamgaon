@@ -10,14 +10,14 @@ if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['super_admin', 'o
 
 $gym = get_gym_details($con);
 
-// Fetch pending requests specifically for renewals (excluding new registrations)
-$query = "SELECT pr.*, u.username, u.mobile FROM payment_requests pr LEFT JOIN users u ON pr.uid = u.userid WHERE pr.status = 'pending' AND (pr.is_new_registration != 1 OR pr.is_new_registration IS NULL) ORDER BY pr.id DESC";
+// Fetch pending requests specifically for new registrations
+$query = "SELECT pr.*, u.username, u.mobile FROM payment_requests pr LEFT JOIN users u ON pr.uid = u.userid WHERE pr.status = 'pending' AND pr.is_new_registration = 1 ORDER BY pr.id DESC";
 $res = mysqli_query($con, $query);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title><?php echo htmlspecialchars($gym['gym_name']); ?> | Payment Approvals</title>
+    <title><?php echo htmlspecialchars($gym['gym_name']); ?> | Manual Booking Approvals</title>
     <link rel="stylesheet" href="../../css/style.css" id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
@@ -25,7 +25,7 @@ $res = mysqli_query($con, $query);
     <link rel="stylesheet" href="../../css/premium.css">
     <link href="a1style.css" rel="stylesheet" type="text/css">
     <style>
-        .page-container .sidebar-menu #main-menu li#payment_requests > a {
+        .page-container .sidebar-menu #main-menu li#manual_approve > a {
             background-color: rgba(59, 130, 246, 0.1) !important;
             color: var(--accent-primary) !important;
             font-weight: 600 !important;
@@ -124,7 +124,7 @@ $res = mysqli_query($con, $query);
                 </div>
             </div>
 
-            <h2>Pending Payment Approvals</h2>
+            <h2>Manual Booking Approvals</h2>
             <hr />
 
             <?php if (mysqli_num_rows($res) == 0): ?>
