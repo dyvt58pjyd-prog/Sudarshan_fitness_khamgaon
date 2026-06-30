@@ -1223,4 +1223,4 @@ if (!function_exists('enqueue_whatsapp_message')) {
         return true;
     }
 }
-?>check_and_upgrade_db($con);
+check_and_upgrade_db($con);
