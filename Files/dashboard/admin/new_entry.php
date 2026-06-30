@@ -523,12 +523,7 @@ $gym_name = isset($gym['gym_name']) ? $gym['gym_name'] : 'Sudarshan Fitness';
                 }
             }
         
-        <?php
-          $settings_query = mysqli_query($con, "SELECT upi_id, gym_name FROM gym_settings LIMIT 1");
-          $settings = mysqli_fetch_assoc($settings_query);
-          $upi_id = $settings['upi_id'] ?? '';
-          $gym_name = $settings['gym_name'] ?? 'Gym';
-        ?>
+
 
         document.getElementById('discount_input').addEventListener('input', generateStaffQR);
         document.getElementById('trainer_id_select').addEventListener('change', generateStaffQR);
@@ -588,8 +583,8 @@ $gym_name = isset($gym['gym_name']) ? $gym['gym_name'] : 'Sudarshan Fitness';
             
             document.getElementById('staff-qr-amount').innerText = '₹' + totalAmount.toLocaleString('en-IN');
             
-            var upiId = "<?php echo addslashes($upi_id); ?>";
-            var gymName = "<?php echo addslashes($gym_name); ?>";
+            var upiId = "<?php echo addslashes($gym['upi_id'] ?? ''); ?>";
+            var gymName = "<?php echo addslashes($gym['gym_name'] ?? 'Gym'); ?>";
             
             if (!upiId) {
                 document.getElementById('staff-qr-container').innerHTML = '<div style="color:red; padding: 10px;">UPI ID not configured in settings.</div>';
