@@ -108,10 +108,10 @@ if ($is_new_reg == 1 && $userid === 'PENDING') {
         $wa_msg = "🔥 Welcome to Sudarshan Fitness, $uname! 🔥\n\nYour Pre-Booking has been verified and approved!\n\nMembership ID: $next_id\nGym Entry PIN: $entry_code\nPlan Paid: ₹$amount\n\nShow this message at the front desk. Get ready to transform your life! 💪";
         sendWhatsAppMessage($phn, $wa_msg);
         
-        echo "<script>alert('Registration Approved! ID Assigned and Activated.'); window.location.href='payment_requests.php';</script>";
+        echo "<script>alert('Registration Approved! ID Assigned and Activated.'); window.location.href='manual_approve.php';</script>";
         exit();
     } else {
-        echo "<script>alert('Failed to generate user account: " . mysqli_error($con) . "'); window.location.href='payment_requests.php';</script>";
+        echo "<script>alert('Failed to generate user account: " . mysqli_error($con) . "'); window.location.href='manual_approve.php';</script>";
         exit();
     }
 }
