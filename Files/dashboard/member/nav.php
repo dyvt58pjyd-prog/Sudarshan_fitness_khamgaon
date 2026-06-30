@@ -56,10 +56,10 @@ document.addEventListener("DOMContentLoaded", function() {
     
     // Dynamic favicon injection
     var favicon = document.querySelector('link[rel="shortcut icon"]') || document.createElement('link');
-    favicon.type = 'image/x-icon';
+    favicon.type = 'image/jpeg';
     favicon.rel = 'shortcut icon';
-    // Use fixed favicon as requested by the user
-    favicon.href = "../../images/favicon_fixed.jpg?v=2";
+    // Use dynamic gym logo as favicon
+    favicon.href = "<?php echo htmlspecialchars($gym_settings_data['gym_logo']); ?>";
     document.getElementsByTagName('head')[0].appendChild(favicon);
 });
 </script>
