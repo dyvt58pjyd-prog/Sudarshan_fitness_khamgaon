@@ -531,7 +531,7 @@ $gym_name = isset($gym['gym_name']) ? $gym['gym_name'] : 'Sudarshan Fitness';
         ?>
 
         document.getElementById('discount_input').addEventListener('input', generateStaffQR);
-        document.getElementById('trainer_select').addEventListener('change', generateStaffQR);
+        document.getElementById('trainer_id_select').addEventListener('change', generateStaffQR);
         document.getElementById('pt_duration').addEventListener('change', generateStaffQR);
         document.getElementById('plan_select').addEventListener('change', generateStaffQR);
 
@@ -559,7 +559,7 @@ $gym_name = isset($gym['gym_name']) ? $gym['gym_name'] : 'Sudarshan Fitness';
             
             // Add PT fees
             var ptFees = 0;
-            var trainerSelect = document.getElementById('trainer_select');
+            var trainerSelect = document.getElementById('trainer_id_select');
             if (trainerSelect && trainerSelect.value !== '') {
                 var ptDuration = document.getElementById('pt_duration');
                 if (ptDuration) {
