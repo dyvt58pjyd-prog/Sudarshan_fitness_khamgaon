@@ -380,14 +380,36 @@ if (isset($_POST['submit_registration'])) {
             z-index: -99;
         }
         .register-container {
-            max-width: 800px;
+            position: relative;
+            max-width: 850px;
             margin: 40px auto;
-            background: rgba(10, 10, 15, 0.85);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 107, 0, 0.4);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 0 40px rgba(255, 107, 0, 0.15);
+            background: rgba(5, 5, 10, 0.6);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 50px;
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.6), 
+                0 0 80px rgba(255, 107, 0, 0.15),
+                inset 0 0 20px rgba(255, 255, 255, 0.02);
+            overflow: hidden;
+        }
+
+        /* Subtle ambient glow behind the form */
+        .register-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 107, 0, 0.08), transparent 60%);
+            animation: pulseOpacity 6s infinite alternate;
+            z-index: -1;
+            pointer-events: none;
         }
         .form-section {
             margin-bottom: 30px;
@@ -399,51 +421,64 @@ if (isset($_POST['submit_registration'])) {
             padding-bottom: 0;
         }
         .form-section-title {
-            color: var(--accent-primary);
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 20px;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 25px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            text-shadow: 0 0 15px rgba(255, 107, 0, 0.6);
+        }
+        .form-section-title i {
+            color: var(--accent-primary);
+            font-size: 22px;
+            filter: drop-shadow(0 0 10px rgba(255, 107, 0, 0.8));
         }
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 25px;
         }
         @media (max-width: 768px) {
             .form-grid {
                 grid-template-columns: 1fr;
             }
+            .register-container { padding: 30px 20px; }
         }
         .form-group-premium {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
         }
         .form-group-premium label {
-            color: var(--text-main);
+            color: rgba(255, 255, 255, 0.8);
             font-weight: 600;
             font-size: 13px;
+            letter-spacing: 0.5px;
         }
         .form-control-premium {
-            background: rgba(15, 23, 42, 0.6) !important;
-            border: 1px solid var(--glass-border) !important;
-            border-radius: 10px !important;
-            color: var(--text-main) !important;
-            padding: 12px !important;
+            background: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 12px !important;
+            color: #ffffff !important;
+            padding: 15px !important;
             width: 100%;
             box-sizing: border-box;
-            font-size: 14px;
-            transition: all 0.2s;
+            font-size: 15px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
         }
         .form-control-premium:focus {
-            border-color: var(--accent-primary) !important;
-            box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.2) !important;
+            background: rgba(255, 255, 255, 0.05) !important;
+            border-color: rgba(255, 107, 0, 0.5) !important;
+            box-shadow: 
+                0 0 0 4px rgba(255, 107, 0, 0.15),
+                inset 0 2px 4px rgba(0,0,0,0.2) !important;
             outline: none;
+            transform: translateY(-2px);
         }
         .qr-section {
             text-align: center;
