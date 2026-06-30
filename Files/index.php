@@ -119,6 +119,23 @@ if (substr($logo_path, 0, 6) === '../../') {
                         <a href="forgot_password.php" class="link" style="font-size: 13px; color: var(--text-muted);">Forgot your password?</a>
                     </div>
                     
+                    <style>
+                        @keyframes intense-pulse {
+                            0% { box-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff; transform: scale(1); }
+                            50% { box-shadow: 0 0 30px #ff00ff, 0 0 50px #00ffff, 0 0 70px #ffeb3b; transform: scale(1.05); }
+                            100% { box-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff; transform: scale(1); }
+                        }
+                        @keyframes color-shift {
+                            0% { background-position: 0% 50%; }
+                            50% { background-position: 100% 50%; }
+                            100% { background-position: 0% 50%; }
+                        }
+                    </style>
+                    <div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+                        <a href="prebook.php" class="btn" style="display: block; width: 100%; background: linear-gradient(270deg, #ff007f, #7928ca, #ff007f); background-size: 200% 200%; color: white !important; font-size: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; padding: 18px 20px; border-radius: 12px; border: none; text-decoration: none; animation: intense-pulse 1.5s infinite alternate, color-shift 3s ease infinite;">
+                            ⚡ PRE-BOOK NOW! ⚡
+                        </a>
+                    </div>
 
                     <div style="margin-top: 25px; text-align: center;">
                         <a href="https://drive.google.com/uc?export=download&id=1dPIrSbq6eTvq4fWcz2CnfTFAWtSoTGvl" target="_blank" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981, #059669) !important; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3) !important; width: 100% !important; border: none !important;">

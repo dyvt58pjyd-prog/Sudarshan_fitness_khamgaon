@@ -147,8 +147,8 @@ if (isset($_POST['submit_registration'])) {
                         $entry_code = strval(rand(100000, 999999));
                         
                         // Pre-Booking Logic
-                        $today_date = date('Y-m-d');
-                        $joining_date_val = "CURRENT_DATE()";
+                        $launch_date_ai = '2026-07-08';
+                        $joining_date_val = "'$launch_date_ai'";
                         
                         // Insert into users
                         $query_user = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, entry_code, biometric_id, biometric_enabled, photo) 
@@ -173,7 +173,7 @@ if (isset($_POST['submit_registration'])) {
 
                             // Insert active subscription
                             date_default_timezone_set("Asia/Calcutta");
-                            $cdate = $today_date;
+                            $cdate = $launch_date_ai;
                             $d = strtotime("+" . $validity . " Months", strtotime($cdate));
                             $expiredate = date("Y-m-d", $d);
                             $payment_mode = 'UPI';
@@ -462,11 +462,18 @@ if (isset($_POST['submit_registration'])) {
     <div id="container">
         <div class="register-container">
             
+            <!-- Scarcity & Countdown Banner -->
+            <div style="background: rgba(255, 107, 0, 0.1); border: 1px solid rgba(255, 107, 0, 0.3); border-radius: 16px; padding: 15px; margin-bottom: 25px; text-align: center; box-shadow: 0 0 20px rgba(255,107,0,0.15);">
+                <div style="font-size: 14px; font-weight: 800; color: #ff6b00; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">🔥 Grand Opening Offers End In:</div>
+                <div id="countdown-timer" style="font-size: 28px; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(255,107,0,0.5); font-family: monospace; letter-spacing: 2px;">00d : 00h : 00m : 00s</div>
+                <div style="margin-top: 10px; font-size: 13px; font-weight: 700; color: #ccc;">Spots Remaining For Welcome Bonus: <span style="color: #00fff9; font-size: 16px;"><?php echo $spots_remaining; ?> / 100</span></div>
+            </div>
+
             <div style="text-align: center; margin-bottom: 30px;">
                 <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Sudarshan Fitness Logo" style="max-height: 80px;" />
                 <h1 style="color: #ff6b00; margin-top: 15px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;">SUDARSHAN FITNESS</h1>
-                <h3 style="color: #ffffff; font-weight: 700; margin-top: 5px; letter-spacing: 1px;">NEW MEMBER REGISTRATION</h3>
-                <p style="color: #ccc; font-size: 14px; margin-top: 10px;">Fill out the form below, pay via UPI, and start your fitness journey today.</p>
+                <h3 style="color: #ffffff; font-weight: 700; margin-top: 5px; letter-spacing: 1px;">GRAND OPENING PRE-BOOKING</h3>
+                <p style="color: #ccc; font-size: 14px; margin-top: 10px;">Fill out the form below, pay via UPI, and secure your spot today.</p>
             </div>
 
             <?php if (!empty($success_message)): ?>
@@ -856,6 +863,32 @@ if (isset($_POST['submit_registration'])) {
             if (holoCards.length > 0) {
                 // Auto click the first plan to initialize it
                 holoCards[0].click();
+            }
+            
+            // Countdown Timer Logic
+            const countDownDate = new Date("Jul 7, 2026 00:00:00").getTime();
+            const timerEl = document.getElementById("countdown-timer");
+            if (timerEl) {
+                const x = setInterval(function() {
+                    const now = new Date().getTime();
+                    const distance = countDownDate - now;
+                    if (distance < 0) {
+                        clearInterval(x);
+                        timerEl.innerHTML = "00d : 00h : 00m : 00s";
+                        return;
+                    }
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    
+                    const dStr = days.toString().padStart(2, '0');
+                    const hStr = hours.toString().padStart(2, '0');
+                    const mStr = minutes.toString().padStart(2, '0');
+                    const sStr = seconds.toString().padStart(2, '0');
+                    
+                    timerEl.innerHTML = dStr + "d : " + hStr + "h : " + mStr + "m : " + sStr + "s";
+                }, 1000);
             }
             
             // Programmatic launcher for mobile browsers
