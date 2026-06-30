@@ -267,8 +267,8 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
 							</div>
 							<div style="font-size: 13px; color: #ffffff; display: flex; align-items: center; justify-content: space-between;">
 								<span>WhatsApp AI Coach:</span>
-								<span style="color: #10b981; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-									<span style="display:inline-block; width:6px; height:6px; background:#10b981; border-radius:50%;"></span> Active
+								<span style="color: <?php echo $is_expired ? '#ef4444' : '#10b981'; ?>; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+									<span style="display:inline-block; width:6px; height:6px; background:<?php echo $is_expired ? '#ef4444' : '#10b981'; ?>; border-radius:50%;"></span> <?php echo $is_expired ? 'Blocked (Renew)' : 'Active'; ?>
 								</span>
 							</div>
 						</div>
@@ -919,6 +919,7 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
         });
     </script>
     <!-- Titan AI Coach Floating Widget -->
+    <?php if (!$is_expired): ?>
     <div id="ai-chat-widget" style="position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end;">
         <!-- Chat Window -->
         <div id="ai-chat-window" style="display: none; width: 320px; height: 400px; background: rgba(10,10,10,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,107,0,0.3); border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(255,107,0,0.2); margin-bottom: 15px; flex-direction: column; overflow: hidden; transform-origin: bottom right; transition: all 0.3s cubic-bezier(0.4, 2.08, 0.55, 0.44);">
@@ -1068,5 +1069,13 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
             });
         });
     </script>
+    <?php else: ?>
+    <!-- Locked AI Coach for Expired Members -->
+    <div id="ai-chat-widget" style="position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end;">
+        <button onclick="alert('Access Denied: Your membership plan has expired. Please renew your plan to reactivate the Titan AI Coach.')" style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #333, #555); border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 0 15px rgba(0,0,0,0.5); cursor: pointer; display: flex; align-items: center; justify-content: center; filter: grayscale(100%);">
+            <i class="entypo-chat" style="font-size: 28px; color: #888;"></i>
+        </button>
+    </div>
+    <?php endif; ?>
 </body>
 </html>
