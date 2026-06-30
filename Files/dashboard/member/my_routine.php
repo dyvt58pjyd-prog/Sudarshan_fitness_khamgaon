@@ -95,7 +95,7 @@ if ($rq && mysqli_num_rows($rq) > 0) {
                 </div>
             </div>
 
-            <?php include('footer.php'); ?>
+            <?php include('../admin/footer.php'); ?>
         </div>
     </div>
 </body>

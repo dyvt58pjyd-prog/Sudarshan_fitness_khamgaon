@@ -835,5 +835,9 @@ if (isset($_POST['submit_registration'])) {
             }
         }
     </script>
+    
+    <div style="text-align: center; margin-top: 50px; padding-bottom: 30px; color: #94a3b8; font-size: 12px; font-weight: 500;">
+        System Engineered by <strong style="color: #cbd5e1;">Anurag Bawaskar</strong>
+    </div>
 </body>
 </html>

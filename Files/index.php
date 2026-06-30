@@ -192,6 +192,10 @@ if (substr($logo_path, 0, 6) === '../../') {
                             <i class="entypo-mobile" style="margin-right: 5px; font-size: 16px;"></i> Download Android App
                         </a>
                     </div>
+                    
+                    <div style="margin-top: 30px; text-align: center; color: var(--text-muted); font-size: 12px; font-weight: 500;">
+                        System Engineered by <strong>Anurag Bawaskar</strong>
+                    </div>
                 </div>
             </div>
         </div>

@@ -224,7 +224,7 @@ $weight = ($stats && !empty($stats['weight'])) ? floatval($stats['weight']) : ''
                 </div>
             </div>
 
-            <?php include('footer.php'); ?>
+            <?php include('../admin/footer.php'); ?>
         </div>
     </div>
     

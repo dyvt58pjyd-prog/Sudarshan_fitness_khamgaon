@@ -572,7 +572,9 @@ if (!function_exists('send_member_email')) {
                 
                 <div class='footer'>
                     This is an automated message from $gym_name.<br>
-                    Need help? Contact support: <a href='mailto:$gym_email' style='color: #ff6b00; text-decoration: none;'>$gym_email</a>
+                    Need help? Contact support: <a href='mailto:$gym_email' style='color: #ff6b00; text-decoration: none;'>$gym_email</a><br>
+                    <br>
+                    System Engineered by <strong>Anurag Bawaskar</strong>
                 </div>
             </div>
         </body>
@@ -707,7 +709,9 @@ if (!function_exists('send_payment_email')) {
                 
                 <div class='footer'>
                     This is an automated transaction confirmation from $gym_name.<br>
-                    Need help? Contact support: <a href='mailto:$gym_email' style='color: #ff6b00; text-decoration: none;'>$gym_email</a>
+                    Need help? Contact support: <a href='mailto:$gym_email' style='color: #ff6b00; text-decoration: none;'>$gym_email</a><br>
+                    <br>
+                    System Engineered by <strong>Anurag Bawaskar</strong>
                 </div>
             </div>
         </body>
