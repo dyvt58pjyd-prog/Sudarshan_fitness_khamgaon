@@ -13,6 +13,14 @@ if ($plans_res) {
     }
 }
 
+// Check member count for discount eligibility
+$member_count_q = mysqli_query($con, "SELECT COUNT(*) as count FROM users");
+$member_count_data = mysqli_fetch_assoc($member_count_q);
+$total_members = intval($member_count_data['count']);
+$discount_active = ($total_members < 100);
+$spots_remaining = 100 - $total_members;
+if ($spots_remaining < 0) $spots_remaining = 0;
+
 $logo_path = $gym['gym_logo'];
 if (substr($logo_path, 0, 6) === '../../') {
     $logo_path = './' . substr($logo_path, 6);
@@ -71,6 +79,19 @@ if (isset($_POST['submit_registration'])) {
                     $plan_data = mysqli_fetch_assoc($plan_q);
                     $amount = intval($plan_data['amount']);
                     $validity = intval($plan_data['validity']);
+                    
+                    // Apply Discount Logic
+                    $discount_amount = 0;
+                    if ($discount_active) {
+                        if ($validity == 12) {
+                            $discount_amount = 2000;
+                            $amount -= 2000;
+                        } elseif ($validity == 6) {
+                            $discount_amount = 1000;
+                            $amount -= 1000;
+                        }
+                    }
+
                     $db_screenshot_path = "../../Sudarshan Data Folder/" . $new_file_name;
                     $utr = isset($_POST['utr']) ? mysqli_real_escape_string($con, $_POST['utr']) : '';
 
@@ -158,7 +179,7 @@ if (isset($_POST['submit_registration'])) {
                             $received_by = 'Auto-Approved by AI';
                             
                             $ins_q = "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
-                                      VALUES ('$plan', '$next_id', '$cdate', '$expiredate', 'yes', '$payment_mode', '$received_by', 0, $amount)";
+                                      VALUES ('$plan', '$next_id', '$cdate', '$expiredate', 'yes', '$payment_mode', '$received_by', $discount_amount, $amount)";
                             mysqli_query($con, $ins_q);
                             
                             // Log payment as approved
@@ -168,6 +189,11 @@ if (isset($_POST['submit_registration'])) {
                             // Send Welcome/Receipt Email Immediately
                             require_once 'include/smtp_mailer.php';
                             send_member_email($con, $next_id, 'new');
+                            
+                            // Send WhatsApp Welcome Message
+                            require_once 'include/whatsapp_api.php';
+                            $wa_msg = "🔥 Welcome to Sudarshan Fitness, $uname! 🔥\n\nYour Pre-Booking is confirmed!\n\nMembership ID: $next_id\nGym Entry PIN: $entry_code\nPlan Paid: ₹$amount\n\nShow this message at the front desk. Get ready to transform your life! 💪";
+                            sendWhatsAppMessage($phn, $wa_msg);
                             
                             $success_message = "Payment Auto-Verified via AI! Registration complete. Your Member ID is: ";
                             $generated_id = $next_id;
@@ -216,6 +242,12 @@ if (isset($_POST['submit_registration'])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- OpenGraph SEO -->
+    <meta property="og:title" content="<?php echo htmlspecialchars($gym['gym_name']); ?> | Grand Opening Pre-Booking">
+    <meta property="og:description" content="Secure your spot today at <?php echo htmlspecialchars($gym['gym_name']); ?>. Exclusive Welcome Bonuses available for a limited time!">
+    <meta property="og:image" content="<?php echo htmlspecialchars($logo_path); ?>">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
     <title><?php echo htmlspecialchars($gym['gym_name']); ?> | Member Registration</title>
     <link rel="shortcut icon" href="<?php echo htmlspecialchars($logo_path); ?>" type="image/jpeg">
     <link rel="stylesheet" href="./css/style.css"/>
@@ -626,6 +658,14 @@ if (isset($_POST['submit_registration'])) {
 
     <div id="container">
         <div class="register-container">
+            
+            <!-- Scarcity & Countdown Banner -->
+            <div style="background: rgba(255, 107, 0, 0.1); border: 1px solid rgba(255, 107, 0, 0.3); border-radius: 16px; padding: 15px; margin-bottom: 25px; text-align: center; box-shadow: 0 0 20px rgba(255,107,0,0.15);">
+                <div style="font-size: 14px; font-weight: 800; color: #ff6b00; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">🔥 Grand Opening Offers End In:</div>
+                <div id="countdown-timer" style="font-size: 28px; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(255,107,0,0.5); font-family: monospace; letter-spacing: 2px;">00d : 00h : 00m : 00s</div>
+                <div style="margin-top: 10px; font-size: 13px; font-weight: 700; color: #ccc;">Spots Remaining For Welcome Bonus: <span style="color: #00fff9; font-size: 16px;"><?php echo $spots_remaining; ?> / 100</span></div>
+            </div>
+
             <div style="text-align: center; margin-bottom: 30px;">
                 <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Sudarshan Fitness Logo" style="max-height: 80px;" />
                 <h1 class="glitch-text" data-text="SUDARSHAN FITNESS" style="color: #ff6b00; margin-top: 15px; font-weight: 900; font-style: italic; letter-spacing: 2px; text-shadow: 0 0 15px rgba(255,107,0,0.5); text-transform: uppercase;">SUDARSHAN FITNESS</h1>
@@ -766,17 +806,41 @@ if (isset($_POST['submit_registration'])) {
                             
                             <!-- Holographic Cards Grid -->
                             <div class="holo-cards-grid" id="holo-cards-grid">
-                                <?php foreach ($plans as $p): ?>
+                                <?php foreach ($plans as $p): 
+                                    $original_price = $p['amount'];
+                                    $discounted_price = $original_price;
+                                    $has_discount = false;
+                                    
+                                    if ($discount_active) {
+                                        if ($p['validity'] == 12) {
+                                            $discounted_price -= 2000;
+                                            $has_discount = true;
+                                        } elseif ($p['validity'] == 6) {
+                                            $discounted_price -= 1000;
+                                            $has_discount = true;
+                                        }
+                                    }
+                                ?>
                                     <div class="holo-card" 
                                          data-value="<?php echo htmlspecialchars($p['pid']); ?>" 
-                                         data-amount="<?php echo $p['amount']; ?>" 
+                                         data-amount="<?php echo $discounted_price; ?>" 
                                          data-validity="<?php echo $p['validity']; ?>" 
                                          data-desc="<?php echo htmlspecialchars($p['description']); ?>"
                                          data-name="<?php echo htmlspecialchars($p['planName']); ?>">
                                         <div class="holo-glare"></div>
                                         <div class="holo-content">
+                                            <?php if ($has_discount): ?>
+                                                <div style="background: linear-gradient(90deg, #ff6b00, #ff2a00); color: #fff; font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 10px; letter-spacing: 1px; animation: pulseOpacity 2s infinite; box-shadow: 0 0 10px rgba(255,107,0,0.5);">WELCOME BONUS</div>
+                                            <?php endif; ?>
                                             <div class="holo-title"><?php echo htmlspecialchars($p['planName']); ?></div>
-                                            <div class="holo-price">₹<?php echo number_format($p['amount']); ?></div>
+                                            <?php if ($has_discount): ?>
+                                                <div class="holo-price">
+                                                    <span style="text-decoration: line-through; color: #888; font-size: 16px; margin-right: 5px;">₹<?php echo number_format($original_price); ?></span>
+                                                    ₹<?php echo number_format($discounted_price); ?>
+                                                </div>
+                                            <?php else: ?>
+                                                <div class="holo-price">₹<?php echo number_format($original_price); ?></div>
+                                            <?php endif; ?>
                                             <div class="holo-validity"><?php echo $p['validity']; ?> Months</div>
                                         </div>
                                     </div>
@@ -1022,6 +1086,32 @@ if (isset($_POST['submit_registration'])) {
             if (holoCards.length > 0) {
                 // Auto click the first plan to initialize it
                 holoCards[0].click();
+            }
+            
+            // Countdown Timer Logic
+            const countDownDate = new Date("Jul 7, 2026 00:00:00").getTime();
+            const timerEl = document.getElementById("countdown-timer");
+            if (timerEl) {
+                const x = setInterval(function() {
+                    const now = new Date().getTime();
+                    const distance = countDownDate - now;
+                    if (distance < 0) {
+                        clearInterval(x);
+                        timerEl.innerHTML = "00d : 00h : 00m : 00s";
+                        return;
+                    }
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    
+                    const dStr = days.toString().padStart(2, '0');
+                    const hStr = hours.toString().padStart(2, '0');
+                    const mStr = minutes.toString().padStart(2, '0');
+                    const sStr = seconds.toString().padStart(2, '0');
+                    
+                    timerEl.innerHTML = dStr + "d : " + hStr + "h : " + mStr + "m : " + sStr + "s";
+                }, 1000);
             }
             
             // Programmatic launcher for mobile browsers

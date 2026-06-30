@@ -103,6 +103,11 @@ if ($is_new_reg == 1 && $userid === 'PENDING') {
         require_once '../../include/smtp_mailer.php';
         send_member_email($con, $next_id, 'new');
         
+        // Send WhatsApp Welcome Message
+        require_once '../../include/whatsapp_api.php';
+        $wa_msg = "🔥 Welcome to Sudarshan Fitness, $uname! 🔥\n\nYour Pre-Booking has been verified and approved!\n\nMembership ID: $next_id\nGym Entry PIN: $entry_code\nPlan Paid: ₹$amount\n\nShow this message at the front desk. Get ready to transform your life! 💪";
+        sendWhatsAppMessage($phn, $wa_msg);
+        
         echo "<script>alert('Registration Approved! ID Assigned and Activated.'); window.location.href='payment_requests.php';</script>";
         exit();
     } else {
@@ -180,12 +185,19 @@ if (strpos($pid, 'PT_') === 0) {
             mysqli_query($con, "UPDATE payment_requests SET status = 'approved' WHERE id = $req_id");
             
             require_once '../../include/smtp_mailer.php';
+            require_once '../../include/whatsapp_api.php';
             if ($is_new_member) {
                 $g_q = mysqli_query($con, "SELECT gender FROM users WHERE userid='$userid'");
                 $gender = ($g_q && mysqli_num_rows($g_q)>0) ? mysqli_fetch_assoc($g_q)['gender'] : '';
                 send_member_email($con, $mem_email, $mem_name, $userid, '1234', $plan_name, $amount, $expiredate, $new_entry_code, 0, $amount, $gender);
+                
+                $wa_msg = "🔥 Welcome to Sudarshan Fitness, $mem_name! 🔥\n\nYour Pre-Booking has been verified and approved!\n\nMembership ID: $userid\nGym Entry PIN: $new_entry_code\nPlan Paid: ₹$amount\n\nShow this message at the front desk. Get ready to transform your life! 💪";
+                sendWhatsAppMessage($mem_mobile, $wa_msg);
             } else {
                 send_payment_email($con, $mem_email, $mem_name, $userid, $plan_name, $amount, $expiredate, $payment_mode, $received_by, $new_entry_code, 0, $amount);
+                
+                $wa_msg = "✅ Payment Successful! ✅\n\nHi $mem_name,\nYour gym membership ($plan_name) has been renewed successfully. It is now valid until $expiredate.\n\nYour new Entry PIN is: $new_entry_code\n\nKeep up the great work! 💪";
+                sendWhatsAppMessage($mem_mobile, $wa_msg);
             }
             
             echo "<script>alert('Membership Payment Approved and Activated!'); window.location.href='payment_requests.php';</script>";

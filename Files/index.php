@@ -33,6 +33,12 @@ if (substr($logo_path, 0, 6) === '../../') {
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- OpenGraph SEO -->
+    <meta property="og:title" content="<?php echo htmlspecialchars($gym['gym_name']); ?> | Login">
+    <meta property="og:description" content="Welcome to <?php echo htmlspecialchars($gym['gym_name']); ?>. Access your premium dashboard.">
+    <meta property="og:image" content="<?php echo htmlspecialchars($logo_path); ?>">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
 	<title><?php echo htmlspecialchars($gym['gym_name']); ?> | Login</title>
 	<link rel="shortcut icon" href="<?php echo htmlspecialchars($logo_path); ?>" type="image/jpeg">
 	<link rel="stylesheet" href="./css/style.css"/>
