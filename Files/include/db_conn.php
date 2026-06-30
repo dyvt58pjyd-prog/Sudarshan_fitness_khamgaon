@@ -441,6 +441,27 @@ if (!function_exists('get_member_rank')) {
     }
 }
 
+if (!function_exists('check_and_upgrade_db')) {
+    function check_and_upgrade_db($con) {
+        // Phase 3: Gamification and Heatmap Schema
+        $cols = mysqli_query($con, "SHOW COLUMNS FROM users LIKE 'xp_points'");
+        if(mysqli_num_rows($cols) == 0) mysqli_query($con, "ALTER TABLE users ADD COLUMN xp_points INT DEFAULT 0");
+        
+        $cols = mysqli_query($con, "SHOW COLUMNS FROM users LIKE 'gym_rank'");
+        if(mysqli_num_rows($cols) == 0) mysqli_query($con, "ALTER TABLE users ADD COLUMN gym_rank VARCHAR(50) DEFAULT 'Beginner'");
+        
+        $workout_logs_sql = "CREATE TABLE IF NOT EXISTS workout_logs (
+            id INT(11) NOT NULL AUTO_INCREMENT,
+            uid VARCHAR(20) NOT NULL,
+            muscle_group VARCHAR(50) NOT NULL,
+            intensity INT DEFAULT 5,
+            log_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id)
+        )";
+        mysqli_query($con, $workout_logs_sql);
+    }
+}
+
 if (!function_exists('add_member_xp')) {
     function add_member_xp($con, $userid, $xp_to_add) {
         $uid_esc = mysqli_real_escape_string($con, $userid);
@@ -1202,4 +1223,4 @@ if (!function_exists('enqueue_whatsapp_message')) {
         return true;
     }
 }
-?>
+?>check_and_upgrade_db($con);
