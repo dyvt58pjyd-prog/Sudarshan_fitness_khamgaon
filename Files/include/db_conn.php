@@ -429,6 +429,44 @@ if (!function_exists('get_gym_details')) {
     }
 }
 
+if (!function_exists('get_member_rank')) {
+    function get_member_rank($xp) {
+        if ($xp < 200) return 'Beginner';
+        if ($xp < 500) return 'Bronze';
+        if ($xp < 1000) return 'Silver';
+        if ($xp < 2500) return 'Gold';
+        if ($xp < 5000) return 'Platinum';
+        if ($xp < 10000) return 'Diamond';
+        return 'Titan';
+    }
+}
+
+if (!function_exists('add_member_xp')) {
+    function add_member_xp($con, $userid, $xp_to_add) {
+        $uid_esc = mysqli_real_escape_string($con, $userid);
+        // Get current XP
+        $res = mysqli_query($con, "SELECT xp_points FROM users WHERE userid = '$uid_esc'");
+        if ($res && mysqli_num_rows($res) > 0) {
+            $row = mysqli_fetch_assoc($res);
+            $current_xp = intval($row['xp_points']);
+            $new_xp = $current_xp + $xp_to_add;
+            $new_rank = get_member_rank($new_xp);
+            
+            // Update
+            mysqli_query($con, "UPDATE users SET xp_points = $new_xp, gym_rank = '$new_rank' WHERE userid = '$uid_esc'");
+            
+            return [
+                'old_xp' => $current_xp,
+                'new_xp' => $new_xp,
+                'old_rank' => get_member_rank($current_xp),
+                'new_rank' => $new_rank,
+                'leveled_up' => (get_member_rank($current_xp) !== $new_rank)
+            ];
+        }
+        return false;
+    }
+}
+
 if (!function_exists('send_member_email')) {
     function send_member_email($con, $email, $name, $memID, $password, $planName, $amount, $expiredate, $entry_code = '', $discount = 0, $paid_amount = NULL, $gender = '') {
         $gym = get_gym_details($con);

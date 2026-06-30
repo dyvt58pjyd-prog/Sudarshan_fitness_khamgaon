@@ -12,7 +12,7 @@ $gym = get_gym_details($con);
 $userid = $_SESSION['user_data'];
 
 // Fetch user subscription details (get the latest subscription)
-$sql = "SELECT u.username, u.email, u.trainer_id, e.paid_date, e.expire, p.planName, p.amount 
+$sql = "SELECT u.username, u.email, u.trainer_id, u.xp_points, u.gym_rank, e.paid_date, e.expire, p.planName, p.amount 
         FROM users u 
         LEFT JOIN enrolls_to e ON u.userid = e.uid 
         LEFT JOIN plan p ON e.pid = p.pid 
@@ -38,8 +38,19 @@ $checked_in_today = ($att_today_q && mysqli_num_rows($att_today_q) > 0);
 $username = isset($user_info['username']) ? $user_info['username'] : $_SESSION['full_name'];
 $planName = isset($user_info['planName']) ? $user_info['planName'] : 'No Active Plan';
 $amount = isset($user_info['amount']) ? "₹" . $user_info['amount'] : 'N/A';
-$paid_date = isset($user_info['paid_date']) ? $user_info['paid_date'] : 'N/A';
 $expire = isset($user_info['expire']) ? $user_info['expire'] : 'N/A';
+$member_xp = isset($user_info['xp_points']) ? intval($user_info['xp_points']) : 0;
+$member_rank = !empty($user_info['gym_rank']) ? $user_info['gym_rank'] : 'Beginner';
+
+// Fetch Muscle Logs
+$uid_esc = mysqli_real_escape_string($con, $userid);
+$muscle_logs = [];
+$heatmap_q = mysqli_query($con, "SELECT muscle_group, MAX(log_date) as last_trained FROM workout_logs WHERE uid = '$uid_esc' GROUP BY muscle_group");
+if ($heatmap_q) {
+    while($row = mysqli_fetch_assoc($heatmap_q)) {
+        $muscle_logs[$row['muscle_group']] = $row['last_trained'];
+    }
+}
 
 $is_expired = false;
 $is_expiring_soon = false;
@@ -196,6 +207,41 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
 							</div>
 						</div>
 						
+						<!-- Gamification / Rank Progress -->
+						<div style="flex: 1; border-left: 1px dashed rgba(255,255,255,0.1); padding-left: 25px; min-width: 280px; display: flex; flex-direction: column; justify-content: center;">
+							<div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;">
+								🏆 Current Gym Rank
+							</div>
+							<div style="display: flex; align-items: flex-end; gap: 15px; margin-bottom: 8px;">
+								<span style="font-size: 28px; font-weight: 900; color: #ff6b00; text-shadow: 0 0 15px rgba(255,107,0,0.4);"><?php echo htmlspecialchars($member_rank); ?></span>
+								<span style="font-size: 14px; color: var(--text-muted); margin-bottom: 5px; font-weight: 600;"><?php echo number_format($member_xp); ?> XP</span>
+							</div>
+							<!-- Progress Bar -->
+							<?php
+							// Calculate next rank threshold
+							$next_threshold = 200; // Default (Beginner -> Bronze)
+							$prev_threshold = 0;
+							if ($member_rank === 'Beginner') { $next_threshold = 200; $prev_threshold = 0; }
+							elseif ($member_rank === 'Bronze') { $next_threshold = 500; $prev_threshold = 200; }
+							elseif ($member_rank === 'Silver') { $next_threshold = 1000; $prev_threshold = 500; }
+							elseif ($member_rank === 'Gold') { $next_threshold = 2500; $prev_threshold = 1000; }
+							elseif ($member_rank === 'Platinum') { $next_threshold = 5000; $prev_threshold = 2500; }
+							elseif ($member_rank === 'Diamond') { $next_threshold = 10000; $prev_threshold = 5000; }
+							else { $next_threshold = $member_xp; $prev_threshold = $member_xp; } // Max level
+							
+							$progress_percent = 100;
+							if ($next_threshold > $prev_threshold) {
+								$progress_percent = (($member_xp - $prev_threshold) / ($next_threshold - $prev_threshold)) * 100;
+							}
+							?>
+							<div style="width: 100%; background: rgba(255,255,255,0.05); height: 8px; border-radius: 4px; overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);">
+								<div style="width: <?php echo $progress_percent; ?>%; height: 100%; background: linear-gradient(90deg, #ff6b00, #ffb300); border-radius: 4px; box-shadow: 0 0 10px #ff6b00; transition: width 1s ease-in-out;"></div>
+							</div>
+							<div style="font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 5px;">
+								<?php echo $member_rank !== 'Titan' ? number_format($next_threshold - $member_xp) . " XP to Next Rank" : "Max Rank Achieved"; ?>
+							</div>
+						</div>
+						
 						<!-- Smart Member Fitness Status block -->
 						<div style="border-left: 1px dashed rgba(255,255,255,0.1); padding-left: 25px; min-width: 280px; display: flex; flex-direction: column; gap: 5px;">
 							<div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 3px;">
@@ -231,6 +277,57 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
 				</div>
 			</div>
             
+            <!-- Neural Muscle Heatmap -->
+			<div class="row" style="margin-left: 0; margin-right: 0; margin-bottom: 25px;">
+				<div class="col-md-12" style="padding: 0;">
+					<div class="portal-card" style="background: var(--glass-bg); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; box-shadow: var(--glass-shadow); color: #ffffff;">
+						<h3 style="margin-top: 0; color: #ff6b00; font-weight: 800; display: flex; align-items: center; gap: 10px;">
+							<i class="entypo-target"></i> Neural Muscle Heatmap
+						</h3>
+						<p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Click a muscle group to log your workout. Red indicates high fatigue (trained recently), Orange is recovering, Green is fully recovered.</p>
+						
+						<div class="heatmap-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
+							<?php
+							$muscles = ['Chest', 'Back', 'Shoulders', 'Arms', 'Core', 'Legs'];
+							foreach ($muscles as $m) {
+								$status_color = '#10b981'; // Green by default (Recovered)
+								$status_text = 'Recovered';
+								$glow = 'rgba(16, 185, 129, 0.4)';
+								
+								if (isset($muscle_logs[$m])) {
+									$last = strtotime($muscle_logs[$m]);
+									$now = time();
+									$diff_hours = ($now - $last) / 3600;
+									
+									if ($diff_hours < 24) {
+										$status_color = '#ef4444'; // Red (Fatigued)
+										$status_text = 'Fatigued';
+										$glow = 'rgba(239, 68, 68, 0.5)';
+									} elseif ($diff_hours < 48) {
+										$status_color = '#ffb300'; // Orange (Recovering)
+										$status_text = 'Recovering';
+										$glow = 'rgba(255, 179, 0, 0.4)';
+									}
+								}
+								?>
+								<div class="muscle-block" data-muscle="<?php echo $m; ?>" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px 15px; text-align: center; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+									<div style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, <?php echo $glow; ?> 0%, transparent 70%); opacity: 0.3; z-index: 1;"></div>
+									<div style="position: relative; z-index: 2;">
+										<div style="font-size: 18px; font-weight: 800; margin-bottom: 8px;"><?php echo $m; ?></div>
+										<div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: <?php echo $status_color; ?>;">
+											<span style="display:inline-block; width:8px; height:8px; background:<?php echo $status_color; ?>; border-radius:50%; margin-right: 4px; box-shadow: 0 0 8px <?php echo $status_color; ?>;"></span>
+											<?php echo $status_text; ?>
+										</div>
+									</div>
+								</div>
+								<?php
+							}
+							?>
+						</div>
+					</div>
+				</div>
+			</div>
+            
             <!-- Monthly Leaderboard Section (Gamification) -->
             <div class="row" style="margin-left: 0; margin-right: 0;">
                 <?php include '../admin/leaderboard_widget.php'; ?>
@@ -238,6 +335,50 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
 
 			<script>
 			document.addEventListener("DOMContentLoaded", function() {
+				// Handle Muscle Heatmap Clicks
+				document.querySelectorAll('.muscle-block').forEach(block => {
+					block.addEventListener('click', function() {
+						const muscle = this.getAttribute('data-muscle');
+						
+						// Add a quick visual pulse
+						this.style.transform = 'scale(0.95)';
+						setTimeout(() => this.style.transform = 'scale(1)', 150);
+						
+						// Send to API
+						fetch('../../api/log_workout.php', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify({ muscle: muscle, intensity: 8 })
+						})
+						.then(response => response.json())
+						.then(data => {
+							if (data.success) {
+								// Instantly turn red (Fatigued) locally for immediate feedback
+								const indicator = this.querySelector('span');
+								const textNode = indicator.nextSibling;
+								indicator.style.background = '#ef4444';
+								indicator.style.boxShadow = '0 0 8px #ef4444';
+								textNode.nodeValue = ' Fatigued';
+								indicator.parentElement.style.color = '#ef4444';
+								
+								const glowLayer = this.querySelector('div[style*="radial-gradient"]');
+								glowLayer.style.background = 'radial-gradient(circle, rgba(239, 68, 68, 0.5) 0%, transparent 70%)';
+								
+								// If XP was awarded, show alert and reload to update bar
+								if (data.xp_earned > 0) {
+									alert('🔥 Awesome! You earned +' + data.xp_earned + ' XP for training ' + data.muscle + '.\nYour rank is now: ' + data.new_rank + '.\nReloading dashboard to update your progress bar...');
+									window.location.reload();
+								}
+							} else {
+								alert('Error: ' + data.message);
+							}
+						})
+						.catch(err => console.error('Error logging workout:', err));
+					});
+				});
+
 				const hrHand = document.getElementById("hour-hand");
 				const minHand = document.getElementById("min-hand");
 				const secHand = document.getElementById("sec-hand");
@@ -775,6 +916,156 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
                     "retina_detect": true
                 });
             }
+        });
+    </script>
+    <!-- Titan AI Coach Floating Widget -->
+    <div id="ai-chat-widget" style="position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end;">
+        <!-- Chat Window -->
+        <div id="ai-chat-window" style="display: none; width: 320px; height: 400px; background: rgba(10,10,10,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,107,0,0.3); border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(255,107,0,0.2); margin-bottom: 15px; flex-direction: column; overflow: hidden; transform-origin: bottom right; transition: all 0.3s cubic-bezier(0.4, 2.08, 0.55, 0.44);">
+            <!-- Header -->
+            <div style="background: linear-gradient(90deg, #111, #222); border-bottom: 1px solid rgba(255,107,0,0.3); padding: 12px 15px; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 30px; height: 30px; background: rgba(255,107,0,0.2); border: 1px solid #ff6b00; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px #ff6b00;">
+                        <i class="entypo-light-bulb" style="color: #ff6b00; font-size: 16px;"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 800; color: #fff; font-size: 14px;">Titan AI Coach</div>
+                        <div style="font-size: 10px; color: #10b981; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+                            <span style="display:inline-block; width:6px; height:6px; background:#10b981; border-radius:50%;"></span> Online
+                        </div>
+                    </div>
+                </div>
+                <button id="ai-close-btn" style="background: none; border: none; color: #fff; cursor: pointer; font-size: 18px; opacity: 0.5; transition: opacity 0.2s;"><i class="entypo-cancel"></i></button>
+            </div>
+            <!-- Messages Area -->
+            <div id="ai-chat-messages" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
+                <div style="align-self: flex-start; background: rgba(255,107,0,0.1); border: 1px solid rgba(255,107,0,0.3); color: #fff; padding: 10px 12px; border-radius: 12px; border-bottom-left-radius: 2px; font-size: 13px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                    System online. How can I help you reach your goals today?
+                </div>
+            </div>
+            <!-- Input Area -->
+            <div style="padding: 10px; border-top: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); display: flex; gap: 8px;">
+                <input type="text" id="ai-chat-input" placeholder="Ask about diet, XP, or workouts..." style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 8px 15px; color: #fff; font-size: 13px; outline: none; transition: border-color 0.2s;">
+                <button id="ai-send-btn" style="background: #ff6b00; border: none; width: 34px; height: 34px; border-radius: 50%; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(255,107,0,0.5); transition: transform 0.2s;"><i class="entypo-paper-plane" style="margin-left: -2px;"></i></button>
+            </div>
+        </div>
+        <!-- Floating Button -->
+        <button id="ai-toggle-btn" style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #ff6b00, #ff8c00); border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 0 20px rgba(255,107,0,0.6); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.3s cubic-bezier(0.4, 2.08, 0.55, 0.44);">
+            <i class="entypo-chat" style="font-size: 28px; color: #fff;"></i>
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // AI Chatbot Logic
+            const aiToggleBtn = document.getElementById('ai-toggle-btn');
+            const aiCloseBtn = document.getElementById('ai-close-btn');
+            const aiChatWindow = document.getElementById('ai-chat-window');
+            const aiChatInput = document.getElementById('ai-chat-input');
+            const aiSendBtn = document.getElementById('ai-send-btn');
+            const aiChatMessages = document.getElementById('ai-chat-messages');
+
+            function toggleChat() {
+                if (aiChatWindow.style.display === 'none') {
+                    aiChatWindow.style.display = 'flex';
+                    aiChatWindow.style.transform = 'scale(0.8)';
+                    aiChatWindow.style.opacity = '0';
+                    setTimeout(() => {
+                        aiChatWindow.style.transform = 'scale(1)';
+                        aiChatWindow.style.opacity = '1';
+                        aiChatInput.focus();
+                    }, 10);
+                } else {
+                    aiChatWindow.style.transform = 'scale(0.8)';
+                    aiChatWindow.style.opacity = '0';
+                    setTimeout(() => {
+                        aiChatWindow.style.display = 'none';
+                    }, 300);
+                }
+            }
+
+            aiToggleBtn.addEventListener('click', toggleChat);
+            aiCloseBtn.addEventListener('click', toggleChat);
+
+            function appendMessage(text, isUser) {
+                const msgDiv = document.createElement('div');
+                msgDiv.style.padding = '10px 12px';
+                msgDiv.style.borderRadius = '12px';
+                msgDiv.style.fontSize = '13px';
+                msgDiv.style.maxWidth = '85%';
+                msgDiv.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
+                msgDiv.style.wordBreak = 'break-word';
+                
+                if (isUser) {
+                    msgDiv.style.alignSelf = 'flex-end';
+                    msgDiv.style.background = 'rgba(255,255,255,0.1)';
+                    msgDiv.style.border = '1px solid rgba(255,255,255,0.2)';
+                    msgDiv.style.color = '#fff';
+                    msgDiv.style.borderBottomRightRadius = '2px';
+                } else {
+                    msgDiv.style.alignSelf = 'flex-start';
+                    msgDiv.style.background = 'rgba(255,107,0,0.1)';
+                    msgDiv.style.border = '1px solid rgba(255,107,0,0.3)';
+                    msgDiv.style.color = '#fff';
+                    msgDiv.style.borderBottomLeftRadius = '2px';
+                }
+                
+                // Handle markdown bold parsing simply
+                let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                msgDiv.innerHTML = formattedText;
+                
+                aiChatMessages.appendChild(msgDiv);
+                aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+            }
+
+            function sendMessage() {
+                const text = aiChatInput.value.trim();
+                if (!text) return;
+                
+                appendMessage(text, true);
+                aiChatInput.value = '';
+                
+                // Typing indicator
+                const typingId = 'typing-' + Date.now();
+                const typingDiv = document.createElement('div');
+                typingDiv.id = typingId;
+                typingDiv.style.alignSelf = 'flex-start';
+                typingDiv.style.color = '#ff6b00';
+                typingDiv.style.fontSize = '12px';
+                typingDiv.style.padding = '5px 12px';
+                typingDiv.innerHTML = '<i class="entypo-dot-3"></i> AI is thinking...';
+                aiChatMessages.appendChild(typingDiv);
+                aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+
+                fetch('../../api/ai_coach.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const typingEl = document.getElementById(typingId);
+                    if (typingEl) typingEl.remove();
+                    
+                    if (data.success) {
+                        setTimeout(() => {
+                            appendMessage(data.response, false);
+                        }, data.delay || 500);
+                    } else {
+                        appendMessage('Error processing request.', false);
+                    }
+                })
+                .catch(err => {
+                    const typingEl = document.getElementById(typingId);
+                    if (typingEl) typingEl.remove();
+                    appendMessage('Connection error.', false);
+                });
+            }
+
+            aiSendBtn.addEventListener('click', sendMessage);
+            aiChatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') sendMessage();
+            });
         });
     </script>
 </body>

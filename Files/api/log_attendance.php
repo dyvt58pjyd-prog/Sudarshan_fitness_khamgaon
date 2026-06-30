@@ -146,6 +146,9 @@ if ($q_att && mysqli_num_rows($q_att) > 0) {
     if (mysqli_query($con, $insert_sql)) {
         mysqli_query($con, "INSERT INTO biometric_gate_logs (uid, timestamp, status, type) VALUES ('$userid_esc', '$log_date_esc $log_time_esc', 'success', 'check-in')");
         
+        // Gamification: Add 50 XP for daily check-in
+        $xp_data = add_member_xp($con, $userid, 50);
+        
         $gym = get_gym_details($con);
         $gym_name = $gym['gym_name'];
         $streak = get_member_streak($con, $userid);
@@ -174,6 +177,8 @@ if ($q_att && mysqli_num_rows($q_att) > 0) {
             'date' => $log_date,
             'time' => $log_time,
             'streak' => $streak,
+            'xp_earned' => 50,
+            'new_rank' => $xp_data ? $xp_data['new_rank'] : 'Beginner',
             'message' => "Check-in logged successfully for $username."
         ]);
     } else {

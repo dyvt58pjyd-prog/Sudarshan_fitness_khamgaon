@@ -139,6 +139,9 @@ if ($q_att && mysqli_num_rows($q_att) > 0) {
     // Insert Check-in
     $insert_sql = "INSERT INTO attendance (uid, date, entry_time, exit_time) VALUES ('$uid', '$today_str', '$log_time', NULL)";
     if (mysqli_query($con, $insert_sql)) {
+        // Gamification: Add 50 XP for daily check-in
+        $xp_data = add_member_xp($con, $uid, 50);
+        
         // Get newly computed streak
         $streak = get_member_streak($con, $uid);
         
@@ -170,6 +173,8 @@ if ($q_att && mysqli_num_rows($q_att) > 0) {
             'plan' => $plan_name,
             'expiry' => date('d-M-Y', strtotime($expire_date)),
             'streak' => $streak,
+            'xp_earned' => 50,
+            'new_rank' => $xp_data ? $xp_data['new_rank'] : 'Beginner',
             'time' => date('h:i A', strtotime($log_time)),
             'message' => 'Welcome, ' . htmlspecialchars($name) . '! Check-in logged successfully.'
         ]);
