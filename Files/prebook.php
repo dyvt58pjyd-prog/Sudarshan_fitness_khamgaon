@@ -125,76 +125,31 @@ if (isset($_POST['submit_registration'])) {
                         }
                     }
                     
-                    // Instantly generate ID and create account
-                    $next_id = 101;
-                    $res_max = mysqli_query($con, "SELECT userid FROM users WHERE userid REGEXP '^[0-9]+$' AND CAST(userid AS UNSIGNED) < 100000000");
-                    if ($res_max && mysqli_num_rows($res_max) > 0) {
-                        $max_val = 100;
-                        while ($row_max = mysqli_fetch_assoc($res_max)) {
-                            $val = intval($row_max['userid']);
-                            if ($val > $max_val) $max_val = $val;
-                        }
-                        $next_id = $max_val + 1;
-                    }
-
-                    // Generate random 6-digit gate code
-                    $entry_code = strval(rand(100000, 999999));
+                    // DEFERRED REGISTRATION (Manual Approval)
+                    $payload = [
+                        'uname' => $uname,
+                        'gender' => $gender,
+                        'phn' => $phn,
+                        'email' => $email,
+                        'dob' => $dob,
+                        'stname' => $stname,
+                        'state' => $state,
+                        'city' => $city,
+                        'zipcode' => $zipcode,
+                        'weight' => isset($_POST['weight']) ? $_POST['weight'] : '',
+                        'height' => isset($_POST['height']) ? $_POST['height'] : '',
+                        'password' => $password,
+                        'photo_path_db' => $photo_path_db
+                    ];
+                    $json_payload = mysqli_real_escape_string($con, json_encode($payload));
                     
-                    // Pre-Booking Logic
-                    $launch_date_ai = '2026-07-08';
-                    $joining_date_val = "'$launch_date_ai'";
-                    
-                    // Insert into users
-                    $query_user = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, entry_code, biometric_id, biometric_enabled, photo) 
-                                   VALUES ('$uname', '$gender', '$phn', '$email', '$dob', $joining_date_val, '$next_id', '$entry_code', '$next_id', 1, '$photo_path_db')";
-                    
-                    if (mysqli_query($con, $query_user)) {
-                        // Insert into address
-                        mysqli_query($con, "INSERT INTO address (id, streetName, state, city, zipcode) 
-                                            VALUES ('$next_id', '$stname', '$state', '$city', '$zipcode')");
-                        
-                        // Insert into health status
-                        $weight = isset($_POST['weight']) ? mysqli_real_escape_string($con, $_POST['weight']) : '';
-                        $height = isset($_POST['height']) ? mysqli_real_escape_string($con, $_POST['height']) : '';
-                        mysqli_query($con, "INSERT INTO health_status (uid, weight, height) VALUES ('$next_id', '$weight', '$height')");
-                        if (!empty($weight) || !empty($height)) {
-                            mysqli_query($con, "INSERT INTO health_history (uid, weight, height, logged_date) VALUES ('$next_id', '$weight', '$height', CURRENT_DATE())");
-                        }
-                        
-                        // Create admin login
-                        mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) 
-                                            VALUES ('$next_id', '$password', 'member', '$uname', 'member')");
-
-                        // Insert active subscription
-                        date_default_timezone_set("Asia/Calcutta");
-                        $cdate = $launch_date_ai;
-                        $d = strtotime("+" . $validity . " Months", strtotime($cdate));
-                        $expiredate = date("Y-m-d", $d);
-                        $payment_mode = 'UPI';
-                        $received_by = 'Direct Approval';
-                        
-                        $ins_q = "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
-                                  VALUES ('$plan', '$next_id', '$cdate', '$expiredate', 'yes', '$payment_mode', '$received_by', $discount_amount, $amount)";
-                        mysqli_query($con, $ins_q);
-                        
-                        // Log payment as approved
-                        mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr, is_new_registration) 
-                                            VALUES ('$next_id', '$plan', $amount, '$db_screenshot_path', 'approved', '$utr', 1)");
-                        
-                        // Send Welcome/Receipt Email Immediately
-                        require_once 'include/smtp_mailer.php';
-                        // Signature: $con, $email, $name, $memID, $password, $planName, $amount, $expiredate, $entry_code = '', $discount = 0, $paid_amount = NULL, $gender = ''
-                        send_member_email($con, $email, $uname, $next_id, '1234', $plan, $amount, $expiredate, $entry_code, $discount_amount, $amount, $gender);
-                        
-                        // Send WhatsApp Welcome Message
-                        require_once 'include/whatsapp_api.php';
-                        $wa_msg = "🔥 Welcome to Sudarshan Fitness, $uname! 🔥\n\nYour Pre-Booking is confirmed!\n\nMembership ID: $next_id\nGym Entry PIN: $entry_code\nPlan Paid: ₹$amount\n\nShow this message at the front desk. Get ready to transform your life! 💪";
-                        sendWhatsAppMessage($phn, $wa_msg);
-                        
-                        $success_message = "Registration complete. Your Member ID is: ";
-                        $generated_id = $next_id;
+                    if (mysqli_query($con, "INSERT INTO payment_requests (uid, pid, amount, screenshot, status, utr, registration_payload, is_new_registration) 
+                                        VALUES ('PENDING', '$plan', $amount, '$db_screenshot_path', 'pending', '$utr', '$json_payload', 1)")) {
+                                        
+                        $success_message = "Registration submitted! Your request and payment proof have been sent to the Admin for manual approval. You will receive your Member ID once approved.";
+                        $generated_id = "";
                     } else {
-                        $error_message = "Failed to register user details: " . mysqli_error($con);
+                        $error_message = "Failed to submit registration: " . mysqli_error($con);
                     }
                 } else {
                     $error_message = "Failed to save payment proof screenshot.";
