@@ -279,7 +279,7 @@ $gym_name = isset($gym['gym_name']) ? $gym['gym_name'] : 'Sudarshan Fitness';
               </tr>
               <tr>
                 <td height="35">PAYMENT MODE:</td>
-                <td height="35"><select name="payment_mode" id="boxx" required onchange="generateStaffQR()">
+                <td height="35"><select name="payment_mode" id="payment_mode_select" required onchange="generateStaffQR()">
                     <option value="Cash" selected>Cash</option>
                     <option value="UPI">UPI</option>
                 </select></td>
@@ -531,7 +531,7 @@ $gym_name = isset($gym['gym_name']) ? $gym['gym_name'] : 'Sudarshan Fitness';
         document.getElementById('plan_select').addEventListener('change', generateStaffQR);
 
         function generateStaffQR() {
-            var paymentMode = document.getElementById('boxx').value;
+            var paymentMode = document.getElementById('payment_mode_select').value;
             var qrContainer = document.getElementById('staff-qr-container');
             
             if (paymentMode !== 'UPI') {
