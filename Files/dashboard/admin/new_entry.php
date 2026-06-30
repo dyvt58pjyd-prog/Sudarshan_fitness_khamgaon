@@ -149,9 +149,14 @@ if ($res_max && mysqli_num_rows($res_max) > 0) {
          <table width="100%" border="0" align="center">
          <tr>
            <td height="35"><table width="100%" border="0" align="center">
-           	 <tr>
+            	 <tr>
            	   <td height="35">MEMBERSHIP ID:</td>
-            	   <td height="35"><input type="text" id="boxx" name="m_id" value="<?php echo $next_id; ?>" readonly required/></td>
+            	   <td height="35">
+            	       <input type="text" id="boxx" name="m_id" value="<?php echo $next_id; ?>" readonly required/>
+            	       <div style="font-size: 11px; color: #ff6b00; margin-top: 5px; font-weight: bold;">
+            	           <i class="entypo-info-circled"></i> IMPORTANT: When enrolling this member on the Biometric Machine, use this exact ID number (<span style="color:white;"><?php echo $next_id; ?></span>).
+            	       </div>
+            	   </td>
          	   </tr>
 			   
 			   <tr>

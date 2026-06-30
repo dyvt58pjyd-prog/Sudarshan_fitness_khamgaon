@@ -5,12 +5,45 @@ require '../include/whatsapp_core.php';
 // Prevent execution from non-CLI or non-cron if necessary, but we'll leave it open for manual testing.
 // However, ensure this script is hidden or protected in a real env.
 
+// ==========================================
+// 1. BIOMETRIC ACCESS EXPIRATION SYNC
+// ==========================================
+$today = date('Y-m-d');
+// Find members whose latest plan expired before today, and whose biometrics are still enabled
+$exp_sql = "SELECT u.userid, u.biometric_id FROM users u 
+            JOIN (SELECT uid, MAX(expire) as last_expire FROM enrolls_to GROUP BY uid) e ON u.userid = e.uid 
+            WHERE e.last_expire < '$today' AND u.biometric_enabled = 1";
+$exp_res = mysqli_query($con, $exp_sql);
+
+if ($exp_res && mysqli_num_rows($exp_res) > 0) {
+    while ($row = mysqli_fetch_assoc($exp_res)) {
+        $uid = $row['userid'];
+        $bio_id = $row['biometric_id'];
+        
+        // 1. Disable access in DB
+        mysqli_query($con, "UPDATE users SET biometric_enabled = 0 WHERE userid = '$uid'");
+        
+        // 2. Queue command to wipe/block on machine
+        if (!empty($bio_id)) {
+            $cmd_payload = json_encode(['reason' => 'membership_expired']);
+            mysqli_query($con, "INSERT INTO biometric_commands (command_type, target_uid, payload, status) 
+                                VALUES ('DELETE_USER', '$bio_id', '$cmd_payload', 'pending')");
+        }
+    }
+    echo "Biometric Expiration Sync: Disabled " . mysqli_num_rows($exp_res) . " expired members.<br>";
+}
+
+// ==========================================
+// 2. DAILY FESTIVAL CAMPAIGNS
+// ==========================================
+
 $today = date('Y-m-d');
 $sql = "SELECT * FROM festival_campaigns WHERE scheduled_date = '$today' AND status = 'Pending'";
 $res = mysqli_query($con, $sql);
 
 if (mysqli_num_rows($res) == 0) {
-    die("No pending campaigns for today.");
+    echo "No pending campaigns for today.<br>";
+    exit();
 }
 
 $gym = get_gym_details($con);

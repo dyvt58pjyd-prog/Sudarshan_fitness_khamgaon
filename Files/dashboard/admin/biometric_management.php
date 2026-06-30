@@ -47,6 +47,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
         }
         exit();
     }
+    if ($action === 'reenroll_fingerprint') {
+        $bio_id = mysqli_real_escape_string($con, trim($_POST['biometric_id']));
+        if (!empty($bio_id) && $bio_id !== 'NULL') {
+            $cmd_payload = json_encode(['reason' => 'reenroll_requested']);
+            // Queue the CLEAR_FINGERPRINT command
+            mysqli_query($con, "INSERT INTO biometric_commands (command_type, target_uid, payload, status) VALUES ('CLEAR_FINGERPRINT', '$bio_id', '$cmd_payload', 'pending')");
+            echo json_encode(['success' => true, 'message' => 'Command queued! The machine will wipe their fingerprint on its next sync, forcing them to re-register.']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Invalid Biometric ID.']);
+        }
+        exit();
+    }
     
     echo json_encode(['success' => false, 'message' => 'Unknown AJAX action.']);
     exit();
@@ -406,6 +418,11 @@ $last_sync_str = $last_heartbeat > 0 ? date("d M Y, h:i A", $last_heartbeat) : '
                                                 <button class="btn-save-bio" onclick="saveBiometricId('<?php echo htmlspecialchars($m['userid']); ?>')" title="Save Biometric ID">
                                                     <i class="entypo-check"></i> Save
                                                 </button>
+                                                <?php if ($m['biometric_id'] !== NULL): ?>
+                                                <button class="btn-save-bio" style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.4); color: #ef4444; margin-left: 5px;" onclick="reenrollFingerprint('<?php echo htmlspecialchars($m['userid']); ?>', '<?php echo htmlspecialchars($m['biometric_id']); ?>')" title="Wipe Fingerprint on Machine for Re-registration">
+                                                    <i class="entypo-ccw"></i> Re-Enroll
+                                                </button>
+                                                <?php endif; ?>
                                             </div>
                                         </td>
                                         <td style="text-align: center;">
@@ -509,6 +526,33 @@ $last_sync_str = $last_heartbeat > 0 ? date("d M Y, h:i A", $last_heartbeat) : '
         })
         .catch(err => {
             alert('Network error saving Biometric ID.');
+        });
+    }
+
+    function reenrollFingerprint(uid, bio_id) {
+        if (!confirm("Are you sure you want to re-enroll this member's fingerprint? This will send a command to wipe their existing fingerprint from the machine.")) {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('ajax_action', 'reenroll_fingerprint');
+        formData.append('uid', uid);
+        formData.append('biometric_id', bio_id);
+
+        fetch('biometric_management.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                showToast(data.message);
+            } else {
+                alert("Error: " + data.message);
+            }
+        })
+        .catch(err => {
+            alert("Network error updating system.");
         });
     }
 
