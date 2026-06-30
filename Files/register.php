@@ -203,18 +203,18 @@ if (isset($_POST['submit_registration'])) {
                     } else {
                         // AI FAILED: DEFERRED REGISTRATION
                         $payload = [
-                            'uname' => $_POST['uname'],
-                            'gender' => $_POST['gender'],
-                            'phn' => $_POST['phn'],
-                            'email' => $_POST['email'],
-                            'dob' => $_POST['dob'],
-                            'stname' => $_POST['stname'],
-                            'state' => $_POST['state'],
-                            'city' => $_POST['city'],
-                            'zipcode' => $_POST['zipcode'],
+                            'uname' => $uname,
+                            'gender' => $gender,
+                            'phn' => $phn,
+                            'email' => $email,
+                            'dob' => $dob,
+                            'stname' => $stname,
+                            'state' => $state,
+                            'city' => $city,
+                            'zipcode' => $zipcode,
                             'weight' => isset($_POST['weight']) ? $_POST['weight'] : '',
                             'height' => isset($_POST['height']) ? $_POST['height'] : '',
-                            'password' => $_POST['password'],
+                            'password' => $password,
                             'photo_path_db' => $photo_path_db
                         ];
                         $json_payload = mysqli_real_escape_string($con, json_encode($payload));
