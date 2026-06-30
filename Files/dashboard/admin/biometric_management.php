@@ -56,6 +56,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
             echo json_encode(['success' => true, 'message' => 'Command queued! The machine will wipe their fingerprint on its next sync, forcing them to re-register.']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Invalid Biometric ID.']);
+        exit();
+    }
+    
+    if ($action === 'enroll_member_machine') {
+        $uid = mysqli_real_escape_string($con, trim($_POST['uid']));
+        
+        $u_q = mysqli_query($con, "SELECT username, entry_code, biometric_id FROM users WHERE userid = '$uid'");
+        if ($u_q && mysqli_num_rows($u_q) > 0) {
+            $user_row = mysqli_fetch_assoc($u_q);
+            $bio_id = $user_row['biometric_id'];
+            $entry_code = $user_row['entry_code'];
+            $username = $user_row['username'];
+            
+            if (empty($bio_id)) {
+                $bio_id = $uid;
+                mysqli_query($con, "UPDATE users SET biometric_id = '$bio_id' WHERE userid = '$uid'");
+            }
+            if (empty($entry_code)) {
+                $entry_code = strval(rand(100000, 999999));
+                mysqli_query($con, "UPDATE users SET entry_code = '$entry_code' WHERE userid = '$uid'");
+            }
+            
+            // Queue UPDATE_USERINFO to push PIN and ID
+            $cmd_payload = json_encode(['reason' => 'enroll_now', 'pin' => $entry_code, 'name' => $username]);
+            mysqli_query($con, "INSERT INTO biometric_commands (command_type, target_uid, payload, status) VALUES ('UPDATE_USERINFO', '$bio_id', '$cmd_payload', 'pending')");
+            
+            echo json_encode(['success' => true, 'message' => 'Command queued! The machine will receive the member details and PIN on its next heartbeat. They can now scan their fingerprint against ID: ' . $bio_id]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'User not found.']);
         }
         exit();
     }
@@ -418,6 +447,9 @@ $last_sync_str = $last_heartbeat > 0 ? date("d M Y, h:i A", $last_heartbeat) : '
                                                 <button class="btn-save-bio" onclick="saveBiometricId('<?php echo htmlspecialchars($m['userid']); ?>')" title="Save Biometric ID">
                                                     <i class="entypo-check"></i> Save
                                                 </button>
+                                                <button class="btn-save-bio" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.4); color: #10b981; margin-left: 5px;" onclick="enrollMemberMachine('<?php echo htmlspecialchars($m['userid']); ?>')" title="Push details & PIN to Machine">
+                                                    <i class="entypo-upload"></i> Enroll Now
+                                                </button>
                                                 <?php if ($m['biometric_id'] !== NULL): ?>
                                                 <button class="btn-save-bio" style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.4); color: #ef4444; margin-left: 5px;" onclick="reenrollFingerprint('<?php echo htmlspecialchars($m['userid']); ?>', '<?php echo htmlspecialchars($m['biometric_id']); ?>')" title="Wipe Fingerprint on Machine for Re-registration">
                                                     <i class="entypo-ccw"></i> Re-Enroll
@@ -547,6 +579,33 @@ $last_sync_str = $last_heartbeat > 0 ? date("d M Y, h:i A", $last_heartbeat) : '
         .then(data => {
             if(data.success) {
                 showToast(data.message);
+            } else {
+                alert("Error: " + data.message);
+            }
+        })
+        .catch(err => {
+            alert("Network error updating system.");
+        });
+    }
+
+    function enrollMemberMachine(uid) {
+        if (!confirm("This will push this member's ID and PIN to the biometric machine. Proceed?")) {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('ajax_action', 'enroll_member_machine');
+        formData.append('uid', uid);
+
+        fetch('biometric_management.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                showToast(data.message);
+                setTimeout(() => window.location.reload(), 2500);
             } else {
                 alert("Error: " + data.message);
             }

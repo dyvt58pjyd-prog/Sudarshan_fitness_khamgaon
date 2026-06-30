@@ -65,10 +65,6 @@ if ($is_new_reg == 1 && $userid === 'PENDING') {
                    VALUES ('$uname', '$gender', '$phn', '$email', '$dob', $joining_date_val, '$next_id', '$entry_code', '$next_id', 1, '$photo_path_db')";
     
     if (mysqli_query($con, $query_user)) {
-        // Queue the new PIN to the Biometric Machine
-        $cmd_payload = json_encode(['reason' => 'update_pin', 'pin' => $entry_code, 'name' => $uname]);
-        mysqli_query($con, "INSERT INTO biometric_commands (command_type, target_uid, payload, status) VALUES ('UPDATE_USERINFO', '$next_id', '$cmd_payload', 'pending')");
-        
         // Create Address
         $stname = mysqli_real_escape_string($con, $payload['stname']);
         $state = mysqli_real_escape_string($con, $payload['state']);
@@ -181,11 +177,6 @@ if (strpos($pid, 'PT_') === 0) {
         if (mysqli_query($con, $ins_enroll)) {
             $new_entry_code = strval(rand(100000, 999999));
             mysqli_query($con, "UPDATE users SET entry_code = '$new_entry_code' WHERE userid = '$userid'");
-            
-            // Queue the new PIN to the Biometric Machine
-            $cmd_payload = json_encode(['reason' => 'update_pin', 'pin' => $new_entry_code, 'name' => $mem_name]);
-            mysqli_query($con, "INSERT INTO biometric_commands (command_type, target_uid, payload, status) VALUES ('UPDATE_USERINFO', '$userid', '$cmd_payload', 'pending')");
-            
             mysqli_query($con, "UPDATE payment_requests SET status = 'approved' WHERE id = $req_id");
             
             require_once '../../include/smtp_mailer.php';

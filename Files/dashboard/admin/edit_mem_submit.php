@@ -60,10 +60,6 @@ page_protect();
                   $new_entry_code = strval(rand(100000, 999999));
                   mysqli_query($con, "UPDATE users SET entry_code = '$new_entry_code' WHERE userid = '$uid'");
                   
-                  // Queue the new PIN to the Biometric Machine
-                  $cmd_payload = json_encode(['reason' => 'update_pin', 'pin' => $new_entry_code, 'name' => $uname]);
-                  mysqli_query($con, "INSERT INTO biometric_commands (command_type, target_uid, payload, status) VALUES ('UPDATE_USERINFO', '$uid', '$cmd_payload', 'pending')");
-                  
                   mysqli_query($con, "INSERT INTO enrolls_to(pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
                                       VALUES ('$plan', '$uid', '$cdate', '$expiredate', 'yes', '$payment_mode', '$received_by', $discount, $paid_amount)");
 
