@@ -223,6 +223,141 @@ if (isset($_POST['submit_registration'])) {
     <link rel="stylesheet" href="./css/premium.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <style>
+        /* Living Button Advanced CSS */
+        .magnetic-wrapper {
+            position: relative;
+            width: 300px; /* Slightly wider for the main form CTA */
+            height: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .living-btn {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            background: rgba(255, 107, 0, 0.15); /* Tinted with primary gym orange */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 100px;
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.5), 
+                inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease;
+        }
+
+        .living-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0%,
+                rgba(255, 107, 0, 0.4) 25%, /* Gym Orange */
+                rgba(121, 40, 202, 0.4) 50%,
+                rgba(255, 107, 0, 0.4) 75%,
+                transparent 100%
+            );
+            animation: spinBtn 6s linear infinite, pulseOpacity 4s ease-in-out infinite alternate;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .living-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                80px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+                rgba(255, 255, 255, 0.3),
+                transparent 40%
+            );
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+        }
+
+        .living-btn .btn-text {
+            position: relative;
+            z-index: 2;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(255, 107, 0, 0.8);
+            pointer-events: none;
+            transition: transform 0.2s ease;
+        }
+
+        .magnetic-wrapper:hover .living-btn::after {
+            opacity: 1;
+        }
+
+        .magnetic-wrapper:hover .living-btn {
+            box-shadow: 
+                0 20px 45px rgba(255, 107, 0, 0.25), 
+                inset 0 1px 1px rgba(255, 255, 255, 0.2),
+                inset 0 0 20px rgba(255, 107, 0, 0.2);
+            transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .living-btn:active {
+            transform: scale(0.95) !important;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), inset 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .living-btn:active .btn-text {
+            transform: scale(0.95);
+        }
+
+        .shockwave {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .shockwave.active {
+            animation: shockwaveAnim 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+
+        @keyframes spinBtn {
+            0% { transform: rotate(0deg) scale(1.5); }
+            100% { transform: rotate(360deg) scale(1.5); }
+        }
+
+        @keyframes pulseOpacity {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes shockwaveAnim {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(40); opacity: 0; }
+        }
+
         .video-bg {
             position: fixed;
             top: 0;
@@ -586,7 +721,12 @@ if (isset($_POST['submit_registration'])) {
                             </div>
 
                             <div style="display: flex; flex-direction: column; align-items: center; margin-top: 40px; gap: 20px;">
-                                <input type="submit" name="submit_registration" value="SECURE MY SPOT NOW!" class="btn-massive-pulse">
+                                <div class="magnetic-wrapper" id="magnetic-area">
+                                    <button type="submit" name="submit_registration" class="living-btn" id="living-button" value="submit">
+                                        <span class="btn-text">SECURE MY SPOT NOW!</span>
+                                        <div class="shockwave" id="shockwave"></div>
+                                    </button>
+                                </div>
                                 <a href="index.php" class="link" style="font-weight: 600; color: #aaa; text-decoration: none; font-size: 14px;">&larr; Back to Login</a>
                             </div>
                         </div>
@@ -833,6 +973,54 @@ if (isset($_POST['submit_registration'])) {
                 }
                 reader.readAsDataURL(input.files[0]);
             }
+        }
+        // Magnetic Physics & Spotlight Tracking for the Living Button
+        const magneticArea = document.getElementById('magnetic-area');
+        const button = document.getElementById('living-button');
+        const shockwave = document.getElementById('shockwave');
+
+        if (magneticArea && button && shockwave) {
+            magneticArea.addEventListener('mousemove', (e) => {
+                const rect = magneticArea.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const deltaX = e.clientX - centerX;
+                const deltaY = e.clientY - centerY;
+                
+                // Magnetic strength
+                const moveX = deltaX * 0.3;
+                const moveY = deltaY * 0.3;
+                
+                button.style.transform = `translate(${moveX}px, ${moveY}px)`;
+
+                // Spotlight Tracking
+                const btnRect = button.getBoundingClientRect();
+                const mouseX = e.clientX - btnRect.left;
+                const mouseY = e.clientY - btnRect.top;
+
+                button.style.setProperty('--mouse-x', `${mouseX}px`);
+                button.style.setProperty('--mouse-y', `${mouseY}px`);
+            });
+
+            magneticArea.addEventListener('mouseleave', () => {
+                button.style.transform = `translate(0px, 0px)`;
+                button.style.setProperty('--mouse-x', `50%`);
+                button.style.setProperty('--mouse-y', `50%`);
+            });
+
+            button.addEventListener('click', (e) => {
+                shockwave.classList.remove('active');
+                void shockwave.offsetWidth; // Trigger reflow
+                
+                const btnRect = button.getBoundingClientRect();
+                const clickX = e.clientX - btnRect.left;
+                const clickY = e.clientY - btnRect.top;
+                
+                shockwave.style.left = `${clickX}px`;
+                shockwave.style.top = `${clickY}px`;
+                
+                shockwave.classList.add('active');
+            });
         }
     </script>
     
