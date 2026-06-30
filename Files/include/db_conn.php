@@ -137,6 +137,17 @@ if (!$con) {
         mysqli_query($con, "UPDATE admin SET role = 'owner' WHERE username = 'admin' OR username = 'admin1' OR username = 'sudarshan'");
     }
 
+    // Self-healing: ensure registration_payload exists in payment_requests
+    $chk_pr_payload = mysqli_query($con, "SHOW COLUMNS FROM payment_requests LIKE 'registration_payload'");
+    if ($chk_pr_payload && mysqli_num_rows($chk_pr_payload) === 0) {
+        mysqli_query($con, "ALTER TABLE payment_requests ADD COLUMN registration_payload JSON DEFAULT NULL");
+    }
+
+    // Self-healing: ensure is_new_registration exists in payment_requests
+    $chk_pr_newreg = mysqli_query($con, "SHOW COLUMNS FROM payment_requests LIKE 'is_new_registration'");
+    if ($chk_pr_newreg && mysqli_num_rows($chk_pr_newreg) === 0) {
+        mysqli_query($con, "ALTER TABLE payment_requests ADD COLUMN is_new_registration TINYINT(1) DEFAULT 0");
+    }
     
     // Self-healing: Ensure App Developer account exists
     $chk_dev = mysqli_query($con, "SELECT username FROM admin WHERE username='admin'");
