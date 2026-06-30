@@ -133,34 +133,47 @@ $res = mysqli_query($con, $query);
                 </div>
             <?php else: ?>
                 <p style="color: var(--text-muted); margin-bottom: 20px;">Please verify the 12-digit UTR with your PhonePe Business / Bank app before clicking approve.</p>
-                <?php while ($row = mysqli_fetch_assoc($res)): ?>
+                <?php while ($row = mysqli_fetch_assoc($res)): 
+                    // Decode payload early if it's a new registration
+                    $is_new = ($row['is_new_registration'] == 1 && !empty($row['registration_payload']));
+                    $payload = $is_new ? json_decode($row['registration_payload'], true) : null;
+                    
+                    $disp_name = $is_new ? $payload['uname'] : $row['username'];
+                    $disp_mobile = $is_new ? $payload['phn'] : $row['mobile'];
+                ?>
                     <div class="req-card">
-                        <div>
-                            <?php
-                            $clean_path = ltrim($row['screenshot'], './');
-                            $url_path = '../../' . $clean_path;
+                        <div style="display: flex; gap: 15px;">
+                            <!-- Profile Photo (if available) -->
+                            <?php if ($is_new && !empty($payload['photo_path_db'])): 
+                                $clean_photo_path = ltrim($payload['photo_path_db'], './');
+                                $photo_url = '../../' . $clean_photo_path;
                             ?>
-                            <a href="<?php echo htmlspecialchars($url_path); ?>" target="_blank">
-                                <img src="<?php echo htmlspecialchars($url_path); ?>" alt="Payment Proof">
-                            </a>
-                            <div style="text-align: center; font-size: 10px; color: var(--text-muted); margin-top: 5px;">Click to Enlarge</div>
+                            <div>
+                                <a href="<?php echo htmlspecialchars($photo_url); ?>" target="_blank">
+                                    <img src="<?php echo htmlspecialchars($photo_url); ?>" alt="Profile Photo" style="border-radius: 50%; object-fit: cover; width: 100px; height: 100px;">
+                                </a>
+                                <div style="text-align: center; font-size: 10px; color: var(--text-muted); margin-top: 5px;">Profile Photo</div>
+                            </div>
+                            <?php endif; ?>
+
+                            <!-- Payment Screenshot -->
+                            <div>
+                                <?php
+                                $clean_path = ltrim($row['screenshot'], './');
+                                $url_path = '../../' . $clean_path;
+                                ?>
+                                <a href="<?php echo htmlspecialchars($url_path); ?>" target="_blank">
+                                    <img src="<?php echo htmlspecialchars($url_path); ?>" alt="Payment Proof" style="object-fit: cover; width: 100px; height: 100px;">
+                                </a>
+                                <div style="text-align: center; font-size: 10px; color: var(--text-muted); margin-top: 5px;">Payment Proof</div>
+                            </div>
                         </div>
                         <div class="req-details">
-                            <?php
-                            $disp_name = "";
-                            $disp_mobile = "";
-                            if ($row['is_new_registration'] == 1 && !empty($row['registration_payload'])) {
-                                $payload = json_decode($row['registration_payload'], true);
-                                $disp_name = $payload['uname'];
-                                $disp_mobile = $payload['phn'];
-                            ?>
+                            <?php if ($is_new): ?>
                                 <h4><?php echo htmlspecialchars($disp_name); ?> <span style="color:#f59e0b; font-size: 12px;">(Pending New Reg.)</span></h4>
-                            <?php } else { 
-                                $disp_name = $row['username'];
-                                $disp_mobile = $row['mobile'];
-                            ?>
+                            <?php else: ?>
                                 <h4><?php echo htmlspecialchars($disp_name); ?> (ID: <?php echo htmlspecialchars($row['uid']); ?>)</h4>
-                            <?php } ?>
+                            <?php endif; ?>
                             
                             <p><strong>Package ID:</strong> <?php echo htmlspecialchars($row['pid']); ?></p>
                             <p><strong>Amount:</strong> ₹<?php echo number_format($row['amount']); ?></p>
