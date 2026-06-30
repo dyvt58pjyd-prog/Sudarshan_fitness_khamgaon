@@ -183,7 +183,8 @@ if (isset($_POST['submit_registration'])) {
                         
                         // Send Welcome/Receipt Email Immediately
                         require_once 'include/smtp_mailer.php';
-                        send_member_email($con, $next_id, 'new');
+                        // Signature: $con, $email, $name, $memID, $password, $planName, $amount, $expiredate, $entry_code = '', $discount = 0, $paid_amount = NULL, $gender = ''
+                        send_member_email($con, $email, $uname, $next_id, '1234', $plan, $amount, $expiredate, $entry_code, $discount_amount, $amount, $gender);
                         
                         // Send WhatsApp Welcome Message
                         require_once 'include/whatsapp_api.php';
