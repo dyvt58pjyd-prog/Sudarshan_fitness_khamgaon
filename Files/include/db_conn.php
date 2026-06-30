@@ -128,6 +128,15 @@ if (!$con) {
         mysqli_query($con, "ALTER TABLE admin ADD COLUMN mobile VARCHAR(20) DEFAULT NULL");
     }
 
+    // Self-healing database check: ensure role column exists in admin
+    $chk_admin_role = mysqli_query($con, "SHOW COLUMNS FROM admin LIKE 'role'");
+    if ($chk_admin_role && mysqli_num_rows($chk_admin_role) === 0) {
+        mysqli_query($con, "ALTER TABLE admin ADD COLUMN role VARCHAR(50) DEFAULT 'member'");
+        // Update existing admin accounts (length < 10) to owner, leaving auto-generated member IDs (which are typically numeric IDs) as members.
+        // As a safe fallback for the primary gym owner, we can set username 'admin' or 'owner' to 'owner'.
+        mysqli_query($con, "UPDATE admin SET role = 'owner' WHERE username = 'admin' OR username = 'admin1' OR username = 'sudarshan'");
+    }
+
     // Self-healing database check: ensure photo column exists in users
     $chk_col = mysqli_query($con, "SHOW COLUMNS FROM users LIKE 'photo'");
     if ($chk_col && mysqli_num_rows($chk_col) === 0) {
