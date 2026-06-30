@@ -39,7 +39,94 @@ if (substr($logo_path, 0, 6) === '../../') {
 	<link rel="stylesheet" type="text/css" href="./css/entypo.css">
 	<link rel="stylesheet" href="./css/premium.css"/>
 </head>
-<body class="page-body login-page login-form-fall">
+<body class="page-body login-page login-form-fall" style="cursor: none; opacity: 0; transition: opacity 0.8s ease;">
+    <!-- Neon Cursor Elements -->
+    <div id="neon-cursor" style="position: fixed; top: 0; left: 0; width: 8px; height: 8px; background: #ff6b00; border-radius: 50%; pointer-events: none; z-index: 999999; transform: translate(-50%, -50%); box-shadow: 0 0 10px #ff6b00, 0 0 20px #ff6b00;"></div>
+    <div id="neon-trail" style="position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 2px solid rgba(255, 107, 0, 0.4); border-radius: 50%; pointer-events: none; z-index: 999998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, border-color 0.2s;"></div>
+
+    <!-- Particle Network Background -->
+    <div id="particles-js" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; background: #050505;"></div>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Initialize Particles
+            if(window.particlesJS) {
+                particlesJS("particles-js", {
+                    "particles": {
+                        "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                        "color": { "value": "#ff6b00" },
+                        "shape": { "type": "circle" },
+                        "opacity": { "value": 0.5, "random": false },
+                        "size": { "value": 3, "random": true },
+                        "line_linked": { "enable": true, "distance": 150, "color": "#ff6b00", "opacity": 0.2, "width": 1 },
+                        "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
+                    },
+                    "interactivity": {
+                        "detect_on": "canvas",
+                        "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                        "modes": { "grab": { "distance": 200, "line_linked": { "opacity": 0.6 } } }
+                    },
+                    "retina_detect": true
+                });
+            }
+
+            // Fluid Page Entrance
+            setTimeout(() => { document.body.style.opacity = '1'; }, 100);
+
+            // Custom Neon Cursor Logic
+            const cursor = document.getElementById('neon-cursor');
+            const trail = document.getElementById('neon-trail');
+            let mouseX = 0, mouseY = 0;
+            let trailX = 0, trailY = 0;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                cursor.style.left = mouseX + 'px';
+                cursor.style.top = mouseY + 'px';
+            });
+
+            // Smooth Lerp for trail
+            function renderTrail() {
+                trailX += (mouseX - trailX) * 0.15;
+                trailY += (mouseY - trailY) * 0.15;
+                trail.style.left = trailX + 'px';
+                trail.style.top = trailY + 'px';
+                requestAnimationFrame(renderTrail);
+            }
+            renderTrail();
+
+            // Hover effects for cursor
+            const interactables = document.querySelectorAll('a, button, input, .category-tab');
+            interactables.forEach(el => {
+                el.style.cursor = 'none';
+                el.addEventListener('mouseenter', () => {
+                    trail.style.width = '60px';
+                    trail.style.height = '60px';
+                    trail.style.borderColor = 'rgba(255, 107, 0, 0.8)';
+                    trail.style.background = 'rgba(255, 107, 0, 0.1)';
+                });
+                el.addEventListener('mouseleave', () => {
+                    trail.style.width = '40px';
+                    trail.style.height = '40px';
+                    trail.style.borderColor = 'rgba(255, 107, 0, 0.4)';
+                    trail.style.background = 'transparent';
+                });
+            });
+
+            // Fluid Page Exit
+            document.querySelectorAll('a[href]:not([target="_blank"]):not([href^="#"])').forEach(a => {
+                a.addEventListener('click', function(e) {
+                    if (this.hostname === window.location.hostname) {
+                        e.preventDefault();
+                        document.body.style.opacity = '0';
+                        setTimeout(() => { window.location = this.href; }, 600);
+                    }
+                });
+            });
+        });
+    </script>
+
 
     <!-- Cinematic Splash Screen -->
     <div id="cinematic-splash" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999999; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s ease-in-out, visibility 1s; overflow: hidden;">
@@ -48,7 +135,7 @@ if (substr($logo_path, 0, 6) === '../../') {
         </video>
         <div style="position: relative; z-index: 2; text-align: center;">
             <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Logo" style="max-width: 250px; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(255,107,0,0.6)); animation: scaleUp 1.5s ease-out forwards;">
-            <h1 style="color: #fff; font-size: 48px; font-weight: 800; text-transform: uppercase; letter-spacing: 4px; margin: 0; text-shadow: 0 0 20px rgba(255,107,0,0.5); animation: fadeUp 1.5s ease-out 0.5s forwards; opacity: 0;">WELCOME TO<br><span style="color: #ff6b00;">SUDARSHAN FITNESS</span></h1>
+            <h1 class="glitch-text" data-text="SUDARSHAN FITNESS" style="color: #fff; font-size: 48px; font-weight: 800; text-transform: uppercase; letter-spacing: 4px; margin: 0; text-shadow: 0 0 20px rgba(255,107,0,0.5); animation: fadeUp 1.5s ease-out 0.5s forwards; opacity: 0;">SUDARSHAN FITNESS</h1>
         </div>
     </div>
     
@@ -60,6 +147,48 @@ if (substr($logo_path, 0, 6) === '../../') {
         @keyframes fadeUp {
             0% { transform: translateY(30px); opacity: 0; }
             100% { transform: translateY(0); opacity: 1; }
+        }
+        /* Cyberpunk Glitch Text */
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+        }
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00c1;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 3s infinite linear alternate-reverse;
+        }
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -2px 0 #00fff9;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 2.5s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 31px, 0); }
+            5% { clip: rect(70px, 9999px, 73px, 0); }
+            10% { clip: rect(29px, 9999px, 86px, 0); }
+            15% { clip: rect(15px, 9999px, 120px, 0); }
+            20% { clip: rect(50px, 9999px, 11px, 0); }
+            100% { clip: rect(10px, 9999px, 31px, 0); }
+        }
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            5% { clip: rect(12px, 9999px, 59px, 0); }
+            10% { clip: rect(89px, 9999px, 120px, 0); }
+            15% { clip: rect(23px, 9999px, 15px, 0); }
+            20% { clip: rect(90px, 9999px, 51px, 0); }
+            100% { clip: rect(65px, 9999px, 100px, 0); }
         }
     </style>
 

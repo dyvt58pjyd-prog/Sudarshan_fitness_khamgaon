@@ -358,6 +358,34 @@ if (isset($_POST['submit_registration'])) {
             100% { transform: translate(-50%, -50%) scale(40); opacity: 0; }
         }
 
+        /* Cyberpunk Glitch Text */
+        .glitch-text { position: relative; display: inline-block; }
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent;
+        }
+        .glitch-text::before {
+            left: 2px; text-shadow: -2px 0 #ff00c1; clip: rect(44px, 450px, 56px, 0); animation: glitch-anim 3s infinite linear alternate-reverse;
+        }
+        .glitch-text::after {
+            left: -2px; text-shadow: -2px 0 #00fff9; clip: rect(44px, 450px, 56px, 0); animation: glitch-anim2 2.5s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 31px, 0); }
+            5% { clip: rect(70px, 9999px, 73px, 0); }
+            10% { clip: rect(29px, 9999px, 86px, 0); }
+            15% { clip: rect(15px, 9999px, 120px, 0); }
+            20% { clip: rect(50px, 9999px, 11px, 0); }
+            100% { clip: rect(10px, 9999px, 31px, 0); }
+        }
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            5% { clip: rect(12px, 9999px, 59px, 0); }
+            10% { clip: rect(89px, 9999px, 120px, 0); }
+            15% { clip: rect(23px, 9999px, 15px, 0); }
+            20% { clip: rect(90px, 9999px, 51px, 0); }
+            100% { clip: rect(65px, 9999px, 100px, 0); }
+        }
+
         .video-bg {
             position: fixed;
             top: 0;
@@ -536,9 +564,60 @@ if (isset($_POST['submit_registration'])) {
             50% { box-shadow: 0 0 50px rgba(255, 107, 0, 0.9); }
             100% { box-shadow: 0 0 30px rgba(255, 107, 0, 0.6); }
         }
+
+        /* Holographic 3D Pricing Cards */
+        .holo-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .holo-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px 20px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.1s, box-shadow 0.1s, border-color 0.3s, background 0.3s;
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .holo-card.selected {
+            border-color: #ff6b00;
+            background: rgba(255, 107, 0, 0.15);
+            box-shadow: 0 0 20px rgba(255, 107, 0, 0.5), inset 0 0 15px rgba(255, 107, 0, 0.3);
+        }
+        .holo-glare {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4), transparent 60%);
+            opacity: 0;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+            transition: opacity 0.3s ease;
+        }
+        .holo-card:hover .holo-glare {
+            opacity: 1;
+        }
+        .holo-content {
+            pointer-events: none;
+            transform: translateZ(20px);
+        }
+        .holo-title { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .holo-price { font-size: 26px; font-weight: 900; color: #ff6b00; margin-bottom: 5px; text-shadow: 0 0 10px rgba(255, 107, 0, 0.5); }
+        .holo-validity { font-size: 14px; color: rgba(255,255,255,0.7); font-weight: 600; }
     </style>
 </head>
-<body class="page-body">
+<body class="page-body" style="cursor: none; opacity: 0; transition: opacity 0.8s ease;">
+    <!-- Neon Cursor Elements -->
+    <div id="neon-cursor" style="position: fixed; top: 0; left: 0; width: 8px; height: 8px; background: #ff6b00; border-radius: 50%; pointer-events: none; z-index: 999999; transform: translate(-50%, -50%); box-shadow: 0 0 10px #ff6b00, 0 0 20px #ff6b00;"></div>
+    <div id="neon-trail" style="position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 2px solid rgba(255, 107, 0, 0.4); border-radius: 50%; pointer-events: none; z-index: 999998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, border-color 0.2s;"></div>
+
+    <!-- Particle Network Background -->
+    <div id="particles-js" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;"></div>
     <!-- Live Video Background -->
     <video autoplay loop muted playsinline class="video-bg">
         <source src="https://cdn.coverr.co/videos/coverr-a-man-lifting-weights-in-a-gym-5339/1080p.mp4" type="video/mp4">
@@ -549,7 +628,7 @@ if (isset($_POST['submit_registration'])) {
         <div class="register-container">
             <div style="text-align: center; margin-bottom: 30px;">
                 <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Sudarshan Fitness Logo" style="max-height: 80px;" />
-                <h1 style="color: #ff6b00; margin-top: 15px; font-weight: 900; font-style: italic; letter-spacing: 2px; text-shadow: 0 0 15px rgba(255,107,0,0.5); text-transform: uppercase;">SUDARSHAN FITNESS</h1>
+                <h1 class="glitch-text" data-text="SUDARSHAN FITNESS" style="color: #ff6b00; margin-top: 15px; font-weight: 900; font-style: italic; letter-spacing: 2px; text-shadow: 0 0 15px rgba(255,107,0,0.5); text-transform: uppercase;">SUDARSHAN FITNESS</h1>
                 <h3 style="color: #ffffff; font-weight: 700; margin-top: 5px; letter-spacing: 1px;">GRAND OPENING PRE-BOOKING</h3>
                 <p style="color: #ccc; font-size: 14px; margin-top: 10px;">Fill out the form below, pay via UPI, and secure your spot today.</p>
             </div>
@@ -679,16 +758,30 @@ if (isset($_POST['submit_registration'])) {
                     <div class="form-section">
                         <div class="form-section-title"><i class="entypo-credit-card"></i> 4. Select Membership & Pay</div>
                         
-                        <div class="form-group-premium" style="margin-bottom: 20px;">
-                            <label>Choose Membership Plan</label>
-                            <select class="form-control-premium" name="plan_id" id="plan-select" required onchange="showPlanDetails()">
-                                <option value="">-- Choose a package --</option>
+                        <div class="form-group-premium" style="margin-bottom: 20px; perspective: 1000px;">
+                            <label style="font-size: 14px; color: #fff;">Choose Membership Plan <span style="color:var(--accent-primary)">*</span></label>
+                            
+                            <!-- Hidden input to submit the selected plan ID -->
+                            <input type="hidden" name="plan_id" id="plan-select-hidden" required>
+                            
+                            <!-- Holographic Cards Grid -->
+                            <div class="holo-cards-grid" id="holo-cards-grid">
                                 <?php foreach ($plans as $p): ?>
-                                    <option value="<?php echo htmlspecialchars($p['pid']); ?>" data-amount="<?php echo $p['amount']; ?>" data-validity="<?php echo $p['validity']; ?>" data-desc="<?php echo htmlspecialchars($p['description']); ?>">
-                                        <?php echo htmlspecialchars($p['planName']); ?> - ₹<?php echo number_format($p['amount']); ?>
-                                    </option>
+                                    <div class="holo-card" 
+                                         data-value="<?php echo htmlspecialchars($p['pid']); ?>" 
+                                         data-amount="<?php echo $p['amount']; ?>" 
+                                         data-validity="<?php echo $p['validity']; ?>" 
+                                         data-desc="<?php echo htmlspecialchars($p['description']); ?>"
+                                         data-name="<?php echo htmlspecialchars($p['planName']); ?>">
+                                        <div class="holo-glare"></div>
+                                        <div class="holo-content">
+                                            <div class="holo-title"><?php echo htmlspecialchars($p['planName']); ?></div>
+                                            <div class="holo-price">₹<?php echo number_format($p['amount']); ?></div>
+                                            <div class="holo-validity"><?php echo $p['validity']; ?> Months</div>
+                                        </div>
+                                    </div>
                                 <?php endforeach; ?>
-                            </select>
+                            </div>
                         </div>
 
                         <div class="plan-details" id="details-box">
@@ -773,23 +866,58 @@ if (isset($_POST['submit_registration'])) {
     </div>
 
     <script>
-        function showPlanDetails() {
-            const select = document.getElementById('plan-select');
-            const selectedOpt = select.options[select.selectedIndex];
+        // Holographic Cards 3D Tilt & Selection Logic
+        const holoCards = document.querySelectorAll('.holo-card');
+        const hiddenPlanInput = document.getElementById('plan-select-hidden');
+        
+        holoCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -15;
+                const rotateY = ((x - centerX) / centerX) * 15;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                
+                const glare = card.querySelector('.holo-glare');
+                glare.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.4), transparent 60%)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                const glare = card.querySelector('.holo-glare');
+                glare.style.background = `radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4), transparent 60%)`;
+            });
+            
+            card.addEventListener('click', () => {
+                holoCards.forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                hiddenPlanInput.value = card.getAttribute('data-value');
+                showPlanDetailsHolo(card);
+            });
+        });
+
+        function showPlanDetailsHolo(card) {
             const detailsBox = document.getElementById('details-box');
             const qrPaymentArea = document.getElementById('qr-payment-area');
+            const manualUpiBox = document.getElementById('manual-upi-box');
 
-            if (!selectedOpt || selectedOpt.value === '') {
+            if (!card) {
                 detailsBox.style.display = 'none';
                 qrPaymentArea.style.display = 'none';
-                document.getElementById('manual-upi-box').style.display = 'none';
+                if(manualUpiBox) manualUpiBox.style.display = 'none';
                 return;
             }
 
-            const amount = selectedOpt.getAttribute('data-amount');
-            const validity = selectedOpt.getAttribute('data-validity');
-            const desc = selectedOpt.getAttribute('data-desc');
-            const name = selectedOpt.text.split(' - ')[0];
+            const amount = card.getAttribute('data-amount');
+            const validity = card.getAttribute('data-validity');
+            const desc = card.getAttribute('data-desc');
+            const name = card.getAttribute('data-name');
 
             document.getElementById('details-title').innerText = name;
             document.getElementById('details-desc').innerText = desc;
@@ -891,10 +1019,9 @@ if (isset($_POST['submit_registration'])) {
 
         // Auto-select first plan on load to generate QR automatically
         document.addEventListener("DOMContentLoaded", function() {
-            const select = document.getElementById('plan-select');
-            if (select && select.options.length > 1) {
-                select.selectedIndex = 1;
-                showPlanDetails();
+            if (holoCards.length > 0) {
+                // Auto click the first plan to initialize it
+                holoCards[0].click();
             }
             
             // Programmatic launcher for mobile browsers
@@ -1057,6 +1184,88 @@ if (isset($_POST['submit_registration'])) {
                 shockwave.classList.add('active');
             });
         }
+
+        // --- GLOBAL EFFECTS JS ---
+        // Fluid Page Entrance
+        setTimeout(() => { document.body.style.opacity = '1'; }, 100);
+
+        // Load particles.js dynamically
+        const particleScript = document.createElement('script');
+        particleScript.src = "https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js";
+        particleScript.onload = function() {
+            if(window.particlesJS) {
+                particlesJS("particles-js", {
+                    "particles": {
+                        "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+                        "color": { "value": "#ff6b00" },
+                        "shape": { "type": "circle" },
+                        "opacity": { "value": 0.5 },
+                        "size": { "value": 3, "random": true },
+                        "line_linked": { "enable": true, "distance": 150, "color": "#ff6b00", "opacity": 0.2, "width": 1 },
+                        "move": { "enable": true, "speed": 1.5, "direction": "none", "random": true, "out_mode": "out" }
+                    },
+                    "interactivity": {
+                        "detect_on": "canvas",
+                        "events": { "onhover": { "enable": true, "mode": "grab" }, "resize": true },
+                        "modes": { "grab": { "distance": 200, "line_linked": { "opacity": 0.6 } } }
+                    },
+                    "retina_detect": true
+                });
+            }
+        };
+        document.body.appendChild(particleScript);
+
+        // Custom Neon Cursor Logic
+        const cursorEl = document.getElementById('neon-cursor');
+        const trailEl = document.getElementById('neon-trail');
+        let cursorX = 0, cursorY = 0;
+        let pTrailX = 0, pTrailY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            cursorX = e.clientX;
+            cursorY = e.clientY;
+            cursorEl.style.left = cursorX + 'px';
+            cursorEl.style.top = cursorY + 'px';
+        });
+
+        function renderNeonTrail() {
+            pTrailX += (cursorX - pTrailX) * 0.15;
+            pTrailY += (cursorY - pTrailY) * 0.15;
+            trailEl.style.left = pTrailX + 'px';
+            trailEl.style.top = pTrailY + 'px';
+            requestAnimationFrame(renderNeonTrail);
+        }
+        renderNeonTrail();
+
+        // Hover effects for cursor
+        document.addEventListener('mouseover', (e) => {
+            if(e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') {
+                e.target.style.cursor = 'none';
+                trailEl.style.width = '60px';
+                trailEl.style.height = '60px';
+                trailEl.style.borderColor = 'rgba(255, 107, 0, 0.8)';
+                trailEl.style.background = 'rgba(255, 107, 0, 0.1)';
+            }
+        });
+        document.addEventListener('mouseout', (e) => {
+            if(e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') {
+                trailEl.style.width = '40px';
+                trailEl.style.height = '40px';
+                trailEl.style.borderColor = 'rgba(255, 107, 0, 0.4)';
+                trailEl.style.background = 'transparent';
+            }
+        });
+
+        // Fluid Page Exit
+        document.querySelectorAll('a[href]:not([target="_blank"]):not([href^="#"])').forEach(a => {
+            a.addEventListener('click', function(e) {
+                if (this.hostname === window.location.hostname && !this.href.includes('javascript:')) {
+                    e.preventDefault();
+                    document.body.style.opacity = '0';
+                    setTimeout(() => { window.location = this.href; }, 600);
+                }
+            });
+        });
     </script>
     
     <div style="text-align: center; margin-top: 50px; padding-bottom: 30px; color: #94a3b8; font-size: 12px; font-weight: 500;">
