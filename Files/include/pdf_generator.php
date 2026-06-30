@@ -352,7 +352,7 @@ if (!function_exists('generate_receipt_pdf_file')) {
         $pdf->SetX(15);
         $pdf->Cell(110, 3.2, 'Access your member portal anytime at: https://sudarshanfitness.de', 0, 1);
         $pdf->SetX(15);
-        $pdf->Cell(110, 3.2, 'System Engineered by DRDO, Ministry of Defence (Anurag Bawaskar)', 0, 1);
+        $pdf->Cell(110, 3.2, 'System Engineered by DRDO, Ministry of Defence (Anurag Bawaskar) | Ph: 8459962390', 0, 1);
         $pdf->SetX(15);
         $pdf->Cell(110, 3.2, 'Please keep this receipt for future reference or plan renewal requests.', 0, 1);
         
@@ -628,7 +628,7 @@ if (!function_exists('generate_pt_receipt_pdf_file')) {
         $pdf->SetX(15);
         $pdf->Cell(110, 3.2, 'Access your member portal anytime at: https://sudarshanfitness.de', 0, 1);
         $pdf->SetX(15);
-        $pdf->Cell(110, 3.2, 'System Engineered by DRDO, Ministry of Defence (Anurag Bawaskar)', 0, 1);
+        $pdf->Cell(110, 3.2, 'System Engineered by DRDO, Ministry of Defence (Anurag Bawaskar) | Ph: 8459962390', 0, 1);
         $pdf->SetX(15);
         $pdf->Cell(110, 3.2, 'Please keep this receipt for future reference or plan renewal requests.', 0, 1);
         

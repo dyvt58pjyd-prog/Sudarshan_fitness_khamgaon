@@ -194,7 +194,8 @@ if (substr($logo_path, 0, 6) === '../../') {
                     </div>
                     
                     <div style="margin-top: 30px; text-align: center; color: var(--text-muted); font-size: 12px; font-weight: 500;">
-                        System Engineered by <strong>Anurag Bawaskar</strong>
+                        System Engineered by <strong>Anurag Bawaskar</strong> <br>
+                        <a href="tel:8459962390" style="color: #ff6b00; text-decoration: none;">📞 8459962390</a>
                     </div>
                 </div>
             </div>
