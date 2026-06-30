@@ -643,10 +643,7 @@ if (isset($_POST['submit_registration'])) {
         .holo-validity { font-size: 14px; color: rgba(255,255,255,0.7); font-weight: 600; }
     </style>
 </head>
-<body class="page-body" style="cursor: none; opacity: 0; transition: opacity 0.8s ease;">
-    <!-- Neon Cursor Elements -->
-    <div id="neon-cursor" style="position: fixed; top: 0; left: 0; width: 8px; height: 8px; background: #ff6b00; border-radius: 50%; pointer-events: none; z-index: 999999; transform: translate(-50%, -50%); box-shadow: 0 0 10px #ff6b00, 0 0 20px #ff6b00;"></div>
-    <div id="neon-trail" style="position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 2px solid rgba(255, 107, 0, 0.4); border-radius: 50%; pointer-events: none; z-index: 999998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, border-color 0.2s;"></div>
+<body class="page-body" style="opacity: 0; transition: opacity 0.8s ease;">
 
     <!-- Particle Network Background -->
     <div id="particles-js" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;"></div>
@@ -1304,47 +1301,6 @@ if (isset($_POST['submit_registration'])) {
             }
         };
         document.body.appendChild(particleScript);
-
-        // Custom Neon Cursor Logic
-        const cursorEl = document.getElementById('neon-cursor');
-        const trailEl = document.getElementById('neon-trail');
-        let cursorX = 0, cursorY = 0;
-        let pTrailX = 0, pTrailY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            cursorX = e.clientX;
-            cursorY = e.clientY;
-            cursorEl.style.left = cursorX + 'px';
-            cursorEl.style.top = cursorY + 'px';
-        });
-
-        function renderNeonTrail() {
-            pTrailX += (cursorX - pTrailX) * 0.15;
-            pTrailY += (cursorY - pTrailY) * 0.15;
-            trailEl.style.left = pTrailX + 'px';
-            trailEl.style.top = pTrailY + 'px';
-            requestAnimationFrame(renderNeonTrail);
-        }
-        renderNeonTrail();
-
-        // Hover effects for cursor
-        document.addEventListener('mouseover', (e) => {
-            if(e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') {
-                e.target.style.cursor = 'none';
-                trailEl.style.width = '60px';
-                trailEl.style.height = '60px';
-                trailEl.style.borderColor = 'rgba(255, 107, 0, 0.8)';
-                trailEl.style.background = 'rgba(255, 107, 0, 0.1)';
-            }
-        });
-        document.addEventListener('mouseout', (e) => {
-            if(e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') {
-                trailEl.style.width = '40px';
-                trailEl.style.height = '40px';
-                trailEl.style.borderColor = 'rgba(255, 107, 0, 0.4)';
-                trailEl.style.background = 'transparent';
-            }
-        });
 
         // Fluid Page Exit
         document.querySelectorAll('a[href]:not([target="_blank"]):not([href^="#"])').forEach(a => {

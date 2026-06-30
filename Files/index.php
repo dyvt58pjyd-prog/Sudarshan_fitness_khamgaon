@@ -45,10 +45,7 @@ if (substr($logo_path, 0, 6) === '../../') {
 	<link rel="stylesheet" type="text/css" href="./css/entypo.css">
 	<link rel="stylesheet" href="./css/premium.css"/>
 </head>
-<body class="page-body login-page login-form-fall" style="cursor: none; opacity: 0; transition: opacity 0.8s ease;">
-    <!-- Neon Cursor Elements -->
-    <div id="neon-cursor" style="position: fixed; top: 0; left: 0; width: 8px; height: 8px; background: #ff6b00; border-radius: 50%; pointer-events: none; z-index: 999999; transform: translate(-50%, -50%); box-shadow: 0 0 10px #ff6b00, 0 0 20px #ff6b00;"></div>
-    <div id="neon-trail" style="position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 2px solid rgba(255, 107, 0, 0.4); border-radius: 50%; pointer-events: none; z-index: 999998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, border-color 0.2s;"></div>
+<body class="page-body login-page login-form-fall" style="opacity: 0; transition: opacity 0.8s ease;">
 
     <!-- Particle Network Background -->
     <div id="particles-js" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; background: #050505;"></div>
@@ -78,47 +75,6 @@ if (substr($logo_path, 0, 6) === '../../') {
 
             // Fluid Page Entrance
             setTimeout(() => { document.body.style.opacity = '1'; }, 100);
-
-            // Custom Neon Cursor Logic
-            const cursor = document.getElementById('neon-cursor');
-            const trail = document.getElementById('neon-trail');
-            let mouseX = 0, mouseY = 0;
-            let trailX = 0, trailY = 0;
-
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-                cursor.style.left = mouseX + 'px';
-                cursor.style.top = mouseY + 'px';
-            });
-
-            // Smooth Lerp for trail
-            function renderTrail() {
-                trailX += (mouseX - trailX) * 0.15;
-                trailY += (mouseY - trailY) * 0.15;
-                trail.style.left = trailX + 'px';
-                trail.style.top = trailY + 'px';
-                requestAnimationFrame(renderTrail);
-            }
-            renderTrail();
-
-            // Hover effects for cursor
-            const interactables = document.querySelectorAll('a, button, input, .category-tab');
-            interactables.forEach(el => {
-                el.style.cursor = 'none';
-                el.addEventListener('mouseenter', () => {
-                    trail.style.width = '60px';
-                    trail.style.height = '60px';
-                    trail.style.borderColor = 'rgba(255, 107, 0, 0.8)';
-                    trail.style.background = 'rgba(255, 107, 0, 0.1)';
-                });
-                el.addEventListener('mouseleave', () => {
-                    trail.style.width = '40px';
-                    trail.style.height = '40px';
-                    trail.style.borderColor = 'rgba(255, 107, 0, 0.4)';
-                    trail.style.background = 'transparent';
-                });
-            });
 
             // Fluid Page Exit
             document.querySelectorAll('a[href]:not([target="_blank"]):not([href^="#"])').forEach(a => {

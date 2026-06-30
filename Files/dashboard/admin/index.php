@@ -208,10 +208,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
     </style>
 
 </head>
-    <body class="page-body  page-fade" onload="collapseSidebar()" style="cursor: none; background-color: #0b0c10;">
-        <!-- Neon Cursor Elements -->
-        <div id="neon-cursor" style="position: fixed; top: 0; left: 0; width: 8px; height: 8px; background: #ff6b00; border-radius: 50%; pointer-events: none; z-index: 999999; transform: translate(-50%, -50%); box-shadow: 0 0 10px #ff6b00, 0 0 20px #ff6b00;"></div>
-        <div id="neon-trail" style="position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 2px solid rgba(255, 107, 0, 0.4); border-radius: 50%; pointer-events: none; z-index: 999998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, border-color 0.2s;"></div>
+    <body class="page-body  page-fade" onload="collapseSidebar()" style="background-color: #0b0c10;">
 
         <!-- Particle HUD Background -->
         <div id="particles-js" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;"></div>
