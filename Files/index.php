@@ -119,10 +119,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                         <a href="forgot_password.php" class="link" style="font-size: 13px; color: var(--text-muted);">Forgot your password?</a>
                     </div>
                     
-                    <div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
-                        <a href="register.php" class="btn btn-primary" style="display: block; width: 100%; font-weight: bold; padding: 12px; font-size: 16px;">New Registration</a>
-                    </div>
-                    
+
                     <div style="margin-top: 25px; text-align: center;">
                         <a href="https://drive.google.com/uc?export=download&id=1dPIrSbq6eTvq4fWcz2CnfTFAWtSoTGvl" target="_blank" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981, #059669) !important; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3) !important; width: 100% !important; border: none !important;">
                             <i class="entypo-mobile" style="margin-right: 5px; font-size: 16px;"></i> Download Android App
