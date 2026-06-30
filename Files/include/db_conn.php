@@ -161,6 +161,19 @@ if (!$con) {
 
     // Self-healing database check: ensure dob column in users is VARCHAR(50) to allow different date formats from CSV
     $chk_dob = mysqli_query($con, "SHOW COLUMNS FROM users LIKE 'dob'");
+    
+    // Self-healing: Ensure all users have a login account in the admin table
+    $users_q = mysqli_query($con, "SELECT userid, username FROM users");
+    if ($users_q) {
+        while ($u_row = mysqli_fetch_assoc($users_q)) {
+            $uid = $u_row['userid'];
+            $uname = $u_row['username'];
+            $chk_admin_user = mysqli_query($con, "SELECT username FROM admin WHERE username='$uid'");
+            if ($chk_admin_user && mysqli_num_rows($chk_admin_user) == 0) {
+                mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('$uid', '1234', 'member', '$uname', 'member')");
+            }
+        }
+    }
     if ($chk_dob && $row_dob = mysqli_fetch_assoc($chk_dob)) {
         if (strpos($row_dob['Type'], 'varchar(10)') !== false) {
             mysqli_query($con, "ALTER TABLE users MODIFY COLUMN dob VARCHAR(50) NOT NULL");
