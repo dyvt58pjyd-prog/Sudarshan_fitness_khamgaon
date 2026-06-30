@@ -149,6 +149,12 @@ if (!$con) {
         mysqli_query($con, "ALTER TABLE payment_requests ADD COLUMN is_new_registration TINYINT(1) DEFAULT 0");
     }
     
+    // Self-healing: ensure dummy user 'PENDING' exists to satisfy foreign key constraints on live server
+    $chk_pending_user = mysqli_query($con, "SELECT userid FROM users WHERE userid = 'PENDING'");
+    if ($chk_pending_user && mysqli_num_rows($chk_pending_user) === 0) {
+        mysqli_query($con, "INSERT IGNORE INTO users (userid, username, gender, mobile, email, dob, joining_date) VALUES ('PENDING', 'Pending Registration', 'Other', '0000000000', 'pending@system.local', '2000-01-01', CURRENT_DATE())");
+    }
+    
     // Self-healing: Ensure App Developer account exists
     $chk_dev = mysqli_query($con, "SELECT username FROM admin WHERE username='admin'");
     if ($chk_dev && mysqli_num_rows($chk_dev) === 0) {
