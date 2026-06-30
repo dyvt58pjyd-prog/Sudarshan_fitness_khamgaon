@@ -37,7 +37,7 @@ $delay_ms = rand(600, 1500); // Simulate typing delay
 
 // Detect Intent
 if (preg_match('/(hi|hello|hey|sup)/i', $message)) {
-    $response_text = "Hey there $name! I'm your Titan Virtual Coach 🦾. How can I help you crush your goals today?";
+    $response_text = "Hey there $name! I'm your Sudarshan Fitness Virtual Coach 🦾. How can I help you crush your goals today?";
 }
 elseif (preg_match('/(diet|eat|food|nutrition|protein)/i', $message)) {
     if (strpos(strtolower($user['fitness_goal']), 'weight loss') !== false) {

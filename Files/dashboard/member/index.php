@@ -930,7 +930,7 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
                         <i class="entypo-light-bulb" style="color: #ff6b00; font-size: 16px;"></i>
                     </div>
                     <div>
-                        <div style="font-weight: 800; color: #fff; font-size: 14px;">Titan AI Coach</div>
+                        <div style="font-weight: 800; color: #fff; font-size: 14px;">Sudarshan Fitness Bot</div>
                         <div style="font-size: 10px; color: #10b981; font-weight: 700; display: flex; align-items: center; gap: 4px;">
                             <span style="display:inline-block; width:6px; height:6px; background:#10b981; border-radius:50%;"></span> Online
                         </div>
@@ -1072,7 +1072,7 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
     <?php else: ?>
     <!-- Locked AI Coach for Expired Members -->
     <div id="ai-chat-widget" style="position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end;">
-        <button onclick="alert('Access Denied: Your membership plan has expired. Please renew your plan to reactivate the Titan AI Coach.')" style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #333, #555); border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 0 15px rgba(0,0,0,0.5); cursor: pointer; display: flex; align-items: center; justify-content: center; filter: grayscale(100%);">
+        <button onclick="alert('Access Denied: Your membership plan has expired. Please renew your plan to reactivate the Sudarshan Fitness Bot.')" style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #333, #555); border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 0 15px rgba(0,0,0,0.5); cursor: pointer; display: flex; align-items: center; justify-content: center; filter: grayscale(100%);">
             <i class="entypo-chat" style="font-size: 28px; color: #888;"></i>
         </button>
     </div>
