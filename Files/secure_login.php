@@ -20,57 +20,30 @@ if ($pass_key == "" || $user_id_auth == "") {
     $user_id_auth = mysqli_real_escape_string($con, $user_id_auth);
     $pass_key     = mysqli_real_escape_string($con, $pass_key);
     
-    // Verify credentials and strict role matching using Prepared Statements
-    $stmt = mysqli_prepare($con, "SELECT * FROM admin WHERE username=? AND role=?");
-    mysqli_stmt_bind_param($stmt, "ss", $user_id_auth, $login_role);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $count  = mysqli_num_rows($result);
+    // Verify credentials and strict role matching
+    $sql          = "SELECT * FROM admin WHERE username='$user_id_auth' and pass_key='$pass_key' and role='$login_role'";
+    $result       = mysqli_query($con, $sql);
+    $count        = mysqli_num_rows($result);
     
     if ($count == 1) {
         $row = mysqli_fetch_assoc($result);
-        
-        $is_authenticated = false;
-        
-        // Check if stored password is a valid bcrypt hash
-        if (password_verify($pass_key, $row['pass_key'])) {
-            $is_authenticated = true;
-        } 
-        // Fallback for plain text passwords (Migration)
-        else if ($pass_key === $row['pass_key']) {
-            $is_authenticated = true;
-            
-            // Hash the password for future use
-            $hashed_pass = password_hash($pass_key, PASSWORD_BCRYPT);
-            $update_stmt = mysqli_prepare($con, "UPDATE admin SET pass_key=? WHERE username=? AND role=?");
-            mysqli_stmt_bind_param($update_stmt, "sss", $hashed_pass, $user_id_auth, $login_role);
-            mysqli_stmt_execute($update_stmt);
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
         }
-        
-        if ($is_authenticated) {
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
-            // Store session data
-            $_SESSION['user_data']  = $user_id_auth;
-            $_SESSION['logged']     = "start";
-            $_SESSION['role']       = $row['role'];
-            $_SESSION['full_name']  = $row['Full_name'];
-            $_SESSION['username']   = $user_id_auth;
+        // Store session data
+        $_SESSION['user_data']  = $user_id_auth;
+        $_SESSION['logged']     = "start";
+        $_SESSION['role']       = $row['role'];
+        $_SESSION['full_name']  = $row['Full_name'];
+        $_SESSION['username']   = $user_id_auth;
 
-            if ($_SESSION['role'] === 'member') {
-                header("Location: ./dashboard/member/");
-            } else {
-                header("Location: ./dashboard/admin/");
-            }
-            exit();
+        if ($_SESSION['role'] === 'member') {
+            header("Location: ./dashboard/member/");
         } else {
-            // Password mismatch
-            $count = 0;
+            header("Location: ./dashboard/admin/");
         }
-    }
-    
-    if ($count == 0) {
+        exit();
+    } else {
         if ($login_role !== 'member') {
             // Security Lock / Intruder Alert logging for administrative roles
             $ip = $_SERVER['REMOTE_ADDR'];

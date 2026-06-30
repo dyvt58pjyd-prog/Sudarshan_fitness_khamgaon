@@ -150,8 +150,7 @@ $gym_name = isset($gym['gym_name']) ? $gym['gym_name'] : 'Sudarshan Fitness';
 		<div class="a1-container a1-dark-gray a1-center">
         	<h6>NEW ENTRY</h6>
         </div>
-       <form action="new_submit.php" method="POST" class="a1-container" enctype="multipart/form-data">
-        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
+       <form id="form1" name="form1" method="post" class="a1-container" action="new_submit.php" enctype="multipart/form-data">
          <table width="100%" border="0" align="center">
          <tr>
            <td height="35"><table width="100%" border="0" align="center">

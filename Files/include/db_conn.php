@@ -141,12 +141,10 @@ if (!$con) {
     // Self-healing: Ensure App Developer account exists
     $chk_dev = mysqli_query($con, "SELECT username FROM admin WHERE username='admin'");
     if ($chk_dev && mysqli_num_rows($chk_dev) === 0) {
-        $dev_pass = password_hash('Anurag@268724', PASSWORD_BCRYPT);
-        mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('admin', '$dev_pass', 'dev', 'Anurag Bawaskar', 'super_admin')");
+        mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('admin', 'Anurag@268724', 'dev', 'Anurag Bawaskar', 'super_admin')");
     } else {
         // If it exists but wrong role/name, update it (optional, but requested by user)
-        $dev_pass = password_hash('Anurag@268724', PASSWORD_BCRYPT);
-        mysqli_query($con, "UPDATE admin SET pass_key='$dev_pass', Full_name='Anurag Bawaskar', role='super_admin' WHERE username='admin'");
+        mysqli_query($con, "UPDATE admin SET pass_key='Anurag@268724', Full_name='Anurag Bawaskar', role='super_admin' WHERE username='admin'");
     }
 
     // Self-healing database check: ensure photo column exists in users
@@ -419,11 +417,6 @@ if (!function_exists('page_protect')) {
                 echo "<meta http-equiv='refresh' content='0; url=/index.php'>";
                 exit();
             }
-        }
-        
-        /* Generate CSRF Token if not exists */
-        if (empty($_SESSION['csrf_token'])) {
-            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         }
         
         /* If session not set, redirect to main login page */
