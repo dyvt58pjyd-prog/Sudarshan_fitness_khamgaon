@@ -252,28 +252,42 @@ $weight = ($stats && !empty($stats['weight'])) ? floatval($stats['weight']) : ''
             });
             const data = await response.json();
             
+            if (!data.success) {
+                throw new Error(data.message || "Unknown API Error");
+            }
+            
             // Populate Metrics
-            document.getElementById('res-bmi').innerText = data.metrics.bmi;
-            document.getElementById('res-bmi-cat').innerText = data.metrics.bmi_category;
-            document.getElementById('res-bmr').innerText = data.metrics.tdee + ' kcal';
-            document.getElementById('res-target').innerText = data.metrics.target_calories + ' kcal';
-            document.getElementById('res-protein').innerText = data.metrics.macros.protein;
+            document.getElementById('res-bmi').innerText = data.bmi || 'N/A';
+            document.getElementById('res-bmi-cat').innerText = data.bmi_category || 'N/A';
+            document.getElementById('res-bmr').innerText = data.target_calories ? (parseInt(data.target_calories) + 300) + ' kcal' : 'N/A';
+            document.getElementById('res-target').innerText = data.target_calories ? data.target_calories + ' kcal' : 'N/A';
+            
+            let proteinStr = 'N/A';
+            if (data.diet && data.diet['Macro Targets']) {
+                proteinStr = data.diet['Macro Targets'];
+            }
+            document.getElementById('res-protein').innerText = proteinStr;
             
             // Populate Workout
             let wHtml = '';
-            for (const [day, desc] of Object.entries(data.workout_plan)) {
-                if(day === 'Notes') {
-                    wHtml += `<div style="margin-top:15px; color:var(--text-muted); font-size:12px;"><strong>Coach Note:</strong> ${desc}</div>`;
-                } else {
-                    wHtml += `<div class="split-card"><div class="day-badge">${day}</div><div style="color:#fff; font-size:15px;">${desc}</div></div>`;
+            if (data.workout) {
+                for (const [day, desc] of Object.entries(data.workout)) {
+                    if(day === 'Notes') {
+                        wHtml += `<div style="margin-top:15px; color:var(--text-muted); font-size:12px;"><strong>Coach Note:</strong> ${desc}</div>`;
+                    } else {
+                        wHtml += `<div class="split-card"><div class="day-badge">${day}</div><div style="color:#fff; font-size:15px;">${desc}</div></div>`;
+                    }
                 }
             }
             document.getElementById('workout-container').innerHTML = wHtml;
             
             // Populate Diet
             let dHtml = '';
-            for (const [meal, item] of Object.entries(data.diet_plan)) {
-                dHtml += `<div class="diet-item"><strong>${meal}</strong><span style="color:#e2e8f0;">${item}</span></div>`;
+            if (data.diet) {
+                for (const [meal, item] of Object.entries(data.diet)) {
+                    if (meal === 'Macro Targets') continue;
+                    dHtml += `<div class="diet-item"><strong>${meal}</strong><span style="color:#e2e8f0;">${item}</span></div>`;
+                }
             }
             document.getElementById('diet-container').innerHTML = dHtml;
             
@@ -282,7 +296,7 @@ $weight = ($stats && !empty($stats['weight'])) ? floatval($stats['weight']) : ''
             document.getElementById('ai-results').style.display = 'block';
             
         } catch (err) {
-            alert('Failed to connect to the AI engine. Please try again.');
+            alert('Failed to connect to the AI engine: ' + err.message);
             console.error(err);
             document.getElementById('loading-overlay').style.display = 'none';
             document.getElementById('ai-form-container').style.display = 'block';
