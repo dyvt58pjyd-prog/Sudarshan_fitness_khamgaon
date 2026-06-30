@@ -56,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
             echo json_encode(['success' => true, 'message' => 'Command queued! The machine will wipe their fingerprint on its next sync, forcing them to re-register.']);
         } else {
             echo json_encode(['success' => false, 'message' => 'Invalid Biometric ID.']);
+        }
         exit();
     }
     
