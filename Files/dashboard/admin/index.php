@@ -131,10 +131,90 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
     	color: #ffffff;
 		}
 
+        /* Glassmorphism Metric Widgets */
+        .tile-stats {
+            background: rgba(255, 255, 255, 0.03) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
+            border-radius: 24px !important;
+            padding: 30px 20px !important;
+            margin-bottom: 30px !important;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .tile-stats:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
+        }
+        .tile-stats .icon {
+            color: rgba(255,255,255,0.1) !important;
+            bottom: 20px !important;
+            right: 20px !important;
+            font-size: 80px !important;
+        }
+        .tile-stats h2 {
+            font-size: 14px !important;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted) !important;
+            margin-top: 0 !important;
+            font-weight: 700 !important;
+        }
+        .tile-stats .num {
+            font-size: 42px !important;
+            font-weight: 800 !important;
+            color: #ffffff !important;
+            text-shadow: 0 0 20px rgba(255,255,255,0.2);
+            margin-top: 15px;
+        }
+        
+        /* Colored Glowing Borders based on tile type */
+        .tile-red { border-bottom: 4px solid #ef4444 !important; box-shadow: inset 0 -15px 30px -20px rgba(239,68,68,0.5) !important; }
+        .tile-green { border-bottom: 4px solid #10b981 !important; box-shadow: inset 0 -15px 30px -20px rgba(16,185,129,0.5) !important; }
+        .tile-aqua { border-bottom: 4px solid #06b6d4 !important; box-shadow: inset 0 -15px 30px -20px rgba(6,182,212,0.5) !important; }
+        .tile-blue { border-bottom: 4px solid #3b82f6 !important; box-shadow: inset 0 -15px 30px -20px rgba(59,130,246,0.5) !important; }
+        
+        .tile-red:hover { border-color: #ef4444 !important; }
+        .tile-green:hover { border-color: #10b981 !important; }
+        .tile-aqua:hover { border-color: #06b6d4 !important; }
+        .tile-blue:hover { border-color: #3b82f6 !important; }
+        
+        /* Darker panel override */
+        .panel {
+            background: rgba(255, 255, 255, 0.02) !important;
+            backdrop-filter: blur(15px) !important;
+            border: 1px solid rgba(255,255,255,0.05) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+        }
+        .panel-heading {
+            background: transparent !important;
+            border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+        }
+        .panel-title { color: #fff !important; font-weight: 700 !important; }
+        
+        /* Table overrides */
+        .table > tbody > tr {
+            transition: background 0.3s ease, box-shadow 0.3s ease !important;
+        }
+        .table > tbody > tr:hover {
+            background: rgba(255, 107, 0, 0.05) !important;
+            box-shadow: inset 0 0 15px rgba(255, 107, 0, 0.2) !important;
+        }
+
     </style>
 
 </head>
-    <body class="page-body  page-fade" onload="collapseSidebar()">
+    <body class="page-body  page-fade" onload="collapseSidebar()" style="cursor: none; background-color: #0b0c10;">
+        <!-- Neon Cursor Elements -->
+        <div id="neon-cursor" style="position: fixed; top: 0; left: 0; width: 8px; height: 8px; background: #ff6b00; border-radius: 50%; pointer-events: none; z-index: 999999; transform: translate(-50%, -50%); box-shadow: 0 0 10px #ff6b00, 0 0 20px #ff6b00;"></div>
+        <div id="neon-trail" style="position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 2px solid rgba(255, 107, 0, 0.4); border-radius: 50%; pointer-events: none; z-index: 999998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, border-color 0.2s;"></div>
+
+        <!-- Particle HUD Background -->
+        <div id="particles-js" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;"></div>
 
     	<div class="page-container sidebar-collapsed" id="navbarcollapse">	
 	
@@ -1029,6 +1109,12 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
 				// 1. Attendance Chart
 				const ctxAtt = document.getElementById('attendanceChart').getContext('2d');
+				
+				// Create neon gradient
+				const gradientAtt = ctxAtt.createLinearGradient(0, 0, 0, 400);
+				gradientAtt.addColorStop(0, 'rgba(6, 182, 212, 0.5)'); // Neon Cyan
+				gradientAtt.addColorStop(1, 'rgba(6, 182, 212, 0.0)');
+
 				new Chart(ctxAtt, {
 					type: 'line',
 					data: {
@@ -1036,17 +1122,18 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 						datasets: [{
 							label: 'Check-ins',
 							data: attData,
-							borderColor: '#ff6b00',
-							backgroundColor: 'rgba(255, 107, 0, 0.08)',
-							borderWidth: 2,
+							borderColor: '#06b6d4',
+							backgroundColor: gradientAtt,
+							borderWidth: 3,
 							fill: true,
 							tension: 0.4,
-							pointBackgroundColor: '#ff6b00',
-							pointBorderColor: '#ffffff',
-							pointHoverBackgroundColor: '#ffffff',
-							pointHoverBorderColor: '#ff6b00',
-							pointRadius: 4,
-							pointHoverRadius: 6
+							pointBackgroundColor: '#0b0c10',
+							pointBorderColor: '#06b6d4',
+							pointHoverBackgroundColor: '#06b6d4',
+							pointHoverBorderColor: '#ffffff',
+							pointRadius: 5,
+							pointHoverRadius: 8,
+                            pointBorderWidth: 2
 						}]
 					},
 					options: {
@@ -1075,6 +1162,16 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
 				// 2. Revenue Splits Chart
 				const ctxRev = document.getElementById('revenueChart').getContext('2d');
+				
+				// Create neon gradients
+				const gradientMem = ctxRev.createLinearGradient(0, 0, 0, 400);
+				gradientMem.addColorStop(0, 'rgba(255, 107, 0, 0.8)'); // Neon Orange
+				gradientMem.addColorStop(1, 'rgba(255, 107, 0, 0.2)');
+
+				const gradientPt = ctxRev.createLinearGradient(0, 0, 0, 400);
+				gradientPt.addColorStop(0, 'rgba(16, 185, 129, 0.8)'); // Neon Green
+				gradientPt.addColorStop(1, 'rgba(16, 185, 129, 0.2)');
+
 				new Chart(ctxRev, {
 					type: 'bar',
 					data: {
@@ -1083,13 +1180,17 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 							{
 								label: 'Membership Plans',
 								data: memRevData,
-								backgroundColor: '#ff6b00',
+								backgroundColor: gradientMem,
+								borderColor: '#ff6b00',
+								borderWidth: 1,
 								borderRadius: 6
 							},
 							{
 								label: 'Personal Training (PT)',
 								data: ptRevData,
-								backgroundColor: '#10b981',
+								backgroundColor: gradientPt,
+								borderColor: '#10b981',
+								borderWidth: 1,
 								borderRadius: 6
 							}
 						]
