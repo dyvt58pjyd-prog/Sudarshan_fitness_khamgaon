@@ -355,13 +355,12 @@ $res_list = mysqli_query($con, $q_list);
                                         <td style="padding: 15px 12px; text-align: center;">
                                             <?php 
                                             $clean_path = ltrim($row['screenshot'], './');
-                                            $physical_path = __DIR__ . '/../../' . $clean_path;
                                             $url_path = '../../' . $clean_path;
                                             
-                                            if (!empty($row['screenshot']) && file_exists($physical_path)): ?>
+                                            if (!empty($row['screenshot'])): ?>
                                                 <img class="proof-thumbnail" src="<?php echo htmlspecialchars($url_path); ?>" alt="Proof Screenshot" onclick="showModal('<?php echo htmlspecialchars($url_path); ?>')">
                                             <?php else: ?>
-                                                <span style="color: var(--danger); font-size: 12px;">File missing or deleted</span>
+                                                <span style="color: var(--danger); font-size: 12px;">No Receipt</span>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
