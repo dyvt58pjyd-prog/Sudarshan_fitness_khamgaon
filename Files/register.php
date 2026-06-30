@@ -48,11 +48,13 @@ if (isset($_POST['submit_registration'])) {
     $state = mysqli_real_escape_string($con, $_POST['state']);
     $zipcode = mysqli_real_escape_string($con, $_POST['zipcode']);
     
-    $plan = mysqli_real_escape_string($con, $_POST['plan_id']);
+    $plan = isset($_POST['plan_id']) ? mysqli_real_escape_string($con, $_POST['plan_id']) : '';
     
     // Check if email already exists
     $chk_email = mysqli_query($con, "SELECT email FROM users WHERE email = '$email'");
-    if ($chk_email && mysqli_num_rows($chk_email) > 0) {
+    if (empty($plan)) {
+        $error_message = "Please select a membership plan before submitting.";
+    } elseif ($chk_email && mysqli_num_rows($chk_email) > 0) {
         $error_message = "Duplicate Entry: Email address $email is already registered!";
     } elseif (empty($_POST['captured_photo']) && (!isset($_FILES['upload_photo']) || $_FILES['upload_photo']['error'] !== UPLOAD_ERR_OK)) {
         $error_message = "Please capture a live photo or upload a profile picture. This is mandatory for gym identification.";
@@ -604,7 +606,7 @@ if (isset($_POST['submit_registration'])) {
                             <label style="font-size: 14px; color: #fff;">Choose Membership Plan <span style="color:var(--accent-primary)">*</span></label>
                             
                             <!-- Hidden input to submit the selected plan ID -->
-                            <input type="hidden" name="plan_id" id="plan-select-hidden" required>
+                            <input type="hidden" name="plan_id" id="plan-select-hidden">
                             
                             <!-- Holographic Cards Grid -->
                             <div class="holo-cards-grid" id="holo-cards-grid">
