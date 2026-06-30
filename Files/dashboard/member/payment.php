@@ -72,6 +72,8 @@ if (isset($_POST['submit_payment'])) {
                             // Automatically Approve Payment & Renew Membership
                             date_default_timezone_set("Asia/Calcutta");
                             $cdate = date('Y-m-d');
+                            $launch_date = '2026-07-08';
+                            $cdate = ($cdate < $launch_date) ? $launch_date : $cdate;
                             $d = strtotime("+" . $validity . " Months", strtotime($cdate));
                             $expiredate = date("Y-m-d", $d);
                             
@@ -131,6 +133,8 @@ if (isset($_POST['submit_payment'])) {
                         // Automatically Approve PT Payment
                         date_default_timezone_set("Asia/Calcutta");
                         $cdate = date('Y-m-d');
+                        $launch_date = '2026-07-08';
+                        $cdate = ($cdate < $launch_date) ? $launch_date : $cdate;
                         $d = strtotime("+" . $duration . " Months", strtotime($cdate));
                         $expiredate = date("Y-m-d", $d);
                         

@@ -101,6 +101,10 @@ $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,t
           $value=mysqli_fetch_row($result);
           date_default_timezone_set("Asia/Calcutta"); 
           $cdate=mysqli_real_escape_string($con, $_POST['jdate']);
+          
+          $launch_date = '2026-07-08';
+          $cdate = ($cdate < $launch_date) ? $launch_date : $cdate;
+          
           $d=strtotime("+".$value[3]." Months", strtotime($cdate));
           $expiredate=date("Y-m-d",$d); //adding validity retrieve from plan to current date
           $discount = isset($_POST['discount']) ? intval($_POST['discount']) : 0;
