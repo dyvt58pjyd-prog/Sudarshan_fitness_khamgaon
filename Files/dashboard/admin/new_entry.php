@@ -15,6 +15,10 @@ if ($res_max && mysqli_num_rows($res_max) > 0) {
     }
     $next_id = $max_val + 1;
 }
+
+$gym = get_gym_details($con);
+$upi_id = isset($gym['upi_id']) ? $gym['upi_id'] : '';
+$gym_name = isset($gym['gym_name']) ? $gym['gym_name'] : 'Sudarshan Fitness';
 ?>
 
 
@@ -29,6 +33,7 @@ if ($res_max && mysqli_num_rows($res_max) > 0) {
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
     <link rel="stylesheet" href="../../css/premium.css">
     <link href="a1style.css" type="text/css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <style>
     	.page-container .sidebar-menu #main-menu li#regis > a {
     	background-color: #2b303a;
@@ -266,7 +271,7 @@ if ($res_max && mysqli_num_rows($res_max) > 0) {
 						$result=mysqli_query($con,$query);
 						if($result && mysqli_num_rows($result) > 0){
 							while($row=mysqli_fetch_assoc($result)){
-								echo "<option value='".$row['pid']."' data-discount-lock='".intval($row['discount_lock'])."'>".htmlspecialchars($row['planName'])."</option>";
+								echo "<option value='".$row['pid']."' data-discount-lock='".intval($row['discount_lock'])."' data-price='".intval($row['amount'])."'>".htmlspecialchars($row['planName'])."</option>";
 							}
 						}
 					?>
@@ -274,10 +279,19 @@ if ($res_max && mysqli_num_rows($res_max) > 0) {
               </tr>
               <tr>
                 <td height="35">PAYMENT MODE:</td>
-                <td height="35"><select name="payment_mode" id="boxx" required>
+                <td height="35"><select name="payment_mode" id="boxx" required onchange="generateStaffQR()">
                     <option value="Cash" selected>Cash</option>
                     <option value="UPI">UPI</option>
                 </select></td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                    <div id="staff-qr-container" style="display: none; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,107,0,0.3); text-align: center; margin: 10px 0;">
+                        <h4 style="color: #fff; margin-top: 0; margin-bottom: 5px;">Scan to Pay: <span id="staff-qr-amount" style="color: #ff6b00;">₹0</span></h4>
+                        <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 15px;">Ask member to scan this QR code. Proceed to submit only after physical verification.</p>
+                        <img id="staff-qr-code" style="display: inline-block; background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); width: 200px; height: 200px;" />
+                    </div>
+                </td>
               </tr>
               <tr>
                 <td height="35">DISCOUNT AMOUNT (₹):</td>
@@ -508,8 +522,76 @@ if ($res_max && mysqli_num_rows($res_max) > 0) {
                     submitBtn.disabled = false;
                 }
             }
+        
+        <?php
+          $settings_query = mysqli_query($con, "SELECT upi_id, gym_name FROM gym_settings LIMIT 1");
+          $settings = mysqli_fetch_assoc($settings_query);
+          $upi_id = $settings['upi_id'] ?? '';
+          $gym_name = $settings['gym_name'] ?? 'Gym';
+        ?>
 
+        document.getElementById('discount_input').addEventListener('input', generateStaffQR);
+        document.getElementById('trainer_select').addEventListener('change', generateStaffQR);
+        document.getElementById('pt_duration').addEventListener('change', generateStaffQR);
+        document.getElementById('plan_select').addEventListener('change', generateStaffQR);
 
+        function generateStaffQR() {
+            var paymentMode = document.getElementById('boxx').value;
+            var qrContainer = document.getElementById('staff-qr-container');
+            
+            if (paymentMode !== 'UPI') {
+                qrContainer.style.display = 'none';
+                return;
+            }
+            
+            // Calculate base plan price
+            var planSelect = document.getElementById('plan_select');
+            var planPrice = 0;
+            if (planSelect && planSelect.options[planSelect.selectedIndex]) {
+                var selectedOpt = planSelect.options[planSelect.selectedIndex];
+                if (selectedOpt.getAttribute('data-price')) {
+                    planPrice = parseFloat(selectedOpt.getAttribute('data-price'));
+                }
+            }
+            
+            // Subtract discount
+            var discount = parseFloat(document.getElementById('discount_input').value) || 0;
+            
+            // Add PT fees
+            var ptFees = 0;
+            var trainerSelect = document.getElementById('trainer_select');
+            if (trainerSelect && trainerSelect.value !== '') {
+                var ptDuration = document.getElementById('pt_duration');
+                if (ptDuration) {
+                    var duration = parseInt(ptDuration.value) || 3;
+                    const pt_rates = { 1: 3000, 2: 6000, 3: 9000, 6: 18000, 12: 35000 };
+                    ptFees = pt_rates[duration] || (duration * 3000);
+                }
+            }
+            
+            var totalAmount = (planPrice - discount) + ptFees;
+            if (totalAmount < 0) totalAmount = 0;
+            
+            document.getElementById('staff-qr-amount').innerText = '₹' + totalAmount.toLocaleString('en-IN');
+            
+            var upiId = "<?php echo addslashes($upi_id); ?>";
+            var gymName = "<?php echo addslashes($gym_name); ?>";
+            
+            if (!upiId) {
+                document.getElementById('staff-qr-container').innerHTML = '<div style="color:red; padding: 10px;">UPI ID not configured in settings.</div>';
+                qrContainer.style.display = 'block';
+                return;
+            }
+            
+            var cleanUpiId = upiId.replace(/\s+/g, '');
+            var queryStr = `?pa=${cleanUpiId}&pn=${encodeURIComponent(gymName)}&am=${totalAmount.toFixed(2)}&tn=${encodeURIComponent('Registration Payment')}&cu=INR`;
+            var upiUrl = `upi://pay${queryStr}`;
+            
+            var qrSrc = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + encodeURIComponent(upiUrl);
+            document.getElementById('staff-qr-code').src = qrSrc;
+            
+            qrContainer.style.display = 'block';
+        }
         </script>
         
         
@@ -518,4 +600,3 @@ if ($res_max && mysqli_num_rows($res_max) > 0) {
 
     </body>
 </html>
-

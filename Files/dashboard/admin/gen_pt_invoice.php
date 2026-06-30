@@ -381,18 +381,13 @@ $gym = get_gym_details($con);
                         if (!empty($upi_id)): 
                             $total_paid = intval($row['amount']);
                         ?>
-                        <div class="upi-pay-card" style="display: inline-flex; align-items: center; gap: 15px; background: #fafafa; border: 1px solid #f0f0f0; padding: 12px; border-radius: 12px; max-width: 320px; text-align: left; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;">
-                            <?php
-                            $clean_upi_id = preg_replace("/\s+/", "", trim($upi_id));
-                            $clean_amount = number_format((float)str_replace(",", "", $total_paid), 2, ".", "");
-                            $upi_url = "upi://pay?pa=" . urlencode($clean_upi_id) . "&pn=" . urlencode($gym['gym_name']) . "&am=" . urlencode($clean_amount) . "&tn=" . urlencode("PT-Invoice-" . $row['pt_id']) . "&cu=INR";
-                            $qr_src = "https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=" . urlencode($upi_url);
-                            ?>
-                            <img src="<?php echo $qr_src; ?>" alt="UPI QR" style="width: 80px; height: 80px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);" />
+                        <div class="upi-pay-card" style="display: inline-flex; align-items: center; gap: 15px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); padding: 12px 20px; border-radius: 12px; max-width: 320px; text-align: left; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;">
+                            <div style="background: #22c55e; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                                ✓
+                            </div>
                             <div>
-                                <span style="display: block; font-size: 11px; font-weight: 700; color: #ff6b00; text-transform: uppercase; letter-spacing: 0.5px;">Pay via PhonePe/GPay</span>
-                                <span style="display: block; font-size: 13px; font-weight: 600; color: #0c0c0c; margin: 2px 0;">₹<?php echo $total_paid; ?></span>
-                                <span style="display: block; font-size: 9.5px; color: #64748b; word-break: break-all; font-family: monospace;"><?php echo htmlspecialchars($upi_id); ?></span>
+                                <span style="display: block; font-size: 13px; font-weight: 700; color: #166534; text-transform: uppercase; letter-spacing: 0.5px;">Payment Verified</span>
+                                <span style="display: block; font-size: 11px; color: #15803d; margin-top: 2px;">Thank you for your payment.</span>
                             </div>
                         </div>
                         <?php endif; ?>
