@@ -1340,4 +1340,10 @@ body, html, .main-content, .sidebar-menu, .a1-card-8, .tile-stats, table, td, th
   #sidebar-backdrop {
     display: none !important;
   }
+  
+  /* Fix double hamburger menu on desktop */
+  .visible-xs,
+  .sidebar-mobile-menu {
+    display: none !important;
+  }
 }
