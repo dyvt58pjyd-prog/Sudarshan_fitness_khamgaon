@@ -400,6 +400,11 @@ if (!function_exists('page_protect')) {
             }
         }
         
+        /* Generate CSRF Token if not exists */
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+        
         /* If session not set, redirect to main login page */
         if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
             session_destroy();

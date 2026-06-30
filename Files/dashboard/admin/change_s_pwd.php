@@ -17,11 +17,17 @@ $user_id_auth = rtrim($_POST['login_id']);
 $passconfirm= rtrim($_POST['confirmfield']);
 if($pass==$passconfirm){
 if (isset($user_id_auth) && isset($pass) && isset($key)) {
-    $sql    = "SELECT * FROM admin WHERE username='$user_id_auth'";
-    $result = mysqli_query($con, $sql);
+    $stmt = mysqli_prepare($con, "SELECT * FROM admin WHERE username=?");
+    mysqli_stmt_bind_param($stmt, "s", $user_id_auth);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
     $count  = mysqli_num_rows($result);
+    
     if ($count == 1) {
-        mysqli_query($con, "UPDATE admin SET pass_key='$pass',securekey='$key' WHERE username='$user_id_auth'");
+        $hashed_pass = password_hash($pass, PASSWORD_BCRYPT);
+        $update_stmt = mysqli_prepare($con, "UPDATE admin SET pass_key=?, securekey=? WHERE username=?");
+        mysqli_stmt_bind_param($update_stmt, "sss", $hashed_pass, $key, $user_id_auth);
+        mysqli_stmt_execute($update_stmt);
         echo "<html><head><script>alert('Profile Updated ,Login Again ');</script></head></html>";
         echo "<meta http-equiv='refresh' content='0; url=logout.php'>";
     } else {

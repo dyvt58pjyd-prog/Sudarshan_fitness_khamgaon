@@ -2,6 +2,10 @@
 require '../../include/db_conn.php';
 page_protect();
 
+if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    die("CSRF Token Validation Failed. Request blocked.");
+}
+
  $memID=$_POST['m_id'];
  $uname=$_POST['u_name'];
  $stname=$_POST['street_name'];
@@ -74,25 +78,43 @@ if (!empty($_POST['member_photo_base64'])) {
 } elseif (isset($_FILES['member_photo_file']) && $_FILES['member_photo_file']['error'] === UPLOAD_ERR_OK) {
     // Uploaded via file input
     $file_tmp = $_FILES['member_photo_file']['tmp_name'];
-    $ext = pathinfo($_FILES['member_photo_file']['name'], PATHINFO_EXTENSION);
+    $ext = strtolower(pathinfo($_FILES['member_photo_file']['name'], PATHINFO_EXTENSION));
+    
+    // Strict MIME and Extension validation
+    $allowed_exts = ['jpg', 'jpeg', 'png'];
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mime_type = finfo_file($finfo, $file_tmp);
+    finfo_close($finfo);
+    
+    $allowed_mimes = ['image/jpeg', 'image/png'];
+    
+    if (!in_array($ext, $allowed_exts) || !in_array($mime_type, $allowed_mimes)) {
+        echo "<head><script>alert('Error: Invalid file type uploaded. Only JPG/PNG images are allowed.');</script></head></html>";
+        echo "<meta http-equiv='refresh' content='0; url=new_entry.php'>";
+        exit();
+    }
+    
     $filename = 'profile_' . $memID . '_' . time() . '.' . $ext;
     $full_path = $upload_dir . $filename;
     if (@move_uploaded_file($file_tmp, $full_path)) {
-        $photo_path = '../../Sudarshan Data Folder/' . $filename;
+        $photo_path = '../../uploads/' . $filename;
     }
 }
 
 // Generate random 6-digit passcode for gate entry
 $entry_code = strval(rand(100000, 999999));
 
-//inserting into users table
-$routine = !empty($_POST['routine']) ? (int)$_POST['routine'] : "NULL";
-$trainer_id = isset($_POST['trainer_id']) && !empty($_POST['trainer_id']) ? mysqli_real_escape_string($con, $_POST['trainer_id']) : '';
-$trainer_val = !empty($trainer_id) ? "'" . $trainer_id . "'" : "NULL";
-$photo_val = $photo_path ? "'" . mysqli_real_escape_string($con, $photo_path) . "'" : "NULL";
-$fitness_goal = isset($_POST['fitness_goal']) ? mysqli_real_escape_string($con, $_POST['fitness_goal']) : 'general';
-$query="insert into users(username,gender,mobile,email,dob,joining_date,userid,tid,photo,entry_code,trainer_id,biometric_id,biometric_enabled,fitness_goal) values('$uname','$gender','$phn','$email','$dob','$jdate','$memID', $routine, $photo_val, '$entry_code', $trainer_val, '$memID', 1, '$fitness_goal')";
-    if(mysqli_query($con,$query)==1){
+//inserting into users table using prepared statement
+$routine = !empty($_POST['routine']) ? (int)$_POST['routine'] : NULL;
+$trainer_id = isset($_POST['trainer_id']) && !empty($_POST['trainer_id']) ? $_POST['trainer_id'] : NULL;
+$photo_val = $photo_path ? $photo_path : NULL;
+$fitness_goal = isset($_POST['fitness_goal']) ? $_POST['fitness_goal'] : 'general';
+$biometric_enabled = 1;
+
+$stmt_user = mysqli_prepare($con, "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, tid, photo, entry_code, trainer_id, biometric_id, biometric_enabled, fitness_goal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+mysqli_stmt_bind_param($stmt_user, "sssssssisssssi", $uname, $gender, $phn, $email, $dob, $jdate, $memID, $routine, $photo_val, $entry_code, $trainer_id, $memID, $biometric_enabled, $fitness_goal);
+
+if(mysqli_stmt_execute($stmt_user)){
       //Retrieve information of plan selected by user
       $query1="select * from plan where pid='$plan'";
       $result=mysqli_query($con,$query1);
@@ -129,8 +151,10 @@ $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,t
               if(mysqli_query($con,$query5)==1){
                 // Create user login auth in admin table
                 $password = '1234';
-                $query_auth = "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('$memID', '$password', 'member', '$uname', 'member')";
-                mysqli_query($con, $query_auth);
+                $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+                $stmt_auth = mysqli_prepare($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES (?, ?, 'member', ?, 'member')");
+                mysqli_stmt_bind_param($stmt_auth, "sss", $memID, $hashed_password, $uname);
+                mysqli_stmt_execute($stmt_auth);
 
                 // Insert PT enrollment if trainer is assigned
                 if (!empty($trainer_id)) {

@@ -167,8 +167,10 @@ if (isset($_POST['submit_registration'])) {
                             }
                             
                             // Create admin login
-                            mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) 
-                                                VALUES ('$next_id', '$password', 'member', '$uname', 'member')");
+                            $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+                            $stmt_auth = mysqli_prepare($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES (?, ?, 'member', ?, 'member')");
+                            mysqli_stmt_bind_param($stmt_auth, "sss", $next_id, $hashed_password, $uname);
+                            mysqli_stmt_execute($stmt_auth);
 
                             // Insert active subscription
                             date_default_timezone_set("Asia/Calcutta");
