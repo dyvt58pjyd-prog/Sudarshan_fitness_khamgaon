@@ -547,11 +547,22 @@ $gym_name = isset($gym['gym_name']) ? $gym['gym_name'] : 'Sudarshan Fitness';
             // Calculate base plan price
             var planSelect = document.getElementById('plan_select');
             var planPrice = 0;
-            if (planSelect && planSelect.options[planSelect.selectedIndex]) {
+            var isPlanSelected = false;
+            
+            if (planSelect && planSelect.selectedIndex >= 0) {
                 var selectedOpt = planSelect.options[planSelect.selectedIndex];
-                if (selectedOpt.getAttribute('data-price')) {
-                    planPrice = parseFloat(selectedOpt.getAttribute('data-price'));
+                if (selectedOpt && selectedOpt.value !== '') {
+                    isPlanSelected = true;
+                    if (selectedOpt.getAttribute('data-price')) {
+                        planPrice = parseFloat(selectedOpt.getAttribute('data-price'));
+                    }
                 }
+            }
+            
+            // If no plan is selected, hide the QR code container until they select one
+            if (!isPlanSelected) {
+                qrContainer.style.display = 'none';
+                return;
             }
             
             // Subtract discount
@@ -570,7 +581,10 @@ $gym_name = isset($gym['gym_name']) ? $gym['gym_name'] : 'Sudarshan Fitness';
             }
             
             var totalAmount = (planPrice - discount) + ptFees;
-            if (totalAmount < 0) totalAmount = 0;
+            if (totalAmount <= 0) {
+                qrContainer.style.display = 'none';
+                return;
+            }
             
             document.getElementById('staff-qr-amount').innerText = '₹' + totalAmount.toLocaleString('en-IN');
             
