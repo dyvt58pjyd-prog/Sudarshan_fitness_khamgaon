@@ -57,6 +57,10 @@ if (isset($_POST['approve_id'])) {
                 $new_entry_code = strval(rand(100000, 999999));
                 mysqli_query($con, "UPDATE users SET entry_code = '$new_entry_code' WHERE userid = '$uid'");
                 
+                // Queue the new PIN to the Biometric Machine
+                $cmd_payload = json_encode(['reason' => 'update_pin', 'pin' => $new_entry_code, 'name' => $username]);
+                mysqli_query($con, "INSERT INTO biometric_commands (command_type, target_uid, payload, status) VALUES ('UPDATE_USERINFO', '$uid', '$cmd_payload', 'pending')");
+                
                 // Check if this is their first subscription or a renewal
                 $check_q = mysqli_query($con, "SELECT COUNT(*) as cnt FROM enrolls_to WHERE uid = '$uid'");
                 $row_check = mysqli_fetch_assoc($check_q);

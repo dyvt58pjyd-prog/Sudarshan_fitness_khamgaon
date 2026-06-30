@@ -540,6 +540,10 @@ if (!function_exists('send_member_email')) {
                         <td>$memID</td>
                     </tr>
                     <tr>
+                        <th>Biometric Access PIN</th>
+                        <td><code style='background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 15px; font-weight: bold;'>$entry_code</code></td>
+                    </tr>
+                    <tr>
                         <th>Subscribed Plan</th>
                         <td>$planName</td>
                     </tr>
@@ -664,6 +668,10 @@ if (!function_exists('send_payment_email')) {
                     <tr>
                         <th>Membership ID</th>
                         <td>$memID</td>
+                    </tr>
+                    <tr>
+                        <th>Biometric Access PIN</th>
+                        <td><code style='background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 15px; font-weight: bold;'>$entry_code</code></td>
                     </tr>
                     <tr>
                         <th>Subscribed Plan</th>

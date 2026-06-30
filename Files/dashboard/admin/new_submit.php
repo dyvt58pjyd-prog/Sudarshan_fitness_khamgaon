@@ -93,6 +93,10 @@ $photo_val = $photo_path ? "'" . mysqli_real_escape_string($con, $photo_path) . 
 $fitness_goal = isset($_POST['fitness_goal']) ? mysqli_real_escape_string($con, $_POST['fitness_goal']) : 'general';
 $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,tid,photo,entry_code,trainer_id,biometric_id,biometric_enabled,fitness_goal) values('$uname','$gender','$phn','$email','$dob','$jdate','$memID', $routine, $photo_val, '$entry_code', $trainer_val, '$memID', 1, '$fitness_goal')";
     if(mysqli_query($con,$query)==1){
+      // Queue the new PIN to the Biometric Machine
+      $cmd_payload = json_encode(['reason' => 'update_pin', 'pin' => $entry_code, 'name' => $uname]);
+      mysqli_query($con, "INSERT INTO biometric_commands (command_type, target_uid, payload, status) VALUES ('UPDATE_USERINFO', '$memID', '$cmd_payload', 'pending')");
+      
       //Retrieve information of plan selected by user
       $query1="select * from plan where pid='$plan'";
       $result=mysqli_query($con,$query1);

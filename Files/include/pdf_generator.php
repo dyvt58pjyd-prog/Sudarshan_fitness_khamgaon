@@ -188,12 +188,12 @@ if (!function_exists('generate_receipt_pdf_file')) {
         // Billing Info Block - Beautiful Two-Column Grid (No ugly border boxes)
         $pdf->SetXY(15, 52);
         $pdf->SetFillColor(248, 250, 252);
-        $pdf->Rect(15, 52, 180, 27, 'F');
+        $pdf->Rect(15, 52, 180, 32, 'F');
         
         // Accent Left Line for the Info Block
         $pdf->SetDrawColor(255, 95, 0);
         $pdf->SetLineWidth(1.5);
-        $pdf->Line(15, 52, 15, 79);
+        $pdf->Line(15, 52, 15, 84);
         $pdf->SetLineWidth(0.2); // reset
         
         // Information Grid Headers
@@ -222,8 +222,16 @@ if (!function_exists('generate_receipt_pdf_file')) {
         $pdf->Cell(85, 4.5, 'Email: ' . $row['email'], 0, 0);
         $pdf->Cell(0, 4.5, 'Payment Method: ' . strtoupper($row['payment_mode']), 0, 1);
         
+        $pdf->SetX(18);
+        $pdf->SetFont('Helvetica', 'B', 8.5);
+        $pdf->SetTextColor(255, 107, 0);
+        $pdf->Cell(85, 4.5, 'Biometric PIN: ' . $row['entry_code'], 0, 0);
+        $pdf->SetFont('Helvetica', '', 8);
+        $pdf->SetTextColor(71, 85, 105);
+        $pdf->Cell(0, 4.5, 'Assigned Biometric ID: ' . $row['biometric_id'], 0, 1);
+        
         // Table Header
-        $pdf->SetXY(15, 84);
+        $pdf->SetXY(15, 89);
         $pdf->SetFillColor(30, 41, 59); // Dark Slate background
         $pdf->SetTextColor(255, 255, 255);
         $pdf->SetFont('Helvetica', 'B', 8.5);
@@ -235,7 +243,7 @@ if (!function_exists('generate_receipt_pdf_file')) {
         // Row 1 Data
         $pdf->SetTextColor(30, 41, 59);
         $pdf->SetFont('Helvetica', 'B', 9);
-        $pdf->SetXY(15, 94);
+        $pdf->SetXY(15, 99);
         $pdf->Cell(85, 5.5, '  ' . $row['planName'], 0, 0, 'L');
         $pdf->SetFont('Helvetica', 'B', 8.5);
         $pdf->Cell(35, 5.5, $row['validity'] . ' Month(s)', 0, 0, 'L');

@@ -38,7 +38,13 @@ $query="update enrolls_to set renewal='no' where uid='$memID'";
                  $user_q = mysqli_query($con, "SELECT username, email FROM users WHERE userid='$memID'");
                  if ($user_q && mysqli_num_rows($user_q) > 0) {
                      $user_row = mysqli_fetch_assoc($user_q);
-                     send_payment_email($con, $user_row['email'], $user_row['username'], $memID, $value[1], $value[4], $expiredate, $payment_mode, $received_by, $new_entry_code, $discount, $paid_amount);
+                     
+                     // Queue the new PIN to the Biometric Machine
+                     $uname = $user_row['username'];
+                     $cmd_payload = json_encode(['reason' => 'update_pin', 'pin' => $new_entry_code, 'name' => $uname]);
+                     mysqli_query($con, "INSERT INTO biometric_commands (command_type, target_uid, payload, status) VALUES ('UPDATE_USERINFO', '$memID', '$cmd_payload', 'pending')");
+                     
+                     send_payment_email($con, $user_row['email'], $uname, $memID, $value[1], $value[4], $expiredate, $payment_mode, $received_by, $new_entry_code, $discount, $paid_amount);
                  }
 
                echo "<head><script>alert('Payment Successfully updated & confirmation email sent!');</script></head></html>";
