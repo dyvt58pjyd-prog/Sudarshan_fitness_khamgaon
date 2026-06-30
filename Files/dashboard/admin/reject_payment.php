@@ -14,5 +14,6 @@ if (!isset($_GET['id'])) {
 $req_id = intval($_GET['id']);
 mysqli_query($con, "UPDATE payment_requests SET status = 'rejected' WHERE id = $req_id AND status = 'pending'");
 
-echo "<script>alert('Payment request has been rejected.'); window.location.href='payment_requests.php';</script>";
+$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'payment_requests.php';
+echo "<script>alert('Payment request has been rejected.'); window.location.href='" . htmlspecialchars($referer, ENT_QUOTES) . "';</script>";
 ?>
