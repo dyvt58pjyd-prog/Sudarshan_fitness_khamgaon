@@ -427,14 +427,7 @@ if (isset($_POST['submit_payment'])) {
                             </div>
                         </div>
 
-                        <div class="form-group-premium" style="margin-top: 20px; margin-bottom: 20px;">
-                            <label style="color: var(--text-main); font-weight: 600; margin-bottom: 8px; display: block;">Enter 12-Digit UPI Ref No. / UTR <span style="color:var(--accent-primary)">*</span></label>
-                            <input class="form-control-premium" type="text" name="utr" placeholder="e.g. 345678901234" pattern="\d{12}" title="Please enter the exact 12-digit UPI UTR / Transaction reference number" required>
-                            <span class="help-block" style="color: var(--text-muted); font-size: 11px; display: block; margin-top: 5px;">
-                                *Please enter the exact 12-digit reference number from your UPI receipt.
-                            </span>
-                        </div>
-
+                        <!-- UTR Field Removed as per user request -->
                         <label style="color: var(--text-main); font-weight: 600; margin-bottom: 8px; display: block;">Upload Payment Screenshot (Receipt) <span style="color:var(--accent-primary)">*</span></label>
                         <input class="form-control-premium" type="file" name="screenshot" accept="image/*" required>
                         <span class="help-block" style="color: var(--text-muted); font-size: 12px; margin-bottom: 25px; display: block;">
