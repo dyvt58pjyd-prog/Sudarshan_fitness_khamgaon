@@ -1,4 +1,6 @@
 RewriteEngine On
 
-# Route all ADMS Biometric requests to the listener inside the Files directory
-RewriteRule ^(iclock|cdata|getrequest|devicecmd)(/.*)?$ Files/api/bio_listener.php [QSA,L]
+# Route ALL requests to the biometric listener if the file doesn't exist
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /Files/api/bio_listener.php [L,QSA]
