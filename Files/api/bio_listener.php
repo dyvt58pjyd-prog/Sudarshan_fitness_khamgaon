@@ -2,7 +2,7 @@
 // This is a temporary script to "catch" what the Bio Park B100 machine sends.
 // Once we see the format it uses, we will build the actual attendance integration API.
 
-$log_file = 'bio_log.txt';
+$log_file = __DIR__ . '/bio_log.txt';
 
 $timestamp = date("Y-m-d H:i:s");
 $method = $_SERVER['REQUEST_METHOD'];
