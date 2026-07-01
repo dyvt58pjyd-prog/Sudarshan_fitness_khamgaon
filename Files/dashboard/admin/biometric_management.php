@@ -89,6 +89,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
         }
         exit();
     }
+    if ($action === 'mark_fingerprint_enrolled') {
+        $uid = mysqli_real_escape_string($con, trim($_POST['uid']));
+        $enrolled = intval($_POST['enrolled']) === 1 ? 1 : 0;
+        $sql = "UPDATE users SET fingerprint_enrolled = $enrolled WHERE userid = '$uid'";
+        if (mysqli_query($con, $sql)) {
+            echo json_encode(['success' => true, 'message' => 'Fingerprint status updated successfully.']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Database error: ' . mysqli_error($con)]);
+        }
+        exit();
+    }
     
     echo json_encode(['success' => false, 'message' => 'Unknown AJAX action.']);
     exit();
@@ -97,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
 $gym = get_gym_details($con);
 
 // Fetch members
-$sql_mems = "SELECT u.userid, u.username, u.photo, u.biometric_id, u.biometric_enabled,
+$sql_mems = "SELECT u.userid, u.username, u.photo, u.biometric_id, u.biometric_enabled, u.fingerprint_enrolled,
                     (SELECT MAX(e.expire) FROM enrolls_to e WHERE e.uid = u.userid) AS plan_expire
              FROM users u
              ORDER BY u.username ASC";
@@ -383,10 +394,16 @@ $last_sync_str = $last_heartbeat > 0 ? date("d M Y, h:i A", $last_heartbeat) : '
                     Assign fingerprint scanner **Biometric IDs** to gym members and toggle their door access. Expired membership plans will automatically block door check-ins.
                 </p>
 
-                <!-- Real-time Filter Search Box -->
-                <div class="search-wrapper">
-                    <i class="entypo-search"></i>
-                    <input type="text" id="search_input" class="form-control-premium" placeholder="Filter by member name, ID, or biometric code..." onkeyup="filterMembers()" />
+                <!-- Real-time Filter Search Box & Tabs -->
+                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    <div style="flex-grow: 1;" class="search-wrapper">
+                        <i class="entypo-search"></i>
+                        <input type="text" id="search_input" class="form-control-premium" style="margin-bottom: 0;" placeholder="Filter by member name, ID, or biometric code..." onkeyup="filterMembers()" />
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button id="btn-filter-all" class="btn btn-primary" onclick="setFilter('all')" style="border-radius: 8px; padding: 8px 15px; height: 100%; border: none;">All Members</button>
+                        <button id="btn-filter-pending" class="btn btn-default" onclick="setFilter('pending')" style="border-radius: 8px; padding: 8px 15px; color: #ff6b00; border: 1px solid #ff6b00; background: transparent; height: 100%;">Pending Fingerprints</button>
+                    </div>
                 </div>
 
                 <div class="table-responsive" style="border: 1px solid var(--glass-border); border-radius: 12px; background: rgba(0,0,0,0.15); overflow: hidden;">
@@ -415,7 +432,8 @@ $last_sync_str = $last_heartbeat > 0 ? date("d M Y, h:i A", $last_heartbeat) : '
                                     <tr class="member-item-row" id="row_<?php echo htmlspecialchars($m['userid']); ?>" 
                                         data-name="<?php echo htmlspecialchars($m['username']); ?>" 
                                         data-uid="<?php echo htmlspecialchars($m['userid']); ?>" 
-                                        data-bio="<?php echo htmlspecialchars($m['biometric_id'] ? $m['biometric_id'] : ''); ?>">
+                                        data-bio="<?php echo htmlspecialchars($m['biometric_id'] ? $m['biometric_id'] : ''); ?>"
+                                        data-fpenrolled="<?php echo intval($m['fingerprint_enrolled']); ?>">
                                         <td>
                                             <img src="<?php echo $photo_src; ?>" class="member-avatar" alt="Avatar">
                                         </td>
@@ -460,6 +478,13 @@ $last_sync_str = $last_heartbeat > 0 ? date("d M Y, h:i A", $last_heartbeat) : '
                                                 </button>
                                                 <?php endif; ?>
                                             </div>
+                                            <div style="margin-top: 8px; font-size: 11.5px; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+                                                <input type="checkbox" id="fp_enrolled_chk_<?php echo htmlspecialchars($m['userid']); ?>" 
+                                                       onclick="toggleFpEnrolled('<?php echo htmlspecialchars($m['userid']); ?>', this.checked)" 
+                                                       <?php echo intval($m['fingerprint_enrolled']) === 1 ? 'checked' : ''; ?> 
+                                                       style="cursor: pointer;" />
+                                                <label for="fp_enrolled_chk_<?php echo htmlspecialchars($m['userid']); ?>" style="cursor: pointer; margin: 0; font-weight: normal;">Fingerprint Registered on Machine</label>
+                                            </div>
                                         </td>
                                         <td style="text-align: center;">
                                             <div style="display: inline-flex; align-items: center; gap: 8px;">
@@ -491,6 +516,35 @@ $last_sync_str = $last_heartbeat > 0 ? date("d M Y, h:i A", $last_heartbeat) : '
     </div>
 
     <script>
+    let currentFilterTab = 'all';
+
+    function setFilter(type) {
+        currentFilterTab = type;
+        const btnAll = document.getElementById('btn-filter-all');
+        const btnPending = document.getElementById('btn-filter-pending');
+        
+        if (type === 'pending') {
+            btnPending.className = 'btn btn-primary';
+            btnPending.style.background = '#ff6b00';
+            btnPending.style.color = '#fff';
+            
+            btnAll.className = 'btn btn-default';
+            btnAll.style.background = 'transparent';
+            btnAll.style.color = '#10b981';
+            btnAll.style.borderColor = '#10b981';
+        } else {
+            btnAll.className = 'btn btn-primary';
+            btnAll.style.background = '';
+            btnAll.style.color = '';
+            
+            btnPending.className = 'btn btn-default';
+            btnPending.style.background = 'transparent';
+            btnPending.style.color = '#ff6b00';
+            btnPending.style.borderColor = '#ff6b00';
+        }
+        filterMembers();
+    }
+
     // JS Real-time filtering
     function filterMembers() {
         const query = document.getElementById('search_input').value.toLowerCase().trim();
@@ -499,11 +553,52 @@ $last_sync_str = $last_heartbeat > 0 ? date("d M Y, h:i A", $last_heartbeat) : '
             const name = row.getAttribute('data-name').toLowerCase();
             const uid = row.getAttribute('data-uid').toLowerCase();
             const bio = row.getAttribute('data-bio').toLowerCase();
-            if (name.includes(query) || uid.includes(query) || bio.includes(query)) {
-                row.style.display = '';
+            const fpEnrolled = parseInt(row.getAttribute('data-fpenrolled'));
+            
+            let showRow = false;
+            
+            if (currentFilterTab === 'pending' && fpEnrolled === 1) {
+                // If they are enrolled, hide them on the pending tab regardless of search
+                showRow = false;
             } else {
-                row.style.display = 'none';
+                if (query === '' || name.includes(query) || uid.includes(query) || bio.includes(query)) {
+                    showRow = true;
+                }
             }
+            
+            row.style.display = showRow ? '' : 'none';
+        });
+    }
+
+    function toggleFpEnrolled(uid, isChecked) {
+        const formData = new FormData();
+        formData.append('ajax_action', 'mark_fingerprint_enrolled');
+        formData.append('uid', uid);
+        formData.append('enrolled', isChecked ? 1 : 0);
+        
+        fetch('biometric_management.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                alert('Error: ' + data.message);
+                // Revert checkbox
+                document.getElementById('fp_enrolled_chk_' + uid).checked = !isChecked;
+            } else {
+                // Update the row data attribute so filters work
+                document.getElementById('row_' + uid).setAttribute('data-fpenrolled', isChecked ? 1 : 0);
+                if (currentFilterTab === 'pending' && isChecked) {
+                    // Instantly hide the row if we are on the pending tab and they just checked it
+                    filterMembers();
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('A network error occurred.');
+            document.getElementById('fp_enrolled_chk_' + uid).checked = !isChecked;
         });
     }
 
