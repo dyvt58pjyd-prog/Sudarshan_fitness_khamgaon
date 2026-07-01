@@ -1179,6 +1179,8 @@ body, html, .main-content, .sidebar-menu, .a1-card-8, .tile-stats, table, td, th
     width: 260px !important;
     z-index: 9999 !important;
     display: block !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
     box-shadow: 5px 0 25px rgba(0,0,0,0.5) !important;
   }
