@@ -452,6 +452,9 @@ $last_sync_str = $last_heartbeat > 0 ? date("d M Y, h:i A", $last_heartbeat) : '
                                                     <i class="entypo-upload"></i> Enroll Now
                                                 </button>
                                                 <?php if ($m['biometric_id'] !== NULL): ?>
+                                                <button class="btn-save-bio" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: #f59e0b; margin-left: 5px;" onclick="triggerScan('<?php echo htmlspecialchars($m['biometric_id']); ?>')" title="Trigger Machine Fingerprint Scan">
+                                                    <i class="entypo-fingerprint"></i> Trigger Scan
+                                                </button>
                                                 <button class="btn-save-bio" style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.4); color: #ef4444; margin-left: 5px;" onclick="reenrollFingerprint('<?php echo htmlspecialchars($m['userid']); ?>', '<?php echo htmlspecialchars($m['biometric_id']); ?>')" title="Wipe Fingerprint on Machine for Re-registration">
                                                     <i class="entypo-ccw"></i> Re-Enroll
                                                 </button>
@@ -607,6 +610,32 @@ $last_sync_str = $last_heartbeat > 0 ? date("d M Y, h:i A", $last_heartbeat) : '
             if(data.success) {
                 showToast(data.message);
                 setTimeout(() => window.location.reload(), 2500);
+            } else {
+                alert("Error: " + data.message);
+            }
+        })
+        .catch(err => {
+            alert("Network error updating system.");
+        });
+    }
+
+    function triggerScan(bio_id) {
+        showToast("Triggering machine scanner...");
+        
+        const formData = new FormData();
+        formData.append('biometric_id', bio_id);
+
+        fetch('../../api/trigger_enrollment.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ biometric_id: bio_id })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.status === 'success') {
+                showToast("Machine triggered! Please ask member to place finger.");
             } else {
                 alert("Error: " + data.message);
             }
