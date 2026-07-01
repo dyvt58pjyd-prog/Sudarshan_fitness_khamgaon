@@ -1175,24 +1175,24 @@ body, html, .main-content, .sidebar-menu, .a1-card-8, .tile-stats, table, td, th
     position: fixed !important;
     top: 0;
     bottom: 0;
-    left: 0 !important;
     width: 260px !important;
     z-index: 9999 !important;
     display: block !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    transition: left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
     box-shadow: 5px 0 25px rgba(0,0,0,0.5) !important;
+    transform: none !important;
   }
 
   /* When Menu is CLOSED (sidebar-collapsed) */
   .page-container.sidebar-collapsed .sidebar-menu {
-    transform: translateX(-105%) !important;
+    left: -280px !important;
   }
 
   /* When Menu is OPEN (not collapsed) */
   .page-container:not(.sidebar-collapsed) .sidebar-menu {
-    transform: translateX(0) !important;
+    left: 0 !important;
   }
 
   /* Make sure header doesn't overlap collapse button inside sidebar */
