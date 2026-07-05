@@ -261,23 +261,45 @@ if ($memid) {
                 <td height="35">DISCOUNT AMOUNT (₹):</td>
                 <td height="35"><input type="number" id="boxxe" name="discount" value="0" min="0" placeholder="Enter discount amount"/></td>
               </tr>
-			<tr>
-               <td height="35">STREET NAME:</td>
-               <td height="35"><input type="text" id="boxxe" name="stname" value='<?php echo $streetname?>'></td>
-             </tr>
-
-			 <tr>
-               <td height="35">STATE:</td>
-               <td height="35"><input type="text" id="boxxe" name="state" value='<?php echo $state?>'></td>
-             </tr>
-			 <tr>
-               <td height="35">CITY:</td>
-               <td height="35"><input type="text" id="boxxe" name="city" value='<?php echo $city?>'></td>
-             </tr>
-             <tr>
-               <td height="35">ZIPCODE:</td>
-               <td height="35"><input type="text" id="boxxe" name="zipcode" value='<?php echo $zipcode?>'></td>
-             </tr>
+              <tr>
+                <td height="35">STREET NAME:</td>
+                <td height="35"><input type="text" id="boxxe" name="stname" value='<?php echo $streetname?>'></td>
+              </tr>
+              <tr>
+                <td height="35">STATE:</td>
+                <td height="35"><input type="text" id="boxxe" name="state" value='<?php echo $state?>'></td>
+              </tr>
+              <tr>
+                <td height="35">CITY:</td>
+                <td height="35"><input type="text" id="boxxe" name="city" value='<?php echo $city?>'></td>
+              </tr>
+              <tr>
+                <td height="35">ZIPCODE:</td>
+                <td height="35"><input type="text" id="boxxe" name="zipcode" value='<?php echo $zipcode?>'></td>
+              </tr>
+              <tr>
+                <td colspan="2" style="padding: 10px 0; border-top: 1px solid rgba(255,107,0,0.2);"><strong style="color: var(--accent-primary);">HEALTH METRICS (SIMPLE INFO):</strong></td>
+              </tr>
+              <tr>
+                <td height="35">HEIGHT (cm):</td>
+                <td height="35"><input type="number" id="boxxe" name="height" value="<?php echo htmlspecialchars($height); ?>" placeholder="e.g. 175"></td>
+              </tr>
+              <tr>
+                <td height="35">WEIGHT (kg):</td>
+                <td height="35"><input type="number" id="boxxe" name="weight" value="<?php echo htmlspecialchars($weight); ?>" placeholder="e.g. 70" step="0.1"></td>
+              </tr>
+              <tr>
+                <td height="35">CALORIE TARGET (kcal):</td>
+                <td height="35"><input type="number" id="boxxe" name="calorie" value="<?php echo htmlspecialchars($calorie); ?>" placeholder="e.g. 2000"></td>
+              </tr>
+              <tr>
+                <td height="35">BODY FAT (%):</td>
+                <td height="35"><input type="number" id="boxxe" name="fat" value="<?php echo htmlspecialchars($fat); ?>" placeholder="e.g. 15" step="0.1"></td>
+              </tr>
+              <tr>
+                <td height="35">REMARKS/HEALTH GOAL:</td>
+                <td height="35"><textarea id="boxxe" name="remarks" rows="3" style="resize: vertical; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 6px; border-radius: 4px;"><?php echo htmlspecialchars($remarks); ?></textarea></td>
+              </tr>
 
 			 
 			 

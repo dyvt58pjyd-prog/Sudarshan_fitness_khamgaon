@@ -71,6 +71,20 @@ page_protect();
 
       $query2="update address set streetName='".$stname."',state='".$state."',city='".$city."',zipcode='".$zipcode."' where id='".$uid."'";
      if(mysqli_query($con,$query2)){
+         // Update Health Status
+         $height = isset($_POST['height']) ? mysqli_real_escape_string($con, $_POST['height']) : '';
+         $weight = isset($_POST['weight']) ? mysqli_real_escape_string($con, $_POST['weight']) : '';
+         $calorie = isset($_POST['calorie']) ? mysqli_real_escape_string($con, $_POST['calorie']) : '';
+         $fat = isset($_POST['fat']) ? mysqli_real_escape_string($con, $_POST['fat']) : '';
+         $remarks = isset($_POST['remarks']) ? mysqli_real_escape_string($con, $_POST['remarks']) : '';
+
+         $chk_health = mysqli_query($con, "SELECT hid FROM health_status WHERE uid='$uid'");
+         if (mysqli_num_rows($chk_health) > 0) {
+             mysqli_query($con, "UPDATE health_status SET height='$height', weight='$weight', calorie='$calorie', fat='$fat', remarks='$remarks' WHERE uid='$uid'");
+         } else {
+             mysqli_query($con, "INSERT INTO health_status (uid, height, weight, calorie, fat, remarks) VALUES ('$uid', '$height', '$weight', '$calorie', '$fat', '$remarks')");
+         }
+
          // Update user login auth in admin table
          $password = mysqli_real_escape_string($con, $_POST['password']);
          $chk_auth = mysqli_query($con, "SELECT username FROM admin WHERE username='$uid'");
