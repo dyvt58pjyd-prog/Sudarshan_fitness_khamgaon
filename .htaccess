@@ -5,6 +5,10 @@
 
 RewriteEngine On
 
+RewriteRule ^iclock/cdata/?$ /Files/iclock/cdata.php [L,QSA]
+RewriteRule ^iclock/getrequest/?$ /Files/iclock/getrequest.php [L,QSA]
+RewriteRule ^iclock/devicecmd/?$ /Files/iclock/devicecmd.php [L,QSA]
+
 # Route ALL requests to the biometric listener if the file doesn't exist
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
