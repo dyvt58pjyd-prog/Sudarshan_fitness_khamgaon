@@ -1,4 +1,3 @@
 RewriteEngine On
 
-# Catch ZKTeco/ADMS Push HTTP Requests
-RewriteRule ^iclock/(.*)$ api/bio_listener.php [QSA,L]
+
