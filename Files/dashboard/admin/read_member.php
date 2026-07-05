@@ -302,6 +302,16 @@ $gym = get_gym_details($con);
                                 <span class="detail-label">Plan Cost:</span>
                                 <span class="detail-value">₹<?php echo htmlspecialchars($active_plan['amount']); ?></span>
                             </div>
+                            <?php if (isset($active_plan['discount_amount']) && intval($active_plan['discount_amount']) > 0): ?>
+                            <div class="detail-row">
+                                <span class="detail-label">Discount Applied:</span>
+                                <span class="detail-value" style="color: #ef4444;">- ₹<?php echo htmlspecialchars($active_plan['discount_amount']); ?></span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Total Paid:</span>
+                                <span class="detail-value" style="color: #10b981; font-weight: 700;">₹<?php echo htmlspecialchars(isset($active_plan['paid_amount']) ? $active_plan['paid_amount'] : ($active_plan['amount'] - $active_plan['discount_amount'])); ?></span>
+                            </div>
+                            <?php endif; ?>
                             <div class="detail-row">
                                 <span class="detail-label">Expiry Date:</span>
                                 <span class="detail-value" style="color: var(--accent-primary); font-weight: 700;"><?php echo htmlspecialchars($active_plan['expire']); ?></span>
@@ -465,7 +475,9 @@ $gym = get_gym_details($con);
                                 <th style="width: 60px;">Sl.No</th>
                                 <th>Plan Name</th>
                                 <th>Validity</th>
-                                <th>Amount</th>
+                                <th>Plan Price</th>
+                                <th>Discount</th>
+                                <th>Paid Amount</th>
                                 <th>Payment Date</th>
                                 <th>Expire Date</th>
                                 <th>Processed By</th>
@@ -487,8 +499,10 @@ $gym = get_gym_details($con);
                                     echo "<tr>";
                                     echo "<td style='text-align: center;'>" . $sno . "</td>";
                                     echo "<td style='font-weight: 600; color: var(--accent-primary);'>" . htmlspecialchars($row['planName']) . "</td>";
-                                    echo "<td style='text-align: center;'>" . htmlspecialchars($row['validity']) . "</td>";
+                                    echo "<td style='text-align: center;'>" . htmlspecialchars($row['validity']) . " Months</td>";
                                     echo "<td style='text-align: right;'>₹" . htmlspecialchars($row['amount']) . "</td>";
+                                    echo "<td style='text-align: right; color: #ef4444;'>₹" . htmlspecialchars(isset($row['discount_amount']) ? $row['discount_amount'] : '0') . "</td>";
+                                    echo "<td style='text-align: right; color: #10b981; font-weight: bold;'>₹" . htmlspecialchars(isset($row['paid_amount']) && $row['paid_amount'] !== null ? $row['paid_amount'] : (intval($row['amount']) - intval($row['discount_amount'] ?? 0))) . "</td>";
                                     echo "<td style='text-align: center;'>" . htmlspecialchars($row['paid_date']) . "</td>";
                                     echo "<td style='text-align: center;'>" . htmlspecialchars($row['expire']) . "</td>";
                                     echo "<td>" . htmlspecialchars(!empty($row['received_by']) ? $row['received_by'] : 'System') . "</td>";
