@@ -84,27 +84,36 @@ if ($is_new_reg == 1 && $userid === 'PENDING') {
         mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('$next_id', '$password', 'member', '$uname', 'member')");
 
         // Activate Subscription
-        $plan_q = mysqli_query($con, "SELECT planName, validity FROM plan WHERE pid = '$pid'");
+        $plan_q = mysqli_query($con, "SELECT planName, validity, amount FROM plan WHERE pid = '$pid'");
         $validity = 1;
         $planName = 'Premium Plan';
+        $plan_amount = $amount;
         if ($plan_q && mysqli_num_rows($plan_q) > 0) {
             $plan_data = mysqli_fetch_assoc($plan_q);
             $validity = intval($plan_data['validity']);
             $planName = $plan_data['planName'];
+            $plan_amount = intval($plan_data['amount']);
+        }
+        
+        $discount_amt = 0;
+        if ($plan_amount == 12000 && $amount == 10000) {
+            $discount_amt = 2000;
+        } else if ($plan_amount > $amount) {
+            $discount_amt = $plan_amount - $amount;
         }
         
         $d = strtotime("+" . $validity . " Months", strtotime($calc_base_date));
         $expiredate = date("Y-m-d", $d);
         
         mysqli_query($con, "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
-                            VALUES ('$pid', '$next_id', '$calc_base_date', '$expiredate', 'yes', '$payment_mode', '$received_by', 0, $amount)");
+                            VALUES ('$pid', '$next_id', '$calc_base_date', '$expiredate', 'yes', '$payment_mode', '$received_by', $discount_amt, $amount)");
         
         // Update payment request
         mysqli_query($con, "UPDATE payment_requests SET status = 'approved', uid = '$next_id' WHERE id = $req_id");
         
         // Send Welcome Email
         require_once '../../include/smtp_mailer.php';
-        send_member_email($con, $email, $uname, $next_id, $password, $planName, $amount, $expiredate, $entry_code, 0, $amount, $gender);
+        send_member_email($con, $email, $uname, $next_id, $password, $planName, $amount, $expiredate, $entry_code, $discount_amt, $amount, $gender);
         
         // Send WhatsApp Welcome Message
         require_once '../../include/whatsapp_api.php';
@@ -162,42 +171,54 @@ if (strpos($pid, 'PT_') === 0) {
     }
 } else {
     // Regular Membership
-    $plan_q = mysqli_query($con, "SELECT planName, validity FROM plan WHERE pid = '$pid'");
+    $plan_q = mysqli_query($con, "SELECT planName, validity, amount FROM plan WHERE pid = '$pid'");
+    $plan_amount = $amount;
+    $plan_name = 'Premium Plan';
+    $validity = 1;
     if ($plan_q && mysqli_num_rows($plan_q) > 0) {
         $plan_data = mysqli_fetch_assoc($plan_q);
         $plan_name = $plan_data['planName'];
         $validity = intval($plan_data['validity']);
+        $plan_amount = intval($plan_data['amount']);
+    }
+    
+    $discount_amt = 0;
+    if ($plan_amount == 12000 && $amount == 10000) {
+        $discount_amt = 2000;
+    } else if ($plan_amount > $amount) {
+        $discount_amt = $plan_amount - $amount;
+    }
         
-        $is_new_member = false;
-        $chk_prev_enroll = mysqli_query($con, "SELECT et_id FROM enrolls_to WHERE uid='$userid'");
-        if (mysqli_num_rows($chk_prev_enroll) == 0) {
-            $is_new_member = true;
-        }
+    $is_new_member = false;
+    $chk_prev_enroll = mysqli_query($con, "SELECT et_id FROM enrolls_to WHERE uid='$userid'");
+    if (mysqli_num_rows($chk_prev_enroll) == 0) {
+        $is_new_member = true;
+    }
 
-        mysqli_query($con, "UPDATE enrolls_to SET renewal='no' WHERE uid='$userid'");
+    mysqli_query($con, "UPDATE enrolls_to SET renewal='no' WHERE uid='$userid'");
+    
+    $d = strtotime("+" . $validity . " Months", strtotime($calc_base_date));
+    $expiredate = date("Y-m-d", $d);
+    
+    $ins_enroll = "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
+                   VALUES ('$pid', '$userid', '$cdate', '$expiredate', 'yes', '$payment_mode', '$received_by', $discount_amt, $amount)";
+    
+    if (mysqli_query($con, $ins_enroll)) {
+        $new_entry_code = strval(rand(100000, 999999));
+        mysqli_query($con, "UPDATE users SET entry_code = '$new_entry_code' WHERE userid = '$userid'");
+        mysqli_query($con, "UPDATE payment_requests SET status = 'approved' WHERE id = $req_id");
         
-        $d = strtotime("+" . $validity . " Months", strtotime($calc_base_date));
-        $expiredate = date("Y-m-d", $d);
-        
-        $ins_enroll = "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
-                       VALUES ('$pid', '$userid', '$cdate', '$expiredate', 'yes', '$payment_mode', '$received_by', 0, $amount)";
-        
-        if (mysqli_query($con, $ins_enroll)) {
-            $new_entry_code = strval(rand(100000, 999999));
-            mysqli_query($con, "UPDATE users SET entry_code = '$new_entry_code' WHERE userid = '$userid'");
-            mysqli_query($con, "UPDATE payment_requests SET status = 'approved' WHERE id = $req_id");
+        require_once '../../include/smtp_mailer.php';
+        require_once '../../include/whatsapp_api.php';
+        if ($is_new_member) {
+            $g_q = mysqli_query($con, "SELECT gender FROM users WHERE userid='$userid'");
+            $gender = ($g_q && mysqli_num_rows($g_q)>0) ? mysqli_fetch_assoc($g_q)['gender'] : '';
+            send_member_email($con, $mem_email, $mem_name, $userid, '1234', $plan_name, $amount, $expiredate, $new_entry_code, $discount_amt, $amount, $gender);
             
-            require_once '../../include/smtp_mailer.php';
-            require_once '../../include/whatsapp_api.php';
-            if ($is_new_member) {
-                $g_q = mysqli_query($con, "SELECT gender FROM users WHERE userid='$userid'");
-                $gender = ($g_q && mysqli_num_rows($g_q)>0) ? mysqli_fetch_assoc($g_q)['gender'] : '';
-                send_member_email($con, $mem_email, $mem_name, $userid, '1234', $plan_name, $amount, $expiredate, $new_entry_code, 0, $amount, $gender);
-                
-                $wa_msg = "🔥 Welcome to Sudarshan Fitness, $mem_name! 🔥\n\nYour Pre-Booking has been verified and approved!\n\nMembership ID: $userid\nGym Entry PIN: $new_entry_code\nPlan Paid: ₹$amount\n\nShow this message at the front desk. Get ready to transform your life! 💪";
-                sendWhatsAppMessage($mem_mobile, $wa_msg);
-            } else {
-                send_payment_email($con, $mem_email, $mem_name, $userid, $plan_name, $amount, $expiredate, $payment_mode, $received_by, $new_entry_code, 0, $amount);
+            $wa_msg = "🔥 Welcome to Sudarshan Fitness, $mem_name! 🔥\n\nYour Pre-Booking has been verified and approved!\n\nMembership ID: $userid\nGym Entry PIN: $new_entry_code\nPlan Paid: ₹$amount\n\nShow this message at the front desk. Get ready to transform your life! 💪";
+            sendWhatsAppMessage($mem_mobile, $wa_msg);
+        } else {
+            send_payment_email($con, $mem_email, $mem_name, $userid, $plan_name, $amount, $expiredate, $payment_mode, $received_by, $new_entry_code, $discount_amt, $amount);
                 
                 $wa_msg = "✅ Payment Successful! ✅\n\nHi $mem_name,\nYour gym membership ($plan_name) has been renewed successfully. It is now valid until $expiredate.\n\nYour new Entry PIN is: $new_entry_code\n\nKeep up the great work! 💪";
                 sendWhatsAppMessage($mem_mobile, $wa_msg);

@@ -109,6 +109,12 @@ $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,t
           $expiredate=date("Y-m-d",$d); //adding validity retrieve from plan to current date
           $discount = isset($_POST['discount']) ? intval($_POST['discount']) : 0;
           $plan_price = intval($value[4]);
+          
+          // Automatic welcome bonus discount for 12000 plan
+          if ($plan_price == 12000 && $discount == 0) {
+              $discount = 2000;
+          }
+          
           $paid_amount = $plan_price - $discount;
           if ($paid_amount < 0) {
               $paid_amount = 0;
