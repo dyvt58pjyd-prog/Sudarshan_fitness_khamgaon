@@ -23,20 +23,24 @@ date_default_timezone_set("Asia/Calcutta");
 $status = [];
 
 // 1. WhatsApp Daemon Check
-$ch = curl_init('http://127.0.0.1:5001/status');
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_TIMEOUT, 2);
-$response = curl_exec($ch);
-$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-@curl_close($ch);
-
-if ($http_code === 200 && $response) {
-    $wa_data = json_decode($response, true);
-    $status['whatsapp'] = [
-        'status' => $wa_data['status'] ?? 'CONNECTED',
-        'user' => $wa_data['user'] ?? null,
-        'label' => ($wa_data['status'] === 'CONNECTED') ? 'Online' : (($wa_data['status'] === 'QR_READY') ? 'QR Authentication Required' : 'Disconnected')
-    ];
+$statusFile = __DIR__ . '/whatsapp_status.json';
+if (file_exists($statusFile)) {
+    $wa_data = json_decode(file_get_contents($statusFile), true);
+    
+    // Check if the status is stale (older than 30 seconds)
+    if (isset($wa_data['last_updated']) && (time() - $wa_data['last_updated'] > 30)) {
+        $status['whatsapp'] = [
+            'status' => 'OFFLINE',
+            'user' => null,
+            'label' => 'Offline (Stale)'
+        ];
+    } else {
+        $status['whatsapp'] = [
+            'status' => $wa_data['status'] ?? 'CONNECTED',
+            'user' => $wa_data['user'] ?? null,
+            'label' => ($wa_data['status'] === 'CONNECTED') ? 'Online' : (($wa_data['status'] === 'QR_READY') ? 'QR Authentication Required' : 'Disconnected')
+        ];
+    }
 } else {
     $status['whatsapp'] = [
         'status' => 'OFFLINE',

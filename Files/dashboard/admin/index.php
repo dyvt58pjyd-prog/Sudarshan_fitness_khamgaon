@@ -883,12 +883,18 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 							$revenue = 0;
 							if ($result && mysqli_num_rows($result) > 0) {
 							    while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-							    	$query1="select * from plan where pid='".$row['pid']."'";
-							    	$result1=mysqli_query($con,$query1);
-							    	if($result1){
-							    		$value=mysqli_fetch_row($result1);
-							        $revenue = $value[4] + $revenue;
-							    	}
+							        if (isset($row['paid_amount']) && $row['paid_amount'] !== null && $row['paid_amount'] !== '') {
+							            $revenue += intval($row['paid_amount']);
+							        } else {
+							            // Fallback for old records without paid_amount
+							            $query1="select * from plan where pid='".$row['pid']."'";
+							            $result1=mysqli_query($con,$query1);
+							            if($result1 && mysqli_num_rows($result1) > 0){
+							                $value=mysqli_fetch_row($result1);
+							                $discount = isset($row['discount_amount']) ? intval($row['discount_amount']) : 0;
+							                $revenue += (intval($value[4]) - $discount);
+							            }
+							        }
 							    }
 							}
 							echo "₹".$revenue;

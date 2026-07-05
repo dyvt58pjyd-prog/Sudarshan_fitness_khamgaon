@@ -8,6 +8,10 @@ require_once __DIR__ . '/../include/db_conn.php';
 date_default_timezone_set("Asia/Calcutta");
 $today = date('Y-m-d');
 
+// Record heartbeat so the dashboard knows the local sync agent is online
+$heartbeat_file = __DIR__ . '/../include/last_sync_heartbeat.txt';
+@file_put_contents($heartbeat_file, strval(time()));
+
 $sql = "SELECT u.userid, u.username, u.biometric_id, u.biometric_enabled, u.photo, u.pending_enrollment,
                (SELECT MAX(e.expire) FROM enrolls_to e WHERE e.uid = u.userid) AS plan_expire
         FROM users u 

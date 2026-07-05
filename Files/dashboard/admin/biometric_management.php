@@ -364,7 +364,7 @@ $last_sync_str = $last_heartbeat > 0 ? date("d M Y, h:i A", $last_heartbeat) : '
                     </div>
                     <div>
                         <h4 style="margin: 0; color: var(--text-main); font-weight: 700;">Live Device Status</h4>
-                        <p style="margin: 5px 0 0 0; color: var(--text-muted); font-size: 13px;">Python ADMS Sync Agent on LAN</p>
+                        <p style="margin: 5px 0 0 0; color: var(--text-muted); font-size: 13px;">Native Cloud ADMS Connection (Direct)</p>
                     </div>
                 </div>
                 <div style="text-align: right;">

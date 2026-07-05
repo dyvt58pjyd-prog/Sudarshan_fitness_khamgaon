@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteRule ^cdata/?$ cdata.php [L,QSA]
+RewriteRule ^getrequest/?$ getrequest.php [L,QSA]
+RewriteRule ^devicecmd/?$ devicecmd.php [L,QSA]
