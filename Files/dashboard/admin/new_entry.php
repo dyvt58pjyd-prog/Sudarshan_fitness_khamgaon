@@ -19,6 +19,16 @@ if ($res_max && mysqli_num_rows($res_max) > 0) {
 $gym = get_gym_details($con);
 $upi_id = isset($gym['upi_id']) ? $gym['upi_id'] : '';
 $gym_name = isset($gym['gym_name']) ? $gym['gym_name'] : 'Sudarshan Fitness';
+
+// Check if Welcome Bonus limit is reached
+$wb_limit_reached = false;
+$cnt_q = mysqli_query($con, "SELECT COUNT(*) as cnt FROM enrolls_to e JOIN plan p ON e.pid = p.pid WHERE e.discount_amount > 0 AND (p.amount=12000 OR p.amount=6000)");
+if ($cnt_q) {
+    $cnt_row = mysqli_fetch_assoc($cnt_q);
+    if (intval($cnt_row['cnt']) >= 100) {
+        $wb_limit_reached = true;
+    }
+}
 ?>
 
 
@@ -528,7 +538,37 @@ $gym_name = isset($gym['gym_name']) ? $gym['gym_name'] : 'Sudarshan Fitness';
         document.getElementById('discount_input').addEventListener('input', generateStaffQR);
         document.getElementById('trainer_id_select').addEventListener('change', generateStaffQR);
         document.getElementById('pt_duration').addEventListener('change', generateStaffQR);
-        document.getElementById('plan_select').addEventListener('change', generateStaffQR);
+        
+        const wbLimitReached = <?php echo $wb_limit_reached ? 'true' : 'false'; ?>;
+        
+        document.getElementById('plan_select').addEventListener('change', function() {
+            var planSelect = document.getElementById('plan_select');
+            var selectedOpt = planSelect.options[planSelect.selectedIndex];
+            var discountInput = document.getElementById('discount_input');
+            
+            if (selectedOpt && selectedOpt.value !== '') {
+                var planPrice = parseFloat(selectedOpt.getAttribute('data-price')) || 0;
+                
+                // Auto-apply welcome bonus if applicable
+                if (!wbLimitReached) {
+                    if (planPrice === 12000) {
+                        discountInput.value = 2000;
+                    } else if (planPrice === 6000) {
+                        discountInput.value = 1000;
+                    } else {
+                        // Reset discount for non-eligible plans if they previously selected eligible
+                        if (discountInput.value == '2000' || discountInput.value == '1000') {
+                            discountInput.value = 0;
+                        }
+                    }
+                }
+            } else {
+                discountInput.value = 0;
+            }
+            
+            validateDiscount();
+            generateStaffQR();
+        });
 
         function generateStaffQR() {
             var paymentMode = document.getElementById('payment_mode_select').value;
