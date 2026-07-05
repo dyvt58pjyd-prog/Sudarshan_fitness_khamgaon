@@ -292,7 +292,17 @@ if (!function_exists('generate_receipt_pdf_file')) {
         // Total block
         $curr_y += 3;
         $pdf->SetXY(120, $curr_y);
-        if ($discount > 0) {
+        $plan_amount = intval($row['amount']);
+        $is_welcome_bonus = ($discount > 0 && ($plan_amount == 12000 || $plan_amount == 6000));
+        
+        if ($is_welcome_bonus) {
+            $pdf->SetFont('Helvetica', 'B', 8.5);
+            $pdf->SetTextColor(255, 95, 0);
+            $pdf->Cell(45, 4.5, 'Welcome Bonus Applied:', 0, 0, 'R');
+            $pdf->SetTextColor(239, 68, 68);
+            $pdf->Cell(30, 4.5, '- Rs. ' . $discount . '  ', 0, 1, 'R');
+            $pdf->SetX(120);
+        } elseif ($discount > 0) {
             $pdf->SetFont('Helvetica', 'B', 8.5);
             $pdf->SetTextColor(100, 116, 139);
             $pdf->Cell(45, 4.5, 'Discount:', 0, 0, 'R');

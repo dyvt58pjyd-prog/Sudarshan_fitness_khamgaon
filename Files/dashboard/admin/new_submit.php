@@ -110,9 +110,13 @@ $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,t
           $discount = isset($_POST['discount']) ? intval($_POST['discount']) : 0;
           $plan_price = intval($value[4]);
           
-          // Automatic welcome bonus discount for 12000 plan
-          if ($plan_price == 12000 && $discount == 0) {
-              $discount = 2000;
+          // Automatic welcome bonus discount for 12000 and 6000 plan, limited to 100 members
+          if (($plan_price == 12000 || $plan_price == 6000) && $discount == 0) {
+              $cnt_q = mysqli_query($con, "SELECT COUNT(*) as cnt FROM enrolls_to e JOIN plan p ON e.pid = p.pid WHERE e.discount_amount > 0 AND (p.amount=12000 OR p.amount=6000)");
+              $cnt_row = mysqli_fetch_assoc($cnt_q);
+              if (intval($cnt_row['cnt']) < 100) {
+                  $discount = ($plan_price == 12000) ? 2000 : 1000;
+              }
           }
           
           $paid_amount = $plan_price - $discount;
