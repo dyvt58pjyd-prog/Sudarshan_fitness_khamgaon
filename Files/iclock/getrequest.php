@@ -31,6 +31,8 @@ if ($res && mysqli_num_rows($res) > 0) {
             // Note: We use target_uid as PIN in ZKTeco to match biometric_id.
         } else if ($type === 'CLEAR_FINGERPRINT') {
             $cmd_str = "DATA DELETE FINGERTMP PIN={$uid}";
+        } else if ($type === 'BLOCK_MEMBER') {
+            $cmd_str = "DATA DELETE USERINFO PIN={$uid}";
         }
         
         if (!empty($cmd_str)) {

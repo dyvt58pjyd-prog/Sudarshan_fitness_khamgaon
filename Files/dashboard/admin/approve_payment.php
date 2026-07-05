@@ -111,6 +111,9 @@ if ($is_new_reg == 1 && $userid === 'PENDING') {
         // Update payment request
         mysqli_query($con, "UPDATE payment_requests SET status = 'approved', uid = '$next_id' WHERE id = $req_id");
         
+        $cmd_payload = json_encode(['reason' => 'new_online_registration', 'pin' => $entry_code, 'name' => $uname]);
+        mysqli_query($con, "INSERT INTO biometric_commands (command_type, target_uid, payload, status) VALUES ('UPDATE_USERINFO', '$next_id', '$cmd_payload', 'pending')");
+        
         // Send Welcome Email
         require_once '../../include/smtp_mailer.php';
         send_member_email($con, $email, $uname, $next_id, $password, $planName, $amount, $expiredate, $entry_code, $discount_amt, $amount, $gender);
@@ -207,6 +210,15 @@ if (strpos($pid, 'PT_') === 0) {
         $new_entry_code = strval(rand(100000, 999999));
         mysqli_query($con, "UPDATE users SET entry_code = '$new_entry_code' WHERE userid = '$userid'");
         mysqli_query($con, "UPDATE payment_requests SET status = 'approved' WHERE id = $req_id");
+        
+        $bio_q = mysqli_query($con, "SELECT biometric_id FROM users WHERE userid='$userid'");
+        if ($bio_q && mysqli_num_rows($bio_q) > 0) {
+            $bio_id = mysqli_fetch_assoc($bio_q)['biometric_id'];
+            if (!empty($bio_id)) {
+                $cmd_payload = json_encode(['reason' => 'renewed_plan', 'pin' => $new_entry_code, 'name' => $mem_name]);
+                mysqli_query($con, "INSERT INTO biometric_commands (command_type, target_uid, payload, status) VALUES ('UPDATE_USERINFO', '$bio_id', '$cmd_payload', 'pending')");
+            }
+        }
         
         require_once '../../include/smtp_mailer.php';
         require_once '../../include/whatsapp_api.php';

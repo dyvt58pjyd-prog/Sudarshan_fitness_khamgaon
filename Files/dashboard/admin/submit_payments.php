@@ -34,14 +34,21 @@ $query="update enrolls_to set renewal='no' where uid='$memID'";
                 $new_entry_code = strval(rand(100000, 999999));
                 mysqli_query($con, "UPDATE users SET entry_code = '$new_entry_code' WHERE userid = '$memID'");
 
-                 // Fetch user email and username for payment notification (which automatically triggers WhatsApp receipt with PDF)
-                 $user_q = mysqli_query($con, "SELECT username, email FROM users WHERE userid='$memID'");
+                 // Fetch user email, username, and bio_id for payment notification (which automatically triggers WhatsApp receipt with PDF)
+                 $user_q = mysqli_query($con, "SELECT username, email, biometric_id FROM users WHERE userid='$memID'");
                  if ($user_q && mysqli_num_rows($user_q) > 0) {
                      $user_row = mysqli_fetch_assoc($user_q);
                      
                      $uname = $user_row['username'];
+                     $bio_id = $user_row['biometric_id'];
+                     
+                     if (!empty($bio_id)) {
+                         $cmd_payload = json_encode(['reason' => 'renewed_plan', 'pin' => $new_entry_code, 'name' => $uname]);
+                         mysqli_query($con, "INSERT INTO biometric_commands (command_type, target_uid, payload, status) VALUES ('UPDATE_USERINFO', '$bio_id', '$cmd_payload', 'pending')");
+                     }
                      
                      send_payment_email($con, $user_row['email'], $uname, $memID, $value[1], $value[4], $expiredate, $payment_mode, $received_by, $new_entry_code, $discount, $paid_amount);
+                     
                  }
 
                echo "<head><script>alert('Payment Successfully updated & confirmation email sent!');</script></head></html>";
