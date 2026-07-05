@@ -79,11 +79,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
                 mysqli_query($con, "UPDATE users SET entry_code = '$entry_code' WHERE userid = '$uid'");
             }
             
-            // Queue UPDATE_USERINFO to push PIN and ID
-            $cmd_payload = json_encode(['reason' => 'enroll_now', 'pin' => $entry_code, 'name' => $username]);
-            mysqli_query($con, "INSERT INTO biometric_commands (command_type, target_uid, payload, status) VALUES ('UPDATE_USERINFO', '$bio_id', '$cmd_payload', 'pending')");
+            // Revert back to local python agent enrollment trigger
+            mysqli_query($con, "UPDATE users SET pending_enrollment = 1 WHERE userid = '$uid'");
             
-            echo json_encode(['success' => true, 'message' => 'Command queued! The machine will receive the member details and PIN on its next heartbeat. They can now scan their fingerprint against ID: ' . $bio_id]);
+            echo json_encode(['success' => true, 'message' => 'Enrollment triggered! Please look at the physical biometric scanner, it should now ask for their fingerprint.']);
         } else {
             echo json_encode(['success' => false, 'message' => 'User not found.']);
         }
@@ -364,7 +363,7 @@ $last_sync_str = $last_heartbeat > 0 ? date("d M Y, h:i A", $last_heartbeat) : '
                     </div>
                     <div>
                         <h4 style="margin: 0; color: var(--text-main); font-weight: 700;">Live Device Status</h4>
-                        <p style="margin: 5px 0 0 0; color: var(--text-muted); font-size: 13px;">Native Cloud ADMS Connection (Direct)</p>
+                        <p style="margin: 5px 0 0 0; color: var(--text-muted); font-size: 13px;">Python ADMS Sync Agent on LAN</p>
                     </div>
                 </div>
                 <div style="text-align: right;">
