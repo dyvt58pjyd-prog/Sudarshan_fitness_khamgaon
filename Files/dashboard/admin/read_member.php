@@ -219,7 +219,7 @@ $gym = get_gym_details($con);
                 <div class="profile-header">
                     <div class="profile-title">
                         <?php if (!empty($member['photo'])): ?>
-                            <img src="<?php echo htmlspecialchars($member['photo']); ?>" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-primary); box-shadow: 0 0 10px rgba(255,107,0,0.3);">
+                            <img src="<?php echo str_replace(' ', '%20', htmlspecialchars($member['photo'])); ?>" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-primary); box-shadow: 0 0 10px rgba(255,107,0,0.3);">
                         <?php else: ?>
                             <div class="profile-icon">
                                 <i class="entypo-user"></i>

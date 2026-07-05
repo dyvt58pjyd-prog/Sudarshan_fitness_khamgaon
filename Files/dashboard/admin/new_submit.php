@@ -78,7 +78,7 @@ if (!empty($_POST['member_photo_base64'])) {
     $filename = 'profile_' . $memID . '_' . time() . '.' . $ext;
     $full_path = $upload_dir . $filename;
     if (@move_uploaded_file($file_tmp, $full_path)) {
-        $photo_path = '../../Sudarshan Data Folder/' . $filename;
+        $photo_path = '../../uploads/' . $filename;
     }
 }
 
