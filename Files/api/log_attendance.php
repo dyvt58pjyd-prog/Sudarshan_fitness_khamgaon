@@ -157,39 +157,21 @@ if (!$is_allowed_by_batch) {
 }
 
 // 4. Exclusive Women-Only Batch Biometric Access Restriction Check (Batch 2)
-// If the current time is between 4 PM and 5 PM (Batch 2), and a female member is inside the gym:
+// If the current time is between 4 PM and 5 PM (Batch 2):
 if ($current_time_str >= $batch2_start && $current_time_str <= $batch2_end) {
     $member_gender = strtolower(trim($user['gender']));
     
-    // If the member checking in is NOT a woman (e.g. male)
+    // STRICT RULE: If the member attempting to check-in is NOT a woman (e.g. male), block them immediately
     if ($member_gender !== 'female' && $member_gender !== 'f') {
-        
-        // Check if there are any women currently checked in (present in the gym)
-        $women_inside_query = "SELECT COUNT(*) as count FROM attendance a 
-                               INNER JOIN users u ON a.uid = u.userid 
-                               WHERE a.date = '$log_date_esc' 
-                                 AND a.exit_time IS NULL 
-                                 AND (LOWER(u.gender) = 'female' OR LOWER(u.gender) = 'f')";
-        
-        $res_women_inside = mysqli_query($con, $women_inside_query);
-        $women_count = 0;
-        if ($res_women_inside) {
-            $women_row = mysqli_fetch_assoc($res_women_inside);
-            $women_count = intval($women_row['count']);
-        }
-        
-        if ($women_count > 0) {
-            // Deny access because women are active inside the gym during the exclusive women-only batch
-            mysqli_query($con, "INSERT INTO biometric_gate_logs (uid, timestamp, status, type, error_reason) VALUES ('$userid_esc', '$log_date_esc $log_time_esc', 'failed', 'access-denied', 'Exclusive women session active')");
-            echo json_encode([
-                'success' => false,
-                'message' => "Access Denied: Exclusive Women's Session (04:00 PM - 05:00 PM) is currently active inside the gym.",
-                'member_id' => $userid,
-                'name' => $username,
-                'action' => 'access-denied'
-            ]);
-            exit();
-        }
+        mysqli_query($con, "INSERT INTO biometric_gate_logs (uid, timestamp, status, type, error_reason) VALUES ('$userid_esc', '$log_date_esc $log_time_esc', 'failed', 'access-denied', 'Strict Women-Only Hour block')");
+        echo json_encode([
+            'success' => false,
+            'message' => "Access Denied: 04:00 PM - 05:00 PM is a strict Women-Only Batch. Males are not permitted during this hour.",
+            'member_id' => $userid,
+            'name' => $username,
+            'action' => 'access-denied'
+        ]);
+        exit();
     }
 }
 
