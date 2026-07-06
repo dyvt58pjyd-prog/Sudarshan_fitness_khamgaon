@@ -116,6 +116,14 @@ if (!$con) {
         mysqli_query($con, "ALTER TABLE gym_details ADD COLUMN upi_id VARCHAR(100) DEFAULT NULL");
     }
 
+    // Self-healing database check: ensure women-only batch details exist in gym_details
+    $chk_wbatch = mysqli_query($con, "SHOW COLUMNS FROM gym_details LIKE 'women_batch_enabled'");
+    if ($chk_wbatch && mysqli_num_rows($chk_wbatch) === 0) {
+        mysqli_query($con, "ALTER TABLE gym_details ADD COLUMN women_batch_enabled TINYINT(1) DEFAULT 0");
+        mysqli_query($con, "ALTER TABLE gym_details ADD COLUMN women_batch_start TIME DEFAULT '11:00:00'");
+        mysqli_query($con, "ALTER TABLE gym_details ADD COLUMN women_batch_end TIME DEFAULT '13:00:00'");
+    }
+
     // Self-healing database check: ensure discount_lock column exists in plan
     $chk_lock = mysqli_query($con, "SHOW COLUMNS FROM plan LIKE 'discount_lock'");
     if ($chk_lock && mysqli_num_rows($chk_lock) === 0) {

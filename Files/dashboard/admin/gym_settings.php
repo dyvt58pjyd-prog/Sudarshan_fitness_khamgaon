@@ -71,6 +71,9 @@ if (isset($_POST['submit'])) {
     }
 
     $upi_id = mysqli_real_escape_string($con, $_POST['upi_id']);
+    $women_batch_enabled = isset($_POST['women_batch_enabled']) ? 1 : 0;
+    $women_batch_start = mysqli_real_escape_string($con, $_POST['women_batch_start']);
+    $women_batch_end = mysqli_real_escape_string($con, $_POST['women_batch_end']);
 
     $update_query = "UPDATE gym_details SET 
         gym_name = '$gym_name', 
@@ -79,7 +82,10 @@ if (isset($_POST['submit'])) {
         gym_email = '$gym_email', 
         gym_logo = '$logo_path',
         payment_qr = '$qr_path',
-        upi_id = '$upi_id' 
+        upi_id = '$upi_id',
+        women_batch_enabled = '$women_batch_enabled',
+        women_batch_start = '$women_batch_start',
+        women_batch_end = '$women_batch_end'
         WHERE id = 1";
 
     if (mysqli_query($con, $update_query)) {
@@ -218,6 +224,31 @@ if (isset($_POST['submit'])) {
 
                     <label>Gym Address</label>
                     <textarea class="form-control-premium" name="gym_address" rows="3" required><?php echo htmlspecialchars($gym['gym_address']); ?></textarea>
+
+                    <div style="background: rgba(255, 107, 0, 0.05); padding: 20px; border-radius: 12px; border: 1px solid rgba(255, 107, 0, 0.2); margin-top: 15px; margin-bottom: 25px;">
+                        <h4 style="margin-top: 0; color: var(--accent-primary); font-weight: 700;">
+                            <i class="entypo-attention"></i> Women-Only Batch Settings (Biometric Lock)
+                        </h4>
+                        <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4; margin-bottom: 15px;">
+                            If enabled, when a woman check-in is currently active in the gym during this scheduled time window, all other member check-ins (e.g. men) will be blocked automatically at the door.
+                        </p>
+                        
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                            <input type="checkbox" id="women_batch_enabled" name="women_batch_enabled" value="1" <?php echo (isset($gym['women_batch_enabled']) && $gym['women_batch_enabled'] == 1) ? 'checked' : ''; ?> style="width: 18px; height: 18px; cursor: pointer;">
+                            <label for="women_batch_enabled" style="margin-bottom: 0; cursor: pointer; color: #fff; font-weight: 600;">Enable Women-Only Exclusive Batch Security</label>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Batch Start Time</label>
+                                <input type="time" name="women_batch_start" class="form-control-premium" value="<?php echo isset($gym['women_batch_start']) ? htmlspecialchars($gym['women_batch_start']) : '11:00'; ?>">
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Batch End Time</label>
+                                <input type="time" name="women_batch_end" class="form-control-premium" value="<?php echo isset($gym['women_batch_end']) ? htmlspecialchars($gym['women_batch_end']) : '13:00'; ?>">
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col-md-6">
