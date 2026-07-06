@@ -795,7 +795,7 @@ if (isset($_POST['submit_registration'])) {
             }
             
             // Countdown Timer Logic
-            const countDownDate = new Date("Jul 7, 2026 00:00:00").getTime();
+            const countDownDate = new Date("Jul 17, 2026 00:00:00").getTime();
             const timerEl = document.getElementById("countdown-timer");
             if (timerEl) {
                 const x = setInterval(function() {

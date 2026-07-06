@@ -29,7 +29,7 @@ $payload = json_decode($req['registration_payload'], true);
 
 date_default_timezone_set("Asia/Calcutta");
 $cdate = date('Y-m-d');
-$launch_date = '2026-07-08';
+$launch_date = '2026-07-18';
 $calc_base_date = ($cdate < $launch_date) ? $launch_date : $cdate;
 $payment_mode = 'UPI';
 $received_by = 'Admin Verification (' . (isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Admin') . ')';
