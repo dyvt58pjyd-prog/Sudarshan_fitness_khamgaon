@@ -272,6 +272,12 @@ if (!$con) {
         mysqli_query($con, "ALTER TABLE users ADD COLUMN fingerprint_enrolled TINYINT DEFAULT 0");
     }
 
+    // Self-healing database check: ensure biometric_batch column exists in users to specify their session batch choice
+    $chk_bio_bt = mysqli_query($con, "SHOW COLUMNS FROM users LIKE 'biometric_batch'");
+    if ($chk_bio_bt && mysqli_num_rows($chk_bio_bt) === 0) {
+        mysqli_query($con, "ALTER TABLE users ADD COLUMN biometric_batch VARCHAR(50) DEFAULT '1'");
+    }
+
 
     // Self-healing database check: ensure discount_amount and paid_amount columns exist in enrolls_to
     $chk_disc = mysqli_query($con, "SHOW COLUMNS FROM enrolls_to LIKE 'discount_amount'");

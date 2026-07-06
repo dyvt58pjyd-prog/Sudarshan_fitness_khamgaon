@@ -39,7 +39,7 @@ if ($biometric_id <= 0) {
 
 // Find member mapping
 $biometric_id_esc = mysqli_real_escape_string($con, $biometric_id);
-$q_user = mysqli_query($con, "SELECT userid, username, mobile, biometric_enabled FROM users WHERE biometric_id = '$biometric_id_esc' OR (biometric_id IS NULL AND userid = '$biometric_id_esc') LIMIT 1");
+$q_user = mysqli_query($con, "SELECT userid, username, gender, mobile, biometric_enabled, biometric_batch FROM users WHERE biometric_id = '$biometric_id_esc' OR (biometric_id IS NULL AND userid = '$biometric_id_esc') LIMIT 1");
 
 if (!$q_user || mysqli_num_rows($q_user) === 0) {
     http_response_code(404);
@@ -99,47 +99,96 @@ if ($max_expire && strtotime($max_expire) < strtotime($log_date)) {
     exit();
 }
 
-// 3. Women-Only Batch Biometric Access Restriction Check
+// 3. Three-Session Shift Biometric Access Restriction Check
 $gym_info = get_gym_details($con);
-if (isset($gym_info['women_batch_enabled']) && intval($gym_info['women_batch_enabled']) === 1) {
-    $current_time_str = $log_time; // HH:ii:ss
-    $batch_start = $gym_info['women_batch_start'];
-    $batch_end = $gym_info['women_batch_end'];
+$current_time_str = $log_time; // HH:ii:ss
+
+// Retrieve member's selected batch choice (Default to Batch 1 if not set)
+$biometric_batch = isset($user['biometric_batch']) ? $user['biometric_batch'] : '1';
+
+// Batch Timing Definitions:
+// Batch 1: 6:00 AM to 11:00 AM (General Session 1)
+// Batch 2: 4:00 PM to 5:00 PM (Women Only Session 2)
+// Batch 3: 5:00 PM to 10:00 PM (General Session 3)
+$batch1_start = '06:00:00';
+$batch1_end   = '11:00:00';
+
+$batch2_start = '16:00:00';
+$batch2_end   = '17:00:00';
+
+$batch3_start = '17:00:00';
+$batch3_end   = '22:00:00';
+
+$is_allowed_by_batch = false;
+$batch_name = "Batch 1";
+$batch_hours = "06:00 AM - 11:00 AM";
+
+if ($biometric_batch === '1') {
+    $batch_name = "Batch 1 (General)";
+    $batch_hours = "06:00 AM - 11:00 AM";
+    if ($current_time_str >= $batch1_start && $current_time_str <= $batch1_end) {
+        $is_allowed_by_batch = true;
+    }
+} elseif ($biometric_batch === '2') {
+    $batch_name = "Batch 2 (Women Only)";
+    $batch_hours = "04:00 PM - 05:00 PM";
+    if ($current_time_str >= $batch2_start && $current_time_str <= $batch2_end) {
+        $is_allowed_by_batch = true;
+    }
+} elseif ($biometric_batch === '3') {
+    $batch_name = "Batch 3 (Evening General)";
+    $batch_hours = "05:00 PM - 10:00 PM";
+    if ($current_time_str >= $batch3_start && $current_time_str <= $batch3_end) {
+        $is_allowed_by_batch = true;
+    }
+}
+
+// Block check-in if the member is attempting to scan outside their assigned batch shift
+if (!$is_allowed_by_batch) {
+    mysqli_query($con, "INSERT INTO biometric_gate_logs (uid, timestamp, status, type, error_reason) VALUES ('$userid_esc', '$log_date_esc $log_time_esc', 'failed', 'access-denied', 'Outside registered batch hours')");
+    echo json_encode([
+        'success' => false,
+        'message' => "Access Denied: You are registered for $batch_name ($batch_hours). Please check in during your batch hours.",
+        'member_id' => $userid,
+        'name' => $username,
+        'action' => 'access-denied'
+    ]);
+    exit();
+}
+
+// 4. Exclusive Women-Only Batch Biometric Access Restriction Check (Batch 2)
+// If the current time is between 4 PM and 5 PM (Batch 2), and a female member is inside the gym:
+if ($current_time_str >= $batch2_start && $current_time_str <= $batch2_end) {
+    $member_gender = strtolower(trim($user['gender']));
     
-    // Check if the punch occurs during the restricted women-only batch hour
-    if ($current_time_str >= $batch_start && $current_time_str <= $batch_end) {
-        $member_gender = strtolower(trim($user['gender']));
+    // If the member checking in is NOT a woman (e.g. male)
+    if ($member_gender !== 'female' && $member_gender !== 'f') {
         
-        // If the current member attempting to check-in is NOT a woman (e.g. male)
-        if ($member_gender !== 'female' && $member_gender !== 'f') {
-            
-            // Check if there are any women currently checked in (present in the gym)
-            // A woman is "inside the gym" if she checked in today and has NOT checked out yet (exit_time IS NULL)
-            $women_inside_query = "SELECT COUNT(*) as count FROM attendance a 
-                                   INNER JOIN users u ON a.uid = u.userid 
-                                   WHERE a.date = '$log_date_esc' 
-                                     AND a.exit_time IS NULL 
-                                     AND (LOWER(u.gender) = 'female' OR LOWER(u.gender) = 'f')";
-            
-            $res_women_inside = mysqli_query($con, $women_inside_query);
-            $women_count = 0;
-            if ($res_women_inside) {
-                $women_row = mysqli_fetch_assoc($res_women_inside);
-                $women_count = intval($women_row['count']);
-            }
-            
-            if ($women_count > 0) {
-                // Deny access because women are active inside the gym during women-only batch hours
-                mysqli_query($con, "INSERT INTO biometric_gate_logs (uid, timestamp, status, type, error_reason) VALUES ('$userid_esc', '$log_date_esc $log_time_esc', 'failed', 'access-denied', 'Women-Only Batch active')");
-                echo json_encode([
-                    'success' => false,
-                    'message' => "Access Denied: Women-Only Batch is currently active inside the gym.",
-                    'member_id' => $userid,
-                    'name' => $username,
-                    'action' => 'access-denied'
-                ]);
-                exit();
-            }
+        // Check if there are any women currently checked in (present in the gym)
+        $women_inside_query = "SELECT COUNT(*) as count FROM attendance a 
+                               INNER JOIN users u ON a.uid = u.userid 
+                               WHERE a.date = '$log_date_esc' 
+                                 AND a.exit_time IS NULL 
+                                 AND (LOWER(u.gender) = 'female' OR LOWER(u.gender) = 'f')";
+        
+        $res_women_inside = mysqli_query($con, $women_inside_query);
+        $women_count = 0;
+        if ($res_women_inside) {
+            $women_row = mysqli_fetch_assoc($res_women_inside);
+            $women_count = intval($women_row['count']);
+        }
+        
+        if ($women_count > 0) {
+            // Deny access because women are active inside the gym during the exclusive women-only batch
+            mysqli_query($con, "INSERT INTO biometric_gate_logs (uid, timestamp, status, type, error_reason) VALUES ('$userid_esc', '$log_date_esc $log_time_esc', 'failed', 'access-denied', 'Exclusive women session active')");
+            echo json_encode([
+                'success' => false,
+                'message' => "Access Denied: Exclusive Women's Session (04:00 PM - 05:00 PM) is currently active inside the gym.",
+                'member_id' => $userid,
+                'name' => $username,
+                'action' => 'access-denied'
+            ]);
+            exit();
         }
     }
 }

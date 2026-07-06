@@ -228,9 +228,17 @@ if ($cnt_q) {
                 <td height="35"><input type="date" name="jdate" id="boxx" value="<?php echo (date('Y-m-d') < '2026-07-08') ? '2026-07-08' : date('Y-m-d'); ?>" required size="30"></td>
              </tr>
 
-             <tr>
-               <td height="35">ASSIGN ROUTINE:</td>
-               <td height="35"><select name="routine" id="boxx">
+              <tr>
+                <td height="35">BIOMETRIC SHIFT / BATCH:</td>
+                <td height="35"><select name="biometric_batch" id="boxx" required>
+                    <option value="1" selected>Batch 1 (General: 6 AM - 11 AM)</option>
+                    <option value="2">Batch 2 (Women Only: 4 PM - 5 PM)</option>
+                    <option value="3">Batch 3 (Evening General: 5 PM - 10 PM)</option>
+                </select></td>
+              </tr>
+              <tr>
+                <td height="35">ASSIGN ROUTINE:</td>
+                <td height="35"><select name="routine" id="boxx">
                    <option value="">--No Routine Assigned--</option>
                    <?php
                        $q_routine = "SELECT * FROM timetable";

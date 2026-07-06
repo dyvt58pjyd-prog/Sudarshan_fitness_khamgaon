@@ -15,7 +15,8 @@ page_protect();
    $city=$_POST['city'];
    $zipcode=$_POST['zipcode'];
    $routine = !empty($_POST['routine']) ? (int)$_POST['routine'] : "NULL";
-   $query1="update users set username='".$uname."',gender='".$gender."',mobile='".$mobile."',email='".$email."',dob='".$dob."',joining_date='".$jdate."',tid=".$routine." where userid='".$uid."'";
+   $biometric_batch = mysqli_real_escape_string($con, $_POST['biometric_batch']);
+   $query1="update users set username='".$uname."',gender='".$gender."',mobile='".$mobile."',email='".$email."',dob='".$dob."',joining_date='".$jdate."',tid=".$routine.",biometric_batch='".$biometric_batch."' where userid='".$uid."'";
 
     if(mysqli_query($con,$query1)){
       // If a plan is selected, check and assign/update their active enrollment

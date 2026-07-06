@@ -129,6 +129,7 @@ if ($memid) {
 				    $fat="";
 				    $remarks="";
 				    $user_tid=null;
+				    $biometric_batch="1";
 
 				    if ($result && mysqli_num_rows($result) > 0) {
 				        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
@@ -148,6 +149,7 @@ if ($memid) {
 				            $fat     = isset($row['fat']) ? $row['fat'] : '';
 				            $remarks = isset($row['remarks']) ? $row['remarks'] : '';
 				            $user_tid = isset($row['tid']) ? $row['tid'] : null;
+				            $biometric_batch = isset($row['biometric_batch']) ? $row['biometric_batch'] : '1';
 				        }
 				    }
 				    else{
@@ -406,6 +408,14 @@ if ($memid) {
                                         <div class="form-group">
                                             <label class="form-label">Plan Discount Amount (₹):</label>
                                             <input class="form-control-custom" type="number" name="discount" value="0" min="0" placeholder="0">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Biometric Shift / Batch Option:</label>
+                                            <select class="form-control-custom" name="biometric_batch" required>
+                                                <option value="1" <?php if($biometric_batch == '1'){echo 'selected';} ?>>Batch 1 (General: 6 AM - 11 AM)</option>
+                                                <option value="2" <?php if($biometric_batch == '2'){echo 'selected';} ?>>Batch 2 (Women Only: 4 PM - 5 PM)</option>
+                                                <option value="3" <?php if($biometric_batch == '3'){echo 'selected';} ?>>Batch 3 (Evening General: 5 PM - 10 PM)</option>
+                                            </select>
                                         </div>
                                     </div>
 
