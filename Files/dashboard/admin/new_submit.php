@@ -111,17 +111,21 @@ $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,t
           $discount = isset($_POST['discount']) ? intval($_POST['discount']) : 0;
           $plan_price = intval($value[4]);
           
-          // Automatic welcome bonus discount for 12000, 6000 and 3900 (3 Months) plans, limited to 100 members
-          if (($plan_price == 12000 || $plan_price == 6000 || $plan_price == 3900) && $discount == 0) {
-              $cnt_q = mysqli_query($con, "SELECT COUNT(*) as cnt FROM enrolls_to e JOIN plan p ON e.pid = p.pid WHERE e.discount_amount > 0 AND (p.amount=12000 OR p.amount=6000 OR p.amount=3900)");
+          // Automatic welcome bonus discount for 12000, 6000 and 3900/4000/4500 (3 Months) plans, limited to 100 members
+          if (($plan_price == 12000 || $plan_price == 6000 || $plan_price == 3900 || $plan_price == 4000 || $plan_price == 4500) && $discount == 0) {
+              $cnt_q = mysqli_query($con, "SELECT COUNT(*) as cnt FROM enrolls_to e JOIN plan p ON e.pid = p.pid WHERE e.discount_amount > 0 AND (p.amount=12000 OR p.amount=6000 OR p.amount=3900 OR p.amount=4000 OR p.amount=4500)");
               $cnt_row = mysqli_fetch_assoc($cnt_q);
               if (intval($cnt_row['cnt']) < 100) {
                   if ($plan_price == 12000) {
                       $discount = 2000;
                   } elseif ($plan_price == 6000) {
                       $discount = 1000;
+                  } elseif ($plan_price == 4500) {
+                      $discount = 600; // Welcome Bonus final price is 3900 (4500 - 600)
+                  } elseif ($plan_price == 4000) {
+                      $discount = 100; // Welcome Bonus final price is 3900 (4000 - 100)
                   } elseif ($plan_price == 3900) {
-                      $discount = 400; // Welcome Bonus for 3-Month Plan (e.g. ₹400 discount)
+                      $discount = 0; // If plan catalog price is already 3900, final is 3900
                   }
               }
           }
