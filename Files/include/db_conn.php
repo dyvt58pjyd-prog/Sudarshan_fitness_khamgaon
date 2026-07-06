@@ -619,10 +619,10 @@ if (!function_exists('send_member_email')) {
             ";
         }
 
-        $is_prebook = (date('Y-m-d') < '2026-07-18');
+        $is_prebook = (date('Y-m-d') < '2026-07-08');
         $welcome_heading = $is_prebook ? "Welcome to the Sudarshan Fitness Family! (Pre-Booking Confirmed)" : "Welcome to the Sudarshan Fitness Family!";
         $welcome_text = $is_prebook ? 
-            "Congratulations on your Grand Opening Pre-Booking! Your spot is officially secured and your membership will begin on July 18th, 2026. Below are your membership details and portal credentials. Your official payment receipt PDF has been attached." : 
+            "Congratulations on your Grand Opening Pre-Booking! Your spot is officially secured and your membership will begin on July 8th, 2026. Below are your membership details and portal credentials. Your official payment receipt PDF has been attached." : 
             "Thank you for choosing Sudarshan Fitness. Below are your active membership details and portal login credentials. Your official payment receipt PDF has been attached.";
 
         // Construct HTML Email Body

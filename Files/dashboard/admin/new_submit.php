@@ -103,7 +103,7 @@ $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,t
           date_default_timezone_set("Asia/Calcutta"); 
           $cdate=mysqli_real_escape_string($con, $_POST['jdate']);
           
-          $launch_date = '2026-07-18';
+          $launch_date = '2026-07-08';
           $cdate = ($cdate < $launch_date) ? $launch_date : $cdate;
           
           $d=strtotime("+".$value[3]." Months", strtotime($cdate));

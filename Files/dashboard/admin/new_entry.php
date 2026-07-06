@@ -225,7 +225,7 @@ if ($cnt_q) {
              </tr>
              <tr>
                <td height="35">JOINING DATE:</td>
-                <td height="35"><input type="date" name="jdate" id="boxx" value="<?php echo (date('Y-m-d') < '2026-07-18') ? '2026-07-18' : date('Y-m-d'); ?>" required size="30"></td>
+                <td height="35"><input type="date" name="jdate" id="boxx" value="<?php echo (date('Y-m-d') < '2026-07-08') ? '2026-07-08' : date('Y-m-d'); ?>" required size="30"></td>
              </tr>
 
               <tr>
