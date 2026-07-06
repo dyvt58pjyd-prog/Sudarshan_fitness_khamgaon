@@ -546,6 +546,9 @@ if (isset($_POST['submit_registration'])) {
                                         } elseif ($p['validity'] == 6) {
                                             $discounted_price -= 1000;
                                             $has_discount = true;
+                                        } elseif ($p['validity'] == 3 || $p['amount'] == 3900) {
+                                            $discounted_price -= 400; // Welcome Bonus for 3-Month package
+                                            $has_discount = true;
                                         }
                                     }
                                 ?>
