@@ -5,8 +5,8 @@ function sendWhatsAppMessage($phone, $message) {
     // ------------------------------------------------------------------
     // TODO: Update these with your UltraMsg (or other provider) credentials
     // ------------------------------------------------------------------
-    $instance_id = 'INSTANCE_ID_HERE'; // e.g., instance12345
-    $api_token = 'API_TOKEN_HERE';     // e.g., 12ab34cd56ef78
+    $instance_id = 'instance183827'; // e.g., instance12345
+    $api_token = 'lqzcsy2b6k0aar9p';     // e.g., 12ab34cd56ef78
     
     // Clean phone number (must include country code, e.g. +91)
     $clean_phone = preg_replace('/[^0-9]/', '', $phone);
