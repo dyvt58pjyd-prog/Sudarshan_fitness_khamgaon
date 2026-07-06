@@ -539,6 +539,9 @@ if (isset($_POST['submit_registration'])) {
                                         } elseif ($p['validity'] == 6) {
                                             $discounted_price -= 1000;
                                             $has_discount = true;
+                                        } elseif ($p['validity'] == 3 || $p['amount'] == 3900) {
+                                            $discounted_price -= 400;
+                                            $has_discount = true;
                                         }
                                     }
                                 ?>
