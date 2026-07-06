@@ -4,6 +4,9 @@ echo Titan Gym - Desktop App Compiler (Windows)
 echo =======================================================
 echo.
 
+:: Force directory switch to the batch file's own directory
+cd /d "%~dp0"
+
 echo Checking Python installation...
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
@@ -20,7 +23,10 @@ pip install pywebview requests pyzk pyinstaller Pillow
 
 echo.
 echo Generating Application Icon...
-python -c "from PIL import Image; img = Image.open('images/logo.jpg'); img.save('logo.ico')"
+python -c "from PIL import Image; img = Image.open('images/logo.jpg') if os.path.exists('images/logo.jpg') else Image.new('RGB', (128, 128), color='#ff6b00'); img.save('logo.ico')" 2>nul
+if not exist "logo.ico" (
+    python -c "from PIL import Image; img = Image.new('RGB', (128, 128), '#ff6b00'); img.save('logo.ico')"
+)
 
 echo.
 echo Compiling sudarshan_desktop.py into an executable...
