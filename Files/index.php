@@ -44,6 +44,112 @@ if (substr($logo_path, 0, 6) === '../../') {
 	<link rel="stylesheet" href="./css/style.css"/>
 	<link rel="stylesheet" type="text/css" href="./css/entypo.css">
 	<link rel="stylesheet" href="./css/premium.css"/>
+    <style>
+    .login-container {
+        max-width: 650px !important;
+        width: 95% !important;
+        border-radius: 28px !important;
+        padding: 45px 35px 35px 35px !important;
+    }
+
+    .login-categories {
+        display: grid !important;
+        grid-template-columns: repeat(5, 1fr) !important;
+        gap: 12px !important;
+        margin-bottom: 30px !important;
+    }
+
+    @media (max-width: 600px) {
+        .login-categories {
+            grid-template-columns: repeat(3, 1fr) !important;
+        }
+    }
+    @media (max-width: 440px) {
+        .login-categories {
+            grid-template-columns: repeat(2, 1fr) !important;
+        }
+    }
+
+    .category-tab {
+        background: rgba(255, 255, 255, 0.02) !important;
+        border: 2px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 16px !important;
+        padding: 20px 8px !important;
+        text-align: center !important;
+        cursor: pointer !important;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px !important;
+        flex: none !important;
+        min-width: 0 !important;
+    }
+
+    /* Category individual colors */
+    .category-tab[data-role="member"]:hover, .category-tab[data-role="member"].active {
+        border-color: #ff6b00 !important;
+        background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(255, 107, 0, 0.03) 100%) !important;
+        box-shadow: 0 8px 20px rgba(255, 107, 0, 0.15) !important;
+    }
+    .category-tab[data-role="reception"]:hover, .category-tab[data-role="reception"].active {
+        border-color: #ec4899 !important;
+        background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.03) 100%) !important;
+        box-shadow: 0 8px 20px rgba(236, 72, 153, 0.15) !important;
+    }
+    .category-tab[data-role="trainer"]:hover, .category-tab[data-role="trainer"].active {
+        border-color: #0ea5e9 !important;
+        background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.03) 100%) !important;
+        box-shadow: 0 8px 20px rgba(14, 165, 233, 0.15) !important;
+    }
+    .category-tab[data-role="owner"]:hover, .category-tab[data-role="owner"].active {
+        border-color: #a855f7 !important;
+        background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.03) 100%) !important;
+        box-shadow: 0 8px 20px rgba(168, 85, 247, 0.15) !important;
+    }
+    .category-tab[data-role="super_admin"]:hover, .category-tab[data-role="super_admin"].active {
+        border-color: #10b981 !important;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.03) 100%) !important;
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.15) !important;
+    }
+
+    /* Category hover transforms */
+    .category-tab:hover {
+        transform: scale(1.05) !important;
+    }
+
+    /* Category icon/span size styling overrides */
+    .category-tab i {
+        font-size: 28px !important;
+        transition: all 0.25s ease !important;
+    }
+    .category-tab span {
+        font-size: 11px !important;
+        font-weight: 800 !important;
+        color: rgba(255, 255, 255, 0.7) !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    /* Apply active state colors to icons and spans */
+    .category-tab.active span {
+        color: #ffffff !important;
+    }
+    .category-tab[data-role="member"].active i { color: #ff6b00 !important; }
+    .category-tab[data-role="reception"].active i { color: #ec4899 !important; }
+    .category-tab[data-role="trainer"].active i { color: #0ea5e9 !important; }
+    .category-tab[data-role="owner"].active i { color: #a855f7 !important; }
+    .category-tab[data-role="super_admin"].active i { color: #10b981 !important; }
+
+    /* Inactive icon colors */
+    .category-tab:not(.active) i {
+        color: rgba(255, 255, 255, 0.4) !important;
+    }
+    .category-tab:not(.active):hover i {
+        color: rgba(255, 255, 255, 0.9) !important;
+    }
+    </style>
 </head>
 <body class="page-body login-page login-form-fall">
     <div id="container">
