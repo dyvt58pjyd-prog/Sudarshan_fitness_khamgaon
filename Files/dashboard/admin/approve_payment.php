@@ -231,17 +231,13 @@ if (strpos($pid, 'PT_') === 0) {
             sendWhatsAppMessage($mem_mobile, $wa_msg);
         } else {
             send_payment_email($con, $mem_email, $mem_name, $userid, $plan_name, $amount, $expiredate, $payment_mode, $received_by, $new_entry_code, $discount_amt, $amount);
-                
-                $wa_msg = "✅ Payment Successful! ✅\n\nHi $mem_name,\nYour gym membership ($plan_name) has been renewed successfully. It is now valid until $expiredate.\n\nYour new Entry PIN is: $new_entry_code\n\nKeep up the great work! 💪";
-                sendWhatsAppMessage($mem_mobile, $wa_msg);
-            }
-            
-            echo "<script>alert('Membership Payment Approved and Activated!'); window.location.href='payment_requests.php';</script>";
-        } else {
-            echo "<script>alert('Database Error.'); window.location.href='payment_requests.php';</script>";
+            $wa_msg = "✅ Payment Successful! ✅\n\nHi $mem_name,\nYour gym membership ($plan_name) has been renewed successfully. It is now valid until $expiredate.\n\nYour new Entry PIN is: $new_entry_code\n\nKeep up the great work! 💪";
+            sendWhatsAppMessage($mem_mobile, $wa_msg);
         }
+        
+        echo "<script>alert('Membership Payment Approved and Activated!'); window.location.href='payment_requests.php';</script>";
     } else {
-        echo "<script>alert('Plan no longer exists.'); window.location.href='payment_requests.php';</script>";
+        echo "<script>alert('Database Error.'); window.location.href='payment_requests.php';</script>";
     }
 }
 ?>

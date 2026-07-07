@@ -163,6 +163,7 @@ if ($memid) {
 				        $pass_row = mysqli_fetch_assoc($pass_res);
 				        $user_pass = $pass_row['pass_key'];
 				    }
+				?>
 
             <style>
                 .form-wrapper {
