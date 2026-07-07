@@ -36,6 +36,10 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
     }
     
     /* Make main content occupy 100% width and remove sidebar spacing offsets */
+    .page-container, .page-container.sidebar-collapsed {
+        padding-left: 0 !important;
+    }
+    
     .page-container .main-content, .page-container.sidebar-collapsed .main-content {
         margin-left: 0 !important;
         padding-left: 30px !important;
