@@ -507,6 +507,9 @@ if (isset($_POST['submit_registration'])) {
                                     <button type="button" id="capture-btn" class="btn btn-success" style="width: 100%; font-weight: bold; display: none;">
                                         <i class="entypo-record"></i> Take Photo
                                     </button>
+                                    <button type="button" id="switch-camera-btn" class="btn btn-info" style="width: 100%; font-weight: bold; display: none; margin-top: 10px;">
+                                        <i class="entypo-arrows-ccw"></i> Switch Camera
+                                    </button>
                                     <button type="button" id="retake-btn" class="btn btn-warning" style="width: 100%; font-weight: bold; display: none; margin-top: 10px;">
                                         <i class="entypo-ccw"></i> Retake
                                     </button>
@@ -871,22 +874,38 @@ if (isset($_POST['submit_registration'])) {
         const retakeBtn = document.getElementById('retake-btn');
 
         let stream = null;
+        let currentFacingMode = "user";
+        const switchCamBtn = document.getElementById('switch-camera-btn');
 
-        startBtn.addEventListener('click', async () => {
+        async function startCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
             try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: currentFacingMode }, 
+                    audio: false 
+                });
                 video.srcObject = stream;
                 video.style.display = 'block';
                 photoPreview.style.display = 'none';
                 
                 startBtn.style.display = 'none';
                 captureBtn.style.display = 'inline-block';
+                switchCamBtn.style.display = 'inline-block';
                 retakeBtn.style.display = 'none';
                 uploadInput.value = ''; // clear upload if using camera
             } catch (err) {
                 alert("Camera access denied or unavailable. Please upload a file instead.");
                 console.error(err);
             }
+        }
+
+        startBtn.addEventListener('click', startCamera);
+
+        switchCamBtn.addEventListener('click', () => {
+            currentFacingMode = (currentFacingMode === "user") ? "environment" : "user";
+            startCamera();
         });
 
         captureBtn.addEventListener('click', () => {
@@ -899,17 +918,20 @@ if (isset($_POST['submit_registration'])) {
             capturedInput.value = dataUrl; // Store base64 in hidden input
             
             // Stop camera stream
-            stream.getTracks().forEach(track => track.stop());
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
             
             video.style.display = 'none';
             photoPreview.style.display = 'block';
             captureBtn.style.display = 'none';
+            switchCamBtn.style.display = 'none';
             retakeBtn.style.display = 'inline-block';
         });
 
         retakeBtn.addEventListener('click', () => {
             capturedInput.value = '';
-            startBtn.click(); // Restart camera
+            startCamera(); // Restart camera
         });
 
         // If they upload a file, clear the webcam data and show preview

@@ -336,11 +336,12 @@ if ($cnt_q) {
                    <canvas id="photo_canvas" width="220" height="165" style="display: none;"></canvas>
                  </div>
                  
-                 <div style="margin-bottom: 15px; display: flex; gap: 5px;">
-                   <button type="button" id="start_cam_btn" class="a1-btn a1-blue" onclick="startWebcam()" style="padding: 4px 8px; font-size: 12px; margin-top: 5px;">Start Camera</button>
-                   <button type="button" id="snap_btn" class="a1-btn a1-green" onclick="capturePhoto()" style="padding: 4px 8px; font-size: 12px; display: none; margin-top: 5px;">Capture</button>
-                   <button type="button" id="reset_cam_btn" class="a1-btn a1-orange" onclick="resetWebcam()" style="padding: 4px 8px; font-size: 12px; display: none; margin-top: 5px;">Reset</button>
-                 </div>
+                 <div style="margin-bottom: 15px; display: flex; gap: 5px; flex-wrap: wrap;">
+                    <button type="button" id="start_cam_btn" class="a1-btn a1-blue" onclick="startWebcam()" style="padding: 4px 8px; font-size: 12px; margin-top: 5px;">Start Camera</button>
+                    <button type="button" id="snap_btn" class="a1-btn a1-green" onclick="capturePhoto()" style="padding: 4px 8px; font-size: 12px; display: none; margin-top: 5px;">Capture</button>
+                    <button type="button" id="switch_cam_btn" class="a1-btn a1-blue" onclick="switchWebcam()" style="padding: 4px 8px; font-size: 12px; display: none; margin-top: 5px;">Switch Camera</button>
+                    <button type="button" id="reset_cam_btn" class="a1-btn a1-orange" onclick="resetWebcam()" style="padding: 4px 8px; font-size: 12px; display: none; margin-top: 5px;">Reset</button>
+                  </div>
                  
                  <div id="photo_preview_container" style="display: none; margin-bottom: 10px;">
                    <span style="color: var(--text-muted); font-size: 11px; display: block; margin-bottom: 3px;">Selected / Captured Photo:</span>
@@ -419,28 +420,36 @@ if ($cnt_q) {
         	}
 
             let stream = null;
+            let currentFacingMode = "user";
 
             function startWebcam() {
                 const video = document.getElementById('webcam');
                 const cameraArea = document.getElementById('camera_area');
                 const startBtn = document.getElementById('start_cam_btn');
                 const snapBtn = document.getElementById('snap_btn');
+                const switchBtn = document.getElementById('switch_cam_btn');
                 const resetBtn = document.getElementById('reset_cam_btn');
                 
                 cameraArea.style.display = 'block';
                 startBtn.style.display = 'none';
                 snapBtn.style.display = 'inline-block';
+                switchBtn.style.display = 'inline-block';
                 resetBtn.style.display = 'none';
                 
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
+
                 if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
                     alert("Camera Blocked by Browser Security!\n\nTo capture member photos on mobile or tablet, modern web browsers require a secure connection (HTTPS) or a 'localhost' hostname.\n\nPlease host locally using a secure tunnel (e.g. Localtunnel or Ngrok with HTTPS) to use device cameras.");
                     cameraArea.style.display = 'none';
                     startBtn.style.display = 'inline-block';
                     snapBtn.style.display = 'none';
+                    switchBtn.style.display = 'none';
                     return;
                 }
                 
-                navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240 } })
+                navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240, facingMode: currentFacingMode } })
                     .then(function(mediaStream) {
                         stream = mediaStream;
                         video.srcObject = mediaStream;
@@ -450,7 +459,13 @@ if ($cnt_q) {
                         cameraArea.style.display = 'none';
                         startBtn.style.display = 'inline-block';
                         snapBtn.style.display = 'none';
+                        switchBtn.style.display = 'none';
                     });
+            }
+
+            function switchWebcam() {
+                currentFacingMode = (currentFacingMode === "user") ? "environment" : "user";
+                startWebcam();
             }
 
             function capturePhoto() {
@@ -461,6 +476,7 @@ if ($cnt_q) {
                 const base64Input = document.getElementById('member_photo_base64');
                 const resetBtn = document.getElementById('reset_cam_btn');
                 const snapBtn = document.getElementById('snap_btn');
+                const switchBtn = document.getElementById('switch_cam_btn');
                 
                 const context = canvas.getContext('2d');
                 context.drawImage(video, 0, 0, 220, 165);
@@ -472,6 +488,7 @@ if ($cnt_q) {
                 previewContainer.style.display = 'block';
                 
                 snapBtn.style.display = 'none';
+                switchBtn.style.display = 'none';
                 resetBtn.style.display = 'inline-block';
                 
                 // Clear file upload input to prioritize webcam capture
@@ -489,6 +506,7 @@ if ($cnt_q) {
                 document.getElementById('photo_preview_container').style.display = 'none';
                 document.getElementById('photo_preview').src = '';
                 document.getElementById('reset_cam_btn').style.display = 'none';
+                document.getElementById('switch_cam_btn').style.display = 'none';
                 document.getElementById('start_cam_btn').style.display = 'inline-block';
             }
 
@@ -505,6 +523,7 @@ if ($cnt_q) {
                             stream.getTracks().forEach(track => track.stop());
                             document.getElementById('camera_area').style.display = 'none';
                             document.getElementById('snap_btn').style.display = 'none';
+                            document.getElementById('switch_cam_btn').style.display = 'none';
                             document.getElementById('reset_cam_btn').style.display = 'none';
                             document.getElementById('start_cam_btn').style.display = 'inline-block';
                         }
