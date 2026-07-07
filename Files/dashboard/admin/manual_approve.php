@@ -184,15 +184,51 @@ $res = mysqli_query($con, $query);
                             <button class="btn btn-info" style="width: 100%; margin-bottom: 10px; font-weight: bold; background: #3b82f6; border-color: #3b82f6;" onclick="verifyPayment('<?php echo htmlspecialchars($row['screenshot']); ?>')">
                                 <i class="entypo-search"></i> Verify Authenticity
                             </button>
-                            <a href="approve_payment.php?id=<?php echo $row['id']; ?>" class="btn-approve" onclick="return confirm('Are you sure you want to approve this payment and instantly activate their membership?');">
-                                <i class="entypo-check"></i> Approve
+                            
+                            <!-- Batch Selector with Live Occupancy Stats -->
+                            <div style="margin-bottom: 10px; text-align: left;">
+                                <label style="font-size: 11px; color: var(--text-muted); font-weight: bold; display: block; margin-bottom: 4px;">Assign Gym Batch Session:</label>
+                                <select id="assign_batch_<?php echo $row['id']; ?>" class="form-control-premium" style="margin: 0; padding: 6px 10px; font-size: 12px; background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.1); border-radius: 6px; width: 100%; color: #fff;">
+                                    <?php
+                                    $batches_sel_q = mysqli_query($con, "SELECT * FROM biometric_batches ORDER BY id");
+                                    while ($b = mysqli_fetch_assoc($batches_sel_q)):
+                                        $bid = $b['id'];
+                                        $cnt_m_q = mysqli_query($con, "SELECT COUNT(*) as cnt FROM users WHERE biometric_batch = '$bid'");
+                                        $cnt_m = mysqli_fetch_assoc($cnt_m_q);
+                                        $occ = intval($cnt_m['cnt']);
+                                        $max_lim = intval($b['max_members']);
+                                        $status_text = "$occ/$max_lim filled";
+                                        if ($occ >= $max_lim) {
+                                            $status_text .= " (FULL)";
+                                        }
+                                    ?>
+                                        <option value="<?php echo $bid; ?>">
+                                            <?php echo htmlspecialchars($b['batch_name']); ?> - <?php echo $status_text; ?>
+                                        </option>
+                                    <?php endwhile; ?>
+                                </select>
+                            </div>
+                            
+                            <a href="#" class="btn-approve" onclick="approveWithBatch(<?php echo $row['id']; ?>); return false;">
+                                <i class="entypo-check"></i> Approve & Activate
                             </a>
-                            <a href="reject_payment.php?id=<?php echo $row['id']; ?>" class="btn-reject" onclick="return confirm('Are you sure you want to REJECT this payment?');">
+                            <a href="reject_payment.php?id=<?php echo $row['id']; ?>" class="btn-reject" style="margin-top: 8px;" onclick="return confirm('Are you sure you want to REJECT this payment?');">
                                 <i class="entypo-cancel"></i> Reject
                             </a>
                         </div>
                     </div>
                 <?php endwhile; ?>
+                
+                <script>
+                function approveWithBatch(requestId) {
+                    const batchSelect = document.getElementById('assign_batch_' + requestId);
+                    const selectedBatch = batchSelect.value;
+                    
+                    if (confirm('Approve payment and assign member to selected batch session?')) {
+                        window.location.href = 'approve_payment.php?id=' + requestId + '&assign_batch=' + selectedBatch;
+                    }
+                }
+                </script>
             <?php endif; ?>
 
             <?php include('footer.php'); ?>

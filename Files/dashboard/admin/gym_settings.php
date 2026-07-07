@@ -97,6 +97,38 @@ if (isset($_POST['submit'])) {
         echo "Error: " . mysqli_error($con);
     }
 }
+
+// Handle Add/Modify Batches
+if (isset($_POST['batch_action'])) {
+    $action = $_POST['batch_action'];
+    if ($action === 'add') {
+        $bname = mysqli_real_escape_string($con, $_POST['new_batch_name']);
+        $bstart = mysqli_real_escape_string($con, $_POST['new_batch_start']);
+        $bend = mysqli_real_escape_string($con, $_POST['new_batch_end']);
+        $bmax = intval($_POST['new_batch_max']);
+        
+        mysqli_query($con, "INSERT INTO biometric_batches (batch_name, start_time, end_time, max_members) VALUES ('$bname', '$bstart', '$bend', $bmax)");
+        echo "<script>alert('New batch created successfully!'); window.location.href='gym_settings.php';</script>";
+        exit();
+    } elseif ($action === 'update') {
+        foreach ($_POST['batch_max'] as $bid => $max_limit) {
+            $bid = intval($bid);
+            $max_limit = intval($max_limit);
+            $start = mysqli_real_escape_string($con, $_POST['batch_start'][$bid]);
+            $end = mysqli_real_escape_string($con, $_POST['batch_end'][$bid]);
+            $name = mysqli_real_escape_string($con, $_POST['batch_name'][$bid]);
+            
+            mysqli_query($con, "UPDATE biometric_batches SET batch_name = '$name', start_time = '$start', end_time = '$end', max_members = $max_limit WHERE id = $bid");
+        }
+        echo "<script>alert('Batch limits and timings updated successfully!'); window.location.href='gym_settings.php';</script>";
+        exit();
+    } elseif ($action === 'delete') {
+        $del_id = intval($_POST['del_batch_id']);
+        mysqli_query($con, "DELETE FROM biometric_batches WHERE id = $del_id");
+        echo "<script>alert('Batch deleted!'); window.location.href='gym_settings.php';</script>";
+        exit();
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -265,6 +297,107 @@ if (isset($_POST['submit'])) {
 
                     <div style="text-align: right; margin-top: 20px;">
                         <input class="btn btn-primary" type="submit" name="submit" id="submit" value="Save Branding Settings" style="width: auto !important; display: inline-block;">
+                    </div>
+                </form>
+            </div>
+
+            <!-- Batch Timing & Limit Managers -->
+            <div class="settings-card" style="margin-top: 30px;">
+                <h3 style="color: #ffffff; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 20px;">⏱️</span> Manage Gym Batches, Hours & Occupancy Limits
+                </h3>
+
+                <form method="post" action="">
+                    <input type="hidden" name="batch_action" value="update">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" style="color: #fff;">
+                            <thead>
+                                <tr style="background: rgba(255,255,255,0.02);">
+                                    <th>Batch ID (Key)</th>
+                                    <th>Batch Name / Label</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Max Occupancy Limit</th>
+                                    <th>Currently Enrolled</th>
+                                    <th style="width: 120px; text-align: center;">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $batches_q = mysqli_query($con, "SELECT * FROM biometric_batches ORDER BY id");
+                                while ($b = mysqli_fetch_assoc($batches_q)):
+                                    $bid = $b['id'];
+                                    // Count enrolled members for this batch
+                                    $cnt_memb_q = mysqli_query($con, "SELECT COUNT(*) as cnt FROM users WHERE biometric_batch = '$bid'");
+                                    $cnt_memb = mysqli_fetch_assoc($cnt_memb_q);
+                                    $enrolled = intval($cnt_memb['cnt']);
+                                ?>
+                                    <tr>
+                                        <td><strong><?php echo $bid; ?></strong></td>
+                                        <td>
+                                            <input type="text" name="batch_name[<?php echo $bid; ?>]" class="form-control-premium" style="margin: 0;" value="<?php echo htmlspecialchars($b['batch_name']); ?>" required>
+                                        </td>
+                                        <td>
+                                            <input type="time" name="batch_start[<?php echo $bid; ?>]" class="form-control-premium" style="margin: 0;" value="<?php echo date('H:i', strtotime($b['start_time'])); ?>" required>
+                                        </td>
+                                        <td>
+                                            <input type="time" name="batch_end[<?php echo $bid; ?>]" class="form-control-premium" style="margin: 0;" value="<?php echo date('H:i', strtotime($b['end_time'])); ?>" required>
+                                        </td>
+                                        <td>
+                                            <input type="number" name="batch_max[<?php echo $bid; ?>]" class="form-control-premium" style="margin: 0;" value="<?php echo intval($b['max_members']); ?>" min="1" required>
+                                        </td>
+                                        <td style="vertical-align: middle;">
+                                            <span class="badge-premium <?php echo ($enrolled >= $b['max_members']) ? 'badge-expired' : 'badge-active'; ?>">
+                                                <?php echo $enrolled; ?> / <?php echo $b['max_members']; ?> members
+                                            </span>
+                                        </td>
+                                        <td style="text-align: center; vertical-align: middle;">
+                                            <button type="button" class="btn btn-danger" style="padding: 4px 10px;" onclick="if(confirm('Are you sure you want to delete this batch?')) { document.getElementById('del_batch_id').value = '<?php echo $bid; ?>'; document.getElementById('del_batch_form').submit(); }">
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="text-align: right; margin-top: 15px;">
+                        <button type="submit" class="btn btn-success">Save Timing & Limit Changes</button>
+                    </div>
+                </form>
+
+                <!-- Hidden Delete Form -->
+                <form id="del_batch_form" method="post" action="" style="display: none;">
+                    <input type="hidden" name="batch_action" value="delete">
+                    <input type="hidden" name="del_batch_id" id="del_batch_id" value="">
+                </form>
+            </div>
+
+            <!-- Create New Batch Card -->
+            <div class="settings-card" style="margin-top: 30px; background: rgba(16, 185, 129, 0.03); border-color: rgba(16, 185, 129, 0.2);">
+                <h4 style="color: #ffffff; font-weight: 700; margin-bottom: 15px;">➕ Create a New Gym Session Batch</h4>
+                <form method="post" action="">
+                    <input type="hidden" name="batch_action" value="add">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Batch Name</label>
+                            <input type="text" name="new_batch_name" class="form-control-premium" placeholder="e.g. Batch 4 (Night Shift)" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Start Time</label>
+                            <input type="time" name="new_batch_start" class="form-control-premium" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>End Time</label>
+                            <input type="time" name="new_batch_end" class="form-control-premium" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Max Occupancy Limit</label>
+                            <input type="number" name="new_batch_max" class="form-control-premium" value="30" min="1" required>
+                        </div>
+                    </div>
+                    <div style="text-align: right; margin-top: 15px;">
+                        <button type="submit" class="btn btn-primary" style="background: #10b981; border-color: #10b981;">Create Batch</button>
                     </div>
                 </form>
             </div>

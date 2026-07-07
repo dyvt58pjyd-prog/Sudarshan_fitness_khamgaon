@@ -1032,6 +1032,64 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			</div>
 			<!-- End of Metric Tiles Row -->
 			
+			<!-- Batch Occupancy & Available Spots Panel -->
+			<div class="row" style="margin-bottom: 30px; margin-left: 0; margin-right: 0;">
+				<div class="col-md-12" style="padding: 0;">
+					<div class="portal-card" style="background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; box-shadow: var(--glass-shadow); color: #ffffff;">
+						<h3 style="color: #ffffff; font-weight: 700; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+							<span style="font-size: 20px;">⏱️</span> Live Session Batch Occupancy & Spots Remaining
+						</h3>
+						<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+							<?php
+							$batches_q = mysqli_query($con, "SELECT * FROM biometric_batches ORDER BY id");
+							while ($b = mysqli_fetch_assoc($batches_q)):
+								$bid = $b['id'];
+								// Count members enrolled in this batch
+								$cnt_memb_q = mysqli_query($con, "SELECT COUNT(*) as cnt FROM users WHERE biometric_batch = '$bid'");
+								$cnt_memb = mysqli_fetch_assoc($cnt_memb_q);
+								$enrolled = intval($cnt_memb['cnt']);
+								$max_limit = intval($b['max_members']);
+								$spots_left = $max_limit - $enrolled;
+								if ($spots_left < 0) $spots_left = 0;
+								$pct = $max_limit > 0 ? min(100, round(($enrolled / $max_limit) * 100)) : 0;
+								
+								$progress_color = "#10b981"; // green
+								if ($pct >= 90) {
+									$progress_color = "#ef4444"; // red (almost full)
+								} elseif ($pct >= 70) {
+									$progress_color = "#f59e0b"; // orange/yellow
+								}
+							?>
+								<div style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
+									<div>
+										<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+											<h4 style="margin: 0; font-weight: 700; color: #fff; font-size: 15px;"><?php echo htmlspecialchars($b['batch_name']); ?></h4>
+											<span style="font-size: 11px; color: var(--text-muted); font-weight: bold;"><?php echo date('h:i A', strtotime($b['start_time'])); ?> - <?php echo date('h:i A', strtotime($b['end_time'])); ?></span>
+										</div>
+										<div style="font-size: 24px; font-weight: 800; color: #ff6b00; margin-bottom: 15px; font-family: monospace;">
+											<?php echo $enrolled; ?> <span style="font-size:14px; color: var(--text-muted); font-weight: normal;">/ <?php echo $max_limit; ?> Enrolled</span>
+										</div>
+									</div>
+									<div>
+										<!-- Progress Bar -->
+										<div style="width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; margin-bottom: 8px;">
+											<div style="width: <?php echo $pct; ?>%; height: 100%; background: <?php echo $progress_color; ?>; border-radius: 3px;"></div>
+										</div>
+										<div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+											<span style="color: <?php echo $spots_left > 0 ? '#10b981' : '#ef4444'; ?>; font-weight: 700;">
+												<?php echo $spots_left > 0 ? "🟢 $spots_left Spots Left" : "🔴 Batch Full"; ?>
+											</span>
+											<span style="color: var(--text-muted);"><?php echo $pct; ?>% Filled</span>
+										</div>
+									</div>
+								</div>
+							<?php endwhile; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End of Batch Occupancy Panel -->
+			
 			<!-- Monthly Leaderboard Section -->
 			<?php include 'leaderboard_widget.php'; ?>
 			

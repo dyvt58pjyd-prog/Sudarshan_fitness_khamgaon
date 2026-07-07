@@ -59,10 +59,13 @@ if ($is_new_reg == 1 && $userid === 'PENDING') {
     $entry_code = strval(rand(100000, 999999));
     $photo_path_db = mysqli_real_escape_string($con, $payload['photo_path_db']);
     $password = mysqli_real_escape_string($con, $payload['password']);
+    
+    // Read assigned batch from approval parameters (default to Batch 1)
+    $assigned_batch = isset($_REQUEST['assign_batch']) ? mysqli_real_escape_string($con, $_REQUEST['assign_batch']) : '1';
 
     // Create User
-    $query_user = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, entry_code, biometric_id, biometric_enabled, photo) 
-                   VALUES ('$uname', '$gender', '$phn', '$email', '$dob', $joining_date_val, '$next_id', '$entry_code', '$next_id', 1, '$photo_path_db')";
+    $query_user = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, entry_code, biometric_id, biometric_enabled, photo, biometric_batch) 
+                   VALUES ('$uname', '$gender', '$phn', '$email', '$dob', $joining_date_val, '$next_id', '$entry_code', '$next_id', 1, '$photo_path_db', '$assigned_batch')";
     
     if (mysqli_query($con, $query_user)) {
         // Create Address

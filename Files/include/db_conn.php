@@ -278,6 +278,26 @@ if (!$con) {
         mysqli_query($con, "ALTER TABLE users ADD COLUMN biometric_batch VARCHAR(50) DEFAULT '1'");
     }
 
+    // Self-healing database check: Create biometric_batches table to configure dynamic shifts
+    mysqli_query($con, "CREATE TABLE IF NOT EXISTS biometric_batches (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        batch_name VARCHAR(100) NOT NULL,
+        start_time TIME NOT NULL,
+        end_time TIME NOT NULL,
+        max_members INT DEFAULT 30
+    )");
+
+    // Seed the default 3 batches if the table is empty
+    $chk_batches_empty = mysqli_query($con, "SELECT COUNT(*) as cnt FROM biometric_batches");
+    $cnt_batches = mysqli_fetch_assoc($chk_batches_empty);
+    if (intval($cnt_batches['cnt']) === 0) {
+        mysqli_query($con, "INSERT INTO biometric_batches (batch_name, start_time, end_time, max_members) VALUES
+            ('Batch 1 (General)', '06:00:00', '11:00:00', 30),
+            ('Batch 2 (Women Only)', '16:00:00', '17:00:00', 25),
+            ('Batch 3 (Evening General)', '17:00:00', '22:00:00', 30)
+        ");
+    }
+
 
     // Self-healing database check: ensure discount_amount and paid_amount columns exist in enrolls_to
     $chk_disc = mysqli_query($con, "SHOW COLUMNS FROM enrolls_to LIKE 'discount_amount'");
