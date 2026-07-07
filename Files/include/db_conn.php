@@ -363,7 +363,13 @@ if (!$con) {
     }
 
     mysqli_query($con, "INSERT IGNORE INTO plan (pid, planName, amount, validity, active) VALUES ('PTPLAN', 'Personal Training', 0, 1, 'no')");
-    mysqli_query($con, "INSERT IGNORE INTO plan (pid, planName, amount, validity, active, description) VALUES ('THREE3M', '3-Month Plan', 4000, 3, 'yes', '3 Months Subscription')");
+    // Self-healing database check: prevent duplicate 3-month plans
+    $chk_other_3m = mysqli_query($con, "SELECT pid FROM plan WHERE validity = 3 AND pid != 'THREE3M'");
+    if ($chk_other_3m && mysqli_num_rows($chk_other_3m) > 0) {
+        mysqli_query($con, "DELETE FROM plan WHERE pid = 'THREE3M'");
+    } else {
+        mysqli_query($con, "INSERT IGNORE INTO plan (pid, planName, amount, validity, active, description) VALUES ('THREE3M', '3-Month Plan', 4000, 3, 'yes', '3 Months Subscription')");
+    }
     mysqli_query($con, "UPDATE plan SET amount = 4000 WHERE validity = 3");
 
     // Self-healing database check: ensure broadcast_campaigns table exists
