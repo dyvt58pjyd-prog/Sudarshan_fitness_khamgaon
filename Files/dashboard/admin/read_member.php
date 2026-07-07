@@ -263,7 +263,12 @@ $gym = get_gym_details($con);
                         </div>
                         <div class="detail-row">
                             <span class="detail-label">Mobile Number:</span>
-                            <span class="detail-value"><?php echo htmlspecialchars($member['mobile']); ?></span>
+                            <span class="detail-value">
+                                <?php echo htmlspecialchars($member['mobile']); ?>
+                                <a href="sip:+91<?php echo htmlspecialchars($member['mobile']); ?>" title="Call via BSNL VoIP Softphone" style="margin-left: 8px; color: var(--accent-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; background: rgba(255, 107, 0, 0.15); border: 1px solid rgba(255,107,0,0.3); padding: 2px 8px; border-radius: 4px; font-size: 11px;">
+                                    <i class="entypo-phone" style="font-size: 10px;"></i> Call
+                                </a>
+                            </span>
                         </div>
                         <div class="detail-row">
                             <span class="detail-label">Email Address:</span>

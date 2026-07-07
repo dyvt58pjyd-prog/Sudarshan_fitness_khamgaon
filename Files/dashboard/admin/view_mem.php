@@ -264,7 +264,7 @@ if ($status === 'active') {
 							    echo "<tr><td>".$sno."</td>";
 							    echo "<td>" . htmlspecialchars($row['userid']) . "</td>";
 							    echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-							    echo "<td>" . htmlspecialchars($row['mobile']) . "</td>";
+							    echo "<td>" . htmlspecialchars($row['mobile']) . " <a href='sip:+91".htmlspecialchars($row['mobile'])."' title='Call via BSNL VoIP Softphone' style='color: var(--accent-primary); text-decoration: none; margin-left: 5px; font-weight: bold;'><i class='entypo-phone'></i></a></td>";
 							    echo "<td>" . htmlspecialchars($row['email']) . "</td>";
 							    echo "<td>" . htmlspecialchars($row['gender']) . "</td>";
 							    echo "<td>" . $trainer_disp . "</td>";
