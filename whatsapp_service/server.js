@@ -70,6 +70,7 @@ function initWhatsAppClient() {
         currentQR = qr;
         console.log('[WhatsApp] Scan this QR Code to link your device:');
         qrcode.generate(qr, {small: true});
+        pushStatusToHostinger();
     });
 
     client.on('ready', () => {
@@ -77,6 +78,7 @@ function initWhatsAppClient() {
         currentQR = null;
         linkedUser = client.info.wid.user;
         console.log(`[WhatsApp] Client is ready! Connected as: ${linkedUser}`);
+        pushStatusToHostinger();
         startPolling();
     });
 
@@ -87,12 +89,14 @@ function initWhatsAppClient() {
     client.on('auth_failure', (msg) => {
         clientState = 'DISCONNECTED';
         console.error('[WhatsApp] Authentication failure:', msg);
+        pushStatusToHostinger();
     });
 
     client.on('disconnected', (reason) => {
         clientState = 'DISCONNECTED';
         linkedUser = null;
         console.log('[WhatsApp] Client disconnected:', reason);
+        pushStatusToHostinger();
         setTimeout(() => initWhatsAppClient(), 5000);
     });
 
@@ -178,8 +182,8 @@ async function pushStatusToHostinger() {
     }
 }
 
-// Push status every 5 seconds to keep the dashboard alive
-setInterval(pushStatusToHostinger, 5000);
+// Push status every 60 seconds to keep the dashboard alive
+setInterval(pushStatusToHostinger, 60000);
 
 // Start everything
 initWhatsAppClient();
