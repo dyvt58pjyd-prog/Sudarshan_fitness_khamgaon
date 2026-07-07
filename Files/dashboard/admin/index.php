@@ -298,6 +298,36 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			<?php endif; ?>
 
 			<hr>
+            <style>
+            .dashboard-grid {
+                display: grid !important;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+                gap: 20px !important;
+            }
+            
+            @media (max-width: 767px) {
+                .dashboard-grid {
+                    grid-template-columns: repeat(2, 1fr) !important;
+                    gap: 12px !important;
+                }
+                .dashboard-grid a div {
+                    padding: 16px 8px !important;
+                    border-radius: 14px !important;
+                }
+                .dashboard-grid a div div {
+                    font-size: 32px !important;
+                    margin-bottom: 8px !important;
+                }
+                .dashboard-grid a div h4 {
+                    font-size: 13px !important;
+                    margin-bottom: 0 !important;
+                    line-height: 1.3 !important;
+                }
+                .dashboard-grid a div span {
+                    display: none !important; /* Hide description on mobile to look neat */
+                }
+            }
+            </style>
 
 			<!-- Big Boxed Simple Quick Actions Categorized Grid (Sidebar Replacement) -->
 			<div class="row" style="margin-bottom: 30px; margin-left: 0; margin-right: 0;">
@@ -309,7 +339,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
 							<span style="font-size: 22px;">👥</span> Front Desk & Visitor Management
 						</h3>
-						<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+						<div class="dashboard-grid">
 							
 							<a href="new_entry.php" style="text-decoration: none;">
 								<div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(255, 107, 0, 0.05) 100%); border: 2px solid #ff6b00; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
@@ -374,7 +404,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
 							<span style="font-size: 22px;">🔑</span> Attendance & Access Control
 						</h3>
-						<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+						<div class="dashboard-grid">
 
 							<a href="biometric_management.php" style="text-decoration: none;">
 								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
@@ -431,7 +461,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
 							<span style="font-size: 22px;">📋</span> Members & Fitness Directory
 						</h3>
-						<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+						<div class="dashboard-grid">
 
 							<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
 							<a href="view_mem.php" style="text-decoration: none;">
@@ -471,7 +501,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
 							<span style="font-size: 22px;">💰</span> Billing, Subscriptions & Analytics
 						</h3>
-						<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+						<div class="dashboard-grid">
 
 							<a href="payment_requests.php" style="text-decoration: none;">
 								<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%); border: 2px solid #ef4444; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
@@ -557,7 +587,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
 							<span style="font-size: 22px;">🏋️</span> Personal Training & Routines
 						</h3>
-						<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+						<div class="dashboard-grid">
 
 							<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
 							<a href="enroll_pt.php" style="text-decoration: none;">
@@ -645,7 +675,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
 							<span style="font-size: 22px;">⚙️</span> System Settings & Admin Panel
 						</h3>
-						<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+						<div class="dashboard-grid">
 
 							<a href="campaign_manager.php" style="text-decoration: none;">
 								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 

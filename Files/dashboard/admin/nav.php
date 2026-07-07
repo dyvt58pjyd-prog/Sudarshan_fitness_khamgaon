@@ -57,6 +57,28 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
             margin-left: 0 !important;
         }
     }
+
+    @media (max-width: 767px) {
+        .links-list {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            align-items: center !important;
+            gap: 12px !important;
+            margin-top: 10px !important;
+            padding: 0 !important;
+            float: none !important;
+        }
+        .links-list li {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .page-container .main-content, .page-container.sidebar-collapsed .main-content {
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+        }
+    }
 </style>
 <script>
     if (localStorage.getItem('theme') === 'light') {
