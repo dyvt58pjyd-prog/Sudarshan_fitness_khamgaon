@@ -48,6 +48,15 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
         width: 100% !important;
         position: relative !important;
     }
+
+    @media (min-width: 768px) {
+        .page-container, .page-container.sidebar-collapsed {
+            padding-left: 0 !important;
+        }
+        .page-container .main-content, .page-container.sidebar-collapsed .main-content {
+            margin-left: 0 !important;
+        }
+    }
 </style>
 <script>
     if (localStorage.getItem('theme') === 'light') {
