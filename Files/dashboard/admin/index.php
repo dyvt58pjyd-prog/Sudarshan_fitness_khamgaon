@@ -299,81 +299,450 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
 			<hr>
 
-			<!-- Big Boxed Simple Quick Actions (Designed for uneducated / elderly staff usability) -->
+			<!-- Big Boxed Simple Quick Actions Categorized Grid (Sidebar Replacement) -->
 			<div class="row" style="margin-bottom: 30px; margin-left: 0; margin-right: 0;">
 				<div class="col-md-12" style="padding: 0;">
-					<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
-						<span style="font-size: 22px;">⚡</span> Quick Work Buttons (Tap any button to start)
-					</h3>
-					<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
-						
-						<!-- Register Member -->
-						<a href="new_entry.php" style="text-decoration: none;">
-							<div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(255, 107, 0, 0.05) 100%); border: 2px solid #ff6b00; border-radius: 18px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-							     onmouseover="this.style.transform='scale(1.03)'; this.style.background='linear-gradient(135deg, rgba(255,107,0,0.25) 0%, rgba(255,107,0,0.1) 100%)';" 
-							     onmouseout="this.style.transform='scale(1)'; this.style.background='linear-gradient(135deg, rgba(255,107,0,0.15) 0%, rgba(255,107,0,0.05) 100%)';">
-								<div style="font-size: 50px; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(255,107,0,0.3));">👤➕</div>
-								<h4 style="color: #ffffff; font-weight: 800; font-size: 17px; margin: 0 0 5px 0; text-transform: uppercase; letter-spacing: 0.5px;">Register Member</h4>
-								<span style="color: rgba(255,255,255,0.6); font-size: 12.5px; font-weight: 500;">Add new gym admission</span>
-							</div>
-						</a>
+					
+					<!-- Category 1: 👥 FRONT DESK & VISITOR MANAGEMENT -->
+					<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
+					<div style="margin-bottom: 35px;">
+						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+							<span style="font-size: 22px;">👥</span> Front Desk & Visitor Management
+						</h3>
+						<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+							
+							<a href="new_entry.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(255, 107, 0, 0.05) 100%); border: 2px solid #ff6b00; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">👤➕</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">New Registration</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Add new gym admission</span>
+								</div>
+							</a>
 
-						<!-- Manage Biometrics -->
-						<a href="biometric_management.php" style="text-decoration: none;">
-							<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-							     onmouseover="this.style.transform='scale(1.03)'; this.style.background='linear-gradient(135deg, rgba(16,185,129,0.25) 0%, rgba(16,185,129,0.1) 100%)';" 
-							     onmouseout="this.style.transform='scale(1)'; this.style.background='linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(16,185,129,0.05) 100%)';">
-								<div style="font-size: 50px; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(16,185,129,0.3));">🔑🚪</div>
-								<h4 style="color: #ffffff; font-weight: 800; font-size: 17px; margin: 0 0 5px 0; text-transform: uppercase; letter-spacing: 0.5px;">Biometric Gate</h4>
-								<span style="color: rgba(255,255,255,0.6); font-size: 12.5px; font-weight: 500;">Enable/Disable finger locks</span>
-							</div>
-						</a>
+							<a href="manual_approve.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%); border: 2px solid #f59e0b; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">📋✓</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Manual Approvals</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Verify offline bookings</span>
+								</div>
+							</a>
 
-						<!-- View Members List -->
-						<a href="view_mem.php" style="text-decoration: none;">
-							<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-							     onmouseover="this.style.transform='scale(1.03)'; this.style.background='linear-gradient(135deg, rgba(59,130,246,0.25) 0%, rgba(59,130,246,0.1) 100%)';" 
-							     onmouseout="this.style.transform='scale(1)'; this.style.background='linear-gradient(135deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0.05) 100%)';">
-								<div style="font-size: 50px; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(59,130,246,0.3));">📋🔍</div>
-								<h4 style="color: #ffffff; font-weight: 800; font-size: 17px; margin: 0 0 5px 0; text-transform: uppercase; letter-spacing: 0.5px;">View Members</h4>
-								<span style="color: rgba(255,255,255,0.6); font-size: 12.5px; font-weight: 500;">Search profiles & update plans</span>
-							</div>
-						</a>
+							<a href="visitor_entry.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">📝👥</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Visitor Entry</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Log inquiry details & snaps</span>
+								</div>
+							</a>
 
-						<!-- Payment Requests -->
-						<a href="payment_requests.php" style="text-decoration: none;">
-							<div style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%); border: 2px solid #a855f7; border-radius: 18px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-							     onmouseover="this.style.transform='scale(1.03)'; this.style.background='linear-gradient(135deg, rgba(168,85,247,0.25) 0%, rgba(168,85,247,0.1) 100%)';" 
-							     onmouseout="this.style.transform='scale(1)'; this.style.background='linear-gradient(135deg, rgba(168,85,247,0.15) 0%, rgba(168,85,247,0.05) 100%)';">
-								<div style="font-size: 50px; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(168,85,247,0.3));">💰✓</div>
-								<h4 style="color: #ffffff; font-weight: 800; font-size: 17px; margin: 0 0 5px 0; text-transform: uppercase; letter-spacing: 0.5px;">Verify Payments</h4>
-								<span style="color: rgba(255,255,255,0.6); font-size: 12.5px; font-weight: 500;">Approve online UPI transfers</span>
-							</div>
-						</a>
+							<a href="visitors_list.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.05) 100%); border: 2px solid #0ea5e9; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">📁👥</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Visitor Logs</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Search previous visit logs</span>
+								</div>
+							</a>
 
-						<!-- Visitor Entry -->
-						<a href="visitor_entry.php" style="text-decoration: none;">
-							<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-							     onmouseover="this.style.transform='scale(1.03)'; this.style.background='linear-gradient(135deg, rgba(236,72,153,0.25) 0%, rgba(236,72,153,0.1) 100%)';" 
-							     onmouseout="this.style.transform='scale(1)'; this.style.background='linear-gradient(135deg, rgba(236,72,153,0.15) 0%, rgba(236,72,153,0.05) 100%)';">
-								<div style="font-size: 50px; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(236,72,153,0.3));">📝👥</div>
-								<h4 style="color: #ffffff; font-weight: 800; font-size: 17px; margin: 0 0 5px 0; text-transform: uppercase; letter-spacing: 0.5px;">Visitor Entry</h4>
-								<span style="color: rgba(255,255,255,0.6); font-size: 12.5px; font-weight: 500;">Log inquiries & live visitor scans</span>
-							</div>
-						</a>
+							<a href="search_member.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">🔍👤</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Search Member</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Lookup profile statistics</span>
+								</div>
+							</a>
 
-						<!-- Visitor Logs -->
-						<a href="visitors_list.php" style="text-decoration: none;">
-							<div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.05) 100%); border: 2px solid #0ea5e9; border-radius: 18px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-							     onmouseover="this.style.transform='scale(1.03)'; this.style.background='linear-gradient(135deg, rgba(14,165,233,0.25) 0%, rgba(14,165,233,0.1) 100%)';" 
-							     onmouseout="this.style.transform='scale(1)'; this.style.background='linear-gradient(135deg, rgba(14,165,233,0.15) 0%, rgba(14,165,233,0.05) 100%)';">
-								<div style="font-size: 50px; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(14,165,233,0.3));">📁👥</div>
-								<h4 style="color: #ffffff; font-weight: 800; font-size: 17px; margin: 0 0 5px 0; text-transform: uppercase; letter-spacing: 0.5px;">Visitor Logs</h4>
-								<span style="color: rgba(255,255,255,0.6); font-size: 12.5px; font-weight: 500;">View previous visit & inquiry logs</span>
-							</div>
-						</a>
-
+							<a href="payments.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%); border: 2px solid #a855f7; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">💳⭐</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Make Payment</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Collect offline package fees</span>
+								</div>
+							</a>
+							
+						</div>
 					</div>
+					<?php endif; ?>
+
+					<!-- Category 2: 🔑 ATTENDANCE & BIOMETRIC CONTROL -->
+					<div style="margin-bottom: 35px;">
+						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+							<span style="font-size: 22px;">🔑</span> Attendance & Access Control
+						</h3>
+						<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+
+							<a href="biometric_management.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">🔑🚪</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Biometric Lock</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Enable or disable gates</span>
+								</div>
+							</a>
+
+							<a href="attendance.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%); border: 2px solid #ef4444; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">📷🚪</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Attendance Portal</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">View scans & calendar logs</span>
+								</div>
+							</a>
+
+							<a href="kiosk.php" target="_blank" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.05) 100%); border: 2px solid #06b6d4; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">🖥️🚪</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Front Desk Kiosk</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Launch kiosk monitor mode</span>
+								</div>
+							</a>
+
+							<?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
+							<a href="biometric_logs.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(244, 63, 94, 0.15) 0%, rgba(244, 63, 94, 0.05) 100%); border: 2px solid #f43f5e; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">📋📊</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Biometric Logs</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Audit machine communications</span>
+								</div>
+							</a>
+
+							<a href="biometric_simulator.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(20, 184, 166, 0.15) 0%, rgba(20, 184, 166, 0.05) 100%); border: 2px solid #14b8a6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">🔄🎛️</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Gate Simulator</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Trigger mock attendance scans</span>
+								</div>
+							</a>
+							<?php endif; ?>
+
+						</div>
+					</div>
+
+					<!-- Category 3: 📋 MEMBERS & SYSTEM DIRECTORY -->
+					<div style="margin-bottom: 35px;">
+						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+							<span style="font-size: 22px;">📋</span> Members & Fitness Directory
+						</h3>
+						<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+
+							<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
+							<a href="view_mem.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">✏️👤</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Manage Members</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Edit client files & details</span>
+								</div>
+							</a>
+							<?php endif; ?>
+
+							<a href="table_view.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">📋🔍</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">View Directory</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Search membership list grid</span>
+								</div>
+							</a>
+
+							<a href="assign_routine.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(251, 191, 36, 0.05) 100%); border: 2px solid #fbbf24; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">📋🏋️</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Assign Routine</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Bind routine plans to members</span>
+								</div>
+							</a>
+
+						</div>
+					</div>
+
+					<!-- Category 4: 💰 BILLING, SUBSCRIPTIONS & ANALYTICS -->
+					<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
+					<div style="margin-bottom: 35px;">
+						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+							<span style="font-size: 22px;">💰</span> Billing, Subscriptions & Analytics
+						</h3>
+						<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+
+							<a href="payment_requests.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%); border: 2px solid #ef4444; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">💰✓</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Verify Payments</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Pending registrations approvals</span>
+								</div>
+							</a>
+
+							<a href="online_payments_records.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">📁💳</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Online Records</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">App verified UPI transfers log</span>
+								</div>
+							</a>
+
+							<a href="invoices.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">📄🧾</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Invoices & Receipts</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Print official tax receipts & PDFs</span>
+								</div>
+							</a>
+
+							<?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
+							<a href="view_plan.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%); border: 2px solid #f59e0b; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">✏️🧾</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Edit Plans</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Alter membership subscription prices</span>
+								</div>
+							</a>
+
+							<a href="new_plan.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%); border: 2px solid #a855f7; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">➕🧾</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Create Plan</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Add custom duration options</span>
+								</div>
+							</a>
+
+							<a href="revenue_month.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.05) 100%); border: 2px solid #06b6d4; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">💰📊</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Revenue Earnings</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">View dynamic business analytics</span>
+								</div>
+							</a>
+
+							<a href="churn_analytics.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">📈📉</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Churn Risk</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">AI inactivity retention predictions</span>
+								</div>
+							</a>
+
+							<a href="renewal_pipeline.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.05) 100%); border: 2px solid #0ea5e9; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">📊📈</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Renewal Pipeline</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Track expiring memberships queue</span>
+								</div>
+							</a>
+							<?php endif; ?>
+
+						</div>
+					</div>
+					<?php endif; ?>
+
+					<!-- Category 5: 🏋️ PERSONAL TRAINING & EXERCISE ROUTINES -->
+					<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'trainer' || $current_role === 'reception'): ?>
+					<div style="margin-bottom: 35px;">
+						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+							<span style="font-size: 22px;">🏋️</span> Personal Training & Routines
+						</h3>
+						<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+
+							<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
+							<a href="enroll_pt.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">🤝 PT</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Enroll PT Client</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Register coach assignments</span>
+								</div>
+							</a>
+							<?php endif; ?>
+
+							<a href="view_pt_clients.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">📋 PT</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">PT Assignments</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Track personal training clients</span>
+								</div>
+							</a>
+
+							<a href="add_pt.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(251, 191, 36, 0.05) 100%); border: 2px solid #fbbf24; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">✏️ PT</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Record PT Session</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Log workout/nutrition notes</span>
+								</div>
+							</a>
+
+							<a href="view_pt.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%); border: 2px solid #a855f7; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">🔍 PT</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">PT Session Logs</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Review previous workouts data</span>
+								</div>
+							</a>
+
+							<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'trainer'): ?>
+							<a href="addroutine.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.05) 100%); border: 2px solid #06b6d4; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">🏋️➕</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Add Routine</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Add custom workout structures</span>
+								</div>
+							</a>
+
+							<a href="editroutine.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">🏋️✏️</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Edit Routine</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Modify existing routine templates</span>
+								</div>
+							</a>
+							<?php endif; ?>
+
+							<a href="viewroutine.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.05) 100%); border: 2px solid #0ea5e9; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">🏋️🔍</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">View Routine</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Preview exercises & reps lists</span>
+								</div>
+							</a>
+
+							<a href="bmi_calc.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(20, 184, 166, 0.15) 0%, rgba(20, 184, 166, 0.05) 100%); border: 2px solid #14b8a6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">⚖️📊</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">BMI Calc</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Calculate client BMI metric</span>
+								</div>
+							</a>
+
+						</div>
+					</div>
+					<?php endif; ?>
+
+					<!-- Category 6: ⚙️ SYSTEM SETTINGS & ADMIN CONTROL -->
+					<?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
+					<div style="margin-bottom: 30px;">
+						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+							<span style="font-size: 22px;">⚙️</span> System Settings & Admin Panel
+						</h3>
+						<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+
+							<a href="campaign_manager.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">⚙️📅</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Auto Campaigns</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Configure reminders automations</span>
+								</div>
+							</a>
+
+							<a href="broadcast_campaign.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">📣💬</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">WA Broadcast</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Send bulk messages to users</span>
+								</div>
+							</a>
+
+							<a href="expenses.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(251, 191, 36, 0.05) 100%); border: 2px solid #fbbf24; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">📖💵</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Expenses Ledger</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Record gym payouts & costs</span>
+								</div>
+							</a>
+
+							<a href="manage_staff.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%); border: 2px solid #a855f7; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">👥🛡️</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Manage Staff</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Audit employee security roles</span>
+								</div>
+							</a>
+
+							<a href="gym_settings.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.05) 100%); border: 2px solid #06b6d4; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">⚙️🏢</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Gym Settings</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Branding, logos & exclusive hours</span>
+								</div>
+							</a>
+
+							<a href="whatsapp_setup.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">💬⚙️</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">WhatsApp Setup</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Link Meta cloud credentials</span>
+								</div>
+							</a>
+
+							<?php if ($current_role === 'super_admin'): ?>
+							<a href="smtp_settings.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.05) 100%); border: 2px solid #0ea5e9; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">📧⚙️</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">SMTP Email</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Manage SMTP server nodes</span>
+								</div>
+							</a>
+
+							<a href="discount_lock.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%); border: 2px solid #ef4444; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">🔒⚙️</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Discount Lock</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Override manual discounts rules</span>
+								</div>
+							</a>
+							<?php endif; ?>
+
+							<a href="backup_data.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(20, 184, 166, 0.15) 0%, rgba(20, 184, 166, 0.05) 100%); border: 2px solid #14b8a6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">💾⚙️</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Backup System</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Import/Export database dumps</span>
+								</div>
+							</a>
+
+							<a href="more-userprofile.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(255, 107, 0, 0.05) 100%); border: 2px solid #ff6b00; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">👤⚙️</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">My Profile</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Update my login credential keys</span>
+								</div>
+							</a>
+
+						</div>
+					</div>
+					<?php endif; ?>
+
 				</div>
 			</div>
 

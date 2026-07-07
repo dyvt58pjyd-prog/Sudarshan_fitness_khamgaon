@@ -23,15 +23,82 @@ $working_year = $_SESSION['working_year'];
 $gym_settings_data = get_gym_details($con);
 $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
 ?>
+<style>
+    /* Completely hide the sidebar menu and collapse controls */
+    .sidebar-menu, .sidebar-collapse, #navbarcollapse .sidebar-menu, .sidebar-collapsed .sidebar-menu {
+        display: none !important;
+        width: 0 !important;
+        max-width: 0 !important;
+        min-width: 0 !important;
+        flex: 0 0 0 !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+    }
+    
+    /* Make main content occupy 100% width and remove sidebar spacing offsets */
+    .page-container .main-content, .page-container.sidebar-collapsed .main-content {
+        margin-left: 0 !important;
+        padding-left: 30px !important;
+        padding-right: 30px !important;
+        left: 0 !important;
+        width: 100% !important;
+        position: relative !important;
+    }
+</style>
 <script>
     if (localStorage.getItem('theme') === 'light') {
         document.documentElement.classList.add('light-theme');
     }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Move Operating Year selector to top header links list
+        const yearSelector = document.querySelector('.working-year-selector');
+        const linksList = document.querySelector('.links-list');
+        if (yearSelector && linksList) {
+            // Style it nicely for the header inline placement
+            yearSelector.style.display = 'inline-flex';
+            yearSelector.style.alignItems = 'center';
+            yearSelector.style.gap = '8px';
+            yearSelector.style.margin = '0 20px 0 0';
+            yearSelector.style.padding = '4px 10px';
+            yearSelector.style.background = 'rgba(255, 107, 0, 0.1)';
+            yearSelector.style.border = '1px solid rgba(255, 107, 0, 0.2)';
+            yearSelector.style.borderRadius = '6px';
+            
+            // Hide the block "Operating Year" label text or make it smaller inline
+            const label = yearSelector.querySelector('span');
+            if (label) {
+                label.style.display = 'inline';
+                label.style.marginRight = '5px';
+                label.style.marginBottom = '0';
+                label.style.fontSize = '11px';
+                label.style.color = '#ff6b00';
+                label.style.fontWeight = 'bold';
+            }
+            
+            const li = document.createElement('li');
+            li.appendChild(yearSelector);
+            linksList.insertBefore(li, linksList.firstChild);
+        }
+        
+        // Add Back to Dashboard link to top right navigation list if not on index.php / main.php
+        const currentPath = window.location.pathname;
+        if (!currentPath.endsWith('index.php') && !currentPath.endsWith('main.php') && !currentPath.endsWith('/')) {
+            if (linksList) {
+                if (!document.getElementById('nav-dashboard-home')) {
+                    const li = document.createElement('li');
+                    li.id = 'nav-dashboard-home';
+                    li.innerHTML = '<a href="index.php" style="color: #ff6b00; font-weight: bold; font-size: 14px;"><i class="entypo-home" style="margin-right: 4px;"></i>Dashboard Home</a>';
+                    linksList.insertBefore(li, linksList.firstChild);
+                }
+            }
+        }
+    });
 </script>
 <link rel="stylesheet" href="../../css/premium.css">
 
 <!-- Working Year Selector -->
-<div class="working-year-selector" style="padding: 15px; border-bottom: 1px solid rgba(255,107,0,0.15); text-align: center; background: rgba(0,0,0,0.3); border-radius: 8px; margin: 10px 15px;">
+<div class="working-year-selector" style="display: none;">
     <span style="color: #a3a3a3; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Operating Year</span>
     <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
         <a href="?set_working_year=<?php echo $working_year - 1; ?>" style="background: rgba(255, 107, 0, 0.15); color: #ff6b00; border: 1px solid rgba(255,107,0,0.3); padding: 2px 8px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 12px; transition: all 0.2s;">&lt;</a>
