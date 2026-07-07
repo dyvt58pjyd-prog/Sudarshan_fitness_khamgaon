@@ -26,11 +26,17 @@ if (isset($_POST['approve_id'])) {
         $gender = $req['gender'];
         
         // Fetch plan details
-        $plan_q = mysqli_query($con, "SELECT planName, validity FROM plan WHERE pid = '$pid'");
+        $plan_q = mysqli_query($con, "SELECT planName, validity, amount FROM plan WHERE pid = '$pid'");
         if ($plan_q && mysqli_num_rows($plan_q) > 0) {
             $plan_data = mysqli_fetch_assoc($plan_q);
             $plan_name = $plan_data['planName'];
             $validity = intval($plan_data['validity']);
+            $plan_amount = intval($plan_data['amount']);
+            
+            $discount_amt = 0;
+            if ($plan_amount > $amount) {
+                $discount_amt = $plan_amount - $amount;
+            }
             
             // Set other plans for this user to renewal = 'no'
             mysqli_query($con, "UPDATE enrolls_to SET renewal = 'no' WHERE uid = '$uid'");
@@ -47,7 +53,7 @@ if (isset($_POST['approve_id'])) {
             
             // Insert active subscription into enrolls_to
             $ins_q = "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
-                      VALUES ('$pid', '$uid', '$cdate', '$expiredate', 'yes', '$payment_mode', '$received_by', 0, $amount)";
+                      VALUES ('$pid', '$uid', '$cdate', '$expiredate', 'yes', '$payment_mode', '$received_by', $discount_amt, $amount)";
             
             if (mysqli_query($con, $ins_q)) {
                 // Update payment request status to approved

@@ -550,7 +550,7 @@ if (isset($_POST['submit_registration'])) {
                                             $discounted_price -= 1000;
                                             $has_discount = true;
                                         } elseif ($p['validity'] == 3 || $p['amount'] == 3900 || $p['amount'] == 4000) {
-                                            $original_price = 4500; // Original price was 4500
+                                            $original_price = 4000; // Original price is 4000
                                             $discounted_price = 3900; // Welcome Bonus final price is 3900
                                             $has_discount = true;
                                         }

@@ -351,6 +351,28 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 							</div>
 						</a>
 
+						<!-- Visitor Entry -->
+						<a href="visitor_entry.php" style="text-decoration: none;">
+							<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+							     onmouseover="this.style.transform='scale(1.03)'; this.style.background='linear-gradient(135deg, rgba(236,72,153,0.25) 0%, rgba(236,72,153,0.1) 100%)';" 
+							     onmouseout="this.style.transform='scale(1)'; this.style.background='linear-gradient(135deg, rgba(236,72,153,0.15) 0%, rgba(236,72,153,0.05) 100%)';">
+								<div style="font-size: 50px; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(236,72,153,0.3));">📝👥</div>
+								<h4 style="color: #ffffff; font-weight: 800; font-size: 17px; margin: 0 0 5px 0; text-transform: uppercase; letter-spacing: 0.5px;">Visitor Entry</h4>
+								<span style="color: rgba(255,255,255,0.6); font-size: 12.5px; font-weight: 500;">Log inquiries & live visitor scans</span>
+							</div>
+						</a>
+
+						<!-- Visitor Logs -->
+						<a href="visitors_list.php" style="text-decoration: none;">
+							<div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.05) 100%); border: 2px solid #0ea5e9; border-radius: 18px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+							     onmouseover="this.style.transform='scale(1.03)'; this.style.background='linear-gradient(135deg, rgba(14,165,233,0.25) 0%, rgba(14,165,233,0.1) 100%)';" 
+							     onmouseout="this.style.transform='scale(1)'; this.style.background='linear-gradient(135deg, rgba(14,165,233,0.15) 0%, rgba(14,165,233,0.05) 100%)';">
+								<div style="font-size: 50px; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(14,165,233,0.3));">📁👥</div>
+								<h4 style="color: #ffffff; font-weight: 800; font-size: 17px; margin: 0 0 5px 0; text-transform: uppercase; letter-spacing: 0.5px;">Visitor Logs</h4>
+								<span style="color: rgba(255,255,255,0.6); font-size: 12.5px; font-weight: 500;">View previous visit & inquiry logs</span>
+							</div>
+						</a>
+
 					</div>
 				</div>
 			</div>

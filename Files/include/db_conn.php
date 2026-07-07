@@ -363,6 +363,8 @@ if (!$con) {
     }
 
     mysqli_query($con, "INSERT IGNORE INTO plan (pid, planName, amount, validity, active) VALUES ('PTPLAN', 'Personal Training', 0, 1, 'no')");
+    mysqli_query($con, "INSERT IGNORE INTO plan (pid, planName, amount, validity, active, description) VALUES ('THREE3M', '3-Month Plan', 4000, 3, 'yes', '3 Months Subscription')");
+    mysqli_query($con, "UPDATE plan SET amount = 4000 WHERE validity = 3");
 
     // Self-healing database check: ensure broadcast_campaigns table exists
     mysqli_query($con, "CREATE TABLE IF NOT EXISTS broadcast_campaigns (
@@ -374,6 +376,19 @@ if (!$con) {
         sent_count INT DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )");
+
+    // Self-healing database check: ensure visitors table exists
+    mysqli_query($con, "CREATE TABLE IF NOT EXISTS `visitors` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `name` varchar(255) NOT NULL,
+      `mobile` varchar(20) NOT NULL,
+      `address` text NOT NULL,
+      `photo_path` varchar(255) DEFAULT NULL,
+      `visit_date` datetime NOT NULL,
+      `status` varchar(50) DEFAULT 'visited',
+      `notes` text DEFAULT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
     // Self-healing database check: ensure gym_tips table exists
     mysqli_query($con, "CREATE TABLE IF NOT EXISTS gym_tips (
