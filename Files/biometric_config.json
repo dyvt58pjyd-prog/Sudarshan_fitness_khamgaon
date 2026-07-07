@@ -1,0 +1,10 @@
+{
+    "device_ip": "192.168.1.13",
+    "device_port": 4370,
+    "api_sync_url": "https://sudarshanfitness.de/api/biometric_sync.php",
+    "api_log_url": "https://sudarshanfitness.de/api/log_attendance.php",
+    "sync_interval_seconds": 10,
+    "simulation_mode": false,
+    "templates_cache_dir": "templates_cache",
+    "checkpoint_file": "sync_checkpoint.txt"
+}
