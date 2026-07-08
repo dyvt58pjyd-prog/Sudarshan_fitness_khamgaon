@@ -44,6 +44,7 @@ if (substr($logo_path, 0, 6) === '../../') {
 	<link rel="stylesheet" href="./css/style.css"/>
 	<link rel="stylesheet" type="text/css" href="./css/entypo.css">
 	<link rel="stylesheet" href="./css/premium.css"/>
+    <style>
     /* Advanced Animated Background with Glowing Mesh & Lightning Flash */
     body.login-page {
         background: #000000 !important;
