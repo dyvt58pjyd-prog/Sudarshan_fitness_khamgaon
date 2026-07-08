@@ -5,9 +5,95 @@
   "description": "Official management and member portal for Sudarshan Fitness.",
   "start_url": "./index.php",
   "display": "fullscreen",
+  "display_override": ["window-controls-overlay", "fullscreen", "minimal-ui"],
   "orientation": "portrait",
   "background_color": "#0b0f19",
   "theme_color": "#ff6b00",
+  "lang": "en",
+  "dir": "ltr",
+  "scope": "/",
+  "categories": ["fitness", "health", "sports"],
+  "prefer_related_applications": false,
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=de.sudarshanfitness.twa",
+      "id": "de.sudarshanfitness.twa"
+    }
+  ],
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+  "shortcuts": [
+    {
+      "name": "Member Dashboard",
+      "short_name": "Dashboard",
+      "description": "View your fitness dashboard",
+      "url": "./dashboard/member/index.php",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "./index.php",
+      "accept": {
+        "image/*": [".jpg", ".jpeg", ".png"]
+      }
+    }
+  ],
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+sudarshan",
+      "url": "./index.php?action=%s"
+    }
+  ],
+  "share_target": {
+    "action": "./index.php",
+    "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "note_taking": {
+    "new_note_url": "./index.php"
+  },
+  "scope_extensions": [
+    {
+      "origin": "https://sudarshanfitness.de"
+    }
+  ],
+  "widgets": [
+    {
+      "name": "Live Occupancy",
+      "description": "Check how full the gym is right now.",
+      "tag": "occupancy",
+      "ms_ac_template": "widgets/template.json",
+      "data": "widgets/data.json",
+      "type": "application/json",
+      "screenshots": [
+        {
+          "src": "images/logo.png",
+          "sizes": "1024x1024",
+          "label": "Live Gym Occupancy"
+        }
+      ],
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192"
+        }
+      ],
+      "auth": false,
+      "update": 900
+    }
+  ],
   "icons": [
     {
       "src": "logo192.png",
