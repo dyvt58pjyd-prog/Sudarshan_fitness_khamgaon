@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "de.sudarshanfitness.twa",
+    "sha256_cert_fingerprints": [
+      "7F:39:0A:C0:9D:C4:87:DE:1C:2A:8A:45:CD:3D:51:C8:E8:85:3E:39:38:D1:9F:C4:B9:6D:B8:C6:85:54:59:DA"
+    ]
+  }
+}]

@@ -2,7 +2,7 @@
   "name": "Sudarshan Fitness",
   "short_name": "Sudarshan Gym",
   "start_url": "./index.php",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#0b0f19",
   "theme_color": "#ff6b00",
   "icons": [
