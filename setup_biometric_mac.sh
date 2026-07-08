@@ -3,7 +3,7 @@
 cd "$(dirname "$0")"
 
 echo "=========================================================="
-2. "          Titan Gym - Mac Biometric setup"
+echo "          Titan Gym - Mac Biometric setup"
 echo "=========================================================="
 echo ""
 
