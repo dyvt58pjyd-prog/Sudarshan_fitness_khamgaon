@@ -3,7 +3,7 @@ require '../../include/db_conn.php';
 page_protect();
 
 $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
-if ($current_role !== 'super_admin' && $current_role !== 'owner' && $current_role !== 'reception') {
+if ($current_role !== 'super_admin' && $current_role !== 'owner' && $current_role !== 'reception' && $current_role !== 'auditor') {
     echo "<head><script>alert('Access Denied: You do not have permissions to view invoices.');</script></head></html>";
     echo "<meta http-equiv='refresh' content='0; url=index.php'>";
     exit();
