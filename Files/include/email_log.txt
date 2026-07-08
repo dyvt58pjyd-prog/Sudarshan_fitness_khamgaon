@@ -3069,3 +3069,93 @@ BODY:
         
 ========================================================
 
+========================================================
+DATE: 2026-06-30 20:34:59
+TO: test@example.com
+SUBJECT: Welcome to the Sudarshan Fitness Family - Registration Confirmed
+BODY:
+
+        
+        
+            
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #0c0c0c, #ff6b00); }
+                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                p { font-size: 14px; line-height: 1.6; color: #475569; }
+                .details-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+                .details-table th, .details-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; text-align: left; font-size: 14px; }
+                .details-table th { color: #475569; font-weight: 600; width: 40%; background-color: #f8fafc; }
+                .details-table td { color: #0f172a; font-weight: 600; }
+                .login-box { background-color: rgba(255, 107, 0, 0.05); border: 1px dashed rgba(255, 107, 0, 0.3); padding: 20px; margin: 25px 0; border-radius: 10px; font-size: 14px; line-height: 1.6; }
+                .login-box strong { color: #ff6b00; }
+                .login-box code { background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+            
+        
+        
+            
+                
+                Welcome to the Sudarshan Fitness Family! (Pre-Booking Confirmed)
+                Dear Test User,
+                Congratulations on your Grand Opening Pre-Booking! Your spot is officially secured and your membership will begin on July 8th, 2026. Below are your membership details and portal credentials. Your official payment receipt PDF has been attached.
+                
+
+ 
+                 
+                
+                    Join Our Members WhatsApp Group!
+                    Get real-time updates, fitness tips, and connect with fellow gym members in our exclusive community group.
+                    Join WhatsApp Group &rarr;
+                
+            
+ 
+                 
+                    Portal Access Credentials:
+                    Portal Link: Go to Portal &rarr;
+                    Username ID: 123458
+                    Password: 1234
+                
+
+                
+                    
+                        Membership ID
+                        123458
+                    
+                    
+                        Biometric Access PIN
+                        606585
+                    
+                    
+                        Subscribed Plan
+                        Monthly Plan
+                    
+                    
+                        Plan Price
+                        ₹600
+                    
+                    
+                    
+                    
+                        Amount Paid
+                        ₹600
+                    
+                    
+                        Expires On
+                        2026-08-08
+                    
+                
+
+                Log in to your dashboard to track your health status, daily routines, and renewals.
+                
+                
+                    This is an automated message from SUDARSHAN FITNESS.
+                    Need help? Contact support: sudarshan.fitness.khm@gmail.com
+                    
+                    System Engineered by Anurag Bawaskar | 📞 8459962390
+                
+            
+        
+        
+========================================================
+

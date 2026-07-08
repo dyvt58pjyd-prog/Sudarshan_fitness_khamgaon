@@ -1357,7 +1357,6 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 							$date  = $_SESSION['working_year'] . '-' . date('m');
 							$query = "select * from enrolls_to WHERE  paid_date LIKE '$date%'";
 
-							//echo $query;
 							$result  = mysqli_query($con, $query);
 							$revenue = 0;
 							if ($result && mysqli_num_rows($result) > 0) {
@@ -1376,6 +1375,16 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 							        }
 							    }
 							}
+                            
+                            // Include PT Revenue in the calculation
+                            $query_pt = "SELECT amount FROM pt_enrollments WHERE enroll_date LIKE '$date%'";
+                            $result_pt = mysqli_query($con, $query_pt);
+                            if ($result_pt && mysqli_num_rows($result_pt) > 0) {
+                                while ($row_pt = mysqli_fetch_array($result_pt, MYSQLI_ASSOC)) {
+                                    $revenue += intval($row_pt['amount']);
+                                }
+                            }
+                            
 							echo "₹".$revenue;
 							?>
 						</div>
@@ -1452,6 +1461,71 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			
 			</div>
 			<!-- End of Metric Tiles Row -->
+            
+            <!-- Today's Cash vs UPI Collection Panel -->
+            <?php
+            $today = date('Y-m-d');
+            $cash = 0;
+            $upi = 0;
+            
+            // Calculate from enrolls_to
+            $q_mem = "SELECT paid_amount, payment_mode FROM enrolls_to WHERE paid_date = '$today'";
+            $res_mem = mysqli_query($con, $q_mem);
+            if($res_mem && mysqli_num_rows($res_mem) > 0){
+                while($row = mysqli_fetch_assoc($res_mem)){
+                    $amount = intval($row['paid_amount']);
+                    $mode = strtolower(trim($row['payment_mode']));
+                    if(strpos($mode, 'cash') !== false) {
+                        $cash += $amount;
+                    } elseif(strpos($mode, 'upi') !== false || strpos($mode, 'online') !== false) {
+                        $upi += $amount;
+                    } else {
+                        $cash += $amount; 
+                    }
+                }
+            }
+
+            // Calculate from pt_enrollments
+            $q_pt = "SELECT amount, payment_mode FROM pt_enrollments WHERE enroll_date = '$today'";
+            $res_pt = mysqli_query($con, $q_pt);
+            if($res_pt && mysqli_num_rows($res_pt) > 0){
+                while($row = mysqli_fetch_assoc($res_pt)){
+                    $amount = intval($row['amount']);
+                    $mode = strtolower(trim($row['payment_mode']));
+                    if(strpos($mode, 'cash') !== false) {
+                        $cash += $amount;
+                    } elseif(strpos($mode, 'upi') !== false || strpos($mode, 'online') !== false) {
+                        $upi += $amount;
+                    } else {
+                        $cash += $amount; 
+                    }
+                }
+            }
+            $total_today = $cash + $upi;
+            ?>
+            <div class="row" style="margin-bottom: 30px; margin-left: 0; margin-right: 0;">
+                <div class="col-md-12" style="padding: 0;">
+                    <div class="portal-card" style="background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; box-shadow: var(--glass-shadow); color: #ffffff;">
+                        <h3 style="color: #ffffff; font-weight: 700; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 20px;">💳</span> Today's Collection Breakdown
+                        </h3>
+                        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                            <div style="flex: 1; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; border-left: 4px solid #10b981;">
+                                <div style="color: #9ca3af; font-size: 13px; text-transform: uppercase;">Cash Collection</div>
+                                <div style="font-size: 24px; font-weight: bold; color: #10b981;">₹<?php echo number_format($cash); ?></div>
+                            </div>
+                            <div style="flex: 1; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; border-left: 4px solid #3b82f6;">
+                                <div style="color: #9ca3af; font-size: 13px; text-transform: uppercase;">UPI / Online Collection</div>
+                                <div style="font-size: 24px; font-weight: bold; color: #3b82f6;">₹<?php echo number_format($upi); ?></div>
+                            </div>
+                            <div style="flex: 1; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; border-left: 4px solid #ff6b00;">
+                                <div style="color: #9ca3af; font-size: 13px; text-transform: uppercase;">Total Today</div>
+                                <div style="font-size: 24px; font-weight: bold; color: #ffffff;">₹<?php echo number_format($total_today); ?></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 			
 			<!-- Batch Occupancy & Available Spots Panel -->
 			<div class="row" style="margin-bottom: 30px; margin-left: 0; margin-right: 0;">

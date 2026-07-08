@@ -332,6 +332,7 @@ class BiometricSyncAgent:
             bio_id = pu["biometric_id"]
             username = pu["username"]
             status = pu["status"]  # 'active' or 'inactive'
+            pending_enrollment = pu.get("pending_enrollment", False)
 
             # Ensure we are dealing with numeric ID
             try:
@@ -386,6 +387,20 @@ class BiometricSyncAgent:
                         if not cached or len(cached.get("fingers", [])) != len(device_user_temps):
                             self.save_local_templates(device_uid, username, device_user_temps)
                             print(f"{COLOR_CYAN}{self.log_timestamp()} Backed up / Updated templates cache locally for '{username}' (ID: {bio_id}, fingers: {len(device_user_temps)}).{COLOR_RESET}")
+
+                # Remote Enrollment Trigger Check
+                if pending_enrollment:
+                    print(f"{COLOR_MAGENTA}{self.log_timestamp()} Remote Enrollment Triggered for '{username}' (ID: {bio_id}). Activating scanner...{COLOR_RESET}")
+                    try:
+                        # Command device to enter enrollment mode
+                        conn.enroll_user(uid=device_uid, temp_id=0, user_id=str(device_uid))
+                        print(f"{COLOR_GREEN}{self.log_timestamp()} Scanner activated successfully!{COLOR_RESET}")
+                        
+                        # Acknowledge and clear the flag on the portal
+                        clear_url = self.config["api_sync_url"].replace("biometric_sync.php", "clear_enrollment_flag.php")
+                        requests.post(clear_url, json={"biometric_id": device_uid}, timeout=5)
+                    except Exception as e:
+                        print(f"{COLOR_RED}{self.log_timestamp()} Failed to trigger remote enrollment: {e}{COLOR_RESET}")
 
             elif status == 'inactive':
                 if on_device:
@@ -518,7 +533,7 @@ class BiometricSyncAgent:
             zk_class = ZK
 
         while True:
-            zk = zk_class(self.config["device_ip"], port=self.config["device_port"], timeout=5)
+            zk = zk_class(self.config["device_ip"], port=self.config["device_port"], timeout=5, force_udp=True, ommit_ping=True)
             conn = None
             try:
                 print(f"{COLOR_CYAN}{self.log_timestamp()} Connecting to biometric device...{COLOR_RESET}")

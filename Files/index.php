@@ -248,6 +248,10 @@ if (substr($logo_path, 0, 6) === '../../') {
                                 <i class="entypo-cog"></i>
                                 <span>App Developer</span>
                             </div>
+                            <div class="category-tab <?php echo ($selected_role === 'auditor') ? 'active' : ''; ?>" data-role="auditor" onclick="selectRole('auditor')">
+                                <i class="entypo-chart-bar"></i>
+                                <span>Auditor</span>
+                            </div>
                         </div>
 
                         <!-- Username/UserID input -->

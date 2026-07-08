@@ -1,0 +1,16 @@
+[30-Jun-2026 14:59:32 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '../../include/db_conn.php' (include_path='.:/opt/homebrew/Cellar/php/8.5.7/share/php/pear') in /Users/anurag.bawaskar/Downloads/Titan-Gym-master/Files/dashboard/admin/approve_payment.php:2
+Stack trace:
+#0 /Users/anurag.bawaskar/Downloads/Titan-Gym-master/test_approve.php(7): include()
+#1 {main}
+  thrown in /Users/anurag.bawaskar/Downloads/Titan-Gym-master/Files/dashboard/admin/approve_payment.php on line 2
+[30-Jun-2026 20:30:21 Asia/Calcutta] PHP Fatal error:  Uncaught ArgumentCountError: Too few arguments to function send_member_email(), 3 passed in /Users/anurag.bawaskar/Downloads/Titan-Gym-master/Files/dashboard/admin/approve_payment.php on line 104 and at least 8 expected in /Users/anurag.bawaskar/Downloads/Titan-Gym-master/Files/include/db_conn.php:524
+Stack trace:
+#0 /Users/anurag.bawaskar/Downloads/Titan-Gym-master/Files/dashboard/admin/approve_payment.php(104): send_member_email(Object(mysqli), 123457, 'new')
+#1 /Users/anurag.bawaskar/Downloads/Titan-Gym-master/Files/dashboard/admin/test_approve_admin.php(11): include('/Users/anurag.b...')
+#2 {main}
+  thrown in /Users/anurag.bawaskar/Downloads/Titan-Gym-master/Files/include/db_conn.php on line 524
+[30-Jun-2026 20:34:59 Asia/Calcutta] WhatsApp API not configured. Message to 919999999999 skipped.
+[01-Jul-2026 17:16:54 UTC] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /Users/anurag.bawaskar/Downloads/Titan-Gym-master/add_enroll_col.php:3
+Stack trace:
+#0 {main}
+  thrown in /Users/anurag.bawaskar/Downloads/Titan-Gym-master/add_enroll_col.php on line 3
