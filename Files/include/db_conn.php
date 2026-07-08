@@ -699,7 +699,7 @@ if (!function_exists('send_member_email')) {
  
                  <div class='login-box'>
                     <strong style='font-size: 15px; display: block; margin-bottom: 8px;'>Portal Access Credentials:</strong>
-                    Portal Link: <a href='https://sudarshanfitness.loca.lt' style='color: #ff6b00; text-decoration: none; font-weight: bold;'>Go to Portal &rarr;</a><br>
+                    Portal Link: <a href='https://sudarshan-fitness.loca.lt' style='color: #ff6b00; text-decoration: none; font-weight: bold;'>Go to Portal &rarr;</a><br>
                     Username ID: <code>$memID</code><br>
                     Password: <code>$password</code>
                 </div>
