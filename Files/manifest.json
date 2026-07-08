@@ -1,8 +1,11 @@
 {
+  "id": "/?source=pwa",
   "name": "Sudarshan Fitness",
   "short_name": "Sudarshan Gym",
+  "description": "Official management and member portal for Sudarshan Fitness.",
   "start_url": "./index.php",
   "display": "fullscreen",
+  "orientation": "portrait",
   "background_color": "#0b0f19",
   "theme_color": "#ff6b00",
   "icons": [
@@ -14,7 +17,22 @@
     {
       "src": "logo512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "images/logo.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "images/poster_bg.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "form_factor": "wide"
     }
   ]
 }
