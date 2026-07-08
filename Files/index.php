@@ -44,12 +44,65 @@ if (substr($logo_path, 0, 6) === '../../') {
 	<link rel="stylesheet" href="./css/style.css"/>
 	<link rel="stylesheet" type="text/css" href="./css/entypo.css">
 	<link rel="stylesheet" href="./css/premium.css"/>
-    <style>
+    /* Advanced Animated Background with Glowing Mesh & Lightning Flash */
+    body.login-page {
+        background: #000000 !important;
+        position: relative;
+        overflow-x: hidden;
+        background-image: 
+            radial-gradient(circle at 50% -20%, rgba(255, 107, 0, 0.18) 0%, transparent 50%),
+            radial-gradient(circle at 0% 100%, rgba(255, 107, 0, 0.08) 0%, transparent 45%) !important;
+        animation: global-glow 15s ease-in-out infinite alternate;
+        transition: background-color 0.15s ease, filter 0.15s ease !important;
+    }
+
+    @keyframes global-glow {
+        0% { background-color: #000000; }
+        50% { background-color: #050505; }
+        100% { background-color: #000000; }
+    }
+
+    /* Periodic Lightning Strike Flash Effect */
+    .lightning-flash-active {
+        animation: screen-lightning 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
+    }
+
+    @keyframes screen-lightning {
+        0% {
+            background-color: rgba(255, 255, 255, 0.12);
+            filter: brightness(1.8);
+        }
+        10% {
+            background-color: rgba(255, 107, 0, 0.08);
+            filter: brightness(1.4);
+        }
+        15% {
+            background-color: rgba(255, 255, 255, 0.15);
+            filter: brightness(2.0);
+        }
+        30% {
+            background-color: rgba(255, 107, 0, 0.04);
+            filter: brightness(1.2);
+        }
+        100% {
+            background-color: transparent;
+            filter: none;
+        }
+    }
+
+    /* Container electrical surge pulse */
     .login-container {
         max-width: 650px !important;
         width: 95% !important;
         border-radius: 28px !important;
         padding: 45px 35px 35px 35px !important;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    }
+    
+    .login-container.surge-active {
+        box-shadow: 0 0 50px rgba(255, 107, 0, 0.45), var(--glass-shadow) !important;
+        border-color: rgba(255, 107, 0, 0.5) !important;
+        transform: scale(1.01) !important;
     }
 
     .login-categories {
@@ -152,6 +205,8 @@ if (substr($logo_path, 0, 6) === '../../') {
     </style>
 </head>
 <body class="page-body login-page login-form-fall">
+    <!-- Electrical Lightning Canvas Background -->
+    <canvas id="lightning-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; opacity: 0.85;"></canvas>
     <div id="container">
         <div class="login-container">
             <div class="login-header login-caret">
@@ -376,5 +431,177 @@ if (substr($logo_path, 0, 6) === '../../') {
         });
     </script>
     <?php endif; ?>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const canvas = document.getElementById('lightning-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+        
+        window.addEventListener('resize', function() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        const particles = [];
+        const maxParticles = 45;
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.8;
+                this.vy = (Math.random() - 0.5) * 0.8;
+                this.radius = Math.random() * 2 + 1;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 107, 0, 0.4)';
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < maxParticles; i++) {
+            particles.push(new Particle());
+        }
+
+        // Function to draw jagged lightning bolt between two points
+        function drawLightningBolt(x1, y1, x2, y2, segments = 5, color = 'rgba(255, 150, 0, 0.85)', widthVal = 1.5) {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            
+            let currX = x1;
+            let currY = y1;
+            
+            for (let i = 1; i < segments; i++) {
+                const ratio = i / segments;
+                const targetX = x1 + (x2 - x1) * ratio;
+                const targetY = y1 + (y2 - y1) * ratio;
+                
+                // Add jitter perpendicular to line
+                const offsetRange = 25 * (1 - Math.abs(ratio - 0.5) * 2);
+                const jitterX = (Math.random() - 0.5) * offsetRange;
+                const jitterY = (Math.random() - 0.5) * offsetRange;
+                
+                currX = targetX + jitterX;
+                currY = targetY + jitterY;
+                ctx.lineTo(currX, currY);
+            }
+            
+            ctx.lineTo(x2, y2);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = widthVal;
+            ctx.shadowColor = '#ff6b00';
+            ctx.shadowBlur = 10;
+            ctx.stroke();
+            
+            // Reset shadow
+            ctx.shadowBlur = 0;
+        }
+
+        let activeBolts = [];
+
+        // Trigger electrical strike and flash
+        function triggerLightning() {
+            // Apply flash style to body
+            document.body.classList.add('lightning-flash-active');
+            const container = document.querySelector('.login-container');
+            if (container) {
+                container.classList.add('surge-active');
+            }
+            
+            setTimeout(() => {
+                document.body.classList.remove('lightning-flash-active');
+                if (container) {
+                    container.classList.remove('surge-active');
+                }
+            }, 600);
+
+            // Generate 3-5 random lightning arcs
+            const boltsCount = Math.floor(Math.random() * 3) + 2;
+            activeBolts = [];
+            
+            for (let i = 0; i < boltsCount; i++) {
+                const startNode = particles[Math.floor(Math.random() * particles.length)];
+                const endNode = particles[Math.floor(Math.random() * particles.length)];
+                if (startNode !== endNode) {
+                    activeBolts.push({
+                        x1: startNode.x,
+                        y1: startNode.y,
+                        x2: endNode.x,
+                        y2: endNode.y,
+                        segments: Math.floor(Math.random() * 4) + 4,
+                        width: Math.random() * 2 + 1,
+                        life: 15
+                    });
+                }
+            }
+        }
+
+        // Set interval for periodic lightning strikes (every 8 seconds average)
+        setInterval(() => {
+            if (Math.random() > 0.3) {
+                triggerLightning();
+            }
+        }, 8000);
+
+        // Also trigger on click/tap for awesome user interaction!
+        window.addEventListener('click', (e) => {
+            // Only trigger if click is outside login container
+            const container = document.querySelector('.login-container');
+            if (container && !container.contains(e.target)) {
+                triggerLightning();
+            }
+        });
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Update and draw nodes
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            
+            // Draw mesh lines
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dist = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
+                    if (dist < 130) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        const alpha = (1 - dist / 130) * 0.15;
+                        ctx.strokeStyle = `rgba(255, 107, 0, ${alpha})`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            // Draw active lightning bolts
+            activeBolts.forEach((bolt, idx) => {
+                drawLightningBolt(bolt.x1, bolt.y1, bolt.x2, bolt.y2, bolt.segments, `rgba(255, 175, 50, ${bolt.life / 15})`, bolt.width);
+                bolt.life--;
+                if (bolt.life <= 0) {
+                    activeBolts.splice(idx, 1);
+                }
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+    });
+    </script>
 </body>
 </html>
