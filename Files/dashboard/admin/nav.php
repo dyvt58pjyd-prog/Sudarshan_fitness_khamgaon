@@ -335,11 +335,11 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
     
-    // Live eTimeOffice Cloud Biometric Sync (Runs silently in background every 15 seconds)
+    // Live eTimeOffice Cloud Biometric Sync (Runs silently in background every 60 seconds)
     setInterval(function() {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "../../api/sync_etimeoffice.php", true);
         xhr.send();
-    }, 15000);
+    }, 60000);
 });
 </script>
