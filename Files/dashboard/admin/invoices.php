@@ -317,7 +317,7 @@ if ($res_logs) {
                                     $paid_amt = intval($inv['paid_amount']);
                                 ?>
                                     <tr>
-                                        <td style="font-family: monospace; font-size: 11.5px;"><?php echo htmlspecialchars($inv['et_id']); ?></td>
+                                        <td style="font-family: monospace; font-size: 11.5px;"><?php echo 100 + intval($inv['et_id']); ?></td>
                                         <td>
                                             <div style="display: flex; align-items: center; gap: 8px;">
                                                 <img src="<?php echo $avatar; ?>" class="member-avatar" alt="Avatar">

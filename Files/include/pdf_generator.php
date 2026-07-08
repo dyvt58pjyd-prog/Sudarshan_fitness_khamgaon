@@ -163,7 +163,7 @@ if (!function_exists('generate_receipt_pdf_file')) {
         $pdf->SetTextColor(100, 116, 139);
         $pdf->SetFont('Helvetica', '', 8.5);
         $pdf->SetX(140);
-        $pdf->Cell(55, 4.5, 'Receipt ID: #' . $row['userid'] . '-' . $row['et_id'], 0, 1, 'R');
+        $pdf->Cell(55, 4.5, 'Receipt ID: #' . (100 + intval($row['et_id'])), 0, 1, 'R');
         $pdf->SetX(140);
         $pdf->Cell(55, 4.5, 'Date: ' . $row['paid_date'], 0, 1, 'R');
         
@@ -494,7 +494,7 @@ if (!function_exists('generate_pt_receipt_pdf_file')) {
         $pdf->SetTextColor(100, 116, 139);
         $pdf->SetFont('Helvetica', '', 8.5);
         $pdf->SetX(140);
-        $pdf->Cell(55, 4.5, 'Receipt ID: #PT-' . $row['userid'] . '-' . $row['pt_id'], 0, 1, 'R');
+        $pdf->Cell(55, 4.5, 'Receipt ID: #PT-' . (100 + intval($row['pt_id'])), 0, 1, 'R');
         $pdf->SetX(140);
         $pdf->Cell(55, 4.5, 'Date: ' . $row['enroll_date'], 0, 1, 'R');
         

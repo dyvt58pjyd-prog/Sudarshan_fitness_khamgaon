@@ -330,7 +330,7 @@ $gym = get_gym_details($con);
             </div>
             <div class="receipt-badge">
                 <h2>PT Receipt</h2>
-                <p><strong>Receipt ID:</strong> #PT-<?php echo htmlspecialchars($row['pt_id']); ?></p>
+                <p><strong>Receipt ID:</strong> #PT-<?php echo 100 + intval($row['pt_id']); ?></p>
                 <p><strong>Date:</strong> <?php echo htmlspecialchars($row['enroll_date']); ?></p>
             </div>
         </div>

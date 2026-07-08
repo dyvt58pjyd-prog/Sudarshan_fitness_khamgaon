@@ -437,7 +437,7 @@ $total_paid = $paid_amount;
             </div>
             <div class="receipt-badge">
                 <h2>Payment Memo</h2>
-                <p><strong>Receipt ID:</strong> #<?php echo htmlspecialchars($row['et_id']); ?></p>
+                <p><strong>Receipt ID:</strong> #<?php echo 100 + intval($row['et_id']); ?></p>
                 <p><strong>Date:</strong> <?php echo htmlspecialchars($row['paid_date']); ?></p>
             </div>
         </div>
@@ -565,7 +565,7 @@ $total_paid = $paid_amount;
         const element = document.querySelector('.invoice-container');
         const opt = {
             margin:       [8, 8, 8, 8],
-            filename:     'Sudarshan_Fitness_Receipt_#' + '<?php echo $row['et_id']; ?>' + '.pdf',
+            filename:     'Sudarshan_Fitness_Receipt_#' + '<?php echo 100 + intval($row['et_id']); ?>' + '.pdf',
             image:        { type: 'jpeg', quality: 0.98 },
             html2canvas:  { scale: 2, useCORS: true },
             jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
