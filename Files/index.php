@@ -41,6 +41,7 @@ if (substr($logo_path, 0, 6) === '../../') {
     <meta name="twitter:card" content="summary_large_image">
 	<title><?php echo htmlspecialchars($gym['gym_name']); ?> | Login</title>
 	<link rel="shortcut icon" href="<?php echo htmlspecialchars($logo_path); ?>" type="image/jpeg">
+    <link rel="manifest" href="manifest.json">
 	<link rel="stylesheet" href="./css/style.css"/>
 	<link rel="stylesheet" type="text/css" href="./css/entypo.css">
 	<link rel="stylesheet" href="./css/premium.css"/>
