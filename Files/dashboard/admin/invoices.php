@@ -31,32 +31,62 @@ if (!empty($end_date)) {
 
 $where_clause = "WHERE " . implode(" AND ", $conditions);
 
-// Fetch Invoices
+// Fetch Standard Invoices
 $sql_logs = "SELECT e.et_id, e.uid, e.pid, e.paid_date, e.expire, e.payment_mode, e.received_by, 
                     e.discount_amount, e.paid_amount, p.planName, p.amount AS base_amount, u.username, u.photo 
              FROM enrolls_to e 
              INNER JOIN plan p ON e.pid = p.pid 
              INNER JOIN users u ON e.uid = u.userid
-             $where_clause
-             ORDER BY e.paid_date DESC, e.et_id DESC";
+             $where_clause";
+
+// Fetch PT Invoices
+$pt_where_clause = str_replace("e.paid_date", "p.enroll_date", $where_clause);
+$pt_where_clause = str_replace("e.uid", "p.uid", $pt_where_clause);
+$pt_where_clause = str_replace("p.planName LIKE", "'Personal Training' LIKE", $pt_where_clause);
+
+$sql_pt = "SELECT p.pt_id AS et_id, p.uid, 'PTPLAN' AS pid, p.enroll_date AS paid_date, p.expire_date AS expire, 
+                  p.payment_mode, p.received_by, 0 AS discount_amount, p.amount AS paid_amount, 
+                  CONCAT('Personal Training (', t.Full_name, ')') AS planName, p.amount AS base_amount, 
+                  u.username, u.photo 
+           FROM pt_enrollments p
+           INNER JOIN users u ON p.uid = u.userid
+           INNER JOIN admin t ON p.trainer_id = t.username
+           $pt_where_clause";
 
 $res_logs = mysqli_query($con, $sql_logs);
+$res_pt = mysqli_query($con, $sql_pt);
 $invoices = [];
 $total_revenue = 0;
 
 if ($res_logs) {
     while ($row = mysqli_fetch_assoc($res_logs)) {
-        // Resolve paid_amount fallback for old records
         if ($row['paid_amount'] === null) {
             $row['paid_amount'] = intval($row['base_amount']) - intval($row['discount_amount']);
             if ($row['paid_amount'] < 0) {
                 $row['paid_amount'] = 0;
             }
         }
+        $row['is_pt'] = false;
         $invoices[] = $row;
         $total_revenue += intval($row['paid_amount']);
     }
 }
+
+if ($res_pt) {
+    while ($row = mysqli_fetch_assoc($res_pt)) {
+        $row['is_pt'] = true;
+        $invoices[] = $row;
+        $total_revenue += intval($row['paid_amount']);
+    }
+}
+
+// Sort the combined array by paid_date DESC, then et_id DESC
+usort($invoices, function($a, $b) {
+    if ($a['paid_date'] === $b['paid_date']) {
+        return $b['et_id'] <=> $a['et_id'];
+    }
+    return $b['paid_date'] <=> $a['paid_date'];
+});
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -354,10 +384,17 @@ if ($res_logs) {
                                         </td>
                                         <td>
                                             <div style="display: flex; gap: 5px;">
-                                                <a href="gen_invoice.php?etid=<?php echo $inv['et_id']; ?>&pid=<?php echo urlencode($inv['pid']); ?>&id=<?php echo urlencode($inv['uid']); ?>" 
-                                                   target="_blank" class="action-btn btn-print" title="Print Invoice">
-                                                    <i class="entypo-print"></i>
-                                                </a>
+                                                <?php if (isset($inv['is_pt']) && $inv['is_pt']): ?>
+                                                    <a href="gen_pt_invoice.php?ptid=<?php echo $inv['et_id']; ?>" 
+                                                       target="_blank" class="action-btn btn-print" title="Print PT Invoice">
+                                                        <i class="entypo-print"></i>
+                                                    </a>
+                                                <?php else: ?>
+                                                    <a href="gen_invoice.php?etid=<?php echo $inv['et_id']; ?>&pid=<?php echo urlencode($inv['pid']); ?>&id=<?php echo urlencode($inv['uid']); ?>" 
+                                                       target="_blank" class="action-btn btn-print" title="Print Invoice">
+                                                        <i class="entypo-print"></i>
+                                                    </a>
+                                                <?php endif; ?>
                                                 <?php if ($current_role === 'super_admin'): ?>
                                                     <a href="del_payment.php?etid=<?php echo $inv['et_id']; ?>&uid=<?php echo urlencode($inv['uid']); ?>&redirect=invoices.php" 
                                                        class="action-btn btn-delete" title="Delete Payment"

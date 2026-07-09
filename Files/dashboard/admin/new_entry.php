@@ -637,8 +637,7 @@ if ($cnt_q) {
                 var ptDuration = document.getElementById('pt_duration');
                 if (ptDuration) {
                     var duration = parseInt(ptDuration.value) || 3;
-                    const pt_rates = { 1: 3000, 2: 6000, 3: 9000, 6: 18000, 12: 35000 };
-                    ptFees = pt_rates[duration] || (duration * 3000);
+                    ptFees = duration * 3500;
                 }
             }
             
