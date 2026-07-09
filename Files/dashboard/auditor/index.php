@@ -63,18 +63,41 @@ $yesterday_data = get_collection($con, $yesterday);
     <style>
         body { background: #0b0f19; color: #fff; font-family: 'Inter', sans-serif; }
         .page-container { display: flex; }
-        .sidebar-menu { width: 250px; background: #111827; padding: 20px; min-height: 100vh; }
-        .main-content { flex: 1; padding: 30px; }
-        .stat-card { background: #1f2937; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border-left: 4px solid #ff6b00; }
-        .stat-card h3 { margin-top: 0; color: #9ca3af; font-size: 14px; text-transform: uppercase; }
-        .stat-card h2 { font-size: 28px; margin: 10px 0; color: #fff; }
-        .stat-details { display: flex; justify-content: space-between; font-size: 14px; margin-top: 15px; border-top: 1px solid #374151; padding-top: 10px; }
-        .stat-details span.cash { color: #10b981; font-weight: bold; }
-        .stat-details span.upi { color: #3b82f6; font-weight: bold; }
+        .sidebar-menu { width: 250px; background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border-right: 1px solid rgba(255, 255, 255, 0.05); padding: 20px; min-height: 100vh; }
+        .main-content { flex: 1; padding: 40px; }
+        
+        .stat-card { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            border-radius: 24px; 
+            padding: 30px 20px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
+            position: relative; 
+            overflow: hidden; 
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
+        }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .stat-card.tile-orange { border-bottom: 4px solid #ff6b00; box-shadow: inset 0 -15px 30px -20px rgba(255,107,0,0.5); }
+        .stat-card.tile-gray { border-bottom: 4px solid #9ca3af; box-shadow: inset 0 -15px 30px -20px rgba(156,163,175,0.5); }
+        .stat-card.tile-pink { border-bottom: 4px solid #ec4899; box-shadow: inset 0 -15px 30px -20px rgba(236,72,153,0.5); }
+        
+        .stat-card h3 { margin-top: 0; color: #9ca3af; font-size: 14px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+        .stat-card h2 { font-size: 42px; font-weight: 800; margin: 15px 0; color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        
+        .stat-details { display: flex; justify-content: space-between; font-size: 14px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; }
+        .stat-details span.cash { color: #10b981; font-weight: 800; }
+        .stat-details span.upi { color: #3b82f6; font-weight: 800; }
+        
         .sidebar-menu ul { list-style: none; padding: 0; }
         .sidebar-menu ul li { margin-bottom: 10px; }
-        .sidebar-menu ul li a { color: #9ca3af; text-decoration: none; display: block; padding: 10px; border-radius: 6px; }
-        .sidebar-menu ul li a:hover, .sidebar-menu ul li.active a { background: #ff6b00; color: #fff; }
+        .sidebar-menu ul li a { color: #9ca3af; text-decoration: none; display: block; padding: 12px 15px; border-radius: 8px; font-weight: 600; transition: all 0.2s; }
+        .sidebar-menu ul li a:hover, .sidebar-menu ul li.active a { background: linear-gradient(135deg, #ff6b00, #e65c00); color: #fff; box-shadow: 0 4px 15px rgba(255,107,0,0.3); }
+        
+        .nav-card { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 30px; margin-top: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .btn-primary { display: inline-block; margin-top: 20px; background: linear-gradient(135deg, #ff6b00, #e65c00); color: #fff; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: all 0.2s; box-shadow: 0 4px 15px rgba(255,107,0,0.3); border: none; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,0,0.4); }
     </style>
 </head>
 <body>
@@ -85,11 +108,11 @@ $yesterday_data = get_collection($con, $yesterday);
         </div>
         
         <div class="main-content">
-            <h1 style="margin-bottom: 30px;">Auditing Dashboard</h1>
+            <h1 style="margin-bottom: 30px; font-weight: 800; font-size: 32px; display: flex; align-items: center; gap: 10px;"><i class="entypo-chart-bar" style="color: #ff6b00;"></i> Auditing Dashboard</h1>
             
             <div style="display: flex; gap: 20px; flex-wrap: wrap;">
                 <!-- Today's Collection -->
-                <div class="stat-card" style="flex: 1; min-width: 300px;">
+                <div class="stat-card tile-orange" style="flex: 1; min-width: 300px;">
                     <h3>Today's Total Collection</h3>
                     <h2>₹<?php echo number_format($today_data['total']); ?></h2>
                     <div class="stat-details">
@@ -99,7 +122,7 @@ $yesterday_data = get_collection($con, $yesterday);
                 </div>
                 
                 <!-- Yesterday's Collection -->
-                <div class="stat-card" style="flex: 1; min-width: 300px; border-left-color: #6b7280;">
+                <div class="stat-card tile-gray" style="flex: 1; min-width: 300px;">
                     <h3>Yesterday's Total Collection</h3>
                     <h2>₹<?php echo number_format($yesterday_data['total']); ?></h2>
                     <div class="stat-details">
@@ -108,21 +131,21 @@ $yesterday_data = get_collection($con, $yesterday);
                     </div>
                 </div>
                 <!-- Specific Date Collection -->
-                <div class="stat-card" style="flex: 1; min-width: 300px; border-left-color: #ec4899;">
+                <div class="stat-card tile-pink" style="flex: 1; min-width: 300px;">
                     <h3>Daily Collection Report</h3>
                     <form action="invoices.php" method="GET" style="margin-top: 15px; display: flex; gap: 10px;">
-                        <input type="date" name="start_date" style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #374151; background: #111827; color: white; color-scheme: dark;" required onchange="this.form.end_date.value = this.value;">
+                        <input type="date" name="start_date" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; color-scheme: dark; font-family: monospace; font-size: 14px;" required onchange="this.form.end_date.value = this.value;">
                         <input type="hidden" name="end_date" value="">
-                        <button type="submit" style="background: #ec4899; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer;">View</button>
+                        <button type="submit" class="btn-primary" style="margin-top: 0; padding: 10px 20px; background: linear-gradient(135deg, #ec4899, #be185d); box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);">View</button>
                     </form>
-                    <p style="font-size: 11px; color: #9ca3af; margin-top: 10px;">Select a date to see all collections, payer details, and PT payments for that day.</p>
+                    <p style="font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 15px;">Select a date to see all exact collections, payer details, and PT payments for that day.</p>
                 </div>
             </div>
             
-            <div style="margin-top: 40px; background: #1f2937; padding: 20px; border-radius: 12px;">
-                <h3>Navigation</h3>
-                <p style="color: #9ca3af; line-height: 1.6;">Welcome to the Auditor Dashboard. Use the sidebar to navigate to the <strong>Invoice Ledger</strong>, where you can view all individual transactions (including Memberships and Personal Training). Your role is restricted to financial auditing only.</p>
-                <a href="invoices.php" style="display: inline-block; margin-top: 15px; background: #ff6b00; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold;">View Full Invoice Ledger</a>
+            <div class="nav-card">
+                <h3 style="margin-top: 0; font-weight: 800; font-size: 20px;"><i class="entypo-docs"></i> Navigation</h3>
+                <p style="color: rgba(255,255,255,0.6); line-height: 1.6; font-size: 14px;">Welcome to the Auditor Dashboard. Use the sidebar to navigate to the <strong>Invoice Ledger</strong>, where you can view all individual transactions (including Memberships and Personal Training). Your role is restricted to financial auditing only.</p>
+                <a href="invoices.php" class="btn-primary"><i class="entypo-book-open"></i> View Full Invoice Ledger</a>
             </div>
         </div>
     </div>
