@@ -320,7 +320,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                     <?php endif; ?>
 
                     <div style="margin-top: 25px; text-align: center;">
-                        <a href="https://drive.google.com/uc?export=download&id=1dPIrSbq6eTvq4fWcz2CnfTFAWtSoTGvl" target="_blank" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981, #059669) !important; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3) !important; width: 100% !important; border: none !important;">
+                        <a href="https://play.google.com/apps/test/com.sudarshanfitness.portal/1" target="_blank" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981, #059669) !important; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3) !important; width: 100% !important; border: none !important;">
                             <i class="entypo-mobile" style="margin-right: 5px; font-size: 16px;"></i> Download Android App
                         </a>
                     </div>
