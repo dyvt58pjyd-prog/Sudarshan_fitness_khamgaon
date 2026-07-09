@@ -657,8 +657,7 @@ body::before {
     radial-gradient(circle at 80% 70%, rgba(234, 88, 12, 0.08) 0%, transparent 45%);
   z-index: -2;
   pointer-events: none;
-  filter: blur(80px);
-  animation: floatOrb1 25s infinite alternate ease-in-out;
+  /* Removed heavy blur and animation for performance */
 }
 
 body::after {
@@ -673,8 +672,7 @@ body::after {
     radial-gradient(circle at 25% 80%, rgba(59, 130, 246, 0.04) 0%, transparent 45%);
   z-index: -1;
   pointer-events: none;
-  filter: blur(100px);
-  animation: floatOrb2 30s infinite alternate ease-in-out;
+  /* Removed heavy blur and animation for performance */
 }
 
 /* Card Neon Hover Glows & Gloss Sweeps */
@@ -690,7 +688,7 @@ body::after {
   transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), 
               border-color 0.4s ease, 
               box-shadow 0.4s ease !important;
-  animation: borderGlow 8s infinite ease-in-out;
+  /* borderGlow animation removed for performance */
 }
 
 .a1-card-8::before, .portal-card::before, .camera-card::before, .controls-card::before, .backup-card::before, .tile-stats::before {
