@@ -341,7 +341,8 @@ usort($invoices, function($a, $b) {
                         <tbody>
                             <?php if (count($invoices) > 0): ?>
                                 <?php foreach ($invoices as $inv): 
-                                    $avatar = !empty($inv['photo']) ? htmlspecialchars($inv['photo']) : '../../images/default_avatar.jpg';
+                                    $photo_path = !empty($inv['photo']) ? str_replace(' ', '%20', $inv['photo']) : '';
+                                    $avatar = $photo_path ? htmlspecialchars($photo_path) : '../../images/logo.png';
                                     $base_amt = intval($inv['base_amount']);
                                     $disc_amt = intval($inv['discount_amount']);
                                     $paid_amt = intval($inv['paid_amount']);

@@ -209,11 +209,11 @@ if ($cnt_q) {
              </tr>
 			 <tr>
                <td height="35">PHONE NO:</td>
-               <td height="35"><input type="number" name="mobile" id="boxx" maxlength="10" required/ size="30"></td>
+               <td height="35"><input type="number" name="mobile" id="boxx" maxlength="10" size="30"></td>
              </tr>
 			  <tr>
                <td height="35">EMAIL ID:</td>
-               <td height="35"><input type="email" name="email" id="boxx" required/ size="30"></td>
+               <td height="35"><input type="email" name="email" id="boxx" size="30"></td>
              </tr>
 			 <tr>
                <td height="35">HEIGHT (cm):</td>
