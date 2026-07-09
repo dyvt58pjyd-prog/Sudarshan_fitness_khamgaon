@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sudarshan-gym-cache-v1';
+const CACHE_NAME = 'sudarshan-gym-cache-v2';
 const urlsToCache = [
   './',
   './index.php',
