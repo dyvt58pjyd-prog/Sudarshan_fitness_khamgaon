@@ -107,6 +107,16 @@ $yesterday_data = get_collection($con, $yesterday);
                         <span>UPI: <span class="upi">₹<?php echo number_format($yesterday_data['upi']); ?></span></span>
                     </div>
                 </div>
+                <!-- Specific Date Collection -->
+                <div class="stat-card" style="flex: 1; min-width: 300px; border-left-color: #ec4899;">
+                    <h3>Daily Collection Report</h3>
+                    <form action="invoices.php" method="GET" style="margin-top: 15px; display: flex; gap: 10px;">
+                        <input type="date" name="start_date" style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #374151; background: #111827; color: white; color-scheme: dark;" required onchange="this.form.end_date.value = this.value;">
+                        <input type="hidden" name="end_date" value="">
+                        <button type="submit" style="background: #ec4899; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer;">View</button>
+                    </form>
+                    <p style="font-size: 11px; color: #9ca3af; margin-top: 10px;">Select a date to see all collections, payer details, and PT payments for that day.</p>
+                </div>
             </div>
             
             <div style="margin-top: 40px; background: #1f2937; padding: 20px; border-radius: 12px;">

@@ -530,6 +530,16 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								</div>
 							</a>
 
+							<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 22px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
+								<div style="font-size: 40px; margin-bottom: 10px;">📅💳</div>
+								<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Daily Collection</h4>
+								<form action="invoices.php" method="GET" style="margin-top: 10px;">
+									<input type="date" name="start_date" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 6px; border-radius: 5px; width: 100%; margin-bottom: 8px; font-size: 12px; color-scheme: dark;" required onchange="this.form.end_date.value = this.value;">
+									<input type="hidden" name="end_date" value="">
+									<button type="submit" style="background: #ec4899; color: white; border: none; padding: 6px 12px; border-radius: 5px; width: 100%; font-weight: bold; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#db2777'" onmouseout="this.style.background='#ec4899'">View Ledger</button>
+								</form>
+							</div>
+
 							<?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
 							<a href="view_plan.php" style="text-decoration: none;">
 								<div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%); border: 2px solid #f59e0b; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
