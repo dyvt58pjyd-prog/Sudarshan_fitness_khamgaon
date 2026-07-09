@@ -48,19 +48,22 @@ $today_md = date('m-d');
 $birthday_sent = 0;
 $anniversary_sent = 0;
 
-// 1. Query birthdays today
+// Include SMTP mailer for email greetings
+require_once __DIR__ . '/../include/smtp_mailer.php';
+
+// 1. Query birthdays today (mobile OR email provided)
 $q_bday = mysqli_query($con, "
-    SELECT username, mobile, dob 
+    SELECT username, mobile, email, dob 
     FROM users 
     WHERE DATE_FORMAT(dob, '%m-%d') = '$today_md' 
-      AND mobile IS NOT NULL 
-      AND mobile != ''
+      AND ( (mobile IS NOT NULL AND mobile != '') OR (email IS NOT NULL AND email != '') )
 ");
 
 if ($q_bday && mysqli_num_rows($q_bday) > 0) {
     while ($row = mysqli_fetch_assoc($q_bday)) {
         $name = $row['username'];
         $mobile = $row['mobile'];
+        $email = $row['email'];
         
         $message = "🏋️ *Happy Birthday from {$gym_name}!* 🎂\n\n" .
                    "Dear *{$name}*,\n\n" .
@@ -68,25 +71,36 @@ if ($q_bday && mysqli_num_rows($q_bday) > 0) {
                    "Enjoy your special day!\n" .
                    "*{$gym_name}*";
         
-        enqueue_whatsapp_message($con, $mobile, $message);
+        // Send WhatsApp if mobile exists
+        if (!empty($mobile)) {
+            enqueue_whatsapp_message($con, $mobile, $message);
+        }
+        
+        // Send Email if email exists
+        if (!empty($email)) {
+            $subject = "Happy Birthday from $gym_name! 🎂";
+            $email_body = nl2br(htmlspecialchars($message));
+            send_smtp_email($email, $name, $subject, $email_body);
+        }
+        
         $birthday_sent++;
     }
 }
 
 // 2. Query gym anniversaries today
 $q_ann = mysqli_query($con, "
-    SELECT username, mobile, joining_date, (YEAR(CURRENT_DATE()) - YEAR(joining_date)) as years 
+    SELECT username, mobile, email, joining_date, (YEAR(CURRENT_DATE()) - YEAR(joining_date)) as years 
     FROM users 
     WHERE DATE_FORMAT(joining_date, '%m-%d') = '$today_md' 
       AND YEAR(joining_date) < YEAR(CURRENT_DATE())
-      AND mobile IS NOT NULL 
-      AND mobile != ''
+      AND ( (mobile IS NOT NULL AND mobile != '') OR (email IS NOT NULL AND email != '') )
 ");
 
 if ($q_ann && mysqli_num_rows($q_ann) > 0) {
     while ($row = mysqli_fetch_assoc($q_ann)) {
         $name = $row['username'];
         $mobile = $row['mobile'];
+        $email = $row['email'];
         $years = intval($row['years']);
         
         $year_word = ($years === 1) ? "year" : "years";
@@ -97,7 +111,16 @@ if ($q_ann && mysqli_num_rows($q_ann) > 0) {
                    "Best regards,\n" .
                    "*{$gym_name}*";
         
-        enqueue_whatsapp_message($con, $mobile, $message);
+        if (!empty($mobile)) {
+            enqueue_whatsapp_message($con, $mobile, $message);
+        }
+        
+        if (!empty($email)) {
+            $subject = "Happy Gym Anniversary! 🎉";
+            $email_body = nl2br(htmlspecialchars($message));
+            send_smtp_email($email, $name, $subject, $email_body);
+        }
+        
         $anniversary_sent++;
     }
 }
