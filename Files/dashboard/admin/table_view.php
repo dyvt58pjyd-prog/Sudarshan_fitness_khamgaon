@@ -8,8 +8,8 @@ $status = isset($_GET['status']) ? $_GET['status'] : 'all';
 $query  = "SELECT u.*, t.Full_name AS trainer_name 
            FROM users u 
            LEFT JOIN admin t ON u.trainer_id = t.username
-           WHERE YEAR(u.joining_date) <= " . $_SESSION['working_year'] . " 
-           ORDER BY u.joining_date";
+           WHERE u.userid != 'PENDING' AND YEAR(u.joining_date) <= " . $_SESSION['working_year'] . " 
+           ORDER BY u.joining_date DESC, u.userid DESC";
 $result = mysqli_query($con, $query);
 
 $all_members = [];
