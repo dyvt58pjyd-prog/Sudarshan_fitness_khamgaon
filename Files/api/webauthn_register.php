@@ -42,7 +42,7 @@ $credentialData = json_encode([
 
 $credentialData = mysqli_real_escape_string($con, $credentialData);
 
-$query = "UPDATE admin SET webauthn_credential = '$credentialData' WHERE username = '$user' AND role = 'owner'";
+$query = "UPDATE admin SET webauthn_credential = '$credentialData' WHERE username = '$user' AND role IN ('owner', 'super_admin')";
 if (mysqli_query($con, $query)) {
     // Clear session variables
     unset($_SESSION['webauthn_enroll_user']);
