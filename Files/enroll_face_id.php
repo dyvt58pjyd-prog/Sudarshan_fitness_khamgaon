@@ -146,6 +146,7 @@ $_SESSION['webauthn_enroll_challenge'] = $challenge;
                 challenge: challengeBuffer,
                 rp: {
                     name: "Sudarshan Fitness App",
+                    id: window.location.hostname
                 },
                 user: {
                     id: userIdBuffer,
