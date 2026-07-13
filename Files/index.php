@@ -313,9 +313,37 @@ if (substr($logo_path, 0, 6) === '../../') {
 
                     async function loginWithFaceID() {
                         try {
+                            const username = document.getElementById('textfield').value.trim();
+                            if (!username) {
+                                alert("Please enter your User ID first before clicking Login with Face ID.");
+                                return;
+                            }
+
                             const btn = document.getElementById('faceIdLoginBtn');
                             btn.innerText = 'Scanning...';
                             
+                            // Fetch the credential ID for this user from our database
+                            const credRes = await fetch(`api/get_face_id_credential.php?u=${encodeURIComponent(username)}`);
+                            const credData = await credRes.json();
+                            
+                            if (!credData.success) {
+                                alert(credData.error);
+                                btn.innerHTML = '<i class="entypo-camera"></i> Login with Face ID';
+                                return;
+                            }
+                            
+                            // Base64URL decode helper for the credential ID
+                            const base64urlToUint8Array = (base64url) => {
+                                const padding = '='.repeat((4 - base64url.length % 4) % 4);
+                                const base64 = (base64url + padding).replace(/\-/g, '+').replace(/_/g, '/');
+                                const rawData = window.atob(base64);
+                                const outputArray = new Uint8Array(rawData.length);
+                                for (let i = 0; i < rawData.length; ++i) {
+                                    outputArray[i] = rawData.charCodeAt(i);
+                                }
+                                return outputArray;
+                            };
+
                             // 32 random bytes for challenge
                             const challengeBuffer = new Uint8Array(32);
                             window.crypto.getRandomValues(challengeBuffer);
@@ -323,6 +351,11 @@ if (substr($logo_path, 0, 6) === '../../') {
                             const publicKey = {
                                 challenge: challengeBuffer,
                                 rpId: window.location.hostname,
+                                allowCredentials: [{
+                                    id: base64urlToUint8Array(credData.credentialId),
+                                    type: "public-key",
+                                    transports: ["internal"]
+                                }],
                                 userVerification: "required",
                                 timeout: 60000
                             };
