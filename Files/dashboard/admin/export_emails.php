@@ -7,30 +7,27 @@ if ($_SESSION['role'] !== 'super_admin') {
     exit();
 }
 
-$filename = "Exported_Emails_" . date('Y-m-d') . ".csv";
+$filename = "Exported_Emails_" . date('Y-m-d') . ".txt";
 
 // Output headers to trigger a file download
-header('Content-Type: text/csv; charset=utf-8');
+header('Content-Type: text/plain; charset=utf-8');
 header('Content-Disposition: attachment; filename=' . $filename);
 
-// Create a file pointer connected to the output stream
-$output = fopen('php://output', 'w');
-
-// Output the column headings
-fputcsv($output, array('User ID', 'Full Name', 'Email', 'Mobile', 'Joining Date'));
-
 // Fetch the emails from the database
-$query = "SELECT userid, username, email, mobile, joining_date FROM users ORDER BY joining_date DESC";
+$query = "SELECT email FROM users WHERE email IS NOT NULL AND email != '' ORDER BY joining_date DESC";
 $result = mysqli_query($con, $query);
 
+$emails = [];
 while ($row = mysqli_fetch_assoc($result)) {
-    // We can also skip empty emails if requested, but let's just output everything
-    // or specifically those who have emails
-    if (!empty($row['email'])) {
-        fputcsv($output, $row);
+    // Sanitize and trim the email just in case
+    $email = trim($row['email']);
+    if (!empty($email) && !in_array($email, $emails)) {
+        $emails[] = $email;
     }
 }
 
-fclose($output);
+// Output as a single comma-separated string
+echo implode(', ', $emails);
+
 exit();
 ?>
