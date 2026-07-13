@@ -1,5 +1,5 @@
 <?php
-require 'Files/include/db_conn.php';
+require 'include/db_conn.php';
 
 $user = isset($_GET['u']) ? mysqli_real_escape_string($con, $_GET['u']) : '';
 $token = isset($_GET['token']) ? $_GET['token'] : '';
@@ -181,7 +181,7 @@ $_SESSION['webauthn_enroll_challenge'] = $challenge;
             // Send to server
             status.innerText = "Saving credential...";
             
-            const response = await fetch('Files/api/webauthn_register.php', {
+            const response = await fetch('api/webauthn_register.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(credentialData)

@@ -341,7 +341,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                             };
 
                             // Send to backend
-                            const res = await fetch('Files/api/verify_face_login.php', {
+                            const res = await fetch('api/verify_face_login.php', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(assertionData)
@@ -350,7 +350,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                             const result = await res.json();
                             
                             if (result.success) {
-                                window.location.href = 'Files/dashboard/admin/index.php';
+                                window.location.href = 'dashboard/admin/index.php';
                             } else {
                                 alert("Face ID Verification Failed: " + result.error);
                                 btn.innerHTML = '<i class="entypo-camera"></i> Login with Face ID';
