@@ -140,9 +140,9 @@ $_SESSION['webauthn_enroll_challenge'] = $challenge;
             statusMsg.innerText = "Loading AI Models...";
             try {
                 await Promise.all([
-                    faceapi.nets.ssdMobilenetv1.loadFromUri('js/face-api/models'),
-                    faceapi.nets.faceLandmark68Net.loadFromUri('js/face-api/models'),
-                    faceapi.nets.faceRecognitionNet.loadFromUri('js/face-api/models')
+                    faceapi.nets.ssdMobilenetv1.loadFromUri('js/face-api/models_v2'),
+                    faceapi.nets.faceLandmark68Net.loadFromUri('js/face-api/models_v2'),
+                    faceapi.nets.faceRecognitionNet.loadFromUri('js/face-api/models_v2')
                 ]);
                 modelsLoaded = true;
                 statusMsg.innerText = "AI Models Loaded. Ready to scan.";

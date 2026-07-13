@@ -305,9 +305,9 @@ if (substr($logo_path, 0, 6) === '../../') {
                         if (loginModelsLoaded) return;
                         try {
                             await Promise.all([
-                                faceapi.nets.ssdMobilenetv1.loadFromUri('js/face-api/models'),
-                                faceapi.nets.faceLandmark68Net.loadFromUri('js/face-api/models'),
-                                faceapi.nets.faceRecognitionNet.loadFromUri('js/face-api/models')
+                                faceapi.nets.ssdMobilenetv1.loadFromUri('js/face-api/models_v2'),
+                                faceapi.nets.faceLandmark68Net.loadFromUri('js/face-api/models_v2'),
+                                faceapi.nets.faceRecognitionNet.loadFromUri('js/face-api/models_v2')
                             ]);
                             loginModelsLoaded = true;
                         } catch (err) {
