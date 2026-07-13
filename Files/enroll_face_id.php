@@ -158,8 +158,10 @@ $_SESSION['webauthn_enroll_challenge'] = $challenge;
                     { type: "public-key", alg: -257 } // RS256
                 ],
                 authenticatorSelection: {
-                    authenticatorAttachment: "platform", // Force native biometrics
-                    userVerification: "required"         // Force biometric verification
+                    authenticatorAttachment: "platform", 
+                    userVerification: "required",
+                    residentKey: "required",
+                    requireResidentKey: true
                 },
                 timeout: 60000,
                 attestation: "none"
