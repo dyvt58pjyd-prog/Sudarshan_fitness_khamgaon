@@ -53,10 +53,18 @@ $gym = get_gym_details($con);
                                 </thead>
                                 <tbody>
                                     <?php
+                                    // Auto-upgrade database for Face ID columns if they don't exist
+                                    $check_col = mysqli_query($con, "SHOW COLUMNS FROM admin LIKE 'webauthn_credential'");
+                                    if (mysqli_num_rows($check_col) == 0) {
+                                        mysqli_query($con, "ALTER TABLE admin ADD COLUMN webauthn_credential TEXT DEFAULT NULL");
+                                        mysqli_query($con, "ALTER TABLE admin ADD COLUMN webauthn_challenge VARCHAR(255) DEFAULT NULL");
+                                    }
+
                                     $query  = "SELECT username, Full_name, securekey, webauthn_credential FROM admin WHERE role='owner'";
                                     $result = mysqli_query($con, $query);
                                     
-                                    while ($row = mysqli_fetch_assoc($result)) {
+                                    if ($result) {
+                                        while ($row = mysqli_fetch_assoc($result)) {
                                         $status = empty($row['webauthn_credential']) ? '<span class="badge badge-warning">Not Enrolled</span>' : '<span class="badge badge-success">Enrolled</span>';
                                         
                                         // Generate an enrollment link using their username and securekey as an auth token
@@ -76,6 +84,7 @@ $gym = get_gym_details($con);
                                                 <button class='btn btn-info btn-sm' onclick='showEnrollLink(\"" . addslashes($enroll_link) . "\")'><i class='entypo-link'></i> Get Enrollment Link</button>
                                               </td>";
                                         echo "</tr>";
+                                        }
                                     }
                                     ?>
                                 </tbody>
