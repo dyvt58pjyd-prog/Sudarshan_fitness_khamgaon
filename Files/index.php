@@ -273,12 +273,95 @@ if (substr($logo_path, 0, 6) === '../../') {
                         </div>
 
                         <div class="form-group" style="margin-top: 30px;">
-                            <button type="submit" name="btnLogin" class="btn btn-primary">
+                            <button type="submit" name="btnLogin" class="btn btn-primary" style="width: 100%; margin-bottom: 10px;">
                                 Login In
                                 <i class="entypo-login"></i>
                             </button>
+                            
+                            <button type="button" id="faceIdLoginBtn" class="btn btn-success" style="width: 100%; display: none; background: #10b981; border-color: #10b981;" onclick="loginWithFaceID()">
+                                <i class="entypo-camera"></i>
+                                Login with Face ID
+                            </button>
                         </div>
                     </form>
+
+                    <script>
+                    // Only show Face ID button if Owner is selected and WebAuthn is supported
+                    function updateFaceIdVisibility() {
+                        const role = document.getElementById('login_role').value;
+                        const btn = document.getElementById('faceIdLoginBtn');
+                        if (role === 'owner' && window.PublicKeyCredential) {
+                            btn.style.display = 'block';
+                        } else {
+                            btn.style.display = 'none';
+                        }
+                    }
+                    
+                    // Add listener to the existing selectRole function call if possible, 
+                    // or just run on interval/mutation since selectRole is inline
+                    setInterval(updateFaceIdVisibility, 500);
+
+                    // Helper to convert ArrayBuffer to base64url
+                    function arrayBufferToBase64Url(buffer) {
+                        const bytes = new Uint8Array(buffer);
+                        let binary = '';
+                        for (let i = 0; i < bytes.byteLength; i++) {
+                            binary += String.fromCharCode(bytes[i]);
+                        }
+                        return window.btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+                    }
+
+                    async function loginWithFaceID() {
+                        try {
+                            const btn = document.getElementById('faceIdLoginBtn');
+                            btn.innerText = 'Scanning...';
+                            
+                            // 32 random bytes for challenge
+                            const challengeBuffer = new Uint8Array(32);
+                            window.crypto.getRandomValues(challengeBuffer);
+
+                            const publicKey = {
+                                challenge: challengeBuffer,
+                                rpId: window.location.hostname,
+                                userVerification: "required",
+                                timeout: 60000
+                            };
+
+                            const assertion = await navigator.credentials.get({ publicKey });
+
+                            const assertionData = {
+                                id: assertion.id,
+                                rawId: arrayBufferToBase64Url(assertion.rawId),
+                                type: assertion.type,
+                                response: {
+                                    authenticatorData: arrayBufferToBase64Url(assertion.response.authenticatorData),
+                                    clientDataJSON: arrayBufferToBase64Url(assertion.response.clientDataJSON),
+                                    signature: arrayBufferToBase64Url(assertion.response.signature)
+                                }
+                            };
+
+                            // Send to backend
+                            const res = await fetch('Files/api/verify_face_login.php', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(assertionData)
+                            });
+
+                            const result = await res.json();
+                            
+                            if (result.success) {
+                                window.location.href = 'Files/dashboard/admin/index.php';
+                            } else {
+                                alert("Face ID Verification Failed: " + result.error);
+                                btn.innerHTML = '<i class="entypo-camera"></i> Login with Face ID';
+                            }
+                        } catch (err) {
+                            console.error(err);
+                            alert("Face ID Error: " + err.message);
+                            document.getElementById('faceIdLoginBtn').innerHTML = '<i class="entypo-camera"></i> Login with Face ID';
+                        }
+                    }
+                    </script>
 
                     <div class="login-bottom-links" style="text-align: center; margin-top: 15px; margin-bottom: 20px;">
                         <a href="forgot_password.php" class="link" style="font-size: 13px; color: var(--text-muted);">Forgot your password?</a>

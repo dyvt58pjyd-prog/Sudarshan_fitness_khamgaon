@@ -549,6 +549,15 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Download all members as CSV</span>
 								</div>
 							</a>
+							
+							<a href="face_id_setup.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">👤📲</div>
+									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Face ID Setup</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Generate Face ID enrollment links for Owners</span>
+								</div>
+							</a>
 							<?php endif; ?>
 
 							<?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
