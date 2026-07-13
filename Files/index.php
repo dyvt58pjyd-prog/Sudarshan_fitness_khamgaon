@@ -283,15 +283,47 @@ if (substr($logo_path, 0, 6) === '../../') {
                                 Login with Face ID
                             </button>
                         </div>
-                    </form>
+                    <!-- Add face-api.js script -->
+                    <script defer src="js/face-api/face-api.min.js"></script>
+
+                    <!-- Face Scan UI Container -->
+                    <div id="faceScanContainer" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
+                        <h2 style="color: white; margin-bottom: 20px;">Live Face Scan</h2>
+                        <div style="position: relative; width: 300px; height: 300px; border-radius: 50%; overflow: hidden; border: 4px solid #10b981;">
+                            <video id="loginVideo" autoplay muted playsinline style="width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1);"></video>
+                        </div>
+                        <p id="loginStatusMsg" style="color: #cbd5e1; margin-top: 20px; font-size: 16px;">Initializing camera...</p>
+                        <button type="button" class="btn btn-danger" style="margin-top: 20px;" onclick="cancelFaceLogin()">Cancel</button>
+                    </div>
 
                     <script>
-                    // Only show Face ID button if Owner or App Developer is selected and WebAuthn is supported
+                    let loginModelsLoaded = false;
+                    let loginStream = null;
+                    let loginScanInterval = null;
+
+                    async function loadLoginModels() {
+                        if (loginModelsLoaded) return;
+                        try {
+                            await Promise.all([
+                                faceapi.nets.ssdMobilenetv1.loadFromUri('js/face-api/models'),
+                                faceapi.nets.faceLandmark68Net.loadFromUri('js/face-api/models'),
+                                faceapi.nets.faceRecognitionNet.loadFromUri('js/face-api/models')
+                            ]);
+                            loginModelsLoaded = true;
+                        } catch (err) {
+                            console.error("Error loading models:", err);
+                            alert("Failed to load AI models. Please try again later.");
+                        }
+                    }
+
+                    // Only show Face ID button if Owner or App Developer is selected
                     function updateFaceIdVisibility() {
                         const role = document.getElementById('login_role').value;
                         const btn = document.getElementById('faceIdLoginBtn');
-                        if ((role === 'owner' || role === 'super_admin') && window.PublicKeyCredential) {
+                        if (role === 'owner' || role === 'super_admin') {
                             btn.style.display = 'block';
+                            // Preload models when tab is selected to save time
+                            loadLoginModels();
                         } else {
                             btn.style.display = 'none';
                         }
@@ -301,105 +333,108 @@ if (substr($logo_path, 0, 6) === '../../') {
                     // or just run on interval/mutation since selectRole is inline
                     setInterval(updateFaceIdVisibility, 500);
 
-                    // Helper to convert ArrayBuffer to base64url
-                    function arrayBufferToBase64Url(buffer) {
-                        const bytes = new Uint8Array(buffer);
-                        let binary = '';
-                        for (let i = 0; i < bytes.byteLength; i++) {
-                            binary += String.fromCharCode(bytes[i]);
+                    async function loginWithFaceID() {
+                        if (!loginModelsLoaded) {
+                            alert("AI Models are still loading. Please wait a moment and try again.");
+                            return;
                         }
-                        return window.btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+
+                        const container = document.getElementById('faceScanContainer');
+                        const video = document.getElementById('loginVideo');
+                        const statusMsg = document.getElementById('loginStatusMsg');
+                        
+                        container.style.display = 'flex';
+                        statusMsg.innerText = "Starting camera...";
+
+                        try {
+                            loginStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+                            video.srcObject = loginStream;
+                            
+                            video.onplay = async () => {
+                                statusMsg.innerText = "Scanning face... Look directly at the camera.";
+                                
+                                let attempts = 0;
+                                loginScanInterval = setInterval(async () => {
+                                    attempts++;
+                                    if (attempts > 30) { // 15 seconds timeout
+                                        cancelFaceLogin();
+                                        alert("Face scan timed out. Please try again.");
+                                        return;
+                                    }
+
+                                    const detections = await faceapi.detectSingleFace(video).withFaceLandmarks().withFaceDescriptor();
+                                    
+                                    if (detections) {
+                                        statusMsg.innerText = "Face detected! Verifying identity...";
+                                        clearInterval(loginScanInterval);
+                                        
+                                        // Send descriptor to backend
+                                        const descriptorArray = Array.from(detections.descriptor);
+                                        await verifyLiveFace(descriptorArray);
+                                    } else {
+                                        statusMsg.innerText = "No face detected. Move closer to the camera.";
+                                    }
+                                }, 500);
+                            };
+                        } catch (err) {
+                            console.error(err);
+                            cancelFaceLogin();
+                            alert("Camera access denied or unavailable.");
+                        }
                     }
 
-                    async function loginWithFaceID() {
+                    async function verifyLiveFace(descriptorArray) {
+                        const statusMsg = document.getElementById('loginStatusMsg');
                         try {
-                            const username = document.getElementById('textfield').value.trim();
-                            if (!username) {
-                                alert("Please enter your User ID first before clicking Login with Face ID.");
-                                return;
-                            }
-
-                            const btn = document.getElementById('faceIdLoginBtn');
-                            btn.innerText = 'Scanning...';
-                            
-                            // Fetch the credential ID for this user from our database
-                            const credRes = await fetch(`api/get_face_id_credential.php?u=${encodeURIComponent(username)}`);
-                            const credData = await credRes.json();
-                            
-                            if (!credData.success) {
-                                alert(credData.error);
-                                btn.innerHTML = '<i class="entypo-camera"></i> Login with Face ID';
-                                return;
-                            }
-                            
-                            // Base64URL decode helper for the credential ID
-                            const base64urlToUint8Array = (base64url) => {
-                                const padding = '='.repeat((4 - base64url.length % 4) % 4);
-                                const base64 = (base64url + padding).replace(/\-/g, '+').replace(/_/g, '/');
-                                const rawData = window.atob(base64);
-                                const outputArray = new Uint8Array(rawData.length);
-                                for (let i = 0; i < rawData.length; ++i) {
-                                    outputArray[i] = rawData.charCodeAt(i);
-                                }
-                                return outputArray;
-                            };
-
-                            // 32 random bytes for challenge
-                            const challengeBuffer = new Uint8Array(32);
-                            window.crypto.getRandomValues(challengeBuffer);
-
-                            const publicKey = {
-                                challenge: challengeBuffer,
-                                rpId: window.location.hostname,
-                                allowCredentials: [{
-                                    id: base64urlToUint8Array(credData.credentialId),
-                                    type: "public-key",
-                                    transports: ["internal"]
-                                }],
-                                userVerification: "required",
-                                timeout: 60000
-                            };
-
-                            const assertion = await navigator.credentials.get({ publicKey });
-
-                            const assertionData = {
-                                id: assertion.id,
-                                rawId: arrayBufferToBase64Url(assertion.rawId),
-                                type: assertion.type,
-                                response: {
-                                    authenticatorData: arrayBufferToBase64Url(assertion.response.authenticatorData),
-                                    clientDataJSON: arrayBufferToBase64Url(assertion.response.clientDataJSON),
-                                    signature: arrayBufferToBase64Url(assertion.response.signature)
-                                }
-                            };
-
-                            // Send to backend
-                            const res = await fetch('api/verify_face_login.php', {
+                            const res = await fetch('api/verify_live_face.php', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(assertionData)
+                                body: JSON.stringify({ descriptor: descriptorArray })
                             });
 
                             const result = await res.json();
                             
                             if (result.success) {
-                                window.location.href = 'dashboard/admin/index.php';
+                                statusMsg.innerText = "Welcome back, " + result.username + "!";
+                                statusMsg.style.color = "#10b981";
+                                setTimeout(() => {
+                                    window.location.href = 'dashboard/admin/index.php';
+                                }, 1000);
                             } else {
-                                alert("Face ID Verification Failed: " + result.error);
-                                btn.innerHTML = '<i class="entypo-camera"></i> Login with Face ID';
+                                statusMsg.innerText = "Access Denied: " + result.error;
+                                statusMsg.style.color = "#ef4444";
+                                setTimeout(() => {
+                                    cancelFaceLogin();
+                                    alert(result.error);
+                                }, 2000);
                             }
                         } catch (err) {
                             console.error(err);
-                            alert("Face ID Error: " + err.message);
-                            document.getElementById('faceIdLoginBtn').innerHTML = '<i class="entypo-camera"></i> Login with Face ID';
+                            cancelFaceLogin();
+                            alert("Verification error: " + err.message);
+                        }
+                    }
+
+                    function cancelFaceLogin() {
+                        const container = document.getElementById('faceScanContainer');
+                        container.style.display = 'none';
+                        
+                        if (loginScanInterval) {
+                            clearInterval(loginScanInterval);
+                        }
+                        
+                        if (loginStream) {
+                            loginStream.getTracks().forEach(track => track.stop());
+                            loginStream = null;
                         }
                     }
                     </script>
-
+                    
                     <div class="login-bottom-links" style="text-align: center; margin-top: 15px; margin-bottom: 20px;">
                         <a href="forgot_password.php" class="link" style="font-size: 13px; color: var(--text-muted);">Forgot your password?</a>
                     </div>
                     
+                    </div>
                     <style>
                         @keyframes intense-pulse {
                             0% { box-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff; transform: scale(1); }

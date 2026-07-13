@@ -29,18 +29,16 @@ $user = $_SESSION['webauthn_enroll_user'];
 // we will store the raw ID and public key (or a simplified representation) securely in the database.
 // The true verification happens when the browser authenticates the exact same credential ID later.
 
-// For this implementation, we will store the credential ID to associate it with the user.
-$credentialId = mysqli_real_escape_string($con, $input['id']);
-$rawId = mysqli_real_escape_string($con, $input['rawId']);
+// For face-api.js, the client sends a 128-element array representing the face descriptor.
+$descriptor = $input['descriptor'];
 
-// Serialize the credential data to store it.
-$credentialData = json_encode([
-    'id' => $input['id'],
-    'rawId' => $input['rawId'],
-    'clientDataJSON' => $input['response']['clientDataJSON']
-]);
+if (!is_array($descriptor) || count($descriptor) !== 128) {
+    echo json_encode(['success' => false, 'error' => 'Invalid face descriptor format.']);
+    exit();
+}
 
-$credentialData = mysqli_real_escape_string($con, $credentialData);
+// Convert descriptor array back to JSON string for storage
+$credentialData = mysqli_real_escape_string($con, json_encode($descriptor));
 
 $query = "UPDATE admin SET webauthn_credential = '$credentialData' WHERE username = '$user' AND role IN ('owner', 'super_admin')";
 if (mysqli_query($con, $query)) {

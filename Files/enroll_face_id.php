@@ -81,136 +81,172 @@ $_SESSION['webauthn_enroll_challenge'] = $challenge;
         .btn:active {
             transform: scale(0.95);
         }
-        .status {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #94a3b8;
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            height: 300px;
+            margin: 20px auto;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #3b82f6;
+            display: none;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: scaleX(-1);
         }
     </style>
+    <script src="js/face-api/face-api.min.js"></script>
 </head>
 <body>
     <div class="card">
-        <div class="icon">📱🔐</div>
+        <div class="icon" id="statusIcon">📱🔐</div>
         <h2>Setup Face ID</h2>
         <p>Welcome, <strong><?php echo htmlspecialchars($row['Full_name']); ?></strong>.</p>
-        <p style="font-size: 14px; color: #cbd5e1;">Click the button below to register your device's native Face ID or Biometrics for quick login.</p>
-        
-        <button class="btn" id="registerBtn" onclick="registerFaceID()">Register Face ID</button>
-        <div id="status" class="status"></div>
+        <p>This will use advanced computer vision to scan your face. Please ensure you are in a well-lit area.</p>
+
+        <div class="video-container" id="videoContainer">
+            <video id="video" autoplay muted playsinline></video>
+        </div>
+
+        <button class="btn" id="registerBtn" onclick="startRegistration()">
+            Start Face Scan
+        </button>
+
+        <div class="status" id="statusMsg"></div>
     </div>
 
     <script>
-    // Helper to convert base64url to Uint8Array
-    function base64urlToUint8Array(base64url) {
-        const padding = '='.repeat((4 - base64url.length % 4) % 4);
-        const base64 = (base64url + padding).replace(/\-/g, '+').replace(/_/g, '/');
-        const rawData = window.atob(base64);
-        const outputArray = new Uint8Array(rawData.length);
-        for (let i = 0; i < rawData.length; ++i) {
-            outputArray[i] = rawData.charCodeAt(i);
-        }
-        return outputArray;
-    }
+        const video = document.getElementById('video');
+        const videoContainer = document.getElementById('videoContainer');
+        const registerBtn = document.getElementById('registerBtn');
+        const statusMsg = document.getElementById('statusMsg');
+        const statusIcon = document.getElementById('statusIcon');
+        
+        let modelsLoaded = false;
 
-    // Helper to convert ArrayBuffer to base64url
-    function arrayBufferToBase64Url(buffer) {
-        const bytes = new Uint8Array(buffer);
-        let binary = '';
-        for (let i = 0; i < bytes.byteLength; i++) {
-            binary += String.fromCharCode(bytes[i]);
-        }
-        return window.btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-    }
-
-    async function registerFaceID() {
-        if (!window.PublicKeyCredential) {
-            document.getElementById('status').innerText = "WebAuthn is not supported by your browser/device.";
-            document.getElementById('status').style.color = "#ef4444";
-            return;
+        async function loadModels() {
+            statusMsg.innerText = "Loading AI Models...";
+            try {
+                await Promise.all([
+                    faceapi.nets.ssdMobilenetv1.loadFromUri('js/face-api/models'),
+                    faceapi.nets.faceLandmark68Net.loadFromUri('js/face-api/models'),
+                    faceapi.nets.faceRecognitionNet.loadFromUri('js/face-api/models')
+                ]);
+                modelsLoaded = true;
+                statusMsg.innerText = "AI Models Loaded. Ready to scan.";
+            } catch (err) {
+                console.error(err);
+                statusMsg.innerText = "Error loading AI models: " + err.message;
+            }
         }
 
-        const btn = document.getElementById('registerBtn');
-        const status = document.getElementById('status');
-        btn.disabled = true;
-        btn.innerText = "Scanning...";
+        loadModels();
 
-        try {
-            // Configuration for WebAuthn Registration
-            const challengeHex = "<?php echo $challenge; ?>";
-            const challengeBuffer = new Uint8Array(challengeHex.match(/[\da-f]{2}/gi).map(h => parseInt(h, 16)));
-            
-            const userIdString = "<?php echo $user; ?>";
-            const userIdBuffer = new TextEncoder().encode(userIdString);
-
-            const publicKey = {
-                challenge: challengeBuffer,
-                rp: {
-                    name: "Sudarshan Fitness App",
-                    id: window.location.hostname
-                },
-                user: {
-                    id: userIdBuffer,
-                    name: userIdString,
-                    displayName: "<?php echo htmlspecialchars($row['Full_name']); ?>"
-                },
-                pubKeyCredParams: [
-                    { type: "public-key", alg: -7 },  // ES256
-                    { type: "public-key", alg: -257 } // RS256
-                ],
-                authenticatorSelection: {
-                    authenticatorAttachment: "platform", 
-                    userVerification: "required",
-                    residentKey: "required",
-                    requireResidentKey: true
-                },
-                timeout: 60000,
-                attestation: "none"
-            };
-
-            // Call native Face ID / Biometrics prompt
-            const credential = await navigator.credentials.create({ publicKey });
-
-            // Prepare credential data to send to server
-            const credentialData = {
-                id: credential.id,
-                rawId: arrayBufferToBase64Url(credential.rawId),
-                type: credential.type,
-                response: {
-                    clientDataJSON: arrayBufferToBase64Url(credential.response.clientDataJSON),
-                    attestationObject: arrayBufferToBase64Url(credential.response.attestationObject)
-                }
-            };
-
-            // Send to server
-            status.innerText = "Saving credential...";
-            
-            const response = await fetch('api/webauthn_register.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(credentialData)
-            });
-            
-            const result = await response.json();
-            
-            if (result.success) {
-                status.innerText = "Face ID Registered Successfully! You can now log in using Face ID.";
-                status.style.color = "#22c55e";
-                btn.innerText = "Done";
-            } else {
-                status.innerText = "Error saving credential: " + result.error;
-                status.style.color = "#ef4444";
-                btn.innerText = "Try Again";
-                btn.disabled = false;
+        async function startRegistration() {
+            if (!modelsLoaded) {
+                alert("Please wait for AI models to finish loading.");
+                return;
             }
 
-        } catch (err) {
-            console.error(err);
-            status.innerText = "Registration failed: " + err.message;
-            status.style.color = "#ef4444";
-            btn.innerText = "Try Again";
-            btn.disabled = false;
+            try {
+                registerBtn.style.display = 'none';
+                videoContainer.style.display = 'block';
+                statusMsg.innerText = "Starting camera...";
+                
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+                video.srcObject = stream;
+                
+                video.onplay = async () => {
+                    const canvas = faceapi.createCanvasFromMedia(video);
+                    videoContainer.append(canvas);
+                    const displaySize = { width: video.clientWidth, height: video.clientHeight };
+                    faceapi.matchDimensions(canvas, displaySize);
+
+                    statusMsg.innerText = "Scanning face... Please hold still and look directly at the camera.";
+                    statusIcon.innerText = "👀";
+
+                    let scanCount = 0;
+                    let bestDetection = null;
+
+                    const scanInterval = setInterval(async () => {
+                        const detections = await faceapi.detectSingleFace(video).withFaceLandmarks().withFaceDescriptor();
+                        
+                        if (detections) {
+                            bestDetection = detections; // Store the best quality detection
+                            scanCount++;
+                            statusMsg.innerText = `Scanning... (${scanCount}/5)`;
+                            
+                            // Draw bounding box
+                            const resizedDetections = faceapi.resizeResults(detections, displaySize);
+                            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+                            faceapi.draw.drawDetections(canvas, resizedDetections);
+                        } else {
+                            statusMsg.innerText = "No face detected. Look directly at the camera.";
+                        }
+
+                        if (scanCount >= 5) {
+                            clearInterval(scanInterval);
+                            statusMsg.innerText = "Face captured successfully! Saving...";
+                            
+                            // Stop camera
+                            stream.getTracks().forEach(track => track.stop());
+                            videoContainer.style.display = 'none';
+                            
+                            // Send descriptor to server
+                            const descriptorArray = Array.from(bestDetection.descriptor);
+                            saveToDatabase(descriptorArray);
+                        }
+                    }, 500); // scan every 500ms
+                };
+
+            } catch (err) {
+                console.error(err);
+                statusMsg.innerText = "Camera Error: " + err.message;
+                registerBtn.style.display = 'block';
+            }
         }
-    }
+
+        async function saveToDatabase(descriptorArray) {
+            try {
+                const res = await fetch('api/webauthn_register.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ descriptor: descriptorArray })
+                });
+
+                const result = await res.json();
+                
+                if (result.success) {
+                    statusIcon.innerText = "✅";
+                    statusMsg.innerText = "Face ID Registration Complete!";
+                    statusMsg.style.color = "#10b981";
+                    
+                    setTimeout(() => {
+                        window.location.href = 'index.php'; // redirect to login
+                    }, 2000);
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (err) {
+                statusIcon.innerText = "❌";
+                statusMsg.innerText = "Registration Failed: " + err.message;
+                statusMsg.style.color = "#ef4444";
+                registerBtn.style.display = 'block';
+                registerBtn.innerText = 'Try Again';
+            }
+        }
     </script>
 </body>
 </html>
