@@ -69,19 +69,15 @@ $gym = get_gym_details($con);
                                         
                                         // Generate an enrollment link using their username and securekey as an auth token
                                         // Usually, you'd use a temporary token in a separate table, but this works for demonstration.
-                                        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
-                                        $host = $_SERVER['HTTP_HOST'];
-                                        $base_url = rtrim(dirname(dirname(dirname($_SERVER['PHP_SELF']))), '/\\');
-                                        
                                         $token = hash('sha256', $row['username'] . $row['securekey']);
-                                        $enroll_link = $protocol . "://" . $host . $base_url . "/enroll_face_id.php?u=" . urlencode($row['username']) . "&token=" . $token;
+                                        $query_string = "?u=" . urlencode($row['username']) . "&token=" . $token;
                                         
                                         echo "<tr>";
                                         echo "<td>" . htmlspecialchars($row['username']) . "</td>";
                                         echo "<td>" . htmlspecialchars($row['Full_name']) . "</td>";
                                         echo "<td>" . $status . "</td>";
                                         echo "<td>
-                                                <button class='btn btn-info btn-sm' onclick='showEnrollLink(\"" . addslashes($enroll_link) . "\")'><i class='entypo-link'></i> Get Enrollment Link</button>
+                                                <button class='btn btn-info btn-sm' onclick='showEnrollLink(\"" . addslashes($query_string) . "\")'><i class='entypo-link'></i> Get Enrollment Link</button>
                                               </td>";
                                         echo "</tr>";
                                         }
@@ -106,7 +102,12 @@ $gym = get_gym_details($con);
     </div>
     
     <script>
-    function showEnrollLink(link) {
+    function showEnrollLink(queryString) {
+        // Find the root by removing '/dashboard/admin/face_id_setup.php' from the current path
+        const currentUrl = window.location.href;
+        const rootUrl = currentUrl.substring(0, currentUrl.indexOf('/dashboard/admin/face_id_setup.php'));
+        const link = rootUrl + '/enroll_face_id.php' + queryString;
+        
         document.getElementById('linkBox').style.display = 'block';
         document.getElementById('enrollLinkText').value = link;
     }
