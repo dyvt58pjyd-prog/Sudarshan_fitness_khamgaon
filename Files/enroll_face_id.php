@@ -86,7 +86,7 @@ $_SESSION['webauthn_enroll_challenge'] = $challenge;
             font-size: 14px;
             color: #94a3b8;
         }
-    </script>
+    </style>
 </head>
 <body>
     <div class="card">
