@@ -18,10 +18,10 @@ if (!$input || empty($input['id'])) {
 
 $credentialId = mysqli_real_escape_string($con, $input['id']);
 
-// Find an owner who has this credential ID
+// Find an owner or super_admin who has this credential ID
 // Since we stored the credential JSON, we can do a LIKE search or precise JSON extraction
 // For simplicity in older MySQL versions, we use LIKE.
-$query = "SELECT username, Full_name, role FROM admin WHERE role='owner' AND webauthn_credential LIKE '%\"id\":\"$credentialId\"%' LIMIT 1";
+$query = "SELECT username, Full_name, role FROM admin WHERE role IN ('owner', 'super_admin') AND webauthn_credential LIKE '%\"id\":\"$credentialId\"%' LIMIT 1";
 $result = mysqli_query($con, $query);
 
 if (mysqli_num_rows($result) === 1) {

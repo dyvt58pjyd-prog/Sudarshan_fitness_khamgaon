@@ -60,7 +60,7 @@ $gym = get_gym_details($con);
                                         mysqli_query($con, "ALTER TABLE admin ADD COLUMN webauthn_challenge VARCHAR(255) DEFAULT NULL");
                                     }
 
-                                    $query  = "SELECT username, Full_name, securekey, webauthn_credential FROM admin WHERE role='owner'";
+                                    $query  = "SELECT username, Full_name, securekey, webauthn_credential FROM admin WHERE role IN ('owner', 'super_admin')";
                                     $result = mysqli_query($con, $query);
                                     
                                     if ($result) {

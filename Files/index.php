@@ -286,11 +286,11 @@ if (substr($logo_path, 0, 6) === '../../') {
                     </form>
 
                     <script>
-                    // Only show Face ID button if Owner is selected and WebAuthn is supported
+                    // Only show Face ID button if Owner or App Developer is selected and WebAuthn is supported
                     function updateFaceIdVisibility() {
                         const role = document.getElementById('login_role').value;
                         const btn = document.getElementById('faceIdLoginBtn');
-                        if (role === 'owner' && window.PublicKeyCredential) {
+                        if ((role === 'owner' || role === 'super_admin') && window.PublicKeyCredential) {
                             btn.style.display = 'block';
                         } else {
                             btn.style.display = 'none';

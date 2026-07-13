@@ -9,7 +9,7 @@ if (empty($user) || empty($token)) {
 }
 
 // Verify the token
-$query = "SELECT securekey, Full_name FROM admin WHERE username='$user' AND role='owner'";
+$query = "SELECT securekey, Full_name FROM admin WHERE username='$user' AND role IN ('owner', 'super_admin')";
 $result = mysqli_query($con, $query);
 
 if (mysqli_num_rows($result) !== 1) {
