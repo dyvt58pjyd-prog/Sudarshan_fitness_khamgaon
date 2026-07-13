@@ -134,14 +134,7 @@ if (isset($_POST['submit_payment'])) {
                     $trainer_id = mysqli_real_escape_string($con, $_POST['trainer_id']);
                     $duration = intval($_POST['pt_duration']);
                     
-                    $pt_rates = [
-                        1 => 3000,
-                        2 => 6000,
-                        3 => 9000,
-                        6 => 18000,
-                        12 => 35000
-                    ];
-                    $amount = isset($pt_rates[$duration]) ? $pt_rates[$duration] : ($duration * 3000);
+                    $amount = $duration * 3500;
                     
                     // Use a special prefix for PT plans to identify them in the approval queue
                     $pid = "PT_" . $trainer_id . "_" . $duration;
@@ -608,14 +601,7 @@ if (isset($_POST['submit_payment'])) {
             }
 
             const trainerName = selectedTrainer.text.trim();
-            const pt_rates = {
-                1: 3000,
-                2: 6000,
-                3: 9000,
-                6: 18000,
-                12: 35000
-            };
-            const amount = pt_rates[duration] || (duration * 3000);
+            const amount = duration * 3500;
 
             document.getElementById('details-title').innerText = 'Personal Training with ' + trainerName;
             document.getElementById('details-desc').innerText = 'Assigned one-on-one personal fitness coaching with personal trainer ' + trainerName + '.';
