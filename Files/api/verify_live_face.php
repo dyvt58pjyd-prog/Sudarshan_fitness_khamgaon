@@ -82,7 +82,8 @@ if ($bestMatch) {
     echo json_encode([
         'success' => true,
         'username' => $bestMatch['username'],
-        'distance' => $bestDistance
+        'distance' => $bestDistance,
+        'role' => $assignedRole
     ]);
 } else {
     echo json_encode(['success' => false, 'error' => 'Face not recognized in the system.']);

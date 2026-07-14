@@ -409,7 +409,17 @@ if (substr($logo_path, 0, 6) === '../../') {
                                 statusMsg.innerText = "Welcome back, " + result.username + "!";
                                 statusMsg.style.color = "#10b981";
                                 setTimeout(() => {
-                                    window.location.href = 'dashboard/admin/index.php';
+                                    if (result.role === 'member') {
+                                        window.location.href = 'dashboard/member/';
+                                    } else if (result.role === 'reception') {
+                                        window.location.href = 'dashboard/reception/';
+                                    } else if (result.role === 'trainer') {
+                                        window.location.href = 'dashboard/trainer/';
+                                    } else if (result.role === 'auditor') {
+                                        window.location.href = 'dashboard/auditor/';
+                                    } else {
+                                        window.location.href = 'dashboard/admin/';
+                                    }
                                 }, 1000);
                             } else {
                                 statusMsg.innerText = "Access Denied: " + result.error;
