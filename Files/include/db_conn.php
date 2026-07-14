@@ -370,7 +370,7 @@ if (!$con) {
     } else {
         mysqli_query($con, "INSERT IGNORE INTO plan (pid, planName, amount, validity, active, description) VALUES ('THREE3M', '3-Month Plan', 4000, 3, 'yes', '3 Months Subscription')");
     }
-    mysqli_query($con, "UPDATE plan SET amount = 4000 WHERE validity = 3");
+
 
     // Self-healing database check: ensure broadcast_campaigns table exists
     mysqli_query($con, "CREATE TABLE IF NOT EXISTS broadcast_campaigns (
