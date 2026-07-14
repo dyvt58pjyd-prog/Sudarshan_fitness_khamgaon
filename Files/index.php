@@ -316,11 +316,13 @@ if (substr($logo_path, 0, 6) === '../../') {
                         }
                     }
 
-                    // Only show Face ID button if Owner or App Developer is selected
+                    // Only show Face ID button if Owner, App Developer, Reception, Trainer, or Auditor is selected
                     function updateFaceIdVisibility() {
                         const role = document.getElementById('login_role').value;
                         const btn = document.getElementById('faceIdLoginBtn');
-                        if (role === 'owner' || role === 'super_admin') {
+                        const allowedRoles = ['owner', 'super_admin', 'reception', 'trainer', 'auditor'];
+                        
+                        if (allowedRoles.includes(role)) {
                             btn.style.display = 'block';
                             // Preload models when tab is selected to save time
                             loadLoginModels();
@@ -339,6 +341,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                             return;
                         }
 
+                        const requestedRole = document.getElementById('login_role').value;
                         const container = document.getElementById('faceScanContainer');
                         const video = document.getElementById('loginVideo');
                         const statusMsg = document.getElementById('loginStatusMsg');
@@ -368,9 +371,9 @@ if (substr($logo_path, 0, 6) === '../../') {
                                         statusMsg.innerText = "Face detected! Verifying identity...";
                                         clearInterval(loginScanInterval);
                                         
-                                        // Send descriptor to backend
+                                        // Send descriptor and requested role to backend
                                         const descriptorArray = Array.from(detections.descriptor);
-                                        await verifyLiveFace(descriptorArray);
+                                        await verifyLiveFace(descriptorArray, requestedRole);
                                     } else {
                                         statusMsg.innerText = "No face detected. Move closer to the camera.";
                                     }
@@ -383,13 +386,13 @@ if (substr($logo_path, 0, 6) === '../../') {
                         }
                     }
 
-                    async function verifyLiveFace(descriptorArray) {
+                    async function verifyLiveFace(descriptorArray, requestedRole) {
                         const statusMsg = document.getElementById('loginStatusMsg');
                         try {
                             const res = await fetch('api/verify_live_face.php', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ descriptor: descriptorArray })
+                                body: JSON.stringify({ descriptor: descriptorArray, requested_role: requestedRole })
                             });
 
                             const result = await res.json();

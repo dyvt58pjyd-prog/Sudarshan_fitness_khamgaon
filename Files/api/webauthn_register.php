@@ -40,7 +40,7 @@ if (!is_array($descriptor) || count($descriptor) !== 128) {
 // Convert descriptor array back to JSON string for storage
 $credentialData = mysqli_real_escape_string($con, json_encode($descriptor));
 
-$query = "UPDATE admin SET webauthn_credential = '$credentialData' WHERE username = '$user' AND role IN ('owner', 'super_admin')";
+$query = "UPDATE admin SET webauthn_credential = '$credentialData' WHERE username = '$user' AND role IN ('owner', 'super_admin', 'reception', 'trainer')";
 if (mysqli_query($con, $query)) {
     // Clear session variables
     unset($_SESSION['webauthn_enroll_user']);

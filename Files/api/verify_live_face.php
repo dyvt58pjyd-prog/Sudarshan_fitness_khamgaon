@@ -33,8 +33,10 @@ function euclideanDistance($arr1, $arr2) {
     return sqrt($sum);
 }
 
-// Fetch all registered faces for owners and super_admins
-$query = "SELECT username, Full_name, role, webauthn_credential FROM admin WHERE role IN ('owner', 'super_admin') AND webauthn_credential IS NOT NULL AND webauthn_credential != ''";
+$requestedRole = isset($input['requested_role']) ? $input['requested_role'] : null;
+
+// Fetch all registered faces for roles that support Face ID
+$query = "SELECT username, Full_name, role, webauthn_credential FROM admin WHERE role IN ('owner', 'super_admin', 'reception', 'trainer') AND webauthn_credential IS NOT NULL AND webauthn_credential != ''";
 $result = mysqli_query($con, $query);
 
 $bestMatch = null;
@@ -54,10 +56,26 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 
 if ($bestMatch) {
+    $assignedRole = $bestMatch['role'];
+    
+    // Cross-role logic: If they requested auditor, verify they are allowed
+    if ($requestedRole === 'auditor') {
+        if (in_array($bestMatch['role'], ['owner', 'reception', 'super_admin'])) {
+            $assignedRole = 'auditor';
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Your role is not authorized to access the Auditor dashboard.']);
+            exit();
+        }
+    } else if ($requestedRole && $requestedRole !== $assignedRole) {
+        // Enforce that they must be logging into their own role, unless handled above
+        echo json_encode(['success' => false, 'error' => 'Face verified, but you are not authorized to login as ' . htmlspecialchars($requestedRole) . '.']);
+        exit();
+    }
+
     // Authenticate the user
     $_SESSION['user_data']  = $bestMatch['username'];
     $_SESSION['logged']     = "start";
-    $_SESSION['role']       = $bestMatch['role'];
+    $_SESSION['role']       = $assignedRole;
     $_SESSION['full_name']  = $bestMatch['Full_name'];
     $_SESSION['username']   = $bestMatch['username'];
 
