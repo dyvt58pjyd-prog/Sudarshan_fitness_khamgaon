@@ -351,7 +351,7 @@ usort($invoices, function($a, $b) {
                                         <td style="font-family: monospace; font-size: 11.5px;"><?php echo 100 + intval($inv['et_id']); ?></td>
                                         <td>
                                             <div style="display: flex; align-items: center; gap: 8px;">
-                                                <img src="<?php echo $avatar; ?>" class="member-avatar" alt="Avatar">
+                                                <img src="<?php echo $avatar; ?>" class="member-avatar" alt="Avatar" onerror="this.onerror=null; this.src='../../images/logo.png';">
                                                 <div>
                                                     <a href="read_member.php?name=<?php echo urlencode($inv['uid']); ?>" style="color: #ffffff; font-weight: bold; text-decoration: none;">
                                                         <?php echo htmlspecialchars($inv['username']); ?>
