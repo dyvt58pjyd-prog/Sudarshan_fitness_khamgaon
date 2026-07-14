@@ -61,8 +61,11 @@ page_protect();
                   $new_entry_code = strval(rand(100000, 999999));
                   mysqli_query($con, "UPDATE users SET entry_code = '$new_entry_code' WHERE userid = '$uid'");
                   
+                  // Use actual transaction date for auditor (today), not the joining date
+                  $transaction_date = date('Y-m-d');
+                  
                   mysqli_query($con, "INSERT INTO enrolls_to(pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
-                                      VALUES ('$plan', '$uid', '$cdate', '$expiredate', 'yes', '$payment_mode', '$received_by', $discount, $paid_amount)");
+                                      VALUES ('$plan', '$uid', '$transaction_date', '$expiredate', 'yes', '$payment_mode', '$received_by', $discount, $paid_amount)");
 
                   // Send Payment/New Membership Confirmation Email
                   send_payment_email($con, $email, $uname, $uid, $plan_data['planName'], $plan_data['amount'], $expiredate, $payment_mode, $received_by, $new_entry_code, $discount, $paid_amount);
