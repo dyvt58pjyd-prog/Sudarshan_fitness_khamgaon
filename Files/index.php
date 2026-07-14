@@ -298,11 +298,13 @@ if (substr($logo_path, 0, 6) === '../../') {
 
                     <script>
                     let loginModelsLoaded = false;
+                    let loginModelsLoading = false;
                     let loginStream = null;
                     let loginScanInterval = null;
 
                     async function loadLoginModels() {
-                        if (loginModelsLoaded) return;
+                        if (loginModelsLoaded || loginModelsLoading) return;
+                        loginModelsLoading = true;
                         try {
                             await Promise.all([
                                 faceapi.nets.ssdMobilenetv1.loadFromUri('js/face-api/models_v2'),
@@ -310,9 +312,10 @@ if (substr($logo_path, 0, 6) === '../../') {
                                 faceapi.nets.faceRecognitionNet.loadFromUri('js/face-api/models_v2')
                             ]);
                             loginModelsLoaded = true;
+                            loginModelsLoading = false;
                         } catch (err) {
                             console.error("Error loading models:", err);
-                            alert("Failed to load AI models. Please try again later.");
+                            loginModelsLoading = false;
                         }
                     }
 
