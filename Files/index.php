@@ -1,4 +1,8 @@
 <?php
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
 include './include/db_conn.php';
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -339,17 +343,18 @@ if (substr($logo_path, 0, 6) === '../../') {
                     setInterval(updateFaceIdVisibility, 500);
 
                     async function loginWithFaceID() {
-                        if (!loginModelsLoaded) {
-                            alert("AI Models are still loading. Please wait a moment and try again.");
-                            return;
-                        }
-
                         const requestedRole = document.getElementById('login_role').value;
                         const container = document.getElementById('faceScanContainer');
                         const video = document.getElementById('loginVideo');
                         const statusMsg = document.getElementById('loginStatusMsg');
                         
                         container.style.display = 'flex';
+                        statusMsg.innerText = "Loading AI Models... Please wait.";
+
+                        if (!loginModelsLoaded) {
+                            await loadLoginModels();
+                        }
+
                         statusMsg.innerText = "Starting camera...";
 
                         try {
