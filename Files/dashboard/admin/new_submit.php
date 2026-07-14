@@ -137,8 +137,8 @@ $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,t
           $payment_mode = isset($_POST['payment_mode']) ? mysqli_real_escape_string($con, $_POST['payment_mode']) : 'Cash';
           $received_by = isset($_SESSION['full_name']) ? mysqli_real_escape_string($con, $_SESSION['full_name']) : 'System';
           
-          // Use actual transaction date for auditor (today), not the joining date which can be backdated
-          $transaction_date = date('Y-m-d');
+          // Use submitted transaction date for auditor, default to today if not provided
+          $transaction_date = isset($_POST['transaction_date']) && !empty($_POST['transaction_date']) ? mysqli_real_escape_string($con, $_POST['transaction_date']) : date('Y-m-d');
           
           $query2="insert into enrolls_to(pid,uid,paid_date,expire,renewal,payment_mode,received_by,discount_amount,paid_amount) values('$plan','$memID','$transaction_date','$expiredate','yes','$payment_mode','$received_by',$discount,$paid_amount)";
           if(mysqli_query($con,$query2)==1){

@@ -227,7 +227,10 @@ if ($cnt_q) {
                <td height="35">JOINING DATE:</td>
                 <td height="35"><input type="date" name="jdate" id="boxx" value="<?php echo (date('Y-m-d') < '2026-07-08') ? '2026-07-08' : date('Y-m-d'); ?>" required size="30"></td>
              </tr>
-
+             <tr>
+               <td height="35">TRANSACTION DATE:</td>
+                <td height="35"><input type="date" name="transaction_date" id="boxx" value="<?php echo date('Y-m-d'); ?>" required size="30"></td>
+             </tr>
               <tr>
                 <td height="35">BIOMETRIC SHIFT / BATCH:</td>
                 <td height="35"><select name="biometric_batch" id="boxx" required>
