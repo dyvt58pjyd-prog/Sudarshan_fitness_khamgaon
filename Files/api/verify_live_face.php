@@ -40,7 +40,7 @@ $query = "SELECT username, Full_name, role, webauthn_credential FROM admin WHERE
 $result = mysqli_query($con, $query);
 
 $bestMatch = null;
-$bestDistance = 0.45; // Strict threshold for facial recognition (lower is stricter, face-api default is usually 0.6 for same face, 0.45 is very strict)
+$bestDistance = 0.55; // Relaxed threshold for facial recognition (0.55 is recommended for ssdMobilenetv1 in varying lighting)
 
 while ($row = mysqli_fetch_assoc($result)) {
     $storedDescriptor = json_decode($row['webauthn_credential'], true);
