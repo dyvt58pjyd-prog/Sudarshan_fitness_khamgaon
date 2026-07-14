@@ -160,6 +160,10 @@ if ($uid) {
  						</select></td></td>
               </tr>
                <tr>
+                 <td height="35">TRANSACTION DATE:</td>
+                 <td height="35"><input type="date" name="transaction_date" id="boxx" value="<?php echo date('Y-m-d'); ?>" required size="30"></td>
+               </tr>
+               <tr>
                  <td height="35">PAYMENT MODE:</td>
                  <td height="35"><select name="payment_mode" id="boxx" required>
                      <option value="Cash" selected>Cash</option>
