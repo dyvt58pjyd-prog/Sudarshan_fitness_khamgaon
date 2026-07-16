@@ -5,7 +5,7 @@ require_once __DIR__ . '/../include/db_conn.php';
 // API to update message status from the WhatsApp Node.js service
 
 $secret = "TITAN_GYM_SECRET_KEY_123";
-$auth = isset($_POST['key']) ? $_POST['key'] : '';
+$auth = isset($_GET['key']) ? $_GET['key'] : '';
 
 if ($auth !== $secret) {
     http_response_code(403);
@@ -13,8 +13,12 @@ if ($auth !== $secret) {
     exit();
 }
 
-$id = isset($_POST['id']) ? intval($_POST['id']) : 0;
-$status = isset($_POST['status']) ? mysqli_real_escape_string($con, $_POST['status']) : '';
+// Read JSON payload from Node.js
+$raw_post = file_get_contents('php://input');
+$data = json_decode($raw_post, true);
+
+$id = isset($data['id']) ? intval($data['id']) : 0;
+$status = isset($data['status']) ? mysqli_real_escape_string($con, $data['status']) : '';
 
 if ($id > 0 && !empty($status)) {
     $now = date('Y-m-d H:i:s');
