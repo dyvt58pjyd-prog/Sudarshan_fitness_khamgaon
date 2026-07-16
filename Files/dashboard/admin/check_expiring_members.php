@@ -106,7 +106,7 @@ if (!function_exists('send_whatsapp_expiry_notice')) {
                    "This is a reminder that your active subscription *({$plan})* is expiring in *{$days} {$day_word}* (on *{$expire}*).\n\n" .
                    "Please renew your membership package on or before the expiration date to prevent scan lockages.\n\n" .
                    "Access your member console anytime to check your receipts and details at:\n" .
-                   "👉 https://sudarshanfitness.localtunnel.me\n\n" .
+                   "👉 https://sudarshanfitness.de\n\n" .
                    "Thank you,\n" .
                    "*{$gym_name}*";
 

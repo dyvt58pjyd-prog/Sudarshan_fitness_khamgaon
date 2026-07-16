@@ -1054,7 +1054,7 @@ if (!function_exists('send_whatsapp_payment_confirmation')) {
                    "Thank you for your payment of *₹" . number_format($amount) . "* for the plan *{$planName}* via *{$payment_mode}*.\n\n" .
                    "Your subscription is now *ACTIVE* and will expire on *{$expiredate}*.\n\n" .
                    "Log in to your member portal to view receipt and workout routines:\n" .
-                   "👉 https://sudarshanfitness.localtunnel.me\n\n" .
+                   "👉 https://sudarshanfitness.de\n\n" .
                    "Thank you,\n" .
                    "*{$gym_name}*";
                    
@@ -1136,7 +1136,7 @@ if (!function_exists('send_whatsapp_welcome_confirmation')) {
                    "Dear *{$name}*,\n\n" .
                    "Your registration is confirmed. Welcome aboard!\n\n" .
                    "🔑 *Portal Access Credentials:*\n" .
-                   "Link: https://sudarshanfitness.localtunnel.me\n" .
+                   "Link: https://sudarshanfitness.de\n" .
                    "Username ID: *{$memID}*\n" .
                    "Password: *{$password}*\n\n" .
                    "🚪 *Gate Access Code:* *{$entry_code}*\n" .
