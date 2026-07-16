@@ -129,7 +129,8 @@ async function startPolling() {
                 
                 for (const msg of data.messages) {
                     await sendMessage(msg);
-                    const randomDelayMs = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
+                    // Anti-ban: Increased delay to 15-25 seconds between messages
+                    const randomDelayMs = Math.floor(Math.random() * (25000 - 15000 + 1)) + 15000;
                     console.log(`[WhatsApp Poller] Sleeping for ${randomDelayMs / 1000}s to mimic human behavior...`);
                     await new Promise(res => setTimeout(res, randomDelayMs));
                 }
@@ -151,7 +152,22 @@ async function sendMessage(msgData) {
         if (cleanedNumber.length === 10) cleanedNumber = '91' + cleanedNumber;
         const chatId = cleanedNumber + '@c.us';
 
-        console.log(`[WhatsApp] Sending msg ID ${id} to ${chatId}...`);
+        console.log(`[WhatsApp] Preparing to send msg ID ${id} to ${chatId}...`);
+        
+        // ANTI-BAN 1: Check if the number is actually registered on WhatsApp first
+        const numberDetails = await client.getNumberId(cleanedNumber);
+        if (!numberDetails) {
+            throw new Error(`Number ${cleanedNumber} is not registered on WhatsApp.`);
+        }
+        
+        // ANTI-BAN 2: Simulate human presence and typing
+        await client.sendPresenceAvailable();
+        const chat = await client.getChatById(numberDetails._serialized);
+        await chat.sendStateTyping();
+        
+        // Simulate typing for 2 to 5 seconds
+        const typingDelay = Math.floor(Math.random() * (5000 - 2000 + 1)) + 2000;
+        await new Promise(res => setTimeout(res, typingDelay));
         
         if (filePath && filePath.trim() !== '') {
             const fileUrl = filePath.startsWith('http') ? filePath : `${HOSTINGER_URL}/${filePath.replace(/^\/+/, '')}`;
@@ -159,15 +175,17 @@ async function sendMessage(msgData) {
             try {
                 const media = await MessageMedia.fromUrl(fileUrl, { unsafeMime: true, filename: 'Document.pdf' });
                 // Send the message text as the caption of the PDF document
-                await client.sendMessage(chatId, media, { caption: message });
+                await client.sendMessage(numberDetails._serialized, media, { caption: message });
             } catch (mediaErr) {
                 console.error(`[WhatsApp] Failed to fetch media from ${fileUrl}: ${mediaErr.message}. Sending text-only instead.`);
-                await client.sendMessage(chatId, message);
+                await client.sendMessage(numberDetails._serialized, message);
             }
         } else {
             // Standard text-only message
-            await client.sendMessage(chatId, message);
+            await client.sendMessage(numberDetails._serialized, message);
         }
+        
+        await chat.clearState();
         
         status = 'sent';
     } catch (err) {
