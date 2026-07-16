@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require '../../include/db_conn.php';
 page_protect();
 ?>
@@ -118,8 +118,8 @@ page_protect();
                <td height="35"><input type="text" name="desc" id="planDesc" placeholder="Enter plan description" size="40"></td>
              </tr>
              <tr>
-               <td height="35">PLAN VALIDITY</td>
-               <td height="35"><input type="number" name="planval" id="planVal" placeholder="Enter validity in months" size="40"></td>
+               <td height="35">PLAN VALIDITY (e.g. 1, 3 for months or 15d for days)</td>
+               <td height="35"><input type="text" name="planval" id="planVal" placeholder="Enter validity (e.g. 3 or 15d)" size="40"></td>
              </tr>
              
              <tr>

@@ -123,8 +123,8 @@ page_protect();
                <td height="35"><input type="text" name="desc" id="planDesc"  value='<?php echo $row['description'] ?>' size="40"></td>
              </tr>
              <tr>
-               <td height="35">PLAN VALIDITY</td>
-               <td height="35"><input type="number" name="planval" id="planVal" value='<?php echo $row['validity'] ?>' size="40"></td>
+               <td height="35">PLAN VALIDITY (e.g. 1, 3 for months or 15d for days)</td>
+               <td height="35"><input type="text" name="planval" id="planVal" value='<?php echo $row['validity'] ?>' size="40"></td>
              </tr>
              
              <tr>

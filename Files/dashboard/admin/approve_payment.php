@@ -105,7 +105,7 @@ if ($is_new_reg == 1 && $userid === 'PENDING') {
             $discount_amt = $plan_amount - $amount;
         }
         
-        $d = strtotime("+" . $validity . " Months", strtotime($calc_base_date));
+        $d = calculate_expiration_date($calc_base_date, $validity);
         $expiredate = date("Y-m-d", $d);
         
         mysqli_query($con, "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
@@ -155,7 +155,7 @@ if (strpos($pid, 'PT_') === 0) {
     $tr_q = mysqli_query($con, "SELECT Full_name FROM admin WHERE username='$trainer_id'");
     $trainer_name = ($tr_q && mysqli_num_rows($tr_q)>0) ? mysqli_fetch_assoc($tr_q)['Full_name'] : 'Assigned Trainer';
     
-    $d = strtotime("+" . $duration . " Months", strtotime($calc_base_date));
+    $d = calculate_expiration_date($calc_base_date, $duration);
     $expiredate = date("Y-m-d", $d);
     
     $ins_pt = "INSERT INTO pt_enrollments (uid, trainer_id, enroll_date, expire_date, amount, payment_mode, received_by) 
@@ -203,7 +203,7 @@ if (strpos($pid, 'PT_') === 0) {
 
     mysqli_query($con, "UPDATE enrolls_to SET renewal='no' WHERE uid='$userid'");
     
-    $d = strtotime("+" . $validity . " Months", strtotime($calc_base_date));
+    $d = calculate_expiration_date($calc_base_date, $validity);
     $expiredate = date("Y-m-d", $d);
     
     $ins_enroll = "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 

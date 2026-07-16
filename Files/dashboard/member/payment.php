@@ -91,7 +91,7 @@ if (isset($_POST['submit_payment'])) {
                             $cdate = date('Y-m-d');
                             $launch_date = '2026-07-08';
                             $cdate = ($cdate < $launch_date) ? $launch_date : $cdate;
-                            $d = strtotime("+" . $validity . " Months", strtotime($cdate));
+                            $d = calculate_expiration_date($cdate, $validity);
                             $expiredate = date("Y-m-d", $d);
                             
                             $payment_mode = 'UPI';
@@ -150,7 +150,7 @@ if (isset($_POST['submit_payment'])) {
                         $cdate = date('Y-m-d');
                         $launch_date = '2026-07-08';
                         $cdate = ($cdate < $launch_date) ? $launch_date : $cdate;
-                        $d = strtotime("+" . $duration . " Months", strtotime($cdate));
+                        $d = calculate_expiration_date($cdate, $duration);
                         $expiredate = date("Y-m-d", $d);
                         
                         $payment_mode = 'UPI';

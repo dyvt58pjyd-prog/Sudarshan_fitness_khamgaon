@@ -106,7 +106,7 @@ $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,t
           $launch_date = '2026-07-08';
           $cdate = ($cdate < $launch_date) ? $launch_date : $cdate;
           
-          $d=strtotime("+".$value[3]." Months", strtotime($cdate));
+          $d = calculate_expiration_date($cdate, $value[3]);
           $expiredate=date("Y-m-d",$d); //adding validity retrieve from plan to current date
           $discount = isset($_POST['discount']) ? intval($_POST['discount']) : 0;
           $plan_price = intval($value[4]);
@@ -162,7 +162,7 @@ $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,t
                     $pt_duration = isset($_POST['pt_duration']) ? intval($_POST['pt_duration']) : 3;
                     $pt_fees = isset($_POST['pt_fees']) ? intval($_POST['pt_fees']) : 0;
                     
-                    $d_pt = strtotime("+" . $pt_duration . " Months", strtotime($cdate));
+                    $d_pt = calculate_expiration_date($cdate, $pt_duration);
                     $pt_expire_date = date("Y-m-d", $d_pt);
                     
                     $pt_payment_mode = isset($_POST['payment_mode']) ? mysqli_real_escape_string($con, $_POST['payment_mode']) : 'Cash';

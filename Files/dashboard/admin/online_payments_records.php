@@ -45,7 +45,7 @@ if (isset($_POST['approve_id'])) {
             date_default_timezone_set("Asia/Calcutta");
             $today = date('Y-m-d');
             $cdate = ($today < '2026-07-08') ? '2026-07-08' : $today;
-            $d = strtotime("+" . $validity . " Months", strtotime($cdate));
+            $d = calculate_expiration_date($cdate, $validity);
             $expiredate = date("Y-m-d", $d);
             
             $payment_mode = 'UPI';

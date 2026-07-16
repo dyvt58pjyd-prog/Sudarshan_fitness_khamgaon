@@ -569,7 +569,7 @@ if (isset($_POST['submit_registration'])) {
                                             <?php else: ?>
                                                 <div class="holo-price">₹<?php echo number_format($original_price); ?></div>
                                             <?php endif; ?>
-                                            <div class="holo-validity"><?php echo $p['validity']; ?> Months</div>
+                                            <div class="holo-validity"><?php echo format_validity_string($p['validity']); ?></div>
                                         </div>
                                     </div>
                                 <?php endforeach; ?>
@@ -688,7 +688,10 @@ if (isset($_POST['submit_registration'])) {
             document.getElementById('details-title').innerText = name;
             document.getElementById('details-desc').innerText = desc;
             document.getElementById('details-price').innerText = '₹' + parseInt(amount).toLocaleString('en-IN');
-            document.getElementById('details-validity').innerText = validity + ' Month' + (parseInt(validity) > 1 ? 's' : '');
+            let validityStr = String(validity).toLowerCase().includes('d') 
+                ? parseInt(validity) + ' Day' + (parseInt(validity) > 1 ? 's' : '') 
+                : parseInt(validity) + ' Month' + (parseInt(validity) > 1 ? 's' : '');
+            document.getElementById('details-validity').innerText = validityStr;
 
             // UPI dynamic loading config
             const upiId = "<?php echo isset($gym['upi_id']) ? htmlspecialchars($gym['upi_id']) : ''; ?>";

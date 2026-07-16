@@ -45,7 +45,7 @@ page_protect();
                   $cdate = isset($_SESSION['working_year']) ? ($_SESSION['working_year'] . '-' . date('m-d')) : date('Y-m-d');
                   $launch_date = '2026-07-08';
                   $cdate = ($cdate < $launch_date) ? $launch_date : $cdate;
-                  $d = strtotime("+" . $validity . " Months", strtotime($cdate));
+                  $d = calculate_expiration_date($cdate, $validity);
                   $expiredate = date("Y-m-d", $d);
                   
                   $payment_mode = 'Cash';

@@ -120,7 +120,7 @@ page_protect();
 					        echo "<td>" . $row['pid'] . "</td>";
 					        echo "<td>" . $row['planName'] . "</td>";
 					        echo "<td width='380'>" . $row['description'] . "</td>";
-					        echo "<td>" . $row['validity'] . "</td>";
+					        echo "<td>" . format_validity_string($row['validity']) . "</td>";
 					        echo "<td>₹" . $row['amount'] . "</td>";
 					        
 					        $sno++;

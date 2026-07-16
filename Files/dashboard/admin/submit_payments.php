@@ -18,7 +18,7 @@ $query="update enrolls_to set renewal='no' where uid='$memID'";
           $cdate = isset($_SESSION['working_year']) ? ($_SESSION['working_year'] . '-' . date('m-d')) : date('Y-m-d');
           $launch_date = '2026-07-08';
           $cdate = ($cdate < $launch_date) ? $launch_date : $cdate;
-          $d=strtotime("+".$value[3]." Months", strtotime($cdate));
+          $d = calculate_expiration_date($cdate, $value[3]);
           $expiredate=date("Y-m-d",$d); //adding validity retrieve from plan to current date
           $discount = isset($_POST['discount']) ? intval($_POST['discount']) : 0;
           $transaction_date = isset($_POST['transaction_date']) && !empty($_POST['transaction_date']) ? mysqli_real_escape_string($con, $_POST['transaction_date']) : date('Y-m-d');

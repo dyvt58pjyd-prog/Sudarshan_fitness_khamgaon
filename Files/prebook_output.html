@@ -481,7 +481,10 @@
             document.getElementById('details-title').innerText = name;
             document.getElementById('details-desc').innerText = desc;
             document.getElementById('details-price').innerText = '₹' + parseInt(amount).toLocaleString('en-IN');
-            document.getElementById('details-validity').innerText = validity + ' Month' + (parseInt(validity) > 1 ? 's' : '');
+            let validityStr = String(validity).toLowerCase().includes('d') 
+                ? parseInt(validity) + ' Day' + (parseInt(validity) > 1 ? 's' : '') 
+                : parseInt(validity) + ' Month' + (parseInt(validity) > 1 ? 's' : '');
+            document.getElementById('details-validity').innerText = validityStr;
 
             // UPI dynamic loading config
             const upiId = "";

@@ -1334,4 +1334,34 @@ if (!function_exists('enqueue_whatsapp_message')) {
         return true;
     }
 }
+
+if (!function_exists('calculate_expiration_date')) {
+    function calculate_expiration_date($start_date_str, $validity_str) {
+        $validity_str = strtolower(trim($validity_str));
+        $start_timestamp = strtotime($start_date_str);
+        if (!$start_timestamp) return false;
+        
+        if (strpos($validity_str, 'd') !== false) {
+            $days = (int)str_replace('d', '', $validity_str);
+            return strtotime("+$days Days", $start_timestamp);
+        } else {
+            $months = (int)str_replace('m', '', $validity_str);
+            return strtotime("+$months Months", $start_timestamp);
+        }
+    }
+}
+
+if (!function_exists('format_validity_string')) {
+    function format_validity_string($validity_str) {
+        $validity_str = strtolower(trim($validity_str));
+        if (strpos($validity_str, 'd') !== false) {
+            $days = (int)str_replace('d', '', $validity_str);
+            return $days . ' Day' . ($days > 1 ? 's' : '');
+        } else {
+            $months = (int)str_replace('m', '', $validity_str);
+            return $months . ' Month' . ($months > 1 ? 's' : '');
+        }
+    }
+}
+
 check_and_upgrade_db($con);
