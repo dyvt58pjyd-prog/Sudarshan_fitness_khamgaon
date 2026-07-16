@@ -123,7 +123,9 @@ async function startPolling() {
                 
                 for (const msg of data.messages) {
                     await sendMessage(msg);
-                    await new Promise(res => setTimeout(res, 2000)); // 2s delay between messages
+                    const randomDelayMs = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
+                    console.log(`[WhatsApp Poller] Sleeping for ${randomDelayMs / 1000}s to mimic human behavior...`);
+                    await new Promise(res => setTimeout(res, randomDelayMs));
                 }
             }
         } catch (error) {
