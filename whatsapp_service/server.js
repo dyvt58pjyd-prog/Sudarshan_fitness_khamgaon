@@ -3,6 +3,7 @@ const qrcode = require('qrcode-terminal');
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios'); // We need axios for HTTP polling
+axios.defaults.headers.common['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
 const { execSync } = require('child_process');
 
 // Configuration
@@ -92,11 +93,16 @@ function initWhatsAppClient() {
         pushStatusToHostinger();
     });
 
-    client.on('disconnected', (reason) => {
+    client.on('disconnected', async (reason) => {
         clientState = 'DISCONNECTED';
         linkedUser = null;
         console.log('[WhatsApp] Client disconnected:', reason);
         pushStatusToHostinger();
+        try {
+            await client.destroy();
+        } catch (err) {
+            console.log('[WhatsApp] Error destroying client:', err.message);
+        }
         setTimeout(() => initWhatsAppClient(), 5000);
     });
 
@@ -146,7 +152,23 @@ async function sendMessage(msgData) {
         const chatId = cleanedNumber + '@c.us';
 
         console.log(`[WhatsApp] Sending msg ID ${id} to ${chatId}...`);
-        await client.sendMessage(chatId, message);
+        
+        if (filePath && filePath.trim() !== '') {
+            const fileUrl = filePath.startsWith('http') ? filePath : `${HOSTINGER_URL}/${filePath.replace(/^\/+/, '')}`;
+            console.log(`[WhatsApp] Fetching attachment from: ${fileUrl}`);
+            try {
+                const media = await MessageMedia.fromUrl(fileUrl, { unsafeMime: true, filename: 'Document.pdf' });
+                // Send the message text as the caption of the PDF document
+                await client.sendMessage(chatId, media, { caption: message });
+            } catch (mediaErr) {
+                console.error(`[WhatsApp] Failed to fetch media from ${fileUrl}: ${mediaErr.message}. Sending text-only instead.`);
+                await client.sendMessage(chatId, message);
+            }
+        } else {
+            // Standard text-only message
+            await client.sendMessage(chatId, message);
+        }
+        
         status = 'sent';
     } catch (err) {
         console.error(`[WhatsApp] Failed to send msg ID ${id}:`, err.message);
