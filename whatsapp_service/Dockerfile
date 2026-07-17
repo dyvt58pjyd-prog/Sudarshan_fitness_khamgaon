@@ -4,7 +4,8 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm ci
+RUN npm ci --ignore-scripts=false
+RUN npx puppeteer browsers install chrome
 
 COPY . .
 
