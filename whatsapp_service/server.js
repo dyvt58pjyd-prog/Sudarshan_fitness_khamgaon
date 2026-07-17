@@ -2,9 +2,16 @@ const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const fs = require('fs');
 const path = require('path');
+const express = require('express'); // Added for Render.com health check
 const axios = require('axios'); // We need axios for HTTP polling
 axios.defaults.headers.common['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
 const { execSync } = require('child_process');
+
+// Start Express Server for Cloud Providers (Render/Railway)
+const app = express();
+const PORT = process.env.PORT || 3000;
+app.get('/', (req, res) => res.send('Titan Gym WhatsApp Bot is Running!'));
+app.listen(PORT, () => console.log(`[Express] Health check server listening on port ${PORT}`));
 
 // Configuration
 const HOSTINGER_URL = process.env.HOSTINGER_URL || 'https://sudarshanfitness.de';
@@ -13,21 +20,23 @@ const POLL_INTERVAL_MS = 10000; // 10 seconds
 
 // Push Architecture Setup for QR Code Exposure
 const qrcodeImage = require('qrcode'); // To generate base64/image instead of terminal
-let clientState = 'DISCONNECTED'; 
+let clientState = 'DISCONNECTED';
 let linkedUser = null;
 let currentQR = null; // Store the raw QR string
 let client;
 
 // Choose Chrome executable path dynamically based on OS/platform
-let chromePath = '';
-if (process.platform === 'darwin') {
-    if (fs.existsSync('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')) chromePath = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-} else if (process.platform === 'win32') {
-    if (fs.existsSync('C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe')) chromePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
-    else if (fs.existsSync('C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe')) chromePath = 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe';
-} else if (process.platform === 'linux') {
-    if (fs.existsSync('/usr/bin/google-chrome')) chromePath = '/usr/bin/google-chrome';
-    else if (fs.existsSync('/usr/bin/chromium-browser')) chromePath = '/usr/bin/chromium-browser';
+let chromePath = process.env.PUPPETEER_EXECUTABLE_PATH || '';
+if (!chromePath) {
+    if (process.platform === 'darwin') {
+        if (fs.existsSync('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')) chromePath = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+    } else if (process.platform === 'win32') {
+        if (fs.existsSync('C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe')) chromePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+        else if (fs.existsSync('C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe')) chromePath = 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe';
+    } else if (process.platform === 'linux') {
+        if (fs.existsSync('/usr/bin/google-chrome')) chromePath = '/usr/bin/google-chrome';
+        else if (fs.existsSync('/usr/bin/chromium-browser')) chromePath = '/usr/bin/chromium-browser';
+    }
 }
 
 const puppeteerOptions = {
@@ -70,7 +79,7 @@ function initWhatsAppClient() {
         clientState = 'QR_READY';
         currentQR = qr;
         console.log('[WhatsApp] Scan this QR Code to link your device:');
-        qrcode.generate(qr, {small: true});
+        qrcode.generate(qr, { small: true });
         pushStatusToHostinger();
     });
 
@@ -113,8 +122,8 @@ function initWhatsAppClient() {
 let isPolling = false;
 
 async function startPolling() {
-    console.log(`[WhatsApp Poller] Started polling ${HOSTINGER_URL} every ${POLL_INTERVAL_MS/1000}s`);
-    
+    console.log(`[WhatsApp Poller] Started polling ${HOSTINGER_URL} every ${POLL_INTERVAL_MS / 1000}s`);
+
     setInterval(async () => {
         if (clientState !== 'CONNECTED' || isPolling) return;
         isPolling = true;
@@ -126,7 +135,7 @@ async function startPolling() {
 
             if (data && data.success && data.messages && data.messages.length > 0) {
                 console.log(`[WhatsApp Poller] Found ${data.messages.length} pending messages.`);
-                
+
                 for (const msg of data.messages) {
                     await sendMessage(msg);
                     // Anti-ban: Increased delay to 15-25 seconds between messages
@@ -146,29 +155,23 @@ async function startPolling() {
 async function sendMessage(msgData) {
     const { id, number, message, filePath } = msgData;
     let status = 'failed';
-    
+
     try {
         let cleanedNumber = number.toString().replace(/\D/g, '');
         if (cleanedNumber.length === 10) cleanedNumber = '91' + cleanedNumber;
         const chatId = cleanedNumber + '@c.us';
 
         console.log(`[WhatsApp] Preparing to send msg ID ${id} to ${chatId}...`);
-        
+
         // ANTI-BAN 1: Check if the number is actually registered on WhatsApp first
         const numberDetails = await client.getNumberId(cleanedNumber);
         if (!numberDetails) {
             throw new Error(`Number ${cleanedNumber} is not registered on WhatsApp.`);
         }
-        
-        // ANTI-BAN 2: Simulate human presence and typing
+
+        // (Removed typing simulation as it crashes on new unsaved numbers in recent wa-web versions)
         await client.sendPresenceAvailable();
-        const chat = await client.getChatById(numberDetails._serialized);
-        await chat.sendStateTyping();
-        
-        // Simulate typing for 2 to 5 seconds
-        const typingDelay = Math.floor(Math.random() * (5000 - 2000 + 1)) + 2000;
-        await new Promise(res => setTimeout(res, typingDelay));
-        
+
         if (filePath && filePath.trim() !== '') {
             const fileUrl = filePath.startsWith('http') ? filePath : `${HOSTINGER_URL}/${filePath.replace(/^\/+/, '')}`;
             console.log(`[WhatsApp] Fetching attachment from: ${fileUrl}`);
@@ -184,12 +187,10 @@ async function sendMessage(msgData) {
             // Standard text-only message
             await client.sendMessage(numberDetails._serialized, message);
         }
-        
-        await chat.clearState();
-        
+
         status = 'sent';
     } catch (err) {
-        console.error(`[WhatsApp] Failed to send msg ID ${id}:`, err.message);
+        console.error(`[WhatsApp] Failed to send msg ID ${id}:`, err.stack || err);
     }
 
     // Report back to Hostinger
@@ -213,7 +214,7 @@ async function pushStatusToHostinger() {
         if (clientState === 'QR_READY' && currentQR) {
             qrData = await qrcodeImage.toDataURL(currentQR);
         }
-        
+
         await axios.post(`${HOSTINGER_URL}/Files/api/update_whatsapp_status.php?key=${API_SECRET}`, {
             status: clientState,
             user: linkedUser,
