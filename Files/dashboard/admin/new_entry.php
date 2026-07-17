@@ -592,6 +592,10 @@ if ($cnt_q) {
         document.getElementById('discount_input').addEventListener('input', generateStaffQR);
         document.getElementById('trainer_id_select').addEventListener('change', generateStaffQR);
         document.getElementById('pt_duration').addEventListener('change', generateStaffQR);
+        var paidInput = document.getElementById('paid_amount');
+        if (paidInput) {
+            paidInput.addEventListener('input', generateStaffQR);
+        }
         
         const wbLimitReached = <?php echo $wb_limit_reached ? 'true' : 'false'; ?>;
         
@@ -669,6 +673,14 @@ if ($cnt_q) {
             }
             
             var totalAmount = (planPrice - discount) + ptFees;
+            var paidAmountInput = document.getElementById('paid_amount');
+            if (paidAmountInput && paidAmountInput.value !== '') {
+                var enteredPaid = parseFloat(paidAmountInput.value);
+                if (!isNaN(enteredPaid)) {
+                    totalAmount = enteredPaid;
+                }
+            }
+            
             if (totalAmount <= 0) {
                 qrContainer.style.display = 'none';
                 return;
