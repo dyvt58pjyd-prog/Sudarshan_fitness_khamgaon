@@ -63,25 +63,15 @@ if (isset($_POST['send_tip_now'])) {
         exit();
     }
     
-    // Forward this broadcast directly to the Node service
-    $node_url = 'http://127.0.0.1:5001/broadcast';
-    $post_payload = json_encode([
-        'numbers' => $numbers,
-        'message' => $broadcast_message
-    ]);
+    // Enqueue messages into whatsapp_outbox instead of direct localhost POST
+    $sent_cnt = 0;
+    foreach ($numbers as $mobile) {
+        if (enqueue_whatsapp_message($con, $mobile, $broadcast_message)) {
+            $sent_cnt++;
+        }
+    }
     
-    $ch_node = curl_init($node_url);
-    curl_setopt($ch_node, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch_node, CURLOPT_POST, true);
-    curl_setopt($ch_node, CURLOPT_POSTFIELDS, $post_payload);
-    curl_setopt($ch_node, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    curl_setopt($ch_node, CURLOPT_TIMEOUT, 10);
-    $node_res = curl_exec($ch_node);
-    $node_code = curl_getinfo($ch_node, CURLINFO_HTTP_CODE);
-    curl_close($ch_node);
-    
-    if ($node_code === 200) {
-        $sent_cnt = count($numbers);
+    if ($sent_cnt > 0) {
         // Log the tip manual send as a campaign record
         $tip_msg = mysqli_real_escape_string($con, $broadcast_message);
         mysqli_query($con, "INSERT INTO broadcast_campaigns (subject, target_group, message, sent_count) 
@@ -149,26 +139,15 @@ if (isset($_POST['send_broadcast'])) {
     if (empty($numbers)) {
         echo "<script>alert('Error: Selected target group has no valid mobile numbers registered.');</script>";
     } else {
-        // Forward broadcast request to WhatsApp service
-        $node_url = 'http://127.0.0.1:5001/broadcast';
-        $post_payload = json_encode([
-            'numbers' => $numbers,
-            'message' => $message,
-            'filePath' => $physical_flyer_path
-        ]);
+        // Enqueue messages into whatsapp_outbox instead of direct localhost POST
+        $sent_cnt = 0;
+        foreach ($numbers as $mobile) {
+            if (enqueue_whatsapp_message($con, $mobile, $message, $physical_flyer_path)) {
+                $sent_cnt++;
+            }
+        }
         
-        $ch = curl_init($node_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_payload);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-        $res = curl_exec($ch);
-        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-        
-        if ($code === 200) {
-            $sent_cnt = count($numbers);
+        if ($sent_cnt > 0) {
             // Insert campaign log
             mysqli_query($con, "INSERT INTO broadcast_campaigns (subject, target_group, message, attachment_path, sent_count) 
                                 VALUES ('$subject', '$target_group', '$message', '$flyer_path', $sent_cnt)");
@@ -176,7 +155,7 @@ if (isset($_POST['send_broadcast'])) {
             echo "<script>alert('Broadcast of $sent_cnt messages successfully started in background!'); window.location.href='broadcast_campaign.php';</script>";
             exit();
         } else {
-            echo "<script>alert('Failed to send. WhatsApp service offline or not connected.');</script>";
+            echo "<script>alert('Failed to send. Could not queue messages.');</script>";
         }
     }
 }
