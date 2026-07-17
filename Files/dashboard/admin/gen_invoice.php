@@ -519,8 +519,12 @@ $total_paid = $paid_amount;
                     </td>
                     <td style="text-align: right; font-weight: 600; color: var(--text-light); padding-top: 15px; vertical-align: top;">Total Paid:</td>
                     <td style="text-align: right; padding-top: 15px; vertical-align: top;">
-                        <div class="total-amount-box">
-                            <span class="total-amount">₹<?php echo $total_paid; ?></span>
+                        <div class="total-amount-box" style="<?php echo (isset($row['balance']) && $row['balance'] > 0) ? 'background-color: #fef2f2; border: 1px solid #fecaca;' : ''; ?>">
+                            <span class="total-amount" style="<?php echo (isset($row['balance']) && $row['balance'] > 0) ? 'color: #ef4444;' : ''; ?>">₹<?php echo $total_paid; ?></span>
+                            <?php if (isset($row['balance']) && $row['balance'] > 0): ?>
+                                <span style="display: block; font-size: 13px; color: #dc2626; margin-top: 5px; font-weight: 600;">Pending: ₹<?php echo $row['balance']; ?></span>
+                                <span style="display: block; font-size: 11px; color: #ef4444; margin-top: 2px;">Due: <?php echo date('d M, Y', strtotime($row['balance_due_date'])); ?></span>
+                            <?php endif; ?>
                         </div>
                     </td>
                 </tr>
