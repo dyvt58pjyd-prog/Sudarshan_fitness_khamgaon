@@ -81,9 +81,6 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
     }
 </style>
 <script>
-    if (localStorage.getItem('theme') === 'light') {
-        document.documentElement.classList.add('light-theme');
-    }
 
     document.addEventListener("DOMContentLoaded", function() {
         // Move Operating Year selector to top header links list
@@ -303,38 +300,7 @@ document.addEventListener("DOMContentLoaded", function() {
     favicon.href = "<?php echo htmlspecialchars($gym_settings_data['gym_logo']); ?>";
     document.getElementsByTagName('head')[0].appendChild(favicon);
 
-    // Dynamic Premium Theme Toggle Button Injection
-    if (!document.getElementById("theme-toggle")) {
-        var themeToggle = document.createElement("button");
-        themeToggle.id = "theme-toggle";
-        themeToggle.className = "theme-toggle-btn";
-        themeToggle.title = "Toggle Light/Dark Theme";
-        
-        var isLight = document.documentElement.classList.contains("light-theme");
-        
-        themeToggle.innerHTML = `
-            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ff6b00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="${isLight ? 'display:none;' : 'display:block;'}"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ff6b00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="${isLight ? 'display:block;' : 'display:none;'}"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-        `;
-        
-        document.body.appendChild(themeToggle);
-        
-        themeToggle.addEventListener("click", function() {
-            var activeLight = document.documentElement.classList.toggle("light-theme");
-            localStorage.setItem("theme", activeLight ? "light" : "dark");
-            
-            var sun = themeToggle.querySelector(".sun-icon");
-            var moon = themeToggle.querySelector(".moon-icon");
-            
-            if (activeLight) {
-                sun.style.display = "none";
-                moon.style.display = "block";
-            } else {
-                sun.style.display = "block";
-                moon.style.display = "none";
-            }
-        });
-    }
+
     
     // Live eTimeOffice Cloud Biometric Sync (Runs silently in background every 60 seconds)
     setInterval(function() {
