@@ -239,6 +239,7 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
         <li id="staffmanage"><a href="manage_staff.php"><i class="entypo-users"></i><span>Manage Staff</span></a></li>
         <li id="gymsettings"><a href="gym_settings.php"><i class="entypo-cog"></i><span>Gym Settings</span></a></li>
         <li id="whatsappsettings"><a href="whatsapp_setup.php"><i class="entypo-phone"></i><span>WhatsApp Settings</span></a></li>
+        <li id="whatsappoutbox"><a href="whatsapp_outbox.php"><i class="entypo-paper-plane"></i><span>WhatsApp Queue</span></a></li>
         <?php if ($current_role === 'super_admin'): ?>
             <li id="smtpsettings"><a href="smtp_settings.php"><i class="entypo-mail"></i><span>SMTP Configuration</span></a></li>
             <li id="discountlock"><a href="discount_lock.php"><i class="entypo-lock"></i><span>Discount Lock</span></a></li>
