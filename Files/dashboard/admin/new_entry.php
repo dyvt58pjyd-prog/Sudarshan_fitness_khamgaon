@@ -315,8 +315,17 @@ if ($cnt_q) {
               </tr>
               <script>
                 function checkBalance() {
-                    var totalText = document.getElementById('price').innerText || document.getElementById('price').value || '0';
-                    var total = parseFloat(totalText.replace(/[^0-9.]/g, '')) || 0;
+                    var total = 0;
+                    var planSelect = document.getElementById('plan_select');
+                    if (planSelect && planSelect.selectedIndex >= 0) {
+                        var opt = planSelect.options[planSelect.selectedIndex];
+                        if (opt && opt.getAttribute('data-price')) {
+                            total = parseFloat(opt.getAttribute('data-price'));
+                        }
+                    }
+                    var discount = parseFloat(document.getElementById('discount_input').value) || 0;
+                    total = total - discount;
+                    
                     var paid = parseFloat(document.getElementById('paid_amount').value);
                     if (!isNaN(paid) && paid < total) {
                         document.getElementById('balance_due_row').style.display = 'table-row';

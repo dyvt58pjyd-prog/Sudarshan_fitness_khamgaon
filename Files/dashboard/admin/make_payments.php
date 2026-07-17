@@ -180,8 +180,10 @@ if ($uid) {
                </tr>
                <script>
                  function checkBalance() {
-                     var totalText = document.getElementById('price').value || '0';
-                     var total = parseFloat(totalText) || 0;
+                     var totalText = document.getElementById('price') ? document.getElementById('price').value : '0';
+                     var total = parseFloat(totalText.replace(/[^0-9.]/g, '')) || 0;
+                     var discount = parseFloat(document.getElementById('discount_input').value) || 0;
+                     total = total - discount;
                      var paid = parseFloat(document.getElementById('paid_amount').value);
                      if (!isNaN(paid) && paid < total) {
                          document.getElementById('balance_due_row').style.display = 'table-row';
