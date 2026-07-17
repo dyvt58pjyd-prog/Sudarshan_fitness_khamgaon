@@ -289,9 +289,6 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			                <span style="font-size: 20px;">⚠️</span>
 			                <span><strong>WhatsApp Notification Service is offline:</strong> <span id="wa-pending-count-text"><?php echo $pending_count; ?></span> alerts are currently pending in the outbox retry queue.</span>
 			            </div>
-			            <button class="btn btn-xs btn-danger" onclick="triggerOutboxRetry()" id="btn-outbox-retry" style="background: var(--danger); border-color: var(--danger); font-weight: bold; padding: 6px 15px; border-radius: 6px;">
-			                Resend Pending Messages
-			            </button>
 			        </div>
 			    </div>
 			</div>
