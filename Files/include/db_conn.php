@@ -1151,8 +1151,20 @@ if (!function_exists('send_whatsapp_welcome_confirmation')) {
                    "(Use this code at the entrance screen if Face ID fails)\n\n" .
                    "💳 *Subscription Details:*\n" .
                    "Plan: *{$planName}*\n" .
-                   "Amount Paid: *₹" . number_format($amount) . "* via *{$payment_mode}*\n" .
-                   "Expires On: *{$expiredate}*\n\n" .
+                   "Amount Paid: *₹" . number_format($amount) . "* via *{$payment_mode}*\n";
+
+         $mob_10 = substr($wa_mobile, -10);
+         $bal_q = mysqli_query($con, "SELECT e.balance, e.balance_due_date, e.amount FROM users u JOIN enrolls_to e ON u.userid = e.uid WHERE u.mobile LIKE '%$mob_10%' ORDER BY e.et_id DESC LIMIT 1");
+         if ($bal_q && mysqli_num_rows($bal_q) > 0) {
+             $bal_row = mysqli_fetch_assoc($bal_q);
+             if (intval($bal_row['balance']) > 0) {
+                 $bal_amt = number_format($bal_row['balance']);
+                 $due_date_fmt = date('d M, Y', strtotime($bal_row['balance_due_date']));
+                 $message .= "Pending Balance: *₹{$bal_amt}* (Due: {$due_date_fmt})\n";
+             }
+         }
+
+         $message .= "Expires On: *{$expiredate}*\n\n" .
                    $health_msg .
                    $group_msg .
                    "Thank you,\n" .
