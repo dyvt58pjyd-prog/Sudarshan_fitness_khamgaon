@@ -12,3 +12,11 @@ upload_chunk_*
 *.docx
 *.pptx
 *.sql
+
+# Ignore dynamically uploaded photos
+Files/uploads/*.jpg
+Files/uploads/*.png
+Files/uploads/*.jpeg
+Files/uploads/profile_pics/*.jpg
+Files/uploads/profile_pics/*.png
+Files/uploads/profile_pics/*.jpeg
