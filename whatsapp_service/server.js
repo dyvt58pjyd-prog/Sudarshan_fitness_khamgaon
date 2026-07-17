@@ -68,7 +68,7 @@ function initWhatsAppClient() {
         authStrategy: new LocalAuth({ dataPath: path.join(__dirname, 'sessions') }),
         puppeteer: puppeteerOptions,
         userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-        webVersionCache: { type: 'remote', remotePath: 'https://raw.githubusercontent.com/wwebjs-dev/extension/main/release-build/wdudef.json' },
+        webVersionCache: { type: 'local' },
         authTimeoutMs: 90000,
         qrMaxRetries: 0,
         takeoverOnConflict: true,
