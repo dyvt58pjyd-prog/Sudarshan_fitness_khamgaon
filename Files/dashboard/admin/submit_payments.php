@@ -23,13 +23,21 @@ $query="update enrolls_to set renewal='no' where uid='$memID'";
           $discount = isset($_POST['discount']) ? intval($_POST['discount']) : 0;
           $transaction_date = isset($_POST['transaction_date']) && !empty($_POST['transaction_date']) ? mysqli_real_escape_string($con, $_POST['transaction_date']) : date('Y-m-d');
            $plan_price = intval($value[4]);
-           $paid_amount = $plan_price - $discount;
-           if ($paid_amount < 0) {
-               $paid_amount = 0;
+           $total_payable = $plan_price - $discount;
+           if ($total_payable < 0) {
+               $total_payable = 0;
            }
+           
+           $paid_now = isset($_POST['paid_amount']) && $_POST['paid_amount'] !== '' ? floatval($_POST['paid_amount']) : $total_payable;
+           $balance = $total_payable - $paid_now;
+           if ($balance < 0) $balance = 0;
+           
+           $balance_due_date = isset($_POST['balance_due_date']) ? mysqli_real_escape_string($con, $_POST['balance_due_date']) : NULL;
+           $due_date_val = $balance > 0 && !empty($balance_due_date) ? "'$balance_due_date'" : "NULL";
+
            $payment_mode = isset($_POST['payment_mode']) ? mysqli_real_escape_string($con, $_POST['payment_mode']) : 'Cash';
            $received_by = isset($_SESSION['full_name']) ? mysqli_real_escape_string($con, $_SESSION['full_name']) : 'System';
-           $query2="insert into enrolls_to(pid,uid,paid_date,expire,renewal,payment_mode,received_by,discount_amount,paid_amount) values('$plan','$memID','$transaction_date','$expiredate','yes','$payment_mode','$received_by',$discount,$paid_amount)";
+           $query2="insert into enrolls_to(pid,uid,paid_date,expire,renewal,payment_mode,received_by,discount_amount,paid_amount,balance,balance_due_date) values('$plan','$memID','$transaction_date','$expiredate','yes','$payment_mode','$received_by',$discount,$paid_now,$balance,$due_date_val)";
            if(mysqli_query($con,$query2)==1){
                 // Generate new random 6-digit entry code for gate access on renewal
                 $new_entry_code = strval(rand(100000, 999999));

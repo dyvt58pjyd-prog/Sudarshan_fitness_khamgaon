@@ -306,6 +306,30 @@ if ($cnt_q) {
                 </select></td>
               </tr>
               <tr>
+                <td height="35">AMOUNT PAID NOW (₹):</td>
+                <td height="35"><input type="number" name="paid_amount" id="paid_amount" placeholder="Leave empty if fully paid" size="40" onkeyup="checkBalance()"></td>
+              </tr>
+              <tr id="balance_due_row" style="display:none;">
+                <td height="35">BALANCE DUE DATE:</td>
+                <td height="35"><input type="date" name="balance_due_date" id="balance_due_date"></td>
+              </tr>
+              <script>
+                function checkBalance() {
+                    var totalText = document.getElementById('price').innerText || document.getElementById('price').value || '0';
+                    var total = parseFloat(totalText.replace(/[^0-9.]/g, '')) || 0;
+                    var paid = parseFloat(document.getElementById('paid_amount').value);
+                    if (!isNaN(paid) && paid < total) {
+                        document.getElementById('balance_due_row').style.display = 'table-row';
+                        document.getElementById('balance_due_date').required = true;
+                    } else {
+                        document.getElementById('balance_due_row').style.display = 'none';
+                        document.getElementById('balance_due_date').required = false;
+                    }
+                }
+                // Call it when plan changes
+                setInterval(checkBalance, 1000);
+              </script>
+              <tr>
                 <td colspan="2">
                     <div id="staff-qr-container" style="display: none; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,107,0,0.3); text-align: center; margin: 10px 0;">
                         <h4 style="color: #fff; margin-top: 0; margin-bottom: 5px;">Scan to Pay: <span id="staff-qr-amount" style="color: #ff6b00;">₹0</span></h4>

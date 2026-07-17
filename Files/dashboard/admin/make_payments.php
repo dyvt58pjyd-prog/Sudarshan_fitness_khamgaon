@@ -171,6 +171,30 @@ if ($uid) {
                  </select></td>
                </tr>
                <tr>
+                 <td height="35">AMOUNT PAID NOW (₹):</td>
+                 <td height="35"><input type="number" name="paid_amount" id="paid_amount" placeholder="Leave empty if fully paid" size="40" onkeyup="checkBalance()"></td>
+               </tr>
+               <tr id="balance_due_row" style="display:none;">
+                 <td height="35">BALANCE DUE DATE:</td>
+                 <td height="35"><input type="date" name="balance_due_date" id="balance_due_date"></td>
+               </tr>
+               <script>
+                 function checkBalance() {
+                     var totalText = document.getElementById('price').value || '0';
+                     var total = parseFloat(totalText) || 0;
+                     var paid = parseFloat(document.getElementById('paid_amount').value);
+                     if (!isNaN(paid) && paid < total) {
+                         document.getElementById('balance_due_row').style.display = 'table-row';
+                         document.getElementById('balance_due_date').required = true;
+                     } else {
+                         document.getElementById('balance_due_row').style.display = 'none';
+                         document.getElementById('balance_due_date').required = false;
+                     }
+                 }
+                 setInterval(checkBalance, 1000);
+               </script>
+               </tr>
+               <tr>
                  <td height="35">DISCOUNT AMOUNT (₹):</td>
                  <td height="35">
                      <input type="number" name="discount" id="discount_input" value="0" min="0" placeholder="Enter discount amount" required oninput="validateDiscount()"/>

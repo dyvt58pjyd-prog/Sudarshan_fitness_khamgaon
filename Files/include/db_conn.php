@@ -308,6 +308,14 @@ if (!$con) {
     if ($chk_paid && mysqli_num_rows($chk_paid) === 0) {
         mysqli_query($con, "ALTER TABLE enrolls_to ADD COLUMN paid_amount INT DEFAULT NULL");
     }
+    $chk_bal = mysqli_query($con, "SHOW COLUMNS FROM enrolls_to LIKE 'balance'");
+    if ($chk_bal && mysqli_num_rows($chk_bal) === 0) {
+        mysqli_query($con, "ALTER TABLE enrolls_to ADD COLUMN balance INT DEFAULT 0");
+    }
+    $chk_due = mysqli_query($con, "SHOW COLUMNS FROM enrolls_to LIKE 'balance_due_date'");
+    if ($chk_due && mysqli_num_rows($chk_due) === 0) {
+        mysqli_query($con, "ALTER TABLE enrolls_to ADD COLUMN balance_due_date VARCHAR(15) DEFAULT NULL");
+    }
 
     // Self-healing database check: ensure personal_training table exists
     mysqli_query($con, "CREATE TABLE IF NOT EXISTS personal_training (
