@@ -234,53 +234,27 @@ for ($days = 1; $days <= 5; $days++) {
             </div>
 
             <div class="row">
-                <!-- Meta Config Form -->
-                <div class="col-md-6">
-                    <div class="premium-card">
-                        <h4 style="color: var(--text-main); font-weight: 600; margin-bottom: 20px;">
-                            Meta API Configuration
-                            <?php if ($config && !empty($config['access_token'])): ?>
-                                <span class="status-badge status-connected pull-right">Configured</span>
-                            <?php else: ?>
-                                <span class="status-badge status-disconnected pull-right">Not Configured</span>
-                            <?php endif; ?>
-                        </h4>
+                <div class="col-md-12">
+                    <div class="premium-card text-center" style="min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <h3 style="color: var(--text-main); font-weight: 600; margin-bottom: 20px;">
+                            Link WhatsApp Web
+                        </h3>
                         
-                        <form method="POST" action="">
-                            <input type="hidden" name="action" value="save_meta">
-                            
-                            <label>Phone Number ID (From Meta Dashboard)</label>
-                            <input type="text" name="phone_number_id" class="form-control-premium" required value="<?php echo $config ? htmlspecialchars($config['phone_number_id']) : ''; ?>" placeholder="e.g. 108395925344444">
-                            
-                            <label>WhatsApp Business Account ID</label>
-                            <input type="text" name="business_account_id" class="form-control-premium" required value="<?php echo $config ? htmlspecialchars($config['business_account_id']) : ''; ?>" placeholder="e.g. 116661701234444">
-                            
-                            <label>Permanent Access Token (Bearer Token)</label>
-                            <textarea name="access_token" class="form-control-premium" style="height: 100px;" required placeholder="EAAL..."><?php echo $config ? htmlspecialchars($config['access_token']) : ''; ?></textarea>
-                            
-                            <button type="submit" class="btn-premium-action" style="width: 100%; justify-content: center;">
-                                <i class="entypo-floppy"></i> Save Credentials
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Test Message Sender -->
-                <div class="col-md-6">
-                    <div class="premium-card">
-                        <h4 style="color: var(--text-main); font-weight: 600; margin-bottom: 20px;">Send Test Message</h4>
+                        <div id="whatsapp-status-badge" class="status-badge status-disconnected" style="margin-bottom: 30px; font-size: 14px;">
+                            Checking connection status...
+                        </div>
                         
-                        <label>Receiver Mobile Number (with country code)</label>
-                        <input type="text" id="test-mobile" class="form-control-premium" placeholder="e.g. 919876543210">
+                        <div id="qr-container" style="display: none; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+                            <img id="qr-image" src="" alt="WhatsApp QR Code" style="width: 250px; height: 250px;" />
+                            <p style="color: #333; margin-top: 15px; font-weight: 600; font-size: 14px;">Scan with WhatsApp to Link</p>
+                        </div>
                         
-                        <label>Message Content</label>
-                        <textarea id="test-message" class="form-control-premium" style="height: 80px;" placeholder="Hello from Titan Gym!"></textarea>
-                        
-                        <button class="btn-premium-action" onclick="sendTestMessage()" style="width: 100%; justify-content: center; background: linear-gradient(135deg, #10B981, #059669);">
-                            <i class="entypo-paper-plane"></i> Send via Meta Cloud
-                        </button>
-                        
-                        <div id="test-result" style="margin-top: 15px; font-weight: 600; text-align: center;"></div>
+                        <div id="connected-container" style="display: none; flex-direction: column; align-items: center;">
+                            <i class="entypo-check" style="font-size: 60px; color: var(--success); margin-bottom: 15px;"></i>
+                            <h4 style="color: var(--success); font-weight: 600;">Service is Connected & Active!</h4>
+                            <p style="color: var(--text-muted); font-size: 14px; margin-top: 5px;">Linked Number: <strong id="linked-number"></strong></p>
+                            <p style="color: var(--text-muted); font-size: 14px;">Background dispatch is running perfectly.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -343,69 +317,45 @@ for ($days = 1; $days <= 5; $days++) {
     </div>
 
     <script>
-        async function sendTestMessage() {
-            const mobile = document.getElementById('test-mobile').value.trim();
-            const message = document.getElementById('test-message').value.trim();
-            const resultDiv = document.getElementById('test-result');
-            
-            if (!mobile || !message) {
-                resultDiv.innerHTML = '<span style="color: var(--danger);">Please fill in both fields.</span>';
-                return;
-            }
-            
-            resultDiv.innerHTML = '<span style="color: var(--text-muted);"><i class="entypo-arrows-ccw" style="animation: spin 2s linear infinite; display: inline-block; margin-right: 5px;"></i> Dispatching via Meta...</span>';
-            
-            try {
-                const response = await fetch('whatsapp_setup.php?ajax=send_manual', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ mobile: mobile, message: message, is_test: true })
+        function checkWhatsAppStatus() {
+            fetch('../../api/whatsapp_status.json?t=' + new Date().getTime())
+                .then(res => res.json())
+                .then(data => {
+                    const badge = document.getElementById('whatsapp-status-badge');
+                    const qrContainer = document.getElementById('qr-container');
+                    const connContainer = document.getElementById('connected-container');
+                    const qrImage = document.getElementById('qr-image');
+                    const linkedNum = document.getElementById('linked-number');
+
+                    if (data.status === 'CONNECTED') {
+                        badge.className = 'status-badge status-connected';
+                        badge.innerHTML = '<i class="entypo-check"></i> Connected';
+                        qrContainer.style.display = 'none';
+                        connContainer.style.display = 'flex';
+                        linkedNum.innerText = data.user || 'Unknown';
+                    } else if (data.status === 'QR_READY') {
+                        badge.className = 'status-badge status-disconnected';
+                        badge.innerHTML = '<i class="entypo-arrows-ccw" style="animation: spin 2s linear infinite;"></i> Waiting for scan...';
+                        connContainer.style.display = 'none';
+                        if (data.qrImage) {
+                            qrContainer.style.display = 'block';
+                            qrImage.src = data.qrImage;
+                        }
+                    } else {
+                        badge.className = 'status-badge status-disconnected';
+                        badge.innerHTML = '<i class="entypo-cancel"></i> Disconnected';
+                        qrContainer.style.display = 'none';
+                        connContainer.style.display = 'none';
+                    }
+                })
+                .catch(err => {
+                    console.log('Error fetching WhatsApp status:', err);
                 });
-                
-                const data = await response.json();
-                if (response.ok && data.success) {
-                    resultDiv.innerHTML = '<span style="color: var(--success);"><i class="entypo-check"></i> ' + data.message + '</span>';
-                } else {
-                    resultDiv.innerHTML = `<span style="color: var(--danger);">Meta Error: ${data.message}</span>`;
-                }
-            } catch (err) {
-                resultDiv.innerHTML = `<span style="color: var(--danger);">Error connecting to Meta API.</span>`;
-            }
         }
 
-        async function sendManualAlert(mobile, name, plan, expire, daysLeft, btnElement) {
-            const originalText = btnElement.innerHTML;
-            btnElement.disabled = true;
-            btnElement.innerHTML = '<i class="entypo-arrows-ccw" style="animation: spin 2s linear infinite; display: inline-block;"></i> Sending...';
-            
-            try {
-                const response = await fetch('whatsapp_setup.php?ajax=send_manual', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        mobile: mobile,
-                        name: name,
-                        plan: plan,
-                        expire: expire,
-                        days_left: daysLeft
-                    })
-                });
-                
-                const data = await response.json();
-                if (response.ok && data.success) {
-                    btnElement.innerHTML = '<i class="entypo-check"></i> Sent';
-                    btnElement.classList.replace('btn-primary', 'btn-success');
-                } else {
-                    alert('Meta Error: ' + data.message);
-                    btnElement.disabled = false;
-                    btnElement.innerHTML = originalText;
-                }
-            } catch (err) {
-                alert('Network error while dispatching.');
-                btnElement.disabled = false;
-                btnElement.innerHTML = originalText;
-            }
-        }
+        // Poll every 5 seconds
+        setInterval(checkWhatsAppStatus, 5000);
+        checkWhatsAppStatus();
     </script>
     <script src="../../neon/js/bootstrap.js"></script>
     <style>
