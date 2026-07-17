@@ -1,4 +1,4 @@
-const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
+const { Client, NoAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const fs = require('fs');
 const path = require('path');
@@ -65,7 +65,7 @@ if (chromePath) {
 
 function initWhatsAppClient() {
     client = new Client({
-        authStrategy: new LocalAuth({ dataPath: path.join(__dirname, 'sessions') }),
+        authStrategy: new NoAuth(),
         puppeteer: puppeteerOptions,
         userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
         webVersionCache: { type: 'local' },
