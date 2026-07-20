@@ -192,7 +192,8 @@ if (isset($_POST['delete_pt_id'])) {
                     date_default_timezone_set("Asia/Calcutta");
                     $today = date('Y-m-d');
                     
-                    $query = "SELECT p.*, u.username AS member_name, u.mobile, u.email, t.Full_name AS trainer_name 
+                    $query = "SELECT p.*, u.username AS member_name, u.mobile, u.email, t.Full_name AS trainer_name,
+                                     (SELECT COUNT(*) FROM pt_attendance a WHERE a.member_id = p.uid) as sessions_logged
                               FROM pt_enrollments p 
                               INNER JOIN users u ON p.uid = u.userid 
                               INNER JOIN admin t ON p.trainer_id = t.username 
@@ -221,10 +222,11 @@ if (isset($_POST['delete_pt_id'])) {
                             echo "<span style='font-size:11px;color:var(--text-muted);'>Username: " . htmlspecialchars($row['trainer_id']) . "</span>";
                             echo "</td>";
                             
-                            // Validity Dates
+                            // Validity Dates & Sessions
                             echo "<td>";
                             echo "Start: " . htmlspecialchars($row['enroll_date']) . "<br>";
-                            echo "End: " . htmlspecialchars($row['expire_date']);
+                            echo "End: " . htmlspecialchars($row['expire_date']) . "<br>";
+                            echo "<span style='font-size:11px; color:#ff6b00;'>Sessions Logged: " . htmlspecialchars($row['sessions_logged']) . "</span>";
                             echo "</td>";
                             
                             // Fee details
@@ -240,7 +242,13 @@ if (isset($_POST['delete_pt_id'])) {
                             
                             // Actions
                             echo "<td>";
-                            echo "<div class='action-flex'>";
+                            echo "<div class='action-flex' style='flex-wrap: wrap;'>";
+                            
+                            // Log Session Button
+                            if ($is_active) {
+                                echo "<a href='log_pt_session.php?uid=" . urlencode($row['uid']) . "&trainer_id=" . urlencode($row['trainer_id']) . "' class='a1-btn' style='background:#10b981; color:#fff; padding:4px 8px; font-size:12px; text-decoration:none;' title='Log a new session'>+ Log</a>";
+                            }
+
                             echo "<a href='gen_pt_invoice.php?ptid=" . $row['pt_id'] . "' target='_blank' class='a1-btn a1-blue' style='padding:4px 8px; font-size:12px; text-decoration:none;'>Receipt</a>";
                             
                             if ($current_role === 'super_admin' || $current_role === 'owner') {
