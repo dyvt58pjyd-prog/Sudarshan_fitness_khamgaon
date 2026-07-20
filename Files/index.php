@@ -11,9 +11,9 @@ if (session_status() === PHP_SESSION_NONE) {
 if(isset($_SESSION["user_data"]))
 {
     if (isset($_SESSION['role']) && $_SESSION['role'] === 'member') {
-        header("location:./dashboard/member/");
+        header("location: /Files/dashboard/member/");
     } else {
-        header("location:./dashboard/admin/");
+        header("location: /Files/dashboard/admin/");
     }
     exit();
 }

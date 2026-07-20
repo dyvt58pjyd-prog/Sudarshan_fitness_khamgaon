@@ -63,6 +63,7 @@ if (mysqli_num_rows($q_att) > 0) {
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         body { background: #0f172a; color: #f8fafc; min-height: 100vh; padding-bottom: 80px; background-image: radial-gradient(circle at 100% 0%, rgba(255,107,0,0.1) 0%, transparent 50%); }
@@ -109,10 +110,19 @@ if (mysqli_num_rows($q_att) > 0) {
         </div>
 
         <div class="card">
-            <div class="card-title">My Diet & Routine</div>
+            <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+                <span>My Diet & Routine</span>
+                <span style="font-size: 20px;">🗺️</span>
+            </div>
+            
+            <!-- Muscle Map Tracker -->
+            <div style="width: 100%; height: 250px; background: rgba(0,0,0,0.3); border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(139,92,246,0.3); padding: 10px; position: relative;">
+                <canvas id="muscleMap"></canvas>
+            </div>
+
             <div class="routine-box">
                 <div class="routine-label">Workout Plan</div>
-                <div class="routine-text"><?php echo htmlspecialchars($workout_plan); ?></div>
+                <div class="routine-text" id="workoutText"><?php echo htmlspecialchars($workout_plan); ?></div>
             </div>
             <div class="routine-box" style="margin-bottom: 0;">
                 <div class="routine-label" style="color: #10b981;">Diet Plan</div>
@@ -147,15 +157,19 @@ if (mysqli_num_rows($q_att) > 0) {
     <div class="bottom-nav">
         <a href="dashboard.php" class="nav-item active">
             <span class="nav-icon">🏠</span>
-            Home
+            <span>Home</span>
         </a>
-        <a href="#" class="nav-item" onclick="alert('Feature coming soon!')">
-            <span class="nav-icon">📊</span>
-            <span>Progress</span>
+        <a href="leaderboard.php" class="nav-item">
+            <span class="nav-icon">🏆</span>
+            <span>Rank</span>
         </a>
-        <a href="#" class="nav-item" onclick="alert('Feature coming soon!')">
+        <a href="ai_scanner.php" class="nav-item">
+            <span class="nav-icon">📸</span>
+            <span>Food AI</span>
+        </a>
+        <a href="profile.php" class="nav-item">
             <span class="nav-icon">👤</span>
-            <span>Profile</span>
+            <span>Me</span>
         </a>
     </div>
 
@@ -167,6 +181,53 @@ if (mysqli_num_rows($q_att) > 0) {
             size: 250,
             background: 'white',
             foreground: 'black'
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const workoutText = document.getElementById('workoutText').innerText.toLowerCase();
+            
+            // Analyze workout string to simulate muscle focus
+            let chest = 20, back = 20, legs = 20, arms = 20, core = 20, shoulders = 20;
+            
+            if(workoutText.includes('chest') || workoutText.includes('push')) chest += 60;
+            if(workoutText.includes('back') || workoutText.includes('pull')) back += 60;
+            if(workoutText.includes('leg') || workoutText.includes('squat')) legs += 70;
+            if(workoutText.includes('arm') || workoutText.includes('bicep') || workoutText.includes('tricep')) arms += 50;
+            if(workoutText.includes('core') || workoutText.includes('abs')) core += 50;
+            if(workoutText.includes('shoulder') || workoutText.includes('press')) shoulders += 50;
+
+            const ctx = document.getElementById('muscleMap').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Chest', 'Back', 'Legs', 'Arms', 'Core', 'Shoulders'],
+                    datasets: [{
+                        label: 'Muscle Activation',
+                        data: [chest, back, legs, arms, core, shoulders],
+                        backgroundColor: 'rgba(139, 92, 246, 0.4)',
+                        borderColor: '#8b5cf6',
+                        pointBackgroundColor: '#10b981',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#10b981',
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255,255,255,0.1)' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            pointLabels: { color: '#94a3b8', font: { family: 'Inter', size: 11, weight: 'bold' } },
+                            ticks: { display: false, min: 0, max: 100 }
+                        }
+                    }
+                }
+            });
         });
     </script>
 </body>

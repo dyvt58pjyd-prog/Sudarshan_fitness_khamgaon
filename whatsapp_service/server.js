@@ -9,7 +9,7 @@ const { execSync } = require('child_process');
 
 // Start Express Server for Cloud Providers (Render/Railway)
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3005;
 app.get('/', (req, res) => res.send('Titan Gym WhatsApp Bot is Running!'));
 app.listen(PORT, () => console.log(`[Express] Health check server listening on port ${PORT}`));
 
