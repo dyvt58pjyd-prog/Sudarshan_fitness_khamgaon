@@ -9,8 +9,12 @@ RewriteRule ^iclock/cdata/?$ /Files/iclock/cdata.php [L,QSA]
 RewriteRule ^iclock/getrequest/?$ /Files/iclock/getrequest.php [L,QSA]
 RewriteRule ^iclock/devicecmd/?$ /Files/iclock/devicecmd.php [L,QSA]
 
-# Route Member App cleanly
+# Route Core App Folders cleanly to /Files/
 RewriteRule ^member_app/?(.*)$ /Files/member_app/$1 [L,QSA]
+RewriteRule ^dashboard/?(.*)$ /Files/dashboard/$1 [L,QSA]
+RewriteRule ^css/?(.*)$ /Files/css/$1 [L,QSA]
+RewriteRule ^images/?(.*)$ /Files/images/$1 [L,QSA]
+RewriteRule ^api/?(.*)$ /Files/api/$1 [L,QSA]
 
 # Route ALL other requests to the biometric listener if the file doesn't exist
 RewriteCond %{REQUEST_FILENAME} !-f
