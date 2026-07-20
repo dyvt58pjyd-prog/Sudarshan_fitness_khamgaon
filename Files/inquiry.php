@@ -8,8 +8,25 @@ if (isset($_POST['submit'])) {
     $mobile = mysqli_real_escape_string($con, $_POST['mobile']);
     $email = mysqli_real_escape_string($con, $_POST['email']);
     $interest = mysqli_real_escape_string($con, $_POST['interest']);
+    $address = mysqli_real_escape_string($con, $_POST['address']);
     
-    $q = "INSERT INTO visitors (name, mobile, email, interest_level) VALUES ('$name', '$mobile', '$email', '$interest')";
+    // Handle Photo Upload
+    $photo_path = "";
+    if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
+        $ext = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+        $allowed = ['jpg', 'jpeg', 'png', 'webp'];
+        if (in_array(strtolower($ext), $allowed)) {
+            $new_name = "visitor_" . time() . "_" . rand(1000, 9999) . "." . $ext;
+            $upload_dir = "images/visitors/";
+            if (!is_dir($upload_dir)) mkdir($upload_dir, 0777, true);
+            $target_file = $upload_dir . $new_name;
+            if (move_uploaded_file($_FILES['photo']['tmp_name'], $target_file)) {
+                $photo_path = $target_file;
+            }
+        }
+    }
+    
+    $q = "INSERT INTO visitors (name, mobile, email, interest_level, address, photo_url) VALUES ('$name', '$mobile', '$email', '$interest', '$address', '$photo_path')";
     
     if (mysqli_query($con, $q)) {
         $msg = "Thank you! Our SalesBot has registered your inquiry. We will contact you soon.";
@@ -64,7 +81,7 @@ if (isset($_POST['submit'])) {
             </div>
         <?php } ?>
 
-        <form method="POST" action="">
+        <form method="POST" action="" enctype="multipart/form-data">
             <div class="form-group">
                 <label>Full Name</label>
                 <input type="text" name="name" class="form-control" required placeholder="Enter your full name">
@@ -78,6 +95,16 @@ if (isset($_POST['submit'])) {
             <div class="form-group">
                 <label>Email Address</label>
                 <input type="email" name="email" class="form-control" required placeholder="Enter your email address">
+            </div>
+            
+            <div class="form-group">
+                <label>Address</label>
+                <input type="text" name="address" class="form-control" placeholder="Enter your full address (Optional)">
+            </div>
+            
+            <div class="form-group">
+                <label>Selfie / Photo (Optional)</label>
+                <input type="file" name="photo" class="form-control" accept="image/*" style="padding: 9px 15px;">
             </div>
             
             <div class="form-group">

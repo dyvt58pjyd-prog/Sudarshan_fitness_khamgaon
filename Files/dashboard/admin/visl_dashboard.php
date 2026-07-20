@@ -86,7 +86,24 @@ if (isset($_POST['mark_called'])) {
             letter-spacing: 0.5px;
         }
         .visl-meta { font-size: 12px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-        .visl-details { font-size: 14px; color: #cbd5e1; line-height: 1.6; }
+        
+        .visl-body {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .visl-photo {
+            flex-shrink: 0;
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid rgba(14, 165, 233, 0.4);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.2);
+        }
+        
+        .visl-details { flex-grow: 1; font-size: 14px; color: #cbd5e1; line-height: 1.6; }
         .visl-details i { color: #0ea5e9; margin-right: 8px; width: 16px; text-align: center; }
         .visl-tag {
             display: inline-block;
@@ -174,10 +191,23 @@ if (isset($_POST['mark_called'])) {
                                 <div class="visl-name"><?php echo htmlspecialchars($row['name']); ?></div>
                                 <div class="visl-meta"><?php echo htmlspecialchars($row['created_at']); ?></div>
                             </div>
-                            <div class="visl-details">
-                                <div><i class="entypo-phone"></i> <?php echo htmlspecialchars($row['mobile']); ?></div>
-                                <div><i class="entypo-mail"></i> <?php echo htmlspecialchars($row['email']); ?></div>
-                                <div class="visl-tag">Target: <?php echo htmlspecialchars($row['interest_level']); ?></div>
+                            <div class="visl-body">
+                                <?php if (!empty($row['photo_url'])) { ?>
+                                    <img src="../../<?php echo htmlspecialchars($row['photo_url']); ?>" alt="Visitor Photo" class="visl-photo">
+                                <?php } else { ?>
+                                    <div class="visl-photo" style="display:flex; align-items:center; justify-content:center; color:#64748b;">
+                                        <i class="entypo-user" style="font-size:32px;"></i>
+                                    </div>
+                                <?php } ?>
+                                
+                                <div class="visl-details">
+                                    <div><i class="entypo-phone"></i> <?php echo htmlspecialchars($row['mobile']); ?></div>
+                                    <div><i class="entypo-mail"></i> <?php echo htmlspecialchars($row['email']); ?></div>
+                                    <?php if (!empty($row['address'])) { ?>
+                                        <div><i class="entypo-location"></i> <?php echo htmlspecialchars($row['address']); ?></div>
+                                    <?php } ?>
+                                    <div class="visl-tag">Target: <?php echo htmlspecialchars($row['interest_level']); ?></div>
+                                </div>
                             </div>
                             
                             <div style="margin-top: 15px; text-align: right;">
