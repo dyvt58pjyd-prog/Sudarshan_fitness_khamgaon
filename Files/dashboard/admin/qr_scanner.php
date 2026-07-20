@@ -11,7 +11,7 @@ page_protect();
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
     <link href="a1style.css" rel="stylesheet" type="text/css">
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js" integrity="sha512-r6rDA7W6ZeQhvl8S7yRVQUKVHdexq+Gv7Z73y5v0Y632xNkVx55Qdb2W8Yt4mU41X2n/L+E1uC3t/V4eL6U/aA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     
     <style>
         .scanner-card {
@@ -136,9 +136,11 @@ page_protect();
                             document.getElementById('member-time').innerText = data.time + " | " + data.date;
                             memberInfoContainer.style.display = 'flex';
                             
-                            // Speak message
-                            let msg = new SpeechSynthesisUtterance(data.username + (data.type === 'entry' ? ' checked in' : ' checked out'));
-                            window.speechSynthesis.speak(msg);
+                            // Speak message (wrap in try-catch for iOS restrictions)
+                            try {
+                                let msg = new SpeechSynthesisUtterance(data.username + (data.type === 'entry' ? ' checked in' : ' checked out'));
+                                window.speechSynthesis.speak(msg);
+                            } catch(e) { console.log('Speech synthesis failed', e); }
                             
                         } else if (data.status === 'expired') {
                             resultBox.classList.add('error');
@@ -149,8 +151,10 @@ page_protect();
                             document.getElementById('member-time').innerText = "Expired on: " + data.expire_date;
                             memberInfoContainer.style.display = 'flex';
                             
-                            let msg = new SpeechSynthesisUtterance('Membership expired for ' + data.username);
-                            window.speechSynthesis.speak(msg);
+                            try {
+                                let msg = new SpeechSynthesisUtterance('Membership expired for ' + data.username);
+                                window.speechSynthesis.speak(msg);
+                            } catch(e) { console.log('Speech synthesis failed', e); }
                             
                         } else {
                             resultBox.classList.add('error');
@@ -173,11 +177,15 @@ page_protect();
                     // handle scan failure quietly
                 }
 
-                let html5QrcodeScanner = new Html5QrcodeScanner(
-                    "reader",
-                    { fps: 10, qrbox: {width: 250, height: 250} },
-                    false);
-                html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+                try {
+                    let html5QrcodeScanner = new Html5QrcodeScanner(
+                        "reader",
+                        { fps: 10, qrbox: {width: 250, height: 250} },
+                        false);
+                    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+                } catch(err) {
+                    document.getElementById('reader').innerHTML = '<div style="color:red; padding:20px;">Camera initialization failed. Please ensure you are using HTTPS and have granted camera permissions. Error: ' + err + '</div>';
+                }
             </script>
         </div>
     </div>
