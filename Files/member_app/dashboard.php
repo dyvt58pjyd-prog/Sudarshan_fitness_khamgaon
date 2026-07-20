@@ -34,7 +34,7 @@ if (mysqli_num_rows($q_plan) > 0) {
 $q_routine = mysqli_query($con, "SELECT * FROM member_routines WHERE uid='$uid'");
 $diet_plan = "No diet plan assigned yet.";
 $workout_plan = "No workout routine assigned yet.";
-if (mysqli_num_rows($q_routine) > 0) {
+if ($q_routine && mysqli_num_rows($q_routine) > 0) {
     $routine = mysqli_fetch_assoc($q_routine);
     if (!empty($routine['diet_plan'])) $diet_plan = $routine['diet_plan'];
     if (!empty($routine['workout_plan'])) $workout_plan = $routine['workout_plan'];

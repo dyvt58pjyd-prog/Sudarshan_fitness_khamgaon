@@ -8,15 +8,18 @@ $revenue_data = [];
 $months_query = mysqli_query($con, "
     SELECT 
         DATE_FORMAT(paid_date, '%b %Y') as month_name, 
-        SUM(paid) as total_revenue
+        SUM(paid) as total_revenue,
+        DATE_FORMAT(paid_date, '%Y-%m') as sort_month
     FROM enrolls_to
     WHERE paid_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
-    GROUP BY DATE_FORMAT(paid_date, '%Y-%m')
-    ORDER BY paid_date ASC
+    GROUP BY sort_month, month_name
+    ORDER BY sort_month ASC
 ");
-while ($row = mysqli_fetch_assoc($months_query)) {
-    $revenue_labels[] = $row['month_name'];
-    $revenue_data[] = $row['total_revenue'];
+if ($months_query) {
+    while ($row = mysqli_fetch_assoc($months_query)) {
+        $revenue_labels[] = $row['month_name'];
+        $revenue_data[] = $row['total_revenue'];
+    }
 }
 $chart_labels_json = json_encode($revenue_labels);
 $chart_data_json = json_encode($revenue_data);

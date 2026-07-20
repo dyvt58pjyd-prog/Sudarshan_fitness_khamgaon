@@ -578,6 +578,16 @@ if (!function_exists('check_and_upgrade_db')) {
             PRIMARY KEY (id)
         )";
         mysqli_query($con, $workout_logs_sql);
+        
+        $member_routines_sql = "CREATE TABLE IF NOT EXISTS member_routines (
+            id INT(11) NOT NULL AUTO_INCREMENT,
+            uid VARCHAR(20) NOT NULL,
+            diet_plan TEXT,
+            workout_plan TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id)
+        )";
+        mysqli_query($con, $member_routines_sql);
     }
 }
 

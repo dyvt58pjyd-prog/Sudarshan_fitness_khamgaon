@@ -55,3 +55,10 @@ Stack trace:
 #0 Command line code(1): mysqli_query(Object(mysqli), 'SELECT * FROM m...')
 #1 {main}
   thrown in Command line code on line 1
+[20-Jul-2026 12:54:58 UTC] PHP Fatal error:  Uncaught TypeError: mysqli_query(): Argument #1 ($mysql) must be of type mysqli, false given in /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/include/db_conn.php:566
+Stack trace:
+#0 /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/include/db_conn.php(566): mysqli_query(false, 'SHOW COLUMNS FR...')
+#1 /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/include/db_conn.php(1387): check_and_upgrade_db(false)
+#2 Command line code(1): require('/Users/anuragba...')
+#3 {main}
+  thrown in /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/include/db_conn.php on line 566
