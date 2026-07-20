@@ -18,36 +18,109 @@ if (isset($_POST['mark_called'])) {
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
     <link href="a1style.css" rel="stylesheet" type="text/css">
     <style>
+        body {
+            background: #0f172a;
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            background-image: radial-gradient(circle at 100% 0%, rgba(14, 165, 233, 0.1) 0%, transparent 50%),
+                              radial-gradient(circle at 0% 100%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+        }
+        h2 {
+            color: #fff;
+            font-weight: 800;
+            font-size: 28px;
+            letter-spacing: -0.5px;
+            margin-bottom: 5px;
+        }
+        p {
+            color: #94a3b8;
+            font-size: 15px;
+        }
+        hr { border-color: rgba(255,255,255,0.05); }
+
         .visl-card {
-            background: #fff;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border-left: 5px solid #ff6b00;
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-left: 6px solid #0ea5e9;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .visl-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            border-left-color: #38bdf8;
+        }
+        .visl-card::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+            pointer-events: none;
         }
         .visl-card.called {
             border-left-color: #10b981;
-            opacity: 0.7;
+            opacity: 0.6;
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.5) 100%);
+        }
+        .visl-card.called:hover {
+            transform: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         .visl-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
-        .visl-name { font-size: 18px; font-weight: bold; color: #333; }
-        .visl-meta { font-size: 13px; color: #888; }
-        .visl-details { font-size: 14px; color: #555; }
+        .visl-name { 
+            font-size: 20px; 
+            font-weight: 700; 
+            color: #fff; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .visl-meta { font-size: 12px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .visl-details { font-size: 14px; color: #cbd5e1; line-height: 1.6; }
+        .visl-details i { color: #0ea5e9; margin-right: 8px; width: 16px; text-align: center; }
         .visl-tag {
             display: inline-block;
-            background: #f1f5f9;
-            padding: 4px 10px;
+            background: rgba(14, 165, 233, 0.15);
+            padding: 6px 14px;
             border-radius: 20px;
             font-size: 12px;
-            font-weight: 600;
-            color: #475569;
-            margin-top: 10px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-top: 15px;
+            border: 1px solid rgba(14, 165, 233, 0.3);
+        }
+        .visl-card.called .visl-tag {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        .btn-mark-called {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 8px 20px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.2s ease;
+        }
+        .btn-mark-called:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+            color: #fff;
         }
     </style>
 </head>
@@ -111,10 +184,10 @@ if (isset($_POST['mark_called'])) {
                                 <?php if (!$is_called) { ?>
                                     <form method="POST" action="">
                                         <input type="hidden" name="visitor_id" value="<?php echo $row['id']; ?>">
-                                        <button type="submit" name="mark_called" class="a1-btn" style="background:#10b981; color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">Mark as Called</button>
+                                        <button type="submit" name="mark_called" class="btn-mark-called">Mark as Called</button>
                                     </form>
                                 <?php } else { ?>
-                                    <span style="color: #10b981; font-weight: bold;"><i class="entypo-check"></i> Called</span>
+                                    <span style="color: #34d399; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;"><i class="entypo-check"></i> Called</span>
                                 <?php } ?>
                             </div>
                         </div>
