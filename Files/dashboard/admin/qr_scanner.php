@@ -11,7 +11,7 @@ page_protect();
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
     <link href="a1style.css" rel="stylesheet" type="text/css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js" integrity="sha512-r6rDA7W6ZeQhvl8S7yRVQUKVHdexq+Gv7Z73y5v0Y632xNkVx55Qdb2W8Yt4mU41X2n/L+E1uC3t/V4eL6U/aA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="../../js/html5-qrcode.min.js" type="text/javascript"></script>
     
     <style>
         .scanner-card {
