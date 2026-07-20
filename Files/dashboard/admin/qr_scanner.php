@@ -14,37 +14,63 @@ page_protect();
     <script src="../../js/html5-qrcode.min.js" type="text/javascript"></script>
     
     <style>
+        body {
+            background: #0f172a;
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+        }
         .scanner-card {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(16px);
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+            backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 107, 0, 0.3);
-            border-radius: 20px;
-            padding: 30px;
+            border-radius: 24px;
+            padding: 40px;
             text-align: center;
-            max-width: 600px;
-            margin: 30px auto;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 650px;
+            margin: 40px auto;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        .scanner-title {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b00 0%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         #reader {
             width: 100%;
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             background: #000;
+            border: 4px solid rgba(255, 107, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(255, 107, 0, 0.1);
+            position: relative;
         }
         #reader video {
             object-fit: cover;
+            width: 100%;
         }
         .result-box {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
             display: none;
+            animation: fadeIn 0.4s ease-out forwards;
         }
-        .success { background: rgba(46, 204, 113, 0.2); border: 1px solid #2ecc71; color: #2ecc71; }
-        .error { background: rgba(231, 76, 60, 0.2); border: 1px solid #e74c3c; color: #e74c3c; }
-        .member-info { display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 10px;}
-        .member-img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #ff6b00;}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .success { background: rgba(16, 185, 129, 0.15); border: 2px solid #10b981; color: #10b981; box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); }
+        .error { background: rgba(239, 68, 68, 0.15); border: 2px solid #ef4444; color: #ef4444; box-shadow: 0 0 20px rgba(239, 68, 68, 0.2); }
+        .member-info { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 15px; }
+        .member-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #ff6b00; box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3); }
+        #member-name { font-size: 22px; font-weight: 700; margin: 0; color: #fff; }
+        #member-time { color: #94a3b8; font-size: 14px; margin-top: 5px; font-weight: 500; }
     </style>
 </head>
 <body class="page-body page-fade" onload="collapseSidebar()">
@@ -90,15 +116,15 @@ page_protect();
             <hr/>
 
             <div class="scanner-card">
-                <h4 style="color: #fff; margin-bottom: 20px;">Scan Member QR Code</h4>
+                <div class="scanner-title">Sudarshan Scanner</div>
                 <div id="reader"></div>
                 <div id="result" class="result-box">
-                    <h4 id="result-title"></h4>
+                    <h4 id="result-title" style="font-weight: 800; font-size: 20px; margin-bottom: 5px;"></h4>
                     <div class="member-info" id="member-info-container" style="display:none;">
                         <img id="member-photo" class="member-img" src="" alt="Member">
                         <div style="text-align: left;">
-                            <h3 id="member-name" style="margin: 0; color: #fff;"></h3>
-                            <div id="member-time" style="color: #bbb; font-size: 12px; margin-top: 5px;"></div>
+                            <h3 id="member-name"></h3>
+                            <div id="member-time"></div>
                         </div>
                     </div>
                 </div>
@@ -178,9 +204,10 @@ page_protect();
                 }
 
                 try {
+                    // Removed qrbox to allow full frame scanning. This significantly improves reading angles!
                     let html5QrcodeScanner = new Html5QrcodeScanner(
                         "reader",
-                        { fps: 10, qrbox: {width: 250, height: 250} },
+                        { fps: 15 },
                         false);
                     html5QrcodeScanner.render(onScanSuccess, onScanFailure);
                 } catch(err) {

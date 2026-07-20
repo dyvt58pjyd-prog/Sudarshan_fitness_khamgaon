@@ -29,33 +29,60 @@ if (!empty($memid)) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     
     <style>
+        body {
+            background: #0f172a;
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            background-image: radial-gradient(circle at 50% 0%, rgba(255,107,0,0.15) 0%, transparent 70%);
+        }
         .qr-card {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 107, 0, 0.3);
-            border-radius: 20px;
-            padding: 40px;
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 107, 0, 0.4);
+            border-radius: 28px;
+            padding: 50px 40px;
             text-align: center;
-            max-width: 400px;
-            margin: 50px auto;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 420px;
+            margin: 60px auto;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 2px 0 rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .qr-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 6px;
+            background: linear-gradient(90deg, #ff6b00, #f59e0b);
         }
         .qr-title {
             color: #fff;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 5px;
+            letter-spacing: -0.5px;
         }
         .qr-subtitle {
             color: #ff6b00;
-            font-size: 16px;
-            margin-bottom: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 35px;
+        }
+        .qr-wrapper {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(255, 107, 0, 0.15);
+            margin-bottom: 25px;
+            transition: transform 0.3s ease;
+        }
+        .qr-wrapper:hover {
+            transform: scale(1.03);
         }
         #qrcode-canvas {
-            background: #fff;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: block;
         }
     </style>
 </head>
@@ -107,10 +134,12 @@ if (!empty($memid)) {
             <?php } else { ?>
                 <div class="qr-card">
                     <div class="qr-title"><?php echo htmlspecialchars($user_name); ?></div>
-                    <div class="qr-subtitle">Member ID: <?php echo htmlspecialchars($memid); ?></div>
-                    <canvas id="qrcode-canvas"></canvas>
-                    <div style="margin-top: 20px; color: #888; font-size: 12px;">
-                        Scan this QR code at the reception for contactless entry.
+                    <div class="qr-subtitle">ID: <?php echo htmlspecialchars($memid); ?></div>
+                    <div class="qr-wrapper">
+                        <canvas id="qrcode-canvas"></canvas>
+                    </div>
+                    <div style="color: #94a3b8; font-size: 13px; font-weight: 500; line-height: 1.5;">
+                        Present this Digital Pass at the reception scanner for contactless entry.
                     </div>
                 </div>
 
@@ -119,9 +148,10 @@ if (!empty($memid)) {
                         var qr = new QRious({
                             element: document.getElementById('qrcode-canvas'),
                             value: '<?php echo $memid; ?>',
-                            size: 250,
+                            size: 260,
                             background: 'white',
-                            foreground: 'black'
+                            foreground: '#0f172a',
+                            padding: 25 // Critical: Adds the white quiet zone required by scanners!
                         });
                     })();
                 </script>
