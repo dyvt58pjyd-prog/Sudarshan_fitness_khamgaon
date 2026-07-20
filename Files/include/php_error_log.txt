@@ -14,3 +14,34 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /Users/anurag.bawaskar/Downloads/Titan-Gym-master/add_enroll_col.php on line 3
+[20-Jul-2026 06:05:11 UTC] PHP Fatal error:  Uncaught TypeError: mysqli_query(): Argument #1 ($mysql) must be of type mysqli, false given in /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/include/db_conn.php:566
+Stack trace:
+#0 /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/include/db_conn.php(566): mysqli_query(false, 'SHOW COLUMNS FR...')
+#1 /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/include/db_conn.php(1387): check_and_upgrade_db(false)
+#2 /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/update_gymshim_db.php(2): require('/Users/anuragba...')
+#3 {main}
+  thrown in /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/include/db_conn.php on line 566
+[20-Jul-2026 06:05:11 UTC] PHP Fatal error:  Uncaught TypeError: mysqli_query(): Argument #1 ($mysql) must be of type mysqli, false given in /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/include/db_conn.php:566
+Stack trace:
+#0 /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/include/db_conn.php(566): mysqli_query(false, 'SHOW COLUMNS FR...')
+#1 /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/include/db_conn.php(1387): check_and_upgrade_db(false)
+#2 /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/index.php(6): include('/Users/anuragba...')
+#3 {main}
+  thrown in /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/include/db_conn.php on line 566
+[20-Jul-2026 06:05:44 UTC] PHP Fatal error:  Uncaught TypeError: mysqli_query(): Argument #1 ($mysql) must be of type mysqli, false given in /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/include/db_conn.php:566
+Stack trace:
+#0 /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/include/db_conn.php(566): mysqli_query(false, 'SHOW COLUMNS FR...')
+#1 /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/include/db_conn.php(1387): check_and_upgrade_db(false)
+#2 /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/update_gymshim_db.php(2): require('/Users/anuragba...')
+#3 {main}
+  thrown in /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/include/db_conn.php on line 566
+[20-Jul-2026 10:49:12 UTC] PHP Fatal error:  Uncaught TypeError: mysqli_fetch_assoc(): Argument #1 ($result) must be of type mysqli_result, false given in /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/api/verify_live_face.php:45
+Stack trace:
+#0 /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/api/verify_live_face.php(45): mysqli_fetch_assoc(false)
+#1 {main}
+  thrown in /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/api/verify_live_face.php on line 45
+[20-Jul-2026 10:49:12 UTC] PHP Fatal error:  Uncaught TypeError: mysqli_fetch_assoc(): Argument #1 ($result) must be of type mysqli_result, false given in /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/api/verify_live_face.php:45
+Stack trace:
+#0 /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/api/verify_live_face.php(45): mysqli_fetch_assoc(false)
+#1 {main}
+  thrown in /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /Files/api/verify_live_face.php on line 45

@@ -1,9 +1,9 @@
 {
-    "last_backup_date": "2026-06-22",
+    "last_backup_date": "2026-07-20",
     "status": "success",
-    "time": "01:02:38",
-    "file": "db_backup_2026-06-22.sql",
-    "size": 35975,
+    "time": "16:20:00",
+    "file": "db_backup_2026-07-20.sql",
+    "size": 19459,
     "email_sent": true,
     "pruned": [],
     "error": ""
