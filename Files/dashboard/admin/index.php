@@ -3,26 +3,7 @@ require '../../include/db_conn.php';
 page_protect();
 
 // Fetch last 6 months revenue for Chart.js
-$revenue_labels = [];
-$revenue_data = [];
-$months_query = mysqli_query($con, "
-    SELECT 
-        DATE_FORMAT(paid_date, '%b %Y') as month_name, 
-        SUM(paid) as total_revenue,
-        DATE_FORMAT(paid_date, '%Y-%m') as sort_month
-    FROM enrolls_to
-    WHERE paid_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
-    GROUP BY sort_month, month_name
-    ORDER BY sort_month ASC
-");
-if ($months_query) {
-    while ($row = mysqli_fetch_assoc($months_query)) {
-        $revenue_labels[] = $row['month_name'];
-        $revenue_data[] = $row['total_revenue'];
-    }
-}
-$chart_labels_json = json_encode($revenue_labels);
-$chart_data_json = json_encode($revenue_data);
+// Removed by user request
 
 
 // Auto daily membership expiry warning trigger
@@ -294,91 +275,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					
 				</div>
 
-                <!-- Financial Growth Chart -->
-                <div class="row" style="margin-bottom: 30px;">
-                    <div class="col-md-12">
-                        <div style="background: linear-gradient(145deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; overflow: hidden;">
-                            <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #ff6b00, #f59e0b);"></div>
-                            <h3 style="color: #ffffff; font-weight: 800; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                                <span style="font-size: 24px;">📈</span> Financial Growth (Last 6 Months)
-                            </h3>
-                            <div style="height: 300px; width: 100%;">
-                                <canvas id="revenueChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                        const ctx = document.getElementById('revenueChart').getContext('2d');
-                        
-                        // Create gradient for the line chart fill
-                        let gradient = ctx.createLinearGradient(0, 0, 0, 400);
-                        gradient.addColorStop(0, 'rgba(255, 107, 0, 0.5)');
-                        gradient.addColorStop(1, 'rgba(255, 107, 0, 0.0)');
-
-                        const data = {
-                            labels: <?php echo $chart_labels_json; ?>,
-                            datasets: [{
-                                label: 'Monthly Revenue (₹)',
-                                data: <?php echo $chart_data_json; ?>,
-                                borderColor: '#ff6b00',
-                                backgroundColor: gradient,
-                                borderWidth: 3,
-                                pointBackgroundColor: '#fff',
-                                pointBorderColor: '#ff6b00',
-                                pointBorderWidth: 2,
-                                pointRadius: 5,
-                                pointHoverRadius: 7,
-                                fill: true,
-                                tension: 0.4
-                            }]
-                        };
-
-                        const config = {
-                            type: 'line',
-                            data: data,
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: {
-                                    legend: { display: false },
-                                    tooltip: {
-                                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                                        titleFont: { family: 'Inter', size: 13 },
-                                        bodyFont: { family: 'Inter', size: 14, weight: 'bold' },
-                                        padding: 12,
-                                        cornerRadius: 8,
-                                        displayColors: false,
-                                        callbacks: {
-                                            label: function(context) {
-                                                return '₹ ' + context.parsed.y.toLocaleString();
-                                            }
-                                        }
-                                    }
-                                },
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                        grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
-                                        ticks: { 
-                                            color: '#94a3b8',
-                                            font: { family: 'Inter' },
-                                            callback: function(value) { return '₹' + value; }
-                                        }
-                                    },
-                                    x: {
-                                        grid: { display: false, drawBorder: false },
-                                        ticks: { color: '#94a3b8', font: { family: 'Inter' } }
-                                    }
-                                }
-                            }
-                        };
-
-                        new Chart(ctx, config);
-                    });
-                </script>
 
 			<div id="gate-alert-container" style="margin-top: 15px; margin-bottom: 15px;"></div>
 			<h2>SUDARSHAN FITNESS</h2>
