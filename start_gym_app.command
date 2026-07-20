@@ -62,7 +62,12 @@ fi
 
 # 3. Start the PHP built-in server in the background
 echo "3. Starting PHP Built-in Server on port 8000..."
-nohup php -S 0.0.0.0:8000 -t Files/ > /tmp/titangym_php.log 2>&1 &
+MAMP_PHP="/Applications/MAMP/bin/php/php8.4.17/bin/php"
+if [ ! -f "$MAMP_PHP" ]; then
+    # Fallback to finding the latest PHP version in MAMP
+    MAMP_PHP=$(ls -d /Applications/MAMP/bin/php/php* | sort -V | tail -n 1)/bin/php
+fi
+nohup "$MAMP_PHP" -S 0.0.0.0:8000 -t Files/ > /tmp/titangym_php.log 2>&1 &
 PHP_PID=$!
 sleep 1.5
 

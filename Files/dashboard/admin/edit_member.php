@@ -130,6 +130,7 @@ if ($memid) {
 				    $remarks="";
 				    $user_tid=null;
 				    $biometric_batch="1";
+				    $pool_group_id="";
 
 				    if ($result && mysqli_num_rows($result) > 0) {
 				        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
@@ -150,6 +151,7 @@ if ($memid) {
 				            $remarks = isset($row['remarks']) ? $row['remarks'] : '';
 				            $user_tid = isset($row['tid']) ? $row['tid'] : null;
 				            $biometric_batch = isset($row['biometric_batch']) ? $row['biometric_batch'] : '1';
+				            $pool_group_id = isset($row['pool_group_id']) ? $row['pool_group_id'] : '';
 				        }
 				    }
 				    else{
@@ -376,6 +378,22 @@ if ($memid) {
                                                         while ($row_r = mysqli_fetch_assoc($res_routine)) {
                                                             $selected = ($user_tid == $row_r['tid']) ? "selected" : "";
                                                             echo "<option value='".$row_r['tid']."' $selected>".htmlspecialchars($row_r['tname'])."</option>";
+                                                        }
+                                                    }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Pool Membership:</label>
+                                            <select class="form-control-custom" name="pool_group_id">
+                                                <option value="">-- No Pool (Individual) --</option>
+                                                <?php
+                                                    $q_pool = "SELECT userid, username FROM users WHERE userid != '$memid'";
+                                                    $res_pool = mysqli_query($con, $q_pool);
+                                                    if ($res_pool && mysqli_num_rows($res_pool) > 0) {
+                                                        while ($row_p = mysqli_fetch_assoc($res_pool)) {
+                                                            $p_selected = ($pool_group_id == $row_p['userid']) ? "selected" : "";
+                                                            echo "<option value='".$row_p['userid']."' $p_selected>".htmlspecialchars($row_p['username'])."</option>";
                                                         }
                                                     }
                                                 ?>

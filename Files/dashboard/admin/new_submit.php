@@ -89,10 +89,12 @@ $entry_code = strval(rand(100000, 999999));
 $routine = !empty($_POST['routine']) ? (int)$_POST['routine'] : "NULL";
 $trainer_id = isset($_POST['trainer_id']) && !empty($_POST['trainer_id']) ? mysqli_real_escape_string($con, $_POST['trainer_id']) : '';
 $trainer_val = !empty($trainer_id) ? "'" . $trainer_id . "'" : "NULL";
+$pool_group_id = isset($_POST['pool_group_id']) && !empty($_POST['pool_group_id']) ? mysqli_real_escape_string($con, $_POST['pool_group_id']) : '';
+$pool_val = !empty($pool_group_id) ? "'" . $pool_group_id . "'" : "NULL";
 $photo_val = $photo_path ? "'" . mysqli_real_escape_string($con, $photo_path) . "'" : "NULL";
 $fitness_goal = isset($_POST['fitness_goal']) ? mysqli_real_escape_string($con, $_POST['fitness_goal']) : 'general';
 $biometric_batch = isset($_POST['biometric_batch']) ? mysqli_real_escape_string($con, $_POST['biometric_batch']) : '1';
-$query="insert into users(username,gender,mobile,email,dob,joining_date,userid,tid,photo,entry_code,trainer_id,biometric_id,biometric_enabled,fitness_goal,biometric_batch) values('$uname','$gender','$phn','$email','$dob','$jdate','$memID', $routine, $photo_val, '$entry_code', $trainer_val, '$memID', 1, '$fitness_goal', '$biometric_batch')";
+$query="insert into users(username,gender,mobile,email,dob,joining_date,userid,tid,photo,entry_code,trainer_id,biometric_id,biometric_enabled,fitness_goal,biometric_batch,pool_group_id) values('$uname','$gender','$phn','$email','$dob','$jdate','$memID', $routine, $photo_val, '$entry_code', $trainer_val, '$memID', 1, '$fitness_goal', '$biometric_batch', $pool_val)";
     if(mysqli_query($con,$query)==1){
       //Retrieve information of plan selected by user
       $query1="select * from plan where pid='$plan'";

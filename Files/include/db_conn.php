@@ -94,7 +94,7 @@ if ($is_local) {
 
 // Check connection
 if (!$con) {
-    echo "Failed to connect to MySQL: Connection refused. Check database port and server status.";
+    echo "Failed to connect to MySQL: " . mysqli_connect_error();
 } else {
     // Disable fatal exceptions for MySQLi (fixes PHP 8.1+ compatibility with legacy code)
     mysqli_report(MYSQLI_REPORT_OFF);

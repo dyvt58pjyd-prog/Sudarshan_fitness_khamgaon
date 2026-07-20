@@ -252,7 +252,24 @@ if ($cnt_q) {
                            }
                        }
                    ?>
-               </select></td>
+                   </select></td>
+             </tr>
+             <tr>
+               <td height="35">POOL MEMBERSHIP:</td>
+               <td height="35">
+                 <select name="pool_group_id" class="boxx-style">
+                   <option value="">-- No Pool (Individual) --</option>
+                   <?php
+                       $q_pool = "SELECT userid, username FROM users";
+                       $res_pool = mysqli_query($con, $q_pool);
+                       if ($res_pool && mysqli_num_rows($res_pool) > 0) {
+                           while ($row_p = mysqli_fetch_assoc($res_pool)) {
+                               echo "<option value='".$row_p['userid']."'>".htmlspecialchars($row_p['username'])."</option>";
+                           }
+                       }
+                   ?>
+                 </select>
+               </td>
              </tr>
              <tr>
                <td height="35">PERSONAL TRAINER:</td>

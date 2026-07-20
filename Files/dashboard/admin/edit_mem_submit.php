@@ -16,7 +16,10 @@ page_protect();
    $zipcode=$_POST['zipcode'];
    $routine = !empty($_POST['routine']) ? (int)$_POST['routine'] : "NULL";
    $biometric_batch = mysqli_real_escape_string($con, $_POST['biometric_batch']);
-   $query1="update users set username='".$uname."',gender='".$gender."',mobile='".$mobile."',email='".$email."',dob='".$dob."',joining_date='".$jdate."',tid=".$routine.",biometric_batch='".$biometric_batch."' where userid='".$uid."'";
+   $pool_group_id = isset($_POST['pool_group_id']) && !empty($_POST['pool_group_id']) ? mysqli_real_escape_string($con, $_POST['pool_group_id']) : '';
+   $pool_val = !empty($pool_group_id) ? "'" . $pool_group_id . "'" : "NULL";
+
+   $query1="update users set username='".$uname."',gender='".$gender."',mobile='".$mobile."',email='".$email."',dob='".$dob."',joining_date='".$jdate."',tid=".$routine.",biometric_batch='".$biometric_batch."',pool_group_id=".$pool_val." where userid='".$uid."'";
 
     if(mysqli_query($con,$query1)){
       // If a plan is selected, check and assign/update their active enrollment
