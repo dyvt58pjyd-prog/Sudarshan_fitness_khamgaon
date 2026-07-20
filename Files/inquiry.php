@@ -14,6 +14,12 @@ if (isset($_POST['submit'])) {
     if (mysqli_query($con, $q)) {
         $msg = "Thank you! Our SalesBot has registered your inquiry. We will contact you soon.";
         $msgClass = "success";
+        
+        // Add to WhatsApp Outbox
+        $wa_msg = "Hello $name! Welcome to Sudarshan Fitness. Our team has received your inquiry for $interest. We will reach out to you shortly. Have a great day!";
+        $wa_q = "INSERT INTO whatsapp_outbox (number, message) VALUES ('$mobile', '$wa_msg')";
+        @mysqli_query($con, $wa_q);
+        
     } else {
         $msg = "Error registering inquiry: " . mysqli_error($con);
         $msgClass = "error";
