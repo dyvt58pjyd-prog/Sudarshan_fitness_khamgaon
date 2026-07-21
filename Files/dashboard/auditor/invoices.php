@@ -104,6 +104,33 @@ if ($res_bal) {
     }
 }
 
+// Fetch Inventory Sales
+$inv_where_clause = str_replace("e.paid_date", "s.sale_date", $where_clause);
+// Inventory search logic is trickier since member_id can be null. We'll simplify search for inventory or use LEFT JOIN.
+$inv_where_clause = str_replace("u.username LIKE", "COALESCE(u.username, '') LIKE", $inv_where_clause);
+$inv_where_clause = str_replace("e.uid", "s.member_id", $inv_where_clause);
+$inv_where_clause = str_replace("p.planName LIKE", "i.product_name LIKE", $inv_where_clause);
+
+$sql_inv = "SELECT s.id AS et_id, s.member_id AS uid, 'STORE' AS pid, s.sale_date AS paid_date, 
+                   s.sale_date AS expire, s.payment_mode, s.received_by, 0 AS discount_amount, s.total_price AS paid_amount,
+                   CONCAT('Store Purchase: ', s.quantity, 'x ', i.product_name) AS planName, s.total_price AS base_amount,
+                   COALESCE(u.username, 'Guest') AS username, u.photo
+            FROM inventory_sales s
+            INNER JOIN inventory_items i ON s.product_id = i.id
+            LEFT JOIN users u ON s.member_id = u.userid
+            $inv_where_clause";
+
+$res_inv = mysqli_query($con, $sql_inv);
+if ($res_inv) {
+    while ($row = mysqli_fetch_assoc($res_inv)) {
+        $row['is_pt'] = false;
+        $row['is_balance'] = false;
+        $row['is_inventory'] = true;
+        $invoices[] = $row;
+        $total_revenue += intval($row['paid_amount']);
+    }
+}
+
 // Ensure original enrollments subtract the deferred amounts so revenue isn't double counted
 foreach ($invoices as &$inv) {
     if (!isset($inv['is_pt']) || !$inv['is_pt']) {

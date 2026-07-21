@@ -328,6 +328,27 @@ if (!$con) {
         FOREIGN KEY (et_id) REFERENCES enrolls_to(et_id) ON DELETE CASCADE
     )");
 
+    // Self-healing database check: ensure inventory tables exist
+    mysqli_query($con, "CREATE TABLE IF NOT EXISTS inventory_items (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        product_name VARCHAR(100) NOT NULL,
+        category VARCHAR(50) NOT NULL,
+        stock_quantity INT DEFAULT 0,
+        price INT NOT NULL
+    )");
+    
+    mysqli_query($con, "CREATE TABLE IF NOT EXISTS inventory_sales (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        product_id INT NOT NULL,
+        member_id VARCHAR(50) DEFAULT NULL,
+        quantity INT NOT NULL,
+        total_price INT NOT NULL,
+        payment_mode VARCHAR(50) NOT NULL,
+        sale_date DATE NOT NULL,
+        received_by VARCHAR(50) NOT NULL,
+        FOREIGN KEY (product_id) REFERENCES inventory_items(id) ON DELETE CASCADE
+    )");
+
     // Self-healing database check: ensure personal_training table exists
     mysqli_query($con, "CREATE TABLE IF NOT EXISTS personal_training (
         id INT AUTO_INCREMENT PRIMARY KEY,

@@ -70,6 +70,23 @@ function get_collection($con, $date) {
             }
         }
     }
+
+    // Inventory Sales
+    $q_inv = "SELECT total_price as amount, payment_mode FROM inventory_sales WHERE sale_date = '$date'";
+    $res_inv = mysqli_query($con, $q_inv);
+    if($res_inv && mysqli_num_rows($res_inv) > 0){
+        while($row = mysqli_fetch_assoc($res_inv)){
+            $amount = intval($row['amount']);
+            $mode = strtolower(trim($row['payment_mode']));
+            if(strpos($mode, 'cash') !== false) {
+                $cash += $amount;
+            } elseif(strpos($mode, 'upi') !== false || strpos($mode, 'online') !== false) {
+                $upi += $amount;
+            } else {
+                $cash += $amount; // Default fallback to cash
+            }
+        }
+    }
     
     return ['cash' => $cash, 'upi' => $upi, 'total' => $cash + $upi];
 }
