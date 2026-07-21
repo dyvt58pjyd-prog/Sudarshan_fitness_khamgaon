@@ -12,9 +12,26 @@ if (isset($_POST['login'])) {
     
     if (mysqli_num_rows($res) == 1) {
         $row = mysqli_fetch_assoc($res);
-        $_SESSION['member_uid'] = $row['userid'];
-        $_SESSION['member_name'] = $row['username'];
-        header("Location: dashboard.php");
+        
+        // Check if this user is part of a couple
+        $is_couple = false;
+        if (!empty($row['partner_uid'])) {
+            $is_couple = true;
+        } else {
+            $check_partner = mysqli_query($con, "SELECT userid FROM users WHERE partner_uid='{$row['userid']}'");
+            if ($check_partner && mysqli_num_rows($check_partner) > 0) {
+                $is_couple = true;
+            }
+        }
+        
+        if ($is_couple) {
+            $_SESSION['login_auth_uid'] = $row['userid']; // Temp auth session
+            header("Location: profile_select.php");
+        } else {
+            $_SESSION['member_uid'] = $row['userid'];
+            $_SESSION['member_name'] = $row['username'];
+            header("Location: dashboard.php");
+        }
         exit;
     } else {
         $msg = "Invalid Member ID or Mobile Number.";

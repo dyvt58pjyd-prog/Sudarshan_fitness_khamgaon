@@ -96,6 +96,24 @@ $fitness_goal = isset($_POST['fitness_goal']) ? mysqli_real_escape_string($con, 
 $biometric_batch = isset($_POST['biometric_batch']) ? mysqli_real_escape_string($con, $_POST['biometric_batch']) : '1';
 $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,tid,photo,entry_code,trainer_id,biometric_id,biometric_enabled,fitness_goal,biometric_batch,pool_group_id) values('$uname','$gender','$phn','$email','$dob','$jdate','$memID', $routine, $photo_val, '$entry_code', $trainer_val, '$memID', 1, '$fitness_goal', '$biometric_batch', $pool_val)";
     if(mysqli_query($con,$query)==1){
+        
+      $partner_uid = null;
+      if (isset($_POST['is_couple']) && $_POST['is_couple'] == '1') {
+          $p_name = mysqli_real_escape_string($con, $_POST['partner_name']);
+          $p_gender = mysqli_real_escape_string($con, $_POST['partner_gender']);
+          $p_dob = mysqli_real_escape_string($con, $_POST['partner_dob']);
+          $p_mobile = mysqli_real_escape_string($con, $_POST['partner_mobile']);
+          
+          // Generate partner ID
+          $res_p_max = mysqli_query($con, "SELECT MAX(CAST(userid AS UNSIGNED)) as maxid FROM users WHERE userid REGEXP '^[0-9]+$'");
+          $p_max_row = mysqli_fetch_assoc($res_p_max);
+          $partner_uid = ($p_max_row['maxid'] > 100) ? $p_max_row['maxid'] + 1 : 101;
+          
+          $q_partner = "INSERT INTO users (username, gender, mobile, dob, joining_date, userid, partner_uid, biometric_id, biometric_enabled, fitness_goal, biometric_batch) 
+                        VALUES ('$p_name', '$p_gender', '$p_mobile', '$p_dob', '$jdate', '$partner_uid', '$memID', '$partner_uid', 1, '$fitness_goal', '$biometric_batch')";
+          mysqli_query($con, $q_partner);
+      }
+
       //Retrieve information of plan selected by user
       $query1="select * from plan where pid='$plan'";
       $result=mysqli_query($con,$query1);
@@ -152,6 +170,17 @@ $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,t
           
           $query2="insert into enrolls_to(pid,uid,paid_date,expire,renewal,payment_mode,received_by,discount_amount,paid_amount,balance,balance_due_date) values('$plan','$memID','$transaction_date','$expiredate','yes','$payment_mode','$received_by',$discount,$paid_now,$balance,$due_date_val)";
           if(mysqli_query($con,$query2)==1){
+              
+            // Enroll Partner (Zero payment)
+            if (!empty($partner_uid)) {
+                $q_partner_enroll = "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount, balance, balance_due_date) 
+                                     VALUES ('$plan', '$partner_uid', '$transaction_date', '$expiredate', 'yes', 'Couple Plan', 'System', 0, 0, 0, NULL)";
+                mysqli_query($con, $q_partner_enroll);
+                
+                // Auth for partner
+                $p_pass = '1234';
+                mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('$partner_uid', '$p_pass', 'member', '$p_name', 'member')");
+            }
             $weight = isset($_POST['weight']) ? mysqli_real_escape_string($con, $_POST['weight']) : '';
             $height = isset($_POST['height']) ? mysqli_real_escape_string($con, $_POST['height']) : '';
             $query4="insert into health_status(uid, weight, height) values('$memID', '$weight', '$height')";

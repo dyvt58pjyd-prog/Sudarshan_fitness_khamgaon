@@ -416,6 +416,62 @@ if ($cnt_q) {
                </td>
              </tr>
              
+             <!-- COUPLE PLAN TOGGLE -->
+             <tr>
+                 <td height="35">REGISTER AS COUPLE?</td>
+                 <td height="35">
+                     <label style="color: #fff; cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                         <input type="checkbox" name="is_couple" id="is_couple" value="1" onchange="toggleCoupleFields()" style="width: 20px; height: 20px;">
+                         Yes, register a partner with this plan
+                     </label>
+                 </td>
+             </tr>
+             
+             <!-- COUPLE FIELDS -->
+             <tbody id="couple_fields" style="display: none; background: rgba(255, 107, 0, 0.05);">
+                 <tr><td colspan="2"><h4 style="color: #ff6b00; margin-top: 15px; margin-bottom: 5px;">Partner Details</h4><hr style="border-color: rgba(255,107,0,0.2);"></td></tr>
+                 <tr>
+                   <td height="35">PARTNER NAME:</td>
+                   <td height="35"><input name="partner_name" id="partner_name" class="boxx-style" placeholder="Enter partner's full name"/></td>
+                 </tr>
+                 <tr>
+                   <td height="35">PARTNER GENDER:</td>
+                   <td height="35"><select name="partner_gender" id="partner_gender" class="boxx-style">
+                        <option value="">--Please Select--</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Transgender">Transgender</option>
+                    </select></td>
+                 </tr>
+                 <tr>
+                   <td height="35">PARTNER DOB:</td>
+                   <td height="35"><input type="date" name="partner_dob" id="partner_dob" class="boxx-style"></td>
+                 </tr>
+                 <tr>
+                   <td height="35">PARTNER PHONE:</td>
+                   <td height="35"><input type="number" name="partner_mobile" id="partner_mobile" class="boxx-style" maxlength="10" placeholder="Required for separate login login"></td>
+                 </tr>
+             </tbody>
+             
+             <script>
+                 function toggleCoupleFields() {
+                     var isCouple = document.getElementById('is_couple').checked;
+                     var fields = document.getElementById('couple_fields');
+                     
+                     if (isCouple) {
+                         fields.style.display = 'table-row-group';
+                         document.getElementById('partner_name').required = true;
+                         document.getElementById('partner_gender').required = true;
+                         document.getElementById('partner_dob').required = true;
+                     } else {
+                         fields.style.display = 'none';
+                         document.getElementById('partner_name').required = false;
+                         document.getElementById('partner_gender').required = false;
+                         document.getElementById('partner_dob').required = false;
+                     }
+                 }
+             </script>
+             
              <tr>
              <td height="35">&nbsp;</td>
              <td height="35"><input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="Register Member" >

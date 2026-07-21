@@ -569,6 +569,9 @@ if (!function_exists('check_and_upgrade_db')) {
         $cols = mysqli_query($con, "SHOW COLUMNS FROM users LIKE 'gym_rank'");
         if(mysqli_num_rows($cols) == 0) mysqli_query($con, "ALTER TABLE users ADD COLUMN gym_rank VARCHAR(50) DEFAULT 'Beginner'");
         
+        $cols = mysqli_query($con, "SHOW COLUMNS FROM users LIKE 'partner_uid'");
+        if(mysqli_num_rows($cols) == 0) mysqli_query($con, "ALTER TABLE users ADD COLUMN partner_uid VARCHAR(20) NULL DEFAULT NULL");
+        
         $workout_logs_sql = "CREATE TABLE IF NOT EXISTS workout_logs (
             id INT(11) NOT NULL AUTO_INCREMENT,
             uid VARCHAR(20) NOT NULL,
