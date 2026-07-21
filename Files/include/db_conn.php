@@ -317,6 +317,9 @@ if (!$con) {
         mysqli_query($con, "ALTER TABLE enrolls_to ADD COLUMN balance_due_date VARCHAR(15) DEFAULT NULL");
     }
 
+    // Self-healing database check: fix legacy overpayment glitches in enrolls_to
+    mysqli_query($con, "UPDATE enrolls_to e INNER JOIN plan p ON e.pid = p.pid SET e.paid_amount = (p.amount - IFNULL(e.discount_amount, 0)) WHERE e.paid_amount > (p.amount - IFNULL(e.discount_amount, 0))");
+
     // Self-healing database check: ensure balance_collections ledger table exists
     mysqli_query($con, "CREATE TABLE IF NOT EXISTS balance_collections (
         id INT AUTO_INCREMENT PRIMARY KEY,

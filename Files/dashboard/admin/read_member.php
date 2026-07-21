@@ -312,9 +312,16 @@ $gym = get_gym_details($con);
                                 <span class="detail-label">Discount Applied:</span>
                                 <span class="detail-value" style="color: #ef4444;">- ₹<?php echo htmlspecialchars($active_plan['discount_amount']); ?></span>
                             </div>
+                            <?php 
+                            $act_price = intval($active_plan['amount']);
+                            $act_disc = isset($active_plan['discount_amount']) ? intval($active_plan['discount_amount']) : 0;
+                            $act_max = $act_price - $act_disc;
+                            $act_paid = isset($active_plan['paid_amount']) && $active_plan['paid_amount'] !== null ? intval($active_plan['paid_amount']) : $act_max;
+                            if ($act_paid > $act_max) { $act_paid = $act_max; }
+                            ?>
                             <div class="detail-row">
                                 <span class="detail-label">Total Paid:</span>
-                                <span class="detail-value" style="color: #10b981; font-weight: 700;">₹<?php echo htmlspecialchars(isset($active_plan['paid_amount']) ? $active_plan['paid_amount'] : ($active_plan['amount'] - $active_plan['discount_amount'])); ?></span>
+                                <span class="detail-value" style="color: #10b981; font-weight: 700;">₹<?php echo htmlspecialchars($act_paid); ?></span>
                             </div>
                             <?php endif; ?>
                             <div class="detail-row">
@@ -501,13 +508,22 @@ $gym = get_gym_details($con);
                             
                             if (mysqli_num_rows($res_ledger) > 0) {
                                 while ($row = mysqli_fetch_assoc($res_ledger)) {
+                                    $p_price = intval($row['amount']);
+                                    $p_disc = isset($row['discount_amount']) ? intval($row['discount_amount']) : 0;
+                                    $p_max_payable = $p_price - $p_disc;
+                                    
+                                    $p_paid = isset($row['paid_amount']) && $row['paid_amount'] !== null ? intval($row['paid_amount']) : $p_max_payable;
+                                    if ($p_paid > $p_max_payable) {
+                                        $p_paid = $p_max_payable;
+                                    }
+
                                     echo "<tr>";
                                     echo "<td style='text-align: center;'>" . $sno . "</td>";
                                     echo "<td style='font-weight: 600; color: var(--accent-primary);'>" . htmlspecialchars($row['planName']) . "</td>";
                                     echo "<td style='text-align: center;'>" . htmlspecialchars($row['validity']) . " Months</td>";
                                     echo "<td style='text-align: right;'>₹" . htmlspecialchars($row['amount']) . "</td>";
-                                    echo "<td style='text-align: right; color: #ef4444;'>₹" . htmlspecialchars(isset($row['discount_amount']) ? $row['discount_amount'] : '0') . "</td>";
-                                    echo "<td style='text-align: right; color: #10b981; font-weight: bold;'>₹" . htmlspecialchars(isset($row['paid_amount']) && $row['paid_amount'] !== null ? $row['paid_amount'] : (intval($row['amount']) - intval($row['discount_amount'] ?? 0))) . "</td>";
+                                    echo "<td style='text-align: right; color: #ef4444;'>₹" . htmlspecialchars($p_disc) . "</td>";
+                                    echo "<td style='text-align: right; color: #10b981; font-weight: bold;'>₹" . htmlspecialchars($p_paid) . "</td>";
                                     echo "<td style='text-align: center;'>" . htmlspecialchars($row['paid_date']) . "</td>";
                                     echo "<td style='text-align: center;'>" . htmlspecialchars($row['expire']) . "</td>";
                                     echo "<td>" . htmlspecialchars(!empty($row['received_by']) ? $row['received_by'] : 'System') . "</td>";
