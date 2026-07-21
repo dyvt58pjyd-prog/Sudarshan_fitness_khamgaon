@@ -19,9 +19,17 @@ page_protect();
    $pool_group_id = isset($_POST['pool_group_id']) && !empty($_POST['pool_group_id']) ? mysqli_real_escape_string($con, $_POST['pool_group_id']) : '';
    $pool_val = !empty($pool_group_id) ? "'" . $pool_group_id . "'" : "NULL";
 
-   $query1="update users set username='".$uname."',gender='".$gender."',mobile='".$mobile."',email='".$email."',dob='".$dob."',joining_date='".$jdate."',tid=".$routine.",biometric_batch='".$biometric_batch."',pool_group_id=".$pool_val." where userid='".$uid."'";
+   $partner_uid = isset($_POST['partner_uid']) && !empty($_POST['partner_uid']) ? mysqli_real_escape_string($con, $_POST['partner_uid']) : 'NULL';
+   $partner_uid_sql = $partner_uid === 'NULL' ? "NULL" : "'$partner_uid'";
+   
+   $query1="update users set username='".$uname."',gender='".$gender."',mobile='".$mobile."',email='".$email."',dob='".$dob."',joining_date='".$jdate."',tid=".$routine.",biometric_batch='".$biometric_batch."',pool_group_id=".$pool_val.", partner_uid=".$partner_uid_sql." where userid='".$uid."'";
 
     if(mysqli_query($con,$query1)){
+        
+      if ($partner_uid !== 'NULL') {
+          // Mutually link the partner back to this user
+          mysqli_query($con, "UPDATE users SET partner_uid='$uid' WHERE userid='$partner_uid'");
+      }
       // If a plan is selected, check and assign/update their active enrollment
       if (isset($_POST['plan']) && !empty($_POST['plan'])) {
           $plan = mysqli_real_escape_string($con, $_POST['plan']);

@@ -332,6 +332,16 @@ if ($memid) {
                                             <input class="form-control-custom" type="text" readonly value="<?php echo htmlspecialchars($memid); ?>">
                                         </div>
                                         <div class="form-group">
+                                            <label class="form-label">Link to Partner ID (For Couple Plan):</label>
+                                            <input class="form-control-custom" type="text" name="partner_uid" value="<?php 
+                                                $q_part = mysqli_query($con, "SELECT partner_uid FROM users WHERE userid='$memid'");
+                                                if ($q_part && mysqli_num_rows($q_part) > 0) {
+                                                    $r_part = mysqli_fetch_assoc($q_part);
+                                                    echo htmlspecialchars($r_part['partner_uid'] ?? '');
+                                                }
+                                            ?>" placeholder="Enter Partner's User ID">
+                                        </div>
+                                        <div class="form-group">
                                             <label class="form-label">Full Name:</label>
                                             <input class="form-control-custom" type="text" name="uname" value="<?php echo htmlspecialchars($name); ?>" required>
                                         </div>
