@@ -10,6 +10,10 @@ $yesterday = date('Y-m-d', strtotime('-1 day'));
 function get_collection($con, $date) {
     $cash = 0;
     $upi = 0;
+    $mem_amt = 0;
+    $bal_amt = 0;
+    $pt_amt = 0;
+    $inv_amt = 0;
     
     // Membership Base Collection (Minus deferred balance collections)
     $q_mem = "SELECT e.et_id, e.paid_amount, e.payment_mode FROM enrolls_to e WHERE e.paid_date = '$date'";
@@ -26,6 +30,7 @@ function get_collection($con, $date) {
                 $amount -= intval($def_row['def_amount']);
             }
             
+            $mem_amt += $amount;
             $mode = strtolower(trim($row['payment_mode']));
             if(strpos($mode, 'cash') !== false) {
                 $cash += $amount;
@@ -43,6 +48,7 @@ function get_collection($con, $date) {
     if($res_bal && mysqli_num_rows($res_bal) > 0){
         while($row = mysqli_fetch_assoc($res_bal)){
             $amount = intval($row['amount']);
+            $bal_amt += $amount;
             $mode = strtolower(trim($row['payment_mode']));
             if(strpos($mode, 'cash') !== false) {
                 $cash += $amount;
@@ -60,6 +66,7 @@ function get_collection($con, $date) {
     if($res_pt && mysqli_num_rows($res_pt) > 0){
         while($row = mysqli_fetch_assoc($res_pt)){
             $amount = intval($row['amount']);
+            $pt_amt += $amount;
             $mode = strtolower(trim($row['payment_mode']));
             if(strpos($mode, 'cash') !== false) {
                 $cash += $amount;
@@ -77,6 +84,7 @@ function get_collection($con, $date) {
     if($res_inv && mysqli_num_rows($res_inv) > 0){
         while($row = mysqli_fetch_assoc($res_inv)){
             $amount = intval($row['amount']);
+            $inv_amt += $amount;
             $mode = strtolower(trim($row['payment_mode']));
             if(strpos($mode, 'cash') !== false) {
                 $cash += $amount;
@@ -88,7 +96,15 @@ function get_collection($con, $date) {
         }
     }
     
-    return ['cash' => $cash, 'upi' => $upi, 'total' => $cash + $upi];
+    return [
+        'cash' => $cash, 
+        'upi' => $upi, 
+        'total' => $cash + $upi,
+        'membership' => $mem_amt,
+        'balance' => $bal_amt,
+        'pt' => $pt_amt,
+        'inventory' => $inv_amt
+    ];
 }
 
 $today_data = get_collection($con, $today);
@@ -155,7 +171,7 @@ $yesterday_data = get_collection($con, $yesterday);
             
             <div style="display: flex; gap: 20px; flex-wrap: wrap;">
                 <!-- Today's Collection -->
-                <div class="stat-card tile-orange" style="flex: 1; min-width: 300px;">
+                <div class="stat-card tile-orange" style="flex: 1; min-width: 250px;">
                     <h3>Today's Total Collection</h3>
                     <h2>₹<?php echo number_format($today_data['total']); ?></h2>
                     <div class="stat-details">
@@ -163,9 +179,19 @@ $yesterday_data = get_collection($con, $yesterday);
                         <span>UPI: <span class="upi">₹<?php echo number_format($today_data['upi']); ?></span></span>
                     </div>
                 </div>
+
+                <!-- Today's Inventory / Store Sales -->
+                <div class="stat-card" style="flex: 1; min-width: 250px; border-bottom: 4px solid #10b981; box-shadow: inset 0 -15px 30px -20px rgba(16,185,129,0.5);">
+                    <h3>Today's Inventory Store Sales</h3>
+                    <h2 style="color: #10b981;">₹<?php echo number_format($today_data['inventory']); ?></h2>
+                    <div class="stat-details">
+                        <span>Supplements &amp; Accessories Sold Today</span>
+                        <a href="inventory_audit.php" style="color: #10b981; font-weight: bold; text-decoration: underline;">View Stock</a>
+                    </div>
+                </div>
                 
                 <!-- Yesterday's Collection -->
-                <div class="stat-card tile-gray" style="flex: 1; min-width: 300px;">
+                <div class="stat-card tile-gray" style="flex: 1; min-width: 250px;">
                     <h3>Yesterday's Total Collection</h3>
                     <h2>₹<?php echo number_format($yesterday_data['total']); ?></h2>
                     <div class="stat-details">
@@ -173,8 +199,9 @@ $yesterday_data = get_collection($con, $yesterday);
                         <span>UPI: <span class="upi">₹<?php echo number_format($yesterday_data['upi']); ?></span></span>
                     </div>
                 </div>
+
                 <!-- Specific Date Collection -->
-                <div class="stat-card tile-pink" style="flex: 1; min-width: 300px;">
+                <div class="stat-card tile-pink" style="flex: 1; min-width: 250px;">
                     <h3>Daily Collection Report</h3>
                     <form action="invoices.php" method="GET" style="margin-top: 15px; display: flex; gap: 10px;">
                         <input type="date" name="start_date" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; color-scheme: dark; font-family: monospace; font-size: 14px;" required onchange="this.form.end_date.value = this.value;">
@@ -182,6 +209,31 @@ $yesterday_data = get_collection($con, $yesterday);
                         <button type="submit" class="btn-primary" style="margin-top: 0; padding: 10px 20px; background: linear-gradient(135deg, #ec4899, #be185d); box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);">View</button>
                     </form>
                     <p style="font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 15px;">Select a date to see all exact collections, payer details, and PT payments for that day.</p>
+                </div>
+            </div>
+
+            <!-- Today's Category Revenue Breakdown -->
+            <div class="nav-card" style="margin-top: 25px;">
+                <h3 style="margin-top: 0; font-weight: 800; font-size: 18px; color: #ff6b00; display: flex; align-items: center; gap: 8px;">
+                    <i class="entypo-chart-pie"></i> Today's Income Category Breakdown
+                </h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 15px;">
+                        <span style="font-size: 12px; color: #9ca3af; text-transform: uppercase; font-weight: bold;">New Memberships</span>
+                        <h3 style="margin: 8px 0 0 0; color: #3b82f6; font-size: 24px; font-weight: 800;">₹<?php echo number_format($today_data['membership']); ?></h3>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 15px;">
+                        <span style="font-size: 12px; color: #9ca3af; text-transform: uppercase; font-weight: bold;">Pending Dues Collected</span>
+                        <h3 style="margin: 8px 0 0 0; color: #ef4444; font-size: 24px; font-weight: 800;">₹<?php echo number_format($today_data['balance']); ?></h3>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 15px;">
+                        <span style="font-size: 12px; color: #9ca3af; text-transform: uppercase; font-weight: bold;">Personal Training (PT)</span>
+                        <h3 style="margin: 8px 0 0 0; color: #a855f7; font-size: 24px; font-weight: 800;">₹<?php echo number_format($today_data['pt']); ?></h3>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 15px; background: rgba(16,185,129,0.05);">
+                        <span style="font-size: 12px; color: #10b981; text-transform: uppercase; font-weight: bold;">🛒 Inventory Store Sales</span>
+                        <h3 style="margin: 8px 0 0 0; color: #10b981; font-size: 24px; font-weight: 800;">₹<?php echo number_format($today_data['inventory']); ?></h3>
+                    </div>
                 </div>
             </div>
             

@@ -12,9 +12,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['product_id'])) {
     $sale_date = date('Y-m-d');
     
     // Check stock
-    $q_stock = mysqli_query($con, "SELECT stock_quantity, product_name FROM inventory_items WHERE id = '$product_id'");
+    $q_stock = mysqli_query($con, "SELECT stock_quantity, product_name, price FROM inventory_items WHERE id = '$product_id'");
     if ($q_stock && mysqli_num_rows($q_stock) > 0) {
         $row = mysqli_fetch_assoc($q_stock);
+        $unit_price = intval($row['price']);
+        if ($total_price <= 0 || $total_price != ($unit_price * $quantity)) {
+            $total_price = $unit_price * $quantity;
+        }
+        
         if (intval($row['stock_quantity']) >= $quantity) {
             // Insert sale
             $q_insert = "INSERT INTO inventory_sales (product_id, member_id, quantity, total_price, payment_mode, sale_date, received_by) 
