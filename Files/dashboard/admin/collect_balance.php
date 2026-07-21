@@ -34,6 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['et_id']) && isset($_PO
                          WHERE et_id = '$et_id'";
                          
         if (mysqli_query($con, $update_query)) {
+            // Log into the balance collections ledger
+            $today = date('Y-m-d');
+            $received_by = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'System';
+            $ledger_query = "INSERT INTO balance_collections (et_id, amount, payment_mode, collection_date, received_by) 
+                             VALUES ('$et_id', '$collect_amount', '$payment_mode', '$today', '$received_by')";
+            mysqli_query($con, $ledger_query);
+            
             // Queue WhatsApp Message for Balance Payment Receipt
             $gym = get_gym_details($con);
             $gym_name = $gym['gym_name'];

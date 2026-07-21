@@ -80,6 +80,48 @@ if ($res_pt) {
     }
 }
 
+// Fetch Deferred Balance Collections
+$bal_where_clause = str_replace("e.paid_date", "b.collection_date", $where_clause);
+$bal_where_clause = str_replace("e.uid", "u.userid", $bal_where_clause); // Adjust for search
+
+$sql_bal = "SELECT b.id AS et_id, u.userid AS uid, 'BALANCE' AS pid, b.collection_date AS paid_date, 
+                   e.expire, b.payment_mode, b.received_by, 0 AS discount_amount, b.amount AS paid_amount,
+                   CONCAT('Deferred Balance (', p.planName, ')') AS planName, b.amount AS base_amount,
+                   u.username, u.photo
+            FROM balance_collections b
+            INNER JOIN enrolls_to e ON b.et_id = e.et_id
+            INNER JOIN plan p ON e.pid = p.pid
+            INNER JOIN users u ON e.uid = u.userid
+            $bal_where_clause";
+
+$res_bal = mysqli_query($con, $sql_bal);
+if ($res_bal) {
+    while ($row = mysqli_fetch_assoc($res_bal)) {
+        $row['is_pt'] = false;
+        $row['is_balance'] = true;
+        $invoices[] = $row;
+        $total_revenue += intval($row['paid_amount']);
+    }
+}
+
+// Ensure original enrollments subtract the deferred amounts so revenue isn't double counted
+foreach ($invoices as &$inv) {
+    if (!isset($inv['is_pt']) || !$inv['is_pt']) {
+        if (!isset($inv['is_balance']) || !$inv['is_balance']) {
+            // It's a base enrollment, subtract any deferred balances
+            $et_id = $inv['et_id'];
+            $q_def = mysqli_query($con, "SELECT SUM(amount) as def_amount FROM balance_collections WHERE et_id = '$et_id'");
+            if ($q_def && mysqli_num_rows($q_def) > 0) {
+                $def_row = mysqli_fetch_assoc($q_def);
+                $def_amt = intval($def_row['def_amount']);
+                $inv['paid_amount'] -= $def_amt;
+                $total_revenue -= $def_amt; // Adjust total revenue to not double count
+            }
+        }
+    }
+}
+unset($inv);
+
 // Sort the combined array by paid_date DESC, then et_id DESC
 usort($invoices, function($a, $b) {
     if ($a['paid_date'] === $b['paid_date']) {

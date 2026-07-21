@@ -11,12 +11,21 @@ function get_collection($con, $date) {
     $cash = 0;
     $upi = 0;
     
-    // Membership Collection
-    $q_mem = "SELECT paid_amount, payment_mode FROM enrolls_to WHERE paid_date = '$date'";
+    // Membership Base Collection (Minus deferred balance collections)
+    $q_mem = "SELECT e.et_id, e.paid_amount, e.payment_mode FROM enrolls_to e WHERE e.paid_date = '$date'";
     $res_mem = mysqli_query($con, $q_mem);
     if($res_mem && mysqli_num_rows($res_mem) > 0){
         while($row = mysqli_fetch_assoc($res_mem)){
             $amount = intval($row['paid_amount']);
+            
+            // Subtract any balance collected LATER than this date for this specific enrollment
+            $et_id = $row['et_id'];
+            $q_def = mysqli_query($con, "SELECT SUM(amount) as def_amount FROM balance_collections WHERE et_id = '$et_id'");
+            if ($q_def && mysqli_num_rows($q_def) > 0) {
+                $def_row = mysqli_fetch_assoc($q_def);
+                $amount -= intval($def_row['def_amount']);
+            }
+            
             $mode = strtolower(trim($row['payment_mode']));
             if(strpos($mode, 'cash') !== false) {
                 $cash += $amount;
@@ -24,6 +33,23 @@ function get_collection($con, $date) {
                 $upi += $amount;
             } else {
                 $cash += $amount; // Default fallback to cash
+            }
+        }
+    }
+
+    // Deferred Balance Collections (Collected ON this date)
+    $q_bal = "SELECT amount, payment_mode FROM balance_collections WHERE collection_date = '$date'";
+    $res_bal = mysqli_query($con, $q_bal);
+    if($res_bal && mysqli_num_rows($res_bal) > 0){
+        while($row = mysqli_fetch_assoc($res_bal)){
+            $amount = intval($row['amount']);
+            $mode = strtolower(trim($row['payment_mode']));
+            if(strpos($mode, 'cash') !== false) {
+                $cash += $amount;
+            } elseif(strpos($mode, 'upi') !== false || strpos($mode, 'online') !== false) {
+                $upi += $amount;
+            } else {
+                $cash += $amount;
             }
         }
     }

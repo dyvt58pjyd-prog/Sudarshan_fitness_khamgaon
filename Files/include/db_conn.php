@@ -317,6 +317,17 @@ if (!$con) {
         mysqli_query($con, "ALTER TABLE enrolls_to ADD COLUMN balance_due_date VARCHAR(15) DEFAULT NULL");
     }
 
+    // Self-healing database check: ensure balance_collections ledger table exists
+    mysqli_query($con, "CREATE TABLE IF NOT EXISTS balance_collections (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        et_id INT NOT NULL,
+        amount INT NOT NULL,
+        payment_mode VARCHAR(50) NOT NULL,
+        collection_date DATE NOT NULL,
+        received_by VARCHAR(50) NOT NULL,
+        FOREIGN KEY (et_id) REFERENCES enrolls_to(et_id) ON DELETE CASCADE
+    )");
+
     // Self-healing database check: ensure personal_training table exists
     mysqli_query($con, "CREATE TABLE IF NOT EXISTS personal_training (
         id INT AUTO_INCREMENT PRIMARY KEY,
