@@ -29,7 +29,15 @@ $gym = get_gym_details($con);
 
 // Parse pricing and discount details
 $discount = isset($row['discount_amount']) ? intval($row['discount_amount']) : 0;
-$paid_amount = (isset($row['paid_amount']) && $row['paid_amount'] !== null) ? intval($row['paid_amount']) : intval($row['amount']);
+$plan_price = intval($row['amount']);
+$total_payable = $plan_price - $discount;
+
+$paid_amount = (isset($row['paid_amount']) && $row['paid_amount'] !== null) ? intval($row['paid_amount']) : $plan_price;
+
+// Fix legacy overpayment calculation glitches (clamp to max payable)
+if ($paid_amount > $total_payable) {
+    $paid_amount = $total_payable;
+}
 
 // Decouple Personal Training (PT) from Membership Plan Invoice
 $has_pt = false;
