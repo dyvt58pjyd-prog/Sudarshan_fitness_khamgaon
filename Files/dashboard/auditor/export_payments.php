@@ -2,14 +2,15 @@
 require '../../include/db_conn.php';
 page_protect();
 
-if ($_SESSION['role'] !== 'super_admin' && $_SESSION['role'] !== 'owner' && $_SESSION['role'] !== 'reception' && $_SESSION['role'] !== 'auditor') {
+$current_role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
+if ($current_role !== 'super_admin' && $current_role !== 'owner' && $current_role !== 'reception' && $current_role !== 'auditor') {
     die("Unauthorized access.");
 }
 
 $working_year = isset($_SESSION['working_year']) ? intval($_SESSION['working_year']) : intval(date('Y'));
 
 header('Content-Type: application/vnd.ms-excel; charset=utf-8');
-header('Content-Disposition: attachment; filename=gym_payments_report_' . date('Ymd_His') . '.xls');
+header('Content-Disposition: attachment; filename=auditor_payments_report_' . date('Ymd_His') . '.xls');
 header('Pragma: no-cache');
 header('Expires: 0');
 
@@ -146,7 +147,7 @@ usort($invoices, function($a, $b) {
 <table>
   <thead>
     <tr>
-      <th colspan="11" class="title-header">SUDARSHAN FITNESS KHAMGAON - DETAILED PAYMENTS &amp; REVENUE EXPORT</th>
+      <th colspan="11" class="title-header">SUDARSHAN FITNESS KHAMGAON - AUDITOR PAYMENTS EXPORT</th>
     </tr>
     <tr>
       <th colspan="11" class="meta-info">Generated: <?php echo date('Y-m-d H:i:s'); ?> | Operating Year Session: <?php echo $working_year; ?></th>
