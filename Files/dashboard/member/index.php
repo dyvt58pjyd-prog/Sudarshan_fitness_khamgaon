@@ -21,6 +21,36 @@ $sql = "SELECT u.username, u.email, u.trainer_id, u.xp_points, u.gym_rank, e.pai
 $result = mysqli_query($con, $sql);
 $user_info = mysqli_fetch_assoc($result);
 
+// Fetch Couple Partner Data if linked
+$partner_user = null;
+$q_partner_check = mysqli_query($con, "SELECT partner_uid, mobile FROM users WHERE userid = '$userid'");
+if ($q_partner_check && mysqli_num_rows($q_partner_check) > 0) {
+    $u_curr = mysqli_fetch_assoc($q_partner_check);
+    if (!empty($u_curr['partner_uid'])) {
+        $p_id = mysqli_real_escape_string($con, $u_curr['partner_uid']);
+        $qp = mysqli_query($con, "SELECT * FROM users WHERE userid='$p_id'");
+        if ($qp && mysqli_num_rows($qp) > 0) {
+            $partner_user = mysqli_fetch_assoc($qp);
+        }
+    }
+    if (!$partner_user) {
+        $qp = mysqli_query($con, "SELECT * FROM users WHERE partner_uid='$userid'");
+        if ($qp && mysqli_num_rows($qp) > 0) {
+            $partner_user = mysqli_fetch_assoc($qp);
+        }
+    }
+    if (!$partner_user && !empty($u_curr['mobile'])) {
+        $m_mob = mysqli_real_escape_string($con, $u_curr['mobile']);
+        $qp = mysqli_query($con, "SELECT * FROM users WHERE mobile='$m_mob' AND userid != '$userid' LIMIT 1");
+        if ($qp && mysqli_num_rows($qp) > 0) {
+            $partner_user = mysqli_fetch_assoc($qp);
+            $p_id = $partner_user['userid'];
+            mysqli_query($con, "UPDATE users SET partner_uid = '$p_id' WHERE userid = '$userid'");
+            mysqli_query($con, "UPDATE users SET partner_uid = '$userid' WHERE userid = '$p_id'");
+        }
+    }
+}
+
 $trainer_name = 'None Assigned';
 if ($user_info && !empty($user_info['trainer_id'])) {
     $tr_id = mysqli_real_escape_string($con, $user_info['trainer_id']);
@@ -155,6 +185,15 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
                 <div class="col-md-6 col-sm-8 clearfix"></div>
                 <div class="col-md-6 col-sm-4 clearfix hidden-xs">
                     <ul class="list-inline links-list pull-right">
+                        <?php if ($partner_user): ?>
+                        <li>
+                            <form method="POST" action="profile_switch.php" style="display:inline; margin:0;">
+                                <input type="hidden" name="switch_uid" value="<?php echo htmlspecialchars($partner_user['userid']); ?>">
+                                <input type="hidden" name="switch_name" value="<?php echo htmlspecialchars($partner_user['username']); ?>">
+                                <button type="submit" class="a1-btn a1-orange" style="font-size:11px; padding:4px 12px; margin:0; border-radius:6px; font-weight:bold;">Switch Profile 🔁</button>
+                            </form>
+                        </li>
+                        <?php endif; ?>
                         <li>Welcome <?php echo htmlspecialchars($username); ?></li>
                         <li>
                             <a href="../admin/logout.php">
@@ -167,6 +206,47 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
 
             <h2>My Dashboard</h2>
             <hr />
+
+            <?php if ($partner_user): ?>
+            <div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.25) 0%, rgba(30, 41, 59, 0.9) 100%); border: 2px solid #ff6b00; border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 15px 35px rgba(255,107,0,0.25);">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                        <span style="font-size: 34px;">💑</span>
+                        <div>
+                            <span style="color: #ff6b00; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; background: rgba(255,107,0,0.15); padding: 4px 10px; border-radius: 20px;">COUPLE FITNESS DUO</span>
+                            <h3 style="margin: 6px 0 0 0; color: #fff; font-weight: 800; font-size: 20px;">Couple Membership Active</h3>
+                        </div>
+                    </div>
+                    <form method="POST" action="profile_switch.php" style="margin: 0;">
+                        <input type="hidden" name="switch_uid" value="<?php echo htmlspecialchars($partner_user['userid']); ?>">
+                        <input type="hidden" name="switch_name" value="<?php echo htmlspecialchars($partner_user['username']); ?>">
+                        <button type="submit" class="a1-btn a1-orange" style="font-size: 13px; font-weight: 800; padding: 10px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(255,107,0,0.4);">
+                            Switch to <?php echo htmlspecialchars(explode(' ', $partner_user['username'])[0]); ?>'s Dashboard 🔁
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Duo Info Grid -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; background: rgba(0,0,0,0.3); padding: 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08);">
+                    <div>
+                        <span style="color: #94a3b8; font-size: 11.5px; display: block; text-transform: uppercase; font-weight: 700;">Partner Name</span>
+                        <strong style="color: #fff; font-size: 16px;"><?php echo htmlspecialchars($partner_user['username']); ?></strong>
+                    </div>
+                    <div>
+                        <span style="color: #94a3b8; font-size: 11.5px; display: block; text-transform: uppercase; font-weight: 700;">Partner Member ID</span>
+                        <strong style="color: #38bdf8; font-size: 16px;"><?php echo htmlspecialchars($partner_user['userid']); ?></strong>
+                    </div>
+                    <div>
+                        <span style="color: #94a3b8; font-size: 11.5px; display: block; text-transform: uppercase; font-weight: 700;">Partner Mobile</span>
+                        <strong style="color: #fff; font-size: 16px;"><?php echo htmlspecialchars($partner_user['mobile']); ?></strong>
+                    </div>
+                    <div>
+                        <span style="color: #94a3b8; font-size: 11.5px; display: block; text-transform: uppercase; font-weight: 700;">Membership Status</span>
+                        <span style="color: #10b981; font-weight: 800; font-size: 15px;">Active Couple Plan</span>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
 
 			<!-- Premium Live Analogue Clock & Smart Fitness Info Panel -->
 			<div class="row" style="margin-bottom: 25px; margin-left: 0; margin-right: 0;">
