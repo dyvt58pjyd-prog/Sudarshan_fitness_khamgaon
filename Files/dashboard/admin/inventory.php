@@ -83,14 +83,18 @@ if (isset($_GET['delete'])) {
             cursor: pointer;
         }
         .stock-badge {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 13px;
+            display: inline-block;
+            min-width: 50px;
+            text-align: center;
+            letter-spacing: 0.5px;
         }
-        .stock-high { background-color: #d1fae5; color: #065f46; }
-        .stock-low { background-color: #fef3c7; color: #92400e; }
-        .stock-out { background-color: #fee2e2; color: #991b1b; }
+        .stock-high { background-color: rgba(16, 185, 129, 0.2) !important; color: #10b981 !important; border: 1px solid #10b981 !important; }
+        .stock-low { background-color: rgba(245, 158, 11, 0.2) !important; color: #f59e0b !important; border: 1px solid #f59e0b !important; }
+        .stock-out { background-color: rgba(239, 68, 68, 0.2) !important; color: #ef4444 !important; border: 1px solid #ef4444 !important; }
     </style>
 </head>
 <body class="page-body page-fade" onload="collapseSidebar()">
@@ -156,12 +160,15 @@ if (isset($_GET['delete'])) {
                                     if ($stock == 0) $stock_class = 'stock-out';
                                     elseif ($stock < 5) $stock_class = 'stock-low';
                                     
+                                    $stock_text = $stock . " Units";
+                                    if ($stock == 0) $stock_text = "Out of Stock";
+                                    
                                     echo "<tr>";
                                     echo "<td>" . $sno . "</td>";
                                     echo "<td><strong>" . htmlspecialchars($row['product_name']) . "</strong></td>";
                                     echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                                     echo "<td>₹" . htmlspecialchars($row['price']) . "</td>";
-                                    echo "<td><span class='stock-badge $stock_class'>" . $stock . "</span></td>";
+                                    echo "<td><span class='stock-badge $stock_class'>" . $stock_text . "</span></td>";
                                     echo "<td>
                                             <button class='a1-btn a1-blue' style='padding:4px 8px;' onclick=\"openUpdateModal('".$row['id']."', '".addslashes($row['product_name'])."', '".$row['price']."')\">Update</button>
                                             <a href='?delete=".$row['id']."' class='a1-btn a1-red' style='padding:4px 8px;' onclick=\"return confirm('Delete this product?')\">Delete</a>

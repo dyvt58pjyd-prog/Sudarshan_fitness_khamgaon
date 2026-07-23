@@ -138,11 +138,11 @@ $res_stock = mysqli_query($con, $q_stock);
                             if ($res_stock && mysqli_num_rows($res_stock) > 0) {
                                 while ($s_row = mysqli_fetch_assoc($res_stock)) {
                                     $st = intval($s_row['stock_quantity']);
-                                    $badge = "<span class='badge badge-success'>In Stock ($st)</span>";
+                                    $badge = "<span class='badge badge-success' style='padding:6px 12px; font-weight:bold; font-size:12px; border:1px solid #10b981;'>IN STOCK ({$st} Units)</span>";
                                     if ($st == 0) {
-                                        $badge = "<span class='badge badge-danger'>OUT OF STOCK (0)</span>";
+                                        $badge = "<span class='badge badge-danger' style='padding:6px 12px; font-weight:bold; font-size:12px; border:1px solid #ef4444;'>OUT OF STOCK (0)</span>";
                                     } elseif ($st < 5) {
-                                        $badge = "<span class='badge badge-warning'>LOW STOCK ($st)</span>";
+                                        $badge = "<span class='badge badge-warning' style='padding:6px 12px; font-weight:bold; font-size:12px; border:1px solid #f59e0b;'>LOW STOCK ({$st} Units)</span>";
                                     }
                                     echo "<tr>";
                                     echo "<td>{$s_count}</td>";
