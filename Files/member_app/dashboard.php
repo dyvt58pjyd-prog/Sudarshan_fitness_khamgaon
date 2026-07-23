@@ -69,6 +69,21 @@ if (mysqli_num_rows($q_att) > 0) {
         $att_status = "Completed (Left at " . date('h:i A', strtotime($att_row['exit_time'])) . ")";
     }
 }
+
+// Fetch Partner's Attendance for Couple Dashboard
+$partner_att_status = "Not Checked In";
+if ($partner_user) {
+    $p_uid = $partner_user['userid'];
+    $q_p_att = mysqli_query($con, "SELECT * FROM attendance WHERE uid='$p_uid' AND date='$today' ORDER BY id DESC LIMIT 1");
+    if ($q_p_att && mysqli_num_rows($q_p_att) > 0) {
+        $p_att_row = mysqli_fetch_assoc($q_p_att);
+        if (empty($p_att_row['exit_time']) || $p_att_row['exit_time'] == '00:00:00') {
+            $partner_att_status = "Checked In at " . date('h:i A', strtotime($p_att_row['entry_time']));
+        } else {
+            $partner_att_status = "Left at " . date('h:i A', strtotime($p_att_row['exit_time']));
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -118,18 +133,56 @@ if (mysqli_num_rows($q_att) > 0) {
 
     <div class="content">
         <?php if ($partner_user): ?>
-        <div class="card" style="border-color: rgba(255, 107, 0, 0.4); background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(30, 41, 59, 0.8) 100%);">
-            <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <div>
-                    <div style="color: #ff6b00; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">✨ Couple Account Linked</div>
-                    <div style="font-size: 18px; font-weight: 800; color: #fff; margin-top: 4px;"><?php echo htmlspecialchars($partner_user['username']); ?></div>
-                    <div style="font-size: 12px; color: #94a3b8;">Partner ID: <?php echo htmlspecialchars($partner_user['userid']); ?></div>
-                </div>
+        <!-- COUPLE DASHBOARD BANNER -->
+        <div class="card" style="border: 2px solid #ff6b00; background: linear-gradient(135deg, rgba(255, 107, 0, 0.2) 0%, rgba(30, 41, 59, 0.9) 100%); box-shadow: 0 15px 35px rgba(255,107,0,0.25);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
+                <span style="color: #ff6b00; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; background: rgba(255,107,0,0.15); padding: 4px 10px; border-radius: 20px;">
+                    💑 COUPLE FITNESS DUO
+                </span>
                 <form method="POST" action="profile_switch.php" style="margin: 0;">
                     <input type="hidden" name="switch_uid" value="<?php echo $partner_user['userid']; ?>">
                     <input type="hidden" name="switch_name" value="<?php echo htmlspecialchars($partner_user['username']); ?>">
-                    <button type="submit" style="background: linear-gradient(135deg, #ff6b00, #ff8800); color: #fff; border: none; padding: 10px 16px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(255,107,0,0.3);">Switch Profile 🔁</button>
+                    <button type="submit" style="background: linear-gradient(135deg, #ff6b00, #ff8800); color: #fff; border: none; padding: 7px 14px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(255,107,0,0.4);">
+                        Switch to <?php echo htmlspecialchars(explode(' ', $partner_user['username'])[0]); ?> 🔁
+                    </button>
                 </form>
+            </div>
+
+            <!-- Avatars Duo -->
+            <div style="display: flex; align-items: center; justify-content: space-around; margin-bottom: 20px; text-align: center;">
+                <div>
+                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #10b981; overflow: hidden; margin: 0 auto 8px auto; box-shadow: 0 0 15px rgba(16,185,129,0.4);">
+                        <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($user['username']); ?>&background=10b981&color=fff&size=100" style="width:100%; height:100%; object-fit:cover;">
+                    </div>
+                    <div style="font-weight: 800; font-size: 13.5px; color: #fff;"><?php echo htmlspecialchars(explode(' ', $user['username'])[0]); ?></div>
+                    <div style="font-size: 11px; color: #94a3b8;">ID: <?php echo htmlspecialchars($user['userid']); ?></div>
+                </div>
+
+                <div style="font-size: 26px; color: #ff6b00;">❤️</div>
+
+                <div>
+                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid #38bdf8; overflow: hidden; margin: 0 auto 8px auto; box-shadow: 0 0 15px rgba(56,189,248,0.4);">
+                        <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($partner_user['username']); ?>&background=38bdf8&color=fff&size=100" style="width:100%; height:100%; object-fit:cover;">
+                    </div>
+                    <div style="font-weight: 800; font-size: 13.5px; color: #fff;"><?php echo htmlspecialchars(explode(' ', $partner_user['username'])[0]); ?></div>
+                    <div style="font-size: 11px; color: #94a3b8;">ID: <?php echo htmlspecialchars($partner_user['userid']); ?></div>
+                </div>
+            </div>
+
+            <!-- Couple Attendance Tracker -->
+            <div style="background: rgba(0,0,0,0.3); border-radius: 14px; padding: 14px; border: 1px solid rgba(255,255,255,0.05);">
+                <div style="font-size: 11px; color: #ff6b00; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
+                    <span>Today's Couple Attendance</span>
+                    <span>📍 Gym Check-In</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;">
+                    <span style="color: #cbd5e1;"><?php echo htmlspecialchars(explode(' ', $user['username'])[0]); ?>:</span>
+                    <span style="color: #10b981; font-weight: bold;"><?php echo htmlspecialchars($att_status); ?></span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                    <span style="color: #cbd5e1;"><?php echo htmlspecialchars(explode(' ', $partner_user['username'])[0]); ?>:</span>
+                    <span style="color: #38bdf8; font-weight: bold;"><?php echo htmlspecialchars($partner_att_status); ?></span>
+                </div>
             </div>
         </div>
         <?php endif; ?>
