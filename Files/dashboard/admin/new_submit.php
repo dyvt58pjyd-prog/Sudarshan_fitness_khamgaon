@@ -98,19 +98,35 @@ $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,t
     if(mysqli_query($con,$query)==1){
         
       $partner_uid = null;
+      $is_couple_selected = false;
+      
       if (isset($_POST['is_couple']) && $_POST['is_couple'] == '1') {
-          $p_name = mysqli_real_escape_string($con, $_POST['partner_name']);
-          $p_gender = mysqli_real_escape_string($con, $_POST['partner_gender']);
-          $p_dob = mysqli_real_escape_string($con, $_POST['partner_dob']);
-          $p_mobile = mysqli_real_escape_string($con, $_POST['partner_mobile']);
+          $is_couple_selected = true;
+      } else if (!empty($_POST['partner_name'])) {
+          $is_couple_selected = true;
+      } else if (!empty($plan)) {
+          $q_chk_plan = mysqli_query($con, "SELECT planName FROM plan WHERE pid='$plan'");
+          if ($q_chk_plan && mysqli_num_rows($q_chk_plan) > 0) {
+              $p_row_chk = mysqli_fetch_assoc($q_chk_plan);
+              if (stripos($p_row_chk['planName'], 'couple') !== false) {
+                  $is_couple_selected = true;
+              }
+          }
+      }
+
+      if ($is_couple_selected) {
+          $p_name = isset($_POST['partner_name']) && !empty($_POST['partner_name']) ? mysqli_real_escape_string($con, trim($_POST['partner_name'])) : "Partner of " . $uname;
+          $p_gender = isset($_POST['partner_gender']) && !empty($_POST['partner_gender']) ? mysqli_real_escape_string($con, trim($_POST['partner_gender'])) : ($gender == 'Male' ? 'Female' : 'Male');
+          $p_dob = isset($_POST['partner_dob']) && !empty($_POST['partner_dob']) ? mysqli_real_escape_string($con, $_POST['partner_dob']) : $dob;
+          $p_mobile = isset($_POST['partner_mobile']) && !empty($_POST['partner_mobile']) ? mysqli_real_escape_string($con, trim($_POST['partner_mobile'])) : $phn;
           
           // Generate partner ID
           $res_p_max = mysqli_query($con, "SELECT MAX(CAST(userid AS UNSIGNED)) as maxid FROM users WHERE userid REGEXP '^[0-9]+$'");
           $p_max_row = mysqli_fetch_assoc($res_p_max);
           $partner_uid = ($p_max_row['maxid'] > 100) ? $p_max_row['maxid'] + 1 : 101;
           
-          $q_partner = "INSERT INTO users (username, gender, mobile, dob, joining_date, userid, partner_uid, biometric_id, biometric_enabled, fitness_goal, biometric_batch) 
-                        VALUES ('$p_name', '$p_gender', '$p_mobile', '$p_dob', '$jdate', '$partner_uid', '$memID', '$partner_uid', 1, '$fitness_goal', '$biometric_batch')";
+          $q_partner = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, partner_uid, biometric_id, biometric_enabled, fitness_goal, biometric_batch) 
+                        VALUES ('$p_name', '$p_gender', '$p_mobile', '$email', '$p_dob', '$jdate', '$partner_uid', '$memID', '$partner_uid', 1, '$fitness_goal', '$biometric_batch')";
           mysqli_query($con, $q_partner);
           
           // Bi-directionally link Primary User to Partner User
@@ -187,12 +203,18 @@ $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,t
             $weight = isset($_POST['weight']) ? mysqli_real_escape_string($con, $_POST['weight']) : '';
             $height = isset($_POST['height']) ? mysqli_real_escape_string($con, $_POST['height']) : '';
             $query4="insert into health_status(uid, weight, height) values('$memID', '$weight', '$height')";
+            if (!empty($partner_uid)) {
+                mysqli_query($con, "INSERT INTO health_status(uid, weight, height) VALUES ('$partner_uid', '$weight', '$height')");
+            }
             if(mysqli_query($con,$query4)==1){
               if (!empty($weight) || !empty($height)) {
                   mysqli_query($con, "INSERT INTO health_history (uid, weight, height, logged_date) VALUES ('$memID', '$weight', '$height', '$cdate')");
               }
 
               $query5="insert into address(id,streetName,state,city,zipcode) values('$memID','$stname','$state','$city','$zipcode')";
+              if (!empty($partner_uid)) {
+                  mysqli_query($con, "INSERT INTO address(id,streetName,state,city,zipcode) VALUES ('$partner_uid','$stname','$state','$city','$zipcode')");
+              }
               if(mysqli_query($con,$query5)==1){
                 // Create user login auth in admin table
                 $password = '1234';
