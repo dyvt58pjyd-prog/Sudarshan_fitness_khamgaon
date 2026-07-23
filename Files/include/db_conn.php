@@ -527,6 +527,42 @@ if (!$con) {
         remarks TEXT DEFAULT NULL
     )");
 
+    // Self-healing assetlinks.json check for Android App Deep Linking
+    $well_known_dir = __DIR__ . '/../.well-known';
+    if (!is_dir($well_known_dir)) {
+        @mkdir($well_known_dir, 0755, true);
+    }
+    $assetlinks_file = $well_known_dir . '/assetlinks.json';
+    $desired_assetlinks = json_encode([
+        [
+            "relation" => ["delegate_permission/common.handle_all_urls"],
+            "target" => [
+                "namespace" => "android_app",
+                "package_name" => "de.sudarshanfitness.twa",
+                "sha256_cert_fingerprints" => [
+                    "7F:39:0A:C0:90:C4:87:DE:1C:2A:8A:45:CD:3D:51:C8:E8:85:3E:77:E5:A9:72:08:4C:E6:86:14:D0:6B:5C:8B:10:98"
+                ]
+            ]
+        ],
+        [
+            "relation" => [
+                "delegate_permission/common.handle_all_urls",
+                "delegate_permission/common.get_login_creds"
+            ],
+            "target" => [
+                "namespace" => "android_app",
+                "package_name" => "com.sudarshanfitness.portal",
+                "sha256_cert_fingerprints" => [
+                    "DB:FA:1E:AB:3D:53:92:05:82:A6:A0:50:90:75:D1:42:53:8B:F8:78:E8:13:B1:09:59:71:0E:61:94:FE:4B:CF:E3"
+                ]
+            ]
+        ]
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
+    if (!file_exists($assetlinks_file) || file_get_contents($assetlinks_file) !== $desired_assetlinks) {
+        @file_put_contents($assetlinks_file, $desired_assetlinks);
+    }
+    
     // Self-healing database check: ensure whatsapp_outbox table exists
     mysqli_query($con, "CREATE TABLE IF NOT EXISTS whatsapp_outbox (
         id INT AUTO_INCREMENT PRIMARY KEY,
