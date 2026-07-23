@@ -60,27 +60,69 @@ if (isset($_GET['delete'])) {
         .modal {
             display: none;
             position: fixed;
-            z-index: 1000;
+            z-index: 10000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
         }
         .modal-content {
-            background-color: #fefefe;
-            margin: 10% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 450px;
-            border-radius: 8px;
+            background: #1e293b !important;
+            color: #ffffff !important;
+            margin: 8% auto;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            width: 90%;
+            max-width: 480px;
+            border-radius: 16px !important;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6) !important;
+        }
+        .modal-content h4 {
+            color: #ff6b00 !important;
+            font-weight: 800 !important;
+            margin: 0 0 15px 0 !important;
+            font-size: 18px !important;
+            text-transform: uppercase;
+        }
+        .modal-content label {
+            color: #cbd5e1 !important;
+            font-weight: 700 !important;
+            font-size: 12px !important;
+            display: block !important;
+            margin-bottom: 6px !important;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .modal-content .form-control {
+            background-color: #0f172a !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 8px !important;
+            padding: 10px 14px !important;
+            font-size: 14px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            color-scheme: dark;
+        }
+        .modal-content .form-control:focus {
+            border-color: #ff6b00 !important;
+            outline: none !important;
+        }
+        .modal-content p, .modal-content span {
+            color: #e2e8f0 !important;
         }
         .close {
-            color: #aaa;
+            color: #94a3b8 !important;
             float: right;
-            font-size: 28px;
+            font-size: 24px;
             font-weight: bold;
             cursor: pointer;
+            line-height: 1;
+        }
+        .close:hover {
+            color: #ff6b00 !important;
         }
         .stock-badge {
             padding: 6px 12px;
