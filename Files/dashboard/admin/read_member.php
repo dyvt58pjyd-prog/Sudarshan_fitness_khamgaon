@@ -7,7 +7,107 @@ if ($_SESSION['role'] === 'member') {
     exit();
 }
 
-$id = isset($_REQUEST['name']) ? mysqli_real_escape_string($con, $_REQUEST['name']) : '';
+$id = '';
+if (isset($_REQUEST['name']) && !empty($_REQUEST['name'])) {
+    $id = mysqli_real_escape_string($con, $_REQUEST['name']);
+} elseif (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
+    $id = mysqli_real_escape_string($con, $_REQUEST['id']);
+}
+
+// Handle Couple Partner Actions (Add/Link/Unlink)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    $primary_uid = mysqli_real_escape_string($con, $_POST['primary_uid']);
+    
+    if ($_POST['action'] === 'add_new_partner') {
+        $p_name = mysqli_real_escape_string($con, trim($_POST['partner_name']));
+        $p_gender = mysqli_real_escape_string($con, trim($_POST['partner_gender']));
+        $p_mobile = mysqli_real_escape_string($con, trim($_POST['partner_mobile']));
+        $p_dob = isset($_POST['partner_dob']) ? mysqli_real_escape_string($con, $_POST['partner_dob']) : '';
+        $jdate = date('Y-m-d');
+        
+        // Generate partner ID
+        $res_p_max = mysqli_query($con, "SELECT MAX(CAST(userid AS UNSIGNED)) as maxid FROM users WHERE userid REGEXP '^[0-9]+$'");
+        $p_max_row = mysqli_fetch_assoc($res_p_max);
+        $partner_uid = ($p_max_row['maxid'] > 100) ? $p_max_row['maxid'] + 1 : 101;
+        
+        // Insert partner user
+        $q_partner = "INSERT INTO users (username, gender, mobile, dob, joining_date, userid, partner_uid, biometric_id, biometric_enabled) 
+                      VALUES ('$p_name', '$p_gender', '$p_mobile', '$p_dob', '$jdate', '$partner_uid', '$primary_uid', '$partner_uid', 1)";
+        
+        if (mysqli_query($con, $q_partner)) {
+            // Bi-directionally link primary user to partner
+            mysqli_query($con, "UPDATE users SET partner_uid = '$partner_uid' WHERE userid = '$primary_uid'");
+            
+            // Enroll partner in primary user's active plan if available
+            $qp_plan = mysqli_query($con, "SELECT pid, expire, paid_date FROM enrolls_to WHERE uid = '$primary_uid' ORDER BY expire DESC LIMIT 1");
+            if ($qp_plan && mysqli_num_rows($qp_plan) > 0) {
+                $p_plan_row = mysqli_fetch_assoc($qp_plan);
+                $pid = $p_plan_row['pid'];
+                $expire = $p_plan_row['expire'];
+                $paid_date = $p_plan_row['paid_date'];
+                
+                $q_partner_enroll = "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount, balance) 
+                                     VALUES ('$pid', '$partner_uid', '$paid_date', '$expire', 'yes', 'Couple Plan Split', 'System', 0, 0, 0)";
+                mysqli_query($con, $q_partner_enroll);
+            }
+            
+            // Create login credentials for partner in admin table
+            $p_pass = '1234';
+            mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('$partner_uid', '$p_pass', 'member', '$p_name', 'member') ON DUPLICATE KEY UPDATE Full_name='$p_name'");
+            
+            echo "<head><script>alert('Partner successfully registered and linked to Member ID $primary_uid!');</script></head></html>";
+            echo "<meta http-equiv='refresh' content='0; url=read_member.php?name=" . urlencode($primary_uid) . "'>";
+            exit();
+        }
+    }
+    
+    if ($_POST['action'] === 'link_existing_partner') {
+        $existing_partner_uid = mysqli_real_escape_string($con, trim($_POST['existing_partner_uid']));
+        
+        $q_chk = mysqli_query($con, "SELECT userid, username FROM users WHERE userid = '$existing_partner_uid' OR mobile = '$existing_partner_uid'");
+        if ($q_chk && mysqli_num_rows($q_chk) > 0) {
+            $p_found = mysqli_fetch_assoc($q_chk);
+            $real_partner_id = $p_found['userid'];
+            
+            mysqli_query($con, "UPDATE users SET partner_uid = '$real_partner_id' WHERE userid = '$primary_uid'");
+            mysqli_query($con, "UPDATE users SET partner_uid = '$primary_uid' WHERE userid = '$real_partner_id'");
+            
+            $qp_plan = mysqli_query($con, "SELECT pid, expire, paid_date FROM enrolls_to WHERE uid = '$primary_uid' ORDER BY expire DESC LIMIT 1");
+            if ($qp_plan && mysqli_num_rows($qp_plan) > 0) {
+                $p_plan_row = mysqli_fetch_assoc($qp_plan);
+                $pid = $p_plan_row['pid'];
+                $expire = $p_plan_row['expire'];
+                $paid_date = $p_plan_row['paid_date'];
+                
+                $chk_partner_enr = mysqli_query($con, "SELECT * FROM enrolls_to WHERE uid = '$real_partner_id' AND pid = '$pid'");
+                if (!$chk_partner_enr || mysqli_num_rows($chk_partner_enr) == 0) {
+                    $q_partner_enroll = "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount, balance) 
+                                         VALUES ('$pid', '$real_partner_id', '$paid_date', '$expire', 'yes', 'Couple Plan Split', 'System', 0, 0, 0)";
+                    mysqli_query($con, $q_partner_enroll);
+                }
+            }
+            
+            echo "<head><script>alert('Successfully linked " . addslashes($p_found['username']) . " as Couple Partner!');</script></head></html>";
+            echo "<meta http-equiv='refresh' content='0; url=read_member.php?name=" . urlencode($primary_uid) . "'>";
+            exit();
+        } else {
+            echo "<head><script>alert('Member ID or Mobile not found!');</script></head></html>";
+            echo "<meta http-equiv='refresh' content='0; url=read_member.php?name=" . urlencode($primary_uid) . "'>";
+            exit();
+        }
+    }
+    
+    if ($_POST['action'] === 'unlink_partner') {
+        $partner_uid = mysqli_real_escape_string($con, $_POST['partner_uid']);
+        
+        mysqli_query($con, "UPDATE users SET partner_uid = NULL WHERE userid = '$primary_uid'");
+        mysqli_query($con, "UPDATE users SET partner_uid = NULL WHERE userid = '$partner_uid'");
+        
+        echo "<head><script>alert('Couple partner unlinked successfully.');</script></head></html>";
+        echo "<meta http-equiv='refresh' content='0; url=read_member.php?name=" . urlencode($primary_uid) . "'>";
+        exit();
+    }
+}
 
 // Query full member info with address and health status using LEFT JOINs
 $query = "SELECT u.*, a.streetName, a.city, a.state, a.zipcode, h.calorie, h.height, h.weight, h.fat, h.remarks 
@@ -60,6 +160,20 @@ $p_query = mysqli_query($con, "SELECT e.*, p.planName, p.description, p.amount, 
                                ORDER BY e.expire DESC LIMIT 1");
 if ($p_query && mysqli_num_rows($p_query) > 0) {
     $active_plan = mysqli_fetch_assoc($p_query);
+}
+
+// Check if member has or had a Couple Plan
+$is_couple_plan = false;
+if ($active_plan && !empty($active_plan['planName'])) {
+    if (stripos($active_plan['planName'], 'couple') !== false) {
+        $is_couple_plan = true;
+    }
+}
+if (!$is_couple_plan) {
+    $cp_check = mysqli_query($con, "SELECT p.planName FROM enrolls_to e JOIN plan p ON e.pid = p.pid WHERE e.uid = '$id' AND LOWER(p.planName) LIKE '%couple%' LIMIT 1");
+    if ($cp_check && mysqli_num_rows($cp_check) > 0) {
+        $is_couple_plan = true;
+    }
 }
 
 $gym = get_gym_details($con);
@@ -266,16 +380,107 @@ $gym = get_gym_details($con);
                 </div>
 
                 <?php if ($partner_data): ?>
-                <div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(255, 107, 0, 0.05)); border: 1px dashed #ff6b00; border-radius: 16px; padding: 15px 20px; margin-top: 20px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-                    <div style="display: flex; align-items: center; gap: 15px;">
-                        <span style="font-size: 32px;">💑</span>
-                        <div>
-                            <h4 style="margin: 0 0 3px 0; color: #ff6b00; font-weight: 800; font-size: 15px;">Couple Plan Partner Linked</h4>
-                            <span style="color: #cbd5e1; font-size: 13.5px;">Partner Name: <strong style="color: #fff;"><?php echo htmlspecialchars($partner_data['username']); ?></strong> (ID: <strong style="color: #38bdf8;"><?php echo htmlspecialchars($partner_data['userid']); ?></strong>)</span>
+                <div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(255, 107, 0, 0.05)); border: 1px dashed #ff6b00; border-radius: 18px; padding: 20px; margin-top: 20px; margin-bottom: 25px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span style="font-size: 36px;">💑</span>
+                            <div>
+                                <span style="color: #ff6b00; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">✨ Couple Plan Partner Linked</span>
+                                <h3 style="margin: 4px 0 2px 0; color: #fff; font-weight: 800; font-size: 18px;"><?php echo htmlspecialchars($partner_data['username']); ?></h3>
+                                <span style="color: #cbd5e1; font-size: 13px;">Membership ID: <strong style="color: #38bdf8;"><?php echo htmlspecialchars($partner_data['userid']); ?></strong> | Mobile: <strong><?php echo htmlspecialchars($partner_data['mobile']); ?></strong></span>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <a href="read_member.php?name=<?php echo urlencode($partner_data['userid']); ?>" class="a1-btn a1-blue" style="font-size: 12px; padding: 8px 16px; text-decoration: none; border-radius: 8px;">View Partner Profile &rarr;</a>
+                            <form method="POST" style="margin: 0;" onsubmit="return confirm('Are you sure you want to unlink this couple partner?');">
+                                <input type="hidden" name="action" value="unlink_partner">
+                                <input type="hidden" name="primary_uid" value="<?php echo htmlspecialchars($member['userid']); ?>">
+                                <input type="hidden" name="partner_uid" value="<?php echo htmlspecialchars($partner_data['userid']); ?>">
+                                <button type="submit" class="a1-btn a1-orange" style="font-size: 12px; padding: 8px 14px; border-radius: 8px;">Unlink Partner</button>
+                            </form>
                         </div>
                     </div>
-                    <a href="read_member.php?id=<?php echo $partner_data['userid']; ?>" class="a1-btn a1-blue" style="font-size: 12px; padding: 7px 15px; text-decoration: none; border-radius: 8px;">View Partner Profile &rarr;</a>
                 </div>
+                <?php elseif ($is_couple_plan): ?>
+                <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05)); border: 2px dashed #f59e0b; border-radius: 18px; padding: 22px; margin-top: 20px; margin-bottom: 25px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; margin-bottom: 15px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span style="font-size: 36px;">⚠️</span>
+                            <div>
+                                <h4 style="margin: 0 0 4px 0; color: #f59e0b; font-weight: 800; font-size: 16px; text-transform: uppercase;">
+                                    COUPLE PLAN DETECTED — NO PARTNER LINKED YET
+                                </h4>
+                                <p style="margin: 0; color: #cbd5e1; font-size: 13px;">
+                                    <strong><?php echo htmlspecialchars($member['username']); ?></strong> is subscribed to <strong><?php echo htmlspecialchars($active_plan['planName'] ?? 'Couple Plan'); ?></strong>, but no partner is assigned yet. Register a new partner or link an existing member below!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Toggle Buttons -->
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <button type="button" class="a1-btn a1-blue" id="btn_new_p" onclick="showPForm('new')">+ Register New Partner</button>
+                        <button type="button" class="a1-btn a1-orange" id="btn_ex_p" onclick="showPForm('existing')">🔗 Link Existing Member</button>
+                    </div>
+
+                    <!-- Form A: Add New Partner -->
+                    <div id="form_new_p" style="background: rgba(0,0,0,0.3); border-radius: 12px; padding: 18px; border: 1px solid rgba(255,255,255,0.1);">
+                        <h5 style="color: #38bdf8; margin: 0 0 12px 0; font-weight: 700;">Register &amp; Link New Partner Account</h5>
+                        <form method="POST">
+                            <input type="hidden" name="action" value="add_new_partner">
+                            <input type="hidden" name="primary_uid" value="<?php echo htmlspecialchars($member['userid']); ?>">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 15px;">
+                                <div>
+                                    <label style="color: #94a3b8; font-size: 12px; display: block; margin-bottom: 4px;">Partner Full Name *</label>
+                                    <input type="text" name="partner_name" class="form-control-custom" placeholder="e.g. Spouse / Partner Name" required style="width:100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 12px; border-radius: 8px;">
+                                </div>
+                                <div>
+                                    <label style="color: #94a3b8; font-size: 12px; display: block; margin-bottom: 4px;">Partner Mobile *</label>
+                                    <input type="number" name="partner_mobile" class="form-control-custom" placeholder="10-digit Mobile" required style="width:100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 12px; border-radius: 8px;">
+                                </div>
+                                <div>
+                                    <label style="color: #94a3b8; font-size: 12px; display: block; margin-bottom: 4px;">Gender *</label>
+                                    <select name="partner_gender" class="form-control-custom" required style="width:100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 12px; border-radius: 8px;">
+                                        <option value="Female">Female</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Transgender">Transgender</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="color: #94a3b8; font-size: 12px; display: block; margin-bottom: 4px;">Date of Birth</label>
+                                    <input type="date" name="partner_dob" class="form-control-custom" style="width:100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 12px; border-radius: 8px;">
+                                </div>
+                            </div>
+                            <button type="submit" class="a1-btn a1-green" style="padding: 9px 20px;">Create &amp; Link Partner Account</button>
+                        </form>
+                    </div>
+
+                    <!-- Form B: Link Existing Member -->
+                    <div id="form_ex_p" style="display: none; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 18px; border: 1px solid rgba(255,255,255,0.1);">
+                        <h5 style="color: #f59e0b; margin: 0 0 12px 0; font-weight: 700;">Link Existing Member ID</h5>
+                        <form method="POST" style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
+                            <input type="hidden" name="action" value="link_existing_partner">
+                            <input type="hidden" name="primary_uid" value="<?php echo htmlspecialchars($member['userid']); ?>">
+                            <div style="flex: 1; min-width: 220px;">
+                                <label style="color: #94a3b8; font-size: 12px; display: block; margin-bottom: 4px;">Partner Member ID or Mobile Number</label>
+                                <input type="text" name="existing_partner_uid" class="form-control-custom" placeholder="e.g. 204 or Mobile" required style="width:100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 12px; border-radius: 8px;">
+                            </div>
+                            <button type="submit" class="a1-btn a1-orange" style="padding: 9px 20px;">Link Member as Partner</button>
+                        </form>
+                    </div>
+                </div>
+
+                <script>
+                function showPForm(type) {
+                    if (type === 'new') {
+                        document.getElementById('form_new_p').style.display = 'block';
+                        document.getElementById('form_ex_p').style.display = 'none';
+                    } else {
+                        document.getElementById('form_new_p').style.display = 'none';
+                        document.getElementById('form_ex_p').style.display = 'block';
+                    }
+                }
+                </script>
                 <?php endif; ?>
 
                 <div class="info-grid">

@@ -261,9 +261,14 @@ if ($status === 'active') {
 							    
 							    $trainer_disp = !empty($row['trainer_name']) ? htmlspecialchars($row['trainer_name']) : '<span style="color:var(--text-muted);">None</span>';
 							    
+							    $couple_badge = '';
+							    if (!empty($row['partner_uid'])) {
+							        $couple_badge = ' <span style="font-size: 11px; background: rgba(255,107,0,0.15); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-weight: bold;">💑 Couple</span>';
+							    }
+							    
 							    echo "<tr><td>".$sno."</td>";
 							    echo "<td>" . htmlspecialchars($row['userid']) . "</td>";
-							    echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+							    echo "<td>" . htmlspecialchars($row['username']) . $couple_badge . "</td>";
 							    echo "<td>" . htmlspecialchars($row['mobile']) . " <a href='sip:+91".htmlspecialchars($row['mobile'])."' title='Call via BSNL VoIP Softphone' style='color: var(--accent-primary); text-decoration: none; margin-left: 5px; font-weight: bold;'><i class='entypo-phone'></i></a></td>";
 							    echo "<td>" . htmlspecialchars($row['email']) . "</td>";
 							    echo "<td>" . htmlspecialchars($row['gender']) . "</td>";
