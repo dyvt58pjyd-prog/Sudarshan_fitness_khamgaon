@@ -1,3 +1,10 @@
 RewriteEngine On
 
+<IfModule mod_headers.c>
+    <Files "assetlinks.json">
+        Header set Access-Control-Allow-Origin "*"
+        Header set Content-Type "application/json"
+    </Files>
+</IfModule>
+
 
