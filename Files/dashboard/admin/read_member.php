@@ -133,11 +133,24 @@ if (!empty($member['partner_uid'])) {
     if ($qp && mysqli_num_rows($qp) > 0) {
         $partner_data = mysqli_fetch_assoc($qp);
     }
-} else {
+}
+if (!$partner_data) {
     $m_id = $member['userid'];
     $qp = mysqli_query($con, "SELECT * FROM users WHERE partner_uid='$m_id'");
     if ($qp && mysqli_num_rows($qp) > 0) {
         $partner_data = mysqli_fetch_assoc($qp);
+    }
+}
+if (!$partner_data && !empty($member['mobile'])) {
+    $m_id = $member['userid'];
+    $m_mob = mysqli_real_escape_string($con, $member['mobile']);
+    $qp = mysqli_query($con, "SELECT * FROM users WHERE mobile='$m_mob' AND userid != '$m_id' LIMIT 1");
+    if ($qp && mysqli_num_rows($qp) > 0) {
+        $partner_data = mysqli_fetch_assoc($qp);
+        // Auto-heal database links
+        $p_id = $partner_data['userid'];
+        mysqli_query($con, "UPDATE users SET partner_uid = '$p_id' WHERE userid = '$m_id'");
+        mysqli_query($con, "UPDATE users SET partner_uid = '$m_id' WHERE userid = '$p_id'");
     }
 }
 

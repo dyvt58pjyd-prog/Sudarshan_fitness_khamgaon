@@ -29,6 +29,15 @@ if (mysqli_num_rows($q) > 0) {
             $u1 = mysqli_fetch_assoc($q1);
         }
     }
+    
+    if (!$u2 && $u1 && !empty($u1['mobile'])) {
+        $q_mob = mysqli_query($con, "SELECT * FROM users WHERE mobile='{$u1['mobile']}' AND userid != '{$u1['userid']}' LIMIT 1");
+        if ($q_mob && mysqli_num_rows($q_mob) > 0) {
+            $u2 = mysqli_fetch_assoc($q_mob);
+            mysqli_query($con, "UPDATE users SET partner_uid='{$u2['userid']}' WHERE userid='{$u1['userid']}'");
+            mysqli_query($con, "UPDATE users SET partner_uid='{$u1['userid']}' WHERE userid='{$u2['userid']}'");
+        }
+    }
 }
 
 if (!$u1 || !$u2) {

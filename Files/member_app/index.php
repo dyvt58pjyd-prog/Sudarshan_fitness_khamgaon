@@ -23,9 +23,14 @@ if (isset($_POST['login'])) {
         if (!empty($row['partner_uid'])) {
             $is_couple = true;
         } else {
-            $check_partner = mysqli_query($con, "SELECT userid FROM users WHERE partner_uid='{$row['userid']}'");
+            $check_partner = mysqli_query($con, "SELECT userid FROM users WHERE partner_uid='{$row['userid']}' OR (mobile='{$row['mobile']}' AND userid!='{$row['userid']}' AND mobile!='')");
             if ($check_partner && mysqli_num_rows($check_partner) > 0) {
                 $is_couple = true;
+                $p_row = mysqli_fetch_assoc($check_partner);
+                $p_id = $p_row['userid'];
+                $m_id = $row['userid'];
+                mysqli_query($con, "UPDATE users SET partner_uid='$p_id' WHERE userid='$m_id'");
+                mysqli_query($con, "UPDATE users SET partner_uid='$m_id' WHERE userid='$p_id'");
             }
         }
         
