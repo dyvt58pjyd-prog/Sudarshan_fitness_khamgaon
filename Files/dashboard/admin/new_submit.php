@@ -112,6 +112,9 @@ $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,t
           $q_partner = "INSERT INTO users (username, gender, mobile, dob, joining_date, userid, partner_uid, biometric_id, biometric_enabled, fitness_goal, biometric_batch) 
                         VALUES ('$p_name', '$p_gender', '$p_mobile', '$p_dob', '$jdate', '$partner_uid', '$memID', '$partner_uid', 1, '$fitness_goal', '$biometric_batch')";
           mysqli_query($con, $q_partner);
+          
+          // Bi-directionally link Primary User to Partner User
+          mysqli_query($con, "UPDATE users SET partner_uid = '$partner_uid' WHERE userid = '$memID'");
       }
 
       //Retrieve information of plan selected by user

@@ -320,6 +320,9 @@ if (!$con) {
     // Self-healing database check: fix legacy overpayment glitches in enrolls_to
     mysqli_query($con, "UPDATE enrolls_to e INNER JOIN plan p ON e.pid = p.pid SET e.paid_amount = (p.amount - IFNULL(e.discount_amount, 0)) WHERE e.paid_amount > (p.amount - IFNULL(e.discount_amount, 0))");
 
+    // Self-healing database check: bi-directionally link couple partner_uids
+    mysqli_query($con, "UPDATE users u1 JOIN users u2 ON u1.userid = u2.partner_uid SET u1.partner_uid = u2.userid WHERE (u1.partner_uid IS NULL OR u1.partner_uid = '')");
+
     // Self-healing database check: ensure balance_collections ledger table exists
     mysqli_query($con, "CREATE TABLE IF NOT EXISTS balance_collections (
         id INT AUTO_INCREMENT PRIMARY KEY,

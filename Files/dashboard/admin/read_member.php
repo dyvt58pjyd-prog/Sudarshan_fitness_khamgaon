@@ -25,6 +25,22 @@ if (!$result || mysqli_num_rows($result) === 0) {
 
 $member = mysqli_fetch_assoc($result);
 
+// Fetch Couple Partner Data if linked
+$partner_data = null;
+if (!empty($member['partner_uid'])) {
+    $p_id = $member['partner_uid'];
+    $qp = mysqli_query($con, "SELECT * FROM users WHERE userid='$p_id'");
+    if ($qp && mysqli_num_rows($qp) > 0) {
+        $partner_data = mysqli_fetch_assoc($qp);
+    }
+} else {
+    $m_id = $member['userid'];
+    $qp = mysqli_query($con, "SELECT * FROM users WHERE partner_uid='$m_id'");
+    if ($qp && mysqli_num_rows($qp) > 0) {
+        $partner_data = mysqli_fetch_assoc($qp);
+    }
+}
+
 // Fetch assigned routine / workout package
 $routine = null;
 if (!empty($member['tid'])) {
@@ -248,6 +264,19 @@ $gym = get_gym_details($con);
                         <span class="status-badge <?php echo $status_class; ?>"><?php echo $status_label; ?></span>
                     </div>
                 </div>
+
+                <?php if ($partner_data): ?>
+                <div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(255, 107, 0, 0.05)); border: 1px dashed #ff6b00; border-radius: 16px; padding: 15px 20px; margin-top: 20px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span style="font-size: 32px;">💑</span>
+                        <div>
+                            <h4 style="margin: 0 0 3px 0; color: #ff6b00; font-weight: 800; font-size: 15px;">Couple Plan Partner Linked</h4>
+                            <span style="color: #cbd5e1; font-size: 13.5px;">Partner Name: <strong style="color: #fff;"><?php echo htmlspecialchars($partner_data['username']); ?></strong> (ID: <strong style="color: #38bdf8;"><?php echo htmlspecialchars($partner_data['userid']); ?></strong>)</span>
+                        </div>
+                    </div>
+                    <a href="read_member.php?id=<?php echo $partner_data['userid']; ?>" class="a1-btn a1-blue" style="font-size: 12px; padding: 7px 15px; text-decoration: none; border-radius: 8px;">View Partner Profile &rarr;</a>
+                </div>
+                <?php endif; ?>
 
                 <div class="info-grid">
                     <!-- Column 1: Personal & Contact Information -->

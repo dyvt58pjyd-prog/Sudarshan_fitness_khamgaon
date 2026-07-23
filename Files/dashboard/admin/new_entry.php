@@ -302,7 +302,7 @@ if ($cnt_q) {
              </tr>
              <tr>
                 <td height="35">PLAN:</td>
-                <td height="35"><select name="plan" id="plan_select" required onchange="myplandetail(this.value); validateDiscount()">
+                <td height="35"><select name="plan" id="plan_select" required onchange="myplandetail(this.value); validateDiscount(); checkCoupleAutoSelect();">
 					<option value="">--Please Select--</option>
 					<?php
 						$query="select * from plan where active='yes'";
@@ -469,6 +469,18 @@ if ($cnt_q) {
                          document.getElementById('partner_gender').required = false;
                          document.getElementById('partner_dob').required = false;
                      }
+                 }
+
+                 function checkCoupleAutoSelect() {
+                      var select = document.getElementById('plan_select');
+                      if (select && select.selectedIndex >= 0) {
+                          var text = select.options[select.selectedIndex].text.toLowerCase();
+                          var isCoupleCheckbox = document.getElementById('is_couple');
+                          if (text.indexOf('couple') !== -1) {
+                              isCoupleCheckbox.checked = true;
+                              toggleCoupleFields();
+                          }
+                      }
                  }
              </script>
              

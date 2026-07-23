@@ -13,6 +13,22 @@ $uid = $_SESSION['member_uid'];
 $q = mysqli_query($con, "SELECT * FROM users WHERE userid='$uid'");
 $user = mysqli_fetch_assoc($q);
 
+// Fetch Partner details if couple account
+$partner_user = null;
+if (!empty($user['partner_uid'])) {
+    $p_id = $user['partner_uid'];
+    $qp = mysqli_query($con, "SELECT * FROM users WHERE userid='$p_id'");
+    if ($qp && mysqli_num_rows($qp) > 0) {
+        $partner_user = mysqli_fetch_assoc($qp);
+    }
+} else {
+    $m_id = $user['userid'];
+    $qp = mysqli_query($con, "SELECT * FROM users WHERE partner_uid='$m_id'");
+    if ($qp && mysqli_num_rows($qp) > 0) {
+        $partner_user = mysqli_fetch_assoc($qp);
+    }
+}
+
 // Fetch active plan & payments
 $q_plan = mysqli_query($con, "SELECT p.planName, e.expire, e.paid_date, e.paid FROM enrolls_to e INNER JOIN plan p ON e.pid = p.pid WHERE e.uid='$uid' AND e.renewal='yes' ORDER BY e.expire DESC LIMIT 5");
 $plan_name = "No Active Plan";
@@ -101,6 +117,23 @@ if (mysqli_num_rows($q_att) > 0) {
     </div>
 
     <div class="content">
+        <?php if ($partner_user): ?>
+        <div class="card" style="border-color: rgba(255, 107, 0, 0.4); background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(30, 41, 59, 0.8) 100%);">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <div>
+                    <div style="color: #ff6b00; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">✨ Couple Account Linked</div>
+                    <div style="font-size: 18px; font-weight: 800; color: #fff; margin-top: 4px;"><?php echo htmlspecialchars($partner_user['username']); ?></div>
+                    <div style="font-size: 12px; color: #94a3b8;">Partner ID: <?php echo htmlspecialchars($partner_user['userid']); ?></div>
+                </div>
+                <form method="POST" action="profile_switch.php" style="margin: 0;">
+                    <input type="hidden" name="switch_uid" value="<?php echo $partner_user['userid']; ?>">
+                    <input type="hidden" name="switch_name" value="<?php echo htmlspecialchars($partner_user['username']); ?>">
+                    <button type="submit" style="background: linear-gradient(135deg, #ff6b00, #ff8800); color: #fff; border: none; padding: 10px 16px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(255,107,0,0.3);">Switch Profile 🔁</button>
+                </form>
+            </div>
+        </div>
+        <?php endif; ?>
+
         <div class="card">
             <div class="card-title">Membership Status</div>
             <div class="card-value"><?php echo htmlspecialchars($plan_name); ?></div>

@@ -32,6 +32,9 @@ if (isset($_POST['add_partner'])) {
         $p_pass = '1234';
         mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('$partner_uid', '$p_pass', 'member', '$p_name', 'member')");
         
+        // Bi-directionally link Primary User to Partner User
+        mysqli_query($con, "UPDATE users SET partner_uid = '$partner_uid' WHERE userid = '$primary_uid'");
+        
         $msg = "Successfully added partner and linked them to $primary_uid!";
     }
 }
