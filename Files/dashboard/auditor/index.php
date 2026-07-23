@@ -96,10 +96,24 @@ function get_collection($con, $date) {
         }
     }
     
+    // Gym Expenses on this date
+    $q_exp = "SELECT SUM(amount) as total_exp FROM expenses WHERE expense_date = '$date'";
+    $res_exp = mysqli_query($con, $q_exp);
+    $exp_amt = 0;
+    if ($res_exp && mysqli_num_rows($res_exp) > 0) {
+        $exp_row = mysqli_fetch_assoc($res_exp);
+        $exp_amt = intval($exp_row['total_exp']);
+    }
+
+    $gross_total = $cash + $upi;
+    $net_total = $gross_total - $exp_amt;
+    
     return [
         'cash' => $cash, 
         'upi' => $upi, 
-        'total' => $cash + $upi,
+        'total' => $gross_total,
+        'expenses' => $exp_amt,
+        'net_total' => $net_total,
         'membership' => $mem_amt,
         'balance' => $bal_amt,
         'pt' => $pt_amt,
@@ -180,23 +194,33 @@ $yesterday_data = get_collection($con, $yesterday);
                     </div>
                 </div>
 
-                <!-- Today's Inventory / Store Sales -->
-                <div class="stat-card" style="flex: 1; min-width: 250px; border-bottom: 4px solid #10b981; box-shadow: inset 0 -15px 30px -20px rgba(16,185,129,0.5);">
-                    <h3>Today's Inventory Store Sales</h3>
-                    <h2 style="color: #10b981;">₹<?php echo number_format($today_data['inventory']); ?></h2>
+                <!-- Today's Gym Expenses -->
+                <div class="stat-card" style="flex: 1; min-width: 250px; border-bottom: 4px solid #ef4444; box-shadow: inset 0 -15px 30px -20px rgba(239,68,68,0.5);">
+                    <h3>Today's Gym Expenses</h3>
+                    <h2 style="color: #ef4444;">₹<?php echo number_format($today_data['expenses']); ?></h2>
                     <div class="stat-details">
-                        <span>Supplements &amp; Accessories Sold Today</span>
-                        <a href="inventory_audit.php" style="color: #10b981; font-weight: bold; text-decoration: underline;">View Stock</a>
+                        <span>Outgoings, Bills &amp; Restock</span>
+                        <a href="expenses_audit.php" style="color: #ef4444; font-weight: bold; text-decoration: underline;">Audit Expenses</a>
                     </div>
                 </div>
-                
+
+                <!-- Today's Net Collection / Profit -->
+                <div class="stat-card" style="flex: 1; min-width: 250px; border-bottom: 4px solid #f59e0b; box-shadow: inset 0 -15px 30px -20px rgba(245,158,11,0.5);">
+                    <h3>Today's Net Collection</h3>
+                    <h2 style="color: #f59e0b;">₹<?php echo number_format($today_data['net_total']); ?></h2>
+                    <div class="stat-details">
+                        <span>Gross Income - Outgoings</span>
+                        <span style="color: #cbd5e1; font-size: 11px;">Collection After Expenses</span>
+                    </div>
+                </div>
+
                 <!-- Yesterday's Collection -->
                 <div class="stat-card tile-gray" style="flex: 1; min-width: 250px;">
                     <h3>Yesterday's Total Collection</h3>
                     <h2>₹<?php echo number_format($yesterday_data['total']); ?></h2>
                     <div class="stat-details">
-                        <span>Cash: <span class="cash">₹<?php echo number_format($yesterday_data['cash']); ?></span></span>
-                        <span>UPI: <span class="upi">₹<?php echo number_format($yesterday_data['upi']); ?></span></span>
+                        <span>Expenses: <span style="color: #ef4444; font-weight: 800;">₹<?php echo number_format($yesterday_data['expenses']); ?></span></span>
+                        <span>Net: <span style="color: #f59e0b; font-weight: 800;">₹<?php echo number_format($yesterday_data['net_total']); ?></span></span>
                     </div>
                 </div>
 
@@ -215,7 +239,7 @@ $yesterday_data = get_collection($con, $yesterday);
             <!-- Today's Category Revenue Breakdown -->
             <div class="nav-card" style="margin-top: 25px;">
                 <h3 style="margin-top: 0; font-weight: 800; font-size: 18px; color: #ff6b00; display: flex; align-items: center; gap: 8px;">
-                    <i class="entypo-chart-pie"></i> Today's Income Category Breakdown
+                    <i class="entypo-chart-pie"></i> Today's Financial Summary Breakdown
                 </h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
                     <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 15px;">
@@ -233,6 +257,14 @@ $yesterday_data = get_collection($con, $yesterday);
                     <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 15px; background: rgba(16,185,129,0.05);">
                         <span style="font-size: 12px; color: #10b981; text-transform: uppercase; font-weight: bold;">🛒 Inventory Store Sales</span>
                         <h3 style="margin: 8px 0 0 0; color: #10b981; font-size: 24px; font-weight: 800;">₹<?php echo number_format($today_data['inventory']); ?></h3>
+                    </div>
+                    <div style="background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.3); border-radius: 12px; padding: 15px;">
+                        <span style="font-size: 12px; color: #ef4444; text-transform: uppercase; font-weight: bold;">💸 Today's Outgoings &amp; Expenses</span>
+                        <h3 style="margin: 8px 0 0 0; color: #ef4444; font-size: 24px; font-weight: 800;">₹<?php echo number_format($today_data['expenses']); ?></h3>
+                    </div>
+                    <div style="background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.4); border-radius: 12px; padding: 15px;">
+                        <span style="font-size: 12px; color: #f59e0b; text-transform: uppercase; font-weight: bold;">💰 Net Collection (Profit)</span>
+                        <h3 style="margin: 8px 0 0 0; color: #f59e0b; font-size: 24px; font-weight: 800;">₹<?php echo number_format($today_data['net_total']); ?></h3>
                     </div>
                 </div>
             </div>

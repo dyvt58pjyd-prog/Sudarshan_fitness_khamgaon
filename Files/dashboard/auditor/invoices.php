@@ -149,6 +149,26 @@ foreach ($invoices as &$inv) {
 }
 unset($inv);
 
+// Calculate total expenses for the selected filter / date range
+$exp_where = ["YEAR(expense_date) = $working_year"];
+if (!empty($search)) {
+    $exp_where[] = "(expense_name LIKE '%$search%' OR category LIKE '%$search%')";
+}
+if (!empty($start_date)) {
+    $exp_where[] = "expense_date >= '$start_date'";
+}
+if (!empty($end_date)) {
+    $exp_where[] = "expense_date <= '$end_date'";
+}
+$exp_sql = "SELECT SUM(amount) AS total_exp FROM expenses WHERE " . implode(" AND ", $exp_where);
+$res_exp_tot = mysqli_query($con, $exp_sql);
+$total_expenses = 0;
+if ($res_exp_tot && mysqli_num_rows($res_exp_tot) > 0) {
+    $r_exp = mysqli_fetch_assoc($res_exp_tot);
+    $total_expenses = intval($r_exp['total_exp']);
+}
+$net_collection = $total_revenue - $total_expenses;
+
 // Sort the combined array by paid_date DESC, then et_id DESC
 usort($invoices, function($a, $b) {
     if ($a['paid_date'] === $b['paid_date']) {
@@ -355,13 +375,24 @@ usort($invoices, function($a, $b) {
                     <i class="entypo-doc-text" style="color: var(--accent-primary);"></i> Captured Payments &amp; Receipts
                 </h3>
                 
-                <div class="summary-banner">
+                <div class="summary-banner" style="flex-wrap: wrap; gap: 20px;">
                     <div>
-                        <h5 class="summary-title">Total Revenue in View</h5>
-                        <p class="summary-val">₹<?php echo number_format($total_revenue); ?></p>
+                        <h5 class="summary-title">Total Gross Income</h5>
+                        <p class="summary-val" style="color: #ff6b00;">₹<?php echo number_format($total_revenue); ?></p>
                     </div>
                     <div>
-                        <a href="export_payments.php" class="btn btn-default" style="margin: 0; display: inline-flex; align-items: center; gap: 5px;">
+                        <h5 class="summary-title">Total Gym Expenses</h5>
+                        <p class="summary-val" style="color: #ef4444; text-shadow: 0 0 10px rgba(239,68,68,0.3);">
+                            ₹<?php echo number_format($total_expenses); ?>
+                            <a href="expenses_audit.php" style="font-size: 11px; font-weight: normal; color: #ef4444; text-decoration: underline; margin-left: 5px;">[Audit]</a>
+                        </p>
+                    </div>
+                    <div>
+                        <h5 class="summary-title">Net Collection (Profit)</h5>
+                        <p class="summary-val" style="color: #10b981; text-shadow: 0 0 10px rgba(16,185,129,0.3);">₹<?php echo number_format($net_collection); ?></p>
+                    </div>
+                    <div>
+                        <a href="export_payments.php" class="btn btn-default" style="margin: 0; display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.15);">
                             <i class="entypo-export"></i> Export to Excel
                         </a>
                     </div>

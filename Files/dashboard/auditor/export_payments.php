@@ -200,12 +200,31 @@ usort($invoices, function($a, $b) {
       <td style="text-align: center; text-transform: uppercase;"><?php echo htmlspecialchars($inv['payment_mode']); ?></td>
       <td><?php echo htmlspecialchars($inv['received_by']); ?></td>
     </tr>
-    <?php endforeach; ?>
+    <?php endforeach; 
+    // Calculate total expenses for working year
+    $tot_exp_q = mysqli_query($con, "SELECT SUM(amount) AS total_exp FROM expenses WHERE YEAR(expense_date) = $working_year");
+    $tot_expenses = 0;
+    if ($tot_exp_q && mysqli_num_rows($tot_exp_q) > 0) {
+        $r_exp = mysqli_fetch_assoc($tot_exp_q);
+        $tot_expenses = intval($r_exp['total_exp']);
+    }
+    $net_profit = $tot_paid - $tot_expenses;
+    ?>
     <tr class="total-row">
-      <td colspan="6" style="text-align: right; font-weight: bold;">GRAND TOTALS:</td>
+      <td colspan="6" style="text-align: right; font-weight: bold;">TOTAL GROSS COLLECTION:</td>
       <td style="text-align: right; color: #555555;">₹<?php echo number_format($tot_price); ?></td>
       <td style="text-align: right; color: #ef4444;">₹<?php echo number_format($tot_disc); ?></td>
       <td style="text-align: right; color: #10b981; font-weight: bold;">₹<?php echo number_format($tot_paid); ?></td>
+      <td colspan="2"></td>
+    </tr>
+    <tr class="total-row" style="background-color: #fee2e2;">
+      <td colspan="8" style="text-align: right; font-weight: bold; color: #dc2626;">LESS TOTAL GYM EXPENSES &amp; OUTGOINGS:</td>
+      <td style="text-align: right; color: #dc2626; font-weight: bold;">- ₹<?php echo number_format($tot_expenses); ?></td>
+      <td colspan="2"></td>
+    </tr>
+    <tr class="total-row" style="background-color: #d1fae5;">
+      <td colspan="8" style="text-align: right; font-weight: bold; color: #059669;">NET GYM PROFIT / COLLECTION:</td>
+      <td style="text-align: right; color: #059669; font-weight: bold;">₹<?php echo number_format($net_profit); ?></td>
       <td colspan="2"></td>
     </tr>
   </tbody>
