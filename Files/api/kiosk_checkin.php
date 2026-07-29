@@ -61,14 +61,26 @@ $sub = mysqli_fetch_assoc($q_sub);
 $expire_date = $sub['expire'];
 $plan_name = $sub['planName'];
 
+$expire_timestamp = strtotime($expire_date);
+$today_timestamp = strtotime($today_str);
+$days_left = floor(($expire_timestamp - $today_timestamp) / 86400);
+
 if ($expire_date < $today_str) {
     http_response_code(403);
     echo json_encode([
         'success' => false,
-        'message' => 'Access Denied: Membership expired on ' . date('d-M-Y', strtotime($expire_date)) . '. Please renew!'
+        'expired' => true,
+        'name' => $name,
+        'uid' => $uid,
+        'plan' => $plan_name,
+        'expiry' => date('d-M-Y', $expire_timestamp),
+        'days_expired' => abs($days_left),
+        'message' => 'Access Denied: Membership for ' . htmlspecialchars($name) . ' expired on ' . date('d-M-Y', $expire_timestamp) . ' (' . abs($days_left) . ' days ago). Please renew!'
     ]);
     exit();
 }
+
+$expiry_status = ($days_left <= 7) ? 'EXPIRING_SOON' : 'ACTIVE';
 
 // Log attendance check-in/out
 $log_time = date('H:i:s');
@@ -106,6 +118,8 @@ if ($q_att && mysqli_num_rows($q_att) > 0) {
                 'uid' => $uid,
                 'plan' => $plan_name,
                 'expiry' => date('d-M-Y', strtotime($expire_date)),
+                'days_left' => $days_left,
+                'expiry_status' => $expiry_status,
                 'streak' => $streak,
                 'time' => date('h:i A', strtotime($log_time)),
                 'message' => 'Goodbye, ' . htmlspecialchars($name) . '! Check-out logged successfully.'
@@ -129,6 +143,8 @@ if ($q_att && mysqli_num_rows($q_att) > 0) {
             'uid' => $uid,
             'plan' => $plan_name,
             'expiry' => date('d-M-Y', strtotime($expire_date)),
+            'days_left' => $days_left,
+            'expiry_status' => $expiry_status,
             'streak' => $streak,
             'time' => date('h:i A', strtotime($att_row['entry_time'])),
             'message' => htmlspecialchars($name) . ' has already checked in and out today.'
@@ -172,6 +188,8 @@ if ($q_att && mysqli_num_rows($q_att) > 0) {
             'uid' => $uid,
             'plan' => $plan_name,
             'expiry' => date('d-M-Y', strtotime($expire_date)),
+            'days_left' => $days_left,
+            'expiry_status' => $expiry_status,
             'streak' => $streak,
             'xp_earned' => 50,
             'new_rank' => $xp_data ? $xp_data['new_rank'] : 'Beginner',

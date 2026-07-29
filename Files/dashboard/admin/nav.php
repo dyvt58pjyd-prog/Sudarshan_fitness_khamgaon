@@ -169,6 +169,7 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
 
     <!-- 4. ATTENDANCE & ACCESS -->
     <li id="attendance_portal"><a href="attendance.php"><i class="entypo-camera"></i><span>Attendance Portal</span></a></li>
+    <li id="qr_gate_link"><a href="../../qr_checkin.php" target="_blank"><i class="entypo-vcard"></i><span>📷 QR Gate Terminal</span></a></li>
     <li id="kiosk_link"><a href="kiosk.php" target="_blank"><i class="entypo-monitor"></i><span>Front Desk Kiosk</span></a></li>
     <li id="biometric_manage"><a href="biometric_management.php"><i class="entypo-key"></i><span>Biometric Management</span></a></li>
     <?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>

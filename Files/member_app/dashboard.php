@@ -326,6 +326,21 @@ if ($partner_user) {
             </div>
         </div>
 
+        <!-- ENTRANCE QR PASS CARD -->
+        <div class="card" style="text-align: center; border: 1px dashed rgba(255,107,0,0.4); background: linear-gradient(135deg, rgba(255, 107, 0, 0.08) 0%, rgba(30, 41, 59, 0.9) 100%);">
+            <div class="card-title" style="color: #ff6b00; margin-bottom: 5px;">📷 Gym Entrance Digital QR Pass</div>
+            <p style="font-size: 11px; color: #94a3b8; margin-bottom: 15px;">Show this QR code to the entrance gate scanner to check in / out</p>
+            <div style="background: #fff; padding: 15px; border-radius: 16px; display: inline-block; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+                <canvas id="qrcode-canvas"></canvas>
+            </div>
+            <div style="font-size: 13px; font-weight: 800; color: #fff; margin-top: 10px; text-transform: uppercase;">
+                <?php echo htmlspecialchars($user['username']); ?> (ID: <?php echo htmlspecialchars($user['userid']); ?>)
+            </div>
+            <div style="font-size: 11px; font-weight: 700; color: <?php echo (strtolower($user['gender']) == 'female') ? '#ec4899' : '#38bdf8'; ?>; margin-top: 2px;">
+                Membership Valid Until: <?php echo htmlspecialchars($expire_date); ?>
+            </div>
+        </div>
+
         <div class="card">
             <div class="card-title">Today's Attendance</div>
             <div class="card-value" style="font-size: 18px; color: #38bdf8;"><?php echo htmlspecialchars($att_status); ?></div>
