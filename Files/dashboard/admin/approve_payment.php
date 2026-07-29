@@ -154,6 +154,7 @@ if ($is_new_reg == 1 && $userid === 'PENDING') {
         // Send Welcome Email
         require_once '../../include/smtp_mailer.php';
         send_member_email($con, $email, $uname, $next_id, $password, $planName, $amount, $expiredate, $entry_code, $discount_amt, $amount, $gender);
+        send_member_qr_pass_email($con, $email, $uname, $next_id, $planName, $expiredate);
         
         // Send WhatsApp Welcome Message
         require_once '../../include/whatsapp_api.php';

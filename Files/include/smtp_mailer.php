@@ -236,4 +236,97 @@ if (!function_exists('send_smtp_email')) {
         return $success;
     }
 }
+
+if (!function_exists('send_member_qr_pass_email')) {
+    function send_member_qr_pass_email($con, $to_email, $to_name, $userid, $plan_name = 'Active Subscription', $expire_date = 'N/A') {
+        if (empty($to_email) || strpos($to_email, '@sudarshanfitness.local') !== false) {
+            return false;
+        }
+
+        $gym = get_gym_details($con);
+        $gym_name = !empty($gym['gym_name']) ? $gym['gym_name'] : 'Sudarshan Fitness Khamgaon';
+        $logo_url = !empty($gym['gym_logo']) ? $gym['gym_logo'] : 'https://sudarshanfitness.de/logo192.png';
+        
+        $qr_image_url = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=" . urlencode($userid);
+        $expire_fmt = ($expire_date !== 'N/A' && !empty($expire_date)) ? date('d-M-Y', strtotime($expire_date)) : 'Active';
+
+        $subject = "📷 Your Official Gym Entrance QR Pass - {$gym_name} (ID: {$userid})";
+
+        $html_body = "
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset='utf-8'>
+            <style>
+                body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #0b0f19; margin: 0; padding: 20px; color: #ffffff; }
+                .card { max-width: 550px; margin: 0 auto; background: #1e293b; border-radius: 20px; border: 2px solid #ff6b00; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+                .header { background: linear-gradient(135deg, #0f172a, #1e293b); padding: 25px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+                .logo { max-height: 50px; margin-bottom: 10px; }
+                .title { color: #ff6b00; font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin: 0; }
+                .subtitle { color: #94a3b8; font-size: 12px; margin-top: 4px; }
+                .body-content { padding: 30px; text-align: center; }
+                .greeting { font-size: 18px; font-weight: 700; color: #ffffff; margin-bottom: 15px; }
+                .instructions { font-size: 13px; color: #cbd5e1; line-height: 1.6; margin-bottom: 25px; }
+                .qr-container { background: #ffffff; padding: 20px; border-radius: 16px; display: inline-block; box-shadow: 0 10px 25px rgba(0,0,0,0.4); margin-bottom: 20px; }
+                .qr-image { width: 220px; height: 220px; display: block; margin: 0 auto; }
+                .member-details { background: rgba(0,0,0,0.3); border-radius: 14px; padding: 15px; margin-top: 15px; border: 1px solid rgba(255,255,255,0.08); text-align: left; }
+                .detail-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; }
+                .detail-row:last-child { border-bottom: none; }
+                .detail-label { color: #94a3b8; font-weight: 600; }
+                .detail-val { color: #ffffff; font-weight: 700; }
+                .footer { background: #0f172a; padding: 20px; text-align: center; font-size: 11px; color: #64748b; border-top: 1px solid rgba(255,255,255,0.05); }
+                .btn { display: inline-block; background: linear-gradient(135deg, #ff6b00, #ff8800); color: #ffffff; text-decoration: none; padding: 12px 25px; border-radius: 12px; font-weight: 800; font-size: 13px; margin-top: 15px; box-shadow: 0 4px 15px rgba(255,107,0,0.4); }
+            </style>
+        </head>
+        <body>
+            <div class='card'>
+                <div class='header'>
+                    <img src='{$logo_url}' class='logo' alt='{$gym_name}'><br>
+                    <div class='title'>📷 DIGITAL ENTRANCE QR PASS</div>
+                    <div class='subtitle'>Official Member Gate Access Pass</div>
+                </div>
+                <div class='body-content'>
+                    <div class='greeting'>Hello, " . htmlspecialchars($to_name) . "! 👋</div>
+                    <div class='instructions'>
+                        Below is your official <strong>Sudarshan Fitness Entrance QR Pass</strong>. You can save this email, download the QR code image, or take a screenshot to scan at the gym entrance terminal for daily sub-second check-in and check-out.
+                    </div>
+                    
+                    <div class='qr-container'>
+                        <img src='{$qr_image_url}' class='qr-image' alt='Member QR Code'>
+                        <div style='color: #0f172a; font-weight: 800; font-size: 12px; margin-top: 8px; text-transform: uppercase;'>{$gym_name}</div>
+                    </div>
+
+                    <div class='member-details'>
+                        <div class='detail-row'>
+                            <span class='detail-label'>Member Name</span>
+                            <span class='detail-val'>" . htmlspecialchars($to_name) . "</span>
+                        </div>
+                        <div class='detail-row'>
+                            <span class='detail-label'>Membership ID</span>
+                            <span class='detail-val' style='color: #38bdf8;'>" . htmlspecialchars($userid) . "</span>
+                        </div>
+                        <div class='detail-row'>
+                            <span class='detail-label'>Active Plan</span>
+                            <span class='detail-val'>" . htmlspecialchars($plan_name) . "</span>
+                        </div>
+                        <div class='detail-row'>
+                            <span class='detail-label'>Plan Expiration Date</span>
+                            <span class='detail-val' style='color: #10b981;'>{$expire_fmt}</span>
+                        </div>
+                    </div>
+
+                    <a href='https://sudarshanfitness.de/qr_checkin.php' class='btn'>🚀 Open Live QR Scanner Terminal</a>
+                </div>
+                <div class='footer'>
+                    This email contains your personal entrance QR pass for {$gym_name}. Please do not share this QR pass with non-members.<br>
+                    Engineered by <strong>Anurag Bawaskar</strong> | Sudarshan Fitness System
+                </div>
+            </div>
+        </body>
+        </html>
+        ";
+
+        return send_smtp_email($to_email, $to_name, $subject, $html_body);
+    }
+}
 ?>
