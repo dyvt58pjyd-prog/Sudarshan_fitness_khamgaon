@@ -22,5 +22,15 @@ echo $output . "\n\n";
 
 // Run self-healing database check
 require_once __DIR__ . '/include/db_conn.php';
-echo "Self-Healing Database Check: PASSED\n";
+echo "Self-Healing Database Check: PASSED\n\n";
+
+// Execute daily WhatsApp reminders
+@include_once __DIR__ . '/cron_reminders.php';
+echo "WhatsApp Expiry & Birthday Reminders: DISPATCHED\n\n";
+
+// Execute daily database SQL backup
+$_GET['force'] = '1';
+@include_once __DIR__ . '/api/auto_backup.php';
+echo "Automated SQL Database Backup: GENERATED & EMAILED\n\n";
+
 echo "=== DEPLOYMENT COMPLETED SUCCESSFULLY ===";

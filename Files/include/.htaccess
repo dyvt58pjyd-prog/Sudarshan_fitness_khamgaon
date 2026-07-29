@@ -1,0 +1,5 @@
+# Block direct browser access to sensitive log, json, sql and text files in include directory
+<FilesMatch "\.(txt|log|json|sql|bak|config)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
