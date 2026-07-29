@@ -2,42 +2,53 @@
 require '../../include/db_conn.php';
 page_protect();
 
- $memID=$_POST['m_id'];
- $uname=$_POST['u_name'];
- $stname=$_POST['street_name'];
- $city=$_POST['city'];
- $zipcode=$_POST['zipcode'];
- $state=$_POST['state'];
- $gender=$_POST['gender'];
- $dob=$_POST['dob'];
- $phn=$_POST['mobile'];
- $email=$_POST['email'];
- $jdate=$_POST['jdate'];
- $plan=$_POST['plan'];
- // Check for duplicates
- $memID = mysqli_real_escape_string($con, $memID);
- $email = mysqli_real_escape_string($con, $email);
+ $memID = isset($_POST['m_id']) ? mysqli_real_escape_string($con, trim($_POST['m_id'])) : '';
+ $uname = mysqli_real_escape_string($con, trim($_POST['u_name']));
+ $stname = mysqli_real_escape_string($con, trim($_POST['street_name']));
+ $city = mysqli_real_escape_string($con, trim($_POST['city']));
+ $zipcode = mysqli_real_escape_string($con, trim($_POST['zipcode']));
+ $state = mysqli_real_escape_string($con, trim($_POST['state']));
+ $gender = mysqli_real_escape_string($con, trim($_POST['gender']));
+ $dob = mysqli_real_escape_string($con, trim($_POST['dob']));
+ $phn = mysqli_real_escape_string($con, trim($_POST['mobile']));
+ $email = mysqli_real_escape_string($con, trim($_POST['email']));
+ $jdate = mysqli_real_escape_string($con, trim($_POST['jdate']));
+ $plan = mysqli_real_escape_string($con, trim($_POST['plan']));
 
- $chk_uid = mysqli_query($con, "SELECT userid FROM users WHERE userid = '$memID'");
- if ($chk_uid && mysqli_num_rows($chk_uid) > 0) {
-     echo "<head><script>alert('Duplicate Entry: Membership ID $memID is already registered!');</script></head></html>";
-     echo "<meta http-equiv='refresh' content='0; url=new_entry.php'>";
-     exit();
- }
+ // Self-Healing Auto-Assignment: If $memID is empty or already registered concurrently by another staff user, calculate next available ID automatically
+ function get_next_free_userid($con, $requested_id) {
+     $id = intval($requested_id);
+     if ($id < 101) {
+         $id = 101;
+     }
 
- // Check if ID exists in admin table (potential staff conflict or orphaned member record)
- $chk_admin = mysqli_query($con, "SELECT username, role FROM admin WHERE username = '$memID'");
- if ($chk_admin && mysqli_num_rows($chk_admin) > 0) {
-     $admin_row = mysqli_fetch_assoc($chk_admin);
-     if ($admin_row['role'] !== 'member') {
-         echo "<head><script>alert('Error: Membership ID $memID is reserved for staff/administration!');</script></head></html>";
-         echo "<meta http-equiv='refresh' content='0; url=new_entry.php'>";
-         exit();
-     } else {
-         // Orphaned member credentials from a previous incomplete deletion. Self-heal and clean it up.
-         mysqli_query($con, "DELETE FROM admin WHERE username = '$memID' AND role = 'member'");
+     while (true) {
+         $id_str = strval($id);
+         $chk_u = mysqli_query($con, "SELECT userid FROM users WHERE userid = '$id_str'");
+         $chk_a = mysqli_query($con, "SELECT username, role FROM admin WHERE username = '$id_str'");
+         
+         $u_exists = ($chk_u && mysqli_num_rows($chk_u) > 0);
+         $a_exists = false;
+         
+         if ($chk_a && mysqli_num_rows($chk_a) > 0) {
+             $a_row = mysqli_fetch_assoc($chk_a);
+             if ($a_row['role'] !== 'member') {
+                 $a_exists = true; // Staff reserved ID
+             } else {
+                 // Orphaned member auth record - clean it up
+                 mysqli_query($con, "DELETE FROM admin WHERE username = '$id_str' AND role = 'member'");
+             }
+         }
+         
+         if ($u_exists || $a_exists) {
+             $id++;
+         } else {
+             return strval($id);
+         }
      }
  }
+
+ $memID = get_next_free_userid($con, $memID);
 
  $chk_email = mysqli_query($con, "SELECT email FROM users WHERE email = '$email'");
  if ($chk_email && mysqli_num_rows($chk_email) > 0) {
@@ -121,13 +132,7 @@ $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,t
           $p_mobile = isset($_POST['partner_mobile']) && !empty($_POST['partner_mobile']) ? mysqli_real_escape_string($con, trim($_POST['partner_mobile'])) : $phn;
           
           // Generate unique partner ID
-          $res_p_max = mysqli_query($con, "SELECT MAX(CAST(userid AS UNSIGNED)) as maxid FROM users WHERE userid REGEXP '^[0-9]+$' AND CAST(userid AS UNSIGNED) < 100000000");
-          $p_max_row = mysqli_fetch_assoc($res_p_max);
-          $max_cur = intval($p_max_row['maxid']);
-          $partner_uid = ($max_cur > 100) ? $max_cur + 1 : 101;
-          if (strval($partner_uid) === strval($memID)) {
-              $partner_uid++;
-          }
+          $partner_uid = get_next_free_userid($con, intval($memID) + 1);
           
           $p_email = "partner_" . $partner_uid . "_" . time() . "@sudarshanfitness.local";
           if (!empty($email)) {
