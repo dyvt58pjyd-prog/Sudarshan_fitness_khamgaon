@@ -115,6 +115,11 @@ if (!$con) {
         mysqli_query($con, "UPDATE attendance SET exit_time = '23:59:00' WHERE (date < CURRENT_DATE() OR (date = CURRENT_DATE() AND CURRENT_TIME() > '23:59:00')) AND (exit_time IS NULL OR exit_time = '' OR exit_time = '00:00:00')");
     } catch (Exception $e) {}
 
+    // Self-healing database check: auto-prune sent WhatsApp outbox logs older than 90 days to keep DB fast
+    try {
+        @mysqli_query($con, "DELETE FROM whatsapp_outbox WHERE status = 'sent' AND created_at < DATE_SUB(NOW(), INTERVAL 90 DAY)");
+    } catch (Exception $e) {}
+
     // Self-healing database check: ensure payment_qr column exists in gym_details
     $chk_qr = mysqli_query($con, "SHOW COLUMNS FROM gym_details LIKE 'payment_qr'");
     if ($chk_qr && mysqli_num_rows($chk_qr) === 0) {
