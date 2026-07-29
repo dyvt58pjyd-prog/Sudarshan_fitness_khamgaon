@@ -194,6 +194,13 @@ $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,t
           $due_date_val = $balance > 0 && !empty($balance_due_date) ? "'$balance_due_date'" : "NULL";
 
           $payment_mode = isset($_POST['payment_mode']) ? mysqli_real_escape_string($con, $_POST['payment_mode']) : 'Cash';
+          if ($payment_mode === 'Complimentary') {
+              $paid_now = 0;
+              $discount = $plan_price;
+              $balance = 0;
+              $due_date_val = "NULL";
+          }
+
           $received_by = isset($_SESSION['full_name']) ? mysqli_real_escape_string($con, $_SESSION['full_name']) : 'System';
           
           // Use submitted transaction date for auditor, default to today if not provided

@@ -317,9 +317,12 @@ if ($cnt_q) {
               </tr>
               <tr>
                 <td height="35">PAYMENT MODE:</td>
-                <td height="35"><select name="payment_mode" id="payment_mode_select" required onchange="generateStaffQR()">
+                <td height="35"><select name="payment_mode" id="payment_mode_select" required onchange="handlePaymentModeChange(); generateStaffQR();">
                     <option value="Cash" selected>Cash</option>
                     <option value="UPI">UPI</option>
+                    <?php if (isset($_SESSION['role']) && ($_SESSION['role'] === 'super_admin' || $_SESSION['role'] === 'owner')): ?>
+                        <option value="Complimentary">🌟 Superadmin Complimentary / VIP Pass (₹0)</option>
+                    <?php endif; ?>
                 </select></td>
               </tr>
               <tr>
@@ -331,7 +334,29 @@ if ($cnt_q) {
                 <td height="35"><input type="date" name="balance_due_date" id="balance_due_date"></td>
               </tr>
               <script>
+                function handlePaymentModeChange() {
+                    var payMode = document.getElementById('payment_mode_select').value;
+                    if (payMode === 'Complimentary') {
+                        document.getElementById('paid_amount').value = '0';
+                        var planSelect = document.getElementById('plan_select');
+                        if (planSelect && planSelect.selectedIndex >= 0) {
+                            var opt = planSelect.options[planSelect.selectedIndex];
+                            if (opt && opt.getAttribute('data-price')) {
+                                document.getElementById('discount_input').value = opt.getAttribute('data-price');
+                            }
+                        }
+                    }
+                    checkBalance();
+                }
+
                 function checkBalance() {
+                    var payMode = document.getElementById('payment_mode_select').value;
+                    if (payMode === 'Complimentary') {
+                        document.getElementById('balance_due_row').style.display = 'none';
+                        document.getElementById('balance_due_date').required = false;
+                        return;
+                    }
+
                     var total = 0;
                     var planSelect = document.getElementById('plan_select');
                     if (planSelect && planSelect.selectedIndex >= 0) {
