@@ -75,7 +75,7 @@ $qr_img = "https://chart.googleapis.com/chart?chs=350x350&cht=qr&chl=" . urlenco
         <div class="tagline">🔥 Visitor Gym Tour &amp; Self-Registration Pass</div>
 
         <div class="qr-box">
-            <img src="<?php echo $qr_img; ?>" class="qr-img" alt="Visitor Registration QR Code">
+            <canvas id="qr-canvas" style="display: block; margin: 0 auto; width: 260px; height: 260px;"></canvas>
             <div style="font-size: 12px; font-weight: 900; color: #0f172a; margin-top: 10px; text-transform: uppercase;">SCAN WITH PHONE CAMERA</div>
         </div>
 
@@ -87,5 +87,17 @@ $qr_img = "https://chart.googleapis.com/chart?chs=350x350&cht=qr&chl=" . urlenco
         <button onclick="window.print()" class="print-btn">🖨️ Print Reception Poster / Standee</button>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            new QRious({
+                element: document.getElementById('qr-canvas'),
+                value: '<?php echo $enquiry_url; ?>',
+                size: 260,
+                background: 'white',
+                foreground: 'black'
+            });
+        });
+    </script>
 </body>
 </html>
