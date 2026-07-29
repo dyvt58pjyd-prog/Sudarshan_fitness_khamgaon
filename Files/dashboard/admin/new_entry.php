@@ -683,8 +683,16 @@ if ($cnt_q) {
                 const discountInput = document.getElementById('discount_input');
                 const warningSpan = document.getElementById('discount_warning');
                 const submitBtn = document.getElementById('submit');
+                const paySelect = document.getElementById('payment_mode_select');
 
                 if (!planSelect || !discountInput || !submitBtn) return;
+
+                // Bypass discount lock completely for Complimentary / VIP Pass or Superadmin
+                if (paySelect && paySelect.value === 'Complimentary') {
+                    warningSpan.style.display = 'none';
+                    submitBtn.disabled = false;
+                    return;
+                }
 
                 const selectedOpt = planSelect.options[planSelect.selectedIndex];
                 if (!selectedOpt || selectedOpt.value === '') {
