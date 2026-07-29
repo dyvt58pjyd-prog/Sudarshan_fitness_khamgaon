@@ -39,15 +39,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         // Plan & Payment details filled by Staff/Admin
         $plan_id = mysqli_real_escape_string($con, $_POST['plan_id']);
         $payment_mode = mysqli_real_escape_string($con, $_POST['payment_mode']);
-        $discount = isset($_POST['discount']) ? floatval($_POST['discount']) : 0;
-        $paid_amount = isset($_POST['paid_amount']) ? floatval($_POST['paid_amount']) : 0;
-        $jdate = isset($_POST['jdate']) ? mysqli_real_escape_string($con, $_POST['jdate']) : date('Y-m-d');
-
+        $discount = isset($_POST['discount']) && $_POST['discount'] !== '' ? floatval($_POST['discount']) : 0;
+        
         // Fetch Plan Info
         $q_plan = mysqli_query($con, "SELECT * FROM plan WHERE pid = '$plan_id'");
         $plan_row = mysqli_fetch_assoc($q_plan);
         $plan_price = floatval($plan_row['amount']);
         $plan_name = $plan_row['planName'];
+
+        $total_payable = $plan_price - $discount;
+        if ($total_payable < 0) $total_payable = 0;
+
+        $paid_amount = isset($_POST['paid_amount']) && $_POST['paid_amount'] !== '' ? floatval($_POST['paid_amount']) : $total_payable;
         
         $expire_timestamp = calculate_expiration_date($jdate, $plan_row['validity']);
         $expiredate = date('Y-m-d', $expire_timestamp);
@@ -55,9 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         if ($payment_mode === 'Complimentary') {
             $paid_amount = 0;
             $discount = $plan_price;
+            $total_payable = 0;
         }
 
-        $total_payable = $plan_price - $discount;
         $balance = $total_payable - $paid_amount;
         if ($balance < 0) $balance = 0;
 
@@ -238,11 +241,11 @@ $pending_count = mysqli_num_rows($q_pending);
 
                 <div class="form-row">
                     <label>Select Membership Plan *</label>
-                    <select name="plan_id" id="m_plan_select" class="form-input" required>
+                    <select name="plan_id" id="m_plan_select" class="form-input" required onchange="updateApprovalModalAmounts()">
                         <?php
                         $q_plans = mysqli_query($con, "SELECT * FROM plan WHERE active = 'yes'");
                         while ($p = mysqli_fetch_assoc($q_plans)) {
-                            echo "<option value='{$p['pid']}'>" . htmlspecialchars($p['planName']) . " - ₹" . intval($p['amount']) . "</option>";
+                            echo "<option value='{$p['pid']}' data-price='" . intval($p['amount']) . "'>" . htmlspecialchars($p['planName']) . " - ₹" . intval($p['amount']) . "</option>";
                         }
                         ?>
                     </select>
@@ -250,7 +253,7 @@ $pending_count = mysqli_num_rows($q_pending);
 
                 <div class="form-row">
                     <label>Payment Mode *</label>
-                    <select name="payment_mode" class="form-input" required>
+                    <select name="payment_mode" id="m_paymode_select" class="form-input" required onchange="updateApprovalModalAmounts()">
                         <option value="Cash" selected>Cash</option>
                         <option value="UPI">UPI</option>
                         <?php if ($_SESSION['role'] === 'super_admin' || $_SESSION['role'] === 'owner'): ?>
@@ -262,11 +265,20 @@ $pending_count = mysqli_num_rows($q_pending);
                 <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div>
                         <label>Amount Paid Now (₹)</label>
-                        <input type="number" name="paid_amount" class="form-input" placeholder="e.g. 5000">
+                        <input type="number" name="paid_amount" id="m_paid_amount" class="form-input" placeholder="Auto calculated if empty">
                     </div>
                     <div>
                         <label>Discount Amount (₹)</label>
-                        <input type="number" name="discount" class="form-input" value="0">
+                        <input type="number" name="discount" id="m_discount_input" class="form-input" value="0" oninput="updateApprovalModalAmounts()">
+                    </div>
+                </div>
+
+                <!-- UPI Payment QR Code Container -->
+                <div id="modal-upi-qr-box" style="display: none; background: rgba(0,0,0,0.3); border: 1px dashed rgba(255,107,0,0.5); padding: 15px; border-radius: 16px; text-align: center; margin: 15px 0;">
+                    <h4 style="color: #fff; margin: 0 0 5px 0; font-size: 14px;">Scan to Pay UPI: <span id="upi-qr-amount-text" style="color: #ff6b00; font-weight: 800; font-size: 16px;">₹0</span></h4>
+                    <p style="color: #94a3b8; font-size: 11px; margin-bottom: 12px;">Ask client to scan &amp; pay via Google Pay, PhonePe, Paytm, or BHIM.</p>
+                    <div style="background: #ffffff; padding: 12px; border-radius: 14px; display: inline-block; box-shadow: 0 8px 20px rgba(0,0,0,0.4);">
+                        <canvas id="modal-upi-qr-canvas"></canvas>
                     </div>
                 </div>
 
@@ -283,11 +295,64 @@ $pending_count = mysqli_num_rows($q_pending);
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <script>
+        let upiQrObj = null;
+        const gymUpiId = <?php echo json_encode(!empty($gym['upi_id']) ? $gym['upi_id'] : ''); ?>;
+        const gymName = <?php echo json_encode(!empty($gym['gym_name']) ? $gym['gym_name'] : 'Sudarshan Fitness'); ?>;
+
         function openApprovalModal(data) {
             document.getElementById('m_enquiry_id').value = data.id;
             document.getElementById('m_name').textContent = data.username;
             document.getElementById('approveModal').style.display = 'flex';
+            updateApprovalModalAmounts();
+        }
+
+        function updateApprovalModalAmounts() {
+            const planSelect = document.getElementById('m_plan_select');
+            const paySelect = document.getElementById('m_paymode_select');
+            const paidInput = document.getElementById('m_paid_amount');
+            const discountInput = document.getElementById('m_discount_input');
+            const qrBox = document.getElementById('modal-upi-qr-box');
+            const qrAmtText = document.getElementById('upi-qr-amount-text');
+
+            if (!planSelect || planSelect.selectedIndex < 0) return;
+
+            const opt = planSelect.options[planSelect.selectedIndex];
+            const planPrice = parseFloat(opt.getAttribute('data-price')) || 0;
+            const payMode = paySelect.value;
+
+            if (payMode === 'Complimentary') {
+                discountInput.value = planPrice;
+                paidInput.value = 0;
+                qrBox.style.display = 'none';
+                return;
+            }
+
+            let discount = parseFloat(discountInput.value) || 0;
+            let netAmount = planPrice - discount;
+            if (netAmount < 0) netAmount = 0;
+
+            if (payMode === 'UPI' && netAmount > 0 && gymUpiId) {
+                qrBox.style.display = 'block';
+                qrAmtText.textContent = `₹` + netAmount.toLocaleString('en-IN');
+                
+                const upiString = `upi://pay?pa=${encodeURIComponent(gymUpiId)}&pn=${encodeURIComponent(gymName)}&am=${netAmount}&cu=INR`;
+                
+                if (typeof QRious !== 'undefined') {
+                    if (!upiQrObj) {
+                        upiQrObj = new QRious({
+                            element: document.getElementById('modal-upi-qr-canvas'),
+                            size: 180,
+                            background: 'white',
+                            foreground: 'black'
+                        });
+                    }
+                    upiQrObj.value = upiString;
+                }
+            } else {
+                qrBox.style.display = 'none';
+            }
         }
     </script>
 </body>
