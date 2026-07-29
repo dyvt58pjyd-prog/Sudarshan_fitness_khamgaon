@@ -1,7 +1,13 @@
 <?php
 // cron_reminders.php
-// To be run via Hostinger Cron Job every morning (e.g. 0 8 * * *)
-// Command: /usr/bin/php /home/username/public_html/cron_reminders.php
+// Can be run via CLI or Web Endpoint: https://sudarshanfitness.de/cron_reminders.php?key=sudarshan_deploy_2026
+
+if (php_sapi_name() !== 'cli') {
+    $secret = 'sudarshan_deploy_2026';
+    if (!isset($_GET['key']) || $_GET['key'] !== $secret) {
+        die("Access Denied: Invalid Key.");
+    }
+}
 
 require_once __DIR__ . '/include/db_conn.php';
 require_once __DIR__ . '/include/whatsapp_api.php';

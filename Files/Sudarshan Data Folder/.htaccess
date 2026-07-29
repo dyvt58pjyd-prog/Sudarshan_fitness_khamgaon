@@ -1,0 +1,6 @@
+# Disable script execution in data folder
+<FilesMatch "\.(php|php3|php4|php5|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+php_flag engine off

@@ -1,10 +1,20 @@
 RewriteEngine On
 
+# Redirect HTTP to HTTPS automatically
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} ^(www\.)?sudarshanfitness\.de$ [NC]
+RewriteRule ^(.*)$ https://sudarshanfitness.de/$1 [L,R=301]
+
 <IfModule mod_headers.c>
+    # Security Headers
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Digital Asset Links CORS & MIME Type
     <Files "assetlinks.json">
         Header set Access-Control-Allow-Origin "*"
         Header set Content-Type "application/json"
     </Files>
 </IfModule>
-
-

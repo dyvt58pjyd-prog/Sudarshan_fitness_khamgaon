@@ -99,6 +99,17 @@ if (!$con) {
     // Disable fatal exceptions for MySQLi (fixes PHP 8.1+ compatibility with legacy code)
     mysqli_report(MYSQLI_REPORT_OFF);
 
+    // Enforce UTF-8 MB4 for emoji & Unicode character support
+    @mysqli_set_charset($con, "utf8mb4");
+
+    // Self-healing database performance indexes
+    try {
+        @mysqli_query($con, "ALTER TABLE users ADD INDEX idx_mobile (mobile)");
+        @mysqli_query($con, "ALTER TABLE users ADD INDEX idx_partner (partner_uid)");
+        @mysqli_query($con, "ALTER TABLE enrolls_to ADD INDEX idx_uid_expire (uid, expire)");
+        @mysqli_query($con, "ALTER TABLE attendance ADD INDEX idx_uid_date (uid, date)");
+    } catch (Exception $e) {}
+
     // Auto-checkout members who forgot to check out (after 11:59 PM)
     try {
         mysqli_query($con, "UPDATE attendance SET exit_time = '23:59:00' WHERE (date < CURRENT_DATE() OR (date = CURRENT_DATE() AND CURRENT_TIME() > '23:59:00')) AND (exit_time IS NULL OR exit_time = '' OR exit_time = '00:00:00')");
