@@ -716,7 +716,34 @@ if (!function_exists('check_and_upgrade_db')) {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id)
         )";
-        mysqli_query($con, $member_routines_sql);
+        $walkin_sql = "CREATE TABLE IF NOT EXISTS walkin_enquiries (
+            id INT(11) NOT NULL AUTO_INCREMENT,
+            username VARCHAR(100) NOT NULL,
+            gender VARCHAR(20) DEFAULT 'Male',
+            mobile VARCHAR(20) NOT NULL,
+            email VARCHAR(100) DEFAULT '',
+            dob DATE NULL,
+            height VARCHAR(10) DEFAULT '',
+            weight VARCHAR(10) DEFAULT '',
+            fitness_goal TEXT,
+            photo_path VARCHAR(255) DEFAULT '',
+            is_couple TINYINT(1) DEFAULT 0,
+            partner_name VARCHAR(100) DEFAULT '',
+            partner_gender VARCHAR(20) DEFAULT '',
+            partner_mobile VARCHAR(20) DEFAULT '',
+            partner_dob DATE NULL,
+            partner_height VARCHAR(10) DEFAULT '',
+            partner_weight VARCHAR(10) DEFAULT '',
+            street_name VARCHAR(255) DEFAULT '',
+            city VARCHAR(100) DEFAULT 'Khamgaon',
+            state VARCHAR(100) DEFAULT 'Maharashtra',
+            zipcode VARCHAR(20) DEFAULT '444303',
+            status VARCHAR(20) DEFAULT 'pending',
+            converted_uid VARCHAR(20) NULL DEFAULT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id)
+        )";
+        mysqli_query($con, $walkin_sql);
     }
 }
 

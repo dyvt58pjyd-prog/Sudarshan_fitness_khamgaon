@@ -168,6 +168,8 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
     <li id="searchmem"><a href="search_member.php"><i class="entypo-search"></i><span>Search Member</span></a></li>
 
     <!-- 4. ATTENDANCE & ACCESS -->
+    <li id="walkin_enquiries"><a href="enquiries.php" style="color: #ff6b00;"><i class="entypo-user-add"></i><span>📝 Walk-In Enquiries</span></a></li>
+    <li id="print_visitor_qr"><a href="print_enquiry_qr.php" target="_blank"><i class="entypo-print"></i><span>🖨️ Visitor QR Poster</span></a></li>
     <li id="attendance_portal"><a href="attendance.php"><i class="entypo-camera"></i><span>Attendance Portal</span></a></li>
     <li id="qr_gate_link"><a href="../../qr_checkin.php" target="_blank"><i class="entypo-vcard"></i><span>📷 QR Gate Terminal</span></a></li>
     <li id="kiosk_link"><a href="kiosk.php" target="_blank"><i class="entypo-monitor"></i><span>Front Desk Kiosk</span></a></li>
