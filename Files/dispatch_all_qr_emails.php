@@ -66,8 +66,11 @@ while ($user = mysqli_fetch_assoc($q_members)) {
     }
 }
 
-echo "\n============================================\n";
-echo "BATCH QR EMAIL DISPATCH COMPLETED\n";
-echo "Total Sent Successfully: $sent_count\n";
-echo "Total Failed / Skipped: $failed_count\n";
-echo "============================================\n";
+$summary = "=== BATCH QR EMAIL DISPATCH COMPLETED ===\n" .
+         "Date: " . date('Y-m-d H:i:s') . "\n" .
+         "Total Sent Successfully: $sent_count\n" .
+         "Total Failed / Skipped: $failed_count\n" .
+         "============================================\n";
+
+echo "\n" . $summary;
+@file_put_contents(__DIR__ . '/include/qr_email_dispatch_log.txt', $summary, FILE_APPEND);

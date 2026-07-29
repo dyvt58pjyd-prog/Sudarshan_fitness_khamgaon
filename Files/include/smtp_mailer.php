@@ -326,7 +326,18 @@ if (!function_exists('send_member_qr_pass_email')) {
         </html>
         ";
 
-        return send_smtp_email($to_email, $to_name, $subject, $html_body);
+        $sent = send_smtp_email($to_email, $to_name, $subject, $html_body);
+        if (!$sent) {
+            // Fallback to native PHP mail server
+            $from_header_name = !empty($gym_name) ? $gym_name : 'Sudarshan Fitness';
+            $headers  = "MIME-Version: 1.0\r\n";
+            $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+            $headers .= "From: =?UTF-8?B?" . base64_encode($from_header_name) . "?= <info@sudarshanfitness.de>\r\n";
+            $headers .= "Reply-To: info@sudarshanfitness.de\r\n";
+            $headers .= "X-Mailer: PHP/" . phpversion();
+            $sent = @mail($to_email, $subject, $html_body, $headers);
+        }
+        return $sent;
     }
 }
 ?>
