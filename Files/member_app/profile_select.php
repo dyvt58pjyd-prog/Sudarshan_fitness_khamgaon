@@ -60,57 +60,78 @@ if (isset($_POST['select_profile'])) {
     exit;
 }
 
-function getAvatar($gender) {
-    if (strtolower($gender) == 'female') return '../images/avatar_female.png';
-    return '../images/avatar_male.png';
+function getGenderBadge($gender) {
+    if (strtolower($gender) == 'female') {
+        return '<span style="background: rgba(236,72,153,0.2); color: #ec4899; border: 1px solid #ec4899; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; margin-top: 6px; display: inline-block;">♀️ Female</span>';
+    }
+    return '<span style="background: rgba(59,130,246,0.2); color: #3b82f6; border: 1px solid #3b82f6; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; margin-top: 6px; display: inline-block;">♂️ Male</span>';
 }
 
-// Fallback images if not exist
-$av1 = "https://ui-avatars.com/api/?name=".urlencode($u1['username'])."&background=10b981&color=fff&size=150";
-$av2 = "https://ui-avatars.com/api/?name=".urlencode($u2['username'])."&background=ff6b00&color=fff&size=150";
+function getAvatarUrl($user) {
+    $gender = strtolower($user['gender'] ?? 'male');
+    $bg = ($gender == 'female') ? 'ec4899' : '3b82f6';
+    if (!empty($user['photo'])) {
+        return htmlspecialchars($user['photo']);
+    }
+    return "https://ui-avatars.com/api/?name=" . urlencode($user['username']) . "&background=" . $bg . "&color=fff&size=150&font-size=0.45&bold=true";
+}
+
+$av1 = getAvatarUrl($u1);
+$av2 = getAvatarUrl($u2);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Who is working out?</title>
+    <title>Select Profile | Sudarshan Fitness</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff6b00">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background: #000; color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        body { background: #0b0f19; color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         
-        .title { font-size: 32px; font-weight: 800; margin-bottom: 50px; text-align: center; letter-spacing: -0.5px; }
+        .title { font-size: 28px; font-weight: 800; margin-bottom: 40px; text-align: center; letter-spacing: -0.5px; color: #fff; }
+        .subtitle { font-size: 14px; color: #94a3b8; margin-top: -30px; margin-bottom: 40px; text-align: center; }
         
-        .profiles-container { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; }
+        .profiles-container { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; max-width: 500px; width: 100%; }
         
         .profile-card {
-            background: transparent;
-            border: none;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 25px 20px;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
             transition: all 0.3s ease;
+            flex: 1;
+            min-width: 180px;
         }
         
         .avatar-wrap {
-            width: 130px;
-            height: 130px;
-            border-radius: 24px;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
             overflow: hidden;
-            border: 3px solid transparent;
+            border: 3px solid rgba(255,255,255,0.1);
             transition: all 0.3s ease;
             box-shadow: 0 10px 20px rgba(0,0,0,0.5);
             margin-bottom: 15px;
         }
         
+        .profile-card:hover {
+            background: rgba(255, 107, 0, 0.08);
+            border-color: #ff6b00;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255,107,0,0.2);
+        }
+        
         .profile-card:hover .avatar-wrap {
             border-color: #ff6b00;
             transform: scale(1.05);
-            box-shadow: 0 15px 30px rgba(255,107,0,0.3);
         }
         
         .avatar-wrap img {
@@ -120,60 +141,69 @@ $av2 = "https://ui-avatars.com/api/?name=".urlencode($u2['username'])."&backgrou
         }
         
         .profile-name {
-            font-size: 18px;
-            font-weight: 600;
-            color: #94a3b8;
-            transition: all 0.3s ease;
-        }
-        
-        .profile-card:hover .profile-name {
+            font-size: 17px;
+            font-weight: 700;
             color: #fff;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        .member-id-tag {
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 600;
         }
         
         .couple-badge {
-            margin-top: 60px;
-            padding: 8px 16px;
-            background: rgba(255,255,255,0.1);
+            margin-top: 50px;
+            padding: 8px 18px;
+            background: rgba(255,107,0,0.1);
+            border: 1px solid rgba(255,107,0,0.3);
             border-radius: 20px;
             font-size: 12px;
-            color: #94a3b8;
+            color: #ff6b00;
             text-transform: uppercase;
             letter-spacing: 1px;
-            font-weight: 600;
+            font-weight: 800;
         }
     </style>
 </head>
 <body>
 
     <h1 class="title">Who is working out today?</h1>
+    <p class="subtitle">Select a profile to load individual BMI, workout &amp; diet plan</p>
     
     <div class="profiles-container">
         <!-- Profile 1 -->
-        <form method="POST" action="">
+        <form method="POST" action="" style="flex:1;">
             <input type="hidden" name="selected_uid" value="<?php echo $u1['userid']; ?>">
             <input type="hidden" name="selected_name" value="<?php echo htmlspecialchars($u1['username']); ?>">
-            <button type="submit" name="select_profile" class="profile-card">
+            <button type="submit" name="select_profile" class="profile-card" style="width: 100%;">
                 <div class="avatar-wrap">
                     <img src="<?php echo $av1; ?>" alt="Avatar">
                 </div>
-                <div class="profile-name"><?php echo explode(' ', $u1['username'])[0]; ?></div>
+                <div class="profile-name"><?php echo htmlspecialchars($u1['username']); ?></div>
+                <div class="member-id-tag">Member ID: <?php echo $u1['userid']; ?></div>
+                <?php echo getGenderBadge($u1['gender'] ?? 'Male'); ?>
             </button>
         </form>
         
         <!-- Profile 2 -->
-        <form method="POST" action="">
+        <form method="POST" action="" style="flex:1;">
             <input type="hidden" name="selected_uid" value="<?php echo $u2['userid']; ?>">
             <input type="hidden" name="selected_name" value="<?php echo htmlspecialchars($u2['username']); ?>">
-            <button type="submit" name="select_profile" class="profile-card">
+            <button type="submit" name="select_profile" class="profile-card" style="width: 100%;">
                 <div class="avatar-wrap">
                     <img src="<?php echo $av2; ?>" alt="Avatar">
                 </div>
-                <div class="profile-name"><?php echo explode(' ', $u2['username'])[0]; ?></div>
+                <div class="profile-name"><?php echo htmlspecialchars($u2['username']); ?></div>
+                <div class="member-id-tag">Member ID: <?php echo $u2['userid']; ?></div>
+                <?php echo getGenderBadge($u2['gender'] ?? 'Female'); ?>
             </button>
         </form>
     </div>
     
-    <div class="couple-badge">✨ Couple Plan Member</div>
+    <div class="couple-badge">💑 Couple Fitness Duo Account</div>
 
 </body>
 </html>

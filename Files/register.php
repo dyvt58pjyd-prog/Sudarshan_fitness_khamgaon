@@ -139,7 +139,13 @@ if (isset($_POST['submit_registration'])) {
                         'weight' => isset($_POST['weight']) ? $_POST['weight'] : '',
                         'height' => isset($_POST['height']) ? $_POST['height'] : '',
                         'password' => $password,
-                        'photo_path_db' => $photo_path_db
+                        'photo_path_db' => $photo_path_db,
+                        'partner_name' => isset($_POST['partner_name']) ? $_POST['partner_name'] : '',
+                        'partner_gender' => isset($_POST['partner_gender']) ? $_POST['partner_gender'] : '',
+                        'partner_dob' => isset($_POST['partner_dob']) ? $_POST['partner_dob'] : '',
+                        'partner_mobile' => isset($_POST['partner_mobile']) ? $_POST['partner_mobile'] : '',
+                        'partner_height' => isset($_POST['partner_height']) ? $_POST['partner_height'] : '',
+                        'partner_weight' => isset($_POST['partner_weight']) ? $_POST['partner_weight'] : ''
                     ];
                     $json_payload = mysqli_real_escape_string($con, json_encode($payload));
                     
@@ -450,6 +456,51 @@ if (isset($_POST['submit_registration'])) {
                             <div class="form-group-premium">
                                 <label>Weight (kg)</label>
                                 <input type="number" name="weight" class="form-control-premium" placeholder="e.g. 70" min="10" max="300" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Couple Partner Details Section (Expandable) -->
+                    <div class="form-section" id="partner-section" style="background: rgba(255,107,0,0.05); border: 1px dashed rgba(255,107,0,0.3); border-radius: 12px; padding: 20px; margin-bottom: 30px;">
+                        <div class="form-section-title" style="color: #ff6b00; display: flex; align-items: center; justify-content: space-between;">
+                            <span><i class="entypo-heart"></i> Partner Details (Couple Plan)</span>
+                            <label style="font-size: 13px; color: #fff; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" id="enable_couple_cb" onchange="togglePublicCoupleFields(this.checked)" style="width: 18px; height: 18px;">
+                                Register with Partner
+                            </label>
+                        </div>
+                        <div id="partner-fields-container" style="display: none; margin-top: 15px;">
+                            <p style="color: rgba(255,255,255,0.7); font-size: 12px; margin-bottom: 15px;">Provide your partner's details so they get their own separate member account, attendance tracking, and individual BMI profile!</p>
+                            <div class="form-grid">
+                                <div class="form-group-premium">
+                                    <label>Partner Full Name *</label>
+                                    <input type="text" name="partner_name" id="p_name_input" class="form-control-premium" placeholder="Enter partner's full name">
+                                </div>
+                                <div class="form-group-premium">
+                                    <label>Partner Gender *</label>
+                                    <select name="partner_gender" id="p_gender_input" class="form-control-premium">
+                                        <option value="">-- Select Gender --</option>
+                                        <option value="Male">Male ♂️</option>
+                                        <option value="Female">Female ♀️</option>
+                                        <option value="Transgender">Transgender</option>
+                                    </select>
+                                </div>
+                                <div class="form-group-premium">
+                                    <label>Partner Date of Birth *</label>
+                                    <input type="date" name="partner_dob" id="p_dob_input" class="form-control-premium">
+                                </div>
+                                <div class="form-group-premium">
+                                    <label>Partner Mobile Number *</label>
+                                    <input type="tel" name="partner_mobile" id="p_mobile_input" class="form-control-premium" placeholder="Partner mobile number" pattern="[0-9]{10}">
+                                </div>
+                                <div class="form-group-premium">
+                                    <label>Partner Height (cm)</label>
+                                    <input type="number" name="partner_height" class="form-control-premium" placeholder="e.g. 165" min="50" max="250">
+                                </div>
+                                <div class="form-group-premium">
+                                    <label>Partner Weight (kg)</label>
+                                    <input type="number" name="partner_weight" class="form-control-premium" placeholder="e.g. 58" min="10" max="300">
+                                </div>
                             </div>
                         </div>
                     </div>

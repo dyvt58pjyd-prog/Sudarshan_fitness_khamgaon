@@ -34,6 +34,18 @@ if ($result && mysqli_num_rows($result) > 0) {
             }
         }
         
+        if (!$is_active && !empty($row['partner_uid'])) {
+            $p_uid = $row['partner_uid'];
+            $q_partner_plan = mysqli_query($con, "SELECT expire FROM enrolls_to WHERE uid='$p_uid' AND YEAR(paid_date) <= " . $_SESSION['working_year'] . " ORDER BY expire DESC LIMIT 1");
+            if ($q_partner_plan && mysqli_num_rows($q_partner_plan) > 0) {
+                $p_plan_row = mysqli_fetch_assoc($q_partner_plan);
+                if ($p_plan_row['expire'] >= $today) {
+                    $expire = $p_plan_row['expire'];
+                    $is_active = true;
+                }
+            }
+        }
+        
         $row['expire'] = $expire;
         $row['is_active'] = $is_active;
         

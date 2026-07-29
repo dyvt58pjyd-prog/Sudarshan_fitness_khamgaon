@@ -323,6 +323,42 @@ if (!$con) {
     // Self-healing database check: bi-directionally link couple partner_uids
     mysqli_query($con, "UPDATE users u1 JOIN users u2 ON u1.userid = u2.partner_uid SET u1.partner_uid = u2.userid WHERE (u1.partner_uid IS NULL OR u1.partner_uid = '')");
 
+    // Self-healing database check: auto-create missing partner accounts for couple plan subscribers
+    $q_unlinked_couples = mysqli_query($con, "SELECT u.userid, u.username, u.gender, u.email, u.mobile, e.pid, e.paid_date, e.expire 
+                                              FROM users u 
+                                              JOIN enrolls_to e ON u.userid = e.uid 
+                                              JOIN plan p ON e.pid = p.pid 
+                                              WHERE LOWER(p.planName) LIKE '%couple%' 
+                                                AND (u.partner_uid IS NULL OR u.partner_uid = '') 
+                                                AND u.userid NOT IN (SELECT partner_uid FROM users WHERE partner_uid IS NOT NULL AND partner_uid != '')");
+    if ($q_unlinked_couples && mysqli_num_rows($q_unlinked_couples) > 0) {
+        while ($c_row = mysqli_fetch_assoc($q_unlinked_couples)) {
+            $p_uid = $c_row['userid'];
+            $p_name = "Partner of " . $c_row['username'];
+            $p_gender = (strtolower($c_row['gender']) == 'male') ? 'Female' : 'Male';
+            $p_mobile = !empty($c_row['mobile']) ? $c_row['mobile'] : '0000000000';
+            $p_email = "partner_" . time() . "_" . rand(100,999) . "@sudarshanfitness.local";
+            $jdate = !empty($c_row['paid_date']) ? $c_row['paid_date'] : date('Y-m-d');
+            $expire_dt = !empty($c_row['expire']) ? $c_row['expire'] : date('Y-m-d', strtotime('+1 year'));
+            $pid = $c_row['pid'];
+
+            // Generate next partner ID
+            $res_p_max = mysqli_query($con, "SELECT MAX(CAST(userid AS UNSIGNED)) as maxid FROM users WHERE userid REGEXP '^[0-9]+$'");
+            $p_max_row = mysqli_fetch_assoc($res_p_max);
+            $new_partner_uid = ($p_max_row['maxid'] > 100) ? $p_max_row['maxid'] + 1 : 101;
+
+            $ins_p = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, partner_uid, biometric_id, biometric_enabled) 
+                      VALUES ('$p_name', '$p_gender', '$p_mobile', '$p_email', '2000-01-01', '$jdate', '$new_partner_uid', '$p_uid', '$new_partner_uid', 1)";
+            if (mysqli_query($con, $ins_p)) {
+                mysqli_query($con, "UPDATE users SET partner_uid = '$new_partner_uid' WHERE userid = '$p_uid'");
+                mysqli_query($con, "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount, balance) 
+                                    VALUES ('$pid', '$new_partner_uid', '$jdate', '$expire_dt', 'yes', 'Couple Plan', 'System', 0, 0, 0)");
+                mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('$new_partner_uid', '1234', 'member', '$p_name', 'member')");
+                mysqli_query($con, "INSERT INTO health_status (uid, weight, height) VALUES ('$new_partner_uid', '60', '165')");
+            }
+        }
+    }
+
     // Self-healing database check: ensure balance_collections ledger table exists
     mysqli_query($con, "CREATE TABLE IF NOT EXISTS balance_collections (
         id INT AUTO_INCREMENT PRIMARY KEY,

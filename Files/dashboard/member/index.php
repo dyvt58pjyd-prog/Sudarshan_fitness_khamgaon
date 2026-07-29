@@ -227,10 +227,16 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
                 </div>
 
                 <!-- Duo Info Grid -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; background: rgba(0,0,0,0.3); padding: 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08);">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; background: rgba(0,0,0,0.3); padding: 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08);">
                     <div>
                         <span style="color: #94a3b8; font-size: 11.5px; display: block; text-transform: uppercase; font-weight: 700;">Partner Name</span>
                         <strong style="color: #fff; font-size: 16px;"><?php echo htmlspecialchars($partner_user['username']); ?></strong>
+                    </div>
+                    <div>
+                        <span style="color: #94a3b8; font-size: 11.5px; display: block; text-transform: uppercase; font-weight: 700;">Partner Gender</span>
+                        <span style="color: <?php echo (strtolower($partner_user['gender'] ?? '') == 'female') ? '#ec4899' : '#38bdf8'; ?>; font-weight: 800; font-size: 15px;">
+                            <?php echo (strtolower($partner_user['gender'] ?? '') == 'female') ? '♀️ Female' : '♂️ Male'; ?>
+                        </span>
                     </div>
                     <div>
                         <span style="color: #94a3b8; font-size: 11.5px; display: block; text-transform: uppercase; font-weight: 700;">Partner Member ID</span>

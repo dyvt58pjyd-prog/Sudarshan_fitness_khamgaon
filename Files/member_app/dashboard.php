@@ -56,17 +56,56 @@ if ($q_routine && mysqli_num_rows($q_routine) > 0) {
     if (!empty($routine['workout_plan'])) $workout_plan = $routine['workout_plan'];
 }
 
-// Fetch today's attendance
+// Handle health log update
 date_default_timezone_set("Asia/Calcutta");
 $today = date('Y-m-d');
-$q_att = mysqli_query($con, "SELECT * FROM attendance WHERE uid='$uid' AND date='$today' ORDER BY id DESC LIMIT 1");
-$att_status = "Not Checked In";
-if (mysqli_num_rows($q_att) > 0) {
-    $att_row = mysqli_fetch_assoc($q_att);
-    if (empty($att_row['exit_time']) || $att_row['exit_time'] == '00:00:00') {
-        $att_status = "Checked In at " . date('h:i A', strtotime($att_row['entry_time']));
+
+if (isset($_POST['update_health'])) {
+    $new_w = mysqli_real_escape_string($con, $_POST['weight']);
+    $new_h = mysqli_real_escape_string($con, $_POST['height']);
+    
+    $chk_h = mysqli_query($con, "SELECT * FROM health_status WHERE uid='$uid'");
+    if ($chk_h && mysqli_num_rows($chk_h) > 0) {
+        mysqli_query($con, "UPDATE health_status SET weight='$new_w', height='$new_h' WHERE uid='$uid'");
     } else {
-        $att_status = "Completed (Left at " . date('h:i A', strtotime($att_row['exit_time'])) . ")";
+        mysqli_query($con, "INSERT INTO health_status (uid, weight, height) VALUES ('$uid', '$new_w', '$new_h')");
+    }
+    
+    mysqli_query($con, "INSERT INTO health_history (uid, weight, height, logged_date) VALUES ('$uid', '$new_w', '$new_h', '$today')");
+    header("Location: dashboard.php?msg=health_updated");
+    exit;
+}
+
+// Fetch Health Status & BMI for active user
+$q_health = mysqli_query($con, "SELECT * FROM health_status WHERE uid='$uid'");
+$weight = 0;
+$height = 0;
+$bmi = 0;
+$bmi_status = "Not Logged";
+$bmi_color = "#94a3b8";
+
+if ($q_health && mysqli_num_rows($q_health) > 0) {
+    $h_row = mysqli_fetch_assoc($q_health);
+    $weight = floatval($h_row['weight']);
+    $height = floatval($h_row['height']);
+    
+    if ($height > 0 && $weight > 0) {
+        $height_m = $height / 100;
+        $bmi = round($weight / ($height_m * $height_m), 1);
+        
+        if ($bmi < 18.5) {
+            $bmi_status = "Underweight";
+            $bmi_color = "#38bdf8";
+        } elseif ($bmi <= 24.9) {
+            $bmi_status = "Normal / Fit";
+            $bmi_color = "#10b981";
+        } elseif ($bmi <= 29.9) {
+            $bmi_status = "Overweight";
+            $bmi_color = "#f59e0b";
+        } else {
+            $bmi_status = "Obese";
+            $bmi_color = "#ef4444";
+        }
     }
 }
 
@@ -192,6 +231,59 @@ if ($partner_user) {
             <div class="card-value"><?php echo htmlspecialchars($plan_name); ?></div>
             <div style="margin-top: 12px; font-size: 14px; font-weight: 600; color: #10b981; background: rgba(16, 185, 129, 0.1); padding: 8px 12px; border-radius: 8px; display: inline-block;">
                 Valid till: <?php echo htmlspecialchars($expire_date); ?>
+            </div>
+        </div>
+
+        <!-- INDIVIDUAL BMI & HEALTH TRACKER -->
+        <div class="card" style="border-left: 4px solid <?php echo $bmi_color; ?>;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div class="card-title" style="margin: 0; display: flex; align-items: center; gap: 6px;">
+                    <span>⚖️ My BMI &amp; Health Profile</span>
+                </div>
+                <span style="font-size: 11px; background: <?php echo (strtolower($user['gender']) == 'female') ? 'rgba(236,72,153,0.15)' : 'rgba(59,130,246,0.15)'; ?>; color: <?php echo (strtolower($user['gender']) == 'female') ? '#ec4899' : '#3b82f6'; ?>; border: 1px solid <?php echo (strtolower($user['gender']) == 'female') ? 'rgba(236,72,153,0.3)' : 'rgba(59,130,246,0.3)'; ?>; padding: 3px 10px; border-radius: 15px; font-weight: 800;">
+                    <?php echo (strtolower($user['gender']) == 'female') ? '♀️ Female' : '♂️ Male'; ?>
+                </span>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; background: rgba(0,0,0,0.25); padding: 12px; border-radius: 12px; margin-bottom: 15px;">
+                <div>
+                    <div style="font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Weight</div>
+                    <div style="font-size: 17px; font-weight: 800; color: #fff; margin-top: 4px;"><?php echo $weight > 0 ? $weight . ' kg' : 'N/A'; ?></div>
+                </div>
+                <div>
+                    <div style="font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Height</div>
+                    <div style="font-size: 17px; font-weight: 800; color: #fff; margin-top: 4px;"><?php echo $height > 0 ? $height . ' cm' : 'N/A'; ?></div>
+                </div>
+                <div>
+                    <div style="font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 700;">BMI Index</div>
+                    <div style="font-size: 17px; font-weight: 800; color: <?php echo $bmi_color; ?>; margin-top: 4px;"><?php echo $bmi > 0 ? $bmi : 'N/A'; ?></div>
+                </div>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+                <span style="color: #94a3b8;">Health: <strong style="color: <?php echo $bmi_color; ?>;"><?php echo $bmi_status; ?></strong></span>
+                <button onclick="document.getElementById('bmiModal').style.display='block'" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer;">✏️ Log Measurements</button>
+            </div>
+        </div>
+
+        <!-- BMI LOG MODAL -->
+        <div id="bmiModal" style="display:none; position:fixed; z-index:10000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(5px);">
+            <div style="background:#1e293b; color:#fff; margin:15% auto; padding:25px; border-radius:16px; width:90%; max-width:400px; border:1px solid rgba(255,255,255,0.15);">
+                <span onclick="document.getElementById('bmiModal').style.display='none'" style="float:right; cursor:pointer; font-size:24px; color:#aaa;">&times;</span>
+                <h3 style="margin-top:0; color:#ff6b00;">Log Health Measurements</h3>
+                <p style="font-size:12px; color:#94a3b8; margin-bottom:15px;">Updating measurements for <strong><?php echo htmlspecialchars($user['username']); ?></strong> (<?php echo (strtolower($user['gender']) == 'female') ? 'Female ♀️' : 'Male ♂️'; ?>)</p>
+                <form method="POST" action="">
+                    <input type="hidden" name="update_health" value="1">
+                    <div style="margin-bottom:12px;">
+                        <label style="font-size:12px; color:#94a3b8; display:block; margin-bottom:4px;">Weight (kg) *</label>
+                        <input type="number" step="0.1" name="weight" value="<?php echo $weight > 0 ? $weight : ''; ?>" required style="width:100%; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.2); background:#0f172a; color:#fff;" placeholder="e.g. 65">
+                    </div>
+                    <div style="margin-bottom:20px;">
+                        <label style="font-size:12px; color:#94a3b8; display:block; margin-bottom:4px;">Height (cm) *</label>
+                        <input type="number" step="0.1" name="height" value="<?php echo $height > 0 ? $height : ''; ?>" required style="width:100%; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.2); background:#0f172a; color:#fff;" placeholder="e.g. 170">
+                    </div>
+                    <button type="submit" style="width:100%; background:linear-gradient(135deg,#ff6b00,#ff8800); color:#fff; border:none; padding:12px; border-radius:10px; font-weight:bold; cursor:pointer;">Save Health Profile</button>
+                </form>
             </div>
         </div>
 

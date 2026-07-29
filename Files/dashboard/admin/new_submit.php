@@ -120,13 +120,25 @@ $query="insert into users(username,gender,mobile,email,dob,joining_date,userid,t
           $p_dob = isset($_POST['partner_dob']) && !empty($_POST['partner_dob']) ? mysqli_real_escape_string($con, $_POST['partner_dob']) : $dob;
           $p_mobile = isset($_POST['partner_mobile']) && !empty($_POST['partner_mobile']) ? mysqli_real_escape_string($con, trim($_POST['partner_mobile'])) : $phn;
           
-          // Generate partner ID
-          $res_p_max = mysqli_query($con, "SELECT MAX(CAST(userid AS UNSIGNED)) as maxid FROM users WHERE userid REGEXP '^[0-9]+$'");
+          // Generate unique partner ID
+          $res_p_max = mysqli_query($con, "SELECT MAX(CAST(userid AS UNSIGNED)) as maxid FROM users WHERE userid REGEXP '^[0-9]+$' AND CAST(userid AS UNSIGNED) < 100000000");
           $p_max_row = mysqli_fetch_assoc($res_p_max);
-          $partner_uid = ($p_max_row['maxid'] > 100) ? $p_max_row['maxid'] + 1 : 101;
+          $max_cur = intval($p_max_row['maxid']);
+          $partner_uid = ($max_cur > 100) ? $max_cur + 1 : 101;
+          if (strval($partner_uid) === strval($memID)) {
+              $partner_uid++;
+          }
+          
+          $p_email = "partner_" . $partner_uid . "_" . time() . "@sudarshanfitness.local";
+          if (!empty($email)) {
+              $chk_p_em = mysqli_query($con, "SELECT email FROM users WHERE email = '$email'");
+              if ($chk_p_em && mysqli_num_rows($chk_p_em) == 0) {
+                  $p_email = $email;
+              }
+          }
           
           $q_partner = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, partner_uid, biometric_id, biometric_enabled, fitness_goal, biometric_batch) 
-                        VALUES ('$p_name', '$p_gender', '$p_mobile', '$email', '$p_dob', '$jdate', '$partner_uid', '$memID', '$partner_uid', 1, '$fitness_goal', '$biometric_batch')";
+                        VALUES ('$p_name', '$p_gender', '$p_mobile', '$p_email', '$p_dob', '$jdate', '$partner_uid', '$memID', '$partner_uid', 1, '$fitness_goal', '$biometric_batch')";
           mysqli_query($con, $q_partner);
           
           // Bi-directionally link Primary User to Partner User
