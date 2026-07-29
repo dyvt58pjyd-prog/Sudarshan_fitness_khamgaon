@@ -362,6 +362,35 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
 					</div>
 				</div>
 			</div>
+
+            <!-- MEMBER ENTRANCE DIGITAL QR PASS CARD -->
+            <div class="row" style="margin-left: 0; margin-right: 0; margin-bottom: 25px;">
+                <div class="col-md-12" style="padding: 0;">
+                    <div class="portal-card" style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.12) 0%, rgba(30, 41, 59, 0.9) 100%); border: 2px dashed rgba(255, 107, 0, 0.4); border-radius: 20px; padding: 25px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; color: #ffffff;">
+                        <div style="flex: 1; min-width: 250px;">
+                            <div style="color: #ff6b00; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;">📷 GYM ENTRANCE DIGITAL QR PASS</div>
+                            <h3 style="margin: 0 0 10px 0; color: #fff; font-weight: 800; font-size: 22px;">My Entrance Access QR Code</h3>
+                            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 15px; line-height: 1.5;">Show this QR code on your phone screen or print your physical card to scan at the gate scanner or front desk for instant entry &amp; exit.</p>
+                            
+                            <div style="display: flex; gap: 15px; flex-wrap: wrap; font-size: 13px;">
+                                <div style="background: rgba(0,0,0,0.3); padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08);">
+                                    <span style="color: #94a3b8; display: block; font-size: 10px; font-weight: 700;">MEMBER NAME</span>
+                                    <strong style="color: #fff; font-size: 15px;"><?php echo htmlspecialchars($user_info['username'] ?? $row['username']); ?></strong>
+                                </div>
+                                <div style="background: rgba(0,0,0,0.3); padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08);">
+                                    <span style="color: #94a3b8; display: block; font-size: 10px; font-weight: 700;">MEMBER ID</span>
+                                    <strong style="color: #38bdf8; font-size: 15px;"><?php echo htmlspecialchars($userid); ?></strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; background: #ffffff; padding: 15px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                            <canvas id="desktop-qr-canvas"></canvas>
+                            <div style="font-size: 11px; font-weight: 800; color: #0f172a; margin-top: 8px; text-transform: uppercase;">SUDARSHAN FITNESS</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
             <!-- Neural Muscle Heatmap -->
 			<div class="row" style="margin-left: 0; margin-right: 0; margin-bottom: 25px;">
@@ -1163,5 +1192,19 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
         </button>
     </div>
     <?php endif; ?>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (document.getElementById('desktop-qr-canvas')) {
+                new QRious({
+                    element: document.getElementById('desktop-qr-canvas'),
+                    value: '<?php echo htmlspecialchars($userid); ?>',
+                    size: 160,
+                    background: 'white',
+                    foreground: 'black'
+                });
+            }
+        });
+    </script>
 </body>
 </html>
