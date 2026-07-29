@@ -3,8 +3,7 @@ require '../../include/db_conn.php';
 page_protect();
 
 $gym = get_gym_details($con);
-$enquiry_url = "https://sudarshanfitness.de/guest_enquiry.php";
-$qr_img = "https://chart.googleapis.com/chart?chs=350x350&cht=qr&chl=" . urlencode($enquiry_url);
+$enquiry_url = "https://sudarshanfitness.de/Files/guest_enquiry.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
