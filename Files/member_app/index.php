@@ -34,6 +34,7 @@ if (isset($_POST['login'])) {
             }
         }
         
+        session_regenerate_id(true);
         if ($is_couple) {
             $_SESSION['login_auth_uid'] = $row['userid']; // Temp auth session
             header("Location: profile_select.php");

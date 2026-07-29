@@ -30,6 +30,7 @@ if ($pass_key == "" || $user_id_auth == "") {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
+        session_regenerate_id(true);
         // Store session data
         $_SESSION['user_data']  = $user_id_auth;
         $_SESSION['logged']     = "start";
