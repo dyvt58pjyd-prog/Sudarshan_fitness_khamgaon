@@ -363,6 +363,28 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
 				</div>
 			</div>
 
+            <!-- 3D AI WORKOUT COACH CARD -->
+            <div class="row" style="margin-left: 0; margin-right: 0; margin-bottom: 25px;">
+                <div class="col-md-12" style="padding: 0;">
+                    <div class="portal-card" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(30, 41, 59, 0.9) 100%); border: 2px solid #8b5cf6; border-radius: 20px; padding: 25px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; color: #ffffff; box-shadow: 0 15px 35px rgba(139, 92, 246, 0.2);">
+                        <div style="flex: 1; min-width: 260px;">
+                            <div style="color: #a78bfa; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;">🤖 INTERACTIVE 3D ANATOMICAL GYM GUIDE</div>
+                            <h3 style="margin: 0 0 10px 0; color: #fff; font-weight: 800; font-size: 22px;">3D AI Virtual Workout Coach</h3>
+                            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 18px; line-height: 1.5;">Explore interactive 3D human workout animations, targeted muscle anatomical highlighting, voice guidance, and form execution for every exercise.</p>
+                            
+                            <a href="../../ai_workout_3d.php" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; border: none; padding: 12px 24px; border-radius: 14px; font-size: 14px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(139,92,246,0.4);">
+                                🏋️ Launch 3D AI Coach Simulator ➔
+                            </a>
+                        </div>
+
+                        <div style="text-align: center; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139,92,246,0.3); padding: 20px 30px; border-radius: 18px;">
+                            <div style="font-size: 45px; margin-bottom: 5px;">🤖💪</div>
+                            <div style="font-size: 13px; font-weight: 800; color: #a78bfa; text-transform: uppercase;">25+ 3D Exercises</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- MEMBER ENTRANCE DIGITAL QR PASS CARD -->
             <div class="row" style="margin-left: 0; margin-right: 0; margin-bottom: 25px;">
                 <div class="col-md-12" style="padding: 0;">

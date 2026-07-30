@@ -287,6 +287,16 @@ if ($partner_user) {
             </div>
         </div>
 
+        <!-- 3D AI WORKOUT COACH CARD -->
+        <div class="card" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(30, 41, 59, 0.9) 100%); border: 2px solid #8b5cf6;">
+            <div style="font-size: 11px; font-weight: 800; color: #a78bfa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">🤖 INTERACTIVE 3D ANATOMICAL GUIDE</div>
+            <h3 style="margin: 0 0 6px 0; color: #fff; font-size: 18px; font-weight: 800;">3D AI Virtual Workout Coach</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-bottom: 15px; line-height: 1.4;">Interactive 3D exercise simulator with muscle anatomical highlighting, voice guidance &amp; posture execution tips.</p>
+            <a href="../ai_workout_3d.php" style="display: block; text-align: center; background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; text-decoration: none; padding: 12px; border-radius: 12px; font-weight: 800; font-size: 13.5px; box-shadow: 0 5px 15px rgba(139,92,246,0.4);">
+                🏋️ Launch 3D AI Workout Coach ➔
+            </a>
+        </div>
+
         <div class="card">
             <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
                 <span>My Diet & Routine</span>
