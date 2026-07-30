@@ -239,15 +239,15 @@ if (substr($logo_path, 0, 6) === '../../') {
     .category-tab.active span {
         color: #ffffff !important;
     }
-    .category-tab[data-role="member"].active i { color: #00f0ff !important; }
+    .category-tab[data-role="member"].active i { color: #ff003c !important; }
     .category-tab[data-role="reception"].active i { color: #ffb703 !important; }
     .category-tab[data-role="trainer"].active i { color: #7000ff !important; }
     .category-tab[data-role="owner"].active i { color: #a855f7 !important; }
     .category-tab[data-role="super_admin"].active i { color: #10b981 !important; }
 
     .form-control {
-        background: rgba(3, 7, 18, 0.8) !important;
-        border: 1px solid rgba(0, 240, 255, 0.3) !important;
+        background: rgba(3, 7, 18, 0.85) !important;
+        border: 1px solid rgba(255, 0, 60, 0.35) !important;
         color: #ffffff !important;
         border-radius: 14px !important;
         padding: 14px 18px !important;
@@ -255,13 +255,13 @@ if (substr($logo_path, 0, 6) === '../../') {
     }
 
     .form-control:focus {
-        border-color: #00f0ff !important;
-        box-shadow: 0 0 25px rgba(0, 240, 255, 0.5) !important;
+        border-color: #ff003c !important;
+        box-shadow: 0 0 25px rgba(255, 0, 60, 0.5) !important;
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, #00f0ff, #0077ff) !important;
-        color: #030712 !important;
+        background: linear-gradient(135deg, #ff003c, #d90429) !important;
+        color: #ffffff !important;
         border: none !important;
         padding: 15px !important;
         border-radius: 14px !important;
@@ -269,13 +269,13 @@ if (substr($logo_path, 0, 6) === '../../') {
         font-weight: 900 !important;
         font-size: 14px !important;
         letter-spacing: 1px !important;
-        box-shadow: 0 0 30px rgba(0, 240, 255, 0.6) !important;
+        box-shadow: 0 0 35px rgba(255, 0, 60, 0.7) !important;
         transition: all 0.2s ease !important;
     }
 
     .btn-primary:hover {
         transform: translateY(-2px) !important;
-        box-shadow: 0 0 45px rgba(0, 240, 255, 0.9) !important;
+        box-shadow: 0 0 50px rgba(255, 0, 60, 0.95) !important;
     }
     </style>
 </head>
@@ -334,7 +334,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                         <!-- Username/UserID input -->
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon" style="background: rgba(0,240,255,0.1); border-color: rgba(0,240,255,0.3); color: #00f0ff;">
+                                <div class="input-group-addon" style="background: rgba(255,0,60,0.15); border-color: rgba(255,0,60,0.35); color: #ff003c;">
                                     <i class="entypo-user"></i>
                                 </div>
                                 <input type="text" placeholder="User ID / Username" class="form-control" name="user_id_auth" id="textfield" required>
@@ -344,7 +344,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                         <!-- Password input -->
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon" style="background: rgba(0,240,255,0.1); border-color: rgba(0,240,255,0.3); color: #00f0ff;">
+                                <div class="input-group-addon" style="background: rgba(255,0,60,0.15); border-color: rgba(255,0,60,0.35); color: #ff003c;">
                                     <i class="entypo-key"></i>
                                 </div>
                                 <input type="password" name="pass_key" id="pwfield" class="form-control" required placeholder="SYSTEM ACCESS PIN">
