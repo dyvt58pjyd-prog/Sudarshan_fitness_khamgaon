@@ -450,13 +450,23 @@ if (substr($logo_path, 0, 6) === '../../') {
                         loginModelsLoading = true;
                         try {
                             await Promise.all([
-                                faceapi.nets.ssdMobilenetv1.loadFromUri('js/face-api/models_v2'),
-                                faceapi.nets.faceLandmark68Net.loadFromUri('js/face-api/models_v2'),
+                                faceapi.nets.tinyFaceDetector.loadFromUri('js/face-api/models_v2'),
+                                faceapi.nets.faceLandmark68TinyNet.loadFromUri('js/face-api/models_v2'),
                                 faceapi.nets.faceRecognitionNet.loadFromUri('js/face-api/models_v2')
                             ]);
                             loginModelsLoaded = true;
                         } catch (err) {
-                            console.warn("Face models failed to load:", err);
+                            console.warn("Fallback to SSD MobileNet...", err);
+                            try {
+                                await Promise.all([
+                                    faceapi.nets.ssdMobilenetv1.loadFromUri('js/face-api/models_v2'),
+                                    faceapi.nets.faceLandmark68Net.loadFromUri('js/face-api/models_v2'),
+                                    faceapi.nets.faceRecognitionNet.loadFromUri('js/face-api/models_v2')
+                                ]);
+                                loginModelsLoaded = true;
+                            } catch (e) {
+                                console.warn("Models load error:", e);
+                            }
                         } finally {
                             loginModelsLoading = false;
                         }

@@ -137,18 +137,28 @@ $_SESSION['webauthn_enroll_challenge'] = $challenge;
         let modelsLoaded = false;
 
         async function loadModels() {
-            statusMsg.innerText = "Loading AI Models...";
+            statusMsg.innerText = "⚡ Loading Ultra-Fast AI Sensors...";
             try {
                 await Promise.all([
-                    faceapi.nets.ssdMobilenetv1.loadFromUri('js/face-api/models_v2'),
-                    faceapi.nets.faceLandmark68Net.loadFromUri('js/face-api/models_v2'),
+                    faceapi.nets.tinyFaceDetector.loadFromUri('js/face-api/models_v2'),
+                    faceapi.nets.faceLandmark68TinyNet.loadFromUri('js/face-api/models_v2'),
                     faceapi.nets.faceRecognitionNet.loadFromUri('js/face-api/models_v2')
                 ]);
                 modelsLoaded = true;
-                statusMsg.innerText = "AI Models Loaded. Ready to scan.";
+                statusMsg.innerText = "⚡ Ultra-Fast AI Models Loaded! Ready to scan.";
             } catch (err) {
-                console.error(err);
-                statusMsg.innerText = "Error loading AI models: " + err.message;
+                console.warn("Fallback to SSD MobileNet...", err);
+                try {
+                    await Promise.all([
+                        faceapi.nets.ssdMobilenetv1.loadFromUri('js/face-api/models_v2'),
+                        faceapi.nets.faceLandmark68Net.loadFromUri('js/face-api/models_v2'),
+                        faceapi.nets.faceRecognitionNet.loadFromUri('js/face-api/models_v2')
+                    ]);
+                    modelsLoaded = true;
+                    statusMsg.innerText = "AI Models Loaded. Ready to scan.";
+                } catch (e) {
+                    statusMsg.innerText = "Error loading AI models: " + e.message;
+                }
             }
         }
 
@@ -165,7 +175,7 @@ $_SESSION['webauthn_enroll_challenge'] = $challenge;
                 videoContainer.style.display = 'block';
                 statusMsg.innerText = "Starting camera...";
                 
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } }, audio: false });
                 video.srcObject = stream;
                 
                 video.onplay = async () => {
@@ -174,14 +184,20 @@ $_SESSION['webauthn_enroll_challenge'] = $challenge;
                     const displaySize = { width: video.clientWidth, height: video.clientHeight };
                     faceapi.matchDimensions(canvas, displaySize);
 
-                    statusMsg.innerText = "Scanning face... Please hold still and look directly at the camera.";
+                    statusMsg.innerText = "Scanning face... Please look at camera.";
                     statusIcon.innerText = "👀";
 
                     let scanCount = 0;
                     let bestDetection = null;
 
                     const scanInterval = setInterval(async () => {
-                        const detections = await faceapi.detectSingleFace(video).withFaceLandmarks().withFaceDescriptor();
+                        let options = new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.2 });
+                        let detections = null;
+                        try {
+                            detections = await faceapi.detectSingleFace(video, options).withFaceLandmarks(true).withFaceDescriptor();
+                        } catch (e) {
+                            detections = await faceapi.detectSingleFace(video).withFaceLandmarks().withFaceDescriptor();
+                        }
                         
                         if (detections) {
                             bestDetection = detections; // Store the best quality detection
