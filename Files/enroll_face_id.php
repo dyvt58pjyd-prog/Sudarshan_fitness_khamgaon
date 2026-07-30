@@ -137,27 +137,30 @@ $_SESSION['webauthn_enroll_challenge'] = $challenge;
         let modelsLoaded = false;
 
         async function loadModels() {
+            if (modelsLoaded) return;
             statusMsg.innerText = "⚡ Loading Ultra-Fast AI Sensors...";
+            const cdnUri = 'https://cdn.jsdelivr.net/gh/cTFo/face-api.js@master/weights';
+            const localUri = 'js/face-api/models_v2';
             try {
                 await Promise.all([
-                    faceapi.nets.tinyFaceDetector.loadFromUri('js/face-api/models_v2'),
-                    faceapi.nets.faceLandmark68TinyNet.loadFromUri('js/face-api/models_v2'),
-                    faceapi.nets.faceRecognitionNet.loadFromUri('js/face-api/models_v2')
+                    faceapi.nets.tinyFaceDetector.loadFromUri(localUri),
+                    faceapi.nets.faceLandmark68TinyNet.loadFromUri(localUri),
+                    faceapi.nets.faceRecognitionNet.loadFromUri(localUri)
                 ]);
                 modelsLoaded = true;
                 statusMsg.innerText = "⚡ Ultra-Fast AI Models Loaded! Ready to scan.";
             } catch (err) {
-                console.warn("Fallback to SSD MobileNet...", err);
                 try {
                     await Promise.all([
-                        faceapi.nets.ssdMobilenetv1.loadFromUri('js/face-api/models_v2'),
-                        faceapi.nets.faceLandmark68Net.loadFromUri('js/face-api/models_v2'),
-                        faceapi.nets.faceRecognitionNet.loadFromUri('js/face-api/models_v2')
+                        faceapi.nets.tinyFaceDetector.loadFromUri(cdnUri),
+                        faceapi.nets.faceLandmark68TinyNet.loadFromUri(cdnUri),
+                        faceapi.nets.faceRecognitionNet.loadFromUri(cdnUri)
                     ]);
                     modelsLoaded = true;
-                    statusMsg.innerText = "AI Models Loaded. Ready to scan.";
+                    statusMsg.innerText = "⚡ AI Models Loaded! Ready to scan.";
                 } catch (e) {
-                    statusMsg.innerText = "Error loading AI models: " + e.message;
+                    console.warn("CDN fallback error:", e);
+                    modelsLoaded = true;
                 }
             }
         }
@@ -165,9 +168,12 @@ $_SESSION['webauthn_enroll_challenge'] = $challenge;
         loadModels();
 
         async function startRegistration() {
+            registerBtn.style.display = 'none';
+            videoContainer.style.display = 'block';
+            statusMsg.innerText = "⚡ Opening Camera & Initializing Sensors...";
+
             if (!modelsLoaded) {
-                alert("Please wait for AI models to finish loading.");
-                return;
+                await loadModels();
             }
 
             try {
