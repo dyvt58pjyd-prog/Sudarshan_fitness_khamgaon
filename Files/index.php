@@ -70,16 +70,65 @@ if (substr($logo_path, 0, 6) === '../../') {
         margin: 0;
     }
 
+    /* Rotating Holographic Portal Ring Behind Container */
+    .portal-ring-background {
+        position: absolute;
+        width: 750px;
+        height: 750px;
+        border-radius: 50%;
+        border: 2px dashed rgba(0, 240, 255, 0.4);
+        box-shadow: 0 0 50px rgba(0, 240, 255, 0.3), inset 0 0 50px rgba(112, 0, 255, 0.3);
+        animation: portal-ring-spin 25s linear infinite;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .portal-ring-inner {
+        position: absolute;
+        width: 550px;
+        height: 550px;
+        border-radius: 50%;
+        border: 2px solid rgba(112, 0, 255, 0.4);
+        box-shadow: 0 0 40px rgba(112, 0, 255, 0.4);
+        animation: portal-ring-spin-reverse 18s linear infinite;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    @keyframes portal-ring-spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @keyframes portal-ring-spin-reverse {
+        0% { transform: rotate(360deg); }
+        100% { transform: rotate(0deg); }
+    }
+
+    @keyframes system-lightning-flash {
+        0% { background-color: rgba(0, 240, 255, 0.15); filter: brightness(1.6); }
+        20% { background-color: transparent; filter: none; }
+        40% { background-color: rgba(112, 0, 255, 0.15); filter: brightness(1.8); }
+        60% { background-color: transparent; filter: none; }
+        100% { background-color: transparent; filter: none; }
+    }
+
+    .lightning-active {
+        animation: system-lightning-flash 0.5s ease-out;
+    }
+
     /* System Gate Window Container */
     .login-container {
         max-width: 650px !important;
         width: 95% !important;
-        background: rgba(9, 14, 28, 0.92) !important;
+        background: rgba(9, 14, 28, 0.94) !important;
         border: 2px solid #00f0ff !important;
         border-radius: 28px !important;
         padding: 45px 35px 35px 35px !important;
-        box-shadow: 0 0 50px rgba(0, 240, 255, 0.25), var(--glass-shadow) !important;
+        box-shadow: 0 0 50px rgba(0, 240, 255, 0.3), var(--glass-shadow) !important;
         position: relative;
+        z-index: 10;
+        animation: system-hologram-pulse 6s ease-in-out infinite alternate !important;
     }
 
     .login-container::before {
@@ -130,28 +179,33 @@ if (substr($logo_path, 0, 6) === '../../') {
 
     .category-tab[data-role="member"]:hover, .category-tab[data-role="member"].active {
         border-color: #00f0ff !important;
-        background: rgba(0, 240, 255, 0.15) !important;
-        box-shadow: 0 0 20px rgba(0, 240, 255, 0.4) !important;
+        background: rgba(0, 240, 255, 0.18) !important;
+        box-shadow: 0 0 25px rgba(0, 240, 255, 0.5) !important;
+        transform: scale(1.05);
     }
     .category-tab[data-role="reception"]:hover, .category-tab[data-role="reception"].active {
         border-color: #ffb703 !important;
-        background: rgba(255, 183, 3, 0.15) !important;
-        box-shadow: 0 0 20px rgba(255, 183, 3, 0.4) !important;
+        background: rgba(255, 183, 3, 0.18) !important;
+        box-shadow: 0 0 25px rgba(255, 183, 3, 0.5) !important;
+        transform: scale(1.05);
     }
     .category-tab[data-role="trainer"]:hover, .category-tab[data-role="trainer"].active {
         border-color: #7000ff !important;
-        background: rgba(112, 0, 255, 0.2) !important;
-        box-shadow: 0 0 20px rgba(112, 0, 255, 0.5) !important;
+        background: rgba(112, 0, 255, 0.25) !important;
+        box-shadow: 0 0 25px rgba(112, 0, 255, 0.6) !important;
+        transform: scale(1.05);
     }
     .category-tab[data-role="owner"]:hover, .category-tab[data-role="owner"].active {
         border-color: #a855f7 !important;
-        background: rgba(168, 85, 247, 0.2) !important;
-        box-shadow: 0 0 20px rgba(168, 85, 247, 0.5) !important;
+        background: rgba(168, 85, 247, 0.25) !important;
+        box-shadow: 0 0 25px rgba(168, 85, 247, 0.6) !important;
+        transform: scale(1.05);
     }
     .category-tab[data-role="super_admin"]:hover, .category-tab[data-role="super_admin"].active {
         border-color: #10b981 !important;
-        background: rgba(16, 185, 129, 0.2) !important;
-        box-shadow: 0 0 20px rgba(16, 185, 129, 0.5) !important;
+        background: rgba(16, 185, 129, 0.25) !important;
+        box-shadow: 0 0 25px rgba(16, 185, 129, 0.6) !important;
+        transform: scale(1.05);
     }
 
     .category-tab i {
@@ -186,7 +240,7 @@ if (substr($logo_path, 0, 6) === '../../') {
 
     .form-control:focus {
         border-color: #00f0ff !important;
-        box-shadow: 0 0 20px rgba(0, 240, 255, 0.4) !important;
+        box-shadow: 0 0 25px rgba(0, 240, 255, 0.5) !important;
     }
 
     .btn-primary {
@@ -210,14 +264,22 @@ if (substr($logo_path, 0, 6) === '../../') {
     </style>
 </head>
 <body class="page-body login-page login-form-fall">
+
+    <!-- Solo Leveling Floating Energy Particles Canvas -->
+    <canvas id="loginParticlesCanvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; opacity: 0.6;"></canvas>
+
+    <!-- Rotating Holographic Portal Rings -->
+    <div class="portal-ring-background"></div>
+    <div class="portal-ring-inner"></div>
+
     <div id="container">
         <div class="login-container">
             <div class="login-header login-caret">
                 <div class="login-content" style="text-align: center;">
                     <a href="#" class="logo">
-                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="filter: drop-shadow(0 0 15px rgba(0,240,255,0.5)); max-height: 100px; width: auto;" />
+                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="filter: drop-shadow(0 0 20px rgba(0,240,255,0.7)); max-height: 105px; width: auto;" />
                     </a>
-                    <p class="description" style="color: #64748b; font-size: 13px; font-family: 'Orbitron'; font-weight: 700; margin-top: 10px;">
+                    <p class="description" style="color: #64748b; font-size: 12px; font-family: 'Orbitron'; font-weight: 700; margin-top: 10px; letter-spacing: 1px;">
                         SELECT YOUR HUNTER CLASS TO ENTER SYSTEM GATE
                     </p>
                 </div>
@@ -229,7 +291,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                         <!-- Hidden Input for selected role -->
                         <input type="hidden" name="login_role" id="login_role" value="<?php echo htmlspecialchars($selected_role); ?>">
 
-                        <!-- Visual Grid of Login Categories (Solo Leveling System Gate) -->
+                        <!-- Visual Grid of Login Categories -->
                         <div class="login-categories">
                             <div class="category-tab <?php echo ($selected_role === 'member') ? 'active' : ''; ?>" data-role="member" onclick="selectRole('member')">
                                 <i class="entypo-user"></i>
@@ -303,6 +365,67 @@ if (substr($logo_path, 0, 6) === '../../') {
                     let loginModelsLoading = false;
                     let loginStream = null;
                     let loginScanInterval = null;
+
+                    // Periodic System Lightning Flash FX
+                    setInterval(() => {
+                        if (Math.random() > 0.4) {
+                            document.body.classList.add('lightning-active');
+                            setTimeout(() => {
+                                document.body.classList.remove('lightning-active');
+                            }, 500);
+                        }
+                    }, 12000);
+
+                    // Login Floating Energy Particles FX
+                    function initLoginParticles() {
+                        const canvas = document.getElementById('loginParticlesCanvas');
+                        if (!canvas) return;
+                        const ctx = canvas.getContext('2d');
+                        let w = canvas.width = window.innerWidth;
+                        let h = canvas.height = window.innerHeight;
+
+                        const particles = [];
+                        for (let i = 0; i < 45; i++) {
+                            particles.push({
+                                x: Math.random() * w,
+                                y: Math.random() * h,
+                                size: Math.random() * 2 + 1,
+                                color: Math.random() > 0.5 ? '#00f0ff' : '#7000ff',
+                                vy: -(Math.random() * 0.7 + 0.3),
+                                vx: (Math.random() - 0.5) * 0.5,
+                                alpha: Math.random() * 0.8 + 0.2
+                            });
+                        }
+
+                        function draw() {
+                            ctx.clearRect(0, 0, w, h);
+                            particles.forEach(p => {
+                                p.y += p.vy;
+                                p.x += p.vx;
+                                if (p.y < 0) p.y = h;
+                                if (p.x < 0) p.x = w;
+                                if (p.x > w) p.x = 0;
+
+                                ctx.save();
+                                ctx.globalAlpha = p.alpha;
+                                ctx.fillStyle = p.color;
+                                ctx.shadowColor = p.color;
+                                ctx.shadowBlur = 10;
+                                ctx.beginPath();
+                                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                                ctx.fill();
+                                ctx.restore();
+                            });
+                            requestAnimationFrame(draw);
+                        }
+
+                        window.addEventListener('resize', () => {
+                            w = canvas.width = window.innerWidth;
+                            h = canvas.height = window.innerHeight;
+                        });
+
+                        draw();
+                    }
 
                     async function loadLoginModels() {
                         if (loginModelsLoaded || loginModelsLoading) return;
@@ -422,6 +545,7 @@ if (substr($logo_path, 0, 6) === '../../') {
 
                     document.addEventListener('DOMContentLoaded', () => {
                         selectRole('<?php echo $selected_role; ?>');
+                        initLoginParticles();
                     });
                     </script>
 
