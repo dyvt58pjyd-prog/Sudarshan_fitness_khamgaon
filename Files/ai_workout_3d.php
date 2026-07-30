@@ -5,31 +5,89 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$gym = get_gym_details($con);
-$user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
+// Handle AJAX Save Workout Routine Log
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'save_workout_log') {
+    header('Content-Type: application/json');
+    if (!isset($_SESSION['user_data'])) {
+        echo json_encode(['status' => 'error', 'message' => 'Session expired. Please log in to save workout.']);
+        exit();
+    }
+    $uid_esc = mysqli_real_escape_string($con, $_SESSION['user_data']);
+    $ex_name = isset($_POST['ex_name']) ? mysqli_real_escape_string($con, trim($_POST['ex_name'])) : 'Exercise';
+    $reps_done = isset($_POST['reps_done']) ? intval($_POST['reps_done']) : 12;
 
-// Fetch User Gender from Database
+    $workout_entry = date('d-M-Y H:i') . " - Completed " . $ex_name . " (" . $reps_done . " Reps)";
+    
+    // Insert into member_routines table
+    $q_ins = "INSERT INTO member_routines (uid, workout_plan) VALUES ('$uid_esc', '$workout_entry')";
+    if (mysqli_query($con, $q_ins)) {
+        // Award +50 XP Points
+        if (function_exists('add_member_xp')) {
+            add_member_xp($con, $uid_esc, 50);
+        }
+        echo json_encode(['status' => 'success', 'message' => 'Workout set logged to your Sudarshan Fitness profile (+50 XP)!']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Database error: ' . mysqli_error($con)]);
+    }
+    exit();
+}
+
+$gym = get_gym_details($con);
+$member_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
+
+// Fetch Member Details from Database
 $user_gender = 'Male';
+$user_height = 170; // cm default
+$user_weight = 70; // kg default
+$fitness_goal = 'Muscle Building & Fitness';
+$trainer_name = 'Sudarshan Gym Staff';
+$user_xp = 0;
+$user_rank = 'Bronze Athlete';
+
 if (isset($_SESSION['user_data'])) {
     $uid_esc = mysqli_real_escape_string($con, $_SESSION['user_data']);
-    $qu = mysqli_query($con, "SELECT gender FROM users WHERE userid='$uid_esc'");
+    $qu = mysqli_query($con, "SELECT username, gender, height, weight, fitness_goal, trainer_id, xp_points, gym_rank FROM users WHERE userid='$uid_esc'");
     if ($qu && mysqli_num_rows($qu) > 0) {
         $row_u = mysqli_fetch_assoc($qu);
+        if (!empty($row_u['username'])) $member_name = $row_u['username'];
         if (!empty($row_u['gender']) && strtolower($row_u['gender']) === 'female') {
             $user_gender = 'Female';
         }
+        if (!empty($row_u['height']) && floatval($row_u['height']) > 0) $user_height = floatval($row_u['height']);
+        if (!empty($row_u['weight']) && floatval($row_u['weight']) > 0) $user_weight = floatval($row_u['weight']);
+        if (!empty($row_u['fitness_goal'])) $fitness_goal = $row_u['fitness_goal'];
+        $user_xp = intval($row_u['xp_points']);
+        if (!empty($row_u['gym_rank'])) $user_rank = $row_u['gym_rank'];
+
+        if (!empty($row_u['trainer_id'])) {
+            $tr_id = mysqli_real_escape_string($con, $row_u['trainer_id']);
+            $qtr = mysqli_query($con, "SELECT Full_name FROM admin WHERE username='$tr_id'");
+            if ($qtr && mysqli_num_rows($qtr) > 0) {
+                $rtr = mysqli_fetch_assoc($qtr);
+                $trainer_name = $rtr['Full_name'];
+            }
+        }
     }
 }
+
+// Calculate Personalized Health & Nutrition Metrics
+$bmr = ($user_gender === 'Female') 
+    ? (10 * $user_weight) + (6.25 * $user_height) - (5 * 25) - 161
+    : (10 * $user_weight) + (6.25 * $user_height) - (5 * 25) + 5;
+$bmr = round($bmr);
+$tdee = round($bmr * 1.55);
+$protein_g = round($user_weight * 2.0); // 2g per kg
+$water_l = round($user_weight * 0.04, 1);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AI Fitness Trainer &amp; 3D Workout Guide | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
+    <title>AI Fitness Trainer &amp; Pose Detector | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- MediaPipe Pose & Camera Utils (Imported from AI-Fitness-trainer) -->
+    <!-- MediaPipe Pose & Camera Utils -->
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
     
@@ -309,7 +367,7 @@ if (isset($_SESSION['user_data'])) {
             box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
 
-        /* WebCam & AI Skeleton Overlay */
+        /* WebCam Container */
         .webcam-container {
             display: none;
             position: absolute;
@@ -453,7 +511,6 @@ if (isset($_SESSION['user_data'])) {
             pointer-events: auto;
         }
 
-        /* Form Tips & Side Details */
         .tip-card {
             background: rgba(30, 41, 59, 0.4);
             border: 1px solid var(--glass-border);
@@ -491,7 +548,6 @@ if (isset($_SESSION['user_data'])) {
             margin-bottom: 6px;
         }
 
-        /* Rep Counter Box */
         .rep-counter-box {
             background: rgba(16, 185, 129, 0.15);
             border: 1px solid #10b981;
@@ -518,6 +574,26 @@ if (isset($_SESSION['user_data'])) {
             display: inline-block;
             margin-top: 6px;
         }
+
+        .btn-save-log {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent), #ff8800);
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255,107,0,0.4);
+            margin-top: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-save-log:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,107,0,0.6);
+        }
     </style>
 </head>
 <body>
@@ -526,8 +602,8 @@ if (isset($_SESSION['user_data'])) {
         <div class="gym-brand">
             <img src="<?php echo htmlspecialchars($gym['gym_logo']); ?>" class="gym-logo" alt="Gym Logo">
             <div>
-                <div class="page-title">🤖 AI FITNESS TRAINER &amp; POSE DETECTOR</div>
-                <div style="font-size: 11px; color: var(--text-muted);">Real-Time MediaPipe Motion &amp; Rep Counter Integration</div>
+                <div class="page-title">🏋️ <?php echo htmlspecialchars($gym['gym_name']); ?> AI TRAINER</div>
+                <div style="font-size: 11px; color: var(--text-muted);">Personalized AI Workout &amp; Nutrition Assistant</div>
             </div>
         </div>
 
@@ -544,8 +620,18 @@ if (isset($_SESSION['user_data'])) {
 
     <div class="app-layout">
         
-        <!-- Left Panel: Exercise Selector -->
+        <!-- Left Panel: Exercise Selector & Member Profile -->
         <div class="panel">
+            <!-- Member Profile Card -->
+            <div style="background: rgba(255, 107, 0, 0.12); border: 1px solid rgba(255, 107, 0, 0.3); border-radius: 16px; padding: 14px; margin-bottom: 20px;">
+                <div style="font-size: 11px; color: var(--accent); font-weight: 800; text-transform: uppercase;">SUDARSHAN FITNESS ATHLETE</div>
+                <h4 style="color: #fff; font-size: 16px; font-weight: 800; margin: 2px 0;"><?php echo htmlspecialchars($member_name); ?></h4>
+                <div style="font-size: 12px; color: var(--text-muted);">
+                    Goal: <strong style="color: #38bdf8;"><?php echo htmlspecialchars($fitness_goal); ?></strong><br>
+                    Trainer: <strong style="color: #10b981;"><?php echo htmlspecialchars($trainer_name); ?></strong>
+                </div>
+            </div>
+
             <div class="panel-title">
                 <span>🏋️ Select Exercise</span>
                 <span style="font-size: 11px; color: var(--accent);" id="ex-count">5 Exercises</span>
@@ -586,12 +672,12 @@ if (isset($_SESSION['user_data'])) {
                 </div>
             </div>
 
-            <!-- Real Human Demonstration GIF / Video Box -->
+            <!-- Real Human Demonstration GIF Box -->
             <div class="stage-media-box" id="demoMediaBox">
                 <img id="demoGif" src="https://github.com/itzThillaiC/AI-Fitness-trainer/raw/main/output/output%20push-up.gif" class="human-demo-gif" alt="Real Human Workout Demo">
             </div>
 
-            <!-- Live Webcam & MediaPipe Joint Skeleton Tracking Container -->
+            <!-- Live Webcam Container -->
             <div class="webcam-container" id="webcamBox">
                 <video id="webcamVideo" autoplay playsinline muted></video>
                 <canvas id="poseCanvas"></canvas>
@@ -604,7 +690,7 @@ if (isset($_SESSION['user_data'])) {
             </div>
         </div>
 
-        <!-- Right Panel: Form Guidance & Live AI Rep Counter -->
+        <!-- Right Panel: Form Guidance, AI Rep Counter & Personalized Nutrition -->
         <div class="panel">
             <div class="panel-title">
                 <span>🎯 Muscle &amp; Form Guide</span>
@@ -641,26 +727,31 @@ if (isset($_SESSION['user_data'])) {
                 <div class="rep-number" id="rep-display">0 REPS</div>
                 <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;" id="ai-stage-status">Position: UP • Stand in front of camera</div>
                 <div style="font-size: 12px; margin-top: 6px;" id="posture-status">Form Status: <span style="color: #10b981; font-weight: bold;">Good Posture 🟢</span></div>
+                
+                <button class="btn-save-log" onclick="saveWorkoutLogToDatabase()">
+                    💾 Save Set to My Routine Log (+50 XP)
+                </button>
             </div>
 
-            <!-- AI Nutrition & Macro Assistant (Imported from Preethamn15 Smart AI Gym Trainer) -->
+            <!-- Personalized AI Nutrition & Macro Assistant for Sudarshan Fitness -->
             <div class="tip-card" style="margin-top: 15px; background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);">
-                <h5 style="color: #60a5fa;">🥗 AI Nutrition &amp; Macro Planner</h5>
-                <div style="font-size: 11px; color: #94a3b8; margin-bottom: 8px;">Tailored for your body profile &amp; fitness goals</div>
+                <h5 style="color: #60a5fa;">🥗 Personalized AI Nutrition Plan</h5>
+                <div style="font-size: 11px; color: #94a3b8; margin-bottom: 8px;">Calculated for <?php echo htmlspecialchars($member_name); ?> (<?php echo $user_weight; ?>kg • <?php echo $user_height; ?>cm)</div>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px; text-align: center;">
                     <div style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px;">
                         <span style="color: #94a3b8; display: block; font-size: 9px;">DAILY PROTEIN</span>
-                        <strong style="color: #10b981; font-size: 14px;" id="macro-protein">130g - 150g</strong>
+                        <strong style="color: #10b981; font-size: 14px;"><?php echo $protein_g; ?>g / day</strong>
                     </div>
                     <div style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px;">
-                        <span style="color: #94a3b8; display: block; font-size: 9px;">ESTIMATED BMR</span>
-                        <strong style="color: #ff6b00; font-size: 14px;" id="macro-bmr">1,850 kcal</strong>
+                        <span style="color: #94a3b8; display: block; font-size: 9px;">DAILY WATER</span>
+                        <strong style="color: #38bdf8; font-size: 14px;"><?php echo $water_l; ?> Liters</strong>
                     </div>
                 </div>
 
                 <div style="font-size: 11px; color: #cbd5e1; margin-top: 10px; line-height: 1.4;">
-                    <strong style="color: #38bdf8;">Smart Meal Tip:</strong> Fuel your workout with 30g protein + complex carbs pre-workout, and hydrate with 3L water daily!
+                    <strong style="color: #ff6b00;">BMR: <?php echo number_format($bmr); ?> kcal</strong> • <strong style="color: #a78bfa;">TDEE: <?php echo number_format($tdee); ?> kcal</strong><br>
+                    <small style="color: #94a3b8;">Suggested pre-workout: 1 Banana + 30g Protein shake 45 mins before training.</small>
                 </div>
             </div>
         </div>
@@ -668,9 +759,6 @@ if (isset($_SESSION['user_data'])) {
     </div>
 
     <script>
-        // -------------------------------------------------------------
-        // EXERCISES FROM AI-FITNESS-TRAINER REPOSITORY
-        // -------------------------------------------------------------
         const EXERCISES = [
             {
                 id: 'pushup',
@@ -742,7 +830,7 @@ if (isset($_SESSION['user_data'])) {
         let currentGender = <?php echo json_encode($user_gender); ?>;
         let activeEx = EXERCISES[0];
         let repCount = 0;
-        let exerciseState = 'UP'; // 'UP' or 'DOWN'
+        let exerciseState = 'UP';
 
         function setCoachGender(gender) {
             currentGender = gender;
@@ -794,7 +882,6 @@ if (isset($_SESSION['user_data'])) {
             document.getElementById('active-cat').textContent = `${ex.category.toUpperCase()} EXERCISE`;
             document.getElementById('active-ex-name').textContent = ex.name;
 
-            // Real Human GIF
             document.getElementById('demoGif').src = ex.gif;
 
             const mContainer = document.getElementById('target-muscles-container');
@@ -824,10 +911,30 @@ if (isset($_SESSION['user_data'])) {
             document.getElementById('btn-toggle-cam').classList.remove('active');
         }
 
-        // -------------------------------------------------------------
-        // MEDIAPIPE AI REALTIME WEBCAM POSE TRACKER & ANGLE REPERTOIRE
-        // (Imported from AI-Fitness-trainer / body_part_angle.py & types_of_exercise.py)
-        // -------------------------------------------------------------
+        function saveWorkoutLogToDatabase() {
+            const formData = new FormData();
+            formData.append('action', 'save_workout_log');
+            formData.append('ex_name', activeEx.name);
+            formData.append('reps_done', repCount > 0 ? repCount : 12);
+
+            fetch('', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('✅ ' + data.message);
+                } else {
+                    alert('⚠️ ' + data.message);
+                }
+            })
+            .catch(err => {
+                alert('⚠️ Error saving workout log: ' + err.message);
+            });
+        }
+
+        // MediaPipe Real-Time Tracker
         let poseDetector = null;
         let cameraStream = null;
         let isWebcamActive = false;
@@ -861,7 +968,6 @@ if (isset($_SESSION['user_data'])) {
 
             isWebcamActive = true;
 
-            // Initialize MediaPipe Pose
             poseDetector = new Pose({
                 locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
             });
@@ -915,7 +1021,6 @@ if (isset($_SESSION['user_data'])) {
 
             const lm = results.poseLandmarks;
 
-            // Draw Skeleton Keypoint Connectors
             ctx.fillStyle = '#10b981';
             ctx.strokeStyle = '#ff6b00';
             ctx.lineWidth = 4;
@@ -926,11 +1031,9 @@ if (isset($_SESSION['user_data'])) {
                 ctx.fill();
             });
 
-            // Calculate Joint Angles based on Active Exercise
             let mainAngle = 180;
 
             if (activeEx.id === 'squats') {
-                // Hip (24), Knee (26), Ankle (28)
                 const hip = lm[24], knee = lm[26], ankle = lm[28];
                 if (hip && knee && ankle) {
                     mainAngle = calculateAngle(hip, knee, ankle);
@@ -953,7 +1056,6 @@ if (isset($_SESSION['user_data'])) {
                     }
                 }
             } else if (activeEx.id === 'pushup') {
-                // Shoulder (12), Elbow (14), Wrist (16)
                 const shoulder = lm[12], elbow = lm[14], wrist = lm[16];
                 if (shoulder && elbow && wrist) {
                     mainAngle = calculateAngle(shoulder, elbow, wrist);
@@ -988,7 +1090,6 @@ if (isset($_SESSION['user_data'])) {
             }
         }
 
-        // Initialize Page
         window.addEventListener('DOMContentLoaded', () => {
             renderExerciseList('all');
             selectExercise(EXERCISES[0], null);
