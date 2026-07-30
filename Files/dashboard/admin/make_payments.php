@@ -165,20 +165,56 @@ if ($uid) {
                </tr>
                <tr>
                  <td height="35">PAYMENT MODE:</td>
-                 <td height="35"><select name="payment_mode" id="boxx" required>
+                 <td height="35"><select name="payment_mode" id="payment_mode_select" required onchange="toggleUPIQR()">
                      <option value="Cash" selected>Cash</option>
                      <option value="UPI">UPI</option>
                  </select></td>
                </tr>
+               <tr id="upi_qr_container" style="display: none;">
+                 <td colspan="2" style="text-align: center; padding: 15px 0;">
+                   <div style="background: rgba(15, 7, 18, 0.95); border: 2px solid #ff003c; border-radius: 16px; padding: 20px; max-width: 280px; margin: 0 auto; box-shadow: 0 0 25px rgba(255, 0, 60, 0.35);">
+                     <div style="font-family: 'Orbitron', sans-serif; color: #ff003c; font-weight: 800; font-size: 13px; margin-bottom: 8px;">📱 SCAN &amp; PAY VIA UPI</div>
+                     <div style="background: #fff; padding: 10px; border-radius: 12px; display: inline-block;">
+                       <img id="upi_qr_image" src="" alt="UPI QR Code" style="width: 180px; height: 180px; display: block;" />
+                     </div>
+                     <div id="upi_amount_display" style="font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900; color: #10b981; margin-top: 10px;">₹0</div>
+                     <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">GPay • PhonePe • Paytm • BHIM</div>
+                   </div>
+                 </td>
+               </tr>
                <tr>
                  <td height="35">AMOUNT PAID NOW (₹):</td>
-                 <td height="35"><input type="number" name="paid_amount" id="paid_amount" placeholder="Leave empty if fully paid" size="40" onkeyup="checkBalance()"></td>
+                 <td height="35"><input type="number" name="paid_amount" id="paid_amount" placeholder="Leave empty if fully paid" size="40" onkeyup="checkBalance(); toggleUPIQR();" onchange="toggleUPIQR();"></td>
                </tr>
                <tr id="balance_due_row" style="display:none;">
                  <td height="35">BALANCE DUE DATE:</td>
                  <td height="35"><input type="date" name="balance_due_date" id="balance_due_date"></td>
                </tr>
                <script>
+                 function toggleUPIQR() {
+                     var mode = document.getElementById('payment_mode_select') ? document.getElementById('payment_mode_select').value : '';
+                     var qrContainer = document.getElementById('upi_qr_container');
+                     if (mode === 'UPI') {
+                         var amount = document.getElementById('paid_amount').value;
+                         if (!amount || parseFloat(amount) <= 0) {
+                             var totalText = document.getElementById('price') ? document.getElementById('price').value : '1000';
+                             amount = parseFloat(totalText.replace(/[^0-9.]/g, '')) || 1000;
+                             var discount = parseFloat(document.getElementById('discount_input').value) || 0;
+                             amount = amount - discount;
+                         }
+                         var upiId = 'sudarshanfitness@upi';
+                         var name = 'Member';
+                         var upiUrl = 'upi://pay?pa=' + encodeURIComponent(upiId) + '&pn=Sudarshan%20Fitness&am=' + encodeURIComponent(amount) + '&cu=INR&tn=' + encodeURIComponent('Membership Payment ' + name);
+                         var qrImgUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(upiUrl);
+                         
+                         document.getElementById('upi_qr_image').src = qrImgUrl;
+                         document.getElementById('upi_amount_display').innerText = '₹' + amount;
+                         qrContainer.style.display = 'table-row';
+                     } else {
+                         qrContainer.style.display = 'none';
+                     }
+                 }
+
                  function checkBalance() {
                      var totalText = document.getElementById('price') ? document.getElementById('price').value : '0';
                      var total = parseFloat(totalText.replace(/[^0-9.]/g, '')) || 0;
@@ -251,8 +287,8 @@ if ($uid) {
        			 	xmlhttp.onreadystatechange = function() {
             		if (this.readyState == 4 && this.status == 200) {
                		 document.getElementById("plandetls").innerHTML=this.responseText;
-                
-            			}
+               		 if (typeof toggleUPIQR === 'function') toggleUPIQR();
+             			}
         			};
         			
        				 xmlhttp.open("GET","plandetail.php?q="+str,true);

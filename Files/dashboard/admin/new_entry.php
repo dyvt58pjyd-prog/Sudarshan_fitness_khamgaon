@@ -815,14 +815,8 @@ if ($cnt_q) {
             
             document.getElementById('staff-qr-amount').innerText = '₹' + totalAmount.toLocaleString('en-IN');
             
-            var upiId = "<?php echo addslashes($gym['upi_id'] ?? ''); ?>";
-            var gymName = "<?php echo addslashes($gym['gym_name'] ?? 'Gym'); ?>";
-            
-            if (!upiId) {
-                document.getElementById('staff-qr-container').innerHTML = '<div style="color:red; padding: 10px;">UPI ID not configured in settings.</div>';
-                qrContainer.style.display = 'block';
-                return;
-            }
+            var upiId = "<?php echo addslashes(!empty($gym['upi_id']) ? $gym['upi_id'] : 'sudarshanfitness@upi'); ?>";
+            var gymName = "<?php echo addslashes($gym['gym_name'] ?? 'Sudarshan Fitness'); ?>";
             
             var cleanUpiId = upiId.replace(/\s+/g, '');
             var queryStr = `?pa=${cleanUpiId}&pn=${encodeURIComponent(gymName)}&am=${totalAmount.toFixed(2)}&tn=${encodeURIComponent('Registration Payment')}&cu=INR`;
