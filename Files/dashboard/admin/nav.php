@@ -260,6 +260,9 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
     <!-- 8. SETTINGS & ADMIN -->
     <?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
         <li id="ai_manager_link"><a href="ai_gym_manager.php" style="color: #ff003c; font-weight: bold;"><i class="entypo-light-bulb"></i><span>🤖 AI Gym Manager</span></a></li>
+        <li id="announcements_link"><a href="announcements.php" style="color: #ffb703;"><i class="entypo-megaphone"></i><span>📢 Gym Announcements</span></a></li>
+        <li id="live_occupancy_link"><a href="live_occupancy.php" style="color: #10b981;"><i class="entypo-users"></i><span>⚡ Live Gym Occupancy</span></a></li>
+        <li id="digital_pass_link"><a href="../member/digital_pass.php" target="_blank" style="color: #ff003c;"><i class="entypo-vcard"></i><span>🆔 Member Digital Pass</span></a></li>
         <li id="challenges_link"><a href="challenges_leaderboard.php" style="color: #ffb703;"><i class="entypo-trophy"></i><span>🏆 Gym Leaderboard &amp; Badges</span></a></li>
         <li id="indian_diet_link"><a href="indian_diet_planner.php" style="color: #10b981;"><i class="entypo-heart"></i><span>🍛 Indian Diet Planner</span></a></li>
         <li id="trainers_manage"><a href="trainers.php"><i class="entypo-user"></i><span>🏋️ Gym Trainers</span></a></li>
