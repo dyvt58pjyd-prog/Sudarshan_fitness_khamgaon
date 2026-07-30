@@ -141,16 +141,19 @@ if (!$partner_data) {
         $partner_data = mysqli_fetch_assoc($qp);
     }
 }
-if (!$partner_data && !empty($member['mobile'])) {
+if (!$partner_data && !empty($member['mobile']) && !in_array($member['mobile'], ['0000000000', '1234567890', '9876543210', '0'])) {
     $m_id = $member['userid'];
-    $m_mob = mysqli_real_escape_string($con, $member['mobile']);
-    $qp = mysqli_query($con, "SELECT * FROM users WHERE mobile='$m_mob' AND userid != '$m_id' LIMIT 1");
-    if ($qp && mysqli_num_rows($qp) > 0) {
-        $partner_data = mysqli_fetch_assoc($qp);
-        // Auto-heal database links
-        $p_id = $partner_data['userid'];
-        mysqli_query($con, "UPDATE users SET partner_uid = '$p_id' WHERE userid = '$m_id'");
-        mysqli_query($con, "UPDATE users SET partner_uid = '$m_id' WHERE userid = '$p_id'");
+    // Only auto-link if member is enrolled in a Couple Plan
+    $chk_couple_plan = mysqli_query($con, "SELECT e.pid, p.planName FROM enrolls_to e JOIN plan p ON e.pid = p.pid WHERE e.uid = '$m_id' AND (LOWER(p.planName) LIKE '%couple%' OR LOWER(e.pid) LIKE '%couple%') LIMIT 1");
+    if ($chk_couple_plan && mysqli_num_rows($chk_couple_plan) > 0) {
+        $m_mob = mysqli_real_escape_string($con, $member['mobile']);
+        $qp = mysqli_query($con, "SELECT * FROM users WHERE mobile='$m_mob' AND userid != '$m_id' LIMIT 1");
+        if ($qp && mysqli_num_rows($qp) > 0) {
+            $partner_data = mysqli_fetch_assoc($qp);
+            $p_id = $partner_data['userid'];
+            mysqli_query($con, "UPDATE users SET partner_uid = '$p_id' WHERE userid = '$m_id'");
+            mysqli_query($con, "UPDATE users SET partner_uid = '$m_id' WHERE userid = '$p_id'");
+        }
     }
 }
 
