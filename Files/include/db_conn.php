@@ -651,6 +651,16 @@ if (!function_exists('page_protect')) {
             echo "<meta http-equiv='refresh' content='0; url=/index.php'>";
             exit();
         }
+
+        /* Mandatory PIN setup check for super_admin & owner roles */
+        if (isset($_SESSION['require_pin_setup']) && $_SESSION['require_pin_setup'] === true) {
+            $script = basename($_SERVER['SCRIPT_NAME']);
+            if ($script !== 'setup_pin.php' && $script !== 'logout.php') {
+                $prefix = (strpos($_SERVER['SCRIPT_NAME'], '/dashboard/') !== false) ? '../../' : './';
+                header("Location: " . $prefix . "setup_pin.php");
+                exit();
+            }
+        }
     }
 }
 
@@ -744,6 +754,15 @@ if (!function_exists('check_and_upgrade_db')) {
             PRIMARY KEY (id)
         )";
         mysqli_query($con, $walkin_sql);
+
+        // Security PIN Migration: add pin_setup_completed column to admin table if missing
+        $cols_pin = mysqli_query($con, "SHOW COLUMNS FROM admin LIKE 'pin_setup_completed'");
+        if ($cols_pin && mysqli_num_rows($cols_pin) == 0) {
+            mysqli_query($con, "ALTER TABLE admin ADD COLUMN pin_setup_completed TINYINT(1) DEFAULT 0");
+        }
+
+        // Set default pass_key '070726' for owner and super_admin if legacy or unset
+        mysqli_query($con, "UPDATE admin SET pass_key = '070726', pin_setup_completed = 0 WHERE (role = 'super_admin' OR role = 'owner') AND (pass_key = 'admin' OR pass_key = '1234' OR pass_key = '' OR pass_key IS NULL)");
     }
 }
 

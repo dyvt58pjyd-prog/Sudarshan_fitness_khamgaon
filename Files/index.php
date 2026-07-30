@@ -10,6 +10,10 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 if(isset($_SESSION["user_data"]))
 {
+    if (isset($_SESSION['require_pin_setup']) && $_SESSION['require_pin_setup'] === true) {
+        header("location: ./setup_pin.php");
+        exit();
+    }
     if (isset($_SESSION['role']) && $_SESSION['role'] === 'member') {
         header("location: ./dashboard/member/");
     } else {
@@ -336,10 +340,25 @@ if (substr($logo_path, 0, 6) === '../../') {
                         } else {
                             btn.style.display = 'none';
                         }
+
+                        // PIN formatting for Owner & Superadmin
+                        const pwfield = document.getElementById('pwfield');
+                        if (pwfield) {
+                            if (role === 'super_admin' || role === 'owner') {
+                                pwfield.setAttribute('maxlength', '6');
+                                pwfield.setAttribute('inputmode', 'numeric');
+                                pwfield.setAttribute('pattern', '[0-9]*');
+                                pwfield.placeholder = "6-Digit Security PIN (Default: 070726)";
+                            } else {
+                                pwfield.removeAttribute('maxlength');
+                                pwfield.removeAttribute('inputmode');
+                                pwfield.removeAttribute('pattern');
+                                pwfield.placeholder = "Password";
+                            }
+                        }
                     }
                     
-                    // Add listener to the existing selectRole function call if possible, 
-                    // or just run on interval/mutation since selectRole is inline
+                    // Add listener to the existing selectRole function call
                     setInterval(updateFaceIdVisibility, 500);
 
                     async function loginWithFaceID() {

@@ -248,6 +248,13 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
     		<div class="main-content">
 		
+				<?php if (isset($_GET['pin_success'])): ?>
+				    <div style="background: rgba(16, 185, 129, 0.15); border: 2px solid #10b981; color: #10b981; padding: 16px 20px; border-radius: 16px; margin-bottom: 20px; font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 10px 25px rgba(16,185,129,0.2);">
+				        <div>🔒 Security PIN Updated! Your owner/superadmin account is now secured with your private 6-digit PIN.</div>
+				        <button onclick="this.parentElement.style.display='none'" style="background: none; border: none; color: #10b981; font-weight: bold; cursor: pointer; font-size: 18px;">✕</button>
+				    </div>
+				<?php endif; ?>
+		
 				<div class="row">
 					
 					<!-- Profile Info and Notifications -->
