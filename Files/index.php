@@ -492,54 +492,63 @@ if (substr($logo_path, 0, 6) === '../../') {
                         const statusMsg = document.getElementById('loginStatusMsg');
 
                         scanContainer.style.display = 'flex';
-                        statusMsg.textContent = 'Activating System Camera...';
+                        statusMsg.textContent = '⚡ Activating Ultra-Fast Sensors...';
 
                         try {
                             if (!loginModelsLoaded) {
-                                statusMsg.textContent = 'Loading System Sensors...';
+                                statusMsg.textContent = '⚡ Loading System Face Sensors...';
                                 await loadLoginModels();
                             }
 
-                            loginStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                            loginStream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' } });
                             video.srcObject = loginStream;
-                            statusMsg.textContent = 'Scanning Hunter Features... Position face in center.';
+                            statusMsg.textContent = '🔍 Scanning Face Biometrics... Position face in frame.';
 
+                            let isProcessing = false;
                             loginScanInterval = setInterval(async () => {
-                                if (!video.paused && !video.ended) {
-                                    const detection = await faceapi.detectSingleFace(video).withFaceLandmarks().withFaceDescriptor();
-                                    if (detection) {
-                                        statusMsg.textContent = 'Hunter Matched! Verifying System Credentials...';
-                                        clearInterval(loginScanInterval);
-                                        
-                                        const descriptorArray = Array.from(detection.descriptor);
-                                        
-                                        fetch('face_login_verify.php', {
-                                            method: 'POST',
-                                            headers: { 'Content-Type': 'application/json' },
-                                            body: JSON.stringify({ descriptor: descriptorArray })
-                                        })
-                                        .then(res => res.json())
-                                        .then(data => {
-                                            if (data.status === 'success') {
-                                                statusMsg.textContent = 'Access Granted! Entering Portal...';
-                                                setTimeout(() => {
-                                                    cancelFaceLogin();
-                                                    window.location.href = data.redirect || './dashboard/member/';
-                                                }, 500);
-                                            } else {
-                                                statusMsg.textContent = 'Verification Failed: ' + (data.message || 'Unknown Hunter');
-                                                setTimeout(() => {
-                                                    cancelFaceLogin();
-                                                }, 2500);
-                                            }
-                                        })
-                                        .catch(err => {
-                                            statusMsg.textContent = 'System Verification Error.';
-                                            setTimeout(cancelFaceLogin, 2000);
-                                        });
+                                if (!video.paused && !video.ended && !isProcessing) {
+                                    isProcessing = true;
+                                    try {
+                                        const options = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.2 });
+                                        const detection = await faceapi.detectSingleFace(video, options).withFaceLandmarks().withFaceDescriptor();
+                                        if (detection) {
+                                            statusMsg.textContent = '⚡ Face Detected! Verifying Identity...';
+                                            clearInterval(loginScanInterval);
+                                            
+                                            const descriptorArray = Array.from(detection.descriptor);
+                                            
+                                            fetch('face_login_verify.php', {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify({ descriptor: descriptorArray })
+                                            })
+                                            .then(res => res.json())
+                                            .then(data => {
+                                                if (data.status === 'success') {
+                                                    statusMsg.textContent = '✅ Access Granted! Entering System...';
+                                                    setTimeout(() => {
+                                                        cancelFaceLogin();
+                                                        window.location.href = data.redirect || './dashboard/member/';
+                                                    }, 300);
+                                                } else {
+                                                    statusMsg.textContent = '❌ ' + (data.message || 'Face Not Verified');
+                                                    setTimeout(() => {
+                                                        cancelFaceLogin();
+                                                    }, 2000);
+                                                }
+                                            })
+                                            .catch(err => {
+                                                statusMsg.textContent = 'System Verification Error.';
+                                                setTimeout(cancelFaceLogin, 2000);
+                                            });
+                                        }
+                                    } catch (e) {
+                                        console.warn("Scan frame error:", e);
+                                    } finally {
+                                        isProcessing = false;
                                     }
                                 }
-                            }, 800);
+                            }, 150);
 
                         } catch (err) {
                             alert('Camera Access Error: ' + err.message);
@@ -560,6 +569,8 @@ if (substr($logo_path, 0, 6) === '../../') {
                     document.addEventListener('DOMContentLoaded', () => {
                         selectRole('<?php echo $selected_role; ?>');
                         initLoginParticles();
+                        // Immediate Background Preload for FaceID Sensors
+                        setTimeout(loadLoginModels, 500);
                     });
                     </script>
 
