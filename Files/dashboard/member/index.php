@@ -378,9 +378,39 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
                         </div>
 
                         <div style="text-align: center; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139,92,246,0.3); padding: 20px 30px; border-radius: 18px;">
-                            <div style="font-size: 45px; margin-bottom: 5px;">🤖💪</div>
-                            <div style="font-size: 13px; font-weight: 800; color: #a78bfa; text-transform: uppercase;">25+ 3D Exercises</div>
+                            <div style="font-size: 45px; margin-bottom: 5px;">🧬</div>
+                            <div style="font-size: 13px; font-weight: 800; color: #a78bfa;">MediaPipe AI</div>
+                            <div style="font-size: 11px; color: var(--text-muted);">Anatomical 3D Motion</div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3D VIRTUAL GYM FLOOR & SUPPLEMENT STORE CARDS -->
+            <div class="row" style="margin-left: 0; margin-right: 0; margin-bottom: 25px; display: flex; gap: 20px; flex-wrap: wrap;">
+                <!-- 3D Virtual Gym Floor Navigator -->
+                <div class="col-md-6" style="padding: 0; flex: 1; min-width: 280px;">
+                    <div class="portal-card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(30, 41, 59, 0.9) 100%); border: 2px solid #3b82f6; border-radius: 20px; padding: 25px; color: #ffffff; box-shadow: 0 15px 35px rgba(59, 130, 246, 0.2);">
+                        <div style="color: #60a5fa; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;">🎮 INTERACTIVE FLOOR NAVIGATOR</div>
+                        <h3 style="margin: 0 0 10px 0; color: #fff; font-weight: 800; font-size: 20px;">3D Virtual Gym Floor</h3>
+                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 18px; line-height: 1.5;">Tour Sudarshan Fitness gym floor zones (Free Weights, Cardio, Heavy Machines) and talk with AI Coach dialogue assistant.</p>
+                        
+                        <a href="../../virtual_gym_3d.php" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: #fff; border: none; padding: 12px 20px; border-radius: 14px; font-size: 13px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 8px 20px rgba(59,130,246,0.4);">
+                            🎮 Explore Virtual Gym Floor ➔
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Virtual Supplement Shop Simulator -->
+                <div class="col-md-6" style="padding: 0; flex: 1; min-width: 280px;">
+                    <div class="portal-card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(30, 41, 59, 0.9) 100%); border: 2px solid #10b981; border-radius: 20px; padding: 25px; color: #ffffff; box-shadow: 0 15px 35px rgba(16, 185, 129, 0.2);">
+                        <div style="color: #34d399; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;">🥤 SUPPLEMENTS &amp; GEAR BAR</div>
+                        <h3 style="margin: 0 0 10px 0; color: #fff; font-weight: 800; font-size: 20px;">Virtual Gym Supplement Shop</h3>
+                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 18px; line-height: 1.5;">Order Whey Protein, Creatine, Pre-Workout energy, gym lifting gear, and personal training passes.</p>
+                        
+                        <a href="../../virtual_store.php" style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; padding: 12px 20px; border-radius: 14px; font-size: 13px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 8px 20px rgba(16,185,129,0.4);">
+                            🛒 Open Supplement Store ➔
+                        </a>
                     </div>
                 </div>
             </div>
