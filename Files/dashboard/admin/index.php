@@ -318,6 +318,23 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
                 grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
                 gap: 20px !important;
             }
+            .dashboard-grid a div, .dashboard-grid div.grid-action-box {
+                background: rgba(9, 14, 28, 0.9) !important;
+                border: 1px solid rgba(0, 240, 255, 0.35) !important;
+                border-radius: 18px !important;
+                box-shadow: 0 0 25px rgba(0, 240, 255, 0.15) !important;
+                transition: all 0.25s ease-in-out !important;
+            }
+            .dashboard-grid a div:hover {
+                border-color: #00f0ff !important;
+                box-shadow: 0 0 35px rgba(0, 240, 255, 0.5), 0 0 60px rgba(112, 0, 255, 0.3) !important;
+                transform: translateY(-4px) scale(1.02) !important;
+            }
+            .dashboard-grid a div h4 {
+                font-family: 'Orbitron', sans-serif !important;
+                color: #00f0ff !important;
+                letter-spacing: 0.5px !important;
+            }
             
             @media (max-width: 767px) {
                 .dashboard-grid {

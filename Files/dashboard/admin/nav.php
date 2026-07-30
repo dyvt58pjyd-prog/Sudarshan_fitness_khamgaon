@@ -80,37 +80,58 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
         }
     }
 </style>
+<script src="../../js/theme_engine.js"></script>
 <script>
 
     document.addEventListener("DOMContentLoaded", function() {
-        // Move Operating Year selector to top header links list
+        // Move Operating Year & Theme Switcher to top header links list
         const yearSelector = document.querySelector('.working-year-selector');
         const linksList = document.querySelector('.links-list');
-        if (yearSelector && linksList) {
-            // Style it nicely for the header inline placement
-            yearSelector.style.display = 'inline-flex';
-            yearSelector.style.alignItems = 'center';
-            yearSelector.style.gap = '8px';
-            yearSelector.style.margin = '0 20px 0 0';
-            yearSelector.style.padding = '4px 10px';
-            yearSelector.style.background = 'rgba(255, 107, 0, 0.1)';
-            yearSelector.style.border = '1px solid rgba(255, 107, 0, 0.2)';
-            yearSelector.style.borderRadius = '6px';
-            
-            // Hide the block "Operating Year" label text or make it smaller inline
-            const label = yearSelector.querySelector('span');
-            if (label) {
-                label.style.display = 'inline';
-                label.style.marginRight = '5px';
-                label.style.marginBottom = '0';
-                label.style.fontSize = '11px';
-                label.style.color = '#ff6b00';
-                label.style.fontWeight = 'bold';
+        if (linksList) {
+            // Theme Switcher Component
+            if (!document.getElementById('sf-theme-switcher-wrapper')) {
+                const themeLi = document.createElement('li');
+                themeLi.id = 'sf-theme-switcher-wrapper';
+                themeLi.style.marginRight = '15px';
+                themeLi.innerHTML = `
+                    <select id="sf-theme-select" onchange="SFThemeEngine.setThemeMode(this.value)" style="background: rgba(0, 240, 255, 0.1); color: #00f0ff; border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 8px; padding: 4px 8px; font-size: 11px; font-weight: 800; font-family: 'Orbitron', sans-serif; cursor: pointer;">
+                        <option value="dark" style="background:#030712; color:#fff;">🌙 Dark Mode</option>
+                        <option value="light" style="background:#fff; color:#000;">☀️ Light Mode</option>
+                        <option value="system" style="background:#030712; color:#fff;">💻 System Mode</option>
+                    </select>
+                `;
+                linksList.insertBefore(themeLi, linksList.firstChild);
+                
+                // Set select default value
+                const currentMode = SFThemeEngine.getThemeMode();
+                document.getElementById('sf-theme-select').value = currentMode;
             }
-            
-            const li = document.createElement('li');
-            li.appendChild(yearSelector);
-            linksList.insertBefore(li, linksList.firstChild);
+
+            if (yearSelector) {
+                yearSelector.style.display = 'inline-flex';
+                yearSelector.style.alignItems = 'center';
+                yearSelector.style.gap = '8px';
+                yearSelector.style.margin = '0 15px 0 0';
+                yearSelector.style.padding = '4px 10px';
+                yearSelector.style.background = 'rgba(0, 240, 255, 0.1)';
+                yearSelector.style.border = '1px solid rgba(0, 240, 255, 0.3)';
+                yearSelector.style.borderRadius = '8px';
+                
+                const label = yearSelector.querySelector('span');
+                if (label) {
+                    label.style.display = 'inline';
+                    label.style.marginRight = '5px';
+                    label.style.marginBottom = '0';
+                    label.style.fontSize = '11px';
+                    label.style.color = '#00f0ff';
+                    label.style.fontWeight = 'bold';
+                    label.style.fontFamily = "'Orbitron', sans-serif";
+                }
+                
+                const li = document.createElement('li');
+                li.appendChild(yearSelector);
+                linksList.insertBefore(li, linksList.firstChild);
+            }
         }
         
         // Add Back to Dashboard link to top right navigation list if not on index.php / main.php
@@ -120,7 +141,7 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
                 if (!document.getElementById('nav-dashboard-home')) {
                     const li = document.createElement('li');
                     li.id = 'nav-dashboard-home';
-                    li.innerHTML = '<a href="index.php" style="color: #ff6b00; font-weight: bold; font-size: 14px;"><i class="entypo-home" style="margin-right: 4px;"></i>Dashboard Home</a>';
+                    li.innerHTML = '<a href="index.php" style="color: #00f0ff; font-weight: bold; font-size: 13px; font-family: \'Orbitron\';"><i class="entypo-home" style="margin-right: 4px;"></i>Dashboard Home</a>';
                     linksList.insertBefore(li, linksList.firstChild);
                 }
             }
@@ -238,17 +259,15 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
 
     <!-- 8. SETTINGS & ADMIN -->
     <?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
-        <li id="campaign_manager_link"><a href="campaign_manager.php"><i class="entypo-calendar"></i><span>Automated Campaigns</span></a></li>
-        <li id="broadcastsettings"><a href="broadcast_campaign.php"><i class="entypo-megaphone"></i><span>WhatsApp Broadcast</span></a></li>
+        <li id="trainers_manage"><a href="trainers.php" style="color: #00f0ff;"><i class="entypo-user"></i><span>🏋️ Gym Trainers</span></a></li>
+        <li id="workout_library"><a href="workout_plans.php"><i class="entypo-flash"></i><span>💪 Workout Library</span></a></li>
+        <li id="diet_planner"><a href="diet_plans.php"><i class="entypo-heart"></i><span>🥗 Diet Planner</span></a></li>
+        <li id="reports_center"><a href="reports.php" style="color: #ffb703;"><i class="entypo-chart-bar"></i><span>📊 Reports &amp; Export</span></a></li>
+        <li id="audit_logs_link"><a href="audit_log.php"><i class="entypo-book-open"></i><span>📜 Audit Logs</span></a></li>
+        <li id="sys_settings"><a href="settings.php" style="color: #10b981;"><i class="entypo-cog"></i><span>⚙️ System Settings (v2.0)</span></a></li>
         <li id="expenses_ledger"><a href="expenses.php"><i class="entypo-book-open"></i><span>Expenses Ledger</span></a></li>
         <li id="staffmanage"><a href="manage_staff.php"><i class="entypo-users"></i><span>Manage Staff</span></a></li>
-        <li id="gymsettings"><a href="gym_settings.php"><i class="entypo-cog"></i><span>Gym Settings</span></a></li>
-        <li id="whatsappsettings"><a href="whatsapp_setup.php"><i class="entypo-phone"></i><span>WhatsApp Settings</span></a></li>
-        <li id="whatsappoutbox"><a href="whatsapp_outbox.php"><i class="entypo-paper-plane"></i><span>WhatsApp Queue</span></a></li>
-        <?php if ($current_role === 'super_admin'): ?>
-            <li id="smtpsettings"><a href="smtp_settings.php"><i class="entypo-mail"></i><span>SMTP Configuration</span></a></li>
-            <li id="discountlock"><a href="discount_lock.php"><i class="entypo-lock"></i><span>Discount Lock</span></a></li>
-        <?php endif; ?>
+        <li id="gymsettings"><a href="gym_settings.php"><i class="entypo-tools"></i><span>Gym Profile Settings</span></a></li>
         <li id="databackup"><a href="backup_data.php"><i class="entypo-drive"></i><span>Data Import/Export</span></a></li>
     <?php endif; ?>
 
