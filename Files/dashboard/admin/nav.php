@@ -259,9 +259,11 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
 
     <!-- 8. SETTINGS & ADMIN -->
     <?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
-        <li id="trainers_manage"><a href="trainers.php" style="color: #00f0ff;"><i class="entypo-user"></i><span>🏋️ Gym Trainers</span></a></li>
+        <li id="ai_manager_link"><a href="ai_gym_manager.php" style="color: #ff003c; font-weight: bold;"><i class="entypo-light-bulb"></i><span>🤖 AI Gym Manager</span></a></li>
+        <li id="challenges_link"><a href="challenges_leaderboard.php" style="color: #ffb703;"><i class="entypo-trophy"></i><span>🏆 Gym Leaderboard &amp; Badges</span></a></li>
+        <li id="indian_diet_link"><a href="indian_diet_planner.php" style="color: #10b981;"><i class="entypo-heart"></i><span>🍛 Indian Diet Planner</span></a></li>
+        <li id="trainers_manage"><a href="trainers.php"><i class="entypo-user"></i><span>🏋️ Gym Trainers</span></a></li>
         <li id="workout_library"><a href="workout_plans.php"><i class="entypo-flash"></i><span>💪 Workout Library</span></a></li>
-        <li id="diet_planner"><a href="diet_plans.php"><i class="entypo-heart"></i><span>🥗 Diet Planner</span></a></li>
         <li id="reports_center"><a href="reports.php" style="color: #ffb703;"><i class="entypo-chart-bar"></i><span>📊 Reports &amp; Export</span></a></li>
         <li id="audit_logs_link"><a href="audit_log.php"><i class="entypo-book-open"></i><span>📜 Audit Logs</span></a></li>
         <li id="sys_settings"><a href="settings.php" style="color: #10b981;"><i class="entypo-cog"></i><span>⚙️ System Settings (v2.0)</span></a></li>
