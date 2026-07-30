@@ -132,21 +132,23 @@ if (substr($logo_path, 0, 6) === '../../') {
     }
 
     .login-container::before {
-        content: '[ SUDARSHAN FITNESS GATE PORTAL ]';
+        content: '[ SUDARSHAN FITNESS PORTAL ]';
         position: absolute;
-        top: -14px;
+        top: -16px;
         left: 50%;
         transform: translateX(-50%);
         background: #030712;
-        border: 1px solid #ff003c;
+        border: 1.5px solid #ff003c;
         color: #ff003c;
         font-family: 'Orbitron', sans-serif;
         font-size: 11px;
         font-weight: 900;
-        padding: 4px 16px;
+        padding: 4px 20px;
         border-radius: 12px;
         letter-spacing: 2px;
-        box-shadow: 0 0 15px rgba(255,0,60,0.5);
+        box-shadow: 0 0 20px rgba(255,0,60,0.6);
+        z-index: 20;
+        white-space: nowrap;
     }
 
     .login-categories {
@@ -290,10 +292,10 @@ if (substr($logo_path, 0, 6) === '../../') {
 
     <div id="container">
         <div class="login-container">
-            <div class="login-header login-caret">
+            <div class="login-header login-caret" style="margin-top: 10px;">
                 <div class="login-content" style="text-align: center;">
                     <a href="#" class="logo">
-                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="filter: drop-shadow(0 0 20px rgba(0,240,255,0.7)); max-height: 105px; width: auto;" />
+                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="filter: drop-shadow(0 0 25px rgba(255,0,60,0.7)); max-height: 105px; width: auto;" />
                     </a>
                     <p class="description" style="color: #64748b; font-size: 13px; font-weight: 600; margin-top: 10px;">
                         Select your category to access your <?php echo htmlspecialchars($gym['gym_name']); ?> account.
