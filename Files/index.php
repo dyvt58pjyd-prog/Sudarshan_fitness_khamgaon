@@ -584,6 +584,16 @@ if (substr($logo_path, 0, 6) === '../../') {
                     });
                     </script>
 
+                    <!-- Official Copyright Footer -->
+                    <div style="text-align: center; margin-top: 25px; border-top: 1px solid rgba(255, 0, 60, 0.25); padding-top: 15px;">
+                        <div style="font-size: 11px; color: var(--text-muted); font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px;">
+                            © <?php echo date('Y'); ?> <?php echo htmlspecialchars($gym['gym_name']); ?>. All Rights Reserved.
+                        </div>
+                        <div style="font-size: 10px; color: #ff003c; font-weight: 800; font-family: 'Orbitron', sans-serif; margin-top: 4px; letter-spacing: 1.5px;">
+                            POWERED BY SUDARSHAN FITNESS v2.0
+                        </div>
+                    </div>
+
                     </form>
                 </div>
             </div>
