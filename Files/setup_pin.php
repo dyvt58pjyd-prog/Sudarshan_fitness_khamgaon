@@ -211,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         <div class="title">Set Your Security PIN</div>
         <div class="subtitle">
             Welcome, <strong><?php echo htmlspecialchars($full_name); ?></strong>!<br>
-            Please create a new <strong>4 to 6 digit Security PIN</strong> to replace the default password '070726' for instant secure access.
+            Please create a new <strong>4 to 6 digit Security PIN</strong> to replace your initial code for instant secure access.
         </div>
 
         <?php if (!empty($error_msg)): ?>

@@ -348,7 +348,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                                 pwfield.setAttribute('maxlength', '6');
                                 pwfield.setAttribute('inputmode', 'numeric');
                                 pwfield.setAttribute('pattern', '[0-9]*');
-                                pwfield.placeholder = "6-Digit Security PIN (Default: 070726)";
+                                pwfield.placeholder = "Enter 6-Digit Security PIN";
                             } else {
                                 pwfield.removeAttribute('maxlength');
                                 pwfield.removeAttribute('inputmode');
