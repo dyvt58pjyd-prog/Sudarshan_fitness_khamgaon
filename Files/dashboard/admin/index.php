@@ -135,16 +135,16 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
     	color: #ffffff;
 		}
 
-        /* Solo Leveling Monarch System Tile Widgets */
+        /* Crimson Red Gym UI Theme Overrides */
         .tile-stats {
-            background: rgba(9, 14, 28, 0.9) !important;
+            background: rgba(15, 7, 18, 0.94) !important;
             backdrop-filter: blur(20px) !important;
             -webkit-backdrop-filter: blur(20px) !important;
-            border: 2px solid rgba(0, 240, 255, 0.4) !important;
+            border: 2px solid rgba(255, 0, 60, 0.45) !important;
             border-radius: 24px !important;
             padding: 30px 20px !important;
             margin-bottom: 30px !important;
-            box-shadow: 0 0 35px rgba(0, 240, 255, 0.25), inset 0 0 15px rgba(112, 0, 255, 0.2) !important;
+            box-shadow: 0 0 35px rgba(255, 0, 60, 0.25), inset 0 0 15px rgba(112, 0, 255, 0.2) !important;
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
@@ -152,11 +152,11 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
         }
         .tile-stats:hover {
             transform: translateY(-5px);
-            border-color: #00f0ff !important;
-            box-shadow: 0 0 50px rgba(0, 240, 255, 0.6), 0 0 80px rgba(112, 0, 255, 0.4) !important;
+            border-color: #ff003c !important;
+            box-shadow: 0 0 50px rgba(255, 0, 60, 0.7), 0 0 80px rgba(112, 0, 255, 0.4) !important;
         }
         .tile-stats .icon {
-            color: rgba(0,240,255,0.15) !important;
+            color: rgba(255,0,60,0.15) !important;
             bottom: 20px !important;
             right: 20px !important;
             font-size: 80px !important;
@@ -166,7 +166,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
             font-size: 13px !important;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: #00f0ff !important;
+            color: #ff003c !important;
             margin-top: 0 !important;
             font-weight: 800 !important;
         }
@@ -175,48 +175,48 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
             font-size: 42px !important;
             font-weight: 900 !important;
             color: #ffffff !important;
-            text-shadow: 0 0 20px #00f0ff;
+            text-shadow: 0 0 20px #ff003c;
             margin-top: 15px;
         }
         
         /* Colored Glowing Borders */
-        .tile-red { border-bottom: 4px solid #ff0054 !important; box-shadow: inset 0 -15px 30px -20px rgba(255,0,84,0.5) !important; }
-        .tile-green { border-bottom: 4px solid #00f0ff !important; box-shadow: inset 0 -15px 30px -20px rgba(0,240,255,0.5) !important; }
-        .tile-aqua { border-bottom: 4px solid #0077ff !important; box-shadow: inset 0 -15px 30px -20px rgba(0,119,255,0.5) !important; }
+        .tile-red { border-bottom: 4px solid #ff003c !important; box-shadow: inset 0 -15px 30px -20px rgba(255,0,60,0.6) !important; }
+        .tile-green { border-bottom: 4px solid #10b981 !important; box-shadow: inset 0 -15px 30px -20px rgba(16,185,129,0.5) !important; }
+        .tile-aqua { border-bottom: 4px solid #ff003c !important; box-shadow: inset 0 -15px 30px -20px rgba(255,0,60,0.5) !important; }
         .tile-blue { border-bottom: 4px solid #7000ff !important; box-shadow: inset 0 -15px 30px -20px rgba(112,0,255,0.5) !important; }
         
-        .tile-red:hover { border-color: #ff0054 !important; }
-        .tile-green:hover { border-color: #00f0ff !important; }
-        .tile-aqua:hover { border-color: #0077ff !important; }
+        .tile-red:hover { border-color: #ff003c !important; }
+        .tile-green:hover { border-color: #10b981 !important; }
+        .tile-aqua:hover { border-color: #ff003c !important; }
         .tile-blue:hover { border-color: #7000ff !important; }
         
         /* Darker panel override */
         .panel {
-            background: rgba(9, 14, 28, 0.9) !important;
+            background: rgba(15, 7, 18, 0.94) !important;
             backdrop-filter: blur(15px) !important;
-            border: 1px solid rgba(0, 240, 255, 0.35) !important;
+            border: 1px solid rgba(255, 0, 60, 0.4) !important;
             border-radius: 20px !important;
-            box-shadow: 0 0 35px rgba(0, 240, 255, 0.15) !important;
+            box-shadow: 0 0 35px rgba(255, 0, 60, 0.2) !important;
         }
         .panel-heading {
             background: transparent !important;
-            border-bottom: 1px solid rgba(0, 240, 255, 0.25) !important;
+            border-bottom: 1px solid rgba(255, 0, 60, 0.3) !important;
         }
-        .panel-title { font-family: 'Orbitron', sans-serif !important; color: #00f0ff !important; font-weight: 900 !important; }
+        .panel-title { font-family: 'Orbitron', sans-serif !important; color: #ff003c !important; font-weight: 900 !important; }
         
         /* Table overrides */
         .table > tbody > tr {
             transition: background 0.3s ease, box-shadow 0.3s ease !important;
         }
         .table > tbody > tr:hover {
-            background: rgba(0, 240, 255, 0.08) !important;
-            box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.3) !important;
+            background: rgba(255, 0, 60, 0.08) !important;
+            box-shadow: inset 0 0 20px rgba(255, 0, 60, 0.3) !important;
         }
 
     </style>
 
 </head>
-    <body class="page-body page-fade" onload="collapseSidebar()" style="background-color: #030712; background-image: radial-gradient(circle at 50% 10%, rgba(112, 0, 255, 0.18) 0%, transparent 60%), radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.15) 0%, transparent 50%);">
+    <body class="page-body page-fade" onload="collapseSidebar()" style="background-color: #030712; background-image: radial-gradient(circle at 50% 10%, rgba(255, 0, 60, 0.22) 0%, transparent 60%), radial-gradient(circle at 90% 80%, rgba(112, 0, 255, 0.15) 0%, transparent 50%);">
 
         <!-- Particle HUD Background -->
         <div id="particles-js" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;"></div>
@@ -319,20 +319,20 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
                 gap: 20px !important;
             }
             .dashboard-grid a div, .dashboard-grid div.grid-action-box {
-                background: rgba(9, 14, 28, 0.9) !important;
-                border: 1px solid rgba(0, 240, 255, 0.35) !important;
+                background: rgba(15, 7, 18, 0.94) !important;
+                border: 1px solid rgba(255, 0, 60, 0.4) !important;
                 border-radius: 18px !important;
-                box-shadow: 0 0 25px rgba(0, 240, 255, 0.15) !important;
+                box-shadow: 0 0 25px rgba(255, 0, 60, 0.2) !important;
                 transition: all 0.25s ease-in-out !important;
             }
             .dashboard-grid a div:hover {
-                border-color: #00f0ff !important;
-                box-shadow: 0 0 35px rgba(0, 240, 255, 0.5), 0 0 60px rgba(112, 0, 255, 0.3) !important;
+                border-color: #ff003c !important;
+                box-shadow: 0 0 40px rgba(255, 0, 60, 0.7), 0 0 70px rgba(112, 0, 255, 0.4) !important;
                 transform: translateY(-4px) scale(1.02) !important;
             }
             .dashboard-grid a div h4 {
                 font-family: 'Orbitron', sans-serif !important;
-                color: #00f0ff !important;
+                color: #ff003c !important;
                 letter-spacing: 0.5px !important;
             }
             

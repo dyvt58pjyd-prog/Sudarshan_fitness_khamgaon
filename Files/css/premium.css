@@ -3,16 +3,16 @@
 :root {
   --bg-dark: #030712;        /* System Abyss Black */
   --bg-darker: #010309;      /* Void Portal Background */
-  --accent-primary: #00f0ff;  /* Monarch Electric Cyan System Glow */
-  --accent-hover: #00b8d4;
+  --accent-primary: #ff003c;  /* Electric Crimson Red Glow */
+  --accent-hover: #d90429;
   --text-main: #f8fafc;       /* System White Text */
   --text-muted: #64748b;     /* System Blue-Gray Muted Text */
-  --glass-bg: rgba(9, 14, 28, 0.92); /* System Window Holographic Glass */
-  --glass-border: rgba(0, 240, 255, 0.4); /* System Electric Cyan Border */
-  --glass-shadow: 0 0 35px 0 rgba(0, 240, 255, 0.25); /* System Glow Shadow */
+  --glass-bg: rgba(15, 7, 18, 0.94); /* System Window Holographic Glass */
+  --glass-border: rgba(255, 0, 60, 0.45); /* Crimson Red Border */
+  --glass-shadow: 0 0 35px 0 rgba(255, 0, 60, 0.35); /* Red Glow Shadow */
   --monarch-purple: #7000ff; /* Shadow Monarch Purple Energy */
   --quest-gold: #ffb703;    /* Quest Clear Gold */
-  --success: #00f0ff;
+  --success: #10b981;
   --warning: #ffb703;
   --danger: #ff0054;
   --info: #0077ff;
@@ -32,8 +32,8 @@ body, html {
   color: var(--text-main);
   background-color: var(--bg-dark);
   background-image: 
-    radial-gradient(circle at 50% 10%, rgba(112, 0, 255, 0.15) 0%, transparent 60%),
-    radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.1) 0%, transparent 50%);
+    radial-gradient(circle at 50% 10%, rgba(255, 0, 60, 0.2) 0%, transparent 60%),
+    radial-gradient(circle at 90% 80%, rgba(112, 0, 255, 0.15) 0%, transparent 50%);
 }
 
 /* ============================================================
