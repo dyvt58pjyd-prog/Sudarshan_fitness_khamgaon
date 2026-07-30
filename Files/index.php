@@ -119,58 +119,38 @@ if (substr($logo_path, 0, 6) === '../../') {
 
     /* System Gate Window Container */
     .login-container {
-        max-width: 680px !important;
-        width: 96% !important;
+        max-width: 650px !important;
+        width: 95% !important;
         background: rgba(15, 7, 18, 0.95) !important;
         border: 2px solid #ff003c !important;
         border-radius: 28px !important;
-        padding: 40px 25px !important;
+        padding: 35px 30px !important;
         box-shadow: 0 0 50px rgba(255, 0, 60, 0.35) !important;
         position: relative;
         z-index: 10;
         animation: system-hologram-pulse 6s ease-in-out infinite alternate !important;
     }
 
-    .login-container::before {
-        content: '[ SUDARSHAN FITNESS PORTAL ]';
-        position: absolute;
-        top: -16px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #030712;
-        border: 1.5px solid #ff003c;
-        color: #ff003c;
-        font-family: 'Orbitron', sans-serif;
-        font-size: 11px;
-        font-weight: 900;
-        padding: 4px 20px;
-        border-radius: 12px;
-        letter-spacing: 2px;
-        box-shadow: 0 0 20px rgba(255,0,60,0.6);
-        z-index: 20;
-        white-space: nowrap;
-    }
-
     .login-categories {
         display: grid !important;
-        grid-template-columns: repeat(6, 1fr) !important;
-        gap: 6px !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 12px !important;
         margin-bottom: 25px !important;
     }
 
     @media (max-width: 550px) {
         .login-categories {
             grid-template-columns: repeat(3, 1fr) !important;
-            gap: 6px !important;
+            gap: 8px !important;
         }
         .category-tab {
-            padding: 10px 4px !important;
+            padding: 12px 6px !important;
         }
         .category-tab i {
-            font-size: 18px !important;
+            font-size: 20px !important;
         }
         .category-tab span {
-            font-size: 8px !important;
+            font-size: 9px !important;
         }
     }
 
@@ -292,12 +272,13 @@ if (substr($logo_path, 0, 6) === '../../') {
 
     <div id="container">
         <div class="login-container">
-            <div class="login-header login-caret" style="margin-top: 10px;">
+            <div class="login-header login-caret">
                 <div class="login-content" style="text-align: center;">
+                    <div style="font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; color: #ff003c; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; text-shadow: 0 0 12px rgba(255,0,60,0.5);">[ SYSTEM GATE PORTAL ]</div>
                     <a href="#" class="logo">
-                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="filter: drop-shadow(0 0 25px rgba(255,0,60,0.7)); max-height: 105px; width: auto;" />
+                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="filter: drop-shadow(0 0 25px rgba(255,0,60,0.7)); max-height: 95px; width: auto;" />
                     </a>
-                    <p class="description" style="color: #64748b; font-size: 13px; font-weight: 600; margin-top: 10px;">
+                    <p class="description" style="color: #64748b; font-size: 12px; font-weight: 600; margin-top: 8px;">
                         Select your category to access your <?php echo htmlspecialchars($gym['gym_name']); ?> account.
                     </p>
                 </div>
