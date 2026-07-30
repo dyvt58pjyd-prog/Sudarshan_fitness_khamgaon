@@ -139,27 +139,28 @@ $_SESSION['webauthn_enroll_challenge'] = $challenge;
         async function loadModels() {
             if (modelsLoaded) return;
             statusMsg.innerText = "⚡ Loading Ultra-Fast AI Sensors...";
-            const cdnUri = 'https://cdn.jsdelivr.net/gh/cTFo/face-api.js@master/weights';
+            const cdnUri = 'https://justadudewhohacks.github.io/face-api.js/models';
             const localUri = 'js/face-api/models_v2';
             try {
                 await Promise.all([
-                    faceapi.nets.tinyFaceDetector.loadFromUri(localUri),
-                    faceapi.nets.faceLandmark68TinyNet.loadFromUri(localUri),
-                    faceapi.nets.faceRecognitionNet.loadFromUri(localUri)
+                    faceapi.nets.tinyFaceDetector.loadFromUri(cdnUri),
+                    faceapi.nets.faceLandmark68TinyNet.loadFromUri(cdnUri),
+                    faceapi.nets.faceRecognitionNet.loadFromUri(cdnUri)
                 ]);
                 modelsLoaded = true;
                 statusMsg.innerText = "⚡ Ultra-Fast AI Models Loaded! Ready to scan.";
             } catch (err) {
+                console.warn("CDN primary load failed, trying local fallback...", err);
                 try {
                     await Promise.all([
-                        faceapi.nets.tinyFaceDetector.loadFromUri(cdnUri),
-                        faceapi.nets.faceLandmark68TinyNet.loadFromUri(cdnUri),
-                        faceapi.nets.faceRecognitionNet.loadFromUri(cdnUri)
+                        faceapi.nets.tinyFaceDetector.loadFromUri(localUri),
+                        faceapi.nets.faceLandmark68TinyNet.loadFromUri(localUri),
+                        faceapi.nets.faceRecognitionNet.loadFromUri(localUri)
                     ]);
                     modelsLoaded = true;
                     statusMsg.innerText = "⚡ AI Models Loaded! Ready to scan.";
                 } catch (e) {
-                    console.warn("CDN fallback error:", e);
+                    console.warn("Local fallback error:", e);
                     modelsLoaded = true;
                 }
             }

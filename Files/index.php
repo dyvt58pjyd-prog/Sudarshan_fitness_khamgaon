@@ -448,20 +448,22 @@ if (substr($logo_path, 0, 6) === '../../') {
                     async function loadLoginModels() {
                         if (loginModelsLoaded || loginModelsLoading) return;
                         loginModelsLoading = true;
+                        const cdnUri = 'https://justadudewhohacks.github.io/face-api.js/models';
+                        const localUri = 'js/face-api/models_v2';
                         try {
                             await Promise.all([
-                                faceapi.nets.tinyFaceDetector.loadFromUri('js/face-api/models_v2'),
-                                faceapi.nets.faceLandmark68TinyNet.loadFromUri('js/face-api/models_v2'),
-                                faceapi.nets.faceRecognitionNet.loadFromUri('js/face-api/models_v2')
+                                faceapi.nets.tinyFaceDetector.loadFromUri(cdnUri),
+                                faceapi.nets.faceLandmark68TinyNet.loadFromUri(cdnUri),
+                                faceapi.nets.faceRecognitionNet.loadFromUri(cdnUri)
                             ]);
                             loginModelsLoaded = true;
                         } catch (err) {
-                            console.warn("Fallback to SSD MobileNet...", err);
+                            console.warn("CDN primary load failed, trying local fallback...", err);
                             try {
                                 await Promise.all([
-                                    faceapi.nets.ssdMobilenetv1.loadFromUri('js/face-api/models_v2'),
-                                    faceapi.nets.faceLandmark68Net.loadFromUri('js/face-api/models_v2'),
-                                    faceapi.nets.faceRecognitionNet.loadFromUri('js/face-api/models_v2')
+                                    faceapi.nets.tinyFaceDetector.loadFromUri(localUri),
+                                    faceapi.nets.faceLandmark68TinyNet.loadFromUri(localUri),
+                                    faceapi.nets.faceRecognitionNet.loadFromUri(localUri)
                                 ]);
                                 loginModelsLoaded = true;
                             } catch (e) {
