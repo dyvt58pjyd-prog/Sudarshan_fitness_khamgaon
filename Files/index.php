@@ -327,7 +327,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                             </div>
                             <div class="category-tab <?php echo ($selected_role === 'super_admin') ? 'active' : ''; ?>" data-role="super_admin" onclick="selectRole('super_admin')">
                                 <i class="entypo-cog"></i>
-                                <span>App Developer</span>
+                                <span>Auditor</span>
                             </div>
                         </div>
 
@@ -358,19 +358,18 @@ if (substr($logo_path, 0, 6) === '../../') {
                             </button>
                             
                             <!-- Action Grid for Self Registration & Quick Portals -->
-                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px;">
-                                <a href="register.php" style="background: rgba(255, 0, 60, 0.15); color: #ff003c; border: 1px solid #ff003c; font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 12px; text-decoration: none; text-align: center; padding: 12px 6px; border-radius: 12px; display: block; box-shadow: 0 0 15px rgba(255,0,60,0.2);">
-                                    ✍️ Self Registration
+                            <div style="margin-top: 15px;">
+                                <a href="register.php" style="background: rgba(255, 0, 60, 0.2); color: #ff003c; border: 1.5px solid #ff003c; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 13px; text-decoration: none; text-align: center; padding: 13px; border-radius: 12px; display: block; box-shadow: 0 0 20px rgba(255,0,60,0.3); margin-bottom: 10px;">
+                                    ✍️ SELF REGISTRATION (JOIN GYM)
                                 </a>
-                                <a href="guest_enquiry.php" style="background: rgba(255, 183, 3, 0.15); color: #ffb703; border: 1px solid #ffb703; font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 12px; text-decoration: none; text-align: center; padding: 12px 6px; border-radius: 12px; display: block; box-shadow: 0 0 15px rgba(255,183,3,0.2);">
-                                    🎁 Free Gym Trial
-                                </a>
-                                <a href="prebook.php" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 12px; text-decoration: none; text-align: center; padding: 12px 6px; border-radius: 12px; display: block; box-shadow: 0 0 15px rgba(16,185,129,0.2);">
-                                    ⚡ Pre-Book Membership
-                                </a>
-                                <a href="virtual_store.php" style="background: rgba(112, 0, 255, 0.15); color: #a78bfa; border: 1px solid #7000ff; font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 12px; text-decoration: none; text-align: center; padding: 12px 6px; border-radius: 12px; display: block; box-shadow: 0 0 15px rgba(112,0,255,0.2);">
-                                    🛍️ Virtual Gym Store
-                                </a>
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                    <a href="guest_enquiry.php" style="background: rgba(255, 183, 3, 0.15); color: #ffb703; border: 1px solid #ffb703; font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 11px; text-decoration: none; text-align: center; padding: 11px 6px; border-radius: 12px; display: block; box-shadow: 0 0 15px rgba(255,183,3,0.2);">
+                                        🎁 Free Gym Trial
+                                    </a>
+                                    <a href="prebook.php" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 11px; text-decoration: none; text-align: center; padding: 11px 6px; border-radius: 12px; display: block; box-shadow: 0 0 15px rgba(16,185,129,0.2);">
+                                        ⚡ Pre-Book Slot
+                                    </a>
+                                </div>
                             </div>
 
                             <button type="button" id="faceIdLoginBtn" class="btn btn-success" style="width: 100%; display: none; margin-top: 12px; background: linear-gradient(135deg, #7000ff, #480094); border: 1px solid #7000ff; font-family: 'Orbitron'; font-weight: 800;" onclick="loginWithFaceID()">
