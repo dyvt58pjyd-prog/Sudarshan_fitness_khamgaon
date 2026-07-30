@@ -174,9 +174,12 @@ if ($uid) {
                  <td colspan="2" style="text-align: center; padding: 15px 0;">
                    <div style="background: rgba(15, 7, 18, 0.95); border: 2px solid #ff003c; border-radius: 16px; padding: 20px; max-width: 280px; margin: 0 auto; box-shadow: 0 0 25px rgba(255, 0, 60, 0.35);">
                      <div style="font-family: 'Orbitron', sans-serif; color: #ff003c; font-weight: 800; font-size: 13px; margin-bottom: 8px;">📱 SCAN &amp; PAY VIA UPI</div>
-                     <div style="background: #fff; padding: 10px; border-radius: 12px; display: inline-block;">
-                       <img id="upi_qr_image" src="" alt="UPI QR Code" style="width: 180px; height: 180px; display: block;" />
-                     </div>
+                      <div style="background: #fff; padding: 10px; border-radius: 12px; display: inline-block; position: relative;">
+                        <img id="upi_qr_image" src="" alt="UPI QR Code" style="width: 180px; height: 180px; display: block;" />
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #030712; padding: 3px; border-radius: 50%; border: 2px solid #ff003c; box-shadow: 0 0 15px rgba(255,0,60,0.8); display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
+                          <img src="<?php echo htmlspecialchars($gym_settings_data['gym_logo'] ?? '../../images/logo.png'); ?>" alt="Gym Logo" style="width: 32px; height: 32px; border-radius: 50%; object-fit: contain;" />
+                        </div>
+                      </div>
                      <div id="upi_amount_display" style="font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: 900; color: #10b981; margin-top: 10px;">₹0</div>
                      <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">GPay • PhonePe • Paytm • BHIM</div>
                    </div>

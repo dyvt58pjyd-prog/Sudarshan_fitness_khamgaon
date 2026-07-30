@@ -33,8 +33,11 @@ $qr_url = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" . url
         <h3 style="font-family: 'Orbitron'; color: var(--accent-primary); margin-top: 0;"><?php echo htmlspecialchars($gym['gym_name']); ?></h3>
         <div style="font-size: 12px; color: var(--text-muted); font-family: 'Orbitron'; font-weight: 800;">SCAN WITH GPAY / PHONEPE / PAYTM</div>
 
-        <div class="qr-box">
+        <div class="qr-box" style="position: relative;">
             <img src="<?php echo $qr_url; ?>" alt="UPI Payment QR Code" style="width: 100%; height: 100%;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #030712; padding: 3px; border-radius: 50%; border: 2px solid #ff003c; box-shadow: 0 0 15px rgba(255,0,60,0.8); display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;">
+                <img src="<?php echo htmlspecialchars($gym['gym_logo'] ?? '../../images/logo.png'); ?>" alt="Gym Logo" style="width: 34px; height: 34px; border-radius: 50%; object-fit: contain;" />
+            </div>
         </div>
 
         <div style="font-size: 28px; font-weight: 900; color: #10b981; font-family: 'Orbitron'; margin-bottom: 5px;">₹<?php echo number_format($amount); ?></div>

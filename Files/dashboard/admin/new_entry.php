@@ -385,7 +385,12 @@ if ($cnt_q) {
                     <div id="staff-qr-container" style="display: none; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,107,0,0.3); text-align: center; margin: 10px 0;">
                         <h4 style="color: #fff; margin-top: 0; margin-bottom: 5px;">Scan to Pay: <span id="staff-qr-amount" style="color: #ff6b00;">₹0</span></h4>
                         <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 15px;">Ask member to scan this QR code. Proceed to submit only after physical verification.</p>
-                        <img id="staff-qr-code" style="display: inline-block; background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); width: 200px; height: 200px;" />
+                        <div style="position: relative; display: inline-block;">
+                            <img id="staff-qr-code" style="display: block; background: #fff; padding: 10px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); width: 200px; height: 200px;" />
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #030712; padding: 3px; border-radius: 50%; border: 2px solid #ff003c; box-shadow: 0 0 15px rgba(255,0,60,0.8); display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;">
+                              <img src="<?php echo htmlspecialchars($gym['gym_logo'] ?? '../../images/logo.png'); ?>" alt="Gym Logo" style="width: 34px; height: 34px; border-radius: 50%; object-fit: contain;" />
+                            </div>
+                        </div>
                     </div>
                 </td>
               </tr>
