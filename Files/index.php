@@ -359,7 +359,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                                 </div>
                             </div>
 
-                            <button type="button" id="faceIdLoginBtn" class="btn btn-success" style="width: 100%; display: none; margin-top: 12px; background: linear-gradient(135deg, #7000ff, #480094); border: 1px solid #7000ff; font-family: 'Orbitron'; font-weight: 800;" onclick="loginWithFaceID()">
+                            <button type="button" id="faceIdLoginBtn" class="btn btn-success" style="width: 100%; display: block; margin-top: 12px; background: linear-gradient(135deg, #7000ff, #ff003c); border: 1px solid #ff003c; font-family: 'Orbitron', sans-serif; font-weight: 900; box-shadow: 0 0 25px rgba(112,0,255,0.6);" onclick="loginWithFaceID()">
                                 <i class="entypo-camera"></i>
                                 SYSTEM BIOMETRIC SCAN
                             </button>
@@ -482,12 +482,8 @@ if (substr($logo_path, 0, 6) === '../../') {
                         }
 
                         const faceBtn = document.getElementById('faceIdLoginBtn');
-                        if (role === 'member') {
-                            if (faceBtn) faceBtn.style.display = 'block';
-                            loadLoginModels();
-                        } else {
-                            if (faceBtn) faceBtn.style.display = 'none';
-                        }
+                        if (faceBtn) faceBtn.style.display = 'block';
+                        loadLoginModels();
                     }
 
                     async function loginWithFaceID() {
