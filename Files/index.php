@@ -42,77 +42,62 @@ if (substr($logo_path, 0, 6) === '../../') {
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- OpenGraph SEO -->
-    <meta property="og:title" content="<?php echo htmlspecialchars($gym['gym_name']); ?> | Login">
-    <meta property="og:description" content="Welcome to <?php echo htmlspecialchars($gym['gym_name']); ?>. Access your premium dashboard.">
+    <meta property="og:title" content="<?php echo htmlspecialchars($gym['gym_name']); ?> | System Portal">
+    <meta property="og:description" content="Solo Leveling System Gate | Access your premium Sudarshan Fitness portal.">
     <meta property="og:image" content="<?php echo htmlspecialchars($logo_path); ?>">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
-	<title><?php echo htmlspecialchars($gym['gym_name']); ?> | Login</title>
+	<title>[SYSTEM PORTAL] <?php echo htmlspecialchars($gym['gym_name']); ?> | Gate Login</title>
 	<link rel="shortcut icon" href="<?php echo htmlspecialchars($logo_path); ?>" type="image/jpeg">
     <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="./css/style.css"/>
 	<link rel="stylesheet" type="text/css" href="./css/entypo.css">
 	<link rel="stylesheet" href="./css/premium.css"/>
     <style>
-    /* Advanced Animated Background with Glowing Mesh & Lightning Flash */
+    /* Solo Leveling Monarch System Gate Background */
     body.login-page {
-        background: #000000 !important;
+        background: #030712 !important;
         position: relative;
         overflow-x: hidden;
         background-image: 
-            radial-gradient(circle at 50% -20%, rgba(255, 107, 0, 0.18) 0%, transparent 50%),
-            radial-gradient(circle at 0% 100%, rgba(255, 107, 0, 0.08) 0%, transparent 45%) !important;
-        animation: global-glow 15s ease-in-out infinite alternate;
-        transition: background-color 0.15s ease, filter 0.15s ease !important;
+            radial-gradient(circle at 50% 20%, rgba(112, 0, 255, 0.25) 0%, transparent 60%),
+            radial-gradient(circle at 50% 80%, rgba(0, 240, 255, 0.18) 0%, transparent 50%) !important;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
     }
 
-    @keyframes global-glow {
-        0% { background-color: #000000; }
-        50% { background-color: #050505; }
-        100% { background-color: #000000; }
-    }
-
-    /* Periodic Lightning Strike Flash Effect */
-    .lightning-flash-active {
-        animation: screen-lightning 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
-    }
-
-    @keyframes screen-lightning {
-        0% {
-            background-color: rgba(255, 255, 255, 0.12);
-            filter: brightness(1.8);
-        }
-        10% {
-            background-color: rgba(255, 107, 0, 0.08);
-            filter: brightness(1.4);
-        }
-        15% {
-            background-color: rgba(255, 255, 255, 0.15);
-            filter: brightness(2.0);
-        }
-        30% {
-            background-color: rgba(255, 107, 0, 0.04);
-            filter: brightness(1.2);
-        }
-        100% {
-            background-color: transparent;
-            filter: none;
-        }
-    }
-
-    /* Container electrical surge pulse */
+    /* System Gate Window Container */
     .login-container {
         max-width: 650px !important;
         width: 95% !important;
+        background: rgba(9, 14, 28, 0.92) !important;
+        border: 2px solid #00f0ff !important;
         border-radius: 28px !important;
         padding: 45px 35px 35px 35px !important;
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+        box-shadow: 0 0 50px rgba(0, 240, 255, 0.25), var(--glass-shadow) !important;
+        position: relative;
     }
-    
-    .login-container.surge-active {
-        box-shadow: 0 0 50px rgba(255, 107, 0, 0.45), var(--glass-shadow) !important;
-        border-color: rgba(255, 107, 0, 0.5) !important;
-        transform: scale(1.01) !important;
+
+    .login-container::before {
+        content: '[ SYSTEM GATE PORTAL ]';
+        position: absolute;
+        top: -14px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #030712;
+        border: 1px solid #00f0ff;
+        color: #00f0ff;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 11px;
+        font-weight: 900;
+        padding: 4px 16px;
+        border-radius: 12px;
+        letter-spacing: 2px;
+        box-shadow: 0 0 15px rgba(0,240,255,0.5);
     }
 
     .login-categories {
@@ -127,90 +112,100 @@ if (substr($logo_path, 0, 6) === '../../') {
             grid-template-columns: repeat(3, 1fr) !important;
         }
     }
-    @media (max-width: 440px) {
-        .login-categories {
-            grid-template-columns: repeat(2, 1fr) !important;
-        }
-    }
 
     .category-tab {
-        background: rgba(255, 255, 255, 0.02) !important;
-        border: 2px solid rgba(255, 255, 255, 0.08) !important;
+        background: rgba(0, 240, 255, 0.03) !important;
+        border: 1px solid rgba(0, 240, 255, 0.2) !important;
         border-radius: 16px !important;
-        padding: 20px 8px !important;
+        padding: 16px 8px !important;
         text-align: center !important;
         cursor: pointer !important;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        transition: all 0.25s ease !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 10px !important;
-        flex: none !important;
-        min-width: 0 !important;
+        gap: 8px !important;
     }
 
-    /* Category individual colors */
     .category-tab[data-role="member"]:hover, .category-tab[data-role="member"].active {
-        border-color: #ff6b00 !important;
-        background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(255, 107, 0, 0.03) 100%) !important;
-        box-shadow: 0 8px 20px rgba(255, 107, 0, 0.15) !important;
+        border-color: #00f0ff !important;
+        background: rgba(0, 240, 255, 0.15) !important;
+        box-shadow: 0 0 20px rgba(0, 240, 255, 0.4) !important;
     }
     .category-tab[data-role="reception"]:hover, .category-tab[data-role="reception"].active {
-        border-color: #ec4899 !important;
-        background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.03) 100%) !important;
-        box-shadow: 0 8px 20px rgba(236, 72, 153, 0.15) !important;
+        border-color: #ffb703 !important;
+        background: rgba(255, 183, 3, 0.15) !important;
+        box-shadow: 0 0 20px rgba(255, 183, 3, 0.4) !important;
     }
     .category-tab[data-role="trainer"]:hover, .category-tab[data-role="trainer"].active {
-        border-color: #0ea5e9 !important;
-        background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.03) 100%) !important;
-        box-shadow: 0 8px 20px rgba(14, 165, 233, 0.15) !important;
+        border-color: #7000ff !important;
+        background: rgba(112, 0, 255, 0.2) !important;
+        box-shadow: 0 0 20px rgba(112, 0, 255, 0.5) !important;
     }
     .category-tab[data-role="owner"]:hover, .category-tab[data-role="owner"].active {
         border-color: #a855f7 !important;
-        background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.03) 100%) !important;
-        box-shadow: 0 8px 20px rgba(168, 85, 247, 0.15) !important;
+        background: rgba(168, 85, 247, 0.2) !important;
+        box-shadow: 0 0 20px rgba(168, 85, 247, 0.5) !important;
     }
     .category-tab[data-role="super_admin"]:hover, .category-tab[data-role="super_admin"].active {
         border-color: #10b981 !important;
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.03) 100%) !important;
-        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.15) !important;
+        background: rgba(16, 185, 129, 0.2) !important;
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.5) !important;
     }
 
-    /* Category hover transforms */
-    .category-tab:hover {
-        transform: scale(1.05) !important;
-    }
-
-    /* Category icon/span size styling overrides */
     .category-tab i {
-        font-size: 28px !important;
-        transition: all 0.25s ease !important;
+        font-size: 24px !important;
     }
     .category-tab span {
-        font-size: 11px !important;
+        font-size: 10px !important;
         font-weight: 800 !important;
-        color: rgba(255, 255, 255, 0.7) !important;
+        font-family: 'Orbitron', sans-serif !important;
+        color: rgba(255, 255, 255, 0.8) !important;
         text-transform: uppercase !important;
         letter-spacing: 0.5px !important;
     }
 
-    /* Apply active state colors to icons and spans */
     .category-tab.active span {
         color: #ffffff !important;
     }
-    .category-tab[data-role="member"].active i { color: #ff6b00 !important; }
-    .category-tab[data-role="reception"].active i { color: #ec4899 !important; }
-    .category-tab[data-role="trainer"].active i { color: #0ea5e9 !important; }
+    .category-tab[data-role="member"].active i { color: #00f0ff !important; }
+    .category-tab[data-role="reception"].active i { color: #ffb703 !important; }
+    .category-tab[data-role="trainer"].active i { color: #7000ff !important; }
     .category-tab[data-role="owner"].active i { color: #a855f7 !important; }
     .category-tab[data-role="super_admin"].active i { color: #10b981 !important; }
 
-    /* Inactive icon colors */
-    .category-tab:not(.active) i {
-        color: rgba(255, 255, 255, 0.4) !important;
+    .form-control {
+        background: rgba(3, 7, 18, 0.8) !important;
+        border: 1px solid rgba(0, 240, 255, 0.3) !important;
+        color: #ffffff !important;
+        border-radius: 14px !important;
+        padding: 14px 18px !important;
+        font-size: 14px !important;
     }
-    .category-tab:not(.active):hover i {
-        color: rgba(255, 255, 255, 0.9) !important;
+
+    .form-control:focus {
+        border-color: #00f0ff !important;
+        box-shadow: 0 0 20px rgba(0, 240, 255, 0.4) !important;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #00f0ff, #0077ff) !important;
+        color: #030712 !important;
+        border: none !important;
+        padding: 15px !important;
+        border-radius: 14px !important;
+        font-family: 'Orbitron', sans-serif !important;
+        font-weight: 900 !important;
+        font-size: 14px !important;
+        letter-spacing: 1px !important;
+        box-shadow: 0 0 30px rgba(0, 240, 255, 0.6) !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 0 45px rgba(0, 240, 255, 0.9) !important;
     }
     </style>
 </head>
@@ -218,11 +213,13 @@ if (substr($logo_path, 0, 6) === '../../') {
     <div id="container">
         <div class="login-container">
             <div class="login-header login-caret">
-                <div class="login-content">
+                <div class="login-content" style="text-align: center;">
                     <a href="#" class="logo">
-                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" />
+                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="filter: drop-shadow(0 0 15px rgba(0,240,255,0.5)); max-height: 100px; width: auto;" />
                     </a>
-                    <p class="description">Select your category to access your <?php echo htmlspecialchars($gym['gym_name']); ?> account.</p>
+                    <p class="description" style="color: #64748b; font-size: 13px; font-family: 'Orbitron'; font-weight: 700; margin-top: 10px;">
+                        SELECT YOUR HUNTER CLASS TO ENTER SYSTEM GATE
+                    </p>
                 </div>
             </div>
 
@@ -232,76 +229,73 @@ if (substr($logo_path, 0, 6) === '../../') {
                         <!-- Hidden Input for selected role -->
                         <input type="hidden" name="login_role" id="login_role" value="<?php echo htmlspecialchars($selected_role); ?>">
 
-                        <!-- Visual Grid of Login Categories -->
+                        <!-- Visual Grid of Login Categories (Solo Leveling System Gate) -->
                         <div class="login-categories">
                             <div class="category-tab <?php echo ($selected_role === 'member') ? 'active' : ''; ?>" data-role="member" onclick="selectRole('member')">
                                 <i class="entypo-user"></i>
-                                <span>Gym Member</span>
+                                <span>HUNTER</span>
                             </div>
                             <div class="category-tab <?php echo ($selected_role === 'reception') ? 'active' : ''; ?>" data-role="reception" onclick="selectRole('reception')">
                                 <i class="entypo-address"></i>
-                                <span>Reception</span>
+                                <span>GATEKEEPER</span>
                             </div>
                             <div class="category-tab <?php echo ($selected_role === 'trainer') ? 'active' : ''; ?>" data-role="trainer" onclick="selectRole('trainer')">
                                 <i class="entypo-flash"></i>
-                                <span>Trainer</span>
+                                <span>TRAINER</span>
                             </div>
                             <div class="category-tab <?php echo ($selected_role === 'owner') ? 'active' : ''; ?>" data-role="owner" onclick="selectRole('owner')">
                                 <i class="entypo-briefcase"></i>
-                                <span>Owner</span>
+                                <span>GUILD MASTER</span>
                             </div>
                             <div class="category-tab <?php echo ($selected_role === 'super_admin') ? 'active' : ''; ?>" data-role="super_admin" onclick="selectRole('super_admin')">
                                 <i class="entypo-cog"></i>
-                                <span>App Developer</span>
-                            </div>
-                            <div class="category-tab <?php echo ($selected_role === 'auditor') ? 'active' : ''; ?>" data-role="auditor" onclick="selectRole('auditor')">
-                                <i class="entypo-chart-bar"></i>
-                                <span>Auditor</span>
+                                <span>ARCHITECT</span>
                             </div>
                         </div>
 
                         <!-- Username/UserID input -->
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon">
+                                <div class="input-group-addon" style="background: rgba(0,240,255,0.1); border-color: rgba(0,240,255,0.3); color: #00f0ff;">
                                     <i class="entypo-user"></i>
                                 </div>
-                                <input type="text" placeholder="User ID / Username" class="form-control" name="user_id_auth" id="textfield" required>
+                                <input type="text" placeholder="HUNTER ID / USERNAME" class="form-control" name="user_id_auth" id="textfield" required>
                             </div>
                         </div>
 
                         <!-- Password input -->
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon">
+                                <div class="input-group-addon" style="background: rgba(0,240,255,0.1); border-color: rgba(0,240,255,0.3); color: #00f0ff;">
                                     <i class="entypo-key"></i>
                                 </div>
-                                <input type="password" name="pass_key" id="pwfield" class="form-control" required placeholder="Password">
+                                <input type="password" name="pass_key" id="pwfield" class="form-control" required placeholder="SYSTEM ACCESS PIN">
                             </div>
                         </div>
 
                         <div class="form-group" style="margin-top: 30px;">
                             <button type="submit" name="btnLogin" class="btn btn-primary" style="width: 100%; margin-bottom: 10px;">
-                                Login In
+                                ENTER SYSTEM GATE ➔
                                 <i class="entypo-login"></i>
                             </button>
                             
-                            <button type="button" id="faceIdLoginBtn" class="btn btn-success" style="width: 100%; display: none; background: #10b981; border-color: #10b981;" onclick="loginWithFaceID()">
+                            <button type="button" id="faceIdLoginBtn" class="btn btn-success" style="width: 100%; display: none; background: linear-gradient(135deg, #7000ff, #480094); border: 1px solid #7000ff; font-family: 'Orbitron'; font-weight: 800;" onclick="loginWithFaceID()">
                                 <i class="entypo-camera"></i>
-                                Login with Face ID
+                                SYSTEM BIOMETRIC SCAN
                             </button>
                         </div>
+
                     <!-- Add face-api.js script -->
                     <script defer src="js/face-api/face-api.min.js"></script>
 
                     <!-- Face Scan UI Container -->
-                    <div id="faceScanContainer" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
-                        <h2 style="color: white; margin-bottom: 20px;">Live Face Scan</h2>
-                        <div style="position: relative; width: 300px; height: 300px; border-radius: 50%; overflow: hidden; border: 4px solid #10b981;">
+                    <div id="faceScanContainer" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3,7,18,0.95); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
+                        <h2 style="color: #00f0ff; margin-bottom: 20px; font-family: 'Orbitron';">[ SYSTEM BIOMETRIC SCAN ]</h2>
+                        <div style="position: relative; width: 300px; height: 300px; border-radius: 50%; overflow: hidden; border: 4px solid #00f0ff; box-shadow: 0 0 40px #00f0ff;">
                             <video id="loginVideo" autoplay muted playsinline style="width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1);"></video>
                         </div>
-                        <p id="loginStatusMsg" style="color: #cbd5e1; margin-top: 20px; font-size: 16px;">Initializing camera...</p>
-                        <button type="button" class="btn btn-danger" style="margin-top: 20px;" onclick="cancelFaceLogin()">Cancel</button>
+                        <p id="loginStatusMsg" style="color: #cbd5e1; margin-top: 20px; font-size: 16px; font-family: 'Orbitron';">Initializing System Sensors...</p>
+                        <button type="button" class="btn btn-danger" style="margin-top: 20px; font-family: 'Orbitron';" onclick="cancelFaceLogin()">CANCEL SCAN</button>
                     </div>
 
                     <script>
@@ -320,320 +314,121 @@ if (substr($logo_path, 0, 6) === '../../') {
                                 faceapi.nets.faceRecognitionNet.loadFromUri('js/face-api/models_v2')
                             ]);
                             loginModelsLoaded = true;
-                            loginModelsLoading = false;
                         } catch (err) {
-                            console.error("Error loading models:", err);
+                            console.warn("Face models failed to load:", err);
+                        } finally {
                             loginModelsLoading = false;
                         }
                     }
 
-                    // Only show Face ID button if Owner, App Developer, Reception, Trainer, or Auditor is selected
-                    function updateFaceIdVisibility() {
-                        const role = document.getElementById('login_role').value;
-                        const btn = document.getElementById('faceIdLoginBtn');
-                        const allowedRoles = ['owner', 'super_admin', 'reception', 'trainer', 'auditor'];
+                    function selectRole(role) {
+                        document.getElementById('login_role').value = role;
                         
-                        if (allowedRoles.includes(role)) {
-                            btn.style.display = 'block';
-                            // Preload models when tab is selected to save time
+                        document.querySelectorAll('.category-tab').forEach(tab => {
+                            tab.classList.remove('active');
+                        });
+                        
+                        const activeTab = document.querySelector(`.category-tab[data-role="${role}"]`);
+                        if (activeTab) {
+                            activeTab.classList.add('active');
+                        }
+
+                        const pwfield = document.getElementById('pwfield');
+                        if (role === 'member') {
+                            pwfield.placeholder = 'ENTER SYSTEM ACCESS PIN';
+                        } else {
+                            pwfield.placeholder = 'ENTER SYSTEM ACCESS PIN';
+                        }
+
+                        const faceBtn = document.getElementById('faceIdLoginBtn');
+                        if (role === 'member') {
+                            if (faceBtn) faceBtn.style.display = 'block';
                             loadLoginModels();
                         } else {
-                            btn.style.display = 'none';
-                        }
-
-                        // PIN formatting for Owner & Superadmin
-                        const pwfield = document.getElementById('pwfield');
-                        if (pwfield) {
-                            if (role === 'super_admin' || role === 'owner') {
-                                pwfield.setAttribute('maxlength', '6');
-                                pwfield.setAttribute('inputmode', 'numeric');
-                                pwfield.setAttribute('pattern', '[0-9]*');
-                                pwfield.placeholder = "Enter 6-Digit Security PIN";
-                            } else {
-                                pwfield.removeAttribute('maxlength');
-                                pwfield.removeAttribute('inputmode');
-                                pwfield.removeAttribute('pattern');
-                                pwfield.placeholder = "Password";
-                            }
+                            if (faceBtn) faceBtn.style.display = 'none';
                         }
                     }
-                    
-                    // Add listener to the existing selectRole function call
-                    setInterval(updateFaceIdVisibility, 500);
 
                     async function loginWithFaceID() {
-                        const requestedRole = document.getElementById('login_role').value;
-                        const container = document.getElementById('faceScanContainer');
+                        const scanContainer = document.getElementById('faceScanContainer');
                         const video = document.getElementById('loginVideo');
                         const statusMsg = document.getElementById('loginStatusMsg');
-                        
-                        container.style.display = 'flex';
-                        statusMsg.innerText = "Loading AI Models... Please wait.";
 
-                        if (!loginModelsLoaded) {
-                            await loadLoginModels();
-                        }
-
-                        statusMsg.innerText = "Starting camera...";
+                        scanContainer.style.display = 'flex';
+                        statusMsg.textContent = 'Activating System Camera...';
 
                         try {
-                            loginStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
-                            video.srcObject = loginStream;
-                            
-                            video.onplay = async () => {
-                                statusMsg.innerText = "Scanning face... Look directly at the camera.";
-                                
-                                let attempts = 0;
-                                loginScanInterval = setInterval(async () => {
-                                    attempts++;
-                                    if (attempts > 30) { // 15 seconds timeout
-                                        cancelFaceLogin();
-                                        alert("Face scan timed out. Please try again.");
-                                        return;
-                                    }
+                            if (!loginModelsLoaded) {
+                                statusMsg.textContent = 'Loading System Sensors...';
+                                await loadLoginModels();
+                            }
 
-                                    const detections = await faceapi.detectSingleFace(video).withFaceLandmarks().withFaceDescriptor();
-                                    
-                                    if (detections) {
-                                        statusMsg.innerText = "Face detected! Verifying identity...";
+                            loginStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                            video.srcObject = loginStream;
+                            statusMsg.textContent = 'Scanning Hunter Features... Position face in center.';
+
+                            loginScanInterval = setInterval(async () => {
+                                if (!video.paused && !video.ended) {
+                                    const detection = await faceapi.detectSingleFace(video).withFaceLandmarks().withFaceDescriptor();
+                                    if (detection) {
+                                        statusMsg.textContent = 'Hunter Matched! Verifying System Credentials...';
                                         clearInterval(loginScanInterval);
                                         
-                                        // Send descriptor and requested role to backend
-                                        const descriptorArray = Array.from(detections.descriptor);
-                                        await verifyLiveFace(descriptorArray, requestedRole);
-                                    } else {
-                                        statusMsg.innerText = "No face detected. Move closer to the camera.";
+                                        const descriptorArray = Array.from(detection.descriptor);
+                                        
+                                        fetch('face_login_verify.php', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({ descriptor: descriptorArray })
+                                        })
+                                        .then(res => res.json())
+                                        .then(data => {
+                                            if (data.status === 'success') {
+                                                statusMsg.textContent = 'Access Granted! Entering Portal...';
+                                                setTimeout(() => {
+                                                    cancelFaceLogin();
+                                                    window.location.href = data.redirect || './dashboard/member/';
+                                                }, 500);
+                                            } else {
+                                                statusMsg.textContent = 'Verification Failed: ' + (data.message || 'Unknown Hunter');
+                                                setTimeout(() => {
+                                                    cancelFaceLogin();
+                                                }, 2500);
+                                            }
+                                        })
+                                        .catch(err => {
+                                            statusMsg.textContent = 'System Verification Error.';
+                                            setTimeout(cancelFaceLogin, 2000);
+                                        });
                                     }
-                                }, 500);
-                            };
-                        } catch (err) {
-                            console.error(err);
-                            cancelFaceLogin();
-                            alert("Camera access denied or unavailable.");
-                        }
-                    }
+                                }
+                            }, 800);
 
-                    async function verifyLiveFace(descriptorArray, requestedRole) {
-                        const statusMsg = document.getElementById('loginStatusMsg');
-                        try {
-                            const res = await fetch('api/verify_live_face.php', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ descriptor: descriptorArray, requested_role: requestedRole })
-                            });
-
-                            const result = await res.json();
-                            
-                            if (result.success) {
-                                statusMsg.innerText = "Welcome back, " + result.username + "!";
-                                statusMsg.style.color = "#10b981";
-                                setTimeout(() => {
-                                    if (result.role === 'member') {
-                                        window.location.href = 'dashboard/member/';
-                                    } else if (result.role === 'reception') {
-                                        window.location.href = 'dashboard/reception/';
-                                    } else if (result.role === 'trainer') {
-                                        window.location.href = 'dashboard/trainer/';
-                                    } else if (result.role === 'auditor') {
-                                        window.location.href = 'dashboard/auditor/';
-                                    } else {
-                                        window.location.href = 'dashboard/admin/';
-                                    }
-                                }, 1000);
-                            } else {
-                                statusMsg.innerText = "Access Denied: " + result.error;
-                                statusMsg.style.color = "#ef4444";
-                                setTimeout(() => {
-                                    cancelFaceLogin();
-                                    alert(result.error);
-                                }, 2000);
-                            }
                         } catch (err) {
-                            console.error(err);
+                            alert('Camera Access Error: ' + err.message);
                             cancelFaceLogin();
-                            alert("Verification error: " + err.message);
                         }
                     }
 
                     function cancelFaceLogin() {
-                        const container = document.getElementById('faceScanContainer');
-                        container.style.display = 'none';
-                        
-                        if (loginScanInterval) {
-                            clearInterval(loginScanInterval);
-                        }
-                        
+                        if (loginScanInterval) clearInterval(loginScanInterval);
                         if (loginStream) {
                             loginStream.getTracks().forEach(track => track.stop());
                             loginStream = null;
                         }
+                        const scanContainer = document.getElementById('faceScanContainer');
+                        if (scanContainer) scanContainer.style.display = 'none';
                     }
-                    </script>
-                    
-                    <div class="login-bottom-links" style="text-align: center; margin-top: 15px; margin-bottom: 20px;">
-                        <a href="forgot_password.php" class="link" style="font-size: 13px; color: var(--text-muted);">Forgot your password?</a>
-                    </div>
-                    
-                    </div>
-                    <style>
-                        @keyframes intense-pulse {
-                            0% { box-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff; transform: scale(1); }
-                            50% { box-shadow: 0 0 30px #ff00ff, 0 0 50px #00ffff, 0 0 70px #ffeb3b; transform: scale(1.05); }
-                            100% { box-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff; transform: scale(1); }
-                        }
-                        @keyframes color-shift {
-                            0% { background-position: 0% 50%; }
-                            50% { background-position: 100% 50%; }
-                            100% { background-position: 0% 50%; }
-                        }
-                    </style>
-                    <?php
-                    // Check if 100 members target has been reached
-                    $cnt_res = mysqli_query($con, "SELECT COUNT(*) as cnt FROM users");
-                    $cnt_row = mysqli_fetch_assoc($cnt_res);
-                    $total_registered = intval($cnt_row['cnt']);
-                    
-                    if ($total_registered >= 100):
-                    ?>
-                        <div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
-                            <a href="register.php" class="btn" style="display: block; width: 100%; background: linear-gradient(270deg, #10b981, #059669, #10b981); background-size: 200% 200%; color: white !important; font-size: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; padding: 18px 20px; border-radius: 12px; border: none; text-decoration: none; animation: intense-pulse 1.5s infinite alternate, color-shift 3s ease infinite;">
-                                ⚡ SELF REGISTRATION ⚡
-                            </a>
-                        </div>
-                    <?php else: ?>
-                        <div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
-                            <a href="prebook.php" class="btn" style="display: block; width: 100%; background: linear-gradient(270deg, #ff007f, #7928ca, #ff007f); background-size: 200% 200%; color: white !important; font-size: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; padding: 18px 20px; border-radius: 12px; border: none; text-decoration: none; animation: intense-pulse 1.5s infinite alternate, color-shift 3s ease infinite;">
-                                ⚡ PRE-BOOK NOW! ⚡
-                            </a>
-                        </div>
-                    <?php endif; ?>
 
-                    <div style="margin-top: 25px; text-align: center;">
-                        <a href="https://play.google.com/apps/test/com.sudarshanfitness.portal/1" target="_blank" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981, #059669) !important; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3) !important; width: 100% !important; border: none !important;">
-                            <i class="entypo-mobile" style="margin-right: 5px; font-size: 16px;"></i> Download Android App
-                        </a>
-                    </div>
-                    
-                    <div style="margin-top: 30px; text-align: center; color: var(--text-muted); font-size: 12px; font-weight: 500;">
-                        System Engineered by <strong>Anurag Bawaskar</strong> <br>
-                        <a href="tel:8459962390" style="color: #ff6b00; text-decoration: none;">📞 8459962390</a>
-                    </div>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        selectRole('<?php echo $selected_role; ?>');
+                    });
+                    </script>
+
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Script to handle dynamic tab switching -->
-    <script>
-        function selectRole(role) {
-            document.getElementById('login_role').value = role;
-            var tabs = document.querySelectorAll('.category-tab');
-            tabs.forEach(function(tab) {
-                if (tab.getAttribute('data-role') === role) {
-                    tab.classList.add('active');
-                } else {
-                    tab.classList.remove('active');
-                }
-            });
-        }
-    </script>
-
-    <?php if (isset($_GET['error']) && $_GET['error'] === 'wrong_password'): ?>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            alert("Wrong password / invalid credentials for the selected category! Please try again.");
-        });
-    </script>
-    <?php endif; ?>
-
-    <?php if (isset($_GET['error']) && $_GET['error'] === 'intruder_alert'): ?>
-    <!-- Full-screen Intruder Alert Lock Overlay -->
-    <div id="intruder-alert-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0c0c0e; z-index: 999999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden;">
-        <div style="text-align: center; max-width: 600px; padding: 40px; border: 2px solid #ef4444; border-radius: 20px; background: rgba(18, 18, 22, 0.95); box-shadow: 0 0 50px rgba(239, 68, 68, 0.4); backdrop-filter: blur(15px); position: relative; animation: alert-pulse 1.5s infinite alternate; margin: 20px;">
-            
-            <!-- Security Shield SVG Icon -->
-            <div style="margin-bottom: 25px;">
-                <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.5));">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                    <line x1="12" y1="9" x2="12" y2="13" stroke-width="2"></line>
-                    <circle cx="12" cy="17" r="1" fill="#ef4444"></circle>
-                </svg>
-            </div>
-            
-            <h1 style="color: #ef4444; font-size: 32px; font-weight: 800; text-transform: uppercase; margin: 0 0 10px 0; letter-spacing: 2px; text-shadow: 0 0 15px rgba(239, 68, 68, 0.3);">Access Restricted</h1>
-            <h3 style="color: #f8fafc; font-size: 15px; margin: 0 0 25px 0; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">Department of Defence Facility Portal</h3>
-            
-            <div style="text-align: left; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 13px; line-height: 1.6; margin-bottom: 25px; font-family: monospace; color: #94a3b8;">
-                <span style="color: #ef4444; font-weight: bold; display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Access Audit Log Parameters:</span>
-                IP Address : <span style="color: #fff; font-weight: bold;"><?php echo htmlspecialchars($_GET['ip'] ?? ''); ?></span><br>
-                Timestamp  : <span style="color: #fff; font-weight: bold;"><?php echo htmlspecialchars($_GET['time'] ?? ''); ?></span><br>
-                Action     : <span style="color: #fbbf24; font-weight: bold; animation: text-blink 1s infinite;">Recording connection metrics & initiating temporary lockout...</span>
-            </div>
-            
-            <p style="color: #94a3b8; font-size: 12px; margin: 0 0 30px 0; line-height: 1.5;">
-                Unauthorized login attempts on facility portals are monitored. Your connection parameters, device profile, and login attempt metadata have been logged and transmitted to system administration.
-            </p>
-            
-            <!-- Descending countdown timer -->
-            <div style="display: inline-block; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 50%; width: 100px; height: 100px; line-height: 100px; margin-bottom: 10px;">
-                <span id="countdown-timer-val" style="font-size: 48px; font-weight: 800; color: #ef4444; text-shadow: 0 0 10px rgba(239, 68, 68, 0.4); font-family: monospace;">10</span>
-            </div>
-            <div style="font-size: 11px; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; margin-top: 5px;">Temporary Lockout Active</div>
-        </div>
-    </div>
-    
-    <style>
-        @keyframes alert-pulse {
-            0% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); }
-            100% { box-shadow: 0 0 60px rgba(239, 68, 68, 0.8); border-color: rgba(239, 68, 68, 0.8); }
-        }
-        @keyframes text-blink {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-    </style>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Trigger speech alert if supported
-            if ('speechSynthesis' in window) {
-                var speechText = "Access restricted. Department of Defence facility portal login attempt has failed.";
-                var msg = new SpeechSynthesisUtterance(speechText);
-                msg.rate = 1.0;
-                msg.pitch = 0.9;
-                window.speechSynthesis.speak(msg);
-            }
-            
-            var seconds = 10;
-            var countdown = setInterval(function() {
-                seconds--;
-                var timerEl = document.getElementById('countdown-timer-val');
-                if (timerEl) {
-                    timerEl.innerText = seconds;
-                }
-                if (seconds <= 0) {
-                    clearInterval(countdown);
-                    var overlay = document.getElementById('intruder-alert-overlay');
-                    if (overlay) {
-                        overlay.style.transition = 'opacity 0.6s ease';
-                        overlay.style.opacity = 0;
-                        setTimeout(function() {
-                            window.location.href = 'index.php?role=<?php echo urlencode($_GET['role'] ?? 'member'); ?>';
-                        }, 600);
-                    }
-                }
-            }, 1000);
-        });
-    </script>
-    <?php endif; ?>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(registration => console.log('ServiceWorker registered:', registration))
-                    .catch(error => console.log('ServiceWorker registration failed:', error));
-            });
-        }
-    </script>
 </body>
 </html>
