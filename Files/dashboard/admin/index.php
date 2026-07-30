@@ -135,84 +135,88 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
     	color: #ffffff;
 		}
 
-        /* Glassmorphism Metric Widgets */
+        /* Solo Leveling Monarch System Tile Widgets */
         .tile-stats {
-            background: rgba(255, 255, 255, 0.03) !important;
+            background: rgba(9, 14, 28, 0.9) !important;
             backdrop-filter: blur(20px) !important;
             -webkit-backdrop-filter: blur(20px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.05) !important;
+            border: 2px solid rgba(0, 240, 255, 0.4) !important;
             border-radius: 24px !important;
             padding: 30px 20px !important;
             margin-bottom: 30px !important;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important;
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.25), inset 0 0 15px rgba(112, 0, 255, 0.2) !important;
             position: relative;
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            transition: all 0.3s ease;
+            animation: system-hologram-pulse 6s ease-in-out infinite alternate !important;
         }
         .tile-stats:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
+            border-color: #00f0ff !important;
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.6), 0 0 80px rgba(112, 0, 255, 0.4) !important;
         }
         .tile-stats .icon {
-            color: rgba(255,255,255,0.1) !important;
+            color: rgba(0,240,255,0.15) !important;
             bottom: 20px !important;
             right: 20px !important;
             font-size: 80px !important;
         }
         .tile-stats h2 {
-            font-size: 14px !important;
+            font-family: 'Orbitron', sans-serif !important;
+            font-size: 13px !important;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: var(--text-muted) !important;
+            color: #00f0ff !important;
             margin-top: 0 !important;
-            font-weight: 700 !important;
+            font-weight: 800 !important;
         }
         .tile-stats .num {
+            font-family: 'Orbitron', sans-serif !important;
             font-size: 42px !important;
-            font-weight: 800 !important;
+            font-weight: 900 !important;
             color: #ffffff !important;
-            text-shadow: 0 0 20px rgba(255,255,255,0.2);
+            text-shadow: 0 0 20px #00f0ff;
             margin-top: 15px;
         }
         
-        /* Colored Glowing Borders based on tile type */
-        .tile-red { border-bottom: 4px solid #ef4444 !important; box-shadow: inset 0 -15px 30px -20px rgba(239,68,68,0.5) !important; }
-        .tile-green { border-bottom: 4px solid #10b981 !important; box-shadow: inset 0 -15px 30px -20px rgba(16,185,129,0.5) !important; }
-        .tile-aqua { border-bottom: 4px solid #06b6d4 !important; box-shadow: inset 0 -15px 30px -20px rgba(6,182,212,0.5) !important; }
-        .tile-blue { border-bottom: 4px solid #3b82f6 !important; box-shadow: inset 0 -15px 30px -20px rgba(59,130,246,0.5) !important; }
+        /* Colored Glowing Borders */
+        .tile-red { border-bottom: 4px solid #ff0054 !important; box-shadow: inset 0 -15px 30px -20px rgba(255,0,84,0.5) !important; }
+        .tile-green { border-bottom: 4px solid #00f0ff !important; box-shadow: inset 0 -15px 30px -20px rgba(0,240,255,0.5) !important; }
+        .tile-aqua { border-bottom: 4px solid #0077ff !important; box-shadow: inset 0 -15px 30px -20px rgba(0,119,255,0.5) !important; }
+        .tile-blue { border-bottom: 4px solid #7000ff !important; box-shadow: inset 0 -15px 30px -20px rgba(112,0,255,0.5) !important; }
         
-        .tile-red:hover { border-color: #ef4444 !important; }
-        .tile-green:hover { border-color: #10b981 !important; }
-        .tile-aqua:hover { border-color: #06b6d4 !important; }
-        .tile-blue:hover { border-color: #3b82f6 !important; }
+        .tile-red:hover { border-color: #ff0054 !important; }
+        .tile-green:hover { border-color: #00f0ff !important; }
+        .tile-aqua:hover { border-color: #0077ff !important; }
+        .tile-blue:hover { border-color: #7000ff !important; }
         
         /* Darker panel override */
         .panel {
-            background: rgba(255, 255, 255, 0.02) !important;
+            background: rgba(9, 14, 28, 0.9) !important;
             backdrop-filter: blur(15px) !important;
-            border: 1px solid rgba(255,255,255,0.05) !important;
+            border: 1px solid rgba(0, 240, 255, 0.35) !important;
             border-radius: 20px !important;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.15) !important;
         }
         .panel-heading {
             background: transparent !important;
-            border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.25) !important;
         }
-        .panel-title { color: #fff !important; font-weight: 700 !important; }
+        .panel-title { font-family: 'Orbitron', sans-serif !important; color: #00f0ff !important; font-weight: 900 !important; }
         
         /* Table overrides */
         .table > tbody > tr {
             transition: background 0.3s ease, box-shadow 0.3s ease !important;
         }
         .table > tbody > tr:hover {
-            background: rgba(255, 107, 0, 0.05) !important;
-            box-shadow: inset 0 0 15px rgba(255, 107, 0, 0.2) !important;
+            background: rgba(0, 240, 255, 0.08) !important;
+            box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.3) !important;
         }
 
     </style>
 
 </head>
-    <body class="page-body  page-fade" onload="collapseSidebar()" style="background-color: #0b0c10;">
+    <body class="page-body page-fade" onload="collapseSidebar()" style="background-color: #030712; background-image: radial-gradient(circle at 50% 10%, rgba(112, 0, 255, 0.18) 0%, transparent 60%), radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.15) 0%, transparent 50%);">
 
         <!-- Particle HUD Background -->
         <div id="particles-js" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;"></div>
