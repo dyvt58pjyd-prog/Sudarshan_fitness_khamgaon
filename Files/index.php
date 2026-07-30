@@ -279,8 +279,8 @@ if (substr($logo_path, 0, 6) === '../../') {
                     <a href="#" class="logo">
                         <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="filter: drop-shadow(0 0 20px rgba(0,240,255,0.7)); max-height: 105px; width: auto;" />
                     </a>
-                    <p class="description" style="color: #64748b; font-size: 12px; font-family: 'Orbitron'; font-weight: 700; margin-top: 10px; letter-spacing: 1px;">
-                        SELECT YOUR HUNTER CLASS TO ENTER SYSTEM GATE
+                    <p class="description" style="color: #64748b; font-size: 13px; font-weight: 600; margin-top: 10px;">
+                        Select your category to access your <?php echo htmlspecialchars($gym['gym_name']); ?> account.
                     </p>
                 </div>
             </div>
@@ -295,23 +295,23 @@ if (substr($logo_path, 0, 6) === '../../') {
                         <div class="login-categories">
                             <div class="category-tab <?php echo ($selected_role === 'member') ? 'active' : ''; ?>" data-role="member" onclick="selectRole('member')">
                                 <i class="entypo-user"></i>
-                                <span>HUNTER</span>
+                                <span>Gym Member</span>
                             </div>
                             <div class="category-tab <?php echo ($selected_role === 'reception') ? 'active' : ''; ?>" data-role="reception" onclick="selectRole('reception')">
                                 <i class="entypo-address"></i>
-                                <span>GATEKEEPER</span>
+                                <span>Reception</span>
                             </div>
                             <div class="category-tab <?php echo ($selected_role === 'trainer') ? 'active' : ''; ?>" data-role="trainer" onclick="selectRole('trainer')">
                                 <i class="entypo-flash"></i>
-                                <span>TRAINER</span>
+                                <span>Trainer</span>
                             </div>
                             <div class="category-tab <?php echo ($selected_role === 'owner') ? 'active' : ''; ?>" data-role="owner" onclick="selectRole('owner')">
                                 <i class="entypo-briefcase"></i>
-                                <span>GUILD MASTER</span>
+                                <span>Owner</span>
                             </div>
                             <div class="category-tab <?php echo ($selected_role === 'super_admin') ? 'active' : ''; ?>" data-role="super_admin" onclick="selectRole('super_admin')">
                                 <i class="entypo-cog"></i>
-                                <span>ARCHITECT</span>
+                                <span>App Developer</span>
                             </div>
                         </div>
 
@@ -321,7 +321,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                                 <div class="input-group-addon" style="background: rgba(0,240,255,0.1); border-color: rgba(0,240,255,0.3); color: #00f0ff;">
                                     <i class="entypo-user"></i>
                                 </div>
-                                <input type="text" placeholder="HUNTER ID / USERNAME" class="form-control" name="user_id_auth" id="textfield" required>
+                                <input type="text" placeholder="User ID / Username" class="form-control" name="user_id_auth" id="textfield" required>
                             </div>
                         </div>
 
@@ -458,9 +458,9 @@ if (substr($logo_path, 0, 6) === '../../') {
 
                         const pwfield = document.getElementById('pwfield');
                         if (role === 'member') {
-                            pwfield.placeholder = 'ENTER SYSTEM ACCESS PIN';
+                            pwfield.placeholder = 'Enter 6-Digit Security PIN';
                         } else {
-                            pwfield.placeholder = 'ENTER SYSTEM ACCESS PIN';
+                            pwfield.placeholder = 'Enter 6-Digit Security PIN';
                         }
 
                         const faceBtn = document.getElementById('faceIdLoginBtn');
