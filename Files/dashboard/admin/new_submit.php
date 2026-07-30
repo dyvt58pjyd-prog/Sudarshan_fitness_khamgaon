@@ -105,8 +105,9 @@ $pool_val = !empty($pool_group_id) ? "'" . $pool_group_id . "'" : "NULL";
 $photo_val = $photo_path ? "'" . mysqli_real_escape_string($con, $photo_path) . "'" : "NULL";
 $fitness_goal = isset($_POST['fitness_goal']) ? mysqli_real_escape_string($con, $_POST['fitness_goal']) : 'general';
 $biometric_batch = isset($_POST['biometric_batch']) ? mysqli_real_escape_string($con, $_POST['biometric_batch']) : '1';
-$query="insert into users(username,gender,mobile,email,dob,joining_date,userid,tid,photo,entry_code,trainer_id,biometric_id,biometric_enabled,fitness_goal,biometric_batch,pool_group_id) values('$uname','$gender','$phn','$email','$dob','$jdate','$memID', $routine, $photo_val, '$entry_code', $trainer_val, '$memID', 1, '$fitness_goal', '$biometric_batch', $pool_val)";
-    if(mysqli_query($con,$query)==1){
+$query="INSERT INTO users(username,gender,mobile,email,dob,joining_date,userid,tid) VALUES('$uname','$gender','$phn','$email','$dob','$jdate','$memID', $routine)";
+    if(mysqli_query($con,$query)){
+        @mysqli_query($con, "UPDATE users SET photo=$photo_val, member_photo=$photo_val, entry_code='$entry_code', trainer_id=$trainer_val, biometric_id='$memID', biometric_enabled=1, fitness_goal='$fitness_goal', biometric_batch='$biometric_batch', pool_group_id=$pool_val WHERE userid='$memID'");
         
       $partner_uid = null;
       $is_couple_selected = false;

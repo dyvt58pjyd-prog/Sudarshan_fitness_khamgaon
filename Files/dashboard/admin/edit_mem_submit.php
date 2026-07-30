@@ -22,9 +22,10 @@ page_protect();
    $partner_uid = isset($_POST['partner_uid']) && !empty($_POST['partner_uid']) ? mysqli_real_escape_string($con, $_POST['partner_uid']) : 'NULL';
    $partner_uid_sql = $partner_uid === 'NULL' ? "NULL" : "'$partner_uid'";
    
-   $query1="update users set username='".$uname."',gender='".$gender."',mobile='".$mobile."',email='".$email."',dob='".$dob."',joining_date='".$jdate."',tid=".$routine.",biometric_batch='".$biometric_batch."',pool_group_id=".$pool_val.", partner_uid=".$partner_uid_sql." where userid='".$uid."'";
+   $query1="UPDATE users SET username='".$uname."',gender='".$gender."',mobile='".$mobile."',email='".$email."',dob='".$dob."',joining_date='".$jdate."',tid=".$routine." WHERE userid='".$uid."'";
 
     if(mysqli_query($con,$query1)){
+        @mysqli_query($con, "UPDATE users SET biometric_batch='".$biometric_batch."', pool_group_id=".$pool_val.", partner_uid=".$partner_uid_sql." WHERE userid='".$uid."'");
         
       if ($partner_uid !== 'NULL') {
           // Mutually link the partner back to this user

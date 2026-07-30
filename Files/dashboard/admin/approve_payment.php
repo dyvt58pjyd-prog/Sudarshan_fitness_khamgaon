@@ -63,11 +63,14 @@ if ($is_new_reg == 1 && $userid === 'PENDING') {
     // Read assigned batch from approval parameters (default to Batch 1)
     $assigned_batch = isset($_REQUEST['assign_batch']) ? mysqli_real_escape_string($con, $_REQUEST['assign_batch']) : '1';
 
-    // Create User
-    $query_user = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, entry_code, biometric_id, biometric_enabled, photo, biometric_batch) 
-                   VALUES ('$uname', '$gender', '$phn', '$email', '$dob', $joining_date_val, '$next_id', '$entry_code', '$next_id', 1, '$photo_path_db', '$assigned_batch')";
+    // Create User with standard column compatibility
+    $query_user = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid) 
+                   VALUES ('$uname', '$gender', '$phn', '$email', '$dob', $joining_date_val, '$next_id')";
     
     if (mysqli_query($con, $query_user)) {
+        // Safe optional column updates
+        @mysqli_query($con, "UPDATE users SET entry_code='$entry_code', biometric_id='$next_id', biometric_enabled=1, photo='$photo_path_db', member_photo='$photo_path_db', biometric_batch='$assigned_batch' WHERE userid='$next_id'");
+
         // Create Address
         $stname = mysqli_real_escape_string($con, $payload['stname']);
         $state = mysqli_real_escape_string($con, $payload['state']);
@@ -111,37 +114,28 @@ if ($is_new_reg == 1 && $userid === 'PENDING') {
         mysqli_query($con, "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
                             VALUES ('$pid', '$next_id', '$calc_base_date', '$expiredate', 'yes', '$payment_mode', '$received_by', $discount_amt, $amount)");
         
-        // Auto-Register Couple Partner if Couple Plan
-        $is_couple_plan = (stripos($planName, 'couple') !== false) || !empty($payload['partner_name']);
-        if ($is_couple_plan) {
-            $p_name = !empty($payload['partner_name']) ? mysqli_real_escape_string($con, trim($payload['partner_name'])) : "Partner of " . $uname;
+        // Auto-Register Couple Partner ONLY IF explicit Couple Plan
+        $is_couple_plan = (stripos($planName, 'couple') !== false);
+        if ($is_couple_plan && !empty($payload['partner_name'])) {
+            $p_name = mysqli_real_escape_string($con, trim($payload['partner_name']));
             $p_gender = !empty($payload['partner_gender']) ? mysqli_real_escape_string($con, trim($payload['partner_gender'])) : (strtolower($gender) == 'male' ? 'Female' : 'Male');
             $p_dob = !empty($payload['partner_dob']) ? mysqli_real_escape_string($con, $payload['partner_dob']) : $dob;
             $p_mobile = !empty($payload['partner_mobile']) ? mysqli_real_escape_string($con, trim($payload['partner_mobile'])) : $phn;
-            
-            // Generate next partner ID
-            $res_p_max = mysqli_query($con, "SELECT MAX(CAST(userid AS UNSIGNED)) as maxid FROM users WHERE userid REGEXP '^[0-9]+$' AND CAST(userid AS UNSIGNED) < 100000000");
-            $p_max_row = mysqli_fetch_assoc($res_p_max);
-            $max_cur = intval($p_max_row['maxid']);
-            $partner_uid = ($max_cur > 100) ? $max_cur + 1 : 101;
-            if (strval($partner_uid) === strval($next_id)) {
-                $partner_uid++;
-            }
-            
+            $p_height = !empty($payload['partner_height']) ? mysqli_real_escape_string($con, trim($payload['partner_height'])) : '';
+            $p_weight = !empty($payload['partner_weight']) ? mysqli_real_escape_string($con, trim($payload['partner_weight'])) : '';
+
+            $partner_uid = ($next_id + 1);
             $p_email = "partner_" . $partner_uid . "_" . time() . "@sudarshanfitness.local";
             
-            $q_partner = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, partner_uid, biometric_id, biometric_enabled, fitness_goal, biometric_batch) 
-                          VALUES ('$p_name', '$p_gender', '$p_mobile', '$p_email', '$p_dob', $joining_date_val, '$partner_uid', '$next_id', '$partner_uid', 1, 'General Fitness', '$assigned_batch')";
+            $q_partner = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid) 
+                          VALUES ('$p_name', '$p_gender', '$p_mobile', '$p_email', '$p_dob', $joining_date_val, '$partner_uid')";
             if (mysqli_query($con, $q_partner)) {
-                mysqli_query($con, "UPDATE users SET partner_uid = '$partner_uid' WHERE userid = '$next_id'");
                 mysqli_query($con, "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
                                     VALUES ('$pid', '$partner_uid', '$calc_base_date', '$expiredate', 'yes', 'Couple Plan', '$received_by', 0, 0)");
                 mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('$partner_uid', '1234', 'member', '$p_name', 'member')");
-                
-                $p_weight = !empty($payload['partner_weight']) ? mysqli_real_escape_string($con, $payload['partner_weight']) : '60';
-                $p_height = !empty($payload['partner_height']) ? mysqli_real_escape_string($con, $payload['partner_height']) : '165';
-                mysqli_query($con, "INSERT INTO health_status (uid, weight, height) VALUES ('$partner_uid', '$p_weight', '$p_height')");
-                mysqli_query($con, "INSERT INTO health_history (uid, weight, height, logged_date) VALUES ('$partner_uid', '$p_weight', '$p_height', CURRENT_DATE())");
+                if (!empty($p_weight) || !empty($p_height)) {
+                    mysqli_query($con, "INSERT INTO health_status (uid, weight, height) VALUES ('$partner_uid', '$p_weight', '$p_height')");
+                }
             }
         }
         

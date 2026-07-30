@@ -56,7 +56,7 @@ $query="update enrolls_to set renewal='no' where uid='$memID'";
                          mysqli_query($con, "INSERT INTO biometric_commands (command_type, target_uid, payload, status) VALUES ('UPDATE_USERINFO', '$bio_id', '$cmd_payload', 'pending')");
                      }
                      
-                     send_payment_email($con, $user_row['email'], $uname, $memID, $value[1], $value[4], $expiredate, $payment_mode, $received_by, $new_entry_code, $discount, $paid_amount);
+                     send_payment_email($con, $user_row['email'], $uname, $memID, $value[1], $value[4], $expiredate, $payment_mode, $received_by, $new_entry_code, $discount, $paid_now);
                      
                  }
 
