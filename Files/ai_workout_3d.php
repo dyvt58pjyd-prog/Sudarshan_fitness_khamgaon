@@ -666,7 +666,22 @@ $level = floor($user_xp / 100) + 1;
 </head>
 <body>
 
-    <header>
+    <!-- Solo Leveling System Background Particles Canvas -->
+    <canvas id="systemParticleCanvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.5;"></canvas>
+
+    <!-- Solo Leveling Quest Clear Level-Up Modal -->
+    <div id="questClearModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.95); z-index: 10000; align-items: center; justify-content: center; flex-direction: column;">
+        <div style="border: 2px solid var(--system-cyan); background: rgba(9, 14, 28, 0.95); padding: 40px; border-radius: 24px; text-align: center; max-width: 500px; width: 90%; box-shadow: 0 0 60px rgba(0, 240, 255, 0.8), 0 0 100px rgba(112, 0, 255, 0.6); animation: levelup-gold-glow 1.5s ease-in-out infinite alternate;">
+            <div style="font-family: 'Orbitron'; color: var(--quest-gold); font-size: 14px; font-weight: 900; letter-spacing: 3px; margin-bottom: 8px;">[ QUEST CLEAR! ]</div>
+            <h2 style="font-family: 'Orbitron'; color: #00f0ff; font-size: 28px; font-weight: 900; text-shadow: 0 0 20px #00f0ff; margin-bottom: 10px;">LEVEL UP! +50 EXP</h2>
+            <p style="color: #cbd5e1; font-size: 14px; margin-bottom: 25px; line-height: 1.5;">Daily Quest Mandate Cleared! Your Hunter Stats &amp; Routine Log have been recorded in the System Database!</p>
+            <button onclick="closeQuestModal()" style="background: linear-gradient(135deg, #00f0ff, #0077ff); color: #030712; border: none; padding: 14px 30px; border-radius: 14px; font-family: 'Orbitron'; font-weight: 900; font-size: 14px; cursor: pointer; box-shadow: 0 0 30px #00f0ff;">
+                CLAIM REWARDS &amp; CONTINUE ➔
+            </button>
+        </div>
+    </div>
+
+    <header style="position: relative; z-index: 10;">
         <div class="gym-brand">
             <img src="<?php echo htmlspecialchars($gym['gym_logo']); ?>" class="gym-logo" alt="Gym Logo">
             <div>
@@ -993,7 +1008,7 @@ $level = floor($user_xp / 100) + 1;
             .then(res => res.json())
             .then(data => {
                 if (data.status === 'success') {
-                    alert('👑 ' + data.message);
+                    showQuestClearModal();
                 } else {
                     alert('⚠️ ' + data.message);
                 }
@@ -1001,6 +1016,70 @@ $level = floor($user_xp / 100) + 1;
             .catch(err => {
                 alert('⚠️ System Error: ' + err.message);
             });
+        }
+
+        function showQuestClearModal() {
+            document.getElementById('questClearModal').style.display = 'flex';
+            if ('speechSynthesis' in window) {
+                const msg = new SpeechSynthesisUtterance("Quest Clear! Level Up! Plus 50 EXP awarded!");
+                msg.rate = 1.0;
+                window.speechSynthesis.speak(msg);
+            }
+        }
+
+        function closeQuestModal() {
+            document.getElementById('questClearModal').style.display = 'none';
+        }
+
+        // Solo Leveling System Background Particles Engine
+        function initSystemParticles() {
+            const pCanvas = document.getElementById('systemParticleCanvas');
+            if (!pCanvas) return;
+            const pCtx = pCanvas.getContext('2d');
+            let width = pCanvas.width = window.innerWidth;
+            let height = pCanvas.height = window.innerHeight;
+
+            const particles = [];
+            for (let i = 0; i < 40; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 2 + 1,
+                    color: Math.random() > 0.5 ? '#00f0ff' : '#7000ff',
+                    vy: -(Math.random() * 0.8 + 0.3),
+                    vx: (Math.random() - 0.5) * 0.4,
+                    alpha: Math.random() * 0.8 + 0.2
+                });
+            }
+
+            function renderParticles() {
+                pCtx.clearRect(0, 0, width, height);
+                particles.forEach(p => {
+                    p.y += p.vy;
+                    p.x += p.vx;
+                    if (p.y < 0) p.y = height;
+                    if (p.x < 0) p.x = width;
+                    if (p.x > width) p.x = 0;
+
+                    pCtx.save();
+                    pCtx.globalAlpha = p.alpha;
+                    pCtx.fillStyle = p.color;
+                    pCtx.shadowColor = p.color;
+                    pCtx.shadowBlur = 8;
+                    pCtx.beginPath();
+                    pCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    pCtx.fill();
+                    pCtx.restore();
+                });
+                requestAnimationFrame(renderParticles);
+            }
+
+            window.addEventListener('resize', () => {
+                width = pCanvas.width = window.innerWidth;
+                height = pCanvas.height = window.innerHeight;
+            });
+
+            renderParticles();
         }
 
         // MediaPipe Real-Time Tracker
@@ -1163,6 +1242,7 @@ $level = floor($user_xp / 100) + 1;
             renderExerciseList('all');
             selectExercise(EXERCISES[0], null);
             setCoachGender(currentGender);
+            initSystemParticles();
         });
     </script>
 </body>

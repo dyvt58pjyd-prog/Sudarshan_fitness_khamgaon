@@ -36,6 +36,81 @@ body, html {
     radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.1) 0%, transparent 50%);
 }
 
+/* ============================================================
+   SOLO LEVELING SYSTEM ANIMATIONS & MONARCH AURA KEYFRAMES
+   ============================================================ */
+
+@keyframes system-hologram-pulse {
+  0% {
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), inset 0 0 10px rgba(112, 0, 255, 0.2);
+    border-color: rgba(0, 240, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.8), inset 0 0 25px rgba(112, 0, 255, 0.5);
+    border-color: rgba(0, 240, 255, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), inset 0 0 10px rgba(112, 0, 255, 0.2);
+    border-color: rgba(0, 240, 255, 0.4);
+  }
+}
+
+@keyframes monarch-purple-aura {
+  0% {
+    box-shadow: 0 0 20px rgba(112, 0, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 50px rgba(112, 0, 255, 0.9), 0 0 80px rgba(0, 240, 255, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(112, 0, 255, 0.4);
+  }
+}
+
+@keyframes levelup-gold-glow {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 20px rgba(255, 183, 3, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 60px rgba(255, 183, 3, 1), 0 0 100px rgba(0, 240, 255, 0.8);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 25px rgba(255, 183, 3, 0.5);
+  }
+}
+
+@keyframes scanline-anim {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(1000%);
+  }
+}
+
+/* System Hologram Cards FX */
+.portal-card, .login-container, .panel, .status-window, .rep-counter-box {
+  animation: system-hologram-pulse 6s ease-in-out infinite alternate !important;
+  position: relative !important;
+}
+
+/* System Hologram Scanline Effect */
+.panel::after, .login-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.8), transparent);
+  animation: scanline-anim 8s linear infinite;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
 h1, h2, h3, h4, h5, p, span, a {
   color: var(--text-main);
 }
