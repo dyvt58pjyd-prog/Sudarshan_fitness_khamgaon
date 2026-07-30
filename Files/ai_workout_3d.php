@@ -7,15 +7,28 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $gym = get_gym_details($con);
 $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
+
+// Fetch User Gender from Database
+$user_gender = 'Male';
+if (isset($_SESSION['user_data'])) {
+    $uid_esc = mysqli_real_escape_string($con, $_SESSION['user_data']);
+    $qu = mysqli_query($con, "SELECT gender FROM users WHERE userid='$uid_esc'");
+    if ($qu && mysqli_num_rows($qu) > 0) {
+        $row_u = mysqli_fetch_assoc($qu);
+        if (!empty($row_u['gender']) && strtolower($row_u['gender']) === 'female') {
+            $user_gender = 'Female';
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>3D AI Virtual Coach &amp; Workout Guide | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
+    <title>3D Realistic AI Virtual Coach &amp; Workout Guide | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Three.js for 3D Graphics -->
+    <!-- Three.js for 3D Realistic Graphics -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <style>
@@ -26,6 +39,7 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
             --accent-green: #10b981;
             --accent-blue: #3b82f6;
             --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --glass-border: rgba(255, 255, 255, 0.12);
@@ -75,6 +89,45 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
             letter-spacing: 1px;
         }
 
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .gender-switch {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 4px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .gender-btn {
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .gender-btn.active.male {
+            background: var(--accent-blue);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(59,130,246,0.4);
+        }
+
+        .gender-btn.active.female {
+            background: var(--accent-pink);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(236,72,153,0.4);
+        }
+
         .btn-back {
             background: rgba(255, 255, 255, 0.1);
             color: #fff;
@@ -98,7 +151,7 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
             gap: 20px;
             padding: 20px;
             flex: 1;
-            max-width: 1700px;
+            max-width: 1750px;
             margin: 0 auto;
             width: 100%;
         }
@@ -109,7 +162,7 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
             }
         }
 
-        /* Sidebar Panels */
+        /* Panels */
         .panel {
             background: var(--card-bg);
             border: 1px solid var(--glass-border);
@@ -135,7 +188,7 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
             padding-bottom: 12px;
         }
 
-        /* Category Tabs */
+        /* Category Filter Pills */
         .cat-pills {
             display: flex;
             gap: 8px;
@@ -165,13 +218,13 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
             box-shadow: 0 4px 15px rgba(255,107,0,0.4);
         }
 
-        /* Exercise List */
+        /* Exercise Cards List */
         .ex-list {
             display: flex;
             flex-direction: column;
             gap: 10px;
             overflow-y: auto;
-            max-height: 520px;
+            max-height: 540px;
             padding-right: 5px;
         }
 
@@ -219,13 +272,13 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
             color: var(--text-muted);
         }
 
-        /* 3D Viewport Main Stage */
+        /* 3D Stage Container */
         .viewport-container {
-            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #070a12 100%);
+            background: radial-gradient(circle at 50% 40%, #1e293b 0%, #070a12 100%);
             border: 2px solid rgba(255, 107, 0, 0.3);
             border-radius: 28px;
             position: relative;
-            min-height: 550px;
+            min-height: 600px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -323,9 +376,10 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
             align-items: center;
             gap: 8px;
             box-shadow: 0 5px 15px rgba(16,185,129,0.4);
+            pointer-events: auto;
         }
 
-        /* Form Tips Side Details */
+        /* Side Tips & Anatomical Info */
         .tip-card {
             background: rgba(30, 41, 59, 0.4);
             border: 1px solid var(--glass-border);
@@ -363,7 +417,7 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
             margin-bottom: 6px;
         }
 
-        /* Rep Counter Overlay */
+        /* Rep Counter Box */
         .rep-counter-box {
             background: rgba(16, 185, 129, 0.15);
             border: 1px solid #10b981;
@@ -386,11 +440,20 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
         <div class="gym-brand">
             <img src="<?php echo htmlspecialchars($gym['gym_logo']); ?>" class="gym-logo" alt="Gym Logo">
             <div>
-                <div class="page-title">🤖 3D AI Workout Coach</div>
-                <div style="font-size: 11px; color: var(--text-muted);">Interactive Anatomical Gym Execution Guide</div>
+                <div class="page-title">🤖 Realistic 3D AI Virtual Coach</div>
+                <div style="font-size: 11px; color: var(--text-muted);">Male &amp; Female Anatomical Gym Execution Guide</div>
             </div>
         </div>
-        <a href="javascript:history.back()" class="btn-back">← Back to Dashboard</a>
+
+        <div class="header-controls">
+            <!-- Gender Switch -->
+            <div class="gender-switch">
+                <button class="gender-btn <?php echo ($user_gender === 'Male') ? 'active male' : ''; ?>" id="btn-gender-male" onclick="setCoachGender('Male')">👨 Male Coach</button>
+                <button class="gender-btn <?php echo ($user_gender === 'Female') ? 'active female' : ''; ?>" id="btn-gender-female" onclick="setCoachGender('Female')">👩 Female Coach</button>
+            </div>
+
+            <a href="javascript:history.back()" class="btn-back">← Back to Dashboard</a>
+        </div>
     </header>
 
     <div class="app-layout">
@@ -399,7 +462,7 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
         <div class="panel">
             <div class="panel-title">
                 <span>🏋️ Select Exercise</span>
-                <span style="font-size: 11px; color: var(--accent);" id="ex-count">25 Available</span>
+                <span style="font-size: 11px; color: var(--accent);" id="ex-count">8 Exercises</span>
             </div>
 
             <!-- Categories Filter -->
@@ -415,11 +478,11 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
 
             <!-- Exercise List -->
             <div class="ex-list" id="exercise-list">
-                <!-- Dynamically Populated -->
+                <!-- Populated dynamically -->
             </div>
         </div>
 
-        <!-- Middle Panel: Interactive 3D WebGL Canvas Stage -->
+        <!-- Middle Panel: Realistic 3D WebGL Stage -->
         <div class="viewport-container">
             <div class="vp-overlay-top">
                 <div class="vp-title-box">
@@ -438,7 +501,7 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
                 <button class="ctrl-btn active" id="btn-play" onclick="toggleAnimation()" title="Play / Pause 3D Animation">⏯️</button>
                 <button class="ctrl-btn" onclick="reset3DCamera()" title="Reset 3D Camera Angle">🎥</button>
                 <button class="ctrl-btn" onclick="toggleMuscleHighlight()" title="Toggle Muscle Highlight Glow">🔥</button>
-                <button class="ctrl-btn" onclick="speed3DMotion()" title="Speed Up Motion">⚡</button>
+                <button class="ctrl-btn" onclick="switchCameraView()" title="Switch Front / Side / Top View">🔄</button>
             </div>
         </div>
 
@@ -452,7 +515,7 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
                 <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">TARGET MUSCLES</div>
                 <div id="target-muscles-container">
                     <span class="muscle-tag">Pectoralis Major</span>
-                    <span class="muscle-tag">Anterior Deltoids</span>
+                    <span class="muscle-tag">Anterior Deltoid</span>
                     <span class="muscle-tag">Triceps Brachii</span>
                 </div>
             </div>
@@ -486,7 +549,7 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
 
     <script>
         // -------------------------------------------------------------
-        // EXERCISE DATABASE WITH ANATOMICAL DETAILS & INSTRUCTIONS
+        // EXERCISE DATABASE
         // -------------------------------------------------------------
         const EXERCISES = [
             {
@@ -499,7 +562,7 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
                 tip2: 'Inhale deeply as you lower the bar under control to lower-mid chest level.',
                 tip3: 'Exhale forcefully and press the bar upwards in a straight trajectory to arm extension.',
                 speech: 'Barbell Bench Press: Keep shoulder blades retracted into the bench, lower the bar smoothly to your mid-chest, and press up with power!',
-                modelColor: 0xff6b00
+                muscleColor: 0xff6b00
             },
             {
                 id: 'pushup',
@@ -511,7 +574,7 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
                 tip2: 'Lower body until chest is an inch off the floor, elbows tucked at 45 degrees.',
                 tip3: 'Press back up until arms extend fully without arching your lower back.',
                 speech: 'Push ups: Keep your core tight like a rigid board, tuck your elbows at forty five degrees, and push the floor away!',
-                modelColor: 0xff8800
+                muscleColor: 0xff8800
             },
             {
                 id: 'deadlift',
@@ -523,7 +586,7 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
                 tip2: 'Pull chest up, flatten lower back, engage lats, and drive through feet to stand up straight.',
                 tip3: 'Lower the bar by hinging at the hips first, maintaining a rigid spine.',
                 speech: 'Deadlift: Keep the barbell tight against your shins, engage your lats, and drive through your heels to stand up strong!',
-                modelColor: 0x8b5cf6
+                muscleColor: 0x8b5cf6
             },
             {
                 id: 'lat_pulldown',
@@ -535,7 +598,7 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
                 tip2: 'Pull bar down towards upper chest by driving elbows straight down and back.',
                 tip3: 'Extend arms back up under resistance for a full lat stretch.',
                 speech: 'Lat pulldown: Lean back slightly, drive your elbows straight down to your upper chest, and squeeze your back muscles.',
-                modelColor: 0xa855f7
+                muscleColor: 0xa855f7
             },
             {
                 id: 'squats',
@@ -547,7 +610,7 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
                 tip2: 'Hinge hips back and bend knees to lower until thighs are parallel to floor or lower.',
                 tip3: 'Push through heels and mid-foot to explode back up to starting position.',
                 speech: 'Barbell squat: Keep your chest upright, descend until your thighs break parallel, and push through your feet to stand!',
-                modelColor: 0xeab308
+                muscleColor: 0xeab308
             },
             {
                 id: 'overhead_press',
@@ -559,7 +622,7 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
                 tip2: 'Press weights directly overhead until arms are fully locked out overhead.',
                 tip3: 'Lower weights smoothly back to collarbone level with tight core.',
                 speech: 'Shoulder press: Squeeze your glutes and core tight, press straight overhead, and lower controlled to shoulder height.',
-                modelColor: 0x10b981
+                muscleColor: 0x10b981
             },
             {
                 id: 'bicep_curl',
@@ -571,7 +634,7 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
                 tip2: 'Curl weights upward toward shoulders while contracting biceps tightly at peak.',
                 tip3: 'Slowly lower weights down under full muscular control.',
                 speech: 'Bicep curls: Pin your elbows to your sides, avoid swinging your hips, and squeeze hard at the top of the curl!',
-                modelColor: 0x3b82f6
+                muscleColor: 0x3b82f6
             },
             {
                 id: 'plank',
@@ -583,14 +646,26 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
                 tip2: 'Maintain straight line from shoulders to ankles with glutes and abs flexed.',
                 tip3: 'Hold position steadily without sagging hips or lifting glutes in air.',
                 speech: 'Plank: Engage your core and glutes tightly, maintain a flat spine, and breathe steadily!',
-                modelColor: 0xec4899
+                muscleColor: 0xec4899
             }
         ];
 
+        let currentGender = <?php echo json_encode($user_gender); ?>;
         let activeEx = EXERCISES[0];
         let isAnimating = true;
 
-        // Populate exercise list UI
+        function setCoachGender(gender) {
+            currentGender = gender;
+            document.getElementById('btn-gender-male').classList.toggle('active', gender === 'Male');
+            document.getElementById('btn-gender-male').classList.toggle('male', gender === 'Male');
+            document.getElementById('btn-gender-female').classList.toggle('active', gender === 'Female');
+            document.getElementById('btn-gender-female').classList.toggle('female', gender === 'Female');
+
+            // Re-build 3D mannequin model for gender
+            rebuild3DHumanModel();
+        }
+
+        // Render Exercise List UI
         function renderExerciseList(filter = 'all') {
             const container = document.getElementById('exercise-list');
             container.innerHTML = '';
@@ -627,33 +702,28 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
             document.getElementById('active-cat').textContent = `${ex.category.toUpperCase()} WORKOUT`;
             document.getElementById('active-ex-name').textContent = ex.name;
 
-            // Target muscles
             const mContainer = document.getElementById('target-muscles-container');
             mContainer.innerHTML = ex.muscles.map(m => `<span class="muscle-tag">${m}</span>`).join('');
 
-            // Tips
             document.getElementById('tip-1').textContent = ex.tip1;
             document.getElementById('tip-2').textContent = ex.tip2;
             document.getElementById('tip-3').textContent = ex.tip3;
 
-            // Update 3D mannequin highlight color
-            update3DMannequinColor(ex.modelColor);
+            updateMuscleGlowColor(ex.muscleColor);
         }
 
-        // Voice Coach
         function speakFormInstruction() {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const msg = new SpeechSynthesisUtterance(activeEx.speech);
                 msg.rate = 0.95;
-                msg.pitch = 1.0;
+                msg.pitch = currentGender === 'Female' ? 1.2 : 0.95;
                 window.speechSynthesis.speak(msg);
             } else {
                 alert("AI Audio Coach: " + activeEx.speech);
             }
         }
 
-        // Timer
         function startRepTimer() {
             let count = 12;
             const display = document.getElementById('rep-display');
@@ -669,10 +739,10 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
         }
 
         // -------------------------------------------------------------
-        // THREE.JS REAL-TIME 3D GRAPHICS & HUMAN ANATOMICAL ANIMATION
+        // THREE.JS REALISTIC ANATOMICAL HUMAN MANNEQUIN STAGE
         // -------------------------------------------------------------
         let scene, camera, renderer, controls;
-        let humanGroup, torsoMesh, headMesh, leftArm, rightArm, leftLeg, rightLeg, barbellMesh;
+        let humanGroup, chestMesh, latsMesh, absMesh, armLeftMesh, armRightMesh, legLeftMesh, legRightMesh, propMesh, benchMesh;
         let animClock = 0;
 
         function init3DStage() {
@@ -681,35 +751,35 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
             const height = container.clientHeight;
 
             scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x070a12, 0.05);
+            scene.fog = new THREE.FogExp2(0x070a12, 0.04);
 
             camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-            camera.position.set(0, 1.8, 4.5);
+            camera.position.set(0, 1.8, 4.2);
 
             renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('webgl-canvas'), antialias: true, alpha: true });
             renderer.setSize(width, height);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.shadowMap.enabled = true;
 
-            // Lights
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-            scene.add(ambientLight);
+            // Dramatic Gym Lighting
+            const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambient);
 
-            const dirLight = new THREE.DirectionalLight(0xff6b00, 1.5);
-            dirLight.position.set(5, 10, 7);
-            scene.add(dirLight);
+            const sunLight = new THREE.DirectionalLight(0xff6b00, 1.6);
+            sunLight.position.set(5, 12, 7);
+            scene.add(sunLight);
 
-            const blueLight = new THREE.PointLight(0x3b82f6, 2, 10);
-            blueLight.position.set(-4, 3, -2);
-            scene.add(blueLight);
+            const backLight = new THREE.PointLight(0x38bdf8, 2, 12);
+            backLight.position.set(-4, 3, -3);
+            scene.add(backLight);
 
-            // Metallic Gym Floor Grid
-            const gridHelper = new THREE.GridHelper(20, 20, 0xff6b00, 0x1e293b);
-            gridHelper.position.y = -1;
-            scene.add(gridHelper);
+            // Metallic Gym Floor & Grid
+            const grid = new THREE.GridHelper(18, 18, 0xff6b00, 0x1e293b);
+            grid.position.y = -1.1;
+            scene.add(grid);
 
-            // Construct 3D Anatomical Humanoid Model
-            createHumanModel();
+            // Construct Realistic Human Mannequin Group
+            rebuild3DHumanModel();
 
             // Orbit Controls
             controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -721,71 +791,110 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
             animate3D();
         }
 
-        function createHumanModel() {
+        function rebuild3DHumanModel() {
+            if (humanGroup) {
+                scene.remove(humanGroup);
+            }
+
             humanGroup = new THREE.Group();
 
-            const matBody = new THREE.MeshStandardMaterial({
-                color: 0x334155,
-                roughness: 0.3,
-                metalness: 0.5,
-                wireframe: false
+            const isFemale = (currentGender === 'Female');
+
+            // Realistic Skin & Muscle Materials
+            const skinMat = new THREE.MeshStandardMaterial({
+                color: isFemale ? 0xe2a780 : 0xd29062,
+                roughness: 0.4,
+                metalness: 0.2
             });
 
-            const matMuscle = new THREE.MeshStandardMaterial({
-                color: 0xff6b00,
-                emissive: 0xff6b00,
-                emissiveIntensity: 0.5,
+            const muscleGlowMat = new THREE.MeshStandardMaterial({
+                color: activeEx ? activeEx.muscleColor : 0xff6b00,
+                emissive: activeEx ? activeEx.muscleColor : 0xff6b00,
+                emissiveIntensity: 0.6,
                 roughness: 0.2
             });
 
-            // Torso / Chest
-            const torsoGeo = new THREE.CylinderGeometry(0.35, 0.25, 0.9, 16);
-            torsoMesh = new THREE.Mesh(torsoGeo, matMuscle);
-            torsoMesh.position.y = 0.45;
-            humanGroup.add(torsoMesh);
+            const darkOutfitMat = new THREE.MeshStandardMaterial({
+                color: isFemale ? 0xec4899 : 0x1e293b,
+                roughness: 0.5
+            });
 
-            // Head
-            const headGeo = new THREE.SphereGeometry(0.18, 16, 16);
-            headMesh = new THREE.Mesh(headGeo, matBody);
-            headMesh.position.y = 1.05;
+            // Head & Neck
+            const headGeo = new THREE.SphereGeometry(isFemale ? 0.17 : 0.19, 32, 32);
+            headGeo.scale(1, 1.2, 1);
+            const headMesh = new THREE.Mesh(headGeo, skinMat);
+            headMesh.position.y = 1.15;
             humanGroup.add(headMesh);
 
-            // Left Arm
-            const armGeo = new THREE.CylinderGeometry(0.08, 0.07, 0.7, 12);
-            leftArm = new THREE.Mesh(armGeo, matBody);
-            leftArm.position.set(-0.45, 0.5, 0);
-            humanGroup.add(leftArm);
+            // Muscular Chest (Pectorals)
+            const chestWidth = isFemale ? 0.38 : 0.46;
+            const chestGeo = new THREE.BoxGeometry(chestWidth, 0.4, 0.26);
+            chestMesh = new THREE.Mesh(chestGeo, muscleGlowMat);
+            chestMesh.position.set(0, 0.75, 0);
+            humanGroup.add(chestMesh);
 
-            // Right Arm
-            rightArm = new THREE.Mesh(armGeo, matBody);
-            rightArm.position.set(0.45, 0.5, 0);
-            humanGroup.add(rightArm);
+            // Latissimus & Abs / Core Section
+            const waistWidth = isFemale ? 0.30 : 0.36;
+            const absGeo = new THREE.CylinderGeometry(chestWidth * 0.9, waistWidth, 0.45, 16);
+            absMesh = new THREE.Mesh(absGeo, darkOutfitMat);
+            absMesh.position.set(0, 0.35, 0);
+            humanGroup.add(absMesh);
 
-            // Legs
-            const legGeo = new THREE.CylinderGeometry(0.1, 0.08, 0.9, 12);
-            leftLeg = new THREE.Mesh(legGeo, matBody);
-            leftLeg.position.set(-0.18, -0.45, 0);
-            humanGroup.add(leftLeg);
+            // Left & Right Shoulder / Arm Joint Groups
+            const armRadius = isFemale ? 0.08 : 0.10;
+            const armLen = 0.65;
+            const armGeo = new THREE.CylinderGeometry(armRadius, armRadius * 0.8, armLen, 16);
 
-            rightLeg = new THREE.Mesh(legGeo, matBody);
-            rightLeg.position.set(0.18, -0.45, 0);
-            humanGroup.add(rightLeg);
+            armLeftMesh = new THREE.Mesh(armGeo, skinMat);
+            armLeftMesh.position.set(-(chestWidth / 2 + armRadius), 0.6, 0);
+            humanGroup.add(armLeftMesh);
 
-            // 3D Gym Barbell Prop
-            const barGeo = new THREE.CylinderGeometry(0.03, 0.03, 1.8, 12);
-            const matBar = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9, roughness: 0.1 });
-            barbellMesh = new THREE.Mesh(barGeo, matBar);
-            barbellMesh.rotation.z = Math.PI / 2;
-            barbellMesh.position.set(0, 0.7, 0.3);
-            humanGroup.add(barbellMesh);
+            armRightMesh = new THREE.Mesh(armGeo, skinMat);
+            armRightMesh.position.set((chestWidth / 2 + armRadius), 0.6, 0);
+            humanGroup.add(armRightMesh);
+
+            // Quadricep / Leg Groups
+            const legRadius = isFemale ? 0.11 : 0.13;
+            const legLen = 0.85;
+            const legGeo = new THREE.CylinderGeometry(legRadius, legRadius * 0.7, legLen, 16);
+
+            legLeftMesh = new THREE.Mesh(legGeo, darkOutfitMat);
+            legLeftMesh.position.set(-0.16, -0.45, 0);
+            humanGroup.add(legLeftMesh);
+
+            legRightMesh = new THREE.Mesh(legGeo, darkOutfitMat);
+            legRightMesh.position.set(0.16, -0.45, 0);
+            humanGroup.add(legRightMesh);
+
+            // 3D Gym Equipment Prop (Olympic Barbell & Weights)
+            const barGeo = new THREE.CylinderGeometry(0.025, 0.025, 2.0, 16);
+            const matBar = new THREE.MeshStandardMaterial({ color: 0xc0c0c0, metalness: 0.95, roughness: 0.1 });
+            propMesh = new THREE.Mesh(barGeo, matBar);
+            propMesh.rotation.z = Math.PI / 2;
+            propMesh.position.set(0, 0.85, 0.25);
+
+            // Add Weight Plates
+            const plateGeo = new THREE.CylinderGeometry(0.22, 0.22, 0.06, 24);
+            const plateMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.3 });
+            const p1 = new THREE.Mesh(plateGeo, plateMat);
+            p1.rotation.z = Math.PI / 2;
+            p1.position.x = -0.85;
+            propMesh.add(p1);
+
+            const p2 = new THREE.Mesh(plateGeo, plateMat);
+            p2.rotation.z = Math.PI / 2;
+            p2.position.x = 0.85;
+            propMesh.add(p2);
+
+            humanGroup.add(propMesh);
 
             scene.add(humanGroup);
         }
 
-        function update3DMannequinColor(colorHex) {
-            if (torsoMesh && torsoMesh.material) {
-                torsoMesh.material.color.setHex(colorHex);
-                torsoMesh.material.emissive.setHex(colorHex);
+        function updateMuscleGlowColor(hexColor) {
+            if (chestMesh && chestMesh.material) {
+                chestMesh.material.color.setHex(hexColor);
+                chestMesh.material.emissive.setHex(hexColor);
             }
         }
 
@@ -795,39 +904,81 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
         }
 
         function reset3DCamera() {
-            camera.position.set(0, 1.8, 4.5);
+            camera.position.set(0, 1.8, 4.2);
             controls.target.set(0, 0, 0);
         }
 
+        function switchCameraView() {
+            const views = [
+                { pos: [0, 1.8, 4.2], target: [0, 0, 0] }, // Front
+                { pos: [3.8, 1.2, 0.5], target: [0, 0, 0] }, // Side Angle
+                { pos: [0, 4.5, 0.5], target: [0, 0, 0] }   // Top Down
+            ];
+            const currentIdx = window.currViewIdx || 0;
+            const nextIdx = (currentIdx + 1) % views.length;
+            window.currViewIdx = nextIdx;
+
+            const v = views[nextIdx];
+            camera.position.set(...v.pos);
+            controls.target.set(...v.target);
+        }
+
         function toggleMuscleHighlight() {
-            if (torsoMesh) {
-                torsoMesh.material.wireframe = !torsoMesh.material.wireframe;
+            if (chestMesh) {
+                chestMesh.material.wireframe = !chestMesh.material.wireframe;
             }
         }
 
         function animate3D() {
             requestAnimationFrame(animate3D);
 
-            if (isAnimating) {
-                animClock += 0.03;
-                const sinMotion = Math.sin(animClock) * 0.25;
+            if (isAnimating && humanGroup) {
+                animClock += 0.035;
+                const sinVal = Math.sin(animClock);
+                const posSin = (sinVal + 1) / 2;
 
                 if (activeEx.category === 'chest') {
-                    // Bench press motion
-                    barbellMesh.position.y = 0.5 + sinMotion;
-                    leftArm.position.y = 0.4 + sinMotion * 0.5;
-                    rightArm.position.y = 0.4 + sinMotion * 0.5;
+                    // Bench Press / Pushup Biomechanics
+                    if (activeEx.id === 'bench_press') {
+                        humanGroup.rotation.x = -Math.PI / 2; // Lie flat on back
+                        humanGroup.position.set(0, 0.2, 0.4);
+                        propMesh.position.set(0, 0.7 + sinVal * 0.35, 0);
+                        armLeftMesh.position.y = 0.5 + sinVal * 0.15;
+                        armRightMesh.position.y = 0.5 + sinVal * 0.15;
+                    } else {
+                        // Pushups
+                        humanGroup.rotation.x = -Math.PI / 2 + 0.2;
+                        humanGroup.position.y = -0.3 + sinVal * 0.25;
+                        propMesh.visible = false;
+                    }
                 } else if (activeEx.category === 'legs') {
-                    // Squat motion
-                    humanGroup.position.y = sinMotion * 0.8;
-                    barbellMesh.position.y = 0.95;
+                    // Squat Biomechanics
+                    humanGroup.rotation.x = 0;
+                    humanGroup.position.y = -sinVal * 0.4;
+                    propMesh.visible = true;
+                    propMesh.position.set(0, 1.0, -0.05); // Rest on traps
+                    legLeftMesh.rotation.x = sinVal * 0.4;
+                    legRightMesh.rotation.x = sinVal * 0.4;
                 } else if (activeEx.category === 'arms') {
-                    // Bicep curl motion
-                    leftArm.rotation.x = Math.abs(Math.sin(animClock)) * 1.2;
-                    rightArm.rotation.x = Math.abs(Math.sin(animClock)) * 1.2;
+                    // Bicep Curl Biomechanics
+                    humanGroup.rotation.x = 0;
+                    humanGroup.position.set(0, 0, 0);
+                    propMesh.visible = true;
+                    propMesh.position.set(0, 0.35 + posSin * 0.45, 0.25);
+                    armLeftMesh.rotation.x = posSin * 1.3;
+                    armRightMesh.rotation.x = posSin * 1.3;
+                } else if (activeEx.category === 'core') {
+                    // Plank Hold Biomechanics
+                    humanGroup.rotation.x = -Math.PI / 2 + 0.1;
+                    humanGroup.position.set(0, -0.4, 0);
+                    propMesh.visible = false;
+                    chestMesh.position.z = Math.sin(animClock * 2) * 0.02; // Breathing motion
                 } else {
-                    // General pulsing motion
-                    humanGroup.rotation.y = Math.sin(animClock * 0.5) * 0.2;
+                    // Standing General Exercises
+                    humanGroup.rotation.x = 0;
+                    humanGroup.position.set(0, 0, 0);
+                    propMesh.visible = true;
+                    propMesh.position.set(0, 0.85 + sinVal * 0.3, 0);
                 }
             }
 
@@ -845,7 +996,7 @@ $user_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
             renderer.setSize(width, height);
         }
 
-        // Initialize UI and 3D Scene
+        // Initialize Page
         window.addEventListener('DOMContentLoaded', () => {
             renderExerciseList('all');
             selectExercise(EXERCISES[0], null);
