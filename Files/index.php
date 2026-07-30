@@ -119,54 +119,64 @@ if (substr($logo_path, 0, 6) === '../../') {
 
     /* System Gate Window Container */
     .login-container {
-        max-width: 650px !important;
-        width: 95% !important;
-        background: rgba(9, 14, 28, 0.94) !important;
-        border: 2px solid #00f0ff !important;
+        max-width: 680px !important;
+        width: 96% !important;
+        background: rgba(15, 7, 18, 0.95) !important;
+        border: 2px solid #ff003c !important;
         border-radius: 28px !important;
-        padding: 45px 35px 35px 35px !important;
-        box-shadow: 0 0 50px rgba(0, 240, 255, 0.3), var(--glass-shadow) !important;
+        padding: 40px 25px !important;
+        box-shadow: 0 0 50px rgba(255, 0, 60, 0.35) !important;
         position: relative;
         z-index: 10;
         animation: system-hologram-pulse 6s ease-in-out infinite alternate !important;
     }
 
     .login-container::before {
-        content: '[ SYSTEM GATE PORTAL ]';
+        content: '[ SUDARSHAN FITNESS GATE PORTAL ]';
         position: absolute;
         top: -14px;
         left: 50%;
         transform: translateX(-50%);
         background: #030712;
-        border: 1px solid #00f0ff;
-        color: #00f0ff;
+        border: 1px solid #ff003c;
+        color: #ff003c;
         font-family: 'Orbitron', sans-serif;
         font-size: 11px;
         font-weight: 900;
         padding: 4px 16px;
         border-radius: 12px;
         letter-spacing: 2px;
-        box-shadow: 0 0 15px rgba(0,240,255,0.5);
+        box-shadow: 0 0 15px rgba(255,0,60,0.5);
     }
 
     .login-categories {
         display: grid !important;
         grid-template-columns: repeat(5, 1fr) !important;
-        gap: 12px !important;
-        margin-bottom: 30px !important;
+        gap: 8px !important;
+        margin-bottom: 25px !important;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 550px) {
         .login-categories {
-            grid-template-columns: repeat(3, 1fr) !important;
+            grid-template-columns: repeat(5, 1fr) !important;
+            gap: 4px !important;
+        }
+        .category-tab {
+            padding: 10px 4px !important;
+        }
+        .category-tab i {
+            font-size: 18px !important;
+        }
+        .category-tab span {
+            font-size: 8px !important;
         }
     }
 
     .category-tab {
-        background: rgba(0, 240, 255, 0.03) !important;
-        border: 1px solid rgba(0, 240, 255, 0.2) !important;
-        border-radius: 16px !important;
-        padding: 16px 8px !important;
+        background: rgba(255, 0, 60, 0.04) !important;
+        border: 1px solid rgba(255, 0, 60, 0.25) !important;
+        border-radius: 14px !important;
+        padding: 14px 6px !important;
         text-align: center !important;
         cursor: pointer !important;
         transition: all 0.25s ease !important;
@@ -174,32 +184,38 @@ if (substr($logo_path, 0, 6) === '../../') {
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 8px !important;
+        gap: 6px !important;
     }
 
     .category-tab[data-role="member"]:hover, .category-tab[data-role="member"].active {
-        border-color: #00f0ff !important;
-        background: rgba(0, 240, 255, 0.18) !important;
-        box-shadow: 0 0 25px rgba(0, 240, 255, 0.5) !important;
-        transform: scale(1.05);
+        border-color: #ff003c !important;
+        background: rgba(255, 0, 60, 0.22) !important;
+        box-shadow: 0 0 25px rgba(255, 0, 60, 0.6) !important;
+        transform: scale(1.04);
     }
     .category-tab[data-role="reception"]:hover, .category-tab[data-role="reception"].active {
         border-color: #ffb703 !important;
-        background: rgba(255, 183, 3, 0.18) !important;
-        box-shadow: 0 0 25px rgba(255, 183, 3, 0.5) !important;
-        transform: scale(1.05);
+        background: rgba(255, 183, 3, 0.22) !important;
+        box-shadow: 0 0 25px rgba(255, 183, 3, 0.6) !important;
+        transform: scale(1.04);
     }
     .category-tab[data-role="trainer"]:hover, .category-tab[data-role="trainer"].active {
         border-color: #7000ff !important;
         background: rgba(112, 0, 255, 0.25) !important;
         box-shadow: 0 0 25px rgba(112, 0, 255, 0.6) !important;
-        transform: scale(1.05);
+        transform: scale(1.04);
     }
     .category-tab[data-role="owner"]:hover, .category-tab[data-role="owner"].active {
         border-color: #a855f7 !important;
         background: rgba(168, 85, 247, 0.25) !important;
         box-shadow: 0 0 25px rgba(168, 85, 247, 0.6) !important;
-        transform: scale(1.05);
+        transform: scale(1.04);
+    }
+    .category-tab[data-role="super_admin"]:hover, .category-tab[data-role="super_admin"].active {
+        border-color: #10b981 !important;
+        background: rgba(16, 185, 129, 0.25) !important;
+        box-shadow: 0 0 25px rgba(16, 185, 129, 0.6) !important;
+        transform: scale(1.04);
     }
     .category-tab[data-role="super_admin"]:hover, .category-tab[data-role="super_admin"].active {
         border-color: #10b981 !important;
