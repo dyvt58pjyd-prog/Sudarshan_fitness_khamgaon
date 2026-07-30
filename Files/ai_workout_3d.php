@@ -28,9 +28,6 @@ if (isset($_SESSION['user_data'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>3D Realistic AI Virtual Coach &amp; Workout Guide | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Three.js for 3D Realistic Graphics -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <style>
         :root {
             --bg-dark: #070a12;
@@ -108,9 +105,9 @@ if (isset($_SESSION['user_data'])) {
             background: transparent;
             color: var(--text-muted);
             border: none;
-            padding: 6px 14px;
+            padding: 8px 16px;
             border-radius: 10px;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 800;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -119,13 +116,13 @@ if (isset($_SESSION['user_data'])) {
         .gender-btn.active.male {
             background: var(--accent-blue);
             color: #fff;
-            box-shadow: 0 4px 12px rgba(59,130,246,0.4);
+            box-shadow: 0 4px 15px rgba(59,130,246,0.5);
         }
 
         .gender-btn.active.female {
             background: var(--accent-pink);
             color: #fff;
-            box-shadow: 0 4px 12px rgba(236,72,153,0.4);
+            box-shadow: 0 4px 15px rgba(236,72,153,0.5);
         }
 
         .btn-back {
@@ -224,7 +221,7 @@ if (isset($_SESSION['user_data'])) {
             flex-direction: column;
             gap: 10px;
             overflow-y: auto;
-            max-height: 540px;
+            max-height: 550px;
             padding-right: 5px;
         }
 
@@ -272,7 +269,7 @@ if (isset($_SESSION['user_data'])) {
             color: var(--text-muted);
         }
 
-        /* 3D Stage Container */
+        /* Realistic Stage Container */
         .viewport-container {
             background: radial-gradient(circle at 50% 40%, #1e293b 0%, #070a12 100%);
             border: 2px solid rgba(255, 107, 0, 0.3);
@@ -282,14 +279,20 @@ if (isset($_SESSION['user_data'])) {
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
             box-shadow: 0 30px 60px rgba(0,0,0,0.8);
         }
 
-        #webgl-canvas {
+        .human-stage-canvas {
             width: 100%;
             height: 100%;
-            display: block;
-            flex: 1;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .vp-overlay-top {
@@ -324,6 +327,18 @@ if (isset($_SESSION['user_data'])) {
             color: var(--accent);
             font-weight: 700;
             text-transform: uppercase;
+        }
+
+        .model-badge {
+            background: rgba(255, 107, 0, 0.15);
+            border: 1px solid #ff6b00;
+            color: #ff6b00;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 800;
+            margin-top: 4px;
+            display: inline-block;
         }
 
         .vp-controls-bar {
@@ -440,16 +455,16 @@ if (isset($_SESSION['user_data'])) {
         <div class="gym-brand">
             <img src="<?php echo htmlspecialchars($gym['gym_logo']); ?>" class="gym-logo" alt="Gym Logo">
             <div>
-                <div class="page-title">🤖 Realistic 3D AI Virtual Coach</div>
-                <div style="font-size: 11px; color: var(--text-muted);">Male &amp; Female Anatomical Gym Execution Guide</div>
+                <div class="page-title">🏋️ REALISTIC MALE &amp; FEMALE AI WORKOUT COACH</div>
+                <div style="font-size: 11px; color: var(--text-muted);">High-Definition Anatomical Gym Exercise Demonstrator</div>
             </div>
         </div>
 
         <div class="header-controls">
-            <!-- Gender Switch -->
+            <!-- Gender Switcher -->
             <div class="gender-switch">
-                <button class="gender-btn <?php echo ($user_gender === 'Male') ? 'active male' : ''; ?>" id="btn-gender-male" onclick="setCoachGender('Male')">👨 Male Coach</button>
-                <button class="gender-btn <?php echo ($user_gender === 'Female') ? 'active female' : ''; ?>" id="btn-gender-female" onclick="setCoachGender('Female')">👩 Female Coach</button>
+                <button class="gender-btn <?php echo ($user_gender === 'Male') ? 'active male' : ''; ?>" id="btn-gender-male" onclick="setCoachGender('Male')">👨 Male Athlete</button>
+                <button class="gender-btn <?php echo ($user_gender === 'Female') ? 'active female' : ''; ?>" id="btn-gender-female" onclick="setCoachGender('Female')">👩 Female Athlete</button>
             </div>
 
             <a href="javascript:history.back()" class="btn-back">← Back to Dashboard</a>
@@ -482,26 +497,29 @@ if (isset($_SESSION['user_data'])) {
             </div>
         </div>
 
-        <!-- Middle Panel: Realistic 3D WebGL Stage -->
+        <!-- Middle Panel: Realistic Human Fitness Stage -->
         <div class="viewport-container">
             <div class="vp-overlay-top">
                 <div class="vp-title-box">
                     <span id="active-cat">CHEST WORKOUT</span>
                     <h3 id="active-ex-name">Barbell Bench Press</h3>
+                    <div class="model-badge" id="active-model-badge">👨 REALISTIC MALE ATHLETE DEMO</div>
                 </div>
                 <button class="voice-btn" onclick="speakFormInstruction()">
                     🔊 Audio AI Coach
                 </button>
             </div>
 
-            <canvas id="webgl-canvas"></canvas>
+            <!-- Realistic Canvas Visualizer Stage -->
+            <div class="human-stage-canvas">
+                <canvas id="humanCanvas" width="700" height="550"></canvas>
+            </div>
 
-            <!-- 3D Controls Bar -->
+            <!-- Controls Bar -->
             <div class="vp-controls-bar">
-                <button class="ctrl-btn active" id="btn-play" onclick="toggleAnimation()" title="Play / Pause 3D Animation">⏯️</button>
-                <button class="ctrl-btn" onclick="reset3DCamera()" title="Reset 3D Camera Angle">🎥</button>
-                <button class="ctrl-btn" onclick="toggleMuscleHighlight()" title="Toggle Muscle Highlight Glow">🔥</button>
-                <button class="ctrl-btn" onclick="switchCameraView()" title="Switch Front / Side / Top View">🔄</button>
+                <button class="ctrl-btn active" id="btn-play" onclick="toggleAnimation()" title="Play / Pause Motion">⏯️</button>
+                <button class="ctrl-btn" onclick="toggleGlow()" title="Toggle Muscle Highlight Glow">🔥</button>
+                <button class="ctrl-btn" onclick="toggleViewMode()" title="Toggle Motion View">🔄</button>
             </div>
         </div>
 
@@ -562,7 +580,7 @@ if (isset($_SESSION['user_data'])) {
                 tip2: 'Inhale deeply as you lower the bar under control to lower-mid chest level.',
                 tip3: 'Exhale forcefully and press the bar upwards in a straight trajectory to arm extension.',
                 speech: 'Barbell Bench Press: Keep shoulder blades retracted into the bench, lower the bar smoothly to your mid-chest, and press up with power!',
-                muscleColor: 0xff6b00
+                glowColor: '#ff6b00'
             },
             {
                 id: 'pushup',
@@ -574,7 +592,7 @@ if (isset($_SESSION['user_data'])) {
                 tip2: 'Lower body until chest is an inch off the floor, elbows tucked at 45 degrees.',
                 tip3: 'Press back up until arms extend fully without arching your lower back.',
                 speech: 'Push ups: Keep your core tight like a rigid board, tuck your elbows at forty five degrees, and push the floor away!',
-                muscleColor: 0xff8800
+                glowColor: '#ff8800'
             },
             {
                 id: 'deadlift',
@@ -586,7 +604,7 @@ if (isset($_SESSION['user_data'])) {
                 tip2: 'Pull chest up, flatten lower back, engage lats, and drive through feet to stand up straight.',
                 tip3: 'Lower the bar by hinging at the hips first, maintaining a rigid spine.',
                 speech: 'Deadlift: Keep the barbell tight against your shins, engage your lats, and drive through your heels to stand up strong!',
-                muscleColor: 0x8b5cf6
+                glowColor: '#8b5cf6'
             },
             {
                 id: 'lat_pulldown',
@@ -598,7 +616,7 @@ if (isset($_SESSION['user_data'])) {
                 tip2: 'Pull bar down towards upper chest by driving elbows straight down and back.',
                 tip3: 'Extend arms back up under resistance for a full lat stretch.',
                 speech: 'Lat pulldown: Lean back slightly, drive your elbows straight down to your upper chest, and squeeze your back muscles.',
-                muscleColor: 0xa855f7
+                glowColor: '#a855f7'
             },
             {
                 id: 'squats',
@@ -610,7 +628,7 @@ if (isset($_SESSION['user_data'])) {
                 tip2: 'Hinge hips back and bend knees to lower until thighs are parallel to floor or lower.',
                 tip3: 'Push through heels and mid-foot to explode back up to starting position.',
                 speech: 'Barbell squat: Keep your chest upright, descend until your thighs break parallel, and push through your feet to stand!',
-                muscleColor: 0xeab308
+                glowColor: '#eab308'
             },
             {
                 id: 'overhead_press',
@@ -622,7 +640,7 @@ if (isset($_SESSION['user_data'])) {
                 tip2: 'Press weights directly overhead until arms are fully locked out overhead.',
                 tip3: 'Lower weights smoothly back to collarbone level with tight core.',
                 speech: 'Shoulder press: Squeeze your glutes and core tight, press straight overhead, and lower controlled to shoulder height.',
-                muscleColor: 0x10b981
+                glowColor: '#10b981'
             },
             {
                 id: 'bicep_curl',
@@ -634,7 +652,7 @@ if (isset($_SESSION['user_data'])) {
                 tip2: 'Curl weights upward toward shoulders while contracting biceps tightly at peak.',
                 tip3: 'Slowly lower weights down under full muscular control.',
                 speech: 'Bicep curls: Pin your elbows to your sides, avoid swinging your hips, and squeeze hard at the top of the curl!',
-                muscleColor: 0x3b82f6
+                glowColor: '#3b82f6'
             },
             {
                 id: 'plank',
@@ -646,13 +664,14 @@ if (isset($_SESSION['user_data'])) {
                 tip2: 'Maintain straight line from shoulders to ankles with glutes and abs flexed.',
                 tip3: 'Hold position steadily without sagging hips or lifting glutes in air.',
                 speech: 'Plank: Engage your core and glutes tightly, maintain a flat spine, and breathe steadily!',
-                muscleColor: 0xec4899
+                glowColor: '#ec4899'
             }
         ];
 
         let currentGender = <?php echo json_encode($user_gender); ?>;
         let activeEx = EXERCISES[0];
         let isAnimating = true;
+        let showGlow = true;
 
         function setCoachGender(gender) {
             currentGender = gender;
@@ -661,11 +680,9 @@ if (isset($_SESSION['user_data'])) {
             document.getElementById('btn-gender-female').classList.toggle('active', gender === 'Female');
             document.getElementById('btn-gender-female').classList.toggle('female', gender === 'Female');
 
-            // Re-build 3D mannequin model for gender
-            rebuild3DHumanModel();
+            document.getElementById('active-model-badge').textContent = (gender === 'Male') ? '👨 REALISTIC MALE ATHLETE DEMO' : '👩 REALISTIC FEMALE ATHLETE DEMO';
         }
 
-        // Render Exercise List UI
         function renderExerciseList(filter = 'all') {
             const container = document.getElementById('exercise-list');
             container.innerHTML = '';
@@ -708,8 +725,6 @@ if (isset($_SESSION['user_data'])) {
             document.getElementById('tip-1').textContent = ex.tip1;
             document.getElementById('tip-2').textContent = ex.tip2;
             document.getElementById('tip-3').textContent = ex.tip3;
-
-            updateMuscleGlowColor(ex.muscleColor);
         }
 
         function speakFormInstruction() {
@@ -717,7 +732,7 @@ if (isset($_SESSION['user_data'])) {
                 window.speechSynthesis.cancel();
                 const msg = new SpeechSynthesisUtterance(activeEx.speech);
                 msg.rate = 0.95;
-                msg.pitch = currentGender === 'Female' ? 1.2 : 0.95;
+                msg.pitch = currentGender === 'Female' ? 1.25 : 0.95;
                 window.speechSynthesis.speak(msg);
             } else {
                 alert("AI Audio Coach: " + activeEx.speech);
@@ -738,269 +753,299 @@ if (isset($_SESSION['user_data'])) {
             }, 1000);
         }
 
-        // -------------------------------------------------------------
-        // THREE.JS REALISTIC ANATOMICAL HUMAN MANNEQUIN STAGE
-        // -------------------------------------------------------------
-        let scene, camera, renderer, controls;
-        let humanGroup, chestMesh, latsMesh, absMesh, armLeftMesh, armRightMesh, legLeftMesh, legRightMesh, propMesh, benchMesh;
-        let animClock = 0;
-
-        function init3DStage() {
-            const container = document.querySelector('.viewport-container');
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-
-            scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x070a12, 0.04);
-
-            camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-            camera.position.set(0, 1.8, 4.2);
-
-            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('webgl-canvas'), antialias: true, alpha: true });
-            renderer.setSize(width, height);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.shadowMap.enabled = true;
-
-            // Dramatic Gym Lighting
-            const ambient = new THREE.AmbientLight(0xffffff, 0.6);
-            scene.add(ambient);
-
-            const sunLight = new THREE.DirectionalLight(0xff6b00, 1.6);
-            sunLight.position.set(5, 12, 7);
-            scene.add(sunLight);
-
-            const backLight = new THREE.PointLight(0x38bdf8, 2, 12);
-            backLight.position.set(-4, 3, -3);
-            scene.add(backLight);
-
-            // Metallic Gym Floor & Grid
-            const grid = new THREE.GridHelper(18, 18, 0xff6b00, 0x1e293b);
-            grid.position.y = -1.1;
-            scene.add(grid);
-
-            // Construct Realistic Human Mannequin Group
-            rebuild3DHumanModel();
-
-            // Orbit Controls
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-            controls.maxPolarAngle = Math.PI / 2 + 0.1;
-
-            window.addEventListener('resize', onWindowResize);
-            animate3D();
-        }
-
-        function rebuild3DHumanModel() {
-            if (humanGroup) {
-                scene.remove(humanGroup);
-            }
-
-            humanGroup = new THREE.Group();
-
-            const isFemale = (currentGender === 'Female');
-
-            // Realistic Skin & Muscle Materials
-            const skinMat = new THREE.MeshStandardMaterial({
-                color: isFemale ? 0xe2a780 : 0xd29062,
-                roughness: 0.4,
-                metalness: 0.2
-            });
-
-            const muscleGlowMat = new THREE.MeshStandardMaterial({
-                color: activeEx ? activeEx.muscleColor : 0xff6b00,
-                emissive: activeEx ? activeEx.muscleColor : 0xff6b00,
-                emissiveIntensity: 0.6,
-                roughness: 0.2
-            });
-
-            const darkOutfitMat = new THREE.MeshStandardMaterial({
-                color: isFemale ? 0xec4899 : 0x1e293b,
-                roughness: 0.5
-            });
-
-            // Head & Neck
-            const headGeo = new THREE.SphereGeometry(isFemale ? 0.17 : 0.19, 32, 32);
-            headGeo.scale(1, 1.2, 1);
-            const headMesh = new THREE.Mesh(headGeo, skinMat);
-            headMesh.position.y = 1.15;
-            humanGroup.add(headMesh);
-
-            // Muscular Chest (Pectorals)
-            const chestWidth = isFemale ? 0.38 : 0.46;
-            const chestGeo = new THREE.BoxGeometry(chestWidth, 0.4, 0.26);
-            chestMesh = new THREE.Mesh(chestGeo, muscleGlowMat);
-            chestMesh.position.set(0, 0.75, 0);
-            humanGroup.add(chestMesh);
-
-            // Latissimus & Abs / Core Section
-            const waistWidth = isFemale ? 0.30 : 0.36;
-            const absGeo = new THREE.CylinderGeometry(chestWidth * 0.9, waistWidth, 0.45, 16);
-            absMesh = new THREE.Mesh(absGeo, darkOutfitMat);
-            absMesh.position.set(0, 0.35, 0);
-            humanGroup.add(absMesh);
-
-            // Left & Right Shoulder / Arm Joint Groups
-            const armRadius = isFemale ? 0.08 : 0.10;
-            const armLen = 0.65;
-            const armGeo = new THREE.CylinderGeometry(armRadius, armRadius * 0.8, armLen, 16);
-
-            armLeftMesh = new THREE.Mesh(armGeo, skinMat);
-            armLeftMesh.position.set(-(chestWidth / 2 + armRadius), 0.6, 0);
-            humanGroup.add(armLeftMesh);
-
-            armRightMesh = new THREE.Mesh(armGeo, skinMat);
-            armRightMesh.position.set((chestWidth / 2 + armRadius), 0.6, 0);
-            humanGroup.add(armRightMesh);
-
-            // Quadricep / Leg Groups
-            const legRadius = isFemale ? 0.11 : 0.13;
-            const legLen = 0.85;
-            const legGeo = new THREE.CylinderGeometry(legRadius, legRadius * 0.7, legLen, 16);
-
-            legLeftMesh = new THREE.Mesh(legGeo, darkOutfitMat);
-            legLeftMesh.position.set(-0.16, -0.45, 0);
-            humanGroup.add(legLeftMesh);
-
-            legRightMesh = new THREE.Mesh(legGeo, darkOutfitMat);
-            legRightMesh.position.set(0.16, -0.45, 0);
-            humanGroup.add(legRightMesh);
-
-            // 3D Gym Equipment Prop (Olympic Barbell & Weights)
-            const barGeo = new THREE.CylinderGeometry(0.025, 0.025, 2.0, 16);
-            const matBar = new THREE.MeshStandardMaterial({ color: 0xc0c0c0, metalness: 0.95, roughness: 0.1 });
-            propMesh = new THREE.Mesh(barGeo, matBar);
-            propMesh.rotation.z = Math.PI / 2;
-            propMesh.position.set(0, 0.85, 0.25);
-
-            // Add Weight Plates
-            const plateGeo = new THREE.CylinderGeometry(0.22, 0.22, 0.06, 24);
-            const plateMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.3 });
-            const p1 = new THREE.Mesh(plateGeo, plateMat);
-            p1.rotation.z = Math.PI / 2;
-            p1.position.x = -0.85;
-            propMesh.add(p1);
-
-            const p2 = new THREE.Mesh(plateGeo, plateMat);
-            p2.rotation.z = Math.PI / 2;
-            p2.position.x = 0.85;
-            propMesh.add(p2);
-
-            humanGroup.add(propMesh);
-
-            scene.add(humanGroup);
-        }
-
-        function updateMuscleGlowColor(hexColor) {
-            if (chestMesh && chestMesh.material) {
-                chestMesh.material.color.setHex(hexColor);
-                chestMesh.material.emissive.setHex(hexColor);
-            }
-        }
-
         function toggleAnimation() {
             isAnimating = !isAnimating;
             document.getElementById('btn-play').classList.toggle('active', isAnimating);
         }
 
-        function reset3DCamera() {
-            camera.position.set(0, 1.8, 4.2);
-            controls.target.set(0, 0, 0);
+        function toggleGlow() {
+            showGlow = !showGlow;
         }
 
-        function switchCameraView() {
-            const views = [
-                { pos: [0, 1.8, 4.2], target: [0, 0, 0] }, // Front
-                { pos: [3.8, 1.2, 0.5], target: [0, 0, 0] }, // Side Angle
-                { pos: [0, 4.5, 0.5], target: [0, 0, 0] }   // Top Down
-            ];
-            const currentIdx = window.currViewIdx || 0;
-            const nextIdx = (currentIdx + 1) % views.length;
-            window.currViewIdx = nextIdx;
-
-            const v = views[nextIdx];
-            camera.position.set(...v.pos);
-            controls.target.set(...v.target);
+        function toggleViewMode() {
+            window.viewModeFront = !window.viewModeFront;
         }
 
-        function toggleMuscleHighlight() {
-            if (chestMesh) {
-                chestMesh.material.wireframe = !chestMesh.material.wireframe;
+        // -------------------------------------------------------------
+        // HIGH-DEFINITION REALISTIC ANATOMICAL HUMAN RENDERER
+        // -------------------------------------------------------------
+        const canvas = document.getElementById('humanCanvas');
+        const ctx = canvas.getContext('2d');
+        let animTick = 0;
+
+        function drawRealisticHuman() {
+            requestAnimationFrame(drawRealisticHuman);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const isFemale = (currentGender === 'Female');
+            const skinTone = isFemale ? '#e0a98b' : '#c68a5c';
+            const shadowSkin = isFemale ? '#b88266' : '#9e643a';
+            const outfitColor = isFemale ? '#ec4899' : '#1e293b';
+            const glowColor = activeEx ? activeEx.glowColor : '#ff6b00';
+
+            if (isAnimating) {
+                animTick += 0.04;
             }
-        }
 
-        function animate3D() {
-            requestAnimationFrame(animate3D);
+            const sinVal = Math.sin(animTick);
+            const posSin = (sinVal + 1) / 2;
 
-            if (isAnimating && humanGroup) {
-                animClock += 0.035;
-                const sinVal = Math.sin(animClock);
-                const posSin = (sinVal + 1) / 2;
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
 
-                if (activeEx.category === 'chest') {
-                    // Bench Press / Pushup Biomechanics
-                    if (activeEx.id === 'bench_press') {
-                        humanGroup.rotation.x = -Math.PI / 2; // Lie flat on back
-                        humanGroup.position.set(0, 0.2, 0.4);
-                        propMesh.position.set(0, 0.7 + sinVal * 0.35, 0);
-                        armLeftMesh.position.y = 0.5 + sinVal * 0.15;
-                        armRightMesh.position.y = 0.5 + sinVal * 0.15;
-                    } else {
-                        // Pushups
-                        humanGroup.rotation.x = -Math.PI / 2 + 0.2;
-                        humanGroup.position.y = -0.3 + sinVal * 0.25;
-                        propMesh.visible = false;
+            // Draw Gym Floor Shadow & Grid
+            ctx.save();
+            ctx.fillStyle = 'rgba(255, 107, 0, 0.04)';
+            ctx.beginPath();
+            ctx.ellipse(cx, cy + 220, 200, 40, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            ctx.save();
+
+            if (activeEx.category === 'chest') {
+                if (activeEx.id === 'bench_press') {
+                    // -------------------------------------------------
+                    // REALISTIC BENCH PRESS DEMO (Horizontal Bench)
+                    // -------------------------------------------------
+                    // Bench Frame
+                    ctx.fillStyle = '#334155';
+                    ctx.fillRect(cx - 160, cy + 30, 320, 25);
+                    ctx.fillRect(cx - 140, cy + 55, 20, 100);
+                    ctx.fillRect(cx + 120, cy + 55, 20, 100);
+
+                    // Human Torso Lying Flat
+                    ctx.fillStyle = outfitColor;
+                    ctx.beginPath();
+                    ctx.roundRect(cx - 120, cy - 10, 240, 45, 15);
+                    ctx.fill();
+
+                    // Pectoral Muscle Glow Overlay
+                    if (showGlow) {
+                        ctx.shadowColor = glowColor;
+                        ctx.shadowBlur = 25;
+                        ctx.fillStyle = glowColor;
+                        ctx.beginPath();
+                        ctx.roundRect(cx - 40, cy - 8, 80, 25, 10);
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
                     }
-                } else if (activeEx.category === 'legs') {
-                    // Squat Biomechanics
-                    humanGroup.rotation.x = 0;
-                    humanGroup.position.y = -sinVal * 0.4;
-                    propMesh.visible = true;
-                    propMesh.position.set(0, 1.0, -0.05); // Rest on traps
-                    legLeftMesh.rotation.x = sinVal * 0.4;
-                    legRightMesh.rotation.x = sinVal * 0.4;
-                } else if (activeEx.category === 'arms') {
-                    // Bicep Curl Biomechanics
-                    humanGroup.rotation.x = 0;
-                    humanGroup.position.set(0, 0, 0);
-                    propMesh.visible = true;
-                    propMesh.position.set(0, 0.35 + posSin * 0.45, 0.25);
-                    armLeftMesh.rotation.x = posSin * 1.3;
-                    armRightMesh.rotation.x = posSin * 1.3;
-                } else if (activeEx.category === 'core') {
-                    // Plank Hold Biomechanics
-                    humanGroup.rotation.x = -Math.PI / 2 + 0.1;
-                    humanGroup.position.set(0, -0.4, 0);
-                    propMesh.visible = false;
-                    chestMesh.position.z = Math.sin(animClock * 2) * 0.02; // Breathing motion
+
+                    // Head
+                    ctx.fillStyle = skinTone;
+                    ctx.beginPath();
+                    ctx.arc(cx - 140, cy + 10, 22, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Arms Holding Barbell
+                    const barY = cy - 70 - sinVal * 45;
+                    ctx.strokeStyle = skinTone;
+                    ctx.lineWidth = isFemale ? 14 : 18;
+                    ctx.lineCap = 'round';
+
+                    // Left & Right Arm Drives
+                    ctx.beginPath();
+                    ctx.moveTo(cx - 70, cy);
+                    ctx.lineTo(cx - 90, barY + 15);
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.moveTo(cx + 70, cy);
+                    ctx.lineTo(cx + 90, barY + 15);
+                    ctx.stroke();
+
+                    // Olympic Barbell & Weight Plates
+                    ctx.strokeStyle = '#e2e8f0';
+                    ctx.lineWidth = 8;
+                    ctx.beginPath();
+                    ctx.moveTo(cx - 180, barY);
+                    ctx.lineTo(cx + 180, barY);
+                    ctx.stroke();
+
+                    ctx.fillStyle = '#0f172a';
+                    ctx.fillRect(cx - 175, barY - 35, 16, 70);
+                    ctx.fillRect(cx + 159, barY - 35, 16, 70);
+
                 } else {
-                    // Standing General Exercises
-                    humanGroup.rotation.x = 0;
-                    humanGroup.position.set(0, 0, 0);
-                    propMesh.visible = true;
-                    propMesh.position.set(0, 0.85 + sinVal * 0.3, 0);
+                    // Pushups
+                    const pushY = cy + sinVal * 30;
+                    // Torso
+                    ctx.fillStyle = outfitColor;
+                    ctx.beginPath();
+                    ctx.roundRect(cx - 100, pushY, 200, 50, 15);
+                    ctx.fill();
+
+                    // Chest Glow
+                    if (showGlow) {
+                        ctx.shadowColor = glowColor;
+                        ctx.shadowBlur = 20;
+                        ctx.fillStyle = glowColor;
+                        ctx.beginPath();
+                        ctx.arc(cx - 30, pushY + 25, 25, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                    }
+
+                    // Head
+                    ctx.fillStyle = skinTone;
+                    ctx.beginPath();
+                    ctx.arc(cx - 125, pushY + 25, 22, 0, Math.PI * 2);
+                    ctx.fill();
                 }
+            } else if (activeEx.category === 'legs') {
+                // -------------------------------------------------
+                // REALISTIC SQUATS DEMO (Standing / Squatting)
+                // -------------------------------------------------
+                const squatY = cy - 40 + posSin * 60;
+
+                // Torso & Upper Body
+                ctx.fillStyle = skinTone;
+                ctx.beginPath();
+                ctx.roundRect(cx - 45, squatY - 110, 90, 110, 16);
+                ctx.fill();
+
+                // Quad / Leg Muscles Glow
+                ctx.fillStyle = outfitColor;
+                ctx.beginPath();
+                ctx.roundRect(cx - 40, squatY, 35, 120, 12);
+                ctx.roundRect(cx + 5, squatY, 35, 120, 12);
+                ctx.fill();
+
+                if (showGlow) {
+                    ctx.shadowColor = glowColor;
+                    ctx.shadowBlur = 25;
+                    ctx.fillStyle = glowColor;
+                    ctx.beginPath();
+                    ctx.roundRect(cx - 38, squatY + 10, 31, 60, 10);
+                    ctx.roundRect(cx + 7, squatY + 10, 31, 60, 10);
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+
+                // Head
+                ctx.fillStyle = skinTone;
+                ctx.beginPath();
+                ctx.arc(cx, squatY - 140, 24, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Barbell on Traps
+                ctx.strokeStyle = '#e2e8f0';
+                ctx.lineWidth = 10;
+                ctx.beginPath();
+                ctx.moveTo(cx - 150, squatY - 115);
+                ctx.lineTo(cx + 150, squatY - 115);
+                ctx.stroke();
+
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(cx - 150, squatY - 145, 16, 60);
+                ctx.fillRect(cx + 134, squatY - 145, 16, 60);
+
+            } else if (activeEx.category === 'arms') {
+                // -------------------------------------------------
+                // REALISTIC BICEP CURLS DEMO
+                // -------------------------------------------------
+                // Standing Body
+                ctx.fillStyle = skinTone;
+                ctx.beginPath();
+                ctx.roundRect(cx - 50, cy - 120, 100, 130, 20);
+                ctx.fill();
+
+                // Shorts
+                ctx.fillStyle = outfitColor;
+                ctx.fillRect(cx - 45, cy + 10, 90, 70);
+
+                // Head
+                ctx.beginPath();
+                ctx.arc(cx, cy - 150, 25, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Bicep Arms Curling
+                const curlAngle = posSin * Math.PI * 0.7;
+                
+                // Left & Right Arms
+                ctx.strokeStyle = skinTone;
+                ctx.lineWidth = isFemale ? 16 : 20;
+                ctx.lineCap = 'round';
+
+                const handY = cy - 20 - posSin * 60;
+                ctx.beginPath();
+                ctx.moveTo(cx - 60, cy - 90);
+                ctx.lineTo(cx - 70, handY);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(cx + 60, cy - 90);
+                ctx.lineTo(cx + 70, handY);
+                ctx.stroke();
+
+                // Glowing Bicep Muscles
+                if (showGlow) {
+                    ctx.shadowColor = glowColor;
+                    ctx.shadowBlur = 25;
+                    ctx.fillStyle = glowColor;
+                    ctx.beginPath();
+                    ctx.arc(cx - 65, handY + 15, 18, 0, Math.PI * 2);
+                    ctx.arc(cx + 65, handY + 15, 18, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+
+                // Dumbbells
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(cx - 95, handY - 15, 45, 16);
+                ctx.fillRect(cx + 50, handY - 15, 45, 16);
+
+            } else {
+                // -------------------------------------------------
+                // GENERAL STANDING HUMAN ATHLETE (Shoulders, Back, Core)
+                // -------------------------------------------------
+                // Torso
+                ctx.fillStyle = skinTone;
+                ctx.beginPath();
+                ctx.roundRect(cx - 50, cy - 100, 100, 130, 20);
+                ctx.fill();
+
+                // Outfit
+                ctx.fillStyle = outfitColor;
+                ctx.fillRect(cx - 45, cy + 30, 90, 80);
+
+                // Target Muscle Glow Overlay
+                if (showGlow) {
+                    ctx.shadowColor = glowColor;
+                    ctx.shadowBlur = 25;
+                    ctx.fillStyle = glowColor;
+                    ctx.beginPath();
+                    ctx.roundRect(cx - 40, cy - 90, 80, 60, 15);
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+
+                // Head
+                ctx.fillStyle = skinTone;
+                ctx.beginPath();
+                ctx.arc(cx, cy - 135, 25, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Overhead Barbell / Dumbbell Press Motion
+                const pressY = cy - 120 - sinVal * 40;
+                ctx.strokeStyle = '#e2e8f0';
+                ctx.lineWidth = 8;
+                ctx.beginPath();
+                ctx.moveTo(cx - 120, pressY);
+                ctx.lineTo(cx + 120, pressY);
+                ctx.stroke();
             }
 
-            controls.update();
-            renderer.render(scene, camera);
+            ctx.restore();
         }
 
-        function onWindowResize() {
-            const container = document.querySelector('.viewport-container');
-            if (!container) return;
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
-            renderer.setSize(width, height);
-        }
-
-        // Initialize Page
+        // Initialize UI & High-Def Renderer
         window.addEventListener('DOMContentLoaded', () => {
             renderExerciseList('all');
             selectExercise(EXERCISES[0], null);
-            init3DStage();
+            setCoachGender(currentGender);
+            drawRealisticHuman();
         });
     </script>
 </body>
