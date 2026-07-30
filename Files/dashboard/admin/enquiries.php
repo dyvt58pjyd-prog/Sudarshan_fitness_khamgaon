@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $plan_id = mysqli_real_escape_string($con, $_POST['plan_id']);
         $payment_mode = mysqli_real_escape_string($con, $_POST['payment_mode']);
         $discount = isset($_POST['discount']) && $_POST['discount'] !== '' ? floatval($_POST['discount']) : 0;
+        $jdate = isset($_POST['jdate']) && !empty($_POST['jdate']) ? mysqli_real_escape_string($con, $_POST['jdate']) : date('Y-m-d');
         
         // Fetch Plan Info
         $q_plan = mysqli_query($con, "SELECT * FROM plan WHERE pid = '$plan_id'");
@@ -52,8 +53,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
         $paid_amount = isset($_POST['paid_amount']) && $_POST['paid_amount'] !== '' ? floatval($_POST['paid_amount']) : $total_payable;
         
-        $expire_timestamp = calculate_expiration_date($jdate, $plan_row['validity']);
-        $expiredate = date('Y-m-d', $expire_timestamp);
+        if (function_exists('calculate_expiration_date')) {
+            $expire_timestamp = calculate_expiration_date($jdate, $plan_row['validity']);
+            $expiredate = date('Y-m-d', $expire_timestamp);
+        } else {
+            $validity_months = intval($plan_row['validity']);
+            $expiredate = date('Y-m-d', strtotime("+$validity_months months", strtotime($jdate)));
+        }
 
         if ($payment_mode === 'Complimentary') {
             $paid_amount = 0;
@@ -76,11 +82,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             $email = "member_" . $next_id . "_" . time() . "@sudarshanfitness.local";
         }
 
-        // 1. Insert Member User
-        $q_user = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, biometric_id, biometric_enabled, fitness_goal, member_photo) 
-                   VALUES ('$uname', '$gender', '$mobile', '$email', $dob_val, '$jdate', '$next_id', '$next_id', 1, '$fitness_goal', '$photo_path')";
+        $dob_insert = ($dob_val !== "NULL") ? $dob_val : "'1995-01-01'";
+
+        // 1. Insert Member User with standard schema compatibility
+        $q_user = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid) 
+                   VALUES ('$uname', '$gender', '$mobile', '$email', $dob_insert, '$jdate', '$next_id')";
         
         if (mysqli_query($con, $q_user)) {
+            // Update additional features if columns exist
+            @mysqli_query($con, "UPDATE users SET biometric_id='$next_id', biometric_enabled=1, fitness_goal='$fitness_goal', member_photo='$photo_path' WHERE userid='$next_id'");
+
             // 2. Insert Enrolls_To
             mysqli_query($con, "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount, balance) 
                                 VALUES ('$plan_id', '$next_id', '$jdate', '$expiredate', 'yes', '$payment_mode', '$received_by', $discount, $paid_amount, $balance)");
@@ -99,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 $p_gender = mysqli_real_escape_string($con, $e_row['partner_gender']);
                 $p_mobile = !empty($e_row['partner_mobile']) ? mysqli_real_escape_string($con, $e_row['partner_mobile']) : $mobile;
                 $p_dob = $e_row['partner_dob'];
-                $p_dob_val = !empty($p_dob) ? "'$p_dob'" : "NULL";
+                $p_dob_val = !empty($p_dob) ? "'$p_dob'" : "'1995-01-01'";
                 
                 $p_height = mysqli_real_escape_string($con, $e_row['partner_height']);
                 $p_weight = mysqli_real_escape_string($con, $e_row['partner_weight']);
@@ -107,12 +118,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 $partner_uid = $next_id + 1;
                 $p_email = "partner_" . $partner_uid . "_" . time() . "@sudarshanfitness.local";
 
-                $q_partner = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, partner_uid, biometric_id, biometric_enabled) 
-                              VALUES ('$p_name', '$p_gender', '$p_mobile', '$p_email', $p_dob_val, '$jdate', '$partner_uid', '$next_id', '$partner_uid', 1)";
+                $q_partner = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid) 
+                              VALUES ('$p_name', '$p_gender', '$p_mobile', '$p_email', $p_dob_val, '$jdate', '$partner_uid')";
                 if (mysqli_query($con, $q_partner)) {
-                    mysqli_query($con, "UPDATE users SET partner_uid = '$partner_uid' WHERE userid = '$next_id'");
-                    mysqli_query($con, "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
-                                        VALUES ('$plan_id', '$partner_uid', '$jdate', '$expiredate', 'yes', 'Couple Plan', '$received_by', 0, 0)");
+                    mysqli_query($con, "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount, balance) 
+                                        VALUES ('$plan_id', '$partner_uid', '$jdate', '$expiredate', 'yes', 'Couple Plan', '$received_by', 0, 0, 0)");
                     mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('$partner_uid', '1234', 'member', '$p_name', 'member')");
                     mysqli_query($con, "INSERT INTO health_status (uid, weight, height) VALUES ('$partner_uid', '$p_weight', '$p_height')");
                 }
@@ -121,13 +131,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             // 5. Update Enquiry Status
             mysqli_query($con, "UPDATE walkin_enquiries SET status = 'approved', converted_uid = '$next_id' WHERE id = $enquiry_id");
 
-            // Dispatch Entrance QR Pass Email
-            require_once '../../include/smtp_mailer.php';
-            send_member_qr_pass_email($con, $email, $uname, $next_id, $plan_name, $expiredate);
+            // Dispatch Entrance QR Pass Email if mailer available
+            if (file_exists('../../include/smtp_mailer.php')) {
+                require_once '../../include/smtp_mailer.php';
+                if (function_exists('send_member_qr_pass_email')) {
+                    @send_member_qr_pass_email($con, $email, $uname, $next_id, $plan_name, $expiredate);
+                }
+            }
 
-            $msg = "<div class='alert alert-success'>✅ Enquiry Approved &amp; Enrolled! Member ID assigned: <strong>#$next_id</strong>. QR Entrance Pass dispatched via email.</div>";
+            $msg = "<div class='alert alert-success' style='background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #10b981; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-weight: bold;'>✅ Member Registered &amp; Enrolled Successfully! Member ID: <strong>#$next_id</strong></div>";
         } else {
-            $msg = "<div class='alert alert-danger'>Error enrolling member: " . mysqli_error($con) . "</div>";
+            $msg = "<div class='alert alert-danger' style='background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-weight: bold;'>Error enrolling member: " . mysqli_error($con) . "</div>";
         }
     }
 }
