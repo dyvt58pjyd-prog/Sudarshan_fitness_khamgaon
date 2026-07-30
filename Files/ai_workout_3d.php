@@ -9,14 +9,14 @@ if (session_status() === PHP_SESSION_NONE) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'save_workout_log') {
     header('Content-Type: application/json');
     if (!isset($_SESSION['user_data'])) {
-        echo json_encode(['status' => 'error', 'message' => 'Session expired. Please log in to save workout.']);
+        echo json_encode(['status' => 'error', 'message' => 'System session expired. Please re-enter portal.']);
         exit();
     }
     $uid_esc = mysqli_real_escape_string($con, $_SESSION['user_data']);
     $ex_name = isset($_POST['ex_name']) ? mysqli_real_escape_string($con, trim($_POST['ex_name'])) : 'Exercise';
     $reps_done = isset($_POST['reps_done']) ? intval($_POST['reps_done']) : 12;
 
-    $workout_entry = date('d-M-Y H:i') . " - Completed " . $ex_name . " (" . $reps_done . " Reps)";
+    $workout_entry = date('d-M-Y H:i') . " - [SYSTEM QUEST CLEAR] " . $ex_name . " (" . $reps_done . " Reps)";
     
     // Insert into member_routines table
     $q_ins = "INSERT INTO member_routines (uid, workout_plan) VALUES ('$uid_esc', '$workout_entry')";
@@ -25,24 +25,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         if (function_exists('add_member_xp')) {
             add_member_xp($con, $uid_esc, 50);
         }
-        echo json_encode(['status' => 'success', 'message' => 'Workout set logged to your Sudarshan Fitness profile (+50 XP)!']);
+        echo json_encode(['status' => 'success', 'message' => '[SYSTEM QUEST CLEARED] +50 EXP AWARDED & STATS LOGGED!']);
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Database error: ' . mysqli_error($con)]);
+        echo json_encode(['status' => 'error', 'message' => 'System Error: ' . mysqli_error($con)]);
     }
     exit();
 }
 
 $gym = get_gym_details($con);
-$member_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Member';
+$member_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Hunter';
 
 // Fetch Member Details from Database
 $user_gender = 'Male';
 $user_height = 170; // cm default
 $user_weight = 70; // kg default
-$fitness_goal = 'Muscle Building & Fitness';
-$trainer_name = 'Sudarshan Gym Staff';
+$fitness_goal = 'Monarch Strength Awakening';
+$trainer_name = 'Sudarshan System AI';
 $user_xp = 0;
-$user_rank = 'Bronze Athlete';
+$user_rank = 'S-Rank Hunter';
 
 if (isset($_SESSION['user_data'])) {
     $uid_esc = mysqli_real_escape_string($con, $_SESSION['user_data']);
@@ -78,14 +78,15 @@ $bmr = round($bmr);
 $tdee = round($bmr * 1.55);
 $protein_g = round($user_weight * 2.0); // 2g per kg
 $water_l = round($user_weight * 0.04, 1);
+$level = floor($user_xp / 100) + 1;
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AI Fitness Trainer &amp; Pose Detector | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>[SYSTEM WINDOW] Solo Leveling AI Trainer | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- MediaPipe Pose & Camera Utils -->
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
@@ -93,16 +94,16 @@ $water_l = round($user_weight * 0.04, 1);
     
     <style>
         :root {
-            --bg-dark: #070a12;
-            --card-bg: rgba(15, 23, 42, 0.85);
-            --accent: #ff6b00;
-            --accent-green: #10b981;
-            --accent-blue: #3b82f6;
-            --accent-purple: #8b5cf6;
-            --accent-pink: #ec4899;
+            --bg-dark: #030712;
+            --card-bg: rgba(9, 14, 28, 0.9);
+            --system-cyan: #00f0ff;
+            --system-blue: #0077ff;
+            --monarch-purple: #7000ff;
+            --monarch-glow: rgba(112, 0, 255, 0.4);
+            --quest-gold: #ffb703;
             --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --glass-border: rgba(255, 255, 255, 0.12);
+            --text-muted: #64748b;
+            --system-border: rgba(0, 240, 255, 0.35);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
@@ -114,11 +115,14 @@ $water_l = round($user_weight * 0.04, 1);
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(112, 0, 255, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 80% 80%, rgba(0, 240, 255, 0.1) 0%, transparent 50%);
         }
 
         header {
-            background: rgba(11, 15, 25, 0.95);
-            border-bottom: 1px solid var(--glass-border);
+            background: rgba(5, 9, 20, 0.95);
+            border-bottom: 2px solid var(--system-border);
             padding: 15px 25px;
             display: flex;
             align-items: center;
@@ -126,7 +130,8 @@ $water_l = round($user_weight * 0.04, 1);
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(0, 240, 255, 0.2);
         }
 
         .gym-brand {
@@ -137,16 +142,19 @@ $water_l = round($user_weight * 0.04, 1);
 
         .gym-logo {
             max-height: 45px;
+            filter: drop-shadow(0 0 10px rgba(0,240,255,0.5));
         }
 
         .page-title {
+            font-family: 'Orbitron', sans-serif;
             font-size: 18px;
             font-weight: 900;
-            background: linear-gradient(135deg, #ff6b00, #ff8800);
+            background: linear-gradient(135deg, #00f0ff, #0077ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
         }
 
         .header-controls {
@@ -156,8 +164,8 @@ $water_l = round($user_weight * 0.04, 1);
         }
 
         .gender-switch {
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid var(--glass-border);
+            background: rgba(9, 14, 28, 0.95);
+            border: 1px solid var(--system-border);
             border-radius: 14px;
             padding: 4px;
             display: flex;
@@ -174,35 +182,38 @@ $water_l = round($user_weight * 0.04, 1);
             font-weight: 800;
             cursor: pointer;
             transition: all 0.2s ease;
+            font-family: 'Orbitron', sans-serif;
         }
 
         .gender-btn.active.male {
-            background: var(--accent-blue);
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(59,130,246,0.5);
+            background: var(--system-cyan);
+            color: #030712;
+            box-shadow: 0 0 20px rgba(0,240,255,0.6);
         }
 
         .gender-btn.active.female {
-            background: var(--accent-pink);
+            background: var(--monarch-purple);
             color: #fff;
-            box-shadow: 0 4px 15px rgba(236,72,153,0.5);
+            box-shadow: 0 0 20px rgba(112,0,255,0.6);
         }
 
         .btn-back {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            border: 1px solid var(--glass-border);
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--system-cyan);
+            border: 1px solid var(--system-border);
             padding: 8px 18px;
             border-radius: 12px;
             font-size: 13px;
-            font-weight: 700;
+            font-weight: 800;
             text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
             transition: all 0.2s ease;
         }
 
         .btn-back:hover {
-            background: var(--accent);
-            border-color: var(--accent);
+            background: var(--system-cyan);
+            color: #030712;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
         }
 
         .app-layout {
@@ -222,30 +233,70 @@ $water_l = round($user_weight * 0.04, 1);
             }
         }
 
-        /* Panels */
+        /* Solo Leveling System Panels */
         .panel {
             background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
+            border: 1px solid var(--system-border);
+            border-radius: 20px;
             padding: 22px;
             backdrop-filter: blur(20px);
             display: flex;
             flex-direction: column;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.15);
+            position: relative;
+        }
+
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--system-cyan), transparent);
         }
 
         .panel-title {
-            font-size: 16px;
-            font-weight: 800;
-            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 900;
+            color: var(--system-cyan);
             margin-bottom: 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 1px solid var(--glass-border);
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid var(--system-border);
             padding-bottom: 12px;
+        }
+
+        /* Hunter Status Window */
+        .status-window {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, rgba(112, 0, 255, 0.15) 100%);
+            border: 1px solid var(--system-cyan);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.2);
+            position: relative;
+        }
+
+        .status-tag {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            color: var(--system-cyan);
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        .hunter-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 10px var(--system-cyan);
         }
 
         /* Category Filter Pills */
@@ -259,23 +310,24 @@ $water_l = round($user_weight * 0.04, 1);
         }
 
         .cat-pill {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid var(--glass-border);
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.2);
             color: var(--text-muted);
             padding: 8px 14px;
             border-radius: 12px;
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 11px;
+            font-weight: 800;
             cursor: pointer;
             white-space: nowrap;
+            font-family: 'Orbitron', sans-serif;
             transition: all 0.2s ease;
         }
 
         .cat-pill.active {
-            background: var(--accent);
-            color: #fff;
-            border-color: var(--accent);
-            box-shadow: 0 4px 15px rgba(255,107,0,0.4);
+            background: var(--system-cyan);
+            color: #030712;
+            border-color: var(--system-cyan);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
         }
 
         /* Exercise Cards List */
@@ -289,9 +341,9 @@ $water_l = round($user_weight * 0.04, 1);
         }
 
         .ex-card {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            border-radius: 14px;
             padding: 14px;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -301,8 +353,9 @@ $water_l = round($user_weight * 0.04, 1);
         }
 
         .ex-card:hover, .ex-card.active {
-            background: rgba(255, 107, 0, 0.15);
-            border-color: var(--accent);
+            background: rgba(0, 240, 255, 0.15);
+            border-color: var(--system-cyan);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
             transform: translateX(4px);
         }
 
@@ -310,14 +363,15 @@ $water_l = round($user_weight * 0.04, 1);
             width: 44px;
             height: 44px;
             border-radius: 12px;
-            background: rgba(255,107,0,0.2);
-            color: var(--accent);
+            background: rgba(0,240,255,0.15);
+            color: var(--system-cyan);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 20px;
             font-weight: 900;
             flex-shrink: 0;
+            border: 1px solid var(--system-cyan);
         }
 
         .ex-info h4 {
@@ -334,8 +388,8 @@ $water_l = round($user_weight * 0.04, 1);
 
         /* Stage Container */
         .viewport-container {
-            background: radial-gradient(circle at 50% 40%, #1e293b 0%, #070a12 100%);
-            border: 2px solid rgba(255, 107, 0, 0.3);
+            background: radial-gradient(circle at 50% 40%, #0b1329 0%, #030712 100%);
+            border: 2px solid var(--system-cyan);
             border-radius: 28px;
             position: relative;
             min-height: 600px;
@@ -344,7 +398,7 @@ $water_l = round($user_weight * 0.04, 1);
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.25);
         }
 
         .stage-media-box {
@@ -356,7 +410,7 @@ $water_l = round($user_weight * 0.04, 1);
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #070a12;
+            background: #030712;
         }
 
         .human-demo-gif {
@@ -364,10 +418,9 @@ $water_l = round($user_weight * 0.04, 1);
             max-height: 100%;
             object-fit: contain;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 0 40px rgba(0,240,255,0.3);
         }
 
-        /* WebCam Container */
         .webcam-container {
             display: none;
             position: absolute;
@@ -409,37 +462,41 @@ $water_l = round($user_weight * 0.04, 1);
         }
 
         .vp-title-box {
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid var(--glass-border);
+            background: rgba(5, 9, 20, 0.95);
+            border: 1px solid var(--system-cyan);
             backdrop-filter: blur(15px);
             padding: 12px 20px;
             border-radius: 16px;
             pointer-events: auto;
+            box-shadow: 0 0 20px rgba(0,240,255,0.3);
         }
 
         .vp-title-box h3 {
+            font-family: 'Orbitron', sans-serif;
             font-size: 18px;
             font-weight: 900;
             color: #fff;
         }
 
         .vp-title-box span {
-            font-size: 12px;
-            color: var(--accent);
-            font-weight: 700;
+            font-size: 11px;
+            color: var(--system-cyan);
+            font-weight: 800;
             text-transform: uppercase;
+            letter-spacing: 1.5px;
         }
 
         .model-badge {
-            background: rgba(255, 107, 0, 0.15);
-            border: 1px solid #ff6b00;
-            color: #ff6b00;
+            background: rgba(0, 240, 255, 0.15);
+            border: 1px solid var(--system-cyan);
+            color: var(--system-cyan);
             padding: 6px 14px;
             border-radius: 12px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 800;
             margin-top: 4px;
             display: inline-block;
+            font-family: 'Orbitron', sans-serif;
         }
 
         .vp-controls-bar {
@@ -447,8 +504,8 @@ $water_l = round($user_weight * 0.04, 1);
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid var(--glass-border);
+            background: rgba(5, 9, 20, 0.95);
+            border: 1px solid var(--system-cyan);
             backdrop-filter: blur(20px);
             padding: 10px 20px;
             border-radius: 20px;
@@ -456,73 +513,78 @@ $water_l = round($user_weight * 0.04, 1);
             align-items: center;
             gap: 15px;
             z-index: 10;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 0 30px rgba(0,240,255,0.4);
         }
 
         .ctrl-btn {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 240, 255, 0.1);
             color: #fff;
-            border: none;
+            border: 1px solid var(--system-border);
             padding: 10px 18px;
             border-radius: 14px;
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 800;
             cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
             transition: all 0.2s ease;
         }
 
         .ctrl-btn:hover, .ctrl-btn.active {
-            background: var(--accent);
-            box-shadow: 0 5px 15px rgba(255,107,0,0.4);
+            background: var(--system-cyan);
+            color: #030712;
+            box-shadow: 0 0 20px rgba(0,240,255,0.6);
         }
 
         .webcam-btn {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            color: #fff;
+            background: linear-gradient(135deg, #00f0ff, #0077ff);
+            color: #030712;
             border: none;
             padding: 10px 18px;
             border-radius: 14px;
-            font-size: 13px;
-            font-weight: 800;
+            font-size: 12px;
+            font-weight: 900;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 5px 15px rgba(59,130,246,0.4);
+            font-family: 'Orbitron', sans-serif;
+            box-shadow: 0 0 20px rgba(0,240,255,0.5);
             pointer-events: auto;
         }
 
         .voice-btn {
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: linear-gradient(135deg, #7000ff, #480094);
             color: #fff;
             border: none;
             padding: 10px 18px;
             border-radius: 14px;
-            font-size: 13px;
-            font-weight: 800;
+            font-size: 12px;
+            font-weight: 900;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 5px 15px rgba(16,185,129,0.4);
+            font-family: 'Orbitron', sans-serif;
+            box-shadow: 0 0 20px rgba(112,0,255,0.5);
             pointer-events: auto;
         }
 
         .tip-card {
-            background: rgba(30, 41, 59, 0.4);
-            border: 1px solid var(--glass-border);
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid var(--system-border);
             border-radius: 16px;
             padding: 14px;
             margin-bottom: 12px;
         }
 
         .tip-card h5 {
-            font-size: 13px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
             font-weight: 800;
-            color: var(--accent);
+            color: var(--system-cyan);
             margin-bottom: 6px;
             display: flex;
             align-items: center;
@@ -537,62 +599,68 @@ $water_l = round($user_weight * 0.04, 1);
 
         .muscle-tag {
             display: inline-block;
-            background: rgba(139, 92, 246, 0.2);
+            background: rgba(112, 0, 255, 0.25);
             color: #a78bfa;
-            border: 1px solid rgba(139, 92, 246, 0.4);
+            border: 1px solid var(--monarch-purple);
             padding: 4px 10px;
             border-radius: 10px;
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 10px;
+            font-weight: 800;
+            font-family: 'Orbitron', sans-serif;
             margin-right: 6px;
             margin-bottom: 6px;
         }
 
         .rep-counter-box {
-            background: rgba(16, 185, 129, 0.15);
-            border: 1px solid #10b981;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--system-cyan);
             border-radius: 16px;
             padding: 15px;
             text-align: center;
             margin-top: 15px;
+            box-shadow: 0 0 25px rgba(0,240,255,0.2);
         }
 
         .rep-number {
-            font-size: 32px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
             font-weight: 900;
-            color: #10b981;
+            color: var(--system-cyan);
+            text-shadow: 0 0 20px var(--system-cyan);
         }
 
         .angle-badge {
-            background: rgba(59, 130, 246, 0.2);
-            border: 1px solid #3b82f6;
-            color: #60a5fa;
-            font-size: 12px;
+            background: rgba(0, 240, 255, 0.15);
+            border: 1px solid var(--system-cyan);
+            color: var(--system-cyan);
+            font-size: 11px;
             font-weight: 800;
             padding: 4px 10px;
             border-radius: 8px;
             display: inline-block;
             margin-top: 6px;
+            font-family: 'Orbitron', sans-serif;
         }
 
         .btn-save-log {
             width: 100%;
-            background: linear-gradient(135deg, var(--accent), #ff8800);
-            color: #fff;
+            background: linear-gradient(135deg, var(--system-cyan), #0077ff);
+            color: #030712;
             border: none;
-            padding: 12px;
+            padding: 14px;
             border-radius: 12px;
-            font-weight: 800;
+            font-weight: 900;
             font-size: 13px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255,107,0,0.4);
+            font-family: 'Orbitron', sans-serif;
+            box-shadow: 0 0 25px rgba(0,240,255,0.6);
             margin-top: 10px;
             transition: all 0.2s ease;
         }
 
         .btn-save-log:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255,107,0,0.6);
+            box-shadow: 0 0 35px rgba(0,240,255,0.9);
         }
     </style>
 </head>
@@ -602,49 +670,50 @@ $water_l = round($user_weight * 0.04, 1);
         <div class="gym-brand">
             <img src="<?php echo htmlspecialchars($gym['gym_logo']); ?>" class="gym-logo" alt="Gym Logo">
             <div>
-                <div class="page-title">🏋️ <?php echo htmlspecialchars($gym['gym_name']); ?> AI TRAINER</div>
-                <div style="font-size: 11px; color: var(--text-muted);">Personalized AI Workout &amp; Nutrition Assistant</div>
+                <div class="page-title">[ SYSTEM NOTIFICATION: SOLO LEVELING MODE ]</div>
+                <div style="font-size: 11px; color: var(--system-cyan); font-family: 'Orbitron'; font-weight: 700;">DAILY QUEST SYSTEM • SHADOW MONARCH AWAKENING</div>
             </div>
         </div>
 
         <div class="header-controls">
             <!-- Gender Switcher -->
             <div class="gender-switch">
-                <button class="gender-btn <?php echo ($user_gender === 'Male') ? 'active male' : ''; ?>" id="btn-gender-male" onclick="setCoachGender('Male')">👨 Male Athlete</button>
-                <button class="gender-btn <?php echo ($user_gender === 'Female') ? 'active female' : ''; ?>" id="btn-gender-female" onclick="setCoachGender('Female')">👩 Female Athlete</button>
+                <button class="gender-btn <?php echo ($user_gender === 'Male') ? 'active male' : ''; ?>" id="btn-gender-male" onclick="setCoachGender('Male')">👨 MALE MONARCH</button>
+                <button class="gender-btn <?php echo ($user_gender === 'Female') ? 'active female' : ''; ?>" id="btn-gender-female" onclick="setCoachGender('Female')">👩 FEMALE MONARCH</button>
             </div>
 
-            <a href="javascript:history.back()" class="btn-back">← Back to Dashboard</a>
+            <a href="javascript:history.back()" class="btn-back">← RETURN TO BASE</a>
         </div>
     </header>
 
     <div class="app-layout">
         
-        <!-- Left Panel: Exercise Selector & Member Profile -->
+        <!-- Left Panel: Exercise Selector & Hunter Status Window -->
         <div class="panel">
-            <!-- Member Profile Card -->
-            <div style="background: rgba(255, 107, 0, 0.12); border: 1px solid rgba(255, 107, 0, 0.3); border-radius: 16px; padding: 14px; margin-bottom: 20px;">
-                <div style="font-size: 11px; color: var(--accent); font-weight: 800; text-transform: uppercase;">SUDARSHAN FITNESS ATHLETE</div>
-                <h4 style="color: #fff; font-size: 16px; font-weight: 800; margin: 2px 0;"><?php echo htmlspecialchars($member_name); ?></h4>
-                <div style="font-size: 12px; color: var(--text-muted);">
-                    Goal: <strong style="color: #38bdf8;"><?php echo htmlspecialchars($fitness_goal); ?></strong><br>
-                    Trainer: <strong style="color: #10b981;"><?php echo htmlspecialchars($trainer_name); ?></strong>
+            <!-- Hunter Status Window -->
+            <div class="status-window">
+                <div class="status-tag">[ HUNTER STATUS WINDOW ]</div>
+                <div class="hunter-name">PLAYER: <?php echo htmlspecialchars($member_name); ?></div>
+                <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">
+                    CLASS: <strong style="color: var(--system-cyan);">SHADOW MONARCH</strong><br>
+                    RANK: <strong style="color: var(--quest-gold);"><?php echo htmlspecialchars($user_rank); ?></strong><br>
+                    LEVEL: <strong style="color: #10b981; font-weight: 900;"><?php echo $level; ?></strong> (<?php echo $user_xp; ?> EXP)
                 </div>
             </div>
 
             <div class="panel-title">
-                <span>🏋️ Select Exercise</span>
-                <span style="font-size: 11px; color: var(--accent);" id="ex-count">5 Exercises</span>
+                <span>⚔️ SELECT DAILY QUEST</span>
+                <span style="font-size: 11px; color: var(--system-cyan);" id="ex-count">5 QUESTS</span>
             </div>
 
             <!-- Categories Filter -->
             <div class="cat-pills">
-                <button class="cat-pill active" onclick="filterCategory('all', this)">All</button>
-                <button class="cat-pill" onclick="filterCategory('chest', this)">Push-up</button>
-                <button class="cat-pill" onclick="filterCategory('back', this)">Pull-up</button>
-                <button class="cat-pill" onclick="filterCategory('legs', this)">Squat</button>
-                <button class="cat-pill" onclick="filterCategory('core', this)">Sit-up</button>
-                <button class="cat-pill" onclick="filterCategory('cardio', this)">Walk</button>
+                <button class="cat-pill active" onclick="filterCategory('all', this)">ALL</button>
+                <button class="cat-pill" onclick="filterCategory('chest', this)">PUSH-UP</button>
+                <button class="cat-pill" onclick="filterCategory('back', this)">PULL-UP</button>
+                <button class="cat-pill" onclick="filterCategory('legs', this)">SQUAT</button>
+                <button class="cat-pill" onclick="filterCategory('core', this)">SIT-UP</button>
+                <button class="cat-pill" onclick="filterCategory('cardio', this)">WALK</button>
             </div>
 
             <!-- Exercise List -->
@@ -657,17 +726,17 @@ $water_l = round($user_weight * 0.04, 1);
         <div class="viewport-container">
             <div class="vp-overlay-top">
                 <div class="vp-title-box">
-                    <span id="active-cat">PUSH-UP EXERCISE</span>
+                    <span id="active-cat">PUSH-UP QUEST</span>
                     <h3 id="active-ex-name">Push-Up Exercise</h3>
-                    <div class="model-badge" id="active-model-badge">👨 REAL HUMAN ATHLETE MODEL</div>
+                    <div class="model-badge" id="active-model-badge">👨 SHADOW MONARCH DEMO</div>
                 </div>
                 
                 <div style="display: flex; gap: 10px;">
                     <button class="webcam-btn" onclick="toggleWebcamPoseTracking()">
-                        📷 Live AI Pose Camera
+                        📷 SYSTEM AI CAMERA
                     </button>
                     <button class="voice-btn" onclick="speakFormInstruction()">
-                        🔊 Audio AI Coach
+                        🔊 SYSTEM VOICE COACH
                     </button>
                 </div>
             </div>
@@ -685,19 +754,19 @@ $water_l = round($user_weight * 0.04, 1);
 
             <!-- Stage Controls Bar -->
             <div class="vp-controls-bar">
-                <button class="ctrl-btn active" id="btn-toggle-demo" onclick="toggleDemoView()">🎥 Human Demo</button>
-                <button class="ctrl-btn" id="btn-toggle-cam" onclick="toggleWebcamPoseTracking()">📷 AI Pose Tracker</button>
+                <button class="ctrl-btn active" id="btn-toggle-demo" onclick="toggleDemoView()">🎥 DEMO MODE</button>
+                <button class="ctrl-btn" id="btn-toggle-cam" onclick="toggleWebcamPoseTracking()">📷 AI POSE DETECTOR</button>
             </div>
         </div>
 
         <!-- Right Panel: Form Guidance, AI Rep Counter & Personalized Nutrition -->
         <div class="panel">
             <div class="panel-title">
-                <span>🎯 Muscle &amp; Form Guide</span>
+                <span>🎯 QUEST EXECUTION GUIDE</span>
             </div>
 
             <div style="margin-bottom: 15px;">
-                <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">TARGET MUSCLES</div>
+                <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); margin-bottom: 6px; font-family: 'Orbitron';">TARGET MUSCLE MATRIX</div>
                 <div id="target-muscles-container">
                     <span class="muscle-tag">Chest</span>
                     <span class="muscle-tag">Triceps</span>
@@ -723,35 +792,35 @@ $water_l = round($user_weight * 0.04, 1);
 
             <!-- Live AI Rep Counter & Posture Evaluator -->
             <div class="rep-counter-box">
-                <div style="font-size: 11px; font-weight: 800; color: #10b981; text-transform: uppercase;">MediaPipe AI Rep Counter</div>
+                <div style="font-size: 11px; font-weight: 800; color: var(--system-cyan); text-transform: uppercase; font-family: 'Orbitron';">SYSTEM REPETITION COUNTER</div>
                 <div class="rep-number" id="rep-display">0 REPS</div>
                 <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;" id="ai-stage-status">Position: UP • Stand in front of camera</div>
                 <div style="font-size: 12px; margin-top: 6px;" id="posture-status">Form Status: <span style="color: #10b981; font-weight: bold;">Good Posture 🟢</span></div>
                 
                 <button class="btn-save-log" onclick="saveWorkoutLogToDatabase()">
-                    💾 Save Set to My Routine Log (+50 XP)
+                    💾 CLAIM QUEST REWARD (+50 EXP)
                 </button>
             </div>
 
-            <!-- Personalized AI Nutrition & Macro Assistant for Sudarshan Fitness -->
-            <div class="tip-card" style="margin-top: 15px; background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);">
-                <h5 style="color: #60a5fa;">🥗 Personalized AI Nutrition Plan</h5>
+            <!-- Personalized AI Nutrition & Macro Assistant -->
+            <div class="tip-card" style="margin-top: 15px; background: rgba(112, 0, 255, 0.15); border-color: var(--monarch-purple);">
+                <h5 style="color: #a78bfa;">🥗 SYSTEM RECOVERY &amp; NUTRITION</h5>
                 <div style="font-size: 11px; color: #94a3b8; margin-bottom: 8px;">Calculated for <?php echo htmlspecialchars($member_name); ?> (<?php echo $user_weight; ?>kg • <?php echo $user_height; ?>cm)</div>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px; text-align: center;">
-                    <div style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px;">
-                        <span style="color: #94a3b8; display: block; font-size: 9px;">DAILY PROTEIN</span>
+                    <div style="background: rgba(0,0,0,0.4); padding: 8px; border-radius: 8px; border: 1px solid var(--monarch-purple);">
+                        <span style="color: #94a3b8; display: block; font-size: 9px; font-family: 'Orbitron';">PROTEIN INTAKE</span>
                         <strong style="color: #10b981; font-size: 14px;"><?php echo $protein_g; ?>g / day</strong>
                     </div>
-                    <div style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px;">
-                        <span style="color: #94a3b8; display: block; font-size: 9px;">DAILY WATER</span>
-                        <strong style="color: #38bdf8; font-size: 14px;"><?php echo $water_l; ?> Liters</strong>
+                    <div style="background: rgba(0,0,0,0.4); padding: 8px; border-radius: 8px; border: 1px solid var(--monarch-purple);">
+                        <span style="color: #94a3b8; display: block; font-size: 9px; font-family: 'Orbitron';">FLUID INTAKE</span>
+                        <strong style="color: var(--system-cyan); font-size: 14px;"><?php echo $water_l; ?> Liters</strong>
                     </div>
                 </div>
 
                 <div style="font-size: 11px; color: #cbd5e1; margin-top: 10px; line-height: 1.4;">
-                    <strong style="color: #ff6b00;">BMR: <?php echo number_format($bmr); ?> kcal</strong> • <strong style="color: #a78bfa;">TDEE: <?php echo number_format($tdee); ?> kcal</strong><br>
-                    <small style="color: #94a3b8;">Suggested pre-workout: 1 Banana + 30g Protein shake 45 mins before training.</small>
+                    <strong style="color: var(--quest-gold);">BMR: <?php echo number_format($bmr); ?> kcal</strong> • <strong style="color: #a78bfa;">TDEE: <?php echo number_format($tdee); ?> kcal</strong><br>
+                    <small style="color: #94a3b8;">System recovery protocol: Consuming 30g Protein Shake + 5g Creatine unlocks max muscular restoration!</small>
                 </div>
             </div>
         </div>
@@ -762,7 +831,7 @@ $water_l = round($user_weight * 0.04, 1);
         const EXERCISES = [
             {
                 id: 'pushup',
-                name: 'Push-Up Exercise',
+                name: 'Push-Up Quest',
                 category: 'chest',
                 icon: '🤸',
                 muscles: ['Chest (Pectorals)', 'Triceps', 'Core (Abs)'],
@@ -770,12 +839,12 @@ $water_l = round($user_weight * 0.04, 1);
                 tip1: 'Form a rigid straight line from head to heels with hands placed slightly wider than shoulder-width.',
                 tip2: 'Lower body until chest is an inch off the floor, keeping elbows tucked at 45 degrees.',
                 tip3: 'Elbow Joint Angle < 90° triggers DOWN position. Extension > 160° completes 1 REQUISITE REP.',
-                speech: 'Push up exercise: Keep your back flat, lower your chest near the floor, and press up smoothly.',
+                speech: 'System Quest Push Up: Maintain tight core, lower chest smoothly, and press up with power.',
                 type: 'push-up'
             },
             {
                 id: 'squats',
-                name: 'Squat Exercise',
+                name: 'Squat Quest',
                 category: 'legs',
                 icon: '🦵',
                 muscles: ['Quadriceps', 'Glutes', 'Hamstrings'],
@@ -783,12 +852,12 @@ $water_l = round($user_weight * 0.04, 1);
                 tip1: 'Stand with feet shoulder-width apart, chest lifted, and core tight.',
                 tip2: 'Lower hips backward and down until knee angle reaches 90 degrees or below.',
                 tip3: 'Knee Joint Angle < 90° triggers SQUAT DOWN. Extension > 160° completes 1 SQUAT REP.',
-                speech: 'Squat exercise: Lower your hips down until thighs are parallel to the floor, and push through your feet to stand!',
+                speech: 'System Quest Squat: Lower hips below parallel and explode back up.',
                 type: 'squat'
             },
             {
                 id: 'pullup',
-                name: 'Pull-Up Exercise',
+                name: 'Pull-Up Quest',
                 category: 'back',
                 icon: '🏋️‍♂️',
                 muscles: ['Latissimus Dorsi', 'Biceps', 'Rhomboids'],
@@ -796,12 +865,12 @@ $water_l = round($user_weight * 0.04, 1);
                 tip1: 'Grip pull-up bar with hands shoulder-width apart and suspend body.',
                 tip2: 'Pull up until chin clears the bar level by driving elbows down to torso.',
                 tip3: 'Elbow Joint Angle < 70° triggers CHIN UP. Full descent > 150° completes 1 PULL-UP REP.',
-                speech: 'Pull up exercise: Pull your body straight up until your chin clears the bar, and lower smoothly under control.',
+                speech: 'System Quest Pull Up: Pull body vertically until chin clears bar.',
                 type: 'pull-up'
             },
             {
                 id: 'situp',
-                name: 'Sit-Up Exercise',
+                name: 'Sit-Up Quest',
                 category: 'core',
                 icon: '🛡️',
                 muscles: ['Rectus Abdominis', 'Hip Flexors', 'Obliques'],
@@ -809,12 +878,12 @@ $water_l = round($user_weight * 0.04, 1);
                 tip1: 'Lie on your back with knees bent and feet flat on the floor.',
                 tip2: 'Engage core to lift torso up towards knees in a full range of motion.',
                 tip3: 'Hip Joint Angle < 65° triggers SIT UP. Lowering to floor completes 1 SIT-UP REP.',
-                speech: 'Sit up exercise: Squeeze your abdominal muscles to raise your torso, and lower down controlled.',
+                speech: 'System Quest Sit Up: Engage abdominal muscles to raise torso.',
                 type: 'sit-up'
             },
             {
                 id: 'walk',
-                name: 'Walking Cardio Exercise',
+                name: 'Walk Endurance Quest',
                 category: 'cardio',
                 icon: '🏃',
                 muscles: ['Cardiovascular System', 'Calves', 'Glutes'],
@@ -822,7 +891,7 @@ $water_l = round($user_weight * 0.04, 1);
                 tip1: 'Maintain upright posture with shoulders relaxed and gaze forward.',
                 tip2: 'Swing arms naturally while taking rhythmic heel-to-toe strides.',
                 tip3: 'Alternating stride knee angles track active step counts & calorie burn.',
-                speech: 'Walking exercise: Maintain an upright posture and take steady, rhythmic strides.',
+                speech: 'System Quest Walking: Maintain steady rhythmic cadence.',
                 type: 'walk'
             }
         ];
@@ -839,7 +908,7 @@ $water_l = round($user_weight * 0.04, 1);
             document.getElementById('btn-gender-female').classList.toggle('active', gender === 'Female');
             document.getElementById('btn-gender-female').classList.toggle('female', gender === 'Female');
 
-            document.getElementById('active-model-badge').textContent = (gender === 'Male') ? '👨 REAL HUMAN ATHLETE MODEL' : '👩 REAL HUMAN ATHLETE MODEL';
+            document.getElementById('active-model-badge').textContent = (gender === 'Male') ? '👨 SHADOW MONARCH DEMO' : '👩 FEMALE MONARCH DEMO';
         }
 
         function renderExerciseList(filter = 'all') {
@@ -847,7 +916,7 @@ $water_l = round($user_weight * 0.04, 1);
             container.innerHTML = '';
             
             const filtered = filter === 'all' ? EXERCISES : EXERCISES.filter(e => e.category === filter);
-            document.getElementById('ex-count').textContent = `${filtered.length} Exercises`;
+            document.getElementById('ex-count').textContent = `${filtered.length} QUESTS`;
 
             filtered.forEach(ex => {
                 const card = document.createElement('div');
@@ -879,7 +948,7 @@ $water_l = round($user_weight * 0.04, 1);
             document.querySelectorAll('.ex-card').forEach(c => c.classList.remove('active'));
             if (cardEl) cardEl.classList.add('active');
 
-            document.getElementById('active-cat').textContent = `${ex.category.toUpperCase()} EXERCISE`;
+            document.getElementById('active-cat').textContent = `${ex.category.toUpperCase()} QUEST`;
             document.getElementById('active-ex-name').textContent = ex.name;
 
             document.getElementById('demoGif').src = ex.gif;
@@ -900,7 +969,7 @@ $water_l = round($user_weight * 0.04, 1);
                 msg.pitch = currentGender === 'Female' ? 1.25 : 0.95;
                 window.speechSynthesis.speak(msg);
             } else {
-                alert("AI Audio Coach: " + activeEx.speech);
+                alert("System Voice Coach: " + activeEx.speech);
             }
         }
 
@@ -924,13 +993,13 @@ $water_l = round($user_weight * 0.04, 1);
             .then(res => res.json())
             .then(data => {
                 if (data.status === 'success') {
-                    alert('✅ ' + data.message);
+                    alert('👑 ' + data.message);
                 } else {
                     alert('⚠️ ' + data.message);
                 }
             })
             .catch(err => {
-                alert('⚠️ Error saving workout log: ' + err.message);
+                alert('⚠️ System Error: ' + err.message);
             });
         }
 
@@ -1021,8 +1090,8 @@ $water_l = round($user_weight * 0.04, 1);
 
             const lm = results.poseLandmarks;
 
-            ctx.fillStyle = '#10b981';
-            ctx.strokeStyle = '#ff6b00';
+            ctx.fillStyle = '#00f0ff';
+            ctx.strokeStyle = '#7000ff';
             ctx.lineWidth = 4;
 
             lm.forEach((pt) => {
@@ -1041,18 +1110,18 @@ $water_l = round($user_weight * 0.04, 1);
                     if (mainAngle < 95 && exerciseState === 'UP') {
                         exerciseState = 'DOWN';
                         document.getElementById('ai-stage-status').textContent = 'Position: SQUAT DOWN';
-                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #10b981; font-weight: bold;">Good Posture 🟢 (Great Depth)</span>';
+                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #00f0ff; font-weight: bold;">Good Posture 🟢 (Optimal Depth)</span>';
                     }
                     if (mainAngle > 155 && exerciseState === 'DOWN') {
                         exerciseState = 'UP';
                         repCount++;
                         document.getElementById('rep-display').textContent = `${repCount} REPS`;
                         document.getElementById('ai-stage-status').textContent = `Position: UP • SQUAT REP ${repCount}!`;
-                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #10b981; font-weight: bold;">Good Posture 🟢</span>';
+                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #00f0ff; font-weight: bold;">Good Posture 🟢</span>';
                         speakRepCount(repCount);
                     }
                     if (mainAngle > 95 && mainAngle < 130 && exerciseState === 'UP') {
-                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #ef4444; font-weight: bold;">Fix Your Form ⚠️ (Go Lower)</span>';
+                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #ff0054; font-weight: bold;">Fix Your Form ⚠️ (Descend Deeper)</span>';
                     }
                 }
             } else if (activeEx.id === 'pushup') {
@@ -1063,18 +1132,18 @@ $water_l = round($user_weight * 0.04, 1);
                     if (mainAngle < 90 && exerciseState === 'UP') {
                         exerciseState = 'DOWN';
                         document.getElementById('ai-stage-status').textContent = 'Position: PUSHUP DOWN';
-                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #10b981; font-weight: bold;">Good Posture 🟢 (Full Range)</span>';
+                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #00f0ff; font-weight: bold;">Good Posture 🟢 (Full Range)</span>';
                     }
                     if (mainAngle > 160 && exerciseState === 'DOWN') {
                         exerciseState = 'UP';
                         repCount++;
                         document.getElementById('rep-display').textContent = `${repCount} REPS`;
                         document.getElementById('ai-stage-status').textContent = `Position: UP • PUSHUP REP ${repCount}!`;
-                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #10b981; font-weight: bold;">Good Posture 🟢</span>';
+                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #00f0ff; font-weight: bold;">Good Posture 🟢</span>';
                         speakRepCount(repCount);
                     }
                     if (mainAngle > 90 && mainAngle < 130 && exerciseState === 'UP') {
-                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #ef4444; font-weight: bold;">Fix Your Form ⚠️ (Touch Chest Lower)</span>';
+                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #ff0054; font-weight: bold;">Fix Your Form ⚠️ (Touch Chest Lower)</span>';
                     }
                 }
             }

@@ -294,13 +294,13 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
 						</div>
 						
 						<!-- Gamification / Rank Progress -->
-						<div style="flex: 1; border-left: 1px dashed rgba(255,255,255,0.1); padding-left: 25px; min-width: 280px; display: flex; flex-direction: column; justify-content: center;">
-							<div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;">
-								🏆 Current Gym Rank
+						<div style="flex: 1; border-left: 1px dashed rgba(0,240,255,0.2); padding-left: 25px; min-width: 280px; display: flex; flex-direction: column; justify-content: center;">
+							<div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--system-cyan); letter-spacing: 1.5px; margin-bottom: 5px; font-family: 'Orbitron';">
+								⚔️ SYSTEM HUNTER RANK
 							</div>
 							<div style="display: flex; align-items: flex-end; gap: 15px; margin-bottom: 8px;">
-								<span style="font-size: 28px; font-weight: 900; color: #ff6b00; text-shadow: 0 0 15px rgba(255,107,0,0.4);"><?php echo htmlspecialchars($member_rank); ?></span>
-								<span style="font-size: 14px; color: var(--text-muted); margin-bottom: 5px; font-weight: 600;"><?php echo number_format($member_xp); ?> XP</span>
+								<span style="font-size: 28px; font-weight: 900; color: #00f0ff; font-family: 'Orbitron'; text-shadow: 0 0 20px rgba(0,240,255,0.8);"><?php echo htmlspecialchars($member_rank); ?> RANK</span>
+								<span style="font-size: 14px; color: #ffb703; margin-bottom: 5px; font-weight: 800; font-family: 'Orbitron';"><?php echo number_format($member_xp); ?> EXP</span>
 							</div>
 							<!-- Progress Bar -->
 							<?php
@@ -320,11 +320,11 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
 								$progress_percent = (($member_xp - $prev_threshold) / ($next_threshold - $prev_threshold)) * 100;
 							}
 							?>
-							<div style="width: 100%; background: rgba(255,255,255,0.05); height: 8px; border-radius: 4px; overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);">
-								<div style="width: <?php echo $progress_percent; ?>%; height: 100%; background: linear-gradient(90deg, #ff6b00, #ffb300); border-radius: 4px; box-shadow: 0 0 10px #ff6b00; transition: width 1s ease-in-out;"></div>
+							<div style="width: 100%; background: rgba(0,240,255,0.1); height: 8px; border-radius: 4px; overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); border: 1px solid rgba(0,240,255,0.3);">
+								<div style="width: <?php echo $progress_percent; ?>%; height: 100%; background: linear-gradient(90deg, #00f0ff, #7000ff); border-radius: 4px; box-shadow: 0 0 15px #00f0ff; transition: width 1s ease-in-out;"></div>
 							</div>
-							<div style="font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 5px;">
-								<?php echo $member_rank !== 'Titan' ? number_format($next_threshold - $member_xp) . " XP to Next Rank" : "Max Rank Achieved"; ?>
+							<div style="font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 5px; font-family: 'Orbitron';">
+								<?php echo $member_rank !== 'Titan' ? number_format($next_threshold - $member_xp) . " EXP to Rank Level Up" : "Max Rank Achieved"; ?>
 							</div>
 						</div>
 						

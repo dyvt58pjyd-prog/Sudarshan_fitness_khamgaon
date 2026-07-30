@@ -1,29 +1,39 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Outfit:wght@300;400;600;700;800;900&display=swap');
 
 :root {
-  --bg-dark: #0c0c0c;        /* Dark page background */
-  --bg-darker: #000000;      /* Dark sidebar / outer background */
-  --accent-primary: #ff6b00;  /* Energetic orange accent */
-  --accent-hover: #ea580c;
-  --text-main: #f8fafc;       /* Light gray for main text */
-  --text-muted: #a3a3a3;     /* Muted gray for secondary text */
-  --glass-bg: rgba(18, 18, 18, 0.85); /* Semi-transparent dark card */
-  --glass-border: rgba(255, 107, 0, 0.25);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7); /* Dark shadow */
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --info: #3b82f6;
+  --bg-dark: #030712;        /* System Abyss Black */
+  --bg-darker: #010309;      /* Void Portal Background */
+  --accent-primary: #00f0ff;  /* Monarch Electric Cyan System Glow */
+  --accent-hover: #00b8d4;
+  --text-main: #f8fafc;       /* System White Text */
+  --text-muted: #64748b;     /* System Blue-Gray Muted Text */
+  --glass-bg: rgba(9, 14, 28, 0.92); /* System Window Holographic Glass */
+  --glass-border: rgba(0, 240, 255, 0.4); /* System Electric Cyan Border */
+  --glass-shadow: 0 0 35px 0 rgba(0, 240, 255, 0.25); /* System Glow Shadow */
+  --monarch-purple: #7000ff; /* Shadow Monarch Purple Energy */
+  --quest-gold: #ffb703;    /* Quest Clear Gold */
+  --success: #00f0ff;
+  --warning: #ffb703;
+  --danger: #ff0054;
+  --info: #0077ff;
 }
 
-/* Base Typo */
-body, html, h1, h2, h3, h4, h5, h6, p, span, a, div, td, th, li, input, select, textarea, button, label {
+/* Base Typo & Solo Leveling System Font Setup */
+body, html, p, span, a, div, td, th, li, input, select, textarea, button, label {
   font-family: 'Outfit', sans-serif !important;
+}
+
+h1, h2, h3, h4, h5, h6, .page-title, .panel-title, .system-title, .portal-title {
+  font-family: 'Orbitron', sans-serif !important;
+  letter-spacing: 1px;
 }
 
 body, html {
   color: var(--text-main);
   background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(circle at 50% 10%, rgba(112, 0, 255, 0.15) 0%, transparent 60%),
+    radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.1) 0%, transparent 50%);
 }
 
 h1, h2, h3, h4, h5, p, span, a {
@@ -31,13 +41,13 @@ h1, h2, h3, h4, h5, p, span, a {
 }
 
 /* ==================
-   LOGIN PAGE OVERHAUL
+   SOLO LEVELING SYSTEM LOGIN OVERHAUL
    ================== */
 .page-body.login-page {
   background: var(--bg-darker) !important;
   background-image: 
-    radial-gradient(circle at 10% 20%, rgba(255, 107, 0, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(234, 88, 12, 0.12) 0%, transparent 40%) !important;
+    radial-gradient(circle at 20% 20%, rgba(0, 240, 255, 0.18) 0%, transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(112, 0, 255, 0.2) 0%, transparent 50%) !important;
   min-height: 100vh;
   display: flex;
   align-items: center;
