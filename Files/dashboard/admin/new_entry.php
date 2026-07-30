@@ -815,7 +815,7 @@ if ($cnt_q) {
             
             document.getElementById('staff-qr-amount').innerText = '₹' + totalAmount.toLocaleString('en-IN');
             
-            var upiId = "<?php echo addslashes(!empty($gym['upi_id']) ? $gym['upi_id'] : 'sudarshanfitness@upi'); ?>";
+            var upiId = "<?php echo addslashes(!empty($gym['upi_id']) ? $gym['upi_id'] : '7620453195-2@ybl'); ?>";
             var gymName = "<?php echo addslashes($gym['gym_name'] ?? 'Sudarshan Fitness'); ?>";
             
             var cleanUpiId = upiId.replace(/\s+/g, '');

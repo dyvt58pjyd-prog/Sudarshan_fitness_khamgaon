@@ -202,7 +202,7 @@ if ($uid) {
                              var discount = parseFloat(document.getElementById('discount_input').value) || 0;
                              amount = amount - discount;
                          }
-                         var upiId = 'sudarshanfitness@upi';
+                         var upiId = '7620453195-2@ybl';
                          var name = 'Member';
                          var upiUrl = 'upi://pay?pa=' + encodeURIComponent(upiId) + '&pn=Sudarshan%20Fitness&am=' + encodeURIComponent(amount) + '&cu=INR&tn=' + encodeURIComponent('Membership Payment ' + name);
                          var qrImgUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(upiUrl);
