@@ -635,11 +635,33 @@ if (isset($_SESSION['user_data'])) {
                 <div class="angle-badge" id="live-angle-text">Live Angle: 175° (UP)</div>
             </div>
 
-            <!-- Live AI Rep Counter (Automated MediaPipe Tracking) -->
+            <!-- Live AI Rep Counter & Posture Evaluator -->
             <div class="rep-counter-box">
                 <div style="font-size: 11px; font-weight: 800; color: #10b981; text-transform: uppercase;">MediaPipe AI Rep Counter</div>
                 <div class="rep-number" id="rep-display">0 REPS</div>
                 <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;" id="ai-stage-status">Position: UP • Stand in front of camera</div>
+                <div style="font-size: 12px; margin-top: 6px;" id="posture-status">Form Status: <span style="color: #10b981; font-weight: bold;">Good Posture 🟢</span></div>
+            </div>
+
+            <!-- AI Nutrition & Macro Assistant (Imported from Preethamn15 Smart AI Gym Trainer) -->
+            <div class="tip-card" style="margin-top: 15px; background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);">
+                <h5 style="color: #60a5fa;">🥗 AI Nutrition &amp; Macro Planner</h5>
+                <div style="font-size: 11px; color: #94a3b8; margin-bottom: 8px;">Tailored for your body profile &amp; fitness goals</div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px; text-align: center;">
+                    <div style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px;">
+                        <span style="color: #94a3b8; display: block; font-size: 9px;">DAILY PROTEIN</span>
+                        <strong style="color: #10b981; font-size: 14px;" id="macro-protein">130g - 150g</strong>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px;">
+                        <span style="color: #94a3b8; display: block; font-size: 9px;">ESTIMATED BMR</span>
+                        <strong style="color: #ff6b00; font-size: 14px;" id="macro-bmr">1,850 kcal</strong>
+                    </div>
+                </div>
+
+                <div style="font-size: 11px; color: #cbd5e1; margin-top: 10px; line-height: 1.4;">
+                    <strong style="color: #38bdf8;">Smart Meal Tip:</strong> Fuel your workout with 30g protein + complex carbs pre-workout, and hydrate with 3L water daily!
+                </div>
             </div>
         </div>
 
@@ -916,13 +938,18 @@ if (isset($_SESSION['user_data'])) {
                     if (mainAngle < 95 && exerciseState === 'UP') {
                         exerciseState = 'DOWN';
                         document.getElementById('ai-stage-status').textContent = 'Position: SQUAT DOWN';
+                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #10b981; font-weight: bold;">Good Posture 🟢 (Great Depth)</span>';
                     }
                     if (mainAngle > 155 && exerciseState === 'DOWN') {
                         exerciseState = 'UP';
                         repCount++;
                         document.getElementById('rep-display').textContent = `${repCount} REPS`;
                         document.getElementById('ai-stage-status').textContent = `Position: UP • SQUAT REP ${repCount}!`;
+                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #10b981; font-weight: bold;">Good Posture 🟢</span>';
                         speakRepCount(repCount);
+                    }
+                    if (mainAngle > 95 && mainAngle < 130 && exerciseState === 'UP') {
+                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #ef4444; font-weight: bold;">Fix Your Form ⚠️ (Go Lower)</span>';
                     }
                 }
             } else if (activeEx.id === 'pushup') {
@@ -934,13 +961,18 @@ if (isset($_SESSION['user_data'])) {
                     if (mainAngle < 90 && exerciseState === 'UP') {
                         exerciseState = 'DOWN';
                         document.getElementById('ai-stage-status').textContent = 'Position: PUSHUP DOWN';
+                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #10b981; font-weight: bold;">Good Posture 🟢 (Full Range)</span>';
                     }
                     if (mainAngle > 160 && exerciseState === 'DOWN') {
                         exerciseState = 'UP';
                         repCount++;
                         document.getElementById('rep-display').textContent = `${repCount} REPS`;
                         document.getElementById('ai-stage-status').textContent = `Position: UP • PUSHUP REP ${repCount}!`;
+                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #10b981; font-weight: bold;">Good Posture 🟢</span>';
                         speakRepCount(repCount);
+                    }
+                    if (mainAngle > 90 && mainAngle < 130 && exerciseState === 'UP') {
+                        document.getElementById('posture-status').innerHTML = 'Form Status: <span style="color: #ef4444; font-weight: bold;">Fix Your Form ⚠️ (Touch Chest Lower)</span>';
                     }
                 }
             }
