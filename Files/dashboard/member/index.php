@@ -402,18 +402,7 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
                 </div>
 
                 <!-- Virtual Supplement Shop Simulator -->
-                <div class="col-md-6" style="padding: 0; flex: 1; min-width: 280px;">
-                    <div class="portal-card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(30, 41, 59, 0.9) 100%); border: 2px solid #10b981; border-radius: 20px; padding: 25px; color: #ffffff; box-shadow: 0 15px 35px rgba(16, 185, 129, 0.2);">
-                        <div style="color: #34d399; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;">🥤 SUPPLEMENTS &amp; GEAR BAR</div>
-                        <h3 style="margin: 0 0 10px 0; color: #fff; font-weight: 800; font-size: 20px;">Virtual Gym Supplement Shop</h3>
-                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 18px; line-height: 1.5;">Order Whey Protein, Creatine, Pre-Workout energy, gym lifting gear, and personal training passes.</p>
-                        
-                        <a href="../../virtual_store.php" style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; padding: 12px 20px; border-radius: 14px; font-size: 13px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 8px 20px rgba(16,185,129,0.4);">
-                            🛒 Open Supplement Store ➔
-                        </a>
-                    </div>
-                </div>
-            </div>
+
 
             <!-- MEMBER ENTRANCE DIGITAL QR PASS CARD -->
             <div class="row" style="margin-left: 0; margin-right: 0; margin-bottom: 25px;">

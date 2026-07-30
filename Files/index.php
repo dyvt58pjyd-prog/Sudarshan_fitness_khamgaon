@@ -151,15 +151,15 @@ if (substr($logo_path, 0, 6) === '../../') {
 
     .login-categories {
         display: grid !important;
-        grid-template-columns: repeat(5, 1fr) !important;
-        gap: 8px !important;
+        grid-template-columns: repeat(6, 1fr) !important;
+        gap: 6px !important;
         margin-bottom: 25px !important;
     }
 
     @media (max-width: 550px) {
         .login-categories {
-            grid-template-columns: repeat(5, 1fr) !important;
-            gap: 4px !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 6px !important;
         }
         .category-tab {
             padding: 10px 4px !important;
@@ -211,17 +211,17 @@ if (substr($logo_path, 0, 6) === '../../') {
         box-shadow: 0 0 25px rgba(168, 85, 247, 0.6) !important;
         transform: scale(1.04);
     }
-    .category-tab[data-role="super_admin"]:hover, .category-tab[data-role="super_admin"].active {
-        border-color: #10b981 !important;
-        background: rgba(16, 185, 129, 0.25) !important;
-        box-shadow: 0 0 25px rgba(16, 185, 129, 0.6) !important;
+    .category-tab[data-role="auditor"]:hover, .category-tab[data-role="auditor"].active {
+        border-color: #00f0ff !important;
+        background: rgba(0, 240, 255, 0.22) !important;
+        box-shadow: 0 0 25px rgba(0, 240, 255, 0.6) !important;
         transform: scale(1.04);
     }
     .category-tab[data-role="super_admin"]:hover, .category-tab[data-role="super_admin"].active {
         border-color: #10b981 !important;
         background: rgba(16, 185, 129, 0.25) !important;
         box-shadow: 0 0 25px rgba(16, 185, 129, 0.6) !important;
-        transform: scale(1.05);
+        transform: scale(1.04);
     }
 
     .category-tab i {
@@ -307,7 +307,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                         <!-- Hidden Input for selected role -->
                         <input type="hidden" name="login_role" id="login_role" value="<?php echo htmlspecialchars($selected_role); ?>">
 
-                        <!-- Visual Grid of Login Categories -->
+                        <!-- Visual Grid of 6 Login Categories -->
                         <div class="login-categories">
                             <div class="category-tab <?php echo ($selected_role === 'member') ? 'active' : ''; ?>" data-role="member" onclick="selectRole('member')">
                                 <i class="entypo-user"></i>
@@ -325,9 +325,13 @@ if (substr($logo_path, 0, 6) === '../../') {
                                 <i class="entypo-briefcase"></i>
                                 <span>Owner</span>
                             </div>
+                            <div class="category-tab <?php echo ($selected_role === 'auditor') ? 'active' : ''; ?>" data-role="auditor" onclick="selectRole('auditor')">
+                                <i class="entypo-book-open"></i>
+                                <span>Auditor</span>
+                            </div>
                             <div class="category-tab <?php echo ($selected_role === 'super_admin') ? 'active' : ''; ?>" data-role="super_admin" onclick="selectRole('super_admin')">
                                 <i class="entypo-cog"></i>
-                                <span>Auditor</span>
+                                <span>App Developer</span>
                             </div>
                         </div>
 

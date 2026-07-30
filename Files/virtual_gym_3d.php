@@ -372,9 +372,7 @@ if (isset($_SESSION['user_data'])) {
                 </div>
             </div>
 
-            <a href="virtual_store.php" class="btn-store-link">
-                🛒 SYSTEM ITEM SHOP ➔
-            </a>
+
         </div>
 
         <!-- Middle Panel: 3D Stage Simulator -->
