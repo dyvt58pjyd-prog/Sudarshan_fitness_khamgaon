@@ -33,4 +33,12 @@ $_GET['force'] = '1';
 @include_once __DIR__ . '/api/auto_backup.php';
 echo "Automated SQL Database Backup: GENERATED & EMAILED\n\n";
 
+// Execute test email if requested
+if (isset($_GET['test_email']) && !empty($_GET['test_email'])) {
+    require_once __DIR__ . '/include/smtp_mailer.php';
+    $target_email = trim($_GET['test_email']);
+    $sent = send_member_qr_pass_email($con, $target_email, 'Anurag Bawaskar', 'M-1001', '12 Month VIP Premium Membership', date('Y-m-d', strtotime('+1 year')));
+    echo "TEST REGISTRATION EMAIL TO {$target_email}: " . ($sent ? "DISPATCHED SUCCESSFULLY" : "FAILED") . "\n\n";
+}
+
 echo "=== DEPLOYMENT COMPLETED SUCCESSFULLY ===";
