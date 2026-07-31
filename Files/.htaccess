@@ -14,9 +14,9 @@ RewriteRule ^(.*)$ https://sudarshanfitness.de/$1 [L,R=301]
     Header set Referrer-Policy "strict-origin-when-cross-origin"
     Header set Permissions-Policy "geolocation=(self), microphone=(), camera=(self)"
 
-    # Digital Asset Links CORS & MIME Type
-    <Files "assetlinks.json">
+    # Digital Asset Links & Web Manifest CORS & MIME Type
+    <FilesMatch "\.(json)$">
         Header set Access-Control-Allow-Origin "*"
-        Header set Content-Type "application/json"
-    </Files>
+        Header set Content-Type "application/json; charset=utf-8"
+    </FilesMatch>
 </IfModule>
