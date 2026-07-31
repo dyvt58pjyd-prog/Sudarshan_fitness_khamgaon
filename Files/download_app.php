@@ -1,6 +1,10 @@
 <?php
 // Sudarshan Fitness Direct APK Downloader
-$apkPath = __DIR__ . '/sudarshan_fitness.apk';
+$apkPath = __DIR__ . '/sudarshan_fitness_native.apk';
+
+if (!file_exists($apkPath)) {
+    $apkPath = __DIR__ . '/sudarshan_fitness.apk';
+}
 
 if (!file_exists($apkPath) || filesize($apkPath) < 1000) {
     http_response_code(404);
