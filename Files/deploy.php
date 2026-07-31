@@ -24,11 +24,12 @@ $res = mysqli_query($con, "SELECT * FROM smtp_settings WHERE id = 1");
 if ($res && mysqli_num_rows($res) > 0) {
     $row = mysqli_fetch_assoc($res);
     echo "=== DATABASE SMTP SETTINGS ===\n";
-    echo "Host: " . $row['smtp_host'] . "\n";
-    echo "Port: " . $row['smtp_port'] . "\n";
-    echo "Secure: " . $row['smtp_secure'] . "\n";
-    echo "Username: " . $row['smtp_username'] . "\n";
-    echo "From Name: " . $row['smtp_from_name'] . "\n\n";
+    echo "Host: [" . $row['smtp_host'] . "]\n";
+    echo "Port: [" . $row['smtp_port'] . "]\n";
+    echo "Secure: [" . $row['smtp_secure'] . "]\n";
+    echo "Username: [" . $row['smtp_username'] . "]\n";
+    echo "Password Is Empty: " . (empty($row['smtp_password']) ? "YES" : "NO (Length: " . strlen($row['smtp_password']) . ")") . "\n";
+    echo "From Name: [" . $row['smtp_from_name'] . "]\n\n";
 } else {
     echo "=== DATABASE SMTP SETTINGS NOT FOUND ===\n\n";
 }
