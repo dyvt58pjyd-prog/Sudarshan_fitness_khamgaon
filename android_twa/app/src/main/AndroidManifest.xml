@@ -110,7 +110,7 @@
                 android:resource="@color/navigationDividerColorDark" />
 
             <meta-data android:name="android.support.customtabs.trusted.SPLASH_IMAGE_DRAWABLE"
-                android:resource="@drawable/splash"/>
+                android:resource="@mipmap/ic_launcher"/>
 
             <meta-data android:name="android.support.customtabs.trusted.SPLASH_SCREEN_BACKGROUND_COLOR"
                 android:resource="@color/backgroundColor"/>
@@ -185,7 +185,7 @@
             
                 <meta-data
                     android:name="android.support.customtabs.trusted.SMALL_ICON"
-                    android:resource="@drawable/ic_notification_icon" />
+                    android:resource="@mipmap/ic_launcher" />
             
 
             <intent-filter>
