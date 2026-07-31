@@ -18,4 +18,11 @@ RewriteRule ^(.*)$ https://sudarshanfitness.de/$1 [L,R=301]
     <FilesMatch "\.(json|png|jpg|jpeg|svg|ico)$">
         Header set Access-Control-Allow-Origin "*"
     </FilesMatch>
+
+    # Android APK Download MIME Type & Force Download Header
+    AddType application/vnd.android.package-archive .apk
+    <FilesMatch "\.(apk)$">
+        Header set Content-Type "application/vnd.android.package-archive"
+        Header set Content-Disposition "attachment; filename=\"sudarshan_fitness.apk\""
+    </FilesMatch>
 </IfModule>
