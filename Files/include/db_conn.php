@@ -933,6 +933,16 @@ if (!function_exists('send_member_email')) {
 
                 <p>Log in to your dashboard to track your health status, daily routines, and renewals.</p>
                 
+                <div style='background: linear-gradient(135deg, #0f172a, #1e293b); border: 1px solid rgba(255,107,0,0.4); border-radius: 14px; padding: 24px; margin: 25px 0; text-align: center;'>
+                    <p style='color: #94a3b8; font-size: 13px; margin: 0 0 8px 0;'>📱 Get the best experience with our official app</p>
+                    <strong style='color: #ffffff; font-size: 16px; display: block; margin-bottom: 16px;'>Sudarshan Fitness App — Available Now!</strong>
+                    <a href='https://sudarshanfitness.de/Files/download_app.php' 
+                       style='display: inline-block; background: linear-gradient(135deg, #ff6b00, #ff8c00); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 50px; font-size: 15px; font-weight: 700; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(255,107,0,0.4);'>
+                        📲 Download App (Free)
+                    </a>
+                    <p style='color: #64748b; font-size: 11px; margin: 12px 0 0 0;'>Android • Direct Install • No Play Store Required</p>
+                </div>
+                
                 <div class='footer'>
                     This is an automated message from $gym_name.<br>
                     Need help? Contact support: <a href='mailto:$gym_email' style='color: #ff6b00; text-decoration: none;'>$gym_email</a><br>

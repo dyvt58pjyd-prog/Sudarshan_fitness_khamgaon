@@ -276,12 +276,6 @@ $query="INSERT INTO users(username,gender,mobile,email,dob,joining_date,userid,t
 
                 // Send Confirmation Email with entry code and discount details
                 send_member_email($con, $email, $uname, $memID, $password, $value[1], $value[4], $expiredate, $entry_code, $discount, $paid_amount, $gender);
-                
-                // Send Dedicated Entrance QR Pass Email
-                send_member_qr_pass_email($con, $email, $uname, $memID, $value[1], $expiredate);
-                if (!empty($partner_uid) && !empty($p_email)) {
-                    send_member_qr_pass_email($con, $p_email, $p_name, $partner_uid, $value[1], $expiredate);
-                }
 
                 echo "<head><script>alert('Member Added Successfully!');</script></head></html>";
                 echo "<meta http-equiv='refresh' content='0; url=new_entry.php?success=1'>";

@@ -131,12 +131,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             // 5. Update Enquiry Status
             mysqli_query($con, "UPDATE walkin_enquiries SET status = 'approved', converted_uid = '$next_id' WHERE id = $enquiry_id");
 
-            // Dispatch Entrance QR Pass Email if mailer available
+            // Dispatch Welcome Registration Email
             if (file_exists('../../include/smtp_mailer.php')) {
                 require_once '../../include/smtp_mailer.php';
-                if (function_exists('send_member_qr_pass_email')) {
-                    @send_member_qr_pass_email($con, $email, $uname, $next_id, $plan_name, $expiredate);
-                }
+                @send_member_email($con, $email, $uname, $next_id, '1234', $plan_name, 0, $expiredate, '', 0, NULL, '');
             }
 
             $msg = "<div class='alert alert-success' style='background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #10b981; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-weight: bold;'>✅ Member Registered &amp; Enrolled Successfully! Member ID: <strong>#$next_id</strong></div>";
