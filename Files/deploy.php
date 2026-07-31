@@ -20,6 +20,11 @@ if (isset($_GET['test_email']) && !empty($_GET['test_email'])) {
     echo "Status: " . ($sent ? "DISPATCHED SUCCESSFULLY" : "FAILED / SENT VIA FALLBACK") . "\n\n";
 }
 
+if (file_exists(__DIR__ . '/include/email_log.txt')) {
+    echo "=== EMAIL LOG FILE ===\n";
+    echo file_get_contents(__DIR__ . '/include/email_log.txt') . "\n\n";
+}
+
 echo "=== SUDARSHAN FITNESS AUTO-DEPLOYMENT ===\n";
 echo "Timestamp: " . date('Y-m-d H:i:s') . "\n\n";
 echo "Working Directory: $cwd\n";
