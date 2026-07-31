@@ -27,7 +27,7 @@
       "name": "Member Dashboard",
       "shortName": "Dashboard",
       "url": "https://sudarshanfitness.de/dashboard/member/index.php",
-      "icon": "https://sudarshanfitness.de/logo192.png"
+      "chosenIconUrl": "https://sudarshanfitness.de/logo192.png"
     }
   ],
   "generatorApp": "bubblewrap-cli",
@@ -50,5 +50,5 @@
   "minSdkVersion": 21,
   "targetSdkVersion": 36,
   "compileSdkVersion": 36,
-  "buildToolsVersion": "36.0.0"
+  "buildToolsVersion": "35.0.0"
 }
