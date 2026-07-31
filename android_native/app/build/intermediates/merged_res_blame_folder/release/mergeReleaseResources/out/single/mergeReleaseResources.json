@@ -1,0 +1,78 @@
+[
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/drawable-anydpi_shortcut_legacy_background.xml.flat",
+        "source": "de.sudarshanfitness.app-main-34:/drawable-anydpi/shortcut_legacy_background.xml"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/xml_backup_rules.xml.flat",
+        "source": "de.sudarshanfitness.app-main-34:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/mipmap-xhdpi_ic_maskable.png.flat",
+        "source": "de.sudarshanfitness.app-main-34:/mipmap-xhdpi/ic_maskable.png"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/drawable_ic_notification_icon.png.flat",
+        "source": "de.sudarshanfitness.app-main-34:/drawable/ic_notification_icon.png"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "de.sudarshanfitness.app-main-34:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/mipmap-xxhdpi_ic_maskable.png.flat",
+        "source": "de.sudarshanfitness.app-main-34:/mipmap-xxhdpi/ic_maskable.png"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/drawable_splash.png.flat",
+        "source": "de.sudarshanfitness.app-main-34:/drawable/splash.png"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "de.sudarshanfitness.app-main-34:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "de.sudarshanfitness.app-main-34:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/layout_activity_main.xml.flat",
+        "source": "de.sudarshanfitness.app-main-34:/layout/activity_main.xml"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/xml_data_extraction_rules.xml.flat",
+        "source": "de.sudarshanfitness.app-main-34:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "de.sudarshanfitness.app-main-34:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/xml_file_paths.xml.flat",
+        "source": "de.sudarshanfitness.app-main-34:/xml/file_paths.xml"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/mipmap-xxxhdpi_ic_maskable.png.flat",
+        "source": "de.sudarshanfitness.app-main-34:/mipmap-xxxhdpi/ic_maskable.png"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "de.sudarshanfitness.app-main-34:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/drawable_shortcut_0.png.flat",
+        "source": "de.sudarshanfitness.app-main-34:/drawable/shortcut_0.png"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/mipmap-mdpi_ic_maskable.png.flat",
+        "source": "de.sudarshanfitness.app-main-34:/mipmap-mdpi/ic_maskable.png"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "de.sudarshanfitness.app-main-34:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "de.sudarshanfitness.app-release-33:/mipmap-hdpi_ic_maskable.png.flat",
+        "source": "de.sudarshanfitness.app-main-34:/mipmap-hdpi/ic_maskable.png"
+    }
+]
