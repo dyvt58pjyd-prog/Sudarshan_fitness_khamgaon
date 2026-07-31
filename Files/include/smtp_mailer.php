@@ -79,6 +79,7 @@ if (!function_exists('send_smtp_email')) {
         // Read greeting
         $resp = $read_response($fp);
         if (substr($resp, 0, 3) !== '220') {
+            @file_put_contents(__DIR__ . "/email_log.txt", "[" . date('Y-m-d H:i:s') . "] [SMTP GREETING FAIL] Host: $host, Resp: $resp\n", FILE_APPEND);
             fclose($fp);
             return false;
         }
@@ -87,6 +88,7 @@ if (!function_exists('send_smtp_email')) {
         fputs($fp, "EHLO localhost\r\n");
         $resp = $read_response($fp);
         if (substr($resp, 0, 3) !== '250') {
+            @file_put_contents(__DIR__ . "/email_log.txt", "[" . date('Y-m-d H:i:s') . "] [SMTP EHLO FAIL] Resp: $resp\n", FILE_APPEND);
             fclose($fp);
             return false;
         }
@@ -96,11 +98,13 @@ if (!function_exists('send_smtp_email')) {
             fputs($fp, "STARTTLS\r\n");
             $resp = $read_response($fp);
             if (substr($resp, 0, 3) !== '220') {
+                @file_put_contents(__DIR__ . "/email_log.txt", "[" . date('Y-m-d H:i:s') . "] [SMTP STARTTLS FAIL] Resp: $resp\n", FILE_APPEND);
                 fclose($fp);
                 return false;
             }
             // Enable encryption on socket
             if (!stream_socket_enable_crypto($fp, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+                @file_put_contents(__DIR__ . "/email_log.txt", "[" . date('Y-m-d H:i:s') . "] [SMTP CRYPTO FAIL] TLS negotiation failed\n", FILE_APPEND);
                 fclose($fp);
                 return false;
             }
@@ -117,6 +121,7 @@ if (!function_exists('send_smtp_email')) {
         fputs($fp, "AUTH LOGIN\r\n");
         $resp = $read_response($fp);
         if (substr($resp, 0, 3) !== '334') {
+            @file_put_contents(__DIR__ . "/email_log.txt", "[" . date('Y-m-d H:i:s') . "] [SMTP AUTH INIT FAIL] Resp: $resp\n", FILE_APPEND);
             fclose($fp);
             return false;
         }
@@ -125,6 +130,7 @@ if (!function_exists('send_smtp_email')) {
         fputs($fp, base64_encode($username) . "\r\n");
         $resp = $read_response($fp);
         if (substr($resp, 0, 3) !== '334') {
+            @file_put_contents(__DIR__ . "/email_log.txt", "[" . date('Y-m-d H:i:s') . "] [SMTP USERNAME FAIL] User: $username, Resp: $resp\n", FILE_APPEND);
             fclose($fp);
             return false;
         }
@@ -133,6 +139,7 @@ if (!function_exists('send_smtp_email')) {
         fputs($fp, base64_encode($password) . "\r\n");
         $resp = $read_response($fp);
         if (substr($resp, 0, 3) !== '235') {
+            @file_put_contents(__DIR__ . "/email_log.txt", "[" . date('Y-m-d H:i:s') . "] [SMTP PASS FAIL] Resp: $resp\n", FILE_APPEND);
             fclose($fp);
             return false;
         }
