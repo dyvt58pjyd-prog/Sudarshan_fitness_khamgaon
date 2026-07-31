@@ -1,0 +1,58 @@
+// Sudarshan Fitness v2.0 - Android 16 (API 36) Target Gradle Configuration
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.4.0'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'com.android.application'
+
+android {
+    namespace 'de.sudarshanfitness.twa'
+    compileSdkVersion 36
+    buildToolsVersion "36.0.0"
+
+    defaultConfig {
+        applicationId "de.sudarshanfitness.twa"
+        minSdkVersion 21
+        targetSdkVersion 36
+        versionCode 200
+        versionName "2.0.0"
+        
+        manifestPlaceholders = [
+            hostName: "sudarshanfitness.de",
+            defaultUrl: "https://sudarshanfitness.de/index.php",
+            launcherName: "Sudarshan Gym",
+            assetStatements: '[{"relation": ["delegate_permission/common.handle_all_urls"],"target": {"namespace": "web", "site": "https://sudarshanfitness.de"}}]'
+        ]
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.browser:browser:1.8.0'
+}

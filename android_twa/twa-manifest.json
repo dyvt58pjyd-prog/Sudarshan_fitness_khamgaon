@@ -1,0 +1,54 @@
+{
+  "packageId": "de.sudarshanfitness.twa",
+  "host": "sudarshanfitness.de",
+  "name": "Sudarshan Fitness",
+  "launcherName": "Sudarshan Gym",
+  "display": "fullscreen",
+  "themeColor": "#FF003C",
+  "themeColorDark": "#0B0F19",
+  "navigationColor": "#0B0F19",
+  "navigationColorDark": "#0B0F19",
+  "navigationDividerColor": "#FF003C",
+  "navigationDividerColorDark": "#FF003C",
+  "backgroundColor": "#0B0F19",
+  "enableNotifications": true,
+  "startUrl": "/index.php?source=twa",
+  "iconUrl": "https://sudarshanfitness.de/logo512.png",
+  "maskableIconUrl": "https://sudarshanfitness.de/logo512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "2.0.0",
+  "appVersionCode": 200,
+  "shortcuts": [
+    {
+      "name": "Member Dashboard",
+      "shortName": "Dashboard",
+      "url": "https://sudarshanfitness.de/dashboard/member/index.php",
+      "icon": "https://sudarshanfitness.de/logo192.png"
+    }
+  ],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://sudarshanfitness.de/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {
+    "locationDelegation": {
+      "enabled": true
+    },
+    "playBilling": {
+      "enabled": false
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "minSdkVersion": 21,
+  "targetSdkVersion": 36,
+  "compileSdkVersion": 36,
+  "buildToolsVersion": "36.0.0"
+}
