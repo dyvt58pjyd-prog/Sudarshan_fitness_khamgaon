@@ -315,7 +315,14 @@ if (!function_exists('send_member_qr_pass_email')) {
                         </div>
                     </div>
 
-                    <a href='https://sudarshanfitness.de/qr_checkin.php' class='btn'>🚀 Open Live QR Scanner Terminal</a>
+                    <div style='margin-top: 25px; text-align: center;'>
+                        <a href='https://sudarshanfitness.de/index.php?install_pwa=1' style='display: block; width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #ff003c, #7000ff); color: #ffffff; text-decoration: none; padding: 16px 20px; border-radius: 14px; font-weight: 800; font-size: 15px; box-shadow: 0 6px 25px rgba(255,0,60,0.5); text-transform: uppercase; letter-spacing: 0.5px;'>📲 INSTALL APPLICATION ON PHONE (CHROME 1-CLICK)</a>
+                        <div style='font-size: 11px; color: #94a3b8; margin-top: 8px;'>Tap to install Sudarshan Fitness as a native Chrome app on your phone</div>
+                    </div>
+
+                    <div style='margin-top: 15px; text-align: center;'>
+                        <a href='https://sudarshanfitness.de/qr_checkin.php' class='btn' style='display: inline-block; background: rgba(255,255,255,0.08); color: #cbd5e1; text-decoration: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 12px; border: 1px solid rgba(255,255,255,0.15);'>🚀 Open Live QR Scanner Terminal</a>
+                    </div>
                 </div>
                 <div class='footer'>
                     This email contains your personal entrance QR pass for {$gym_name}. Please do not share this QR pass with non-members.<br>

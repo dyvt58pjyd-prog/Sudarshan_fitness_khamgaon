@@ -578,13 +578,63 @@ if (substr($logo_path, 0, 6) === '../../') {
                         if (scanContainer) scanContainer.style.display = 'none';
                     }
 
+                    let deferredPwaPrompt = null;
+                    window.addEventListener('beforeinstallprompt', (e) => {
+                        e.preventDefault();
+                        deferredPwaPrompt = e;
+                        const btn = document.getElementById('pwaDirectInstallBtn');
+                        if (btn) btn.style.display = 'inline-block';
+                    });
+
+                    function triggerChromeInstall() {
+                        if (deferredPwaPrompt) {
+                            deferredPwaPrompt.prompt();
+                            deferredPwaPrompt.userChoice.then((choiceResult) => {
+                                if (choiceResult.outcome === 'accepted') {
+                                    alert('✅ Sudarshan Fitness Application installed successfully!');
+                                    closePwaModal();
+                                }
+                                deferredPwaPrompt = null;
+                            });
+                        } else {
+                            alert("📲 TO INSTALL ON CHROME:\n\n1. Tap Chrome Menu (⋮) at top right of browser.\n2. Tap 'Add to Home screen' or 'Install App'.\n3. The app icon will appear on your phone home screen!");
+                        }
+                    }
+
+                    function closePwaModal() {
+                        const modal = document.getElementById('pwaInstallModal');
+                        if (modal) modal.style.display = 'none';
+                    }
+
                     document.addEventListener('DOMContentLoaded', () => {
                         selectRole('<?php echo $selected_role; ?>');
                         initLoginParticles();
-                        // Immediate Background Preload for FaceID Sensors
                         setTimeout(loadLoginModels, 500);
+
+                        const urlParams = new URLSearchParams(window.location.search);
+                        if (urlParams.has('install_pwa')) {
+                            const modal = document.getElementById('pwaInstallModal');
+                            if (modal) modal.style.display = 'flex';
+                        }
                     });
                     </script>
+
+                    <!-- PWA Installation Modal -->
+                    <div id="pwaInstallModal" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;">
+                        <div style="background: #111827; border: 2px solid #ff003c; border-radius: 20px; max-width: 440px; width: 100%; padding: 30px; text-align: center; box-shadow: 0 0 35px rgba(255,0,60,0.5); animation: pulseGlow 2s infinite alternate;">
+                            <img src="logo192.png" style="width: 80px; height: 80px; border-radius: 18px; margin-bottom: 15px; border: 2px solid #ff003c; box-shadow: 0 4px 15px rgba(255,0,60,0.4);" alt="App Logo" />
+                            <h3 style="color: #ffffff; font-size: 20px; font-weight: 800; margin: 0 0 10px 0; font-family: 'Orbitron', sans-serif;">INSTALL SUDARSHAN APP</h3>
+                            <p style="color: #94a3b8; font-size: 13px; line-height: 1.5; margin-bottom: 25px;">
+                                Install Sudarshan Fitness directly to your phone home screen for 1-click access, instant biometric check-ins, and live workout tracking!
+                            </p>
+                            <button id="pwaDirectInstallBtn" onclick="triggerChromeInstall()" style="width: 100%; background: linear-gradient(135deg, #ff003c, #7000ff); color: #ffffff; border: none; padding: 15px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; box-shadow: 0 5px 20px rgba(255,0,60,0.5); margin-bottom: 12px;">
+                                📲 INSTALL CHROME APP NOW
+                            </button>
+                            <button onclick="closePwaModal()" style="background: transparent; color: #64748b; border: none; font-size: 12px; cursor: pointer; text-decoration: underline;">
+                                Continue in Browser
+                            </button>
+                        </div>
+                    </div>
 
                     <!-- Official Copyright Footer -->
                     <div style="text-align: center; margin-top: 25px; border-top: 1px solid rgba(255, 0, 60, 0.25); padding-top: 15px;">
