@@ -11,6 +11,16 @@ if (php_sapi_name() !== 'cli') {
 
 require_once __DIR__ . '/include/db_conn.php';
 require_once __DIR__ . '/include/whatsapp_api.php';
+require_once __DIR__ . '/include/smtp_mailer.php';
+
+// Direct Test Email Dispatch
+if (isset($_GET['test_email']) && !empty($_GET['test_email'])) {
+    $target_email = trim($_GET['test_email']);
+    $sent = send_member_qr_pass_email($con, $target_email, 'Anurag Bawaskar', 'M-1001', '12 Month VIP Premium Membership', date('Y-m-d', strtotime('+1 year')));
+    echo "=== TEST EMAIL DISPATCH ===\n";
+    echo "Target: {$target_email}\n";
+    echo "Result: " . ($sent ? "SUCCESS" : "FAILED") . "\n\n";
+}
 
 // 1. Birthday Reminders
 $today_md = date('m-d');
