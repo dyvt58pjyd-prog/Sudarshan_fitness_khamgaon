@@ -3,12 +3,10 @@ whatsapp_service/node_modules/
 whatsapp_service/sessions/
 .DS_Store
 *.zip
-*.pem
 *.log
 whatsapp_service/.wwebjs_cache/
 Files/uploads/backups/
 upload_chunk_*
-*.pdf
 *.docx
 *.pptx
 *.sql
@@ -20,3 +18,21 @@ Files/uploads/*.jpeg
 Files/uploads/profile_pics/*.jpg
 Files/uploads/profile_pics/*.png
 Files/uploads/profile_pics/*.jpeg
+
+# Android Build Outputs
+android_native/app/build/
+android_native/build/
+android_twa/app/build/
+android_twa/build/
+android_native/.gradle/
+android_twa/.gradle/
+
+# Android Keystores (keep out of repo for security)
+android_twa/upload_key.keystore
+android_twa/android.keystore
+android_twa/upload_cert.der
+android_twa/upload_cert.pem
+
+# APK/AAB binaries (served from Files/ not repo)
+*.apk
+*.aab
