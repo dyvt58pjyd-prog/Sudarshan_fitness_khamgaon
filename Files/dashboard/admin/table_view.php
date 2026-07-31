@@ -15,26 +15,42 @@ $result = mysqli_query($con, $query);
 $all_members = [];
 $active_members = [];
 $expired_members = [];
+$year_members = [];
+$six_month_members = [];
+$three_month_members = [];
+$one_month_members = [];
 
 $today = date('Y-m-d');
 
 if ($result && mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
         $uid = $row['userid'];
-        $query1  = "select * from enrolls_to WHERE uid='$uid' AND YEAR(paid_date) <= " . $_SESSION['working_year'] . " ORDER BY expire DESC LIMIT 1";
+        $query1  = "SELECT e.*, p.planName, p.validity 
+                    FROM enrolls_to e 
+                    LEFT JOIN plan p ON e.pid = p.pid 
+                    WHERE e.uid='$uid' AND YEAR(e.paid_date) <= " . $_SESSION['working_year'] . " 
+                    ORDER BY e.expire DESC LIMIT 1";
         $result1 = mysqli_query($con, $query1);
         
         $expire = "No Active Plan";
+        $plan_name = "N/A";
+        $validity_months = 0;
         $is_active = false;
+        
         if ($result1 && mysqli_num_rows($result1) > 0) {
             $row1 = mysqli_fetch_array($result1, MYSQLI_ASSOC);
             $expire = $row1['expire'];
+            $plan_name = !empty($row1['planName']) ? $row1['planName'] : 'N/A';
+            $validity_months = isset($row1['validity']) ? intval($row1['validity']) : 0;
+            
             if ($expire >= $today) {
                 $is_active = true;
             }
         }
         
         $row['expire'] = $expire;
+        $row['plan_name'] = $plan_name;
+        $row['validity_months'] = $validity_months;
         $row['is_active'] = $is_active;
         
         $all_members[] = $row;
@@ -43,17 +59,40 @@ if ($result && mysqli_num_rows($result) > 0) {
         } else {
             $expired_members[] = $row;
         }
+
+        $p_lower = strtolower($plan_name);
+        if ($validity_months == 12 || strpos($p_lower, '12') !== false || strpos($p_lower, 'year') !== false || strpos($p_lower, '1 yr') !== false) {
+            $year_members[] = $row;
+        } elseif ($validity_months == 6 || strpos($p_lower, '6') !== false || strpos($p_lower, 'half') !== false) {
+            $six_month_members[] = $row;
+        } elseif ($validity_months == 3 || strpos($p_lower, '3') !== false || strpos($p_lower, 'quarter') !== false) {
+            $three_month_members[] = $row;
+        } elseif ($validity_months == 1 || strpos($p_lower, '1 month') !== false || strpos($p_lower, 'monthly') !== false) {
+            $one_month_members[] = $row;
+        }
     }
 }
 
 $total_count = count($all_members);
 $active_count = count($active_members);
 $expired_count = count($expired_members);
+$year_count = count($year_members);
+$six_month_count = count($six_month_members);
+$three_month_count = count($three_month_members);
+$one_month_count = count($one_month_members);
 
 if ($status === 'active') {
     $members_to_show = $active_members;
 } elseif ($status === 'expired') {
     $members_to_show = $expired_members;
+} elseif ($status === '1year') {
+    $members_to_show = $year_members;
+} elseif ($status === '6months') {
+    $members_to_show = $six_month_members;
+} elseif ($status === '3months') {
+    $members_to_show = $three_month_members;
+} elseif ($status === '1month') {
+    $members_to_show = $one_month_members;
 } else {
     $members_to_show = $all_members;
     $status = 'all';
@@ -217,16 +256,28 @@ if ($status === 'active') {
 
 		<hr />
 
-		<!-- Filter Tabs -->
+		<!-- Filter Tabs for All, Active, Expired, 1 Year, 6 Months, 3 Months, 1 Month -->
 		<div class="member-tabs-container">
 			<a href="?status=all" class="tab-btn <?php echo $status === 'all' ? 'active-tab' : ''; ?>">
-				All Members <span class="tab-count"><?php echo $total_count; ?></span>
+				👥 All Members <span class="tab-count"><?php echo $total_count; ?></span>
 			</a>
 			<a href="?status=active" class="tab-btn <?php echo $status === 'active' ? 'active-tab' : ''; ?>">
-				Active Plan Members <span class="tab-count"><?php echo $active_count; ?></span>
+				🟢 Active Members <span class="tab-count"><?php echo $active_count; ?></span>
 			</a>
 			<a href="?status=expired" class="tab-btn <?php echo $status === 'expired' ? 'active-tab' : ''; ?>">
-				Expired Plan Members <span class="tab-count"><?php echo $expired_count; ?></span>
+				🔴 Expired Members <span class="tab-count"><?php echo $expired_count; ?></span>
+			</a>
+			<a href="?status=1year" class="tab-btn <?php echo $status === '1year' ? 'active-tab' : ''; ?>" style="border-color: rgba(255, 0, 60, 0.4);">
+				👑 1 Year (12 Mo) <span class="tab-count" style="background: #ff003c;"><?php echo $year_count; ?></span>
+			</a>
+			<a href="?status=6months" class="tab-btn <?php echo $status === '6months' ? 'active-tab' : ''; ?>" style="border-color: rgba(255, 183, 3, 0.4);">
+				🔥 6 Months <span class="tab-count" style="background: #ffb703; color: #000;"><?php echo $six_month_count; ?></span>
+			</a>
+			<a href="?status=3months" class="tab-btn <?php echo $status === '3months' ? 'active-tab' : ''; ?>" style="border-color: rgba(112, 0, 255, 0.4);">
+				⚡ 3 Months <span class="tab-count" style="background: #7000ff;"><?php echo $three_month_count; ?></span>
+			</a>
+			<a href="?status=1month" class="tab-btn <?php echo $status === '1month' ? 'active-tab' : ''; ?>" style="border-color: rgba(16, 185, 129, 0.4);">
+				🥉 1 Month <span class="tab-count" style="background: #10b981;"><?php echo $one_month_count; ?></span>
 			</a>
 		</div>
 		
@@ -239,46 +290,51 @@ if ($status === 'active') {
 					<th>Contact</th>
 					<th>E-Mail</th>
 					<th>Gender</th>
+					<th>Plan Package</th>
 					<th>Assigned Trainer</th>
-					<th>Membership Expiry</th>
+					<th>Expiry Date</th>
 					<th>Status</th>
 					<th>Joining Date</th>
 					<th>Action</th>
 				</tr>
 			</thead>
 				<tbody>
+				<?php
+				$sno = 1;
+				foreach ($members_to_show as $mem) {
+					$status_html = $mem['is_active'] 
+						? '<span class="status-badge status-active">ACTIVE</span>' 
+						: '<span class="status-badge status-expired">EXPIRED</span>';
+						
+					$p_name_display = htmlspecialchars($mem['plan_name']);
+					if (stripos($p_name_display, 'year') !== false || stripos($p_name_display, '12') !== false) {
+						$p_badge = "<span style='color: #ff003c; font-weight: 800;'>👑 $p_name_display</span>";
+					} elseif (stripos($p_name_display, '6') !== false) {
+						$p_badge = "<span style='color: #ffb703; font-weight: 800;'>🔥 $p_name_display</span>";
+					} elseif (stripos($p_name_display, '3') !== false) {
+						$p_badge = "<span style='color: #a78bfa; font-weight: 800;'>⚡ $p_name_display</span>";
+					} else {
+						$p_badge = "<span style='color: #34d399; font-weight: 800;'>🥉 $p_name_display</span>";
+					}
 
-						<?php
-							$sno    = 1;
-							foreach ($members_to_show as $row) {
-							    $uid   = $row['userid'];
-							    $expire = $row['expire'];
-							    $is_active = $row['is_active'];
-							    
-							    $badge = $is_active ? 
-							        '<span class="status-badge status-active">ACTIVE</span>' : 
-							        '<span class="status-badge status-expired">EXPIRED</span>';
-							    
-							    $trainer_disp = !empty($row['trainer_name']) ? htmlspecialchars($row['trainer_name']) : '<span style="color:var(--text-muted);">None</span>';
-							    
-							    echo "<tr><td>".$sno."</td>";
-							    echo "<td>" . htmlspecialchars($row['userid']) . "</td>";
-							    echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-							    echo "<td>" . htmlspecialchars($row['mobile']) . "</td>";
-							    echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-							    echo "<td>" . htmlspecialchars($row['gender']) . "</td>";
-							    echo "<td>" . $trainer_disp . "</td>";
-							    echo "<td>" . htmlspecialchars($expire) . "</td>";
-							    echo "<td>" . $badge . "</td>";
-							    echo "<td>" . htmlspecialchars($row['joining_date']) ."</td>";
-							    
-							    $sno++;
-							   
-							    echo "<td><form action='viewall_detail.php' method='post'><input type='hidden' name='name' value='" . $uid . "'/><input type='submit' class='a1-btn a1-blue' id='button1' value='View All'/></form></td></tr>";
-							}
-						?>									
-					</tbody>
-				</table>
+					echo "<tr>";
+					echo "<td>" . $sno++ . "</td>";
+					echo "<td><strong>#" . htmlspecialchars($mem['userid']) . "</strong></td>";
+					echo "<td>" . htmlspecialchars($mem['username']) . "</td>";
+					echo "<td>" . htmlspecialchars($mem['mobile']) . "</td>";
+					echo "<td>" . htmlspecialchars($mem['email']) . "</td>";
+					echo "<td>" . htmlspecialchars($mem['gender']) . "</td>";
+					echo "<td>" . $p_badge . "</td>";
+					echo "<td>" . htmlspecialchars($mem['trainer_name'] ?: 'General') . "</td>";
+					echo "<td>" . htmlspecialchars($mem['expire']) . "</td>";
+					echo "<td>" . $status_html . "</td>";
+					echo "<td>" . htmlspecialchars($mem['joining_date']) . "</td>";
+					echo "<td><a href='read_member.php?id=" . urlencode($mem['userid']) . "' class='btn btn-info btn-sm'>View Profile</a></td>";
+					echo "</tr>";
+				}
+				?>
+				</tbody>
+		</table>
 
 <script>
 	
