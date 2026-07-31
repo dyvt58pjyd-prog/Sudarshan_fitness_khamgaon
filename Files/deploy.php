@@ -20,9 +20,23 @@ if (isset($_GET['test_email']) && !empty($_GET['test_email'])) {
     echo "Status: " . ($sent ? "DISPATCHED SUCCESSFULLY" : "FAILED / SENT VIA FALLBACK") . "\n\n";
 }
 
+$res = mysqli_query($con, "SELECT * FROM smtp_settings WHERE id = 1");
+if ($res && mysqli_num_rows($res) > 0) {
+    $row = mysqli_fetch_assoc($res);
+    echo "=== DATABASE SMTP SETTINGS ===\n";
+    echo "Host: " . $row['smtp_host'] . "\n";
+    echo "Port: " . $row['smtp_port'] . "\n";
+    echo "Secure: " . $row['smtp_secure'] . "\n";
+    echo "Username: " . $row['smtp_username'] . "\n";
+    echo "From Name: " . $row['smtp_from_name'] . "\n\n";
+} else {
+    echo "=== DATABASE SMTP SETTINGS NOT FOUND ===\n\n";
+}
+
 if (file_exists(__DIR__ . '/include/email_log.txt')) {
-    echo "=== EMAIL LOG FILE ===\n";
-    echo file_get_contents(__DIR__ . '/include/email_log.txt') . "\n\n";
+    echo "=== EMAIL LOG FILE (LAST 50 LINES) ===\n";
+    $lines = file(__DIR__ . '/include/email_log.txt');
+    echo implode("", array_slice($lines, -50)) . "\n\n";
 }
 
 echo "=== SUDARSHAN FITNESS AUTO-DEPLOYMENT ===\n";
