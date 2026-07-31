@@ -10,9 +10,13 @@ color navigationColorDark
 color navigationDividerColor
 color navigationDividerColorDark
 color shortcut_background
+drawable ic_notification_icon
+drawable shortcut_0
 drawable shortcut_legacy_background
+drawable splash
 integer splashScreenFadeOutDuration
 mipmap ic_launcher
+mipmap ic_maskable
 string appName
 string assetStatements
 string fallbackType
@@ -22,6 +26,8 @@ string launchUrl
 string launcherName
 string orientation
 string providerAuthority
+string shortcut_name_0
+string shortcut_short_name_0
 string webManifestUrl
 xml filepaths
 xml shortcuts

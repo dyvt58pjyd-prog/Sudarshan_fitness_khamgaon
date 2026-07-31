@@ -40,6 +40,10 @@
     <!-- Value from default config. -->
     <string name="providerAuthority" translatable="false">de.sudarshanfitness.twa.fileprovider</string>
     <!-- Value from default config. -->
+    <string name="shortcut_name_0" translatable="false">Member Dashboard</string>
+    <!-- Value from default config. -->
+    <string name="shortcut_short_name_0" translatable="false">Dashboard</string>
+    <!-- Value from default config. -->
     <string name="webManifestUrl" translatable="false">https://sudarshanfitness.de/manifest.json</string>
 
 </resources>

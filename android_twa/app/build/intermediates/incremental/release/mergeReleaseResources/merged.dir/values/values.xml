@@ -375,6 +375,8 @@
     <string name="orientation" translatable="false">default</string>
     <string name="providerAuthority" translatable="false">de.sudarshanfitness.twa.fileprovider</string>
     <string name="search_menu_title">Search</string>
+    <string name="shortcut_name_0" translatable="false">Member Dashboard</string>
+    <string name="shortcut_short_name_0" translatable="false">Dashboard</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="update_chrome_toast">Please update to Chrome Stable 72 or later.</string>
     <string name="webManifestUrl" translatable="false">https://sudarshanfitness.de/manifest.json</string>

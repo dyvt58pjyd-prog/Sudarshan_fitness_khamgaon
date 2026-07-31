@@ -188,11 +188,11 @@
 113                android:resource="@color/navigationDividerColorDark" />
 113-->/Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:110:17-69
 114            <meta-data
-114-->/Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:112:13-113:57
+114-->/Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:112:13-113:54
 115                android:name="android.support.customtabs.trusted.SPLASH_IMAGE_DRAWABLE"
 115-->/Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:112:24-95
-116                android:resource="@mipmap/ic_launcher" />
-116-->/Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:113:17-55
+116                android:resource="@drawable/splash" />
+116-->/Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:113:17-52
 117            <meta-data
 117-->/Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:115:13-116:60
 118                android:name="android.support.customtabs.trusted.SPLASH_SCREEN_BACKGROUND_COLOR"
@@ -305,11 +305,11 @@
 173            android:exported="@bool/enableNotification" >
 173-->/Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:183:13-56
 174            <meta-data
-174-->/Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:186:17-188:62
+174-->/Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:186:17-188:73
 175                android:name="android.support.customtabs.trusted.SMALL_ICON"
 175-->/Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:187:21-81
-176                android:resource="@mipmap/ic_launcher" />
-176-->/Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:188:21-59
+176                android:resource="@drawable/ic_notification_icon" />
+176-->/Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:188:21-70
 177
 178            <intent-filter>
 178-->/Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:191:13-194:29

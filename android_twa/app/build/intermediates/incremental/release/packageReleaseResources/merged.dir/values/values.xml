@@ -29,5 +29,7 @@
     <string name="launcherName" translatable="false">Sudarshan Gym</string>
     <string name="orientation" translatable="false">default</string>
     <string name="providerAuthority" translatable="false">de.sudarshanfitness.twa.fileprovider</string>
+    <string name="shortcut_name_0" translatable="false">Member Dashboard</string>
+    <string name="shortcut_short_name_0" translatable="false">Dashboard</string>
     <string name="webManifestUrl" translatable="false">https://sudarshanfitness.de/manifest.json</string>
 </resources>

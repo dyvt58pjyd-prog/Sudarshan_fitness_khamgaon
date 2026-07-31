@@ -193,9 +193,9 @@ ADDED from /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app
 	android:name
 		ADDED from /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:109:17-89
 meta-data#android.support.customtabs.trusted.SPLASH_IMAGE_DRAWABLE
-ADDED from /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:112:13-113:57
+ADDED from /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:112:13-113:54
 	android:resource
-		ADDED from /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:113:17-55
+		ADDED from /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:113:17-52
 	android:name
 		ADDED from /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:112:24-95
 meta-data#android.support.customtabs.trusted.SPLASH_SCREEN_BACKGROUND_COLOR
@@ -303,9 +303,9 @@ ADDED from /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app
 	android:name
 		ADDED from /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:181:13-46
 meta-data#android.support.customtabs.trusted.SMALL_ICON
-ADDED from /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:186:17-188:62
+ADDED from /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:186:17-188:73
 	android:resource
-		ADDED from /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:188:21-59
+		ADDED from /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:188:21-70
 	android:name
 		ADDED from /Users/anuragbawaskar/Sudarshan Fitness Orignal Data /android_twa/app/src/main/AndroidManifest.xml:187:21-81
 intent-filter#action:name:android.support.customtabs.trusted.TRUSTED_WEB_ACTIVITY_SERVICE+category:name:android.intent.category.DEFAULT
