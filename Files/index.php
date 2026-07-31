@@ -627,9 +627,12 @@ if (substr($logo_path, 0, 6) === '../../') {
                             <p style="color: #94a3b8; font-size: 13px; line-height: 1.5; margin-bottom: 25px;">
                                 Install Sudarshan Fitness directly to your phone home screen for 1-click access, instant biometric check-ins, and live workout tracking!
                             </p>
-                            <button id="pwaDirectInstallBtn" onclick="triggerChromeInstall()" style="width: 100%; background: linear-gradient(135deg, #ff003c, #7000ff); color: #ffffff; border: none; padding: 15px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; box-shadow: 0 5px 20px rgba(255,0,60,0.5); margin-bottom: 12px;">
-                                📲 INSTALL CHROME APP NOW
+                            <button id="pwaDirectInstallBtn" onclick="triggerChromeInstall()" style="width: 100%; background: linear-gradient(135deg, #ff003c, #7000ff); color: #ffffff; border: none; padding: 15px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; box-shadow: 0 5px 20px rgba(255,0,60,0.5); margin-bottom: 10px;">
+                                📲 INSTALL CHROME PWA APP
                             </button>
+                            <a href="download_app.php" style="width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; text-decoration: none; display: block; padding: 15px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; box-shadow: 0 5px 20px rgba(16,185,129,0.4); margin-bottom: 12px;">
+                                ⬇️ DOWNLOAD DIRECT ANDROID APK (5.3 MB)
+                            </a>
                             <button onclick="closePwaModal()" style="background: transparent; color: #64748b; border: none; font-size: 12px; cursor: pointer; text-decoration: underline;">
                                 Continue in Browser
                             </button>

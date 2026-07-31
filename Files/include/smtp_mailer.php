@@ -316,8 +316,8 @@ if (!function_exists('send_member_qr_pass_email')) {
                     </div>
 
                     <div style='margin-top: 25px; text-align: center;'>
-                        <a href='https://sudarshanfitness.de/index.php?install_pwa=1' style='display: block; width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #ff003c, #7000ff); color: #ffffff; text-decoration: none; padding: 16px 20px; border-radius: 14px; font-weight: 800; font-size: 15px; box-shadow: 0 6px 25px rgba(255,0,60,0.5); text-transform: uppercase; letter-spacing: 0.5px;'>📲 INSTALL APPLICATION ON PHONE (CHROME 1-CLICK)</a>
-                        <div style='font-size: 11px; color: #94a3b8; margin-top: 8px;'>Tap to install Sudarshan Fitness as a native Chrome app on your phone</div>
+                        <a href='https://sudarshanfitness.de/Files/download_app.php' style='display: block; width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #ff003c, #7000ff); color: #ffffff; text-decoration: none; padding: 16px 20px; border-radius: 14px; font-weight: 800; font-size: 15px; box-shadow: 0 6px 25px rgba(255,0,60,0.5); text-transform: uppercase; letter-spacing: 0.5px;'>📲 INSTALL APPLICATION ON PHONE (DIRECT 1-CLICK APK)</a>
+                        <div style='font-size: 11px; color: #94a3b8; margin-top: 8px;'>Tap to install Sudarshan Fitness native app (5.3 MB) directly on your phone</div>
                     </div>
 
                     <div style='margin-top: 15px; text-align: center;'>
