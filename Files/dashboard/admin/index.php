@@ -129,94 +129,30 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
     <link rel="stylesheet" href="../../css/premium.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-     <style>
-    	.page-container .sidebar-menu #main-menu li#dash > a {
-    	background-color: #2b303a;
-    	color: #ffffff;
-		}
-
-        /* Crimson Red Gym UI Theme Overrides */
-        .tile-stats {
-            background: rgba(15, 7, 18, 0.94) !important;
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
-            border: 2px solid rgba(255, 0, 60, 0.45) !important;
-            border-radius: 24px !important;
-            padding: 30px 20px !important;
-            margin-bottom: 30px !important;
-            box-shadow: 0 0 35px rgba(255, 0, 60, 0.25), inset 0 0 15px rgba(112, 0, 255, 0.2) !important;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            animation: system-hologram-pulse 6s ease-in-out infinite alternate !important;
+    <style>
+        /* Dashboard page overrides — uses premium.css design tokens */
+        .dashboard-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)) !important;
+            gap: 16px !important;
         }
-        .tile-stats:hover {
-            transform: translateY(-5px);
-            border-color: #ff003c !important;
-            box-shadow: 0 0 50px rgba(255, 0, 60, 0.7), 0 0 80px rgba(112, 0, 255, 0.4) !important;
+        .dashboard-grid > a, .dashboard-grid > div {
+            text-decoration: none !important;
         }
-        .tile-stats .icon {
-            color: rgba(255,0,60,0.15) !important;
-            bottom: 20px !important;
-            right: 20px !important;
-            font-size: 80px !important;
+        @media (max-width: 767px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 10px !important;
+            }
+            .cybercard span { display: none !important; }
+            .cybercard { padding: 16px 10px !important; }
+            .cybercard .card-icon { font-size: 28px !important; margin-bottom: 8px !important; }
+            .cybercard h4 { font-size: 11px !important; }
         }
-        .tile-stats h2 {
-            font-family: 'Orbitron', sans-serif !important;
-            font-size: 13px !important;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #ff003c !important;
-            margin-top: 0 !important;
-            font-weight: 800 !important;
-        }
-        .tile-stats .num {
-            font-family: 'Orbitron', sans-serif !important;
-            font-size: 42px !important;
-            font-weight: 900 !important;
-            color: #ffffff !important;
-            text-shadow: 0 0 20px #ff003c;
-            margin-top: 15px;
-        }
-        
-        /* Colored Glowing Borders */
-        .tile-red { border-bottom: 4px solid #ff003c !important; box-shadow: inset 0 -15px 30px -20px rgba(255,0,60,0.6) !important; }
-        .tile-green { border-bottom: 4px solid #10b981 !important; box-shadow: inset 0 -15px 30px -20px rgba(16,185,129,0.5) !important; }
-        .tile-aqua { border-bottom: 4px solid #ff003c !important; box-shadow: inset 0 -15px 30px -20px rgba(255,0,60,0.5) !important; }
-        .tile-blue { border-bottom: 4px solid #7000ff !important; box-shadow: inset 0 -15px 30px -20px rgba(112,0,255,0.5) !important; }
-        
-        .tile-red:hover { border-color: #ff003c !important; }
-        .tile-green:hover { border-color: #10b981 !important; }
-        .tile-aqua:hover { border-color: #ff003c !important; }
-        .tile-blue:hover { border-color: #7000ff !important; }
-        
-        /* Darker panel override */
-        .panel {
-            background: rgba(15, 7, 18, 0.94) !important;
-            backdrop-filter: blur(15px) !important;
-            border: 1px solid rgba(255, 0, 60, 0.4) !important;
-            border-radius: 20px !important;
-            box-shadow: 0 0 35px rgba(255, 0, 60, 0.2) !important;
-        }
-        .panel-heading {
-            background: transparent !important;
-            border-bottom: 1px solid rgba(255, 0, 60, 0.3) !important;
-        }
-        .panel-title { font-family: 'Orbitron', sans-serif !important; color: #ff003c !important; font-weight: 900 !important; }
-        
-        /* Table overrides */
-        .table > tbody > tr {
-            transition: background 0.3s ease, box-shadow 0.3s ease !important;
-        }
-        .table > tbody > tr:hover {
-            background: rgba(255, 0, 60, 0.08) !important;
-            box-shadow: inset 0 0 20px rgba(255, 0, 60, 0.3) !important;
-        }
-
     </style>
 
 </head>
-    <body class="page-body page-fade" onload="collapseSidebar()" style="background-color: #030712; background-image: radial-gradient(circle at 50% 10%, rgba(255, 0, 60, 0.22) 0%, transparent 60%), radial-gradient(circle at 90% 80%, rgba(112, 0, 255, 0.15) 0%, transparent 50%);">
+    <body class="page-body page-fade" onload="collapseSidebar()">
 
         <!-- Particle HUD Background -->
         <div id="particles-js" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;"></div>
@@ -288,8 +224,25 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
 
 
-			<div id="gate-alert-container" style="margin-top: 15px; margin-bottom: 15px;"></div>
-			<h2>SUDARSHAN FITNESS</h2>
+			<!-- Hero Greeting Bar -->
+			<?php
+			$hour = (int)date('H');
+			$greet = $hour < 12 ? 'Good Morning' : ($hour < 17 ? 'Good Afternoon' : 'Good Evening');
+			$greet_emoji = $hour < 12 ? '🌅' : ($hour < 17 ? '💪' : '🔥');
+			?>
+			<div class="hero-bar">
+				<div>
+					<p class="greet-text"><?php echo $greet; ?>, <span><?php echo htmlspecialchars($_SESSION['full_name']); ?></span> <?php echo $greet_emoji; ?></p>
+					<p class="greet-sub">Here's what's happening at your gym today.</p>
+				</div>
+				<div class="hero-date">
+					<div style="font-size:22px; margin-bottom:4px;">📅</div>
+					<div><?php echo date('D, d M Y'); ?></div>
+					<div style="color:#94A3B8; font-size:11px; margin-top:3px;"><?php echo date('h:i A'); ?></div>
+				</div>
+			</div>
+
+			<div id="gate-alert-container" style="margin-bottom: 15px;"></div>
 
 			<?php
 			$q_pending = mysqli_query($con, "SELECT COUNT(*) as cnt FROM whatsapp_outbox WHERE status IN ('pending', 'failed') AND attempts < 3");
@@ -299,66 +252,12 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			}
 			if ($pending_count > 0):
 			?>
-			<div class="row" id="wa-outbox-alert-row" style="margin-bottom: 20px; margin-left: 0; margin-right: 0;">
-			    <div class="col-md-12" style="padding: 0;">
-			        <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; color: #ffffff;">
-			            <div style="display: flex; align-items: center; gap: 10px;">
-			                <span style="font-size: 20px;">⚠️</span>
-			                <span><strong>WhatsApp Notification Service is offline:</strong> <span id="wa-pending-count-text"><?php echo $pending_count; ?></span> alerts are currently pending in the outbox retry queue.</span>
-			            </div>
-			        </div>
-			    </div>
+			<div style="background: rgba(255,0,85,0.1); border: 1px solid rgba(255,0,85,0.3); border-radius: 14px; padding: 14px 20px; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; color: #FCA5A5;">
+			    <span style="font-size: 20px;">⚠️</span>
+			    <span><strong>WhatsApp offline:</strong> <span id="wa-pending-count-text"><?php echo $pending_count; ?></span> messages pending in retry queue.</span>
 			</div>
 			<?php endif; ?>
 
-			<hr>
-            <style>
-            .dashboard-grid {
-                display: grid !important;
-                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
-                gap: 20px !important;
-            }
-            .dashboard-grid a div, .dashboard-grid div.grid-action-box {
-                background: rgba(15, 7, 18, 0.94) !important;
-                border: 1px solid rgba(255, 0, 60, 0.4) !important;
-                border-radius: 18px !important;
-                box-shadow: 0 0 25px rgba(255, 0, 60, 0.2) !important;
-                transition: all 0.25s ease-in-out !important;
-            }
-            .dashboard-grid a div:hover {
-                border-color: #ff003c !important;
-                box-shadow: 0 0 40px rgba(255, 0, 60, 0.7), 0 0 70px rgba(112, 0, 255, 0.4) !important;
-                transform: translateY(-4px) scale(1.02) !important;
-            }
-            .dashboard-grid a div h4 {
-                font-family: 'Orbitron', sans-serif !important;
-                color: #ff003c !important;
-                letter-spacing: 0.5px !important;
-            }
-            
-            @media (max-width: 767px) {
-                .dashboard-grid {
-                    grid-template-columns: repeat(2, 1fr) !important;
-                    gap: 12px !important;
-                }
-                .dashboard-grid a div {
-                    padding: 16px 8px !important;
-                    border-radius: 14px !important;
-                }
-                .dashboard-grid a div div {
-                    font-size: 32px !important;
-                    margin-bottom: 8px !important;
-                }
-                .dashboard-grid a div h4 {
-                    font-size: 13px !important;
-                    margin-bottom: 0 !important;
-                    line-height: 1.3 !important;
-                }
-                .dashboard-grid a div span {
-                    display: none !important; /* Hide description on mobile to look neat */
-                }
-            }
-            </style>
 
 			<!-- Big Boxed Simple Quick Actions Categorized Grid (Sidebar Replacement) -->
 			<div class="row" style="margin-bottom: 30px; margin-left: 0; margin-right: 0;">
@@ -367,89 +266,80 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					<!-- Category 1: 👥 FRONT DESK & VISITOR MANAGEMENT -->
 					<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
 					<div style="margin-bottom: 35px;">
-						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+						<div class="section-header"><h3>
 							<span style="font-size: 22px;">👥</span> Front Desk & Visitor Management
-						</h3>
+						</h3></div>
 						<div class="dashboard-grid">
 							
 							<a href="new_entry.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(255, 107, 0, 0.05) 100%); border: 2px solid #ff6b00; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">👤➕</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">New Registration</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Add new gym admission</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">👤➕</span>
+									<h4>New Registration</h4>
+									<span>Add new gym admission</span>
 								</div>
 							</a>
 
 							<a href="manual_approve.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%); border: 2px solid #f59e0b; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📋✓</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Manual Approvals</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Verify offline bookings</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📋✓</span>
+									<h4>Manual Approvals</h4>
+									<span>Verify offline bookings</span>
 								</div>
 							</a>
 
 							<a href="visitor_entry.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📝👥</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Visitor Entry</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Log inquiry details & snaps</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📝👥</span>
+									<h4>Visitor Entry</h4>
+									<span>Log inquiry details & snaps</span>
 								</div>
 							</a>
 
 							<a href="visitors_list.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.05) 100%); border: 2px solid #0ea5e9; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📁👥</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Visitor Logs</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Search previous visit logs</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📁👥</span>
+									<h4>Visitor Logs</h4>
+									<span>Search previous visit logs</span>
 								</div>
 							</a>
 
 							<a href="visl_dashboard.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0.05) 100%); border: 2px solid #8b5cf6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">🤖📈</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">VISL Dashboard</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Real-time SalesBot inquiries</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">🤖📈</span>
+									<h4>VISL Dashboard</h4>
+									<span>Real-time SalesBot inquiries</span>
 								</div>
 							</a>
 
 							<a href="search_member.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">🔍👤</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Search Member</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Lookup profile statistics</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">🔍👤</span>
+									<h4>Search Member</h4>
+									<span>Lookup profile statistics</span>
 								</div>
 							</a>
 
 							<a href="payments.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%); border: 2px solid #a855f7; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">💳⭐</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Make Payment</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Collect offline package fees</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">💳⭐</span>
+									<h4>Make Payment</h4>
+									<span>Collect offline package fees</span>
 								</div>
 							</a>
 
 							<a href="pending_dues.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%); border: 2px solid #ef4444; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">⏳⚠️</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Pending Fees</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Collect outstanding balances</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">⏳⚠️</span>
+									<h4>Pending Fees</h4>
+									<span>Collect outstanding balances</span>
 								</div>
 							</a>
 							
 							<a href="inventory.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">🛒💊</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Inventory Store</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Sell products & track stock</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">🛒💊</span>
+									<h4>Inventory Store</h4>
+									<span>Sell products & track stock</span>
 								</div>
 							</a>
 							
@@ -459,82 +349,74 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
 					<!-- Category 2: 🔑 ATTENDANCE & BIOMETRIC CONTROL -->
 					<div style="margin-bottom: 35px;">
-						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+						<div class="section-header"><h3>
 							<span style="font-size: 22px;">🔑</span> Attendance & Access Control
-						</h3>
+						</h3></div>
 						<div class="dashboard-grid">
 
 							<a href="biometric_management.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">🔑🚪</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Biometric Lock</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Enable or disable gates</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">🔑🚪</span>
+									<h4>Biometric Lock</h4>
+									<span>Enable or disable gates</span>
 								</div>
 							</a>
 
 							<a href="attendance.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%); border: 2px solid #ef4444; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📷🚪</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Attendance Portal</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">View scans & calendar logs</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📷🚪</span>
+									<h4>Attendance Portal</h4>
+									<span>View scans & calendar logs</span>
 								</div>
 							</a>
 
 							<a href="enquiries.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(255, 107, 0, 0.05) 100%); border: 2px solid #ff6b00; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📝🏋️</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Walk-In Enquiries</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Review visitor tours &amp; approvals</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📝🏋️</span>
+									<h4>Walk-In Enquiries</h4>
+									<span>Review visitor tours &amp; approvals</span>
 								</div>
 							</a>
 
 							<a href="print_enquiry_qr.php" target="_blank" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">🖨️📱</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Visitor QR Poster</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Print reception desk standee</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">🖨️📱</span>
+									<h4>Visitor QR Poster</h4>
+									<span>Print reception desk standee</span>
 								</div>
 							</a>
 
 							<a href="../../qr_checkin.php" target="_blank" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(255, 107, 0, 0.05) 100%); border: 2px solid #ff6b00; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📷🚪</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">QR Gate Terminal</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Launch QR Entrance Gate Scanner</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📷🚪</span>
+									<h4>QR Gate Terminal</h4>
+									<span>Launch QR Entrance Gate Scanner</span>
 								</div>
 							</a>
 
 							<a href="kiosk.php" target="_blank" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.05) 100%); border: 2px solid #06b6d4; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">🖥️🚪</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Front Desk Kiosk</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Launch kiosk monitor mode</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">🖥️🚪</span>
+									<h4>Front Desk Kiosk</h4>
+									<span>Launch kiosk monitor mode</span>
 								</div>
 							</a>
 
 
 							<?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
 							<a href="biometric_logs.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(244, 63, 94, 0.15) 0%, rgba(244, 63, 94, 0.05) 100%); border: 2px solid #f43f5e; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📋📊</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Biometric Logs</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Audit machine communications</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📋📊</span>
+									<h4>Biometric Logs</h4>
+									<span>Audit machine communications</span>
 								</div>
 							</a>
 
 							<a href="biometric_simulator.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(20, 184, 166, 0.15) 0%, rgba(20, 184, 166, 0.05) 100%); border: 2px solid #14b8a6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">🔄🎛️</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Gate Simulator</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Trigger mock attendance scans</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">🔄🎛️</span>
+									<h4>Gate Simulator</h4>
+									<span>Trigger mock attendance scans</span>
 								</div>
 							</a>
 							<?php endif; ?>
@@ -544,37 +426,34 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
 					<!-- Category 3: 📋 MEMBERS & SYSTEM DIRECTORY -->
 					<div style="margin-bottom: 35px;">
-						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+						<div class="section-header"><h3>
 							<span style="font-size: 22px;">📋</span> Members & Fitness Directory
-						</h3>
+						</h3></div>
 						<div class="dashboard-grid">
 
 							<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
 							<a href="view_mem.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">✏️👤</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Manage Members</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Edit client files & details</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">✏️👤</span>
+									<h4>Manage Members</h4>
+									<span>Edit client files & details</span>
 								</div>
 							</a>
 							<?php endif; ?>
 
 							<a href="table_view.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📋🔍</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">View Directory</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Search membership list grid</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📋🔍</span>
+									<h4>View Directory</h4>
+									<span>Search membership list grid</span>
 								</div>
 							</a>
 
 							<a href="assign_routine.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(251, 191, 36, 0.05) 100%); border: 2px solid #fbbf24; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📋🏋️</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Assign Routine</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Bind routine plans to members</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📋🏋️</span>
+									<h4>Assign Routine</h4>
+									<span>Bind routine plans to members</span>
 								</div>
 							</a>
 
@@ -584,41 +463,38 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					<!-- Category 4: 💰 BILLING, SUBSCRIPTIONS & ANALYTICS -->
 					<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
 					<div style="margin-bottom: 35px;">
-						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+						<div class="section-header"><h3>
 							<span style="font-size: 22px;">💰</span> Billing, Subscriptions & Analytics
-						</h3>
+						</h3></div>
 						<div class="dashboard-grid">
 
 							<a href="payment_requests.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%); border: 2px solid #ef4444; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">💰✓</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Verify Payments</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Pending registrations approvals</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">💰✓</span>
+									<h4>Verify Payments</h4>
+									<span>Pending registrations approvals</span>
 								</div>
 							</a>
 
 							<a href="online_payments_records.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📁💳</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Online Records</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">App verified UPI transfers log</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📁💳</span>
+									<h4>Online Records</h4>
+									<span>App verified UPI transfers log</span>
 								</div>
 							</a>
 
 							<a href="invoices.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📄🧾</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Invoices & Receipts</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Print official tax receipts & PDFs</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📄🧾</span>
+									<h4>Invoices & Receipts</h4>
+									<span>Print official tax receipts & PDFs</span>
 								</div>
 							</a>
 
 							<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 22px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
-								<div style="font-size: 40px; margin-bottom: 10px;">📅💳</div>
-								<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Daily Collection</h4>
+								<span class="card-icon">📅💳</span>
+								<h4>Daily Collection</h4>
 								<form action="invoices.php" method="GET" style="margin-top: 10px;">
 									<input type="date" name="start_date" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 6px; border-radius: 5px; width: 100%; margin-bottom: 8px; font-size: 12px; color-scheme: dark;" required onchange="this.form.end_date.value = this.value;">
 									<input type="hidden" name="end_date" value="">
@@ -628,67 +504,60 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
 							<?php if ($current_role === 'super_admin'): ?>
 							<a href="export_emails.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%); border: 2px solid #22c55e; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📧⬇️</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Export Emails</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Download all members as CSV</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📧⬇️</span>
+									<h4>Export Emails</h4>
+									<span>Download all members as CSV</span>
 								</div>
 							</a>
 							
 							<a href="face_id_setup.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">👤📲</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Face ID Setup</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Generate Face ID enrollment links for Owners</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">👤📲</span>
+									<h4>Face ID Setup</h4>
+									<span>Generate Face ID enrollment links for Owners</span>
 								</div>
 							</a>
 							<?php endif; ?>
 
 							<?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
 							<a href="view_plan.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%); border: 2px solid #f59e0b; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">✏️🧾</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Edit Plans</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Alter membership subscription prices</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">✏️🧾</span>
+									<h4>Edit Plans</h4>
+									<span>Alter membership subscription prices</span>
 								</div>
 							</a>
 
 							<a href="new_plan.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%); border: 2px solid #a855f7; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">➕🧾</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Create Plan</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Add custom duration options</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">➕🧾</span>
+									<h4>Create Plan</h4>
+									<span>Add custom duration options</span>
 								</div>
 							</a>
 
 							<a href="revenue_month.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.05) 100%); border: 2px solid #06b6d4; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">💰📊</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Revenue Earnings</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">View dynamic business analytics</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">💰📊</span>
+									<h4>Revenue Earnings</h4>
+									<span>View dynamic business analytics</span>
 								</div>
 							</a>
 
 							<a href="churn_analytics.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📈📉</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Churn Risk</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">AI inactivity retention predictions</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📈📉</span>
+									<h4>Churn Risk</h4>
+									<span>AI inactivity retention predictions</span>
 								</div>
 							</a>
 
 							<a href="renewal_pipeline.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.05) 100%); border: 2px solid #0ea5e9; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📊📈</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Renewal Pipeline</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Track expiring memberships queue</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📊📈</span>
+									<h4>Renewal Pipeline</h4>
+									<span>Track expiring memberships queue</span>
 								</div>
 							</a>
 							<?php endif; ?>
@@ -700,84 +569,76 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					<!-- Category 5: 🏋️ PERSONAL TRAINING & EXERCISE ROUTINES -->
 					<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'trainer' || $current_role === 'reception'): ?>
 					<div style="margin-bottom: 35px;">
-						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+						<div class="section-header"><h3>
 							<span style="font-size: 22px;">🏋️</span> Personal Training & Routines
-						</h3>
+						</h3></div>
 						<div class="dashboard-grid">
 
 							<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
 							<a href="enroll_pt.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">🤝 PT</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Enroll PT Client</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Register coach assignments</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">🤝 PT</span>
+									<h4>Enroll PT Client</h4>
+									<span>Register coach assignments</span>
 								</div>
 							</a>
 							<?php endif; ?>
 
 							<a href="view_pt_clients.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📋 PT</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">PT Assignments</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Track personal training clients</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📋 PT</span>
+									<h4>PT Assignments</h4>
+									<span>Track personal training clients</span>
 								</div>
 							</a>
 
 							<a href="add_pt.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(251, 191, 36, 0.05) 100%); border: 2px solid #fbbf24; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">✏️ PT</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Record PT Session</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Log workout/nutrition notes</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">✏️ PT</span>
+									<h4>Record PT Session</h4>
+									<span>Log workout/nutrition notes</span>
 								</div>
 							</a>
 
 							<a href="view_pt.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%); border: 2px solid #a855f7; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">🔍 PT</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">PT Session Logs</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Review previous workouts data</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">🔍 PT</span>
+									<h4>PT Session Logs</h4>
+									<span>Review previous workouts data</span>
 								</div>
 							</a>
 
 							<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'trainer'): ?>
 							<a href="addroutine.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.05) 100%); border: 2px solid #06b6d4; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">🏋️➕</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Add Routine</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Add custom workout structures</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">🏋️➕</span>
+									<h4>Add Routine</h4>
+									<span>Add custom workout structures</span>
 								</div>
 							</a>
 
 							<a href="editroutine.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">🏋️✏️</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Edit Routine</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Modify existing routine templates</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">🏋️✏️</span>
+									<h4>Edit Routine</h4>
+									<span>Modify existing routine templates</span>
 								</div>
 							</a>
 							<?php endif; ?>
 
 							<a href="viewroutine.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.05) 100%); border: 2px solid #0ea5e9; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">🏋️🔍</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">View Routine</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Preview exercises & reps lists</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">🏋️🔍</span>
+									<h4>View Routine</h4>
+									<span>Preview exercises & reps lists</span>
 								</div>
 							</a>
 
 							<a href="bmi_calc.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(20, 184, 166, 0.15) 0%, rgba(20, 184, 166, 0.05) 100%); border: 2px solid #14b8a6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">⚖️📊</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">BMI Calc</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Calculate client BMI metric</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">⚖️📊</span>
+									<h4>BMI Calc</h4>
+									<span>Calculate client BMI metric</span>
 								</div>
 							</a>
 
@@ -788,100 +649,90 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					<!-- Category 6: ⚙️ SYSTEM SETTINGS & ADMIN CONTROL -->
 					<?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
 					<div style="margin-bottom: 30px;">
-						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+						<div class="section-header"><h3>
 							<span style="font-size: 22px;">⚙️</span> System Settings & Admin Panel
-						</h3>
+						</h3></div>
 						<div class="dashboard-grid">
 
 							<a href="campaign_manager.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">⚙️📅</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Auto Campaigns</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Configure reminders automations</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">⚙️📅</span>
+									<h4>Auto Campaigns</h4>
+									<span>Configure reminders automations</span>
 								</div>
 							</a>
 
 							<a href="broadcast_campaign.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📣💬</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">WA Broadcast</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Send bulk messages to users</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📣💬</span>
+									<h4>WA Broadcast</h4>
+									<span>Send bulk messages to users</span>
 								</div>
 							</a>
 
 							<a href="expenses.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(251, 191, 36, 0.05) 100%); border: 2px solid #fbbf24; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📖💵</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Expenses Ledger</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Record gym payouts & costs</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📖💵</span>
+									<h4>Expenses Ledger</h4>
+									<span>Record gym payouts & costs</span>
 								</div>
 							</a>
 
 							<a href="manage_staff.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%); border: 2px solid #a855f7; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">👥🛡️</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Manage Staff</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Audit employee security roles</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">👥🛡️</span>
+									<h4>Manage Staff</h4>
+									<span>Audit employee security roles</span>
 								</div>
 							</a>
 
 							<a href="gym_settings.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.05) 100%); border: 2px solid #06b6d4; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">⚙️🏢</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Gym Settings</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Branding, logos & exclusive hours</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">⚙️🏢</span>
+									<h4>Gym Settings</h4>
+									<span>Branding, logos & exclusive hours</span>
 								</div>
 							</a>
 
 							<a href="whatsapp_setup.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">💬⚙️</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">WhatsApp Setup</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Link Meta cloud credentials</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">💬⚙️</span>
+									<h4>WhatsApp Setup</h4>
+									<span>Link Meta cloud credentials</span>
 								</div>
 							</a>
 
 							<?php if ($current_role === 'super_admin'): ?>
 							<a href="smtp_settings.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.05) 100%); border: 2px solid #0ea5e9; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">📧⚙️</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">SMTP Email</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Manage SMTP server nodes</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">📧⚙️</span>
+									<h4>SMTP Email</h4>
+									<span>Manage SMTP server nodes</span>
 								</div>
 							</a>
 
 							<a href="discount_lock.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%); border: 2px solid #ef4444; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">🔒⚙️</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Discount Lock</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Override manual discounts rules</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">🔒⚙️</span>
+									<h4>Discount Lock</h4>
+									<span>Override manual discounts rules</span>
 								</div>
 							</a>
 							<?php endif; ?>
 
 							<a href="backup_data.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(20, 184, 166, 0.15) 0%, rgba(20, 184, 166, 0.05) 100%); border: 2px solid #14b8a6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">💾⚙️</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Backup System</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Import/Export database dumps</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">💾⚙️</span>
+									<h4>Backup System</h4>
+									<span>Import/Export database dumps</span>
 								</div>
 							</a>
 
 							<a href="more-userprofile.php" style="text-decoration: none;">
-								<div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(255, 107, 0, 0.05) 100%); border: 2px solid #ff6b00; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
-								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
-									<div style="font-size: 40px; margin-bottom: 10px;">👤⚙️</div>
-									<h4 style="color: #ffffff; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">My Profile</h4>
-									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Update my login credential keys</span>
+								<div class="cybercard card-animate">
+									<span class="card-icon">👤⚙️</span>
+									<h4>My Profile</h4>
+									<span>Update my login credential keys</span>
 								</div>
 							</a>
 
@@ -2464,5 +2315,85 @@ function triggerOutboxRetry() {
         });
 }
 </script>
+
+    <!-- ===== MOBILE BOTTOM NAVIGATION BAR ===== -->
+    <nav class="bottom-nav">
+        <a href="index.php" class="active">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="search_member.php">
+            <span class="nav-icon">👤</span>
+            <span class="nav-label">Members</span>
+        </a>
+        <a href="payments.php">
+            <span class="nav-icon">💳</span>
+            <span class="nav-label">Payments</span>
+        </a>
+        <a href="attendance.php">
+            <span class="nav-icon">📷</span>
+            <span class="nav-label">Attendance</span>
+        </a>
+        <a href="gym_settings.php">
+            <span class="nav-icon">⚙️</span>
+            <span class="nav-label">Settings</span>
+        </a>
+    </nav>
+
+    <script>
+    /* ===== COUNT-UP ANIMATION ===== */
+    function animateCountUp(el) {
+        const target = parseFloat(el.getAttribute('data-target') || el.innerText.replace(/[^0-9.]/g, ''));
+        if (isNaN(target) || target === 0) return;
+        const isDecimal = target % 1 !== 0;
+        const duration = 800;
+        const start = performance.now();
+        const startVal = 0;
+        function step(now) {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+            const current = startVal + (target - startVal) * eased;
+            el.innerText = isDecimal ? current.toFixed(1) : Math.floor(current).toLocaleString('en-IN');
+            if (progress < 1) requestAnimationFrame(step);
+            else el.innerText = isDecimal ? target.toFixed(1) : target.toLocaleString('en-IN');
+        }
+        requestAnimationFrame(step);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Collect all .num elements inside tile-stats and animate
+        const nums = document.querySelectorAll('.tile-stats .num, .count-up-num');
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting && !entry.target.dataset.animated) {
+                    entry.target.dataset.animated = '1';
+                    // Store original text as target before animating
+                    const orig = entry.target.innerText.replace(/[^0-9.]/g, '');
+                    entry.target.setAttribute('data-target', orig);
+                    animateCountUp(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+        nums.forEach(function(el) { observer.observe(el); });
+
+        /* ===== RIPPLE EFFECT on all .cybercard and buttons ===== */
+        document.querySelectorAll('.cybercard, .btn-primary, .btn-success, .btn-danger').forEach(function(el) {
+            el.addEventListener('click', function(e) {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const size = Math.max(rect.width, rect.height) * 2;
+                const ripple = document.createElement('span');
+                ripple.className = 'ripple-circle';
+                ripple.style.cssText = 'width:' + size + 'px;height:' + size + 'px;left:' + (x - size/2) + 'px;top:' + (y - size/2) + 'px;';
+                el.style.position = 'relative';
+                el.style.overflow = 'hidden';
+                el.appendChild(ripple);
+                ripple.addEventListener('animationend', function() { ripple.remove(); });
+            });
+        });
+    });
+    </script>
     </body>
 </html>
