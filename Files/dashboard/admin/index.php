@@ -291,6 +291,69 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			<div id="gate-alert-container" style="margin-top: 15px; margin-bottom: 15px;"></div>
 			<h2>SUDARSHAN FITNESS</h2>
 
+			<!-- 🚩 MARATHI WARRIOR MOTIVATIONAL QUOTE TICKER -->
+			<div id="sf-quote-banner" style="background:linear-gradient(135deg,rgba(255,107,0,0.12) 0%,rgba(30,10,0,0.85) 100%);border:1px solid rgba(255,107,0,0.4);border-left:4px solid #ff6b00;border-radius:12px;padding:14px 20px;margin-bottom:18px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden;box-shadow:0 4px 20px rgba(255,107,0,0.15);">
+				<div style="position:absolute;top:-60%;left:-10%;width:200px;height:200px;background:radial-gradient(circle,rgba(255,107,0,0.1) 0%,transparent 70%);pointer-events:none;"></div>
+				<div style="font-size:26px;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(255,107,0,0.6));">🚩</div>
+				<div style="flex:1;min-width:0;">
+					<div id="sf-quote-text" style="font-family:'Noto Sans Devanagari','Segoe UI',Arial,sans-serif;font-size:15px;font-weight:700;color:#ffffff;line-height:1.5;letter-spacing:0.3px;transition:opacity 0.5s ease;">जय शिवराय! 🚩 छत्रपती शिवाजी महाराज की जय!</div>
+					<div id="sf-quote-sub" style="font-size:10.5px;color:rgba(255,150,50,0.85);font-weight:600;margin-top:3px;letter-spacing:0.5px;text-transform:uppercase;transition:opacity 0.5s ease;">Sudarshan Fitness | Warrior Mindset</div>
+				</div>
+				<div onclick="sfNextQuote()" title="Next Quote" style="flex-shrink:0;cursor:pointer;opacity:0.6;font-size:18px;color:#ff6b00;transition:opacity 0.2s;user-select:none;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">▶</div>
+			</div>
+			<style>
+			@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@600;700;800&display=swap');
+			#sf-quote-text.sf-fade-out, #sf-quote-sub.sf-fade-out { opacity: 0 !important; }
+			</style>
+			<script>
+			var sfQuotes = [
+				{ text: "जय शिवराय! 🚩 छत्रपती शिवाजी महाराज की जय!", sub: "Chhatrapati Shivaji Maharaj Ki Jai" },
+				{ text: "जय महाराणा प्रताप! 🚩 वीरों की भूमि को प्रणाम!", sub: "Jay Maharana Pratap — Warrior King of Mewar" },
+				{ text: "स्वराज्य हे माझ्या जन्माचा हक्क आहे, आणि मी ते मिळवणारच! 🚩", sub: "Bal Gangadhar Tilak | Swarajya is my birthright" },
+				{ text: "जय भवानी! जय शिवाजी! 🚩 महाराष्ट्र धर्म जागृत राहो!", sub: "Jai Bhavani — Jai Shivaji" },
+				{ text: "एक वेळ घाम गाळणे, हजार वेळ रक्त गाळण्यापेक्षा चांगले! 💪🔥", sub: "Train Hard — Sweat Today, Shine Tomorrow" },
+				{ text: "जय श्री राम! 🙏 जो डरे नहीं, वो योद्धा है!", sub: "Jai Shri Ram — The Warrior's Spirit" },
+				{ text: "मराठा तितुका मेळवावा, महाराष्ट्र धर्म वाढवावा! 🚩", sub: "Chhatrapati Shivaji Maharaj | Unity is Strength" },
+				{ text: "कठोर परिश्रम कधीही विश्वासघात करत नाही! 💪 उठा, जिंका!", sub: "Hard Work Never Betrays — Rise & Conquer" },
+				{ text: "जय हनुमान! 🙏 शक्ती, भक्ती आणि युद्धकला यांचे प्रतीक!", sub: "Jai Hanuman — Symbol of Strength & Devotion" },
+				{ text: "हार मानणे हे योद्ध्याला शोभत नाही! 🚩 लढत रहा, जिंकत रहा!", sub: "A warrior never surrenders — Keep Fighting!" },
+				{ text: "जय शिवशक्ती! 🚩 महाराष्ट्राचा शेर अजूनही जागा आहे!", sub: "Jai Shiv Shakti — The Lion of Maharashtra" },
+				{ text: "रोज एक पाऊल पुढे टाका — एक दिवस शिखरावर असाल! 🏋️🔥", sub: "Sudarshan Fitness | One Step at a Time" },
+				{ text: "जय गोमाता! जय भारत माता! 🇮🇳🚩 वंदे मातरम्!", sub: "Vande Mataram — Jai Hind" },
+				{ text: "थकलेल्या शरीराला विश्रांती द्या, पण कधीही स्वप्न सोडू नका! 💪", sub: "Rest the Body — Never Rest the Dream" },
+				{ text: "जय महाकाल! 🔱 महाकालाच्या आशीर्वादाने आजचा दिवस जिंकूया!", sub: "Jai Mahakal — Victory belongs to the Brave" },
+				{ text: "सुदर्शन फिटनेस — जिथे घाम गाळला जातो, तिथे यश मिळते! 🏋️🚩", sub: "Sudarshan Fitness | Where Champions are Made" },
+				{ text: "छत्रपतींचा आदर्श घेऊन, आपल्या शरीराला किल्ल्यासारखे मजबूत बनवा! 🏰💪", sub: "Build your body strong as a fort — Shivaji's way" },
+				{ text: "जय परशुराम! 🔱 ज्ञान आणि शक्ती एकत्र असतील तर कोणी थांबवू शकत नाही!", sub: "Jai Parshuram — Knowledge + Strength = Unstoppable" },
+				{ text: "एक मराठा, लाख मराठा! 🚩 आपण एकत्र अजेय आहोत!", sub: "Ek Maratha, Lakh Maratha — Together Unstoppable" },
+				{ text: "शरीर हे तुमचे मंदिर आहे — त्याची पूजा घामाने करा! 🏋️🙏", sub: "Your body is a temple — worship it with sweat!" }
+			];
+			var sfIdx = 0, sfTimer;
+			function sfShowQuote(i) {
+				var t = document.getElementById('sf-quote-text');
+				var s = document.getElementById('sf-quote-sub');
+				if (!t || !s) return;
+				t.classList.add('sf-fade-out'); s.classList.add('sf-fade-out');
+				setTimeout(function() {
+					t.innerText = sfQuotes[i].text;
+					s.innerText = sfQuotes[i].sub;
+					t.classList.remove('sf-fade-out'); s.classList.remove('sf-fade-out');
+				}, 500);
+			}
+			function sfNextQuote() {
+				clearInterval(sfTimer);
+				sfIdx = (sfIdx + 1) % sfQuotes.length;
+				sfShowQuote(sfIdx);
+				sfTimer = setInterval(function(){ sfIdx=(sfIdx+1)%sfQuotes.length; sfShowQuote(sfIdx); }, 5000);
+			}
+			document.addEventListener('DOMContentLoaded', function() {
+				sfIdx = Math.floor(Math.random() * sfQuotes.length);
+				sfShowQuote(sfIdx);
+				sfTimer = setInterval(function(){ sfIdx=(sfIdx+1)%sfQuotes.length; sfShowQuote(sfIdx); }, 5000);
+			});
+			</script>
+
+
 			<?php
 			$q_pending = mysqli_query($con, "SELECT COUNT(*) as cnt FROM whatsapp_outbox WHERE status IN ('pending', 'failed') AND attempts < 3");
 			$pending_count = 0;
