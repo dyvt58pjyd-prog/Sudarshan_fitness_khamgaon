@@ -204,24 +204,8 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
                 </div>
             </div>
 
-			<?php
-			$__hour = (int)date('H');
-			$__greet = $__hour < 12 ? 'Good Morning' : ($__hour < 17 ? 'Good Afternoon' : 'Good Evening');
-			$__emoji = $__hour < 12 ? '🌅' : ($__hour < 17 ? '💪' : '🔥');
-			?>
-			<div class="hero-bar" style="margin-bottom: 24px;">
-				<div>
-					<p class="greet-text"><?php echo $__greet; ?>, <span><?php echo htmlspecialchars($username); ?></span> <?php echo $__emoji; ?></p>
-					<p class="greet-sub">Your fitness journey continues today. Let's crush it!</p>
-				</div>
-				<div class="hero-date">
-					<div style="font-size:22px; margin-bottom:4px;"><?php echo $is_expired ? '⚠️' : '✅'; ?></div>
-					<div style="color:<?php echo $is_expired ? '#FF0055' : '#CCFF00'; ?>; font-weight:800; font-size:13px;">
-						<?php echo $is_expired ? 'EXPIRED' : 'ACTIVE'; ?>
-					</div>
-					<div style="color:#94A3B8; font-size:11px; margin-top:2px;"><?php echo $days_remaining > 0 ? $days_remaining.' days left' : ''; ?></div>
-				</div>
-			</div>
+            <h2>My Dashboard</h2>
+            <hr />
 
             <?php if ($partner_user): ?>
             <div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.25) 0%, rgba(30, 41, 59, 0.9) 100%); border: 2px solid #ff6b00; border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 15px 35px rgba(255,107,0,0.25);">
@@ -280,16 +264,16 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
 							<!-- Analogue Clock Face -->
 							<div class="analogue-clock-container" style="position: relative; width: 130px; height: 130px; background: rgba(255, 255, 255, 0.02); border: 2px solid rgba(255, 255, 255, 0.08); border-radius: 50%; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center;">
 								<!-- Clock Center Pin -->
-								<div style="position: absolute; width: 8px; height: 8px; background: #CCFF00; border: 2px solid #ffffff; border-radius: 50%; z-index: 10; box-shadow: 0 0 10px rgba(204,255,0,0.9);"></div>
+								<div style="position: absolute; width: 8px; height: 8px; background: #ff6b00; border: 2px solid #ffffff; border-radius: 50%; z-index: 10; box-shadow: 0 0 8px rgba(255,107,0,0.8);"></div>
 								
 								<!-- Hour Hand -->
 								<div id="hour-hand" style="position: absolute; width: 4px; height: 32px; background: #ffffff; border-radius: 4px; bottom: 50%; left: calc(50% - 2px); transform-origin: bottom center; z-index: 5; transition: transform 0.1s cubic-bezier(0.4, 2.08, 0.55, 0.44);"></div>
 								
 								<!-- Minute Hand -->
-								<div id="min-hand" style="position: absolute; width: 3px; height: 44px; background: #CCFF00; border-radius: 3px; bottom: 50%; left: calc(50% - 1.5px); transform-origin: bottom center; z-index: 6; transition: transform 0.1s cubic-bezier(0.4, 2.08, 0.55, 0.44);"></div>
+								<div id="min-hand" style="position: absolute; width: 3px; height: 44px; background: #ff6b00; border-radius: 3px; bottom: 50%; left: calc(50% - 1.5px); transform-origin: bottom center; z-index: 6; transition: transform 0.1s cubic-bezier(0.4, 2.08, 0.55, 0.44);"></div>
 								
 								<!-- Second Hand -->
-								<div id="sec-hand" style="position: absolute; width: 1.5px; height: 48px; background: #FF0055; bottom: 50%; left: calc(50% - 0.75px); transform-origin: bottom center; z-index: 7; transition: transform 0.05s linear;"></div>
+								<div id="sec-hand" style="position: absolute; width: 1.5px; height: 48px; background: #ef4444; bottom: 50%; left: calc(50% - 0.75px); transform-origin: bottom center; z-index: 7; transition: transform 0.05s linear;"></div>
 								
 								<!-- Dial Markers -->
 								<div style="position: absolute; width: 4px; height: 4px; background: rgba(255,255,255,0.8); border-radius: 50%; top: 8px; left: calc(50% - 2px);"></div>
@@ -300,10 +284,10 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
 							
 							<!-- Greeting & Digital Time info -->
 							<div>
-								<h3 id="smart-greeting" style="margin: 0 0 5px 0; font-weight: 800; color: #ffffff; font-size: 20px; font-family: 'Montserrat', sans-serif;">System Loading...</h3>
-								<div style="font-size: 26px; font-weight: 900; color: #CCFF00; font-family: 'Orbitron', monospace; display: flex; align-items: center; gap: 8px; margin-bottom: 2px; text-shadow: 0 0 15px rgba(204,255,0,0.5);">
+								<h3 id="smart-greeting" style="margin: 0 0 5px 0; font-weight: 700; color: #ffffff; font-size: 20px;">System Loading...</h3>
+								<div style="font-size: 26px; font-weight: 800; color: #ff6b00; font-family: monospace; display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
 									<span id="digital-clock">00:00:00</span>
-									<span style="font-size: 13px; background: rgba(204,255,0,0.12); padding: 1px 8px; border-radius: 4px; border: 1px solid rgba(204,255,0,0.3); color: #CCFF00;" id="time-ampm">PM</span>
+									<span style="font-size: 13px; background: rgba(255, 107, 0, 0.15); padding: 1px 6px; border-radius: 4px; border: 1px solid rgba(255,107,0,0.3);" id="time-ampm">PM</span>
 								</div>
 								<div style="color: var(--text-muted); font-size: 13px; font-weight: 500;" id="date-string">Friday, 19 June 2026</div>
 							</div>
@@ -1262,57 +1246,6 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
                 });
             }
         });
-    </script>
-    <!-- MOBILE BOTTOM NAV -->
-    <nav class="bottom-nav">
-        <a href="index.php" class="active">
-            <span class="nav-icon">🏠</span>
-            <span class="nav-label">Home</span>
-        </a>
-        <a href="my_plan.php">
-            <span class="nav-icon">📋</span>
-            <span class="nav-label">My Plan</span>
-        </a>
-        <a href="payment.php">
-            <span class="nav-icon">💳</span>
-            <span class="nav-label">Payment</span>
-        </a>
-        <a href="attendance_logs.php">
-            <span class="nav-icon">📊</span>
-            <span class="nav-label">Attendance</span>
-        </a>
-        <a href="digital_pass.php">
-            <span class="nav-icon">🎫</span>
-            <span class="nav-label">My Pass</span>
-        </a>
-    </nav>
-
-    <script>
-    /* Count-Up for member stats */
-    function animateCountUp(el) {
-        const target = parseFloat(el.getAttribute('data-target') || el.innerText.replace(/[^0-9.]/g, ''));
-        if (isNaN(target) || target === 0) return;
-        const isDecimal = target % 1 !== 0;
-        const duration = 800;
-        const start = performance.now();
-        function step(now) {
-            const elapsed = now - start;
-            const progress = Math.min(elapsed / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            const current = (target) * eased;
-            el.innerText = isDecimal ? current.toFixed(1) : Math.floor(current).toLocaleString('en-IN');
-            if (progress < 1) requestAnimationFrame(step);
-            else el.innerText = isDecimal ? target.toFixed(1) : target.toLocaleString('en-IN');
-        }
-        requestAnimationFrame(step);
-    }
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.count-up-num, .tile-stats .num').forEach(function(el) {
-            const orig = el.innerText.replace(/[^0-9.]/g, '');
-            el.setAttribute('data-target', orig);
-            animateCountUp(el);
-        });
-    });
     </script>
 </body>
 </html>
