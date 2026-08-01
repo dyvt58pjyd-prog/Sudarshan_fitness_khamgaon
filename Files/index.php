@@ -55,14 +55,14 @@ if (substr($logo_path, 0, 6) === '../../') {
 	<link rel="stylesheet" type="text/css" href="./css/entypo.css">
 	<link rel="stylesheet" href="./css/premium.css"/>
     <style>
-    /* Solo Leveling Monarch System Gate Background */
+    /* Cyberpunk Neon Green System Gate Background */
     body.login-page {
-        background: #030712 !important;
+        background: #050A0F !important;
         position: relative;
         overflow-x: hidden;
         background-image: 
-            radial-gradient(circle at 50% 20%, rgba(112, 0, 255, 0.25) 0%, transparent 60%),
-            radial-gradient(circle at 50% 80%, rgba(0, 240, 255, 0.18) 0%, transparent 50%) !important;
+            radial-gradient(circle at 50% 20%, rgba(204, 255, 0, 0.12) 0%, transparent 55%),
+            radial-gradient(circle at 50% 80%, rgba(0, 240, 255, 0.1) 0%, transparent 50%) !important;
         min-height: 100vh;
         display: flex;
         align-items: center;
@@ -76,8 +76,8 @@ if (substr($logo_path, 0, 6) === '../../') {
         width: 750px;
         height: 750px;
         border-radius: 50%;
-        border: 2px dashed rgba(0, 240, 255, 0.4);
-        box-shadow: 0 0 50px rgba(0, 240, 255, 0.3), inset 0 0 50px rgba(112, 0, 255, 0.3);
+        border: 2px dashed rgba(204, 255, 0, 0.25);
+        box-shadow: 0 0 50px rgba(204, 255, 0, 0.12), inset 0 0 50px rgba(0, 240, 255, 0.08);
         animation: portal-ring-spin 25s linear infinite;
         pointer-events: none;
         z-index: 1;
@@ -88,8 +88,8 @@ if (substr($logo_path, 0, 6) === '../../') {
         width: 550px;
         height: 550px;
         border-radius: 50%;
-        border: 2px solid rgba(112, 0, 255, 0.4);
-        box-shadow: 0 0 40px rgba(112, 0, 255, 0.4);
+        border: 2px solid rgba(0, 240, 255, 0.2);
+        box-shadow: 0 0 40px rgba(0, 240, 255, 0.15);
         animation: portal-ring-spin-reverse 18s linear infinite;
         pointer-events: none;
         z-index: 1;
@@ -121,14 +121,14 @@ if (substr($logo_path, 0, 6) === '../../') {
     .login-container {
         max-width: 650px !important;
         width: 95% !important;
-        background: rgba(15, 7, 18, 0.95) !important;
-        border: 2px solid #ff003c !important;
+        background: rgba(13, 17, 23, 0.97) !important;
+        border: 1px solid rgba(204, 255, 0, 0.35) !important;
         border-radius: 28px !important;
         padding: 35px 30px !important;
-        box-shadow: 0 0 50px rgba(255, 0, 60, 0.35) !important;
+        box-shadow: 0 0 60px rgba(204, 255, 0, 0.12), 0 0 0 1px rgba(255,255,255,0.02) !important;
         position: relative;
         z-index: 10;
-        animation: system-hologram-pulse 6s ease-in-out infinite alternate !important;
+        animation: neon-green-pulse 4s ease-in-out infinite alternate !important;
     }
 
     .login-categories {
@@ -155,8 +155,8 @@ if (substr($logo_path, 0, 6) === '../../') {
     }
 
     .category-tab {
-        background: rgba(255, 0, 60, 0.04) !important;
-        border: 1px solid rgba(255, 0, 60, 0.25) !important;
+        background: rgba(204, 255, 0, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
         border-radius: 14px !important;
         padding: 14px 6px !important;
         text-align: center !important;
@@ -170,9 +170,9 @@ if (substr($logo_path, 0, 6) === '../../') {
     }
 
     .category-tab[data-role="member"]:hover, .category-tab[data-role="member"].active {
-        border-color: #ff003c !important;
-        background: rgba(255, 0, 60, 0.22) !important;
-        box-shadow: 0 0 25px rgba(255, 0, 60, 0.6) !important;
+        border-color: #CCFF00 !important;
+        background: rgba(204, 255, 0, 0.12) !important;
+        box-shadow: 0 0 25px rgba(204, 255, 0, 0.4) !important;
         transform: scale(1.04);
     }
     .category-tab[data-role="reception"]:hover, .category-tab[data-role="reception"].active {
@@ -221,15 +221,15 @@ if (substr($logo_path, 0, 6) === '../../') {
     .category-tab.active span {
         color: #ffffff !important;
     }
-    .category-tab[data-role="member"].active i { color: #ff003c !important; }
+    .category-tab[data-role="member"].active i { color: #CCFF00 !important; }
     .category-tab[data-role="reception"].active i { color: #ffb703 !important; }
     .category-tab[data-role="trainer"].active i { color: #7000ff !important; }
     .category-tab[data-role="owner"].active i { color: #a855f7 !important; }
     .category-tab[data-role="super_admin"].active i { color: #10b981 !important; }
 
     .form-control {
-        background: rgba(3, 7, 18, 0.85) !important;
-        border: 1px solid rgba(255, 0, 60, 0.35) !important;
+        background: rgba(13, 17, 23, 0.9) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
         color: #ffffff !important;
         border-radius: 14px !important;
         padding: 14px 18px !important;
@@ -237,27 +237,27 @@ if (substr($logo_path, 0, 6) === '../../') {
     }
 
     .form-control:focus {
-        border-color: #ff003c !important;
-        box-shadow: 0 0 25px rgba(255, 0, 60, 0.5) !important;
+        border-color: #CCFF00 !important;
+        box-shadow: 0 0 0 3px rgba(204, 255, 0, 0.2) !important;
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, #ff003c, #d90429) !important;
-        color: #ffffff !important;
+        background: linear-gradient(135deg, #CCFF00, #AADD00) !important;
+        color: #000000 !important;
         border: none !important;
         padding: 15px !important;
         border-radius: 14px !important;
-        font-family: 'Orbitron', sans-serif !important;
+        font-family: 'Montserrat', sans-serif !important;
         font-weight: 900 !important;
         font-size: 14px !important;
-        letter-spacing: 1px !important;
-        box-shadow: 0 0 35px rgba(255, 0, 60, 0.7) !important;
+        letter-spacing: 1.5px !important;
+        box-shadow: 0 0 30px rgba(204, 255, 0, 0.4) !important;
         transition: all 0.2s ease !important;
     }
 
     .btn-primary:hover {
         transform: translateY(-2px) !important;
-        box-shadow: 0 0 50px rgba(255, 0, 60, 0.95) !important;
+        box-shadow: 0 0 50px rgba(204, 255, 0, 0.6) !important;
     }
     </style>
 </head>
@@ -274,9 +274,9 @@ if (substr($logo_path, 0, 6) === '../../') {
         <div class="login-container">
             <div class="login-header login-caret">
                 <div class="login-content" style="text-align: center;">
-                    <div style="font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; color: #ff003c; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; text-shadow: 0 0 12px rgba(255,0,60,0.5);">[ SYSTEM GATE PORTAL ]</div>
-                    <a href="#" class="logo">
-                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="filter: drop-shadow(0 0 25px rgba(255,0,60,0.7)); max-height: 95px; width: auto;" />
+                    <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 900; color: #CCFF00; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; text-shadow: 0 0 12px rgba(204,255,0,0.5);">[ SYSTEM GATE PORTAL ]</div>
+					<a href="#" class="logo">
+						<img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="filter: drop-shadow(0 0 20px rgba(204,255,0,0.4)); max-height: 95px; width: auto;" />
                     </a>
                     <p class="description" style="color: #64748b; font-size: 12px; font-weight: 600; margin-top: 8px;">
                         Select your category to access your <?php echo htmlspecialchars($gym['gym_name']); ?> account.
