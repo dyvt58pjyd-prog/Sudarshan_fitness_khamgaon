@@ -328,3 +328,210 @@ strong, b, h1, h2, h3, h4, h5, h6 { color: var(--text-primary); }
 a { transition: color var(--transition-fast); }
 a:hover { color: var(--accent-green) !important; }
 .portal-card, .status-window, .rep-counter-box { background: var(--bg-card) !important; border: 1px solid rgba(204,255,0,0.15) !important; border-radius: var(--radius-lg) !important; animation: none !important; }
+
+/* ============================================================
+   CRITICAL OVERRIDES — Fix background + layout issues
+   ============================================================ */
+
+/* Force correct background everywhere */
+body,
+.page-body,
+.page-container,
+.page-container.sidebar-collapsed {
+  background-color: var(--bg-primary) !important;
+  background-image:
+    radial-gradient(ellipse at 15% 15%, rgba(204,255,0,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 85%, rgba(0,240,255,0.06) 0%, transparent 55%) !important;
+}
+
+/* Override page-container's sidebar background */
+.page-container .sidebar-menu {
+  background: var(--bg-card) !important;
+}
+
+/* Fix main-content bg */
+.page-container .main-content {
+  background: transparent !important;
+  min-height: 100vh;
+}
+
+/* TOP BAR — links-list row */
+.links-list {
+  background: transparent !important;
+}
+.links-list li,
+.links-list li a {
+  color: var(--text-secondary) !important;
+  font-family: var(--font-body) !important;
+  font-size: 13px !important;
+}
+.links-list li a:hover { color: var(--accent-green) !important; }
+
+/* TOP NAV STRIPE — the row with welcome + logout */
+.page-container > .main-content > .row:first-child {
+  background: rgba(13, 17, 23, 0.7) !important;
+  backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid rgba(204,255,0,0.08) !important;
+  padding: 8px 0 !important;
+  margin: 0 -30px 24px -30px !important;
+  padding-left: 30px !important;
+  padding-right: 30px !important;
+  border-radius: 0 !important;
+}
+
+/* Neon green year selector arrows */
+.working-year-selector a {
+  background: rgba(204,255,0,0.1) !important;
+  color: var(--accent-green) !important;
+  border: 1px solid rgba(204,255,0,0.25) !important;
+}
+.working-year-selector span { color: var(--accent-green) !important; text-shadow: 0 0 8px rgba(204,255,0,0.5) !important; }
+
+/* Orbitron → Montserrat for year label */
+#sf-theme-select {
+  background: rgba(204,255,0,0.08) !important;
+  color: var(--accent-green) !important;
+  border: 1px solid rgba(204,255,0,0.25) !important;
+  font-family: var(--font-display) !important;
+}
+
+/* ============================================================
+   HERO BAR — bigger, more prominent
+   ============================================================ */
+.hero-bar {
+  background: linear-gradient(135deg, rgba(13,17,23,0.95) 0%, rgba(13,23,10,0.95) 100%) !important;
+  border: 1px solid rgba(204,255,0,0.25) !important;
+  border-radius: 20px !important;
+  padding: 22px 28px !important;
+  margin-bottom: 28px !important;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bar::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle at 30% 50%, rgba(204,255,0,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-bar .greet-text {
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  margin: 0 0 4px 0 !important;
+  line-height: 1.2 !important;
+}
+.hero-bar .greet-text span { color: var(--accent-green) !important; }
+.hero-bar .greet-sub { font-size: 13px !important; color: var(--text-secondary) !important; }
+
+/* ============================================================
+   DASHBOARD GRID CARDS — bigger, cleaner
+   ============================================================ */
+.dashboard-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+  gap: 14px !important;
+}
+.dashboard-grid > a { text-decoration: none !important; }
+
+.cybercard {
+  background: rgba(13, 17, 23, 0.92) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 16px !important;
+  padding: 20px 14px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+  min-height: 120px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
+.cybercard::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important; left: -100% !important;
+  width: 100% !important; height: 1px !important;
+  background: linear-gradient(90deg, transparent, rgba(204,255,0,0.8), transparent) !important;
+  transition: left 0.5s ease !important;
+}
+.cybercard:hover::before { left: 100% !important; }
+.cybercard:hover {
+  transform: translateY(-5px) scale(1.02) !important;
+  border-color: rgba(204,255,0,0.45) !important;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.5), 0 0 25px rgba(204,255,0,0.08) !important;
+}
+.cybercard:active { transform: scale(0.97) !important; }
+
+.cybercard .card-icon {
+  font-size: 32px !important;
+  margin-bottom: 4px !important;
+  display: block !important;
+  line-height: 1 !important;
+  filter: drop-shadow(0 0 6px rgba(204,255,0,0.2));
+}
+.cybercard h4 {
+  font-family: var(--font-display) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  margin: 0 0 4px 0 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  line-height: 1.3 !important;
+}
+.cybercard span {
+  color: var(--text-secondary) !important;
+  font-size: 10.5px !important;
+  line-height: 1.4 !important;
+  display: block !important;
+}
+
+/* ============================================================
+   SECTION HEADERS — neon left-border style
+   ============================================================ */
+.section-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-bottom: 16px !important;
+  padding: 12px 16px !important;
+  background: rgba(204,255,0,0.04) !important;
+  border-left: 3px solid var(--accent-green) !important;
+  border-radius: 0 10px 10px 0 !important;
+  border-bottom: none !important;
+}
+.section-header::after { display: none !important; }
+.section-header h3 {
+  color: var(--text-primary) !important;
+  font-family: var(--font-display) !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  margin: 0 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+  }
+  .cybercard {
+    padding: 14px 8px !important;
+    min-height: 90px !important;
+    border-radius: 12px !important;
+    gap: 5px !important;
+  }
+  .cybercard .card-icon { font-size: 24px !important; }
+  .cybercard h4 { font-size: 10px !important; }
+  .cybercard span { display: none !important; }
+  .hero-bar { flex-direction: column !important; align-items: flex-start !important; }
+  .hero-bar .greet-text { font-size: 18px !important; }
+}

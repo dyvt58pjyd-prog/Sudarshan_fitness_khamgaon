@@ -130,26 +130,34 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
     <link rel="stylesheet" href="../../css/premium.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Dashboard page overrides — uses premium.css design tokens */
+        /* Force override any theme/style.css interference */
+        body.page-body,
+        body.page-fade,
+        .page-container,
+        .page-container.sidebar-collapsed {
+            background-color: #050A0F !important;
+            background-image:
+                radial-gradient(ellipse at 15% 15%, rgba(204,255,0,0.07) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 85%, rgba(0,240,255,0.06) 0%, transparent 55%) !important;
+        }
+
+        /* Dashboard grid responsive */
         .dashboard-grid {
             display: grid !important;
-            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)) !important;
-            gap: 16px !important;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+            gap: 14px !important;
         }
-        .dashboard-grid > a, .dashboard-grid > div {
-            text-decoration: none !important;
-        }
+        .dashboard-grid > a { text-decoration: none !important; }
+
         @media (max-width: 767px) {
-            .dashboard-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 10px !important;
-            }
+            .dashboard-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 8px !important; }
             .cybercard span { display: none !important; }
-            .cybercard { padding: 16px 10px !important; }
-            .cybercard .card-icon { font-size: 28px !important; margin-bottom: 8px !important; }
-            .cybercard h4 { font-size: 11px !important; }
+            .cybercard { padding: 12px 6px !important; min-height: 80px !important; }
+            .cybercard .card-icon { font-size: 22px !important; }
+            .cybercard h4 { font-size: 9px !important; }
         }
     </style>
+
 
 </head>
     <body class="page-body page-fade" onload="collapseSidebar()">
