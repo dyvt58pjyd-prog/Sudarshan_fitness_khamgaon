@@ -24,9 +24,16 @@
 ">
     <!-- Left: Developer Branding -->
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-        <div style="display:flex;align-items:center;gap:6px;white-space:nowrap;">
-            <span style="font-size:14px;">⚡</span>
-            <span style="font-size:12px;font-weight:400;color:rgba(255,255,255,0.55);font-family:'Segoe UI',Arial,sans-serif;">Designed &amp; Developed by</span>
+        <div style="display:flex;align-items:center;gap:8px;white-space:nowrap;">
+            <!-- Government of India Emblem (Lion Capital of Ashoka) -->
+            <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/40px-Emblem_of_India.svg.png"
+                alt="Govt of India"
+                title="Government of India"
+                style="height:28px;width:auto;object-fit:contain;filter:brightness(1.1) drop-shadow(0 0 4px rgba(255,200,50,0.5));flex-shrink:0;"
+                onerror="this.style.display='none'"
+            >
+            <span style="font-size:12px;font-weight:400;color:rgba(255,255,255,0.5);font-family:'Segoe UI',Arial,sans-serif;">Designed &amp; Developed by</span>
             <span style="font-size:13px;font-weight:800;color:#ff6b00;font-family:'Segoe UI',Arial,sans-serif;text-shadow:0 0 10px rgba(255,107,0,0.5);">Anurag Bawaskar</span>
         </div>
         <div style="background:rgba(255,107,0,0.12);border:1px solid rgba(255,107,0,0.3);color:rgba(255,160,60,0.9);font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:0.8px;white-space:nowrap;font-family:'Segoe UI',Arial,sans-serif;">
