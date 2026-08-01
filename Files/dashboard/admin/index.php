@@ -2527,5 +2527,6 @@ function triggerOutboxRetry() {
         });
 }
 </script>
+    <?php include '../../include/dev_credit.php'; ?>
     </body>
 </html>

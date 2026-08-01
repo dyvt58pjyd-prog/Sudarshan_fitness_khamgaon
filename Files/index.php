@@ -654,5 +654,6 @@ if (substr($logo_path, 0, 6) === '../../') {
             </div>
         </div>
     </div>
+    <?php include './include/dev_credit.php'; ?>
 </body>
 </html>

@@ -1288,5 +1288,6 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
             }
         });
     </script>
+<?php include '../../include/dev_credit.php'; ?>
 </body>
 </html>
