@@ -379,6 +379,110 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			</div>
 			<?php endif; ?>
 
+			<?php
+			// ── FINANCIAL REVENUE & INCOME CALCULATIONS ────────────────────────────────
+			$total_mem_income = 0; $total_pt_income = 0; $overall_income = 0;
+			$year_mem_income  = 0; $year_pt_income  = 0; $year_income    = 0;
+			$month_mem_income = 0; $month_pt_income = 0; $month_income   = 0;
+			$overall_expenses = 0; $net_profit       = 0;
+
+			$curr_yr = date('Y');
+			$curr_ym = date('Y-m');
+
+			$q_inc_mem = @mysqli_query($con, "SELECT SUM(COALESCE(paid_amount, 0)) AS total FROM enrolls_to");
+			if ($q_inc_mem && $r_inc_mem = @mysqli_fetch_assoc($q_inc_mem)) {
+			    $total_mem_income = intval($r_inc_mem['total'] ?? 0);
+			}
+			$q_inc_pt = @mysqli_query($con, "SELECT SUM(amount) AS total FROM pt_enrollments");
+			if ($q_inc_pt && $r_inc_pt = @mysqli_fetch_assoc($q_inc_pt)) {
+			    $total_pt_income = intval($r_inc_pt['total'] ?? 0);
+			}
+			$overall_income = $total_mem_income + $total_pt_income;
+
+			$q_y_mem = @mysqli_query($con, "SELECT SUM(COALESCE(paid_amount, 0)) AS total FROM enrolls_to WHERE paid_date LIKE '$curr_yr-%'");
+			if ($q_y_mem && $r_y_mem = @mysqli_fetch_assoc($q_y_mem)) {
+			    $year_mem_income = intval($r_y_mem['total'] ?? 0);
+			}
+			$q_y_pt = @mysqli_query($con, "SELECT SUM(amount) AS total FROM pt_enrollments WHERE enroll_date LIKE '$curr_yr-%'");
+			if ($q_y_pt && $r_y_pt = @mysqli_fetch_assoc($q_y_pt)) {
+			    $year_pt_income = intval($r_y_pt['total'] ?? 0);
+			}
+			$year_income = $year_mem_income + $year_pt_income;
+
+			$q_m_mem = @mysqli_query($con, "SELECT SUM(COALESCE(paid_amount, 0)) AS total FROM enrolls_to WHERE paid_date LIKE '$curr_ym-%'");
+			if ($q_m_mem && $r_m_mem = @mysqli_fetch_assoc($q_m_mem)) {
+			    $month_mem_income = intval($r_m_mem['total'] ?? 0);
+			}
+			$q_m_pt = @mysqli_query($con, "SELECT SUM(amount) AS total FROM pt_enrollments WHERE enroll_date LIKE '$curr_ym-%'");
+			if ($q_m_pt && $r_m_pt = @mysqli_fetch_assoc($q_m_pt)) {
+			    $month_pt_income = intval($r_m_pt['total'] ?? 0);
+			}
+			$month_income = $month_mem_income + $month_pt_income;
+
+			$q_exp_all = @mysqli_query($con, "SELECT SUM(amount) as total FROM expenses");
+			if ($q_exp_all && $r_exp_all = @mysqli_fetch_assoc($q_exp_all)) {
+			    $overall_expenses = intval($r_exp_all['total'] ?? 0);
+			}
+			$net_profit = $overall_income - $overall_expenses;
+			?>
+
+			<?php if (in_array($current_role, ['super_admin', 'owner', 'reception'])): ?>
+			<!-- 💰 FINANCIAL REVENUE & INCOME DASHBOARD WIDGET -->
+			<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(13, 17, 23, 0.95) 100%); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 20px; padding: 22px 24px; margin-top: 15px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
+				<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom: 18px; border-bottom: 1px solid rgba(16, 185, 129, 0.2); padding-bottom: 12px;">
+					<div style="display:flex; align-items:center; gap:10px;">
+						<span style="font-size: 26px;">💰</span>
+						<div>
+							<h3 style="color: #ffffff; font-weight: 800; font-size: 16px; margin: 0; text-transform: uppercase; letter-spacing: 1px;">Financial Income &amp; Revenue Overview</h3>
+							<span style="color: #94a3b8; font-size: 12px;">Real-time collection analytics across membership &amp; PT</span>
+						</div>
+					</div>
+					<div style="display:flex; gap:8px;">
+						<a href="revenue_month.php" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #6ee7b7; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none;">Monthly Income →</a>
+						<a href="expenses.php" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none;">Expenses Ledger →</a>
+					</div>
+				</div>
+
+				<div class="row" style="margin:0;">
+					<!-- Monthly Income Card -->
+					<div class="col-md-3 col-sm-6" style="padding: 6px;">
+						<div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 14px; padding: 16px; text-align: center;">
+							<div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">This Month Income</div>
+							<div style="color: #10b981; font-size: 26px; font-weight: 900; margin-top: 4px;">₹<?php echo number_format($month_income); ?></div>
+							<div style="color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 4px;"><?php echo date('F Y'); ?> collections</div>
+						</div>
+					</div>
+
+					<!-- Yearly Income Card -->
+					<div class="col-md-3 col-sm-6" style="padding: 6px;">
+						<div style="background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 14px; padding: 16px; text-align: center;">
+							<div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">Year <?php echo date('Y'); ?> Income</div>
+							<div style="color: #60a5fa; font-size: 26px; font-weight: 900; margin-top: 4px;">₹<?php echo number_format($year_income); ?></div>
+							<div style="color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 4px;">Annual revenue so far</div>
+						</div>
+					</div>
+
+					<!-- Overall Lifetime Income Card -->
+					<div class="col-md-3 col-sm-6" style="padding: 6px;">
+						<div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 14px; padding: 16px; text-align: center;">
+							<div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">🌐 Overall Lifetime Income</div>
+							<div style="color: #f59e0b; font-size: 26px; font-weight: 900; margin-top: 4px;">₹<?php echo number_format($overall_income); ?></div>
+							<div style="color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 4px;">All-time gross collection</div>
+						</div>
+					</div>
+
+					<!-- Net Lifetime Profit Card -->
+					<div class="col-md-3 col-sm-6" style="padding: 6px;">
+						<div style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 14px; padding: 16px; text-align: center;">
+							<div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">💎 Net Lifetime Profit</div>
+							<div style="color: <?php echo $net_profit >= 0 ? '#c084fc' : '#ef4444'; ?>; font-size: 26px; font-weight: 900; margin-top: 4px;">₹<?php echo number_format($net_profit); ?></div>
+							<div style="color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 4px;">Income minus expenses</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php endif; ?>
+
 			<hr>
             <style>
             .dashboard-grid {
