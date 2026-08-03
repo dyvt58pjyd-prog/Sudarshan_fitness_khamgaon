@@ -142,8 +142,8 @@ for ($d = 1; $d <= 7; $d++) {
 }
 
 // Count by range
-$count_3 = count(array_filter($expiring, fn($r) => $r['days_left'] <= 3));
-$count_5 = count(array_filter($expiring, fn($r) => $r['days_left'] <= 5));
+$count_3 = count(array_filter($expiring, function($r) { return $r['days_left'] <= 3; }));
+$count_5 = count(array_filter($expiring, function($r) { return $r['days_left'] <= 5; }));
 $count_7 = count($expiring);
 ?>
 <!DOCTYPE html>
