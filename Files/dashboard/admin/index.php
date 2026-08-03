@@ -788,6 +788,18 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								</div>
 							</a>
 
+							<?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
+							<a href="transfer_pt.php" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.18) 0%, rgba(255, 107, 0, 0.05) 100%); border: 2px solid #ff6b00; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(255,107,0,0.2);" 
+								     onmouseover="this.style.transform='scale(1.03)';this.style.boxShadow='0 0 30px rgba(255,107,0,0.5)';" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 10px 20px rgba(255,107,0,0.2)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">🔄</div>
+									<h4 style="color: #ff6b00; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Transfer PT</h4>
+									<span style="color: rgba(255,255,255,0.6); font-size: 11.5px;">Move client to new trainer</span>
+								</div>
+							</a>
+							<?php endif; ?>
+
+
 							<a href="add_pt.php" style="text-decoration: none;">
 								<div style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(251, 191, 36, 0.05) 100%); border: 2px solid #fbbf24; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">

@@ -237,6 +237,9 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
                     <li><a href="enroll_pt.php"><span>Enroll PT Client</span></a></li>
                 <?php endif; ?>
                 <li><a href="view_pt_clients.php"><span>PT Client Assignments</span></a></li>
+                <?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
+                <li><a href="transfer_pt.php" style="color:#ff6b00;"><span>🔄 Transfer PT</span></a></li>
+                <?php endif; ?>
                 <li><a href="add_pt.php"><span>Record PT Workout/Diet</span></a></li>
                 <li><a href="view_pt.php"><span>View PT Session Logs</span></a></li>
             </ul>
