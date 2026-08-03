@@ -389,7 +389,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			$curr_yr = date('Y');
 			$curr_ym = date('Y-m');
 
-			$q_inc_mem = @mysqli_query($con, "SELECT SUM(COALESCE(paid_amount, 0)) AS total FROM enrolls_to");
+			$q_inc_mem = @mysqli_query($con, "SELECT SUM(COALESCE(IF(e.paid_amount > 0 AND (e.discount_amount = 0 OR e.paid_amount != p.amount), e.paid_amount, GREATEST(0, p.amount - COALESCE(e.discount_amount, 0))), e.paid_amount, 0)) AS total FROM enrolls_to e LEFT JOIN plan p ON e.pid = p.pid");
 			if ($q_inc_mem && $r_inc_mem = @mysqli_fetch_assoc($q_inc_mem)) {
 			    $total_mem_income = intval($r_inc_mem['total'] ?? 0);
 			}
@@ -399,7 +399,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			}
 			$overall_income = $total_mem_income + $total_pt_income;
 
-			$q_y_mem = @mysqli_query($con, "SELECT SUM(COALESCE(paid_amount, 0)) AS total FROM enrolls_to WHERE paid_date LIKE '$curr_yr-%'");
+			$q_y_mem = @mysqli_query($con, "SELECT SUM(COALESCE(IF(e.paid_amount > 0 AND (e.discount_amount = 0 OR e.paid_amount != p.amount), e.paid_amount, GREATEST(0, p.amount - COALESCE(e.discount_amount, 0))), e.paid_amount, 0)) AS total FROM enrolls_to e LEFT JOIN plan p ON e.pid = p.pid WHERE e.paid_date LIKE '$curr_yr-%'");
 			if ($q_y_mem && $r_y_mem = @mysqli_fetch_assoc($q_y_mem)) {
 			    $year_mem_income = intval($r_y_mem['total'] ?? 0);
 			}
@@ -409,7 +409,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			}
 			$year_income = $year_mem_income + $year_pt_income;
 
-			$q_m_mem = @mysqli_query($con, "SELECT SUM(COALESCE(paid_amount, 0)) AS total FROM enrolls_to WHERE paid_date LIKE '$curr_ym-%'");
+			$q_m_mem = @mysqli_query($con, "SELECT SUM(COALESCE(IF(e.paid_amount > 0 AND (e.discount_amount = 0 OR e.paid_amount != p.amount), e.paid_amount, GREATEST(0, p.amount - COALESCE(e.discount_amount, 0))), e.paid_amount, 0)) AS total FROM enrolls_to e LEFT JOIN plan p ON e.pid = p.pid WHERE e.paid_date LIKE '$curr_ym-%'");
 			if ($q_m_mem && $r_m_mem = @mysqli_fetch_assoc($q_m_mem)) {
 			    $month_mem_income = intval($r_m_mem['total'] ?? 0);
 			}
