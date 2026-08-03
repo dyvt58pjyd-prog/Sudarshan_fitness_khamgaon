@@ -13,11 +13,18 @@ $last_check = file_exists($lock_file) ? trim(@file_get_contents($lock_file)) : '
 
 if ($last_check !== $today_str) {
     @file_put_contents($lock_file, $today_str);
-    ob_start();
-    include __DIR__ . '/check_expiring_members.php';
-    include __DIR__ . '/../../api/inactivity_check.php';
-    include __DIR__ . '/../../api/daily_celebration_check.php';
-    ob_end_clean();
+    try {
+        @set_time_limit(120);
+        ob_start();
+        @include __DIR__ . '/check_expiring_members.php';
+        @include __DIR__ . '/../../api/inactivity_check.php';
+        @include __DIR__ . '/../../api/daily_celebration_check.php';
+        if (ob_get_length()) ob_end_clean();
+    } catch (\Exception $ex) {
+        if (ob_get_length()) ob_end_clean();
+    } catch (\Error $err) {
+        if (ob_get_length()) ob_end_clean();
+    }
 }
 
 if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
