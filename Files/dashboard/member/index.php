@@ -72,6 +72,28 @@ $expire = isset($user_info['expire']) ? $user_info['expire'] : 'N/A';
 $member_xp = isset($user_info['xp_points']) ? intval($user_info['xp_points']) : 0;
 $member_rank = !empty($user_info['gym_rank']) ? $user_info['gym_rank'] : 'Beginner';
 
+// ── Expiry Warning Calculation ───────────────────────────────────────────────
+$show_expiry_warning = false;
+$expiry_days_left    = null;
+$expiry_warning_type = ''; // 'expired', 'critical' (1-2d), 'warning' (3-5d)
+if ($expire !== 'N/A') {
+    $exp_dt    = new DateTime($expire);
+    $now_dt    = new DateTime(date('Y-m-d'));
+    $diff_days = (int) $now_dt->diff($exp_dt)->days;
+    $is_past   = ($exp_dt < $now_dt);
+    if ($is_past) {
+        $show_expiry_warning = true;
+        $expiry_days_left    = -$diff_days;
+        $expiry_warning_type = 'expired';
+    } elseif ($diff_days <= 5) {
+        $show_expiry_warning = true;
+        $expiry_days_left    = $diff_days;
+        $expiry_warning_type = $diff_days <= 2 ? 'critical' : 'warning';
+    }
+}
+$expire_fmt = ($expire !== 'N/A') ? date('d M Y', strtotime($expire)) : 'N/A';
+
+
 // Fetch Muscle Logs
 $uid_esc = mysqli_real_escape_string($con, $userid);
 $muscle_logs = [];
@@ -159,6 +181,115 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
     </style>
 </head>
 <body class="page-body page-fade" onload="collapseSidebar()">
+
+<?php if ($show_expiry_warning): ?>
+<?php
+    // Set colors/labels based on type
+    if ($expiry_warning_type === 'expired') {
+        $w_color = '#dc2626'; $w_bg = 'rgba(220,38,38,0.15)'; $w_border = 'rgba(220,38,38,0.5)';
+        $w_icon  = '🚫'; $w_title = 'MEMBERSHIP EXPIRED';
+        $w_msg   = "Your membership <strong>expired {$expiry_days_left} day" . ($expiry_days_left > 1 ? 's' : '') . " ago</strong> on <strong>{$expire_fmt}</strong>. Please renew at the reception to continue using the gym.";
+        $w_label = 'EXPIRED';
+    } elseif ($expiry_warning_type === 'critical') {
+        $w_color = '#f59e0b'; $w_bg = 'rgba(245,158,11,0.15)'; $w_border = 'rgba(245,158,11,0.5)';
+        $w_icon  = '⚠️'; $w_title = 'MEMBERSHIP EXPIRING VERY SOON';
+        $w_msg   = "Your membership expires <strong>" . ($expiry_days_left === 0 ? 'TODAY' : ($expiry_days_left === 1 ? 'TOMORROW' : "in {$expiry_days_left} days")) . "</strong> on <strong>{$expire_fmt}</strong>. Please visit the reception immediately to renew.";
+        $w_label = $expiry_days_left === 0 ? 'EXPIRES TODAY' : ($expiry_days_left === 1 ? 'EXPIRES TOMORROW' : "EXPIRES IN {$expiry_days_left} DAYS");
+    } else {
+        $w_color = '#3b82f6'; $w_bg = 'rgba(59,130,246,0.12)'; $w_border = 'rgba(59,130,246,0.4)';
+        $w_icon  = '📅'; $w_title = 'MEMBERSHIP EXPIRY NOTICE';
+        $w_msg   = "Your membership is expiring in <strong>{$expiry_days_left} days</strong> on <strong>{$expire_fmt}</strong>. We recommend renewing soon to avoid any break in your fitness routine.";
+        $w_label = "EXPIRES IN {$expiry_days_left} DAYS";
+    }
+?>
+<!-- EXPIRY WARNING MODAL -->
+<div id="expiry-warning-overlay" style="
+    position: fixed; inset: 0; z-index: 99999;
+    background: rgba(0,0,0,0.92);
+    backdrop-filter: blur(10px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+">
+    <div style="
+        background: #0d1117;
+        border: 2px solid <?php echo $w_color; ?>;
+        border-radius: 24px;
+        max-width: 500px; width: 100%;
+        box-shadow: 0 0 60px <?php echo $w_bg; ?>, 0 20px 60px rgba(0,0,0,0.8);
+        overflow: hidden;
+        animation: warn-pop 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+    ">
+        <!-- Top Banner -->
+        <div style="background:<?php echo $w_bg; ?>;border-bottom:1px solid <?php echo $w_border; ?>;padding:24px;text-align:center;">
+            <div style="font-size:48px;margin-bottom:8px;"><?php echo $w_icon; ?></div>
+            <div style="color:<?php echo $w_color; ?>;font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;"><?php echo $w_label; ?></div>
+            <h2 style="color:#fff;font-size:18px;font-weight:900;margin:0;"><?php echo $w_title; ?></h2>
+        </div>
+
+        <!-- Body -->
+        <div style="padding:24px;">
+            <div style="background:<?php echo $w_bg; ?>;border:1px solid <?php echo $w_border; ?>;border-radius:12px;padding:16px 20px;margin-bottom:20px;">
+                <p style="color:#e2e8f0;font-size:14px;line-height:1.7;margin:0;"><?php echo $w_msg; ?></p>
+            </div>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:rgba(255,255,255,0.04);border-radius:10px;padding:12px 16px;margin-bottom:20px;">
+                <div>
+                    <div style="color:#64748b;font-size:10px;text-transform:uppercase;letter-spacing:1px;">Your Plan</div>
+                    <div style="color:#fff;font-size:14px;font-weight:700;"><?php echo htmlspecialchars($planName); ?></div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="color:#64748b;font-size:10px;text-transform:uppercase;letter-spacing:1px;">Expires On</div>
+                    <div style="color:<?php echo $w_color; ?>;font-size:14px;font-weight:800;"><?php echo $expire_fmt; ?></div>
+                </div>
+            </div>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <?php if ($expiry_warning_type !== 'expired'): ?>
+                <button onclick="dismissWarning()" style="
+                    flex:1; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
+                    color:#94a3b8; padding:13px 20px; border-radius:12px; font-size:13px;
+                    font-weight:700; cursor:pointer;
+                ">I'll Renew Later — Continue →</button>
+                <?php endif; ?>
+                <?php if ($expiry_warning_type === 'expired'): ?>
+                <button onclick="dismissWarning()" style="
+                    flex:1; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
+                    color:#94a3b8; padding:13px 20px; border-radius:12px; font-size:13px;
+                    font-weight:700; cursor:pointer;
+                ">View My Dashboard →</button>
+                <?php endif; ?>
+            </div>
+            <p style="color:#374151;font-size:11px;text-align:center;margin:14px 0 0 0;">
+                Please contact the reception desk or call your gym to renew your membership.
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes warn-pop {
+    from { opacity:0; transform:scale(0.85) translateY(20px); }
+    to   { opacity:1; transform:scale(1) translateY(0); }
+}
+</style>
+<script>
+// Show only once per session (not on every page reload)
+(function() {
+    var key = 'expiry_warn_seen_<?php echo $userid; ?>';
+    if (sessionStorage.getItem(key)) {
+        document.getElementById('expiry-warning-overlay').style.display = 'none';
+    }
+})();
+function dismissWarning() {
+    var key = 'expiry_warn_seen_<?php echo $userid; ?>';
+    sessionStorage.setItem(key, '1');
+    var el = document.getElementById('expiry-warning-overlay');
+    el.style.transition = 'opacity 0.3s ease';
+    el.style.opacity = '0';
+    setTimeout(function() { el.style.display = 'none'; }, 300);
+}
+</script>
+<?php endif; ?>
 
     <!-- Particle HUD Background -->
     <div id="particles-js" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;"></div>
