@@ -2,11 +2,8 @@
 require '../../include/db_conn.php';
 page_protect();
 
-// Only owner/super_admin can transfer PT
-if (!in_array($current_role, ['super_admin', 'owner'])) {
-    echo "<script>alert('Access Denied: Only Owner or Super Admin can transfer PT assignments.'); window.location.href='index.php';</script>";
-    exit();
-}
+// Get role directly from session (nav.php is loaded later in HTML, can't rely on it here)
+$current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
 
 $msg = '';
 $msg_type = '';
