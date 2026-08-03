@@ -208,11 +208,11 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
         <li id="inventory"><a href="inventory.php" style="color: #10b981;"><i class="entypo-basket"></i><span>Inventory Store</span></a></li>
         <li id="online_paymnt_records"><a href="online_payments_records.php"><i class="entypo-folder"></i><span>Online Payments Records</span></a></li>
         <li id="invoices_link"><a href="invoices.php"><i class="entypo-doc-text"></i><span>Invoices</span></a></li>
+        <li id="renewal_remind"><a href="send_renewal_reminders.php" style="color:#f59e0b;"><i class="entypo-mail"></i><span>📧 Renewal Reminders</span></a></li>
     <?php endif; ?>
 
     <!-- 6. ANALYTICS & SUBSCRIPTIONS -->
     <?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
-        <li id="renewal_remind"><a href="send_renewal_reminders.php" style="color:#f59e0b;"><i class="entypo-mail"></i><span>📧 Renewal Reminders</span></a></li>
         <li class="" id="planhassubopen"><a href="#" onclick="memberExpand(2)"><i class="entypo-quote"></i><span>Plan Details</span></a>
             <ul id="planExpand">
                 <li class="active"><a href="new_plan.php"><span>New Plan</span></a></li>
