@@ -185,36 +185,38 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
 <?php if ($show_expiry_warning): ?>
 <?php
     // Set colors/labels based on type
-    if ($expiry_warning_type === 'expired') {
+    $is_expired_lock = ($expiry_warning_type === 'expired');
+    if ($is_expired_lock) {
         $w_color = '#dc2626'; $w_bg = 'rgba(220,38,38,0.15)'; $w_border = 'rgba(220,38,38,0.5)';
         $w_icon  = '🚫'; $w_title = 'MEMBERSHIP EXPIRED';
-        $w_msg   = "Your membership <strong>expired {$expiry_days_left} day" . ($expiry_days_left > 1 ? 's' : '') . " ago</strong> on <strong>{$expire_fmt}</strong>. Please renew at the reception to continue using the gym.";
-        $w_label = 'EXPIRED';
+        $w_msg   = "Your membership <strong>expired {$expiry_days_left} day" . ($expiry_days_left > 1 ? 's' : '') . " ago</strong> on <strong>{$expire_fmt}</strong>. Application functions are locked. Please renew online or at reception to continue.";
+        $w_label = 'ACCOUNT LOCKED — EXPIRED';
     } elseif ($expiry_warning_type === 'critical') {
         $w_color = '#f59e0b'; $w_bg = 'rgba(245,158,11,0.15)'; $w_border = 'rgba(245,158,11,0.5)';
         $w_icon  = '⚠️'; $w_title = 'MEMBERSHIP EXPIRING VERY SOON';
-        $w_msg   = "Your membership expires <strong>" . ($expiry_days_left === 0 ? 'TODAY' : ($expiry_days_left === 1 ? 'TOMORROW' : "in {$expiry_days_left} days")) . "</strong> on <strong>{$expire_fmt}</strong>. Please visit the reception immediately to renew.";
+        $w_msg   = "Your membership expires <strong>" . ($expiry_days_left === 0 ? 'TODAY' : ($expiry_days_left === 1 ? 'TOMORROW' : "in {$expiry_days_left} days")) . "</strong> on <strong>{$expire_fmt}</strong>. Please renew to avoid service interruption.";
         $w_label = $expiry_days_left === 0 ? 'EXPIRES TODAY' : ($expiry_days_left === 1 ? 'EXPIRES TOMORROW' : "EXPIRES IN {$expiry_days_left} DAYS");
     } else {
         $w_color = '#3b82f6'; $w_bg = 'rgba(59,130,246,0.12)'; $w_border = 'rgba(59,130,246,0.4)';
         $w_icon  = '📅'; $w_title = 'MEMBERSHIP EXPIRY NOTICE';
-        $w_msg   = "Your membership is expiring in <strong>{$expiry_days_left} days</strong> on <strong>{$expire_fmt}</strong>. We recommend renewing soon to avoid any break in your fitness routine.";
+        $w_msg   = "Your membership is expiring in <strong>{$expiry_days_left} days</strong> on <strong>{$expire_fmt}</strong>. We recommend renewing soon.";
         $w_label = "EXPIRES IN {$expiry_days_left} DAYS";
     }
 ?>
 <!-- EXPIRY WARNING MODAL -->
 <div id="expiry-warning-overlay" style="
     position: fixed; inset: 0; z-index: 99999;
-    background: rgba(0,0,0,0.92);
-    backdrop-filter: blur(10px);
+    background: rgba(0,0,0,<?php echo $is_expired_lock ? '0.96' : '0.92'; ?>);
+    backdrop-filter: blur(<?php echo $is_expired_lock ? '16px' : '10px'; ?>);
     display: flex; align-items: center; justify-content: center;
     padding: 20px;
+    <?php echo $is_expired_lock ? 'pointer-events: auto;' : ''; ?>
 ">
     <div style="
         background: #0d1117;
         border: 2px solid <?php echo $w_color; ?>;
         border-radius: 24px;
-        max-width: 500px; width: 100%;
+        max-width: 520px; width: 100%;
         box-shadow: 0 0 60px <?php echo $w_bg; ?>, 0 20px 60px rgba(0,0,0,0.8);
         overflow: hidden;
         animation: warn-pop 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
@@ -234,33 +236,47 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
 
             <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:rgba(255,255,255,0.04);border-radius:10px;padding:12px 16px;margin-bottom:20px;">
                 <div>
-                    <div style="color:#64748b;font-size:10px;text-transform:uppercase;letter-spacing:1px;">Your Plan</div>
+                    <div style="color:#64748b;font-size:10px;text-transform:uppercase;letter-spacing:1px;">Current Plan</div>
                     <div style="color:#fff;font-size:14px;font-weight:700;"><?php echo htmlspecialchars($planName); ?></div>
                 </div>
                 <div style="text-align:right;">
-                    <div style="color:#64748b;font-size:10px;text-transform:uppercase;letter-spacing:1px;">Expires On</div>
+                    <div style="color:#64748b;font-size:10px;text-transform:uppercase;letter-spacing:1px;">Expired / Expires On</div>
                     <div style="color:<?php echo $w_color; ?>;font-size:14px;font-weight:800;"><?php echo $expire_fmt; ?></div>
                 </div>
             </div>
 
             <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                <?php if ($expiry_warning_type !== 'expired'): ?>
+                <?php if ($is_expired_lock): ?>
+                <!-- EXPIRED: Lock out functions, provide direct online renewal & logout -->
+                <a href="payment.php" style="
+                    flex:2; background:linear-gradient(135deg,#dc2626,#991b1b);
+                    color:#fff; text-align:center; padding:14px 20px; border-radius:12px;
+                    font-size:14px; font-weight:800; text-decoration:none;
+                    box-shadow: 0 4px 20px rgba(220,38,38,0.5); display:inline-block;
+                ">💳 RENEW ONLINE NOW →</a>
+
+                <a href="../admin/logout.php" style="
+                    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
+                    color:#94a3b8; text-align:center; padding:14px 18px; border-radius:12px;
+                    font-size:13px; font-weight:700; text-decoration:none; display:inline-block;
+                ">🚪 Log Out</a>
+                <?php else: ?>
+                <!-- EXPIRING: Can dismiss or renew online -->
+                <a href="payment.php" style="
+                    background:linear-gradient(135deg,#f59e0b,#d97706);
+                    color:#fff; text-align:center; padding:13px 20px; border-radius:12px;
+                    font-size:13px; font-weight:800; text-decoration:none; display:inline-block;
+                ">💳 Renew Online Now</a>
+
                 <button onclick="dismissWarning()" style="
                     flex:1; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
                     color:#94a3b8; padding:13px 20px; border-radius:12px; font-size:13px;
                     font-weight:700; cursor:pointer;
                 ">I'll Renew Later — Continue →</button>
                 <?php endif; ?>
-                <?php if ($expiry_warning_type === 'expired'): ?>
-                <button onclick="dismissWarning()" style="
-                    flex:1; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
-                    color:#94a3b8; padding:13px 20px; border-radius:12px; font-size:13px;
-                    font-weight:700; cursor:pointer;
-                ">View My Dashboard →</button>
-                <?php endif; ?>
             </div>
-            <p style="color:#374151;font-size:11px;text-align:center;margin:14px 0 0 0;">
-                Please contact the reception desk or call your gym to renew your membership.
+            <p style="color:#475569;font-size:11px;text-align:center;margin:14px 0 0 0;">
+                <?php echo $is_expired_lock ? 'Click RENEW ONLINE NOW to select a plan and complete payment.' : 'Please visit reception or use online renewal to extend your membership.'; ?>
             </p>
         </div>
     </div>
@@ -273,7 +289,11 @@ if ($planName === 'No Active Plan' || $expire === 'N/A') {
 }
 </style>
 <script>
-// Show only once per session (not on every page reload)
+<?php if ($is_expired_lock): ?>
+// Expired members CANNOT skip the modal — stay visible permanently
+document.getElementById('expiry-warning-overlay').style.display = 'flex';
+<?php else: ?>
+// Expiring members see it once per session
 (function() {
     var key = 'expiry_warn_seen_<?php echo $userid; ?>';
     if (sessionStorage.getItem(key)) {
@@ -288,6 +308,7 @@ function dismissWarning() {
     el.style.opacity = '0';
     setTimeout(function() { el.style.display = 'none'; }, 300);
 }
+<?php endif; ?>
 </script>
 <?php endif; ?>
 

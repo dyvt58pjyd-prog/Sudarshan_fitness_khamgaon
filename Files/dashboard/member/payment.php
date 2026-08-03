@@ -294,6 +294,28 @@ if (isset($_POST['submit_payment'])) {
             <h2>Membership & PT Renewal</h2>
             <hr />
 
+            <?php
+            // Check if member is currently expired
+            $is_currently_expired = false;
+            $m_uid_check = mysqli_real_escape_string($con, $userid);
+            $q_exp_check = mysqli_query($con, "SELECT MAX(expire) as max_exp FROM enrolls_to WHERE uid = '$m_uid_check'");
+            if ($q_exp_check && $r_exp_check = mysqli_fetch_assoc($q_exp_check)) {
+                if (!empty($r_exp_check['max_exp']) && $r_exp_check['max_exp'] < date('Y-m-d')) {
+                    $is_currently_expired = true;
+                }
+            }
+            ?>
+
+            <?php if ($is_currently_expired): ?>
+            <div style="background: rgba(220, 38, 38, 0.15); border: 2px solid #dc2626; border-radius: 14px; padding: 18px 24px; margin-bottom: 25px; display: flex; align-items: center; gap: 14px; color: #ffffff; box-shadow: 0 4px 20px rgba(220,38,38,0.25);">
+                <div style="font-size: 32px; flex-shrink: 0;">🚫</div>
+                <div>
+                    <h4 style="color: #f87171; font-weight: 800; margin: 0 0 4px 0; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px;">Account Locked — Membership Expired</h4>
+                    <p style="margin: 0; font-size: 13px; color: #e2e8f0; line-height: 1.5;">Select a membership plan below, scan the UPI QR code to complete payment, and upload your proof. Once submitted, reception will verify and unlock your account immediately!</p>
+                </div>
+            </div>
+            <?php endif; ?>
+
             <div class="payment-card">
                 <!-- Payment Renewal Request Form -->
                 <h3 style="margin-top: 0; color: var(--text-main); font-weight: 600; margin-bottom: 10px;">Select Membership or PT Renewal</h3>

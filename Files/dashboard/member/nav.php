@@ -1,5 +1,24 @@
 <?php
 $gym_settings_data = get_gym_details($con);
+
+// ── Expired Member Security Lock ──────────────────────────────────────────────
+if (isset($_SESSION['role']) && $_SESSION['role'] === 'member' && isset($_SESSION['user_data'])) {
+    $curr_page = basename($_SERVER['SCRIPT_NAME']);
+    $allowed_pages = ['index.php', 'payment.php', 'profile_switch.php', 'logout.php'];
+    if (!in_array($curr_page, $allowed_pages)) {
+        $m_uid_esc = mysqli_real_escape_string($con, $_SESSION['user_data']);
+        $q_chk_exp = mysqli_query($con, "SELECT MAX(expire) as max_exp FROM enrolls_to WHERE uid = '$m_uid_esc'");
+        if ($q_chk_exp && $row_exp = mysqli_fetch_assoc($q_chk_exp)) {
+            if (!empty($row_exp['max_exp'])) {
+                $today_str = date('Y-m-d');
+                if ($row_exp['max_exp'] < $today_str) {
+                    header("Location: index.php");
+                    exit();
+                }
+            }
+        }
+    }
+}
 ?>
 <ul id="main-menu" class="">
     <li id="dash"><a href="index.php"><i class="entypo-gauge"></i><span>My Dashboard</span></a></li>
