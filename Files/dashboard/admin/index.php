@@ -375,44 +375,50 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			<?php
 			// ── FINANCIAL REVENUE & INCOME CALCULATIONS ────────────────────────────────
 			// 1. Overall Lifetime Income (Membership + PT)
+			$total_mem_income = 0;
 			$q_inc_mem = mysqli_query($con, "SELECT SUM(amount) AS total FROM enrolls_to");
-			$r_inc_mem = mysqli_fetch_assoc($q_inc_mem);
-			$total_mem_income = intval($r_inc_mem['total'] ?? 0);
+			if ($q_inc_mem && $r_inc_mem = mysqli_fetch_assoc($q_inc_mem)) {
+			    $total_mem_income = intval($r_inc_mem['total'] ?? 0);
+			}
 
-			$q_inc_pt = mysqli_query($con, "SELECT SUM(amount) AS total FROM pt_enrollments");
 			$total_pt_income = 0;
+			$q_inc_pt = mysqli_query($con, "SELECT SUM(amount) AS total FROM pt_enrollments");
 			if ($q_inc_pt && $r_inc_pt = mysqli_fetch_assoc($q_inc_pt)) {
 			    $total_pt_income = intval($r_inc_pt['total'] ?? 0);
 			}
 			$overall_income = $total_mem_income + $total_pt_income;
 
 			// 2. Current Year Income
+			$year_mem_income = 0;
 			$q_y_mem = mysqli_query($con, "SELECT SUM(amount) AS total FROM enrolls_to WHERE YEAR(paid_date) = YEAR(CURDATE())");
-			$r_y_mem = mysqli_fetch_assoc($q_y_mem);
-			$year_mem_income = intval($r_y_mem['total'] ?? 0);
+			if ($q_y_mem && $r_y_mem = mysqli_fetch_assoc($q_y_mem)) {
+			    $year_mem_income = intval($r_y_mem['total'] ?? 0);
+			}
 
-			$q_y_pt = mysqli_query($con, "SELECT SUM(amount) AS total FROM pt_enrollments WHERE YEAR(enroll_date) = YEAR(CURDATE())");
 			$year_pt_income = 0;
+			$q_y_pt = mysqli_query($con, "SELECT SUM(amount) AS total FROM pt_enrollments WHERE YEAR(enroll_date) = YEAR(CURDATE())");
 			if ($q_y_pt && $r_y_pt = mysqli_fetch_assoc($q_y_pt)) {
 			    $year_pt_income = intval($r_y_pt['total'] ?? 0);
 			}
 			$year_income = $year_mem_income + $year_pt_income;
 
 			// 3. Current Month Income
+			$month_mem_income = 0;
 			$q_m_mem = mysqli_query($con, "SELECT SUM(amount) AS total FROM enrolls_to WHERE YEAR(paid_date) = YEAR(CURDATE()) AND MONTH(paid_date) = MONTH(CURDATE())");
-			$r_m_mem = mysqli_fetch_assoc($q_m_mem);
-			$month_mem_income = intval($r_m_mem['total'] ?? 0);
+			if ($q_m_mem && $r_m_mem = mysqli_fetch_assoc($q_m_mem)) {
+			    $month_mem_income = intval($r_m_mem['total'] ?? 0);
+			}
 
-			$q_m_pt = mysqli_query($con, "SELECT SUM(amount) AS total FROM pt_enrollments WHERE YEAR(enroll_date) = YEAR(CURDATE()) AND MONTH(enroll_date) = MONTH(CURDATE())");
 			$month_pt_income = 0;
+			$q_m_pt = mysqli_query($con, "SELECT SUM(amount) AS total FROM pt_enrollments WHERE YEAR(enroll_date) = YEAR(CURDATE()) AND MONTH(enroll_date) = MONTH(CURDATE())");
 			if ($q_m_pt && $r_m_pt = mysqli_fetch_assoc($q_m_pt)) {
 			    $month_pt_income = intval($r_m_pt['total'] ?? 0);
 			}
 			$month_income = $month_mem_income + $month_pt_income;
 
 			// 4. Overall Expenses & Net Profit
-			$q_exp_all = mysqli_query($con, "SELECT SUM(amount) as total FROM expenses");
 			$overall_expenses = 0;
+			$q_exp_all = mysqli_query($con, "SELECT SUM(amount) as total FROM expenses");
 			if ($q_exp_all && $r_exp_all = mysqli_fetch_assoc($q_exp_all)) {
 			    $overall_expenses = intval($r_exp_all['total'] ?? 0);
 			}
