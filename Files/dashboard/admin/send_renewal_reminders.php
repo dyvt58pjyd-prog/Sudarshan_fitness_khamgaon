@@ -9,6 +9,9 @@ $today = new DateTime();
 
 // ── Handle Send Action ───────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_reminders'])) {
+    @set_time_limit(300); // 5 minutes execution time for bulk sending
+    ob_start();
+
     $days_filter = intval($_POST['days_filter'] ?? 5); // 3, 5, or 7
     $sent = 0; $failed = 0; $no_email = 0;
 
@@ -99,8 +102,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_reminders'])) {
 </html>";
 
         $subject = "⚠️ Your {$gym_name} Membership Expires $urgency_label — Renew Now!";
-        $result = send_smtp_email($row['email'], $row['username'], $subject, $html);
-        if ($result) $sent++; else $failed++;
+        
+        try {
+            $result = send_smtp_email($row['email'], $row['username'], $subject, $html);
+            if ($result) $sent++; else $failed++;
+        } catch (Throwable $e) {
+            $failed++;
+        }
 
         // Log reminder sent
         @mysqli_query($con, "INSERT INTO renewal_reminder_log (uid, email, days_left, sent_at) VALUES ('" 
@@ -111,7 +119,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_reminders'])) {
 
     $response = ['sent' => $sent, 'failed' => $failed, 'no_email' => $no_email];
     if (isset($_POST['ajax'])) {
-        header('Content-Type: application/json');
+        if (ob_get_length()) ob_end_clean();
+        header('Content-Type: application/json; charset=utf-8');
         echo json_encode($response);
         exit();
     }
@@ -342,11 +351,23 @@ function sendReminders() {
     fd.append('days_filter', selectedDays);
 
     fetch('send_renewal_reminders.php', { method: 'POST', body: fd })
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
+        .then(function(r) {
+            if (!r.ok) { throw new Error('HTTP error ' + r.status); }
+            return r.text();
+        })
+        .then(function(text) {
             btn.disabled = false;
             icon.innerText = '📧';
             txt.innerText  = 'Send Renewal Reminders';
+
+            var data;
+            try {
+                data = JSON.parse(text);
+            } catch (e) {
+                console.error('Response text:', text);
+                alert('Server returned invalid response. Details logged in browser console.');
+                return;
+            }
 
             var toast = document.getElementById('result-toast');
             document.getElementById('toast-icon').innerText = data.sent > 0 ? '✅' : '⚠️';
@@ -358,11 +379,11 @@ function sendReminders() {
             toast.style.borderColor = data.sent > 0 ? 'rgba(16,185,129,0.5)' : 'rgba(245,158,11,0.5)';
             toast.scrollIntoView({ behavior: 'smooth', block: 'start' });
         })
-        .catch(function() {
+        .catch(function(err) {
             btn.disabled = false;
             icon.innerText = '📧';
             txt.innerText  = 'Send Renewal Reminders';
-            alert('Network error. Please try again.');
+            alert('Request failed: ' + err.message);
         });
 }
 </script>
