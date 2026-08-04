@@ -306,6 +306,16 @@ if ($partner_user) {
             </div>
         </div>
 
+        <!-- NUTRITION STORE CARD -->
+        <div class="card" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.2) 0%, rgba(30, 41, 59, 0.9) 100%); border: 2px solid #f97316;">
+            <div style="font-size: 11px; font-weight: 800; color: #f97316; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">🍎 OFFICIAL NUTRITION &amp; SUPPLEMENT STORE</div>
+            <h3 style="margin: 0 0 6px 0; color: #fff; font-size: 18px; font-weight: 800;">Fat Loss, Muscle Gain &amp; Lean Fitness</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-bottom: 15px; line-height: 1.4;">Browse authentic supplements, fat burners, proteins, and recovery formulas delivered directly to you.</p>
+            <a href="store.php" style="display: block; text-align: center; background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; text-decoration: none; padding: 12px; border-radius: 12px; font-weight: 800; font-size: 13.5px; box-shadow: 0 5px 15px rgba(249,115,22,0.4);">
+                🛒 Open Nutrition Store ➔
+            </a>
+        </div>
+
         <!-- 3D AI WORKOUT COACH CARD -->
         <div class="card" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(30, 41, 59, 0.9) 100%); border: 2px solid #8b5cf6;">
             <div style="font-size: 11px; font-weight: 800; color: #a78bfa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">🤖 INTERACTIVE 3D ANATOMICAL GUIDE</div>
@@ -380,6 +390,10 @@ if ($partner_user) {
         <a href="dashboard.php" class="nav-item active">
             <span class="nav-icon">🏠</span>
             <span>Home</span>
+        </a>
+        <a href="store.php" class="nav-item">
+            <span class="nav-icon">🍎</span>
+            <span>Store</span>
         </a>
         <a href="leaderboard.php" class="nav-item">
             <span class="nav-icon">🏆</span>

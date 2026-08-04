@@ -25,7 +25,7 @@ if(isset($_SESSION["user_data"]))
 $gym = get_gym_details($con);
 
 $selected_role = isset($_GET['role']) ? $_GET['role'] : 'member';
-$valid_roles = ['member', 'reception', 'trainer', 'owner', 'super_admin'];
+$valid_roles = ['member', 'reception', 'trainer', 'owner', 'auditor', 'super_admin', 'nutrition_partner'];
 if (!in_array($selected_role, $valid_roles)) {
     $selected_role = 'member';
 }
@@ -205,6 +205,12 @@ if (substr($logo_path, 0, 6) === '../../') {
         box-shadow: 0 0 25px rgba(16, 185, 129, 0.6) !important;
         transform: scale(1.04);
     }
+    .category-tab[data-role="nutrition_partner"]:hover, .category-tab[data-role="nutrition_partner"].active {
+        border-color: #f97316 !important;
+        background: rgba(249, 115, 22, 0.25) !important;
+        box-shadow: 0 0 25px rgba(249, 115, 22, 0.6) !important;
+        transform: scale(1.04);
+    }
 
     .category-tab i {
         font-size: 24px !important;
@@ -315,6 +321,10 @@ if (substr($logo_path, 0, 6) === '../../') {
                             <div class="category-tab <?php echo ($selected_role === 'super_admin') ? 'active' : ''; ?>" data-role="super_admin" onclick="selectRole('super_admin')">
                                 <i class="entypo-cog"></i>
                                 <span>App Developer</span>
+                            </div>
+                            <div class="category-tab <?php echo ($selected_role === 'nutrition_partner') ? 'active' : ''; ?>" data-role="nutrition_partner" onclick="selectRole('nutrition_partner')">
+                                <i class="entypo-basket"></i>
+                                <span>Store Partner</span>
                             </div>
                         </div>
 

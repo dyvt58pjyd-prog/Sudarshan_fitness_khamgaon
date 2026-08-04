@@ -667,6 +667,53 @@ if (!$con) {
         last_attempt TIMESTAMP NULL DEFAULT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )");
+
+    // Self-healing database check: ensure nutrition_products table exists
+    mysqli_query($con, "CREATE TABLE IF NOT EXISTS nutrition_products (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        product_name VARCHAR(150) NOT NULL,
+        category VARCHAR(50) NOT NULL DEFAULT 'Fat Loss',
+        description TEXT DEFAULT NULL,
+        benefits TEXT DEFAULT NULL,
+        price INT NOT NULL DEFAULT 0,
+        discount_price INT DEFAULT 0,
+        photo_url VARCHAR(255) DEFAULT NULL,
+        photo_base64 LONGTEXT DEFAULT NULL,
+        vendor_username VARCHAR(100) DEFAULT 'nutrition_partner',
+        stock_status VARCHAR(20) DEFAULT 'in_stock',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )");
+
+    // Self-healing database check: ensure nutrition_orders table exists
+    mysqli_query($con, "CREATE TABLE IF NOT EXISTS nutrition_orders (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        order_code VARCHAR(30) NOT NULL,
+        member_id VARCHAR(50) NOT NULL,
+        member_name VARCHAR(100) NOT NULL,
+        member_mobile VARCHAR(20) NOT NULL,
+        product_id INT NOT NULL,
+        product_name VARCHAR(150) NOT NULL,
+        price INT NOT NULL,
+        status VARCHAR(20) DEFAULT 'pending',
+        notes TEXT DEFAULT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )");
+
+    // Self-healing: Ensure Nutrition Partner vendor account exists in admin table
+    $chk_store_partner = mysqli_query($con, "SELECT username FROM admin WHERE username='nutrition_partner' OR role='nutrition_partner'");
+    if ($chk_store_partner && mysqli_num_rows($chk_store_partner) === 0) {
+        mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('nutrition_partner', '268724', 'store', 'Sudarshan Nutrition Partner', 'nutrition_partner')");
+    }
+
+    // Self-healing: Seed default nutrition products if table is empty
+    $chk_p_cnt = mysqli_query($con, "SELECT id FROM nutrition_products LIMIT 1");
+    if ($chk_p_cnt && mysqli_num_rows($chk_p_cnt) === 0) {
+        mysqli_query($con, "INSERT INTO nutrition_products (product_name, category, description, benefits, price, discount_price, stock_status) VALUES
+        ('Ultra Thermo Fat Burner X', 'Fat Loss', 'Advanced thermogenic formula designed to boost metabolism, accelerate fat loss, and enhance workout energy.', 'Boosts Fat Oxidation | High Energy | Zero Sugar', 2499, 1999, 'in_stock'),
+        ('Pure Lean Whey Isolate (1kg)', 'Lean Muscle', '100% Ultra-filtered Whey Protein Isolate for maximum lean muscle synthesis and fast recovery.', '27g Protein per Scoop | Zero Carbs | Fast Absorbing', 3999, 3299, 'in_stock'),
+        ('Monohydrate Creatine (250g)', 'Muscle Gain', 'Micronized Pure Creatine Monohydrate for explosive strength, power, and muscle volume.', 'Increases Power Output | Cell Volumization | 100% Pure', 1299, 999, 'in_stock'),
+        ('BCAA 2:1:1 Recovery Formula', 'Recovery', 'Essential Branched Chain Amino Acids for muscle endurance, hydration, and intra-workout energy.', 'Prevents Muscle Breakdown | Electrolyte Blend | Refreshing Flavor', 1899, 1499, 'in_stock')");
+    }
 }
 ?>
 <?php

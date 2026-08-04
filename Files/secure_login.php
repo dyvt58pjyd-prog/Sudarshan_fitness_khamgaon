@@ -68,6 +68,8 @@ if ($pass_key == "" || $user_id_auth == "") {
             header("Location: ./dashboard/member/");
         } elseif ($_SESSION['role'] === 'auditor') {
             header("Location: ./dashboard/auditor/");
+        } elseif ($_SESSION['role'] === 'nutrition_partner') {
+            header("Location: ./dashboard/store_partner/");
         } else {
             header("Location: ./dashboard/admin/");
         }
