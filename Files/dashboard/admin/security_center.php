@@ -191,6 +191,14 @@ $q_ip_list = mysqli_query($con, "SELECT * FROM blocked_ips ORDER BY id DESC LIMI
                 <div style="color: #10b981; font-weight: 800; font-size: 13px;">✅ Cryptographic CSRF Defense Token</div>
                 <div style="color: #94a3b8; font-size: 11px; margin-top: 4px;">Protects state-changing forms against Cross-Site Request Forgery exploits.</div>
             </div>
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px;">
+                <div style="color: #10b981; font-weight: 800; font-size: 13px;">✅ Web Application Firewall (SQLi &amp; XSS Shield)</div>
+                <div style="color: #94a3b8; font-size: 11px; margin-top: 4px;">Global payload inspector blocks SQL injections, XSS scripts &amp; path traversals.</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px;">
+                <div style="color: #10b981; font-weight: 800; font-size: 13px;">✅ Master Security PIN Verification Gate</div>
+                <div style="color: #94a3b8; font-size: 11px; margin-top: 4px;">Requires secondary PIN authorization for high-privilege administrative actions.</div>
+            </div>
         </div>
     </div>
 
