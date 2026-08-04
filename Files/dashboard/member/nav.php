@@ -4,7 +4,7 @@ $gym_settings_data = get_gym_details($con);
 // ── Expired Member Security Lock ──────────────────────────────────────────────
 if (isset($_SESSION['role']) && $_SESSION['role'] === 'member' && isset($_SESSION['user_data'])) {
     $curr_page = basename($_SERVER['SCRIPT_NAME']);
-    $allowed_pages = ['index.php', 'payment.php', 'profile_switch.php', 'logout.php'];
+    $allowed_pages = ['index.php', 'payment.php', 'profile_switch.php', 'logout.php', 'virtual_hanuman.php'];
     if (!in_array($curr_page, $allowed_pages)) {
         $m_uid_esc = mysqli_real_escape_string($con, $_SESSION['user_data']);
         $q_chk_exp = mysqli_query($con, "SELECT MAX(expire) as max_exp FROM enrolls_to WHERE uid = '$m_uid_esc'");
@@ -21,6 +21,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'member' && isset($_SESSIO
 }
 ?>
 <ul id="main-menu" class="">
+    <li id="virtual_hanuman"><a href="virtual_hanuman.php" style="color: #ff6b00; font-weight: bold;"><i class="entypo-heart"></i><span>🚩 सजीव श्री हनुमान (Virtual Hanuman)</span></a></li>
     <li id="dash"><a href="index.php"><i class="entypo-gauge"></i><span>My Dashboard</span></a></li>
     <li id="myplan"><a href="my_plan.php"><i class="entypo-star" style="color: #ff6b00;"></i><span style="color: #ff6b00; font-weight: bold;">My Smart Plan</span></a></li>
     <li id="my_routine"><a href="my_routine.php"><i class="entypo-alert"></i><span>My Routine</span></a></li>
