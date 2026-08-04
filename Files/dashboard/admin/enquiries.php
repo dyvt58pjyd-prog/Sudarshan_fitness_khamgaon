@@ -10,6 +10,17 @@ if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['super_admin', 'o
 $gym = get_gym_details($con);
 $msg = '';
 
+// Handle Delete Enquiry
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_enquiry') {
+    $del_id = intval($_POST['enquiry_id']);
+    $q_del = mysqli_query($con, "DELETE FROM walkin_enquiries WHERE id = $del_id");
+    if ($q_del) {
+        $msg = "<div class='alert alert-success' style='background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-weight: bold;'>🗑️ Walk-In Visitor Enquiry Deleted Successfully!</div>";
+    } else {
+        $msg = "<div class='alert alert-danger' style='background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-weight: bold;'>Error deleting enquiry: " . mysqli_error($con) . "</div>";
+    }
+}
+
 // Handle Conversion & Approval from Enquiry
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'convert_enquiry') {
     $enquiry_id = intval($_POST['enquiry_id']);
@@ -234,9 +245,14 @@ $pending_count = mysqli_num_rows($q_pending);
                         <tr><td class="info-label">Registered Date</td><td class="info-val"><?php echo date('d-M-Y h:i A', strtotime($row['created_at'])); ?></td></tr>
                     </table>
 
-                    <button class="btn-approve" onclick="openApprovalModal(<?php echo htmlspecialchars(json_encode($row)); ?>)">
-                        ⚡ Tour Done &amp; Activate Membership ➔
-                    </button>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button class="btn-approve" style="flex: 1;" onclick="openApprovalModal(<?php echo htmlspecialchars(json_encode($row)); ?>)">
+                            ⚡ Tour Done &amp; Activate ➔
+                        </button>
+                        <button type="button" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; padding: 12px 14px; border-radius: 12px; font-weight: 800; font-size: 13px; cursor: pointer; transition: all 0.2s;" onclick="confirmDeleteEnquiry(<?php echo $row['id']; ?>, <?php echo htmlspecialchars(json_encode($row['username'])); ?>)">
+                            🗑️ Delete
+                        </button>
+                    </div>
                 </div>
             <?php endwhile; ?>
         </div>
@@ -299,19 +315,39 @@ $pending_count = mysqli_num_rows($q_pending);
                     <input type="date" name="jdate" class="form-input" value="<?php echo date('Y-m-d'); ?>" required>
                 </div>
 
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button type="submit" class="btn-approve" style="flex: 1;">Confirm &amp; Register Member 🚀</button>
-                    <button type="button" onclick="document.getElementById('approveModal').style.display='none'" style="background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 12px 20px; border-radius: 12px; font-weight: bold; cursor: pointer;">Cancel</button>
+                <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+                    <button type="submit" class="btn-approve" style="flex: 2; min-width: 180px;">Confirm &amp; Register Member 🚀</button>
+                    <button type="button" onclick="confirmDeleteFromModal()" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fca5a5; padding: 12px 16px; border-radius: 12px; font-weight: bold; cursor: pointer;">🗑️ Delete</button>
+                    <button type="button" onclick="document.getElementById('approveModal').style.display='none'" style="background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 12px 16px; border-radius: 12px; font-weight: bold; cursor: pointer;">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
+
+    <!-- Hidden Form for Deleting Enquiries -->
+    <form method="POST" action="" id="deleteEnquiryForm" style="display:none;">
+        <input type="hidden" name="action" value="delete_enquiry">
+        <input type="hidden" name="enquiry_id" id="del_enquiry_id">
+    </form>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <script>
         let upiQrObj = null;
         const gymUpiId = <?php echo json_encode(!empty($gym['upi_id']) ? $gym['upi_id'] : ''); ?>;
         const gymName = <?php echo json_encode(!empty($gym['gym_name']) ? $gym['gym_name'] : 'Sudarshan Fitness'); ?>;
+
+        function confirmDeleteEnquiry(id, name) {
+            if (confirm("Are you sure you want to delete the walk-in enquiry for \"" + name + "\"?\nThis action cannot be undone.")) {
+                document.getElementById('del_enquiry_id').value = id;
+                document.getElementById('deleteEnquiryForm').submit();
+            }
+        }
+
+        function confirmDeleteFromModal() {
+            const id = document.getElementById('m_enquiry_id').value;
+            const name = document.getElementById('m_name').textContent;
+            confirmDeleteEnquiry(id, name);
+        }
 
         function openApprovalModal(data) {
             document.getElementById('m_enquiry_id').value = data.id;
