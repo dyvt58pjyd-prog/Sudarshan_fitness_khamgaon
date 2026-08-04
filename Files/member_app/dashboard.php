@@ -33,13 +33,18 @@ if (!empty($user['partner_uid'])) {
 $q_plan = mysqli_query($con, "SELECT p.planName, e.expire, e.paid_date, e.paid FROM enrolls_to e INNER JOIN plan p ON e.pid = p.pid WHERE e.uid='$uid' AND e.renewal='yes' ORDER BY e.expire DESC LIMIT 5");
 $plan_name = "No Active Plan";
 $expire_date = "N/A";
+$is_expired_member = false;
 $payments = [];
 if (mysqli_num_rows($q_plan) > 0) {
     $first = true;
     while ($row = mysqli_fetch_assoc($q_plan)) {
         if ($first) {
             $plan_name = $row['planName'];
+            $raw_expire = $row['expire'];
             $expire_date = date('d M Y', strtotime($row['expire']));
+            if (!empty($raw_expire) && strtotime($raw_expire) < strtotime(date('Y-m-d'))) {
+                $is_expired_member = true;
+            }
             $first = false;
         }
         $payments[] = $row;
@@ -171,6 +176,20 @@ if ($partner_user) {
     </div>
 
     <div class="content">
+        <?php if ($is_expired_member): ?>
+        <!-- ⛔ EXPIRED MEMBERSHIP LOCKOUT WARNING -->
+        <div class="card" style="border: 2px solid #ef4444; background: linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(15, 23, 42, 0.95) 100%); box-shadow: 0 15px 35px rgba(239, 68, 68, 0.3); text-align: center;">
+            <div style="font-size: 36px; margin-bottom: 8px;">⛔</div>
+            <div style="color: #ef4444; font-size: 15px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">MEMBERSHIP SECURITY LOCKOUT ACTIVE</div>
+            <p style="color: #fca5a5; font-size: 13px; font-weight: 600; margin-bottom: 16px; line-height: 1.5;">
+                Your subscription <strong>(<?php echo htmlspecialchars($plan_name); ?>)</strong> expired on <strong><?php echo $expire_date; ?></strong>.<br>
+                Entrance gate scanner access is currently locked.
+            </p>
+            <a href="../dashboard/member/payment.php" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: #ffffff; padding: 12px 22px; border-radius: 12px; font-weight: 900; font-size: 13px; text-decoration: none; display: inline-block; box-shadow: 0 4px 15px rgba(239,68,68,0.5);">
+                💳 RENEW MEMBERSHIP ONLINE NOW →
+            </a>
+        </div>
+        <?php endif; ?>
         <?php if ($partner_user): ?>
         <!-- COUPLE DASHBOARD BANNER -->
         <div class="card" style="border: 2px solid #ff6b00; background: linear-gradient(135deg, rgba(255, 107, 0, 0.2) 0%, rgba(30, 41, 59, 0.9) 100%); box-shadow: 0 15px 35px rgba(255,107,0,0.25);">

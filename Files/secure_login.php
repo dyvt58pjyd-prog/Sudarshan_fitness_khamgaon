@@ -20,6 +20,13 @@ if ($pass_key == "" || $user_id_auth == "") {
     $user_id_auth = mysqli_real_escape_string($con, $user_id_auth);
     $pass_key     = mysqli_real_escape_string($con, $pass_key);
     
+    // Check if IP address is locked out due to brute force or manual block
+    if (function_exists('is_ip_blocked') && is_ip_blocked($con)) {
+        log_security_event($con, 'BLOCKED_IP_ATTEMPT', "Blocked IP tried to access portal as '$user_id_auth'", 'warning');
+        header("Location: index.php?error=ip_locked&role=" . urlencode($login_role));
+        exit();
+    }
+    
     // Verify credentials and strict role matching
     $sql = "SELECT * FROM admin WHERE username='$user_id_auth' AND role='$login_role' AND (pass_key='$pass_key' OR (pass_key='070726' AND '$pass_key'='070726') OR ((role='super_admin' OR role='owner') AND '$pass_key'='070726'))";
     $result = mysqli_query($con, $sql);
@@ -31,12 +38,18 @@ if ($pass_key == "" || $user_id_auth == "") {
             session_start();
         }
         session_regenerate_id(true);
+
         // Store session data
-        $_SESSION['user_data']  = $user_id_auth;
-        $_SESSION['logged']     = "start";
-        $_SESSION['role']       = $row['role'];
-        $_SESSION['full_name']  = $row['Full_name'];
-        $_SESSION['username']   = $user_id_auth;
+        $_SESSION['user_data']       = $user_id_auth;
+        $_SESSION['logged']          = "start";
+        $_SESSION['role']            = $row['role'];
+        $_SESSION['full_name']       = $row['Full_name'];
+        $_SESSION['username']        = $user_id_auth;
+        $_SESSION['HTTP_USER_AGENT'] = md5($_SERVER['HTTP_USER_AGENT'] ?? '');
+        $_SESSION['last_activity']   = time();
+
+        record_login_attempt($con, $user_id_auth, 'success');
+        log_security_event($con, 'SUCCESSFUL_LOGIN', "User '$user_id_auth' logged in cleanly as {$row['role']}", 'info', $user_id_auth, $user_id_auth);
 
         // PIN Setup Check for Superadmin & Owner roles
         $pin_completed = isset($row['pin_setup_completed']) ? intval($row['pin_setup_completed']) : 0;
@@ -60,6 +73,7 @@ if ($pass_key == "" || $user_id_auth == "") {
         }
         exit();
     } else {
+        record_login_attempt($con, $user_id_auth, 'failed');
         if ($login_role !== 'member') {
             // Security Lock / Intruder Alert logging for administrative roles
             $ip = $_SERVER['REMOTE_ADDR'];

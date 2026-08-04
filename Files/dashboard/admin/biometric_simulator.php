@@ -32,6 +32,14 @@ if ($res_mems) {
                 $row['checked_out_today'] = true;
             }
         }
+        // Check membership expiration
+        $exp_q = mysqli_query($con, "SELECT MAX(expire) as max_exp FROM enrolls_to WHERE uid = '$uid'");
+        $row['is_expired'] = false;
+        if ($exp_q && $r_exp = mysqli_fetch_assoc($exp_q)) {
+            if (!empty($r_exp['max_exp']) && strtotime($r_exp['max_exp']) < strtotime($today)) {
+                $row['is_expired'] = true;
+            }
+        }
         $members[] = $row;
     }
 }

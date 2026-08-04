@@ -274,8 +274,8 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
         <li id="indian_diet_link"><a href="indian_diet_planner.php" style="color: #10b981;"><i class="entypo-heart"></i><span>🍛 Indian Diet Planner</span></a></li>
         <li id="trainers_manage"><a href="trainers.php"><i class="entypo-user"></i><span>🏋️ Gym Trainers</span></a></li>
         <li id="workout_library"><a href="workout_plans.php"><i class="entypo-flash"></i><span>💪 Workout Library</span></a></li>
-        <li id="reports_center"><a href="reports.php" style="color: #ffb703;"><i class="entypo-chart-bar"></i><span>📊 Reports &amp; Export</span></a></li>
         <li id="audit_logs_link"><a href="audit_log.php"><i class="entypo-book-open"></i><span>📜 Audit Logs</span></a></li>
+        <li id="security_center_link"><a href="security_center.php" style="color: #ef4444; font-weight: bold;"><i class="entypo-shield"></i><span>🛡️ Super Security Center</span></a></li>
         <li id="sys_settings"><a href="settings.php" style="color: #10b981;"><i class="entypo-cog"></i><span>⚙️ System Settings (v2.0)</span></a></li>
         <li id="expenses_ledger"><a href="expenses.php"><i class="entypo-book-open"></i><span>Expenses Ledger</span></a></li>
         <li id="staffmanage"><a href="manage_staff.php"><i class="entypo-users"></i><span>Manage Staff</span></a></li>

@@ -629,6 +629,110 @@ if (!$con) {
 }
 ?>
 <?php
+if (!function_exists('get_client_ip')) {
+    function get_client_ip() {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip_list = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $ip = trim($ip_list[0]);
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+        }
+        return filter_var($ip, FILTER_VALIDATE_IP) ? $ip : '127.0.0.1';
+    }
+}
+
+if (!function_exists('log_security_event')) {
+    function log_security_event($con, $event_type, $description, $severity = 'info', $user_id = null, $username = null) {
+        if (!$con) return false;
+        
+        $ip = get_client_ip();
+        $ua = substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255);
+        
+        if ($user_id === null && isset($_SESSION['user_data'])) {
+            $user_id = $_SESSION['user_data'];
+        }
+        if ($username === null && isset($_SESSION['username'])) {
+            $username = $_SESSION['username'];
+        }
+        
+        $uid_esc  = mysqli_real_escape_string($con, $user_id ?? 'guest');
+        $user_esc = mysqli_real_escape_string($con, $username ?? 'guest');
+        $evt_esc  = mysqli_real_escape_string($con, $event_type);
+        $desc_esc = mysqli_real_escape_string($con, $description);
+        $sev_esc  = mysqli_real_escape_string($con, $severity);
+        $ip_esc   = mysqli_real_escape_string($con, $ip);
+        $ua_esc   = mysqli_real_escape_string($con, $ua);
+
+        $sql = "INSERT INTO security_audit_logs (user_id, username, event_type, description, severity, ip_address, user_agent)
+                VALUES ('$uid_esc', '$user_esc', '$evt_esc', '$desc_esc', '$sev_esc', '$ip_esc', '$ua_esc')";
+        return @mysqli_query($con, $sql);
+    }
+}
+
+if (!function_exists('is_ip_blocked')) {
+    function is_ip_blocked($con, $ip = null) {
+        if (!$con) return false;
+        if ($ip === null) $ip = get_client_ip();
+        $ip_esc = mysqli_real_escape_string($con, $ip);
+
+        // 1. Check explicit blocked_ips table
+        $q1 = @mysqli_query($con, "SELECT * FROM blocked_ips WHERE ip_address = '$ip_esc' AND (expires_at IS NULL OR expires_at > NOW())");
+        if ($q1 && mysqli_num_rows($q1) > 0) {
+            return true;
+        }
+
+        // 2. Check login attempts rate limiting (5 failed attempts in 15 mins)
+        $q2 = @mysqli_query($con, "SELECT COUNT(*) as failed_cnt FROM login_attempts WHERE ip_address = '$ip_esc' AND status = 'failed' AND attempt_time > NOW() - INTERVAL 15 MINUTE");
+        if ($q2 && $r2 = mysqli_fetch_assoc($q2)) {
+            if (intval($r2['failed_cnt']) >= 5) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+if (!function_exists('record_login_attempt')) {
+    function record_login_attempt($con, $username, $status = 'failed') {
+        if (!$con) return;
+        $ip = get_client_ip();
+        $ip_esc   = mysqli_real_escape_string($con, $ip);
+        $user_esc = mysqli_real_escape_string($con, $username);
+        $stat_esc = mysqli_real_escape_string($con, $status);
+        @mysqli_query($con, "INSERT INTO login_attempts (ip_address, username, status) VALUES ('$ip_esc', '$user_esc', '$stat_esc')");
+
+        if ($status === 'failed') {
+            log_security_event($con, 'FAILED_LOGIN', "Failed login attempt for user '$username'", 'warning');
+        }
+    }
+}
+
+if (!function_exists('generate_csrf_token')) {
+    function generate_csrf_token() {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+        return $_SESSION['csrf_token'];
+    }
+}
+
+if (!function_exists('verify_csrf_token')) {
+    function verify_csrf_token($token) {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+    }
+}
+
+if (!function_exists('csrf_input')) {
+    function csrf_input() {
+        $token = generate_csrf_token();
+        return '<input type="hidden" name="csrf_token" value="' . htmlspecialchars($token) . '">';
+    }
+}
+
 if (!function_exists('page_protect')) {
     function page_protect()
     {
@@ -636,23 +740,34 @@ if (!function_exists('page_protect')) {
             session_start();
         }
         
-        /* Secure against Session Hijacking by checking user agent */
+        /* 1. Secure against Session Hijacking by checking user agent fingerprint */
         if (isset($_SESSION['HTTP_USER_AGENT'])) {
             if ($_SESSION['HTTP_USER_AGENT'] != md5($_SERVER['HTTP_USER_AGENT'])) {
+                if (function_exists('log_security_event') && isset($GLOBALS['con'])) {
+                    log_security_event($GLOBALS['con'], 'SESSION_HIJACK_BLOCKED', 'User-Agent fingerprint mismatch', 'critical');
+                }
                 session_destroy();
-                echo "<meta http-equiv='refresh' content='0; url=/index.php'>";
+                echo "<meta http-equiv='refresh' content='0; url=/index.php?sec_alert=hijack'>";
                 exit();
             }
         }
+
+        /* 2. 30-Minute Inactivity Session Expiry */
+        if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 1800)) {
+            session_destroy();
+            echo "<meta http-equiv='refresh' content='0; url=/index.php?sec_alert=timeout'>";
+            exit();
+        }
+        $_SESSION['last_activity'] = time();
         
-        /* If session not set, redirect to main login page */
+        /* 3. Authentication Session Check */
         if (!isset($_SESSION['user_data']) || !isset($_SESSION['logged'])) {
             session_destroy();
             echo "<meta http-equiv='refresh' content='0; url=/index.php'>";
             exit();
         }
 
-        /* Mandatory PIN setup check for super_admin & owner roles */
+        /* 4. Mandatory Security PIN Check for Admin Roles */
         if (isset($_SESSION['require_pin_setup']) && $_SESSION['require_pin_setup'] === true) {
             $script = basename($_SERVER['SCRIPT_NAME']);
             if ($script !== 'setup_pin.php' && $script !== 'logout.php') {
@@ -671,7 +786,7 @@ if (!function_exists('get_gym_details')) {
         $result = mysqli_query($con, $sql);
         if ($result && mysqli_num_rows($result) > 0) {
             $row = mysqli_fetch_assoc($result);
-            $row['gym_logo'] = '../../images/logo.jpg'; // Fixed logo path as per user request
+            $row['gym_logo'] = '../../images/logo.jpg';
             return $row;
         }
         return [
@@ -698,6 +813,42 @@ if (!function_exists('get_member_rank')) {
 
 if (!function_exists('check_and_upgrade_db')) {
     function check_and_upgrade_db($con) {
+        // Super Security System Tables
+        @mysqli_query($con, "CREATE TABLE IF NOT EXISTS login_attempts (
+            id INT(11) NOT NULL AUTO_INCREMENT,
+            ip_address VARCHAR(45) NOT NULL,
+            username VARCHAR(100) NOT NULL,
+            attempt_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            status VARCHAR(20) DEFAULT 'failed',
+            PRIMARY KEY (id),
+            KEY idx_ip_time (ip_address, attempt_time),
+            KEY idx_user_time (username, attempt_time)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+        @mysqli_query($con, "CREATE TABLE IF NOT EXISTS security_audit_logs (
+            id INT(11) NOT NULL AUTO_INCREMENT,
+            user_id VARCHAR(50) DEFAULT 'system',
+            username VARCHAR(100) DEFAULT 'system',
+            event_type VARCHAR(50) NOT NULL,
+            description TEXT NOT NULL,
+            severity VARCHAR(20) DEFAULT 'info',
+            ip_address VARCHAR(45) DEFAULT '',
+            user_agent VARCHAR(255) DEFAULT '',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            KEY idx_event (event_type),
+            KEY idx_created (created_at)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+        @mysqli_query($con, "CREATE TABLE IF NOT EXISTS blocked_ips (
+            id INT(11) NOT NULL AUTO_INCREMENT,
+            ip_address VARCHAR(45) NOT NULL UNIQUE,
+            reason VARCHAR(255) NOT NULL,
+            blocked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            expires_at DATETIME NULL DEFAULT NULL,
+            blocked_by VARCHAR(50) DEFAULT 'system',
+            PRIMARY KEY (id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
         // Phase 3: Gamification and Heatmap Schema
         $cols = mysqli_query($con, "SHOW COLUMNS FROM users LIKE 'xp_points'");
         if(mysqli_num_rows($cols) == 0) mysqli_query($con, "ALTER TABLE users ADD COLUMN xp_points INT DEFAULT 0");
