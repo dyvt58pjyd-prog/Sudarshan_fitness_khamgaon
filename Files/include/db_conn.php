@@ -1884,6 +1884,8 @@ if (!function_exists('verify_csrf_token')) {
         }
         return hash_equals($_SESSION['csrf_token'], $token);
     }
+}
+
 if (!function_exists('get_member_photo_url')) {
     function get_member_photo_url($row, $relative_prefix = '') {
         if (!$row) return $relative_prefix . 'img/default_avatar.png';
