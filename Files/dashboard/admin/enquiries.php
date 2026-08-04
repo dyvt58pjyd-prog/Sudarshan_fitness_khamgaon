@@ -33,7 +33,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $uname = mysqli_real_escape_string($con, $e_row['username']);
         $gender = mysqli_real_escape_string($con, $e_row['gender']);
         $mobile = mysqli_real_escape_string($con, $e_row['mobile']);
-        $email = mysqli_real_escape_string($con, $e_row['email']);
+        
+        $email_post = isset($_POST['email']) ? trim($_POST['email']) : '';
+        if (!empty($email_post)) {
+            $email = mysqli_real_escape_string($con, $email_post);
+            @mysqli_query($con, "UPDATE walkin_enquiries SET email = '$email' WHERE id = $enquiry_id");
+        } else {
+            $email = mysqli_real_escape_string($con, $e_row['email']);
+        }
         $dob = $e_row['dob'];
         $dob_val = !empty($dob) ? "'$dob'" : "NULL";
         
@@ -270,6 +277,11 @@ $pending_count = mysqli_num_rows($q_pending);
                 <input type="hidden" name="enquiry_id" id="m_enquiry_id">
 
                 <div class="form-row">
+                    <label>Member Email Address <span style="font-size: 11px; color: #ff6b00;">(Add or Edit if missing/N/A)</span></label>
+                    <input type="email" name="email" id="m_email_input" class="form-input" placeholder="e.g. gauravkhatri@gmail.com">
+                </div>
+
+                <div class="form-row">
                     <label>Select Membership Plan *</label>
                     <select name="plan_id" id="m_plan_select" class="form-input" required onchange="updateApprovalModalAmounts()">
                         <?php
@@ -354,6 +366,10 @@ $pending_count = mysqli_num_rows($q_pending);
         function openApprovalModal(data) {
             document.getElementById('m_enquiry_id').value = data.id;
             document.getElementById('m_name').textContent = data.username;
+            const emailInput = document.getElementById('m_email_input');
+            if (emailInput) {
+                emailInput.value = (data.email && data.email !== 'N/A' && !data.email.includes('@sudarshanfitness.local')) ? data.email : '';
+            }
             document.getElementById('approveModal').style.display = 'flex';
             updateApprovalModalAmounts();
         }
