@@ -1,5 +1,62 @@
-<!-- 🚩 GLOBAL VIRTUAL LIVE LORD HANUMAN FLOATING WIDGET -->
-<style>
+/* 🚩 CONTINUOUS FLYING LORD HANUMAN ANIMATION (FLYING ACROSS SCREEN WITH SANJEEVANI MOUNTAIN) */
+#flying-hanuman-container {
+    position: fixed;
+    top: 15%;
+    left: -150px;
+    z-index: 99998;
+    pointer-events: auto;
+    cursor: pointer;
+    animation: fly-across 22s linear infinite;
+    filter: drop-shadow(0 0 20px rgba(255, 107, 0, 0.95)) drop-shadow(0 0 40px rgba(255, 183, 3, 0.8));
+    transition: transform 0.2s ease;
+}
+#flying-hanuman-container:hover {
+    transform: scale(1.18);
+}
+
+@keyframes fly-across {
+    0% {
+        left: -160px;
+        top: 18%;
+        transform: scale(0.9) rotate(-4deg);
+    }
+    25% {
+        top: 8%;
+        transform: scale(1) rotate(2deg);
+    }
+    50% {
+        top: 22%;
+        transform: scale(1.05) rotate(-3deg);
+    }
+    75% {
+        top: 10%;
+        transform: scale(0.95) rotate(3deg);
+    }
+    100% {
+        left: calc(100vw + 160px);
+        top: 18%;
+        transform: scale(0.9) rotate(-2deg);
+    }
+}
+
+/* Saffron Aura Glow Pulse around Flying Hanuman */
+.flying-glow-trail {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    top: -10px;
+    left: -20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 183, 3, 0.5) 0%, rgba(255, 107, 0, 0.3) 50%, transparent 75%);
+    animation: trail-pulse 1.5s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: -1;
+}
+@keyframes trail-pulse {
+    0% { transform: scale(0.9); opacity: 0.7; }
+    100% { transform: scale(1.2); opacity: 1; }
+}
+
 #hanuman-float-btn {
     position: fixed;
     bottom: 25px;
@@ -78,6 +135,71 @@
 }
 .hanuman-close-btn:hover { background: #ef4444; color: #fff; }
 </style>
+
+<!-- 🚩 CONTINUOUSLY FLYING LORD HANUMAN WITH SANJEEVANI MOUNTAIN & GADA -->
+<div id="flying-hanuman-container" onclick="openHanumanModal()" title="🚩 जय श्री राम | सजीव श्री हनुमान दर्शन">
+    <div class="flying-glow-trail"></div>
+    <svg width="130" height="130" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <radialGradient id="flyAura" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffea9f"/>
+                <stop offset="50%" stop-color="#ff6b00"/>
+                <stop offset="100%" stop-color="transparent"/>
+            </radialGradient>
+            <linearGradient id="sanparvat" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#15803d"/>
+                <stop offset="50%" stop-color="#84cc16"/>
+                <stop offset="100%" stop-color="#fef08a"/>
+            </linearGradient>
+            <linearGradient id="flyGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffe6aa"/>
+                <stop offset="50%" stop-color="#ffb703"/>
+                <stop offset="100%" stop-color="#d97706"/>
+            </linearGradient>
+        </defs>
+
+        <!-- Aura Background Glow -->
+        <circle cx="110" cy="110" r="95" fill="url(#flyAura)" opacity="0.6"/>
+
+        <!-- Dronagiri Sanjeevani Mountain in Right Raised Hand -->
+        <g transform="translate(130, 20)">
+            <!-- Mountain Peak Base -->
+            <polygon points="25,5 5,55 50,55" fill="url(#sanparvat)" stroke="#166534" stroke-width="2"/>
+            <!-- Glowing Medicinal Herbs (Sanjeevani Booti Glows) -->
+            <circle cx="25" cy="18" r="3" fill="#ffffff"/>
+            <circle cx="18" cy="32" r="2.5" fill="#fef08a"/>
+            <circle cx="34" cy="38" r="2.5" fill="#ffffff"/>
+            <circle cx="28" cy="45" r="2" fill="#86efac"/>
+        </g>
+
+        <!-- Flying Body Pose (Aerodynamic Flying Pose) -->
+        <!-- Flying Saffron Dupatta / Uttariya trailing back -->
+        <path d="M 40 120 Q 10 140 0 170 Q 30 165 60 135 Z" fill="#ff6b00" opacity="0.95"/>
+        <path d="M 50 110 Q 20 125 5 150 Q 35 145 70 125 Z" fill="#ffb703" opacity="0.8"/>
+
+        <!-- Muscular Torso Flying Forward -->
+        <path d="M 60 125 L 140 85 Q 155 105 130 135 L 75 145 Z" fill="#b45309"/>
+
+        <!-- Extended Flying Legs Behind -->
+        <path d="M 60 125 L 15 155 L 25 168 L 75 145 Z" fill="#d97706"/>
+
+        <!-- Crown & Face Facing Forward -->
+        <path d="M 125 45 L 145 20 L 160 45 Z" fill="url(#flyGold)"/>
+        <circle cx="143" cy="32" r="3" fill="#ef4444"/>
+        <ellipse cx="140" cy="70" rx="22" ry="24" fill="#d97706"/>
+
+        <!-- Tilak & Facial Features -->
+        <path d="M 142 55 L 150 55 L 148 68 Z" fill="#ef4444"/>
+        <circle cx="146" cy="62" r="1.5" fill="#ffb703"/>
+        <ellipse cx="142" cy="66" rx="4" ry="3" fill="#ffffff"/>
+        <circle cx="143" cy="66" r="1.8" fill="#000"/>
+        <path d="M 138 80 Q 146 88 152 80" fill="none" stroke="#7c2d12" stroke-width="2.5"/>
+
+        <!-- Left Arm Holding Divine Mace (Gada) -->
+        <rect x="75" y="100" width="85" height="7" rx="3" fill="url(#flyGold)" transform="rotate(-25 75 100)"/>
+        <circle cx="155" cy="62" r="14" fill="url(#flyGold)" stroke="#92400e" stroke-width="2"/>
+    </svg>
+</div>
 
 <!-- Floating Action Trigger Button -->
 <div id="hanuman-float-btn" onclick="openHanumanModal()" title="🚩 सजीव श्री हनुमान दर्शन (Virtual Live Hanuman Companion)">
