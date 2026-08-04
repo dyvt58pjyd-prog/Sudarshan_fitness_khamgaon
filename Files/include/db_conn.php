@@ -1862,30 +1862,6 @@ if (!function_exists('format_validity_string')) {
     }
 }
 
-if (!function_exists('get_csrf_token')) {
-    function get_csrf_token() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        if (empty($_SESSION['csrf_token'])) {
-            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-        }
-        return $_SESSION['csrf_token'];
-    }
-}
-
-if (!function_exists('verify_csrf_token')) {
-    function verify_csrf_token($token) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        if (empty($_SESSION['csrf_token']) || empty($token)) {
-            return false;
-        }
-        return hash_equals($_SESSION['csrf_token'], $token);
-    }
-}
-
 if (!function_exists('get_member_photo_url')) {
     function get_member_photo_url($row, $relative_prefix = '') {
         if (!$row) return $relative_prefix . 'img/default_avatar.png';
