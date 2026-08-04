@@ -364,13 +364,8 @@ $gym = get_gym_details($con);
             <div class="profile-card">
                 <div class="profile-header">
                     <div class="profile-title">
-                        <?php if (!empty($member['photo'])): ?>
-                            <img src="<?php echo str_replace(' ', '%20', htmlspecialchars($member['photo'])); ?>" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-primary); box-shadow: 0 0 10px rgba(255,107,0,0.3);">
-                        <?php else: ?>
-                            <div class="profile-icon">
-                                <i class="entypo-user"></i>
-                            </div>
-                        <?php endif; ?>
+                        <?php $mem_photo_url = get_member_photo_url($member, '../../'); ?>
+                        <img src="<?php echo $mem_photo_url; ?>" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-primary); box-shadow: 0 0 10px rgba(255,107,0,0.3);" alt="Member Photo">
                         <div>
                             <h3 style="margin: 0 0 5px 0; color: #fff; font-weight: 700;"><?php echo htmlspecialchars($member['username']); ?></h3>
                             <span style="color: var(--text-muted); font-size: 14px;">Membership ID: <strong><?php echo htmlspecialchars($member['userid']); ?></strong></span>

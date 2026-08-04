@@ -65,31 +65,38 @@ page_protect();
 
 // Process Member Photo (Webcam or File Upload)
 $photo_path = NULL;
-$upload_dir = __DIR__ . '/../../uploads/';
+$photo_base64_val = "NULL";
+$upload_dir = __DIR__ . '/../../uploads/member_photos/';
 if (!file_exists($upload_dir)) {
-    @mkdir($upload_dir, 0777, true);
+    @mkdir($upload_dir, 0755, true);
 }
 
 if (!empty($_POST['member_photo_base64'])) {
     // Captured via webcam
-    $base64_data = $_POST['member_photo_base64'];
+    $base64_data = trim($_POST['member_photo_base64']);
+    $photo_base64_val = "'" . mysqli_real_escape_string($con, $base64_data) . "'";
     $data_pieces = explode(',', $base64_data);
     if (count($data_pieces) > 1) {
         $image_data = base64_decode($data_pieces[1]);
         $filename = 'profile_' . $memID . '_' . time() . '.jpg';
         $full_path = $upload_dir . $filename;
         if (@file_put_contents($full_path, $image_data)) {
-            $photo_path = '../../uploads/' . $filename;
+            $photo_path = '../../uploads/member_photos/' . $filename;
         }
     }
 } elseif (isset($_FILES['member_photo_file']) && $_FILES['member_photo_file']['error'] === UPLOAD_ERR_OK) {
     // Uploaded via file input
     $file_tmp = $_FILES['member_photo_file']['tmp_name'];
+    $file_raw = @file_get_contents($file_tmp);
+    if ($file_raw !== false) {
+        $b64_str = 'data:image/jpeg;base64,' . base64_encode($file_raw);
+        $photo_base64_val = "'" . mysqli_real_escape_string($con, $b64_str) . "'";
+    }
     $ext = pathinfo($_FILES['member_photo_file']['name'], PATHINFO_EXTENSION);
     $filename = 'profile_' . $memID . '_' . time() . '.' . $ext;
     $full_path = $upload_dir . $filename;
     if (@move_uploaded_file($file_tmp, $full_path)) {
-        $photo_path = '../../uploads/' . $filename;
+        $photo_path = '../../uploads/member_photos/' . $filename;
     }
 }
 
@@ -107,7 +114,7 @@ $fitness_goal = isset($_POST['fitness_goal']) ? mysqli_real_escape_string($con, 
 $biometric_batch = isset($_POST['biometric_batch']) ? mysqli_real_escape_string($con, $_POST['biometric_batch']) : '1';
 $query="INSERT INTO users(username,gender,mobile,email,dob,joining_date,userid,tid) VALUES('$uname','$gender','$phn','$email','$dob','$jdate','$memID', $routine)";
     if(mysqli_query($con,$query)){
-        @mysqli_query($con, "UPDATE users SET photo=$photo_val, member_photo=$photo_val, entry_code='$entry_code', trainer_id=$trainer_val, biometric_id='$memID', biometric_enabled=1, fitness_goal='$fitness_goal', biometric_batch='$biometric_batch', pool_group_id=$pool_val WHERE userid='$memID'");
+        @mysqli_query($con, "UPDATE users SET photo=$photo_val, member_photo=$photo_val, photo_base64=$photo_base64_val, entry_code='$entry_code', trainer_id=$trainer_val, biometric_id='$memID', biometric_enabled=1, fitness_goal='$fitness_goal', biometric_batch='$biometric_batch', pool_group_id=$pool_val WHERE userid='$memID'");
         
       $partner_uid = null;
       $is_couple_selected = false;

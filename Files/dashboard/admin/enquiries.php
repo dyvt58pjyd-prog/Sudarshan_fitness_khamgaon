@@ -101,7 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         
         if (mysqli_query($con, $q_user)) {
             // Update additional features if columns exist
-            @mysqli_query($con, "UPDATE users SET biometric_id='$next_id', biometric_enabled=1, fitness_goal='$fitness_goal', member_photo='$photo_path' WHERE userid='$next_id'");
+            $photo_b64_esc = mysqli_real_escape_string($con, $e_row['photo_base64'] ?? '');
+            @mysqli_query($con, "UPDATE users SET biometric_id='$next_id', biometric_enabled=1, fitness_goal='$fitness_goal', member_photo='$photo_path', photo='$photo_path', photo_base64='$photo_b64_esc' WHERE userid='$next_id'");
 
             // 2. Insert Enrolls_To
             mysqli_query($con, "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount, balance) 
@@ -226,7 +227,8 @@ $pending_count = mysqli_num_rows($q_pending);
             <?php while ($row = mysqli_fetch_assoc($q_pending)): ?>
                 <div class="enquiry-card">
                     <div class="card-header">
-                        <img src="../../<?php echo !empty($row['photo_path']) ? htmlspecialchars($row['photo_path']) : 'img/default_avatar.png'; ?>" class="visitor-photo" alt="Visitor Photo">
+                        <?php $v_photo = get_member_photo_url($row, '../../'); ?>
+                        <img src="<?php echo $v_photo; ?>" class="visitor-photo" alt="Visitor Photo">
                         <div>
                             <div class="visitor-name"><?php echo htmlspecialchars($row['username']); ?></div>
                             <div class="visitor-phone">📞 <?php echo htmlspecialchars($row['mobile']); ?></div>

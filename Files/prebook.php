@@ -99,8 +99,10 @@ if (isset($_POST['submit_registration'])) {
 
                     // Handle Profile Photo (Webcam Base64 OR Uploaded File)
                     $photo_path_db = "";
+                    $photo_b64_db = "";
                     if (!empty($_POST['captured_photo'])) {
                         // It's a Base64 webcam image
+                        $photo_b64_db = trim($_POST['captured_photo']);
                         $base64_string = $_POST['captured_photo'];
                         $image_parts = explode(";base64,", $base64_string);
                         if (count($image_parts) == 2) {
@@ -114,6 +116,10 @@ if (isset($_POST['submit_registration'])) {
                     } elseif (isset($_FILES['upload_photo']) && $_FILES['upload_photo']['error'] === UPLOAD_ERR_OK) {
                         // It's a standard file upload
                         $p_file_tmp = $_FILES['upload_photo']['tmp_name'];
+                        $p_file_raw = @file_get_contents($p_file_tmp);
+                        if ($p_file_raw !== false) {
+                            $photo_b64_db = 'data:image/jpeg;base64,' . base64_encode($p_file_raw);
+                        }
                         $p_file_name = $_FILES['upload_photo']['name'];
                         $p_file_ext = strtolower(pathinfo($p_file_name, PATHINFO_EXTENSION));
                         if (in_array($p_file_ext, array('jpg', 'jpeg', 'png'))) {
@@ -139,7 +145,8 @@ if (isset($_POST['submit_registration'])) {
                         'weight' => isset($_POST['weight']) ? $_POST['weight'] : '',
                         'height' => isset($_POST['height']) ? $_POST['height'] : '',
                         'password' => $password,
-                        'photo_path_db' => $photo_path_db
+                        'photo_path_db' => $photo_path_db,
+                        'photo_base64' => $photo_b64_db
                     ];
                     $json_payload = mysqli_real_escape_string($con, json_encode($payload));
                     

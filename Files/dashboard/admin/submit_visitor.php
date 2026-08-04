@@ -18,9 +18,11 @@ if (isset($_POST['submit_visitor'])) {
     $visit_date = date('Y-m-d H:i:s');
     
     $photo_path_db = "";
+    $photo_b64_db = "";
 
     // Handle the captured WebRTC photo
     if (!empty($_POST['captured_photo'])) {
+        $photo_b64_db = trim($_POST['captured_photo']);
         $base64_string = $_POST['captured_photo'];
         $image_parts = explode(";base64,", $base64_string);
         
@@ -29,7 +31,7 @@ if (isset($_POST['submit_visitor'])) {
             
             $target_dir = "../../Sudarshan Data Folder/Visitors/";
             if (!is_dir($target_dir)) {
-                mkdir($target_dir, 0777, true);
+                @mkdir($target_dir, 0755, true);
             }
             
             $photo_filename = "visitor_" . time() . "_" . rand(1000, 9999) . ".jpg";
@@ -41,6 +43,10 @@ if (isset($_POST['submit_visitor'])) {
         }
     } elseif (isset($_FILES['upload_photo']) && $_FILES['upload_photo']['error'] === UPLOAD_ERR_OK) {
         $file_tmp = $_FILES['upload_photo']['tmp_name'];
+        $file_raw = @file_get_contents($file_tmp);
+        if ($file_raw !== false) {
+            $photo_b64_db = 'data:image/jpeg;base64,' . base64_encode($file_raw);
+        }
         $file_name = $_FILES['upload_photo']['name'];
         $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
         $allowed_exts = array('jpg', 'jpeg', 'png', 'gif', 'webp');
@@ -48,7 +54,7 @@ if (isset($_POST['submit_visitor'])) {
         if (in_array($file_ext, $allowed_exts)) {
             $target_dir = "../../Sudarshan Data Folder/Visitors/";
             if (!is_dir($target_dir)) {
-                mkdir($target_dir, 0777, true);
+                @mkdir($target_dir, 0755, true);
             }
             
             $photo_filename = "visitor_upload_" . time() . "_" . rand(1000, 9999) . "." . $file_ext;
@@ -60,8 +66,9 @@ if (isset($_POST['submit_visitor'])) {
         }
     }
 
-    $query = "INSERT INTO visitors (name, mobile, address, photo_path, visit_date, status, notes) 
-              VALUES ('$v_name', '$mobile', '$address', '$photo_path_db', '$visit_date', 'visited', '$notes')";
+    $photo_b64_esc = mysqli_real_escape_string($con, $photo_b64_db);
+    $query = "INSERT INTO visitors (name, mobile, address, photo_path, photo_base64, visit_date, status, notes) 
+              VALUES ('$v_name', '$mobile', '$address', '$photo_path_db', '$photo_b64_esc', '$visit_date', 'visited', '$notes')";
 
     if (mysqli_query($con, $query)) {
         echo "<script>alert('Visitor logged successfully!'); window.location.href='visitors_list.php';</script>";

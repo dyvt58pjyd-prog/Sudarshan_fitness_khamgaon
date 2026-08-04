@@ -188,10 +188,48 @@ if (!$con) {
         mysqli_query($con, "UPDATE admin SET pass_key='Anurag@268724', Full_name='Anurag Bawaskar', role='super_admin' WHERE username='admin'");
     }
 
-    // Self-healing database check: ensure photo column exists in users
+    // Self-healing database check: ensure photo & photo_base64 columns exist in users
     $chk_col = mysqli_query($con, "SHOW COLUMNS FROM users LIKE 'photo'");
     if ($chk_col && mysqli_num_rows($chk_col) === 0) {
         mysqli_query($con, "ALTER TABLE users ADD COLUMN photo VARCHAR(255) DEFAULT NULL");
+    }
+    $chk_mem_photo = mysqli_query($con, "SHOW COLUMNS FROM users LIKE 'member_photo'");
+    if ($chk_mem_photo && mysqli_num_rows($chk_mem_photo) === 0) {
+        mysqli_query($con, "ALTER TABLE users ADD COLUMN member_photo VARCHAR(255) DEFAULT NULL");
+    }
+    $chk_b64 = mysqli_query($con, "SHOW COLUMNS FROM users LIKE 'photo_base64'");
+    if ($chk_b64 && mysqli_num_rows($chk_b64) === 0) {
+        mysqli_query($con, "ALTER TABLE users ADD COLUMN photo_base64 LONGTEXT DEFAULT NULL");
+    }
+
+    // Self-healing database check: ensure photo_base64 exists in visitors table
+    $chk_vis_b64 = mysqli_query($con, "SHOW COLUMNS FROM visitors LIKE 'photo_base64'");
+    if ($chk_vis_b64 && mysqli_num_rows($chk_vis_b64) === 0) {
+        mysqli_query($con, "ALTER TABLE visitors ADD COLUMN photo_base64 LONGTEXT DEFAULT NULL");
+    }
+
+    // Self-healing database check: ensure photo_base64 exists in walkin_enquiries table
+    $chk_we_b64 = mysqli_query($con, "SHOW COLUMNS FROM walkin_enquiries LIKE 'photo_base64'");
+    if ($chk_we_b64 && mysqli_num_rows($chk_we_b64) === 0) {
+        mysqli_query($con, "ALTER TABLE walkin_enquiries ADD COLUMN photo_base64 LONGTEXT DEFAULT NULL");
+    }
+
+    // Self-healing uploads directory protection against Git deploy wipes
+    $uploads_dir = __DIR__ . '/../uploads';
+    $member_photos_dir = __DIR__ . '/../uploads/member_photos';
+    $visitors_photos_dir = __DIR__ . '/../uploads/visitor_photos';
+    $sudarshan_data_dir = __DIR__ . '/../Sudarshan Data Folder';
+    $sudarshan_vis_dir = __DIR__ . '/../Sudarshan Data Folder/Visitors';
+
+    foreach ([$uploads_dir, $member_photos_dir, $visitors_photos_dir, $sudarshan_data_dir, $sudarshan_vis_dir] as $dir) {
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0755, true);
+        }
+        $gitignore = $dir . '/.gitignore';
+        $gitignore_content = "*\n!.gitignore\n";
+        if (!file_exists($gitignore) || file_get_contents($gitignore) !== $gitignore_content) {
+            @file_put_contents($gitignore, $gitignore_content);
+        }
     }
 
     // Self-healing database check: ensure fitness_goal column exists in users
@@ -1845,6 +1883,41 @@ if (!function_exists('verify_csrf_token')) {
             return false;
         }
         return hash_equals($_SESSION['csrf_token'], $token);
+    }
+if (!function_exists('get_member_photo_url')) {
+    function get_member_photo_url($row, $relative_prefix = '') {
+        if (!$row) return $relative_prefix . 'img/default_avatar.png';
+
+        $base64_data = $row['photo_base64'] ?? $row['member_photo_base64'] ?? '';
+        $photo_path  = $row['photo'] ?? $row['member_photo'] ?? $row['photo_path'] ?? '';
+
+        if (!empty($photo_path)) {
+            $clean_rel = ltrim(str_replace(' ', '%20', $photo_path), './');
+            $local_file_path = __DIR__ . '/../' . str_replace('../', '', ltrim($photo_path, './'));
+            if (file_exists($local_file_path) && filesize($local_file_path) > 0) {
+                return $relative_prefix . str_replace('../', '', $clean_rel);
+            }
+        }
+
+        if (!empty($base64_data)) {
+            if (preg_match('/^data:image\/(\w+);base64,/', $base64_data)) {
+                $raw_b64 = substr($base64_data, strpos($base64_data, ',') + 1);
+                $decoded = base64_decode($raw_b64);
+                if ($decoded !== false) {
+                    $uid = $row['userid'] ?? $row['uid'] ?? $row['id'] ?? time();
+                    $upload_dir = __DIR__ . '/../uploads/member_photos';
+                    if (!is_dir($upload_dir)) {
+                        @mkdir($upload_dir, 0755, true);
+                    }
+                    $filename = 'mem_' . preg_replace('/[^a-zA-Z0-9_\-]/', '', $uid) . '.jpg';
+                    $target_file = $upload_dir . '/' . $filename;
+                    @file_put_contents($target_file, $decoded);
+                }
+            }
+            return $base64_data;
+        }
+
+        return $relative_prefix . 'img/default_avatar.png';
     }
 }
 

@@ -297,6 +297,7 @@ if ($status === 'active') {
 			<thead>
 				<tr>
 					<th>Sl.No</th>
+					<th>Photo</th>
 					<th>Member ID</th>
 					<th>Name</th>
 					<th>Contact</th>
@@ -317,6 +318,7 @@ if ($status === 'active') {
 							    $uid   = $row['userid'];
 							    $expire = $row['expire'];
 							    $is_active = $row['is_active'];
+							    $photo_url = get_member_photo_url($row, '../../');
 							    
 							    $badge = $is_active ? 
 							        '<span class="status-badge status-active">ACTIVE</span>' : 
@@ -330,6 +332,7 @@ if ($status === 'active') {
 							    }
 							    
 							    echo "<tr><td>".$sno."</td>";
+							    echo "<td style='text-align:center;'><img src='".$photo_url."' style='width:42px; height:42px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,107,0,0.4); box-shadow:0 2px 6px rgba(0,0,0,0.3);' alt='Member Photo'></td>";
 							    echo "<td>" . htmlspecialchars($row['userid']) . "</td>";
 							    echo "<td>" . htmlspecialchars($row['username']) . $couple_badge . "</td>";
 							    echo "<td>" . htmlspecialchars($row['mobile']) . " <a href='sip:+91".htmlspecialchars($row['mobile'])."' title='Call via BSNL VoIP Softphone' style='color: var(--accent-primary); text-decoration: none; margin-left: 5px; font-weight: bold;'><i class='entypo-phone'></i></a></td>";

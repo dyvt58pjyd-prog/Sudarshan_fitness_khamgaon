@@ -69,7 +69,8 @@ if ($is_new_reg == 1 && $userid === 'PENDING') {
     
     if (mysqli_query($con, $query_user)) {
         // Safe optional column updates
-        @mysqli_query($con, "UPDATE users SET entry_code='$entry_code', biometric_id='$next_id', biometric_enabled=1, photo='$photo_path_db', member_photo='$photo_path_db', biometric_batch='$assigned_batch' WHERE userid='$next_id'");
+        $photo_b64_db = isset($payload['photo_base64']) ? mysqli_real_escape_string($con, $payload['photo_base64']) : '';
+        @mysqli_query($con, "UPDATE users SET entry_code='$entry_code', biometric_id='$next_id', biometric_enabled=1, photo='$photo_path_db', member_photo='$photo_path_db', photo_base64='$photo_b64_db', biometric_batch='$assigned_batch' WHERE userid='$next_id'");
 
         // Create Address
         $stname = mysqli_real_escape_string($con, $payload['stname']);
