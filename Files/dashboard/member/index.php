@@ -399,21 +399,6 @@ function dismissWarning() {
 			document.addEventListener('DOMContentLoaded',function(){sfIdx=Math.floor(Math.random()*sfQuotes.length);sfShowQuote(sfIdx);sfTimer=setInterval(function(){sfIdx=(sfIdx+1)%sfQuotes.length;sfShowQuote(sfIdx);},5000);});
 			</script>
 
-			<!-- 🚩 VIRTUAL LIVE HANUMAN COMPANION QUICK BANNER -->
-			<div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.25) 0%, rgba(18, 12, 34, 0.95) 100%); border: 2px solid #ff6b00; border-radius: 20px; padding: 22px 25px; margin-bottom: 25px; box-shadow: 0 15px 35px rgba(255, 107, 0, 0.25); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-				<div style="display: flex; align-items: center; gap: 16px;">
-					<div style="font-size: 42px; filter: drop-shadow(0 0 10px rgba(255, 107, 0, 0.8));">🚩</div>
-					<div>
-						<span style="background: rgba(255,107,0,0.2); border: 1px solid #ff6b00; color: #ffb703; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 800; letter-spacing: 1px;">DIVINE FITNESS COMPANION</span>
-						<h3 style="color: #ffffff; font-size: 18px; font-weight: 900; margin: 4px 0 0 0;">सजीव श्री हनुमान दर्शन एवं शक्ति संवर्धन</h3>
-						<p style="color: rgba(255,255,255,0.7); font-size: 12.5px; margin-top: 2px;">पुष्पांजलि, महा आरती, हनुमान चालीसा एवं दैनिक वर्कआउट प्रेरणा मार्गदर्शन।</p>
-					</div>
-				</div>
-				<a href="virtual_hanuman.php" style="background: linear-gradient(135deg, #ff6b00, #ff8800); color: #ffffff; padding: 12px 22px; border-radius: 12px; font-weight: 900; font-size: 13.5px; text-decoration: none; box-shadow: 0 4px 20px rgba(255,107,0,0.5); transition: transform 0.2s;">
-					दर्शन करें (Enter Shrine) →
-				</a>
-			</div>
-
 
             <?php if ($partner_user): ?>
             <div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.25) 0%, rgba(30, 41, 59, 0.9) 100%); border: 2px solid #ff6b00; border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 15px 35px rgba(255,107,0,0.25);">
