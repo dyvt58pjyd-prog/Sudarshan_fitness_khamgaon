@@ -32,6 +32,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 'member' && isset($_SESSIO
     <li id="pt_booking"><a href="pt_booking.php"><i class="entypo-calendar"></i><span>PT Slot Booking</span></a></li>
     <li><a href="../admin/logout.php"><i class="entypo-logout"></i><span>Logout</span></a></li>
 </ul>
+<?php @include('../../include/hanuman_floating_widget.php'); ?>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {

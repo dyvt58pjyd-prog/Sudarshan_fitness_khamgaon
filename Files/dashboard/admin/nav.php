@@ -284,9 +284,11 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
     <?php endif; ?>
 
     <!-- 9. PROFILE & LOGOUT -->
+    <li id="virtual_hanuman_admin"><a href="../member/virtual_hanuman.php" style="color: #ff6b00; font-weight: bold;"><i class="entypo-heart"></i><span>🚩 सजीव श्री हनुमान (Virtual Hanuman)</span></a></li>
     <li id="adminprofile"><a href="more-userprofile.php"><i class="entypo-folder"></i><span>Profile</span></a></li>
     <li><a href="logout.php"><i class="entypo-logout"></i><span>Logout</span></a></li>
 </ul>
+<?php @include('../../include/hanuman_floating_widget.php'); ?>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {

@@ -275,6 +275,18 @@ if (substr($logo_path, 0, 6) === '../../') {
             <div class="login-header login-caret">
                 <div class="login-content" style="text-align: center;">
                     <div style="font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; color: #ff003c; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; text-shadow: 0 0 12px rgba(255,0,60,0.5);">[ SYSTEM GATE PORTAL ]</div>
+                    
+                    <!-- 🚩 SHRI BAJRANGBALI DIVINE BLESSING BANNER -->
+                    <div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.22) 0%, rgba(18, 12, 34, 0.9) 100%); border: 1.5px solid #ff6b00; border-radius: 16px; padding: 10px 14px; margin-bottom: 14px; text-align: center; box-shadow: 0 0 25px rgba(255, 107, 0, 0.35);">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <span style="font-size: 22px; filter: drop-shadow(0 0 8px #ff6b00);">🚩</span>
+                            <span style="color: #ffb703; font-size: 13px; font-weight: 900; letter-spacing: 0.5px;">जय श्री राम | ॐ हं हनुमते नमः</span>
+                        </div>
+                        <div style="font-size: 11px; color: #ffe6aa; margin-top: 3px; font-weight: 700;">
+                            "बल बुधि बिद्या देहु मोहिं हरहु कलेस बिकार" — सजीव श्री हनुमान शक्ति द्वार
+                        </div>
+                    </div>
+
                     <a href="#" class="logo">
                         <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="filter: drop-shadow(0 0 25px rgba(255,0,60,0.7)); max-height: 95px; width: auto;" />
                     </a>
@@ -655,5 +667,6 @@ if (substr($logo_path, 0, 6) === '../../') {
         </div>
     </div>
     <?php include './include/dev_credit.php'; ?>
+    <?php @include('./include/hanuman_floating_widget.php'); ?>
 </body>
 </html>
