@@ -300,7 +300,7 @@ if (!$con) {
         batch_name VARCHAR(100) NOT NULL,
         start_time TIME NOT NULL,
         end_time TIME NOT NULL,
-        max_members INT DEFAULT 30
+        max_members INT DEFAULT 100
     )");
 
     // Seed the default 3 batches if the table is empty
@@ -308,10 +308,13 @@ if (!$con) {
     $cnt_batches = mysqli_fetch_assoc($chk_batches_empty);
     if (intval($cnt_batches['cnt']) === 0) {
         mysqli_query($con, "INSERT INTO biometric_batches (batch_name, start_time, end_time, max_members) VALUES
-            ('Batch 1 (General)', '06:00:00', '11:00:00', 30),
-            ('Batch 2 (Women Only)', '16:00:00', '17:00:00', 25),
-            ('Batch 3 (Evening General)', '17:00:00', '22:00:00', 30)
+            ('Batch 1 (General)', '06:00:00', '11:00:00', 100),
+            ('Batch 2 (Women Only)', '16:00:00', '17:00:00', 100),
+            ('Batch 3 (Evening General)', '17:00:00', '22:00:00', 100)
         ");
+    } else {
+        // Automatically set max occupancy limit for all batches to 100 members
+        mysqli_query($con, "UPDATE biometric_batches SET max_members = 100 WHERE max_members != 100");
     }
 
 

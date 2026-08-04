@@ -393,7 +393,7 @@ if (isset($_POST['batch_action'])) {
                         </div>
                         <div class="col-md-3">
                             <label>Max Occupancy Limit</label>
-                            <input type="number" name="new_batch_max" class="form-control-premium" value="30" min="1" required>
+                            <input type="number" name="new_batch_max" class="form-control-premium" value="100" min="1" required>
                         </div>
                     </div>
                     <div style="text-align: right; margin-top: 15px;">
