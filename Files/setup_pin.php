@@ -25,8 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $error_msg = "Invalid PIN: Your Security PIN must contain numbers only (0-9).";
     } elseif (strlen($new_pin) < 4 || strlen($new_pin) > 6) {
         $error_msg = "Invalid PIN Length: Your Security PIN must be between 4 and 6 digits.";
-    } elseif ($new_pin === '070726') {
-        $error_msg = "Security Alert: You cannot use the default code '070726'. Please choose a unique private PIN.";
+    } elseif ($new_pin === '1234' || $new_pin === '123456') {
+        $error_msg = "Security Alert: You cannot use weak default PINs like '1234'. Please choose a secure PIN.";
     } elseif ($new_pin !== $confirm_pin) {
         $error_msg = "Mismatch Error: The New PIN and Confirm PIN do not match. Please re-enter.";
     } else {

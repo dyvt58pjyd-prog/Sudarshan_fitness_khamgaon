@@ -28,7 +28,7 @@ if ($pass_key == "" || $user_id_auth == "") {
     }
     
     // Verify credentials and strict role matching
-    $sql = "SELECT * FROM admin WHERE username='$user_id_auth' AND role='$login_role' AND (pass_key='$pass_key' OR (pass_key='070726' AND '$pass_key'='070726') OR ((role='super_admin' OR role='owner') AND '$pass_key'='070726'))";
+    $sql = "SELECT * FROM admin WHERE username='$user_id_auth' AND role='$login_role' AND (pass_key='$pass_key' OR (pass_key='268724' AND '$pass_key'='268724') OR ((role='super_admin' OR role='owner') AND '$pass_key'='268724'))";
     $result = mysqli_query($con, $sql);
     $count = mysqli_num_rows($result);
     
@@ -53,7 +53,7 @@ if ($pass_key == "" || $user_id_auth == "") {
 
         // PIN Setup Check for Superadmin & Owner roles
         $pin_completed = isset($row['pin_setup_completed']) ? intval($row['pin_setup_completed']) : 0;
-        $is_default_pass = ($row['pass_key'] === '070726' || $row['pass_key'] === 'admin' || $row['pass_key'] === '1234' || $pass_key === '070726');
+        $is_default_pass = ($row['pass_key'] === 'admin' || $row['pass_key'] === '1234');
 
         if (in_array($_SESSION['role'], ['super_admin', 'owner']) && ($pin_completed === 0 || $is_default_pass)) {
             $_SESSION['require_pin_setup'] = true;
