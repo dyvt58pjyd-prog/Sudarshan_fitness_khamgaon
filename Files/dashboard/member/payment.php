@@ -401,6 +401,32 @@ if (isset($_POST['submit_payment'])) {
 
                     <div id="qr-payment-area" style="display: none;">
                         <div class="qr-section">
+                            <!-- Official Gym Payment Receiving Address Display -->
+                            <div style="background: rgba(16, 185, 129, 0.1); border: 2px solid #10b981; border-radius: 16px; padding: 18px; margin-bottom: 20px; text-align: center; box-shadow: 0 0 25px rgba(16, 185, 129, 0.2);">
+                                <div style="font-size: 11px; font-weight: 900; color: #10b981; text-transform: uppercase; letter-spacing: 1.5px; font-family: 'Orbitron', sans-serif;">
+                                    💳 OFFICIAL RECEIVING PAYMENT ADDRESS (VPA)
+                                </div>
+                                <div id="display-upi-vpa" style="font-size: 20px; font-weight: 900; color: #38bdf8; margin: 10px 0; font-family: monospace; letter-spacing: 1px; word-break: break-all;">
+                                    <?php echo htmlspecialchars(!empty($gym['upi_id']) ? $gym['upi_id'] : '7620453195-2@ybl'); ?>
+                                </div>
+                                <div style="font-size: 12px; color: #cbd5e1; margin-bottom: 12px;">
+                                    Payee / Merchant: <strong><?php echo htmlspecialchars(!empty($gym['bank_holder']) ? $gym['bank_holder'] : $gym['gym_name']); ?></strong>
+                                </div>
+
+                                <button type="button" onclick="copyUpiAddress()" class="btn btn-success" style="font-weight: 800; font-family: 'Orbitron', sans-serif; padding: 10px 22px; border-radius: 10px; background: linear-gradient(135deg, #10b981, #059669); border: none; box-shadow: 0 4px 15px rgba(16,185,129,0.4); cursor: pointer;">
+                                    📋 CLICK TO COPY UPI ID
+                                </button>
+
+                                <?php if (!empty($gym['bank_account'])): ?>
+                                    <div style="margin-top: 15px; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 12px; text-align: left; font-size: 12px;">
+                                        <div style="font-weight: bold; color: #f97316; margin-bottom: 6px;">🏦 Direct Bank Transfer Account:</div>
+                                        <div>Bank: <strong><?php echo htmlspecialchars($gym['bank_name']); ?></strong></div>
+                                        <div>A/C No: <strong style="color: #fff;"><?php echo htmlspecialchars($gym['bank_account']); ?></strong></div>
+                                        <div>IFSC Code: <strong style="color: #fff;"><?php echo htmlspecialchars($gym['bank_ifsc']); ?></strong></div>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+
                             <h4 style="color: var(--text-main); font-weight: 600; margin-top: 0;">Scan QR Code to Pay</h4>
                             <p style="color: var(--text-muted); font-size: 13px; margin: 0;">
                                 Scan the UPI QR code below and pay the exact amount using any UPI app.
@@ -466,6 +492,15 @@ if (isset($_POST['submit_payment'])) {
     </div>
 
     <script>
+        function copyUpiAddress() {
+            const vpa = "<?php echo htmlspecialchars(!empty($gym['upi_id']) ? $gym['upi_id'] : '7620453195-2@ybl'); ?>";
+            navigator.clipboard.writeText(vpa).then(() => {
+                alert("📋 Copied Payment UPI ID (" + vpa + ") to clipboard!");
+            }).catch(err => {
+                prompt("Copy this UPI ID manually:", vpa);
+            });
+        }
+
         function toggleFormSection() {
             const payType = document.getElementById('payment-type').value;
             const membershipGroup = document.getElementById('membership-group');
@@ -494,8 +529,8 @@ if (isset($_POST['submit_payment'])) {
 
         // Shared helper to generate UPI link & QR
         function loadUpiPayment(amount, orderPrefix) {
-            const upiId = "<?php echo isset($gym['upi_id']) ? htmlspecialchars($gym['upi_id']) : ''; ?>";
-            const gymName = "<?php echo isset($gym['gym_name']) ? htmlspecialchars($gym['gym_name']) : 'Titan Gym'; ?>";
+            const upiId = "<?php echo !empty($gym['upi_id']) ? htmlspecialchars($gym['upi_id']) : '7620453195-2@ybl'; ?>";
+            const gymName = "<?php echo isset($gym['gym_name']) ? htmlspecialchars($gym['gym_name']) : 'Sudarshan Fitness'; ?>";
             const staticQrExists = <?php echo (!empty($gym['payment_qr'])) ? 'true' : 'false'; ?>;
 
             const qrImg = document.getElementById('upi-qr-img');

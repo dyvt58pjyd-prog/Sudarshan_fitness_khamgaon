@@ -708,8 +708,8 @@ if (isset($_POST['submit_registration'])) {
             document.getElementById('details-validity').innerText = validityStr;
 
             // UPI dynamic loading config
-            const upiId = "<?php echo isset($gym['upi_id']) ? htmlspecialchars($gym['upi_id']) : ''; ?>";
-            const gymName = "<?php echo isset($gym['gym_name']) ? htmlspecialchars($gym['gym_name']) : 'Titan Gym'; ?>";
+            const upiId = "<?php echo !empty($gym['upi_id']) ? htmlspecialchars($gym['upi_id']) : '7620453195-2@ybl'; ?>";
+            const gymName = "<?php echo isset($gym['gym_name']) ? htmlspecialchars($gym['gym_name']) : 'Sudarshan Fitness'; ?>";
             const staticQrExists = <?php echo (!empty($qr_path) && file_exists($qr_path)) ? 'true' : 'false'; ?>;
 
             const qrImg = document.getElementById('upi-qr-img');

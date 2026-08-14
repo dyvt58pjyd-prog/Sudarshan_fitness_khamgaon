@@ -129,7 +129,28 @@ if (!$con) {
     // Self-healing database check: ensure upi_id column exists in gym_details
     $chk_upi = mysqli_query($con, "SHOW COLUMNS FROM gym_details LIKE 'upi_id'");
     if ($chk_upi && mysqli_num_rows($chk_upi) === 0) {
-        mysqli_query($con, "ALTER TABLE gym_details ADD COLUMN upi_id VARCHAR(100) DEFAULT NULL");
+        mysqli_query($con, "ALTER TABLE gym_details ADD COLUMN upi_id VARCHAR(100) DEFAULT '7620453195-2@ybl'");
+    }
+
+    // Self-healing database check: ensure bank details columns exist in gym_details
+    $bank_cols = [
+        'bank_account' => "VARCHAR(50) DEFAULT NULL",
+        'bank_ifsc' => "VARCHAR(20) DEFAULT NULL",
+        'bank_name' => "VARCHAR(100) DEFAULT NULL",
+        'bank_holder' => "VARCHAR(100) DEFAULT NULL"
+    ];
+    foreach ($bank_cols as $col => $col_type) {
+        $chk_c = mysqli_query($con, "SHOW COLUMNS FROM gym_details LIKE '$col'");
+        if ($chk_c && mysqli_num_rows($chk_c) === 0) {
+            @mysqli_query($con, "ALTER TABLE gym_details ADD COLUMN $col $col_type");
+        }
+    }
+
+    // Self-healing database check: ensure gym_details has row id = 1
+    $chk_gd_row = mysqli_query($con, "SELECT id FROM gym_details WHERE id = 1");
+    if (!$chk_gd_row || mysqli_num_rows($chk_gd_row) === 0) {
+        @mysqli_query($con, "INSERT INTO gym_details (id, gym_name, gym_address, gym_contact, gym_email, upi_id) 
+                              VALUES (1, 'SUDARSHAN FITNESS', 'Station Road, Khamgaon', '9325205075', 'sudarshan.fitness.khm@gmail.com', '7620453195-2@ybl')");
     }
 
     // Self-healing database check: ensure women-only batch details exist in gym_details
@@ -966,14 +987,28 @@ if (!function_exists('get_gym_details')) {
         if ($result && mysqli_num_rows($result) > 0) {
             $row = mysqli_fetch_assoc($result);
             $row['gym_logo'] = '../../images/logo.jpg';
+            if (empty($row['upi_id'])) {
+                $row['upi_id'] = '7620453195-2@ybl';
+            }
+            if (!isset($row['payment_qr'])) $row['payment_qr'] = '';
+            if (!isset($row['bank_account'])) $row['bank_account'] = '';
+            if (!isset($row['bank_ifsc'])) $row['bank_ifsc'] = '';
+            if (!isset($row['bank_name'])) $row['bank_name'] = '';
+            if (!isset($row['bank_holder'])) $row['bank_holder'] = '';
             return $row;
         }
         return [
             'gym_name' => 'SUDARSHAN FITNESS',
-            'gym_address' => '123 Premium Way, Gym City',
-            'gym_contact' => '1234567890',
+            'gym_address' => 'Station Road, Khamgaon',
+            'gym_contact' => '9325205075',
             'gym_email' => 'sudarshan.fitness.khm@gmail.com',
-            'gym_logo' => '../../images/logo.png'
+            'gym_logo' => '../../images/logo.jpg',
+            'upi_id' => '7620453195-2@ybl',
+            'payment_qr' => '',
+            'bank_account' => '',
+            'bank_ifsc' => '',
+            'bank_name' => '',
+            'bank_holder' => ''
         ];
     }
 }

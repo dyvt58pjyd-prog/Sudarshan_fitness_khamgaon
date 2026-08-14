@@ -3,7 +3,7 @@ require '../../include/db_conn.php';
 page_protect();
 
 $gym = get_gym_details($con);
-$upi_id = "7620453195-2@ybl"; // Official Gym UPI ID
+$upi_id = !empty($gym['upi_id']) ? $gym['upi_id'] : '7620453195-2@ybl';
 
 $amount = isset($_GET['amount']) ? floatval($_GET['amount']) : 2500;
 $uid = isset($_GET['uid']) ? htmlspecialchars($_GET['uid']) : 'MEMBER';

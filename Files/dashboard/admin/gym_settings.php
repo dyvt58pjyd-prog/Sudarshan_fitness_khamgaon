@@ -70,7 +70,12 @@ if (isset($_POST['submit'])) {
         }
     }
 
-    $upi_id = mysqli_real_escape_string($con, $_POST['upi_id']);
+    $upi_id = mysqli_real_escape_string($con, trim($_POST['upi_id']));
+    $bank_account = mysqli_real_escape_string($con, trim($_POST['bank_account'] ?? ''));
+    $bank_ifsc = mysqli_real_escape_string($con, trim($_POST['bank_ifsc'] ?? ''));
+    $bank_name = mysqli_real_escape_string($con, trim($_POST['bank_name'] ?? ''));
+    $bank_holder = mysqli_real_escape_string($con, trim($_POST['bank_holder'] ?? ''));
+
     $women_batch_enabled = isset($_POST['women_batch_enabled']) ? 1 : 0;
     $women_batch_start = mysqli_real_escape_string($con, $_POST['women_batch_start']);
     $women_batch_end = mysqli_real_escape_string($con, $_POST['women_batch_end']);
@@ -83,13 +88,17 @@ if (isset($_POST['submit'])) {
         gym_logo = '$logo_path',
         payment_qr = '$qr_path',
         upi_id = '$upi_id',
+        bank_account = '$bank_account',
+        bank_ifsc = '$bank_ifsc',
+        bank_name = '$bank_name',
+        bank_holder = '$bank_holder',
         women_batch_enabled = '$women_batch_enabled',
         women_batch_start = '$women_batch_start',
         women_batch_end = '$women_batch_end'
         WHERE id = 1";
 
     if (mysqli_query($con, $update_query)) {
-        echo "<head><script>alert('Branding settings updated successfully!');</script></head></html>";
+        echo "<head><script>alert('✅ Gym settings & renewal payment receiving address updated successfully!');</script></head></html>";
         echo "<meta http-equiv='refresh' content='0; url=gym_settings.php'>";
         exit();
     } else {
@@ -245,8 +254,40 @@ if (isset($_POST['batch_action'])) {
                     <label>Gym Name</label>
                     <input class="form-control-premium" type="text" name="gym_name" value="<?php echo htmlspecialchars($gym['gym_name']); ?>" required>
 
-                    <label>Gym UPI ID (For Free Instant Payments)</label>
-                    <input class="form-control-premium" type="text" name="upi_id" value="<?php echo isset($gym['upi_id']) ? htmlspecialchars($gym['upi_id']) : ''; ?>" placeholder="e.g. merchant@upi">
+                    <!-- Renewal Payment Address & UPI Settings Box -->
+                    <div style="background: rgba(16, 185, 129, 0.08); padding: 20px; border-radius: 14px; border: 1.5px solid #10b981; margin-top: 15px; margin-bottom: 25px;">
+                        <h4 style="margin-top: 0; color: #10b981; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">
+                            💳 Renewal Payment Receiving Address &amp; Banking Details
+                        </h4>
+                        <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4; margin-bottom: 15px;">
+                            Members renewing their membership in the app and website will send payment directly to this UPI ID and Bank Account.
+                        </p>
+
+                        <label style="color: #fff; font-weight: bold;">Gym UPI VPA Address (For Instant Member Renewals) *</label>
+                        <input class="form-control-premium" type="text" name="upi_id" value="<?php echo isset($gym['upi_id']) ? htmlspecialchars($gym['upi_id']) : '7620453195-2@ybl'; ?>" placeholder="e.g. 7620453195-2@ybl" required style="border-color: #10b981 !important; font-weight: bold; font-size: 15px; color: #38bdf8 !important;">
+
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-sm-6">
+                                <label>Bank Account Number (Optional)</label>
+                                <input type="text" name="bank_account" class="form-control-premium" value="<?php echo isset($gym['bank_account']) ? htmlspecialchars($gym['bank_account']) : ''; ?>" placeholder="e.g. 5010023456789">
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Bank IFSC Code (Optional)</label>
+                                <input type="text" name="bank_ifsc" class="form-control-premium" value="<?php echo isset($gym['bank_ifsc']) ? htmlspecialchars($gym['bank_ifsc']) : ''; ?>" placeholder="e.g. HDFC0001234">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Bank Name (Optional)</label>
+                                <input type="text" name="bank_name" class="form-control-premium" value="<?php echo isset($gym['bank_name']) ? htmlspecialchars($gym['bank_name']) : ''; ?>" placeholder="e.g. HDFC Bank">
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Account Holder Name (Optional)</label>
+                                <input type="text" name="bank_holder" class="form-control-premium" value="<?php echo isset($gym['bank_holder']) ? htmlspecialchars($gym['bank_holder']) : ''; ?>" placeholder="e.g. Sudarshan Fitness">
+                            </div>
+                        </div>
+                    </div>
 
                     <label>Gym Email</label>
                     <input class="form-control-premium" type="email" name="gym_email" value="<?php echo htmlspecialchars($gym['gym_email']); ?>" required>
