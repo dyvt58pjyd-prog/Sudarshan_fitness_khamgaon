@@ -745,7 +745,7 @@ if (isset($_POST['submit_registration'])) {
             document.getElementById('details-validity').innerText = validityStr;
 
             // UPI dynamic loading config
-            const upiId = "<?php echo !empty($gym['upi_id']) ? htmlspecialchars($gym['upi_id']) : '7620453195-2@ybl'; ?>";
+            const upiId = "<?php echo !empty($gym['upi_id']) ? htmlspecialchars($gym['upi_id']) : 'anuragbawaskar4326@sbi'; ?>";
             const gymName = "<?php echo isset($gym['gym_name']) ? htmlspecialchars($gym['gym_name']) : 'Sudarshan Fitness'; ?>";
             const staticQrExists = <?php echo (!empty($qr_path) && file_exists($qr_path)) ? 'true' : 'false'; ?>;
 

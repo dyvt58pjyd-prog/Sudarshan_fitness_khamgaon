@@ -347,7 +347,7 @@ $pending_count = mysqli_num_rows($q_pending);
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <script>
         let upiQrObj = null;
-        const gymUpiId = <?php echo json_encode(!empty($gym['upi_id']) ? $gym['upi_id'] : '7620453195-2@ybl'); ?>;
+        const gymUpiId = <?php echo json_encode(!empty($gym['upi_id']) ? $gym['upi_id'] : 'anuragbawaskar4326@sbi'); ?>;
         const gymName = <?php echo json_encode(!empty($gym['gym_name']) ? $gym['gym_name'] : 'Sudarshan Fitness'); ?>;
 
         function confirmDeleteEnquiry(id, name) {

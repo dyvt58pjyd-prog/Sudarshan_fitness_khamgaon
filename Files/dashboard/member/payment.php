@@ -407,7 +407,7 @@ if (isset($_POST['submit_payment'])) {
                                     💳 OFFICIAL RECEIVING PAYMENT ADDRESS (VPA)
                                 </div>
                                 <div id="display-upi-vpa" style="font-size: 20px; font-weight: 900; color: #38bdf8; margin: 10px 0; font-family: monospace; letter-spacing: 1px; word-break: break-all;">
-                                    <?php echo htmlspecialchars(!empty($gym['upi_id']) ? $gym['upi_id'] : '7620453195-2@ybl'); ?>
+                                    <?php echo htmlspecialchars(!empty($gym['upi_id']) ? $gym['upi_id'] : 'anuragbawaskar4326@sbi'); ?>
                                 </div>
                                 <div style="font-size: 12px; color: #cbd5e1; margin-bottom: 12px;">
                                     Payee / Merchant: <strong><?php echo htmlspecialchars(!empty($gym['bank_holder']) ? $gym['bank_holder'] : $gym['gym_name']); ?></strong>
@@ -493,7 +493,7 @@ if (isset($_POST['submit_payment'])) {
 
     <script>
         function copyUpiAddress() {
-            const vpa = "<?php echo htmlspecialchars(!empty($gym['upi_id']) ? $gym['upi_id'] : '7620453195-2@ybl'); ?>";
+            const vpa = "<?php echo htmlspecialchars(!empty($gym['upi_id']) ? $gym['upi_id'] : 'anuragbawaskar4326@sbi'); ?>";
             navigator.clipboard.writeText(vpa).then(() => {
                 alert("📋 Copied Payment UPI ID (" + vpa + ") to clipboard!");
             }).catch(err => {
@@ -529,7 +529,7 @@ if (isset($_POST['submit_payment'])) {
 
         // Shared helper to generate UPI link & QR
         function loadUpiPayment(amount, orderPrefix) {
-            const upiId = "<?php echo !empty($gym['upi_id']) ? htmlspecialchars($gym['upi_id']) : '7620453195-2@ybl'; ?>";
+            const upiId = "<?php echo !empty($gym['upi_id']) ? htmlspecialchars($gym['upi_id']) : 'anuragbawaskar4326@sbi'; ?>";
             const gymName = "<?php echo isset($gym['gym_name']) ? htmlspecialchars($gym['gym_name']) : 'Sudarshan Fitness'; ?>";
             const staticQrExists = <?php echo (!empty($gym['payment_qr'])) ? 'true' : 'false'; ?>;
 

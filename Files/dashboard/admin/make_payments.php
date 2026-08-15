@@ -1,6 +1,7 @@
 <?php
 require '../../include/db_conn.php';
 page_protect();
+$gym = get_gym_details($con);
 $uid = null;
 if (isset($_POST['userID'])) {
     $uid = $_POST['userID'];
@@ -205,7 +206,7 @@ if ($uid) {
                              var discount = parseFloat(document.getElementById('discount_input').value) || 0;
                              amount = amount - discount;
                          }
-                         var upiId = '7620453195-2@ybl';
+                         var upiId = '<?php echo addslashes(!empty($gym['upi_id']) ? $gym['upi_id'] : "anuragbawaskar4326@sbi"); ?>';
                          var name = 'Member';
                          var upiUrl = 'upi://pay?pa=' + encodeURIComponent(upiId) + '&pn=Sudarshan%20Fitness&am=' + encodeURIComponent(amount) + '&cu=INR&tn=' + encodeURIComponent('Membership Payment ' + name);
                          var qrImgUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(upiUrl);

@@ -264,7 +264,7 @@ if (isset($_POST['batch_action'])) {
                         </p>
 
                         <label style="color: #fff; font-weight: bold;">Gym UPI VPA Address (For Instant Member Renewals) *</label>
-                        <input class="form-control-premium" type="text" name="upi_id" value="<?php echo isset($gym['upi_id']) ? htmlspecialchars($gym['upi_id']) : '7620453195-2@ybl'; ?>" placeholder="e.g. 7620453195-2@ybl" required style="border-color: #10b981 !important; font-weight: bold; font-size: 15px; color: #38bdf8 !important;">
+                        <input class="form-control-premium" type="text" name="upi_id" value="<?php echo isset($gym['upi_id']) ? htmlspecialchars($gym['upi_id']) : 'anuragbawaskar4326@sbi'; ?>" placeholder="e.g. anuragbawaskar4326@sbi" required style="border-color: #10b981 !important; font-weight: bold; font-size: 15px; color: #38bdf8 !important;">
 
                         <div class="row" style="margin-top: 10px;">
                             <div class="col-sm-6">
