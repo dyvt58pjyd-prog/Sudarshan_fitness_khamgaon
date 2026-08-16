@@ -280,11 +280,7 @@ if (substr($logo_path, 0, 6) === '../../') {
         <div class="login-container">
             <div class="login-header login-caret">
                 <div class="login-content" style="text-align: center;">
-                    <div style="font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; color: #ffd700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; text-shadow: 0 0 15px rgba(255,215,0,0.8); display: flex; align-items: center; justify-content: center; gap: 8px;">
-                        <span>⚡</span>
-                        <span>[ SAIYAN ULTRA INSTINCT SYSTEM GATE ]</span>
-                        <span>⚡</span>
-                    </div>
+                    <div style="font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; color: #ff003c; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; text-shadow: 0 0 12px rgba(255,0,60,0.5);">[ SYSTEM GATE PORTAL ]</div>
                     <a href="#" class="logo">
                         <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="filter: drop-shadow(0 0 25px rgba(255,0,60,0.7)); max-height: 95px; width: auto;" />
                     </a>

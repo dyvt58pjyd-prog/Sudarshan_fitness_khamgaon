@@ -114,25 +114,6 @@ if ($q_health && mysqli_num_rows($q_health) > 0) {
     }
 }
 
-// Compute Dragon Ball Z Saiyan Power Level & Rank
-$q_tot_att = mysqli_query($con, "SELECT COUNT(*) as cnt FROM attendance WHERE uid='$uid'");
-$tot_days = ($q_tot_att && $r_att = mysqli_fetch_assoc($q_tot_att)) ? intval($r_att['cnt']) : 0;
-$saiyan_power = 9000 + ($tot_days * 150) + intval($weight * 10);
-
-if ($tot_days >= 60) {
-    $saiyan_rank = "🔥 ULTRA INSTINCT MASTER";
-    $db_stars = "⭐️⭐️⭐️⭐️⭐️⭐️⭐️ (7-Star)";
-} elseif ($tot_days >= 30) {
-    $saiyan_rank = "⚡ SUPER SAIYAN GOD";
-    $db_stars = "⭐️⭐️⭐️⭐️⭐️ (5-Star)";
-} elseif ($tot_days >= 10) {
-    $saiyan_rank = "💥 SUPER SAIYAN 2";
-    $db_stars = "⭐️⭐️⭐️ (3-Star)";
-} else {
-    $saiyan_rank = "🐢 TURTLE HERMIT ATHLETE";
-    $db_stars = "⭐️ (1-Star)";
-}
-
 // Fetch Partner's Attendance for Couple Dashboard
 $partner_att_status = "Not Checked In";
 if ($partner_user) {
@@ -263,33 +244,6 @@ if ($partner_user) {
             </div>
         </div>
         <?php endif; ?>
-
-        <!-- ⚡ DRAGON BALL Z SUPER SAIYAN POWER SCOUTER & RANK CARD -->
-        <div class="dbz-scouter-card" style="margin-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <span class="scouter-hud-badge">📟 SAIYAN POWER SCOUTER</span>
-                <span style="font-size: 11px; color: #00f0ff; font-weight: 800; text-transform: uppercase;">ULTRA INSTINCT ACTIVE</span>
-            </div>
-            
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
-                <div>
-                    <div style="font-size: 11px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">COMBAT POWER LEVEL</div>
-                    <div class="power-level-val"><?php echo number_format($saiyan_power); ?>⚡</div>
-                    <div style="font-size: 12px; color: #ffd700; font-weight: 800; margin-top: 4px;">
-                        <?php echo $saiyan_rank; ?>
-                    </div>
-                </div>
-
-                <div class="dragon-ball-badge" title="<?php echo $db_stars; ?>">
-                    🐉
-                </div>
-            </div>
-
-            <div style="margin-top: 14px; background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 10px; border: 1px solid rgba(255,215,0,0.2); font-size: 11px; color: #cbd5e1; display: flex; justify-content: space-between;">
-                <span>Dragon Ball Badge: <strong style="color: #ffd700;"><?php echo $db_stars; ?></strong></span>
-                <span>Gym Days: <strong style="color: #10b981;"><?php echo $tot_days; ?> Days</strong></span>
-            </div>
-        </div>
 
         <div class="card">
             <div class="card-title">Membership Status</div>
