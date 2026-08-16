@@ -1432,3 +1432,98 @@ body, html, .main-content, .sidebar-menu, .a1-card-8, .tile-stats, table, td, th
     display: none !important;
   }
 }
+
+/* ==========================================================================
+   ⚡ DRAGON BALL Z / SUPER SAIYAN ULTRA INSTINCT THEME ENGINE
+   ========================================================================== */
+
+:root {
+  --saiyan-gold: #ffd700;
+  --saiyan-orange: #ff6b00;
+  --ultra-instinct-cyan: #00f0ff;
+  --ultra-instinct-silver: #e2e8f0;
+  --god-crimson: #ff0054;
+  --scouter-green: #10b981;
+  --dbz-card-bg: rgba(15, 23, 42, 0.85);
+  --dbz-gold-border: rgba(255, 215, 0, 0.4);
+}
+
+@keyframes saiyan-aura-flare {
+  0% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4), inset 0 0 15px rgba(255, 107, 0, 0.3);
+    border-color: rgba(255, 215, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.95), 0 0 80px rgba(0, 240, 255, 0.5), inset 0 0 30px rgba(255, 215, 0, 0.6);
+    border-color: rgba(255, 215, 0, 0.95);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4), inset 0 0 15px rgba(255, 107, 0, 0.3);
+    border-color: rgba(255, 215, 0, 0.5);
+  }
+}
+
+@keyframes scouter-scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+/* DBZ Super Saiyan Power Scouter Card */
+.dbz-scouter-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%) !important;
+  border: 2px solid var(--saiyan-gold) !important;
+  border-radius: 20px !important;
+  padding: 22px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  animation: saiyan-aura-flare 5s infinite alternate !important;
+  box-shadow: 0 10px 35px rgba(255, 215, 0, 0.3) !important;
+}
+
+.dbz-scouter-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, #ffd700, #ff6b00, #00f0ff, #ffd700);
+}
+
+.scouter-hud-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 215, 0, 0.15);
+  border: 1px solid #ffd700;
+  color: #ffd700;
+  font-family: 'Orbitron', sans-serif !important;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 4px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.power-level-val {
+  font-family: 'Orbitron', sans-serif !important;
+  font-size: 28px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #ffd700, #ff6b00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+}
+
+.dragon-ball-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffd700, #ff6b00, #b45309);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 900;
+  font-size: 14px;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.8);
+  border: 2px solid #fff;
+}
