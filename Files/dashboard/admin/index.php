@@ -426,36 +426,6 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			$net_profit = $overall_income - $overall_expenses;
 			?>
 
-			<!-- ⚡ DRAGON BALL Z SUPER SAIYAN ULTRA INSTINCT POWER SCOUTER WIDGET -->
-			<div class="dbz-scouter-card" style="margin-bottom: 22px;">
-			    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
-			        <span class="scouter-hud-badge">📟 SAIYAN ARMY COMBAT SCOUTER</span>
-			        <span style="font-size: 11px; color: #ffd700; background: rgba(255,215,0,0.2); border: 1px solid #ffd700; padding: 4px 12px; border-radius: 20px; font-weight: 900; letter-spacing: 1px; font-family: 'Orbitron', sans-serif;">
-			            🔥 ULTRA INSTINCT MODE ONLINE
-			        </span>
-			    </div>
-
-			    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
-			        <div>
-			            <div style="font-size: 11px; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">SUDARSHAN FITNESS GYM POWER LEVEL</div>
-			            <div class="power-level-val" style="font-size: 32px;">OVER <?php echo number_format(90000 + (intval($total_users_cnt ?? 150) * 250)); ?>⚡</div>
-			            <div style="font-size: 13px; color: #ffd700; font-weight: 800; margin-top: 4px; font-family: 'Orbitron', sans-serif;">
-			                RANK: 🐉 7-STAR DRAGON BALL GOD MONARCH
-			            </div>
-			        </div>
-
-			        <div style="display: flex; align-items: center; gap: 12px;">
-			            <div class="dragon-ball-badge" style="width: 52px; height: 52px; font-size: 20px;" title="7-Star Dragon Ball">
-			                🐉
-			            </div>
-			            <div style="text-align: right;">
-			                <div style="font-size: 11px; color: #38bdf8; font-weight: 800;">ATHLETE ARMY</div>
-			                <div style="font-size: 20px; font-weight: 900; color: #fff; font-family: 'Orbitron', sans-serif;"><?php echo number_format($total_users_cnt ?? 0); ?> SAIYANS</div>
-			            </div>
-			        </div>
-			    </div>
-			</div>
-
 			<?php if (in_array($current_role, ['super_admin', 'owner', 'reception'])): ?>
 			<!-- 💰 FINANCIAL REVENUE & INCOME DASHBOARD WIDGET -->
 			<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(13, 17, 23, 0.95) 100%); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 20px; padding: 22px 24px; margin-top: 15px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
