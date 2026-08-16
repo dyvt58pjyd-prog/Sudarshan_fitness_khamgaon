@@ -121,8 +121,44 @@ function get_collection($con, $date) {
     ];
 }
 
+function get_monthly_collection($con, $year_month) {
+    $cash = 0; $upi = 0; $total = 0;
+    // Membership
+    $qm = mysqli_query($con, "SELECT paid_amount, payment_mode FROM enrolls_to WHERE paid_date LIKE '$year_month-%'");
+    if ($qm) {
+        while ($r = mysqli_fetch_assoc($qm)) {
+            $amt = intval($r['paid_amount']);
+            $mode = strtolower(trim($r['payment_mode'] ?? 'cash'));
+            if (strpos($mode, 'upi') !== false || strpos($mode, 'online') !== false) $upi += $amt; else $cash += $amt;
+        }
+    }
+    // PT
+    $qp = mysqli_query($con, "SELECT amount, payment_mode FROM pt_enrollments WHERE enroll_date LIKE '$year_month-%'");
+    if ($qp) {
+        while ($r = mysqli_fetch_assoc($qp)) {
+            $amt = intval($r['amount']);
+            $mode = strtolower(trim($r['payment_mode'] ?? 'cash'));
+            if (strpos($mode, 'upi') !== false || strpos($mode, 'online') !== false) $upi += $amt; else $cash += $amt;
+        }
+    }
+    // Balances
+    $qb = mysqli_query($con, "SELECT amount, payment_mode FROM balance_collections WHERE collection_date LIKE '$year_month-%'");
+    if ($qb) {
+        while ($r = mysqli_fetch_assoc($qb)) {
+            $amt = intval($r['amount']);
+            $mode = strtolower(trim($r['payment_mode'] ?? 'cash'));
+            if (strpos($mode, 'upi') !== false || strpos($mode, 'online') !== false) $upi += $amt; else $cash += $amt;
+        }
+    }
+    // Expenses
+    $qe = mysqli_query($con, "SELECT SUM(amount) as exp FROM expenses WHERE expense_date LIKE '$year_month-%'");
+    $exp = ($qe && $re = mysqli_fetch_assoc($qe)) ? intval($re['exp'] ?? 0) : 0;
+    return ['cash' => $cash, 'upi' => $upi, 'total' => $cash + $upi, 'expenses' => $exp, 'net' => ($cash + $upi) - $exp];
+}
+
 $today_data = get_collection($con, $today);
 $yesterday_data = get_collection($con, $yesterday);
+$month_data = get_monthly_collection($con, date('Y-m'));
 
 ?>
 <!DOCTYPE html>
@@ -191,6 +227,16 @@ $yesterday_data = get_collection($con, $yesterday);
                     <div class="stat-details">
                         <span>Cash: <span class="cash">₹<?php echo number_format($today_data['cash']); ?></span></span>
                         <span>UPI: <span class="upi">₹<?php echo number_format($today_data['upi']); ?></span></span>
+                    </div>
+                </div>
+
+                <!-- This Month's Collection with UPI vs Cash Separator -->
+                <div class="stat-card" style="flex: 1; min-width: 250px; border-bottom: 4px solid #3b82f6; box-shadow: inset 0 -15px 30px -20px rgba(59,130,246,0.5);">
+                    <h3>This Month (<?php echo date('F Y'); ?>)</h3>
+                    <h2 style="color: #60a5fa;">₹<?php echo number_format($month_data['total']); ?></h2>
+                    <div class="stat-details">
+                        <span>Cash: <span class="cash">₹<?php echo number_format($month_data['cash']); ?></span></span>
+                        <span>UPI: <span class="upi">₹<?php echo number_format($month_data['upi']); ?></span></span>
                     </div>
                 </div>
 

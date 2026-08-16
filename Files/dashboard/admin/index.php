@@ -409,15 +409,55 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			}
 			$year_income = $year_mem_income + $year_pt_income;
 
-			$q_m_mem = @mysqli_query($con, "SELECT SUM(COALESCE(IF(e.paid_amount > 0 AND (e.discount_amount = 0 OR e.paid_amount != p.amount), e.paid_amount, GREATEST(0, p.amount - COALESCE(e.discount_amount, 0))), e.paid_amount, 0)) AS total FROM enrolls_to e LEFT JOIN plan p ON e.pid = p.pid WHERE e.paid_date LIKE '$curr_ym-%'");
-			if ($q_m_mem && $r_m_mem = @mysqli_fetch_assoc($q_m_mem)) {
-			    $month_mem_income = intval($r_m_mem['total'] ?? 0);
+			$month_mem_income = 0; $month_pt_income = 0; $month_bal_income = 0; $month_income = 0;
+			$month_upi_income = 0; $month_cash_income = 0;
+
+			// Monthly Membership Breakdown by Payment Mode
+			$q_m_mem = @mysqli_query($con, "SELECT e.payment_mode, SUM(COALESCE(IF(e.paid_amount > 0 AND (e.discount_amount = 0 OR e.paid_amount != p.amount), e.paid_amount, GREATEST(0, p.amount - COALESCE(e.discount_amount, 0))), e.paid_amount, 0)) AS total FROM enrolls_to e LEFT JOIN plan p ON e.pid = p.pid WHERE e.paid_date LIKE '$curr_ym-%' GROUP BY e.payment_mode");
+			if ($q_m_mem) {
+			    while ($r_mm = @mysqli_fetch_assoc($q_m_mem)) {
+			        $tot = intval($r_mm['total'] ?? 0);
+			        $month_mem_income += $tot;
+			        $m_mode = strtolower(trim($r_mm['payment_mode'] ?? 'cash'));
+			        if (strpos($m_mode, 'upi') !== false || strpos($m_mode, 'online') !== false) {
+			            $month_upi_income += $tot;
+			        } else {
+			            $month_cash_income += $tot;
+			        }
+			    }
 			}
-			$q_m_pt = @mysqli_query($con, "SELECT SUM(amount) AS total FROM pt_enrollments WHERE enroll_date LIKE '$curr_ym-%'");
-			if ($q_m_pt && $r_m_pt = @mysqli_fetch_assoc($q_m_pt)) {
-			    $month_pt_income = intval($r_m_pt['total'] ?? 0);
+
+			// Monthly PT Breakdown by Payment Mode
+			$q_m_pt = @mysqli_query($con, "SELECT payment_mode, SUM(amount) AS total FROM pt_enrollments WHERE enroll_date LIKE '$curr_ym-%' GROUP BY payment_mode");
+			if ($q_m_pt) {
+			    while ($r_mp = @mysqli_fetch_assoc($q_m_pt)) {
+			        $tot = intval($r_mp['total'] ?? 0);
+			        $month_pt_income += $tot;
+			        $p_mode = strtolower(trim($r_mp['payment_mode'] ?? 'cash'));
+			        if (strpos($p_mode, 'upi') !== false || strpos($p_mode, 'online') !== false) {
+			            $month_upi_income += $tot;
+			        } else {
+			            $month_cash_income += $tot;
+			        }
+			    }
 			}
-			$month_income = $month_mem_income + $month_pt_income;
+
+			// Monthly Balance Settlements by Payment Mode
+			$q_m_bal = @mysqli_query($con, "SELECT payment_mode, SUM(amount) AS total FROM balance_collections WHERE collection_date LIKE '$curr_ym-%' GROUP BY payment_mode");
+			if ($q_m_bal) {
+			    while ($r_mb = @mysqli_fetch_assoc($q_m_bal)) {
+			        $tot = intval($r_mb['total'] ?? 0);
+			        $month_bal_income += $tot;
+			        $b_mode = strtolower(trim($r_mb['payment_mode'] ?? 'cash'));
+			        if (strpos($b_mode, 'upi') !== false || strpos($b_mode, 'online') !== false) {
+			            $month_upi_income += $tot;
+			        } else {
+			            $month_cash_income += $tot;
+			        }
+			    }
+			}
+
+			$month_income = $month_mem_income + $month_pt_income + $month_bal_income;
 
 			$q_exp_all = @mysqli_query($con, "SELECT SUM(amount) as total FROM expenses");
 			if ($q_exp_all && $r_exp_all = @mysqli_fetch_assoc($q_exp_all)) {
@@ -438,18 +478,21 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 						</div>
 					</div>
 					<div style="display:flex; gap:8px;">
-						<a href="revenue_month.php" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #6ee7b7; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none;">Monthly Income →</a>
+						<a href="revenue_month.php" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #6ee7b7; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none;">Monthly Income &amp; Auditing →</a>
 						<a href="expenses.php" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none;">Expenses Ledger →</a>
 					</div>
 				</div>
 
 				<div class="row" style="margin:0;">
-					<!-- Monthly Income Card -->
+					<!-- Monthly Income Card with UPI vs Cash Separator -->
 					<div class="col-md-3 col-sm-6" style="padding: 6px;">
 						<div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 14px; padding: 16px; text-align: center;">
 							<div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">This Month Income</div>
 							<div style="color: #10b981; font-size: 26px; font-weight: 900; margin-top: 4px;">₹<?php echo number_format($month_income); ?></div>
-							<div style="color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 4px;"><?php echo date('F Y'); ?> collections</div>
+							<div style="display: flex; justify-content: space-around; margin-top: 8px; border-top: 1px dashed rgba(255,255,255,0.12); padding-top: 6px; font-size: 11px; font-weight: 800;">
+								<span style="color: #38bdf8;" title="UPI / Online Collections">💳 UPI: ₹<?php echo number_format($month_upi_income); ?></span>
+								<span style="color: #f59e0b;" title="Cash Collections">💵 Cash: ₹<?php echo number_format($month_cash_income); ?></span>
+							</div>
 						</div>
 					</div>
 
