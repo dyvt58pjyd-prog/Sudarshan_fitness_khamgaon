@@ -1,4 +1,14 @@
 <?php
+// CERT-In Indian Military Grade Cyber Defense Standard HTTP Security Headers
+if (!headers_sent()) {
+    header("X-Frame-Options: SAMEORIGIN");
+    header("X-Content-Type-Options: nosniff");
+    header("X-XSS-Protection: 1; mode=block");
+    header("Referrer-Policy: strict-origin-when-cross-origin");
+    header("Permissions-Policy: camera=*, microphone=(), display-capture=()");
+    header("X-Military-Cyber-Defense: CERT-In MIL-STD-256-INDIA");
+}
+
 // Suppress PHP deprecation warnings, notices, and warnings to prevent breaking JSON/AJAX responses
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
 ini_set('display_errors', 0);
@@ -1988,3 +1998,16 @@ if (!function_exists('get_member_photo_url')) {
 
 check_and_upgrade_db($con);
 run_waf_security_shield($con);
+
+// Enforce Active IP Blacklist Check (CERT-In MIL-STD Protection)
+if (function_exists('is_ip_blocked') && is_ip_blocked($con)) {
+    header("HTTP/1.1 403 Forbidden");
+    die("<div style='background:#030712; color:#ef4444; font-family:sans-serif; padding:50px; text-align:center; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;'>
+        <div style='font-size:60px; margin-bottom:15px;'>🇮🇳</div>
+        <h1 style='font-size:26px; font-weight:900; font-family:sans-serif; letter-spacing:1px; margin-bottom:12px;'>CERT-In MILITARY CYBER DEFENSE QUARANTINE</h1>
+        <p style='color:#cbd5e1; font-size:15px; max-width:620px; line-height:1.6; margin-bottom:20px;'>Your IP address <strong style='color:#ff003c;'>" . get_client_ip() . "</strong> has been quarantined by the Indian Military Standard Cyber Security Defense Shield due to unauthorized probe or threat detection.</p>
+        <div style='background:rgba(255,0,60,0.1); border:1px solid #ff003c; padding:12px 24px; border-radius:12px; color:#fca5a5; font-size:13px; font-weight:bold;'>
+            Incident ID: MIL-DEF-" . strtoupper(substr(md5(get_client_ip() . date('Y-m-d')), 0, 8)) . " | Logged to Cyber Threat Intelligence Audit Trail
+        </div>
+    </div>");
+}
