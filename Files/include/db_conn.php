@@ -558,6 +558,58 @@ if (!$con) {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )");
 
+    // Self-healing database check: ensure gym_equipment table exists (Feature 10)
+    mysqli_query($con, "CREATE TABLE IF NOT EXISTS gym_equipment (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        equipment_name VARCHAR(150) NOT NULL,
+        category VARCHAR(50) DEFAULT 'Strength',
+        muscle_group VARCHAR(100) DEFAULT 'Full Body',
+        video_url VARCHAR(255) DEFAULT NULL,
+        instructions TEXT DEFAULT NULL,
+        status VARCHAR(30) DEFAULT 'operational',
+        last_serviced DATE DEFAULT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )");
+
+    // Seed sample standard gym equipment if empty
+    $chk_eq_cnt = mysqli_query($con, "SELECT COUNT(*) as cnt FROM gym_equipment");
+    if ($chk_eq_cnt && ($r_eq = mysqli_fetch_assoc($chk_eq_cnt)) && intval($r_eq['cnt']) === 0) {
+        mysqli_query($con, "INSERT INTO gym_equipment (equipment_name, category, muscle_group, instructions, status, last_serviced) VALUES
+            ('Olympic Flat Bench Press', 'Strength', 'Chest, Triceps, Shoulders', 'Keep your feet flat on the floor, grip the bar slightly wider than shoulder-width, lower smoothly to mid-chest and press upward.', 'operational', CURRENT_DATE()),
+            ('Power Squat Rack / Cage', 'Strength', 'Quadriceps, Glutes, Hamstrings', 'Position the barbell across upper traps, brace core, squat down until thighs are parallel to ground, drive through heels.', 'operational', CURRENT_DATE()),
+            ('Dual Adjustable Cable Crossover', 'Cables', 'Chest, Back, Arms', 'Adjust pulleys to desired height. Excellent for cable chest flyes, tricep pushdowns, and lat pullovers.', 'operational', CURRENT_DATE()),
+            ('Commercial Motorized Treadmill Pro', 'Cardio', 'Cardiovascular, Legs', 'Always clip safety key to clothing. Start with 5-minute warm-up walk at 4 km/h before increasing incline or speed.', 'operational', CURRENT_DATE()),
+            ('Seated Lat Pulldown Machine', 'Strength', 'Lats, Upper Back, Biceps', 'Grip bar wide with overhand grip. Pull down to upper collarbone while slightly arching upper back, control return.', 'operational', CURRENT_DATE())
+        ");
+    }
+
+    // Self-healing database check: ensure equipment_tickets table exists (Feature 10)
+    mysqli_query($con, "CREATE TABLE IF NOT EXISTS equipment_tickets (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        equipment_id INT NOT NULL,
+        reported_by VARCHAR(50) NOT NULL,
+        issue_description TEXT NOT NULL,
+        severity VARCHAR(20) DEFAULT 'medium',
+        status VARCHAR(30) DEFAULT 'open',
+        resolved_at DATETIME DEFAULT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (equipment_id) REFERENCES gym_equipment(id) ON DELETE CASCADE
+    )");
+
+    // Self-healing database check: ensure member_strength_logs table exists (Feature 11)
+    mysqli_query($con, "CREATE TABLE IF NOT EXISTS member_strength_logs (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        uid VARCHAR(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+        exercise VARCHAR(100) NOT NULL,
+        weight_kg DECIMAL(6,2) NOT NULL,
+        reps INT NOT NULL,
+        calculated_1rm DECIMAL(6,2) NOT NULL,
+        log_date DATE NOT NULL,
+        notes VARCHAR(255) DEFAULT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (uid) REFERENCES users(userid) ON DELETE CASCADE
+    )");
+
     // Self-healing database check: ensure visitors table exists
     mysqli_query($con, "CREATE TABLE IF NOT EXISTS `visitors` (
       `id` int(11) NOT NULL AUTO_INCREMENT,

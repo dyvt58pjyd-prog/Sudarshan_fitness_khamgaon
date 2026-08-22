@@ -264,6 +264,8 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
 
     <!-- 8. SETTINGS & ADMIN -->
     <?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
+        <li id="ai_churn_link"><a href="churn_radar.php" style="color: #38bdf8; font-weight: bold;"><i class="entypo-chart-line"></i><span>🧠 AI Churn &amp; Retention Radar</span></a></li>
+        <li id="smart_equipment_link"><a href="equipment.php" style="color: #f59e0b; font-weight: bold;"><i class="entypo-tools"></i><span>🏷️ Smart Equipment &amp; QR</span></a></li>
         <li id="ai_manager_link"><a href="ai_gym_manager.php" style="color: #ff003c; font-weight: bold;"><i class="entypo-light-bulb"></i><span>🤖 AI Gym Manager</span></a></li>
         <li id="upi_pay_link"><a href="instant_upi_pay.php" style="color: #10b981;"><i class="entypo-vcard"></i><span>💳 Instant UPI Payment QR</span></a></li>
         <li id="equipment_link"><a href="equipment_management.php" style="color: #ffb703;"><i class="entypo-tools"></i><span>🛠️ Equipment Maintenance</span></a></li>

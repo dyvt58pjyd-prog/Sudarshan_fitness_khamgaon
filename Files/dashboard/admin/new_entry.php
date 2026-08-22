@@ -160,6 +160,24 @@ if ($cnt_q) {
 		<div class="a1-container a1-dark-gray a1-center">
         	<h6>NEW ENTRY</h6>
         </div>
+
+        <!-- 🪪 SMART AADHAAR & ID OCR AUTO-FILL SCANNER -->
+        <div style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(15, 23, 42, 0.95) 100%); border-bottom: 2px solid #38bdf8; padding: 15px 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <div>
+                    <span style="font-size: 13px; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px;">🪪 Smart Aadhaar / ID Card OCR Scanner</span>
+                    <p style="margin: 3px 0 0 0; font-size: 11px; color: #94a3b8;">Upload or scan an Aadhaar / Driving License to auto-fill Name, DOB, Gender &amp; Address instantly.</p>
+                </div>
+                <div>
+                    <label for="ocr-id-file" class="a1-btn a1-blue" style="cursor: pointer; font-size: 11.5px; font-weight: bold; border-radius: 8px; padding: 6px 14px; margin: 0; display: inline-flex; align-items: center; gap: 6px;">
+                        <i class="entypo-camera"></i> Scan ID Card
+                    </label>
+                    <input type="file" id="ocr-id-file" accept="image/*" style="display: none;" onchange="processIdCardOcr(this)">
+                </div>
+            </div>
+            <div id="ocr-status-box" style="display: none; margin-top: 10px; padding: 8px 12px; border-radius: 8px; font-size: 11.5px; font-weight: bold;"></div>
+        </div>
+
        <form id="form1" name="form1" method="post" class="a1-container" action="new_submit.php" enctype="multipart/form-data">
          <table width="100%" border="0" align="center">
          <tr>
@@ -831,6 +849,114 @@ if ($cnt_q) {
             document.getElementById('staff-qr-code').src = qrSrc;
             
             qrContainer.style.display = 'block';
+        }
+
+        // 🪪 Tesseract.js OCR ID Processor
+        function processIdCardOcr(input) {
+            if (!input.files || !input.files[0]) return;
+            var file = input.files[0];
+            var statusBox = document.getElementById('ocr-status-box');
+            statusBox.style.display = 'block';
+            statusBox.style.background = 'rgba(56, 189, 248, 0.15)';
+            statusBox.style.color = '#38bdf8';
+            statusBox.innerHTML = '⏳ Loading AI Vision Engine & Scanning ID Card... Please wait.';
+
+            // Load Tesseract if not present
+            var loadScript = function(url, callback) {
+                if (window.Tesseract) { callback(); return; }
+                var s = document.createElement('script');
+                s.src = url;
+                s.onload = callback;
+                s.onerror = function() {
+                    statusBox.style.background = 'rgba(239, 68, 68, 0.15)';
+                    statusBox.style.color = '#ef4444';
+                    statusBox.innerHTML = '❌ Failed to load OCR engine. Please check internet connection.';
+                };
+                document.head.appendChild(s);
+            };
+
+            loadScript('https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js', function() {
+                statusBox.innerHTML = '🔍 Reading card text & extracting information...';
+                Tesseract.recognize(file, 'eng', {
+                    logger: function(m) {
+                        if (m.status === 'recognizing text') {
+                            statusBox.innerHTML = '🔍 Scanning ID Card: ' + Math.round(m.progress * 100) + '% complete...';
+                        }
+                    }
+                }).then(function(result) {
+                    var text = result.data.text || '';
+                    var lines = text.split('\n').map(function(l) { return l.trim(); }).filter(function(l) { return l.length > 0; });
+                    
+                    var extractedName = '';
+                    var extractedDob = '';
+                    var extractedGender = '';
+                    var extractedPin = '';
+
+                    // 1. Extract DOB (e.g. 15/08/1998, 15-08-1998, DOB: 1998)
+                    var dobMatch = text.match(/(?:DOB|Date\s*of\s*Birth|Year\s*of\s*Birth)[:\s]*([0-9]{2}[\/\-][0-9]{2}[\/\-][0-9]{4}|[0-9]{4})/i);
+                    if (dobMatch && dobMatch[1]) {
+                        var rawDob = dobMatch[1];
+                        if (rawDob.includes('/') || rawDob.includes('-')) {
+                            var parts = rawDob.split(/[\/\-]/);
+                            if (parts.length === 3) {
+                                extractedDob = parts[2] + '-' + parts[1].padStart(2, '0') + '-' + parts[0].padStart(2, '0');
+                            }
+                        } else if (rawDob.length === 4) {
+                            extractedDob = rawDob + '-01-01';
+                        }
+                    }
+
+                    // 2. Extract Gender
+                    if (/female|women|woman/i.test(text)) {
+                        extractedGender = 'Female';
+                    } else if (/male|men|man/i.test(text)) {
+                        extractedGender = 'Male';
+                    }
+
+                    // 3. Extract PIN Code (6-digit Indian PIN)
+                    var pinMatch = text.match(/\b([1-9][0-9]{5})\b/);
+                    if (pinMatch) {
+                        extractedPin = pinMatch[1];
+                    }
+
+                    // 4. Extract Name heuristic
+                    for (var i = 0; i < lines.length; i++) {
+                        var l = lines[i];
+                        if (/government\s*of\s*india|unique\s*identification|enrolment|aadhaar|male|female|dob|address/i.test(l)) continue;
+                        if (l.length >= 3 && l.length <= 35 && /^[a-zA-Z\s\.]+$/.test(l)) {
+                            extractedName = l;
+                            break;
+                        }
+                    }
+
+                    // Populate form fields
+                    var filledCount = 0;
+                    if (extractedName) {
+                        var nameInput = document.querySelector('input[name="u_name"]');
+                        if (nameInput) { nameInput.value = extractedName; filledCount++; }
+                    }
+                    if (extractedDob) {
+                        var dobInput = document.querySelector('input[name="dob"]');
+                        if (dobInput) { dobInput.value = extractedDob; filledCount++; }
+                    }
+                    if (extractedGender) {
+                        var genderSelect = document.querySelector('select[name="gender"]');
+                        if (genderSelect) { genderSelect.value = extractedGender; filledCount++; }
+                    }
+                    if (extractedPin) {
+                        var pinInput = document.querySelector('input[name="zipcode"]');
+                        if (pinInput) { pinInput.value = extractedPin; filledCount++; }
+                    }
+
+                    statusBox.style.background = 'rgba(16, 185, 129, 0.15)';
+                    statusBox.style.color = '#10b981';
+                    statusBox.innerHTML = '✅ Card Scanned! Auto-filled ' + filledCount + ' fields (' + (extractedName ? extractedName : 'Data parsed') + '). Please verify details.';
+                }).catch(function(err) {
+                    statusBox.style.background = 'rgba(239, 68, 68, 0.15)';
+                    statusBox.style.color = '#ef4444';
+                    statusBox.innerHTML = '⚠️ OCR could not clearly read the card. Please fill fields manually or try a clearer photo.';
+                });
+            });
         }
         </script>
         

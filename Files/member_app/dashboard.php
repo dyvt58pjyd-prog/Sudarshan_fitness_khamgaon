@@ -248,8 +248,13 @@ if ($partner_user) {
         <div class="card">
             <div class="card-title">Membership Status</div>
             <div class="card-value"><?php echo htmlspecialchars($plan_name); ?></div>
-            <div style="margin-top: 12px; font-size: 14px; font-weight: 600; color: #10b981; background: rgba(16, 185, 129, 0.1); padding: 8px 12px; border-radius: 8px; display: inline-block;">
-                Valid till: <?php echo htmlspecialchars($expire_date); ?>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 12px;">
+                <div style="font-size: 14px; font-weight: 600; color: #10b981; background: rgba(16, 185, 129, 0.1); padding: 8px 12px; border-radius: 8px; display: inline-block;">
+                    Valid till: <?php echo htmlspecialchars($expire_date); ?>
+                </div>
+                <a href="wallet_pass.php" style="background: linear-gradient(135deg, #38bdf8, #0284c7); color: #fff; text-decoration: none; padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(56,189,248,0.4);">
+                    📲 Smart Pass
+                </a>
             </div>
         </div>
 
@@ -283,6 +288,19 @@ if ($partner_user) {
                 <span style="color: #94a3b8;">Health: <strong style="color: <?php echo $bmi_color; ?>;"><?php echo $bmi_status; ?></strong></span>
                 <button onclick="document.getElementById('bmiModal').style.display='block'" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer;">✏️ Log Measurements</button>
             </div>
+        </div>
+
+        <!-- 📈 1RM & PROGRESSIVE OVERLOAD STRENGTH MATRIX -->
+        <div class="card" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(15, 23, 42, 0.95) 100%); border: 2px solid #38bdf8;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-size: 11px; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 1px;">⚡ 1RM STRENGTH MATRIX</span>
+                <span style="font-size: 10px; background: rgba(56,189,248,0.2); color: #38bdf8; padding: 2px 8px; border-radius: 10px; font-weight: bold;">Personal Records</span>
+            </div>
+            <h3 style="margin: 0 0 6px 0; color: #fff; font-size: 17px; font-weight: 800;">Track Progressive Overload &amp; PRs</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-bottom: 12px; line-height: 1.4;">Log working weights for Bench, Squat &amp; Deadlift and track your true estimated 1-Rep Max.</p>
+            <a href="strength_tracker.php" style="display: block; text-align: center; background: linear-gradient(135deg, #38bdf8, #0284c7); color: #fff; text-decoration: none; padding: 10px; border-radius: 10px; font-weight: 800; font-size: 13px; box-shadow: 0 4px 15px rgba(56,189,248,0.3);">
+                🔥 Open 1RM Strength Tracker ➔
+            </a>
         </div>
 
         <!-- BMI LOG MODAL -->
