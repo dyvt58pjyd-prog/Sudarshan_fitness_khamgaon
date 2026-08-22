@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../include/db_conn.php';
+require_once __DIR__ . '/../include/db_conn.php';
 
 $raw_uid = $_SESSION['member_uid'] ?? $_SESSION['user_data'] ?? ($_SESSION['userid'] ?? ($_GET['uid'] ?? ''));
 if (is_array($raw_uid)) {
@@ -26,7 +26,7 @@ $user = ($q_user && mysqli_num_rows($q_user) > 0) ? mysqli_fetch_assoc($q_user) 
     'joining_date' => date('Y-m-d')
 ];
 
-// Fetch Active Membership (order by latest expiration date)
+// Fetch Active Membership
 $q_plan = mysqli_query($con, "SELECT p.planName, p.validity, e.expire, e.paid_date FROM enrolls_to e INNER JOIN plan p ON e.pid = p.pid WHERE e.uid='$uid' ORDER BY e.expire DESC LIMIT 1");
 $plan_name = "General Membership";
 $expire_date = "Active";
@@ -67,10 +67,8 @@ if (isset($user['biometric_batch'])) {
 }
 
 // Get photo URL or fallback avatar
-$photo_url = get_member_photo_url($user, '../');
-
-// Gym Logo URL
-$gym_logo = !empty($gym_settings_data['gym_logo']) ? $gym_settings_data['gym_logo'] : (!empty($gym['gym_logo']) ? $gym['gym_logo'] : '../images/logo.png');
+$photo_url = function_exists('get_member_photo_url') ? get_member_photo_url($user, '../') : '../images/logo.png';
+$gym_logo = '../images/logo.png';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -115,6 +113,7 @@ $gym_logo = !empty($gym_settings_data['gym_logo']) ? $gym_settings_data['gym_log
             max-width: 90px;
             object-fit: contain;
             filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+            border-radius: 50%;
         }
 
         .gym-meta-title { font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 900; letter-spacing: 1px; color: #fff; text-transform: uppercase; }
