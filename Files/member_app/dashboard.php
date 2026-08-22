@@ -114,6 +114,18 @@ if ($q_health && mysqli_num_rows($q_health) > 0) {
     }
 }
 
+// Fetch User's Attendance
+$att_status = "Not Checked In";
+$q_att = mysqli_query($con, "SELECT * FROM attendance WHERE uid='$uid' AND date='$today' ORDER BY id DESC LIMIT 1");
+if ($q_att && mysqli_num_rows($q_att) > 0) {
+    $att_row = mysqli_fetch_assoc($q_att);
+    if (empty($att_row['exit_time']) || $att_row['exit_time'] == '00:00:00') {
+        $att_status = "Checked In at " . date('h:i A', strtotime($att_row['entry_time']));
+    } else {
+        $att_status = "Left at " . date('h:i A', strtotime($att_row['exit_time']));
+    }
+}
+
 // Fetch Partner's Attendance for Couple Dashboard
 $partner_att_status = "Not Checked In";
 if ($partner_user) {
@@ -138,6 +150,7 @@ if ($partner_user) {
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
