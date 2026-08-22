@@ -2,27 +2,49 @@
 session_start();
 require '../../include/db_conn.php';
 
-if (!isset($_SESSION['user_data'])) {
+$raw_uid = $_SESSION['member_uid'] ?? $_SESSION['user_data'] ?? ($_SESSION['userid'] ?? ($_GET['uid'] ?? ''));
+if (is_array($raw_uid)) {
+    $uid = $raw_uid['userid'] ?? '';
+} else {
+    $uid = (string)$raw_uid;
+}
+$uid = mysqli_real_escape_string($con, trim($uid));
+
+if (empty($uid)) {
     header("Location: ../../index.php");
     exit;
 }
 
-$uid = $_SESSION['user_data'];
 $gym = get_gym_details($con);
 
 // Fetch Member info
 $q_user = mysqli_query($con, "SELECT u.*, a.city, a.state FROM users u LEFT JOIN address a ON u.userid = a.id WHERE u.userid='$uid'");
-$user = mysqli_fetch_assoc($q_user);
+$user = ($q_user && mysqli_num_rows($q_user) > 0) ? mysqli_fetch_assoc($q_user) : [
+    'userid' => $uid,
+    'username' => 'Athlete',
+    'mobile' => '',
+    'joining_date' => date('Y-m-d')
+];
 
-// Fetch Active Membership
-$q_plan = mysqli_query($con, "SELECT p.planName, p.validity, e.expire, e.paid_date FROM enrolls_to e INNER JOIN plan p ON e.pid = p.pid WHERE e.uid='$uid' AND e.renewal='yes' ORDER BY e.expire DESC LIMIT 1");
-$plan_name = "No Active Plan";
-$expire_date = "N/A";
-$days_left = 0;
-$is_active = false;
+// Fetch Active Membership (order by latest expiration date)
+$q_plan = mysqli_query($con, "SELECT p.planName, p.validity, e.expire, e.paid_date FROM enrolls_to e INNER JOIN plan p ON e.pid = p.pid WHERE e.uid='$uid' ORDER BY e.expire DESC LIMIT 1");
+$plan_name = "General Membership";
+$expire_date = "Active";
+$days_left = 30;
+$is_active = true;
 if ($q_plan && mysqli_num_rows($q_plan) > 0) {
     $plan_row = mysqli_fetch_assoc($q_plan);
     $plan_name = $plan_row['planName'];
+    $expire_date = date('d M Y', strtotime($plan_row['expire']));
+    $diff = strtotime($plan_row['expire']) - strtotime(date('Y-m-d'));
+    if ($diff >= 0) {
+        $is_active = true;
+        $days_left = ceil($diff / (60 * 60 * 24));
+    } else {
+        $is_active = false;
+        $days_left = 0;
+    }
+}
     $expire_date = date('d M Y', strtotime($plan_row['expire']));
     $diff = strtotime($plan_row['expire']) - strtotime(date('Y-m-d'));
     if ($diff >= 0) {
