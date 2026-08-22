@@ -75,9 +75,9 @@ if (isset($_POST['login'])) {
 </head>
 <body>
     <div class="login-card">
-        <img src="../images/logo.png" alt="Titan Gym" class="logo">
-        <h2 style="margin-bottom: 5px;">Member Portal</h2>
-        <p style="color:#8ba3cb; font-size:13px; margin-bottom:25px;">Log in to access your digital ID</p>
+        <img src="../images/logo.png" alt="Sudarshan Fitness" class="logo" style="border-radius: 50%; max-width: 140px; box-shadow: 0 4px 25px rgba(255, 107, 0, 0.4); border: 2px solid rgba(255, 215, 0, 0.5);">
+        <h2 style="margin-bottom: 5px; font-weight: 800; color: #fff;">Sudarshan Fitness</h2>
+        <p style="color:#8ba3cb; font-size:13px; margin-bottom:25px;">Member Portal • Access Your Digital Pass</p>
         
         <?php if ($msg != "") { echo "<div class='error'>$msg</div>"; } ?>
 
