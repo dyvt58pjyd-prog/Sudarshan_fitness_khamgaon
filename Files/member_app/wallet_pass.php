@@ -45,13 +45,6 @@ if ($q_plan && mysqli_num_rows($q_plan) > 0) {
         $days_left = 0;
     }
 }
-    $expire_date = date('d M Y', strtotime($plan_row['expire']));
-    $diff = strtotime($plan_row['expire']) - strtotime(date('Y-m-d'));
-    if ($diff >= 0) {
-        $is_active = true;
-        $days_left = ceil($diff / (60 * 60 * 24));
-    }
-}
 
 // Fetch Trainer Name if assigned
 $trainer_name = "General Floor Coach";
