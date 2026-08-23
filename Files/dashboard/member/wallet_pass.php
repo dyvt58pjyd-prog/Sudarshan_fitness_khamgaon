@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../../include/db_conn.php';
+require_once __DIR__ . '/../../include/db_conn.php';
 
 $raw_uid = $_SESSION['member_uid'] ?? $_SESSION['user_data'] ?? ($_SESSION['userid'] ?? ($_GET['uid'] ?? ''));
 if (is_array($raw_uid)) {
@@ -26,7 +26,7 @@ $user = ($q_user && mysqli_num_rows($q_user) > 0) ? mysqli_fetch_assoc($q_user) 
     'joining_date' => date('Y-m-d')
 ];
 
-// Fetch Active Membership (order by latest expiration date)
+// Fetch Active Membership
 $q_plan = mysqli_query($con, "SELECT p.planName, p.validity, e.expire, e.paid_date FROM enrolls_to e INNER JOIN plan p ON e.pid = p.pid WHERE e.uid='$uid' ORDER BY e.expire DESC LIMIT 1");
 $plan_name = "General Membership";
 $expire_date = "Active";
@@ -67,10 +67,8 @@ if (isset($user['biometric_batch'])) {
 }
 
 // Get photo URL or fallback avatar
-$photo_url = get_member_photo_url($user, '../../');
-
-// Gym Logo URL
-$gym_logo = !empty($gym_settings_data['gym_logo']) ? $gym_settings_data['gym_logo'] : (!empty($gym['gym_logo']) ? $gym['gym_logo'] : '../../images/logo.png');
+$photo_url = function_exists('get_member_photo_url') ? get_member_photo_url($user, '../../') : '../../images/logo.png';
+$gym_logo = '../../images/logo.png';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -78,6 +76,11 @@ $gym_logo = !empty($gym_settings_data['gym_logo']) ? $gym_settings_data['gym_log
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VIP Digital Gym Pass | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Sudarshan Pass">
+    <link rel="apple-touch-icon" href="../../images/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -94,6 +97,7 @@ $gym_logo = !empty($gym_settings_data['gym_logo']) ? $gym_settings_data['gym_log
             overflow: hidden;
             box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 35px <?php echo $is_active ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)'; ?>;
             position: relative;
+            transition: transform 0.3s ease;
         }
 
         .pass-header {
@@ -115,6 +119,8 @@ $gym_logo = !empty($gym_settings_data['gym_logo']) ? $gym_settings_data['gym_log
             max-width: 90px;
             object-fit: contain;
             filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+            border-radius: 50%;
+            border: 1px solid rgba(255,215,0,0.4);
         }
 
         .gym-meta-title { font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 900; letter-spacing: 1px; color: #fff; text-transform: uppercase; }
@@ -174,7 +180,10 @@ $gym_logo = !empty($gym_settings_data['gym_logo']) ? $gym_settings_data['gym_log
             display: inline-block;
             margin: 8px 0;
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            cursor: pointer;
+            transition: transform 0.2s ease;
         }
+        .qr-card-wrap:hover { transform: scale(1.04); }
 
         .pass-footer-bar {
             background: rgba(0,0,0,0.4);
@@ -201,6 +210,29 @@ $gym_logo = !empty($gym_settings_data['gym_logo']) ? $gym_settings_data['gym_log
             transition: transform 0.2s ease;
         }
         .btn-action:hover { transform: translateY(-2px); }
+
+        /* Modal styling */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 99999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-card {
+            background: #1e293b;
+            border: 2px solid #38bdf8;
+            border-radius: 24px;
+            padding: 25px 20px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
     </style>
 </head>
 <body>
@@ -271,12 +303,12 @@ $gym_logo = !empty($gym_settings_data['gym_logo']) ? $gym_settings_data['gym_log
             </div>
 
             <!-- Dynamic Gate Check-in QR Code -->
-            <div class="qr-card-wrap">
+            <div class="qr-card-wrap" onclick="toggleFullScreenQR()" title="Tap to expand for optical scanner">
                 <canvas id="qrCanvas"></canvas>
             </div>
             
             <div style="font-size: 11px; color: #94a3b8; font-weight: 600; margin-top: 4px;">
-                Scan for Instant Turnstile &amp; Biometric Gate Access
+                💡 Tap QR to enlarge for gate scanner camera
             </div>
         </div>
 
@@ -287,28 +319,103 @@ $gym_logo = !empty($gym_settings_data['gym_logo']) ? $gym_settings_data['gym_log
         </div>
     </div>
 
-    <!-- Direct Apple & Google Wallet Actions -->
+    <!-- Direct Wallet & Offline Access Actions -->
     <div style="width: 100%; max-width: 380px; margin-top: 18px; display: grid; gap: 9px;">
-        <!-- Apple Wallet Button -->
-        <a href="../../api/generate_apple_pass.php" class="btn-action" style="background: #000; color: #fff; border: 1px solid rgba(255,255,255,0.25); box-shadow: 0 4px 15px rgba(0,0,0,0.6);">
-            <svg width="20" height="20" viewBox="0 0 170 170" fill="#fff"><path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.04-7.67-7.81-11.96-14.34-6.42-9.78-11.48-20.9-15.19-33.35-3.71-12.44-5.56-23.77-5.56-33.99 0-14.12 3.65-25.59 10.95-34.42 7.3-8.83 16.32-13.35 27.06-13.56 4.35 0 9.29 1.15 14.82 3.46 5.53 2.31 9.38 3.52 11.55 3.64 1.74 0 5.86-1.33 12.38-3.99 6.51-2.67 11.98-3.83 16.4-3.5 12.18.98 21.73 5.34 28.66 13.08-10.66 6.42-15.88 15.24-15.66 26.46.22 8.71 3.52 16.03 9.91 21.96 6.39 5.94 13.91 9.26 22.56 9.98-2.17 6.42-4.78 12.76-7.83 19.01zM119.22 33.15c0-6.74 2.45-13.15 7.34-19.23 4.9-6.08 10.9-10.15 18-12.22-.44 6.74-2.99 13.1-7.65 19.08-4.66 5.98-10.74 9.93-18.25 11.85-.22-.76-.44-1.59-.44-2.48z"/></svg>
-            Add to Apple Wallet
-        </a>
+        <!-- 📲 1-Tap Home Screen Pass Button -->
+        <button onclick="openInstallModal()" class="btn-action" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; box-shadow: 0 4px 15px rgba(16,185,129,0.4);">
+            📲 Add Pass to iPhone / Android Home Screen
+        </button>
 
-        <!-- Google Wallet Button -->
-        <a href="../../api/generate_google_pass.php" class="btn-action" style="background: #ffffff; color: #000; box-shadow: 0 4px 15px rgba(255,255,255,0.2);">
+        <!-- 🍏 Apple Wallet Pass Guide Button -->
+        <button onclick="openAppleWalletGuide()" class="btn-action" style="background: #000; color: #fff; border: 1px solid rgba(255,255,255,0.25); box-shadow: 0 4px 15px rgba(0,0,0,0.6);">
+            <svg width="20" height="20" viewBox="0 0 170 170" fill="#fff"><path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.04-7.67-7.81-11.96-14.34-6.42-9.78-11.48-20.9-15.19-33.35-3.71-12.44-5.56-23.77-5.56-33.99 0-14.12 3.65-25.59 10.95-34.42 7.3-8.83 16.32-13.35 27.06-13.56 4.35 0 9.29 1.15 14.82 3.46 5.53 2.31 9.38 3.52 11.55 3.64 1.74 0 5.86-1.33 12.38-3.99 6.51-2.67 11.98-3.83 16.4-3.5 12.18.98 21.73 5.34 28.66 13.08-10.66 6.42-15.88 15.24-15.66 26.46.22 8.71 3.52 16.03 9.91 21.96 6.39 5.94 13.91 9.26 22.56 9.98-2.17 6.42-4.78 12.76-7.83 19.01zM119.22 33.15c0-6.74 2.45-13.15 7.34-19.23 4.9-6.08 10.9-10.15 18-12.22-.44 6.74-2.99 13.1-7.65 19.08-4.66 5.98-10.74 9.93-18.25 11.85-.22-.76-.44-1.59-.44-2.48z"/></svg>
+            🍏 Save to Apple Wallet &amp; Photos
+        </button>
+
+        <!-- 🔵 Google Wallet / Android Button -->
+        <button onclick="openGoogleWalletGuide()" class="btn-action" style="background: #ffffff; color: #000; box-shadow: 0 4px 15px rgba(255,255,255,0.2);">
             <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-            Add to Google Wallet
-        </a>
+            🔵 Save to Google Wallet &amp; Photos
+        </button>
 
         <!-- Download Image Button -->
         <button onclick="downloadPassImage()" class="btn-action" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56,189,248,0.4);">
-            📥 Save Pass Image to Photos
+            📥 Download Pass Card Image
         </button>
 
         <a href="index.php" class="btn-action" style="background: rgba(255,255,255,0.05); color: #94a3b8; border: 1px solid rgba(255,255,255,0.1);">
             Return to Dashboard
         </a>
+    </div>
+
+    <!-- 📱 PWA HOME SCREEN MODAL -->
+    <div id="installModal" class="modal-overlay" onclick="closeModals()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <div style="font-size: 36px; margin-bottom: 8px;">📲</div>
+            <h3 style="color: #10b981; font-weight: 800; margin-bottom: 10px;">Instant Home Screen Pass</h3>
+            <p style="font-size: 13px; color: #cbd5e1; line-height: 1.5; margin-bottom: 15px;">
+                Pin your official VIP pass to your phone's home screen for 1-tap gate access even without internet:
+            </p>
+            <div style="background: rgba(0,0,0,0.4); border-radius: 12px; padding: 12px; text-align: left; font-size: 12.5px; line-height: 1.6; color: #94a3b8; margin-bottom: 18px;">
+                <div>🍏 <strong>On iPhone (Safari):</strong> Tap Share <span style="font-size: 14px;">⬆️</span> then select <strong>"Add to Home Screen ➕"</strong>.</div>
+                <div style="margin-top: 8px;">🔵 <strong>On Android (Chrome):</strong> Tap Menu <span style="font-size: 14px;">⋮</span> then select <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.</div>
+            </div>
+            <button onclick="closeModals()" class="btn-action" style="background: #10b981; color: #fff;">Got It 👍</button>
+        </div>
+    </div>
+
+    <!-- 🍏 APPLE WALLET GUIDE MODAL -->
+    <div id="appleModal" class="modal-overlay" onclick="closeModals()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <div style="font-size: 36px; margin-bottom: 8px;">🍏</div>
+            <h3 style="color: #fff; font-weight: 800; margin-bottom: 10px;">Apple Wallet &amp; Photos Pass</h3>
+            <p style="font-size: 13px; color: #cbd5e1; line-height: 1.5; margin-bottom: 15px;">
+                Choose how you want to save your Sudarshan Fitness VIP pass on your Apple device:
+            </p>
+            <div style="display: grid; gap: 10px; margin-bottom: 15px;">
+                <button onclick="downloadPassImage(); closeModals();" class="btn-action" style="background: #38bdf8; color: #000;">
+                    🖼️ Save to Apple Photos / Wallpaper
+                </button>
+                <button onclick="closeModals(); openInstallModal();" class="btn-action" style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                    📲 Add to iPhone Lockscreen Pass
+                </button>
+            </div>
+            <button onclick="closeModals()" style="background: none; border: none; color: #94a3b8; font-size: 12px; cursor: pointer;">Close</button>
+        </div>
+    </div>
+
+    <!-- 🔵 GOOGLE WALLET GUIDE MODAL -->
+    <div id="googleModal" class="modal-overlay" onclick="closeModals()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <div style="font-size: 36px; margin-bottom: 8px;">🔵</div>
+            <h3 style="color: #fff; font-weight: 800; margin-bottom: 10px;">Google Wallet &amp; Android Pass</h3>
+            <p style="font-size: 13px; color: #cbd5e1; line-height: 1.5; margin-bottom: 15px;">
+                Save your pass for instant biometric and optical turnstile scanning:
+            </p>
+            <div style="display: grid; gap: 10px; margin-bottom: 15px;">
+                <button onclick="downloadPassImage(); closeModals();" class="btn-action" style="background: #10b981; color: #fff;">
+                    🖼️ Save HD Pass to Gallery
+                </button>
+                <button onclick="closeModals(); openInstallModal();" class="btn-action" style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                    📲 Pin to Android Home Screen
+                </button>
+            </div>
+            <button onclick="closeModals()" style="background: none; border: none; color: #94a3b8; font-size: 12px; cursor: pointer;">Close</button>
+        </div>
+    </div>
+
+    <!-- 💡 FULLSCREEN QR MODAL -->
+    <div id="fullScreenQRModal" class="modal-overlay" onclick="closeModals()">
+        <div class="modal-card" style="background: #ffffff; color: #000; border: 3px solid #10b981;" onclick="event.stopPropagation()">
+            <div style="font-size: 14px; font-weight: 900; color: #0f172a; margin-bottom: 10px; text-transform: uppercase;">
+                SCAN FOR GATE ENTRANCE
+            </div>
+            <canvas id="largeQrCanvas" style="width: 240px; height: 240px; margin: 0 auto; display: block;"></canvas>
+            <div style="font-size: 15px; font-weight: 900; margin-top: 12px; color: #000;">
+                #<?php echo htmlspecialchars($user['userid']); ?> • <?php echo htmlspecialchars($user['username']); ?>
+            </div>
+            <button onclick="closeModals()" class="btn-action" style="background: #0f172a; color: #fff; margin-top: 15px;">Done</button>
+        </div>
     </div>
 
     <script>
@@ -320,6 +427,23 @@ $gym_logo = !empty($gym_settings_data['gym_logo']) ? $gym_settings_data['gym_log
             foreground: 'black',
             level: 'H'
         });
+
+        const largeQr = new QRious({
+            element: document.getElementById('largeQrCanvas'),
+            value: 'MEMBER_ID:<?php echo $user['userid']; ?>',
+            size: 240,
+            background: 'white',
+            foreground: 'black',
+            level: 'H'
+        });
+
+        function openInstallModal() { document.getElementById('installModal').style.display = 'flex'; }
+        function openAppleWalletGuide() { document.getElementById('appleModal').style.display = 'flex'; }
+        function openGoogleWalletGuide() { document.getElementById('googleModal').style.display = 'flex'; }
+        function toggleFullScreenQR() { document.getElementById('fullScreenQRModal').style.display = 'flex'; }
+        function closeModals() {
+            document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+        }
 
         function downloadPassImage() {
             const passCard = document.getElementById('digitalPassCard');
