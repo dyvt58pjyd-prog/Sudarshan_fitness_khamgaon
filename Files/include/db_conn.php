@@ -1444,7 +1444,6 @@ if (!function_exists('send_member_email')) {
         $log_entry .= "DATE: " . date('Y-m-d H:i:s') . "\n";
         $log_entry .= "TO: $email\n";
         $log_entry .= "SUBJECT: $subject\n";
-        $log_entry .= "BODY:\n" . strip_tags($mail_body) . "\n";
         $log_entry .= "========================================================\n\n";
         @file_put_contents($log_path, $log_entry, FILE_APPEND);
     }
@@ -1466,6 +1465,57 @@ if (!function_exists('send_payment_email')) {
         }
 
         $memID_esc = mysqli_real_escape_string($con, $memID);
+
+        // Determine WhatsApp group link based on member's gender
+        $gender_str = '';
+        $gender_q = mysqli_query($con, "SELECT gender FROM users WHERE userid = '$memID_esc'");
+        if ($gender_q && mysqli_num_rows($gender_q) > 0) {
+            $gender_row = mysqli_fetch_assoc($gender_q);
+            $gender_str = strtolower(trim($gender_row['gender'] ?? ''));
+        }
+
+        $male_group_link = "https://chat.whatsapp.com/LMkWJql6kT91P5X59caDI0?s=sw&p=i&ilr=0";
+        $female_group_link = "https://chat.whatsapp.com/ISk4F5HqcJhBK477gJ55Ee?s=sw&p=i&ilr=0";
+
+        if ($gender_str === 'female' || $gender_str === 'f') {
+            $whatsapp_section = "
+                <div style='background: linear-gradient(135deg, rgba(37, 211, 102, 0.08) 0%, rgba(20, 184, 166, 0.08) 100%); border: 2px solid #25D366; padding: 22px; margin: 25px 0; border-radius: 14px; text-align: center; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.12);'>
+                    <div style='font-size: 26px; margin-bottom: 6px;'>💬</div>
+                    <strong style='color: #15803d; font-size: 16px; display: block; margin-bottom: 8px;'>Join Our Official Members WhatsApp Group!</strong>
+                    <p style='font-size: 13px; color: #475569; margin: 0 0 16px 0; line-height: 1.5;'>Stay updated with daily workout schedules, trainer announcements, events &amp; gym community updates.</p>
+                    <a href='{$female_group_link}' target='_blank' style='display: inline-block; background-color: #25D366; color: #ffffff; text-decoration: none; padding: 12px 28px; border-radius: 10px; font-weight: 800; font-size: 14px; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35); text-transform: uppercase; letter-spacing: 0.5px;'>
+                        🟢 Join Female WhatsApp Group &rarr;
+                    </a>
+                </div>
+            ";
+        } elseif ($gender_str === 'male' || $gender_str === 'm') {
+            $whatsapp_section = "
+                <div style='background: linear-gradient(135deg, rgba(37, 211, 102, 0.08) 0%, rgba(20, 184, 166, 0.08) 100%); border: 2px solid #25D366; padding: 22px; margin: 25px 0; border-radius: 14px; text-align: center; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.12);'>
+                    <div style='font-size: 26px; margin-bottom: 6px;'>💬</div>
+                    <strong style='color: #15803d; font-size: 16px; display: block; margin-bottom: 8px;'>Join Our Official Members WhatsApp Group!</strong>
+                    <p style='font-size: 13px; color: #475569; margin: 0 0 16px 0; line-height: 1.5;'>Stay updated with daily workout schedules, trainer announcements, events &amp; gym community updates.</p>
+                    <a href='{$male_group_link}' target='_blank' style='display: inline-block; background-color: #25D366; color: #ffffff; text-decoration: none; padding: 12px 28px; border-radius: 10px; font-weight: 800; font-size: 14px; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35); text-transform: uppercase; letter-spacing: 0.5px;'>
+                        🟢 Join Male WhatsApp Group &rarr;
+                    </a>
+                </div>
+            ";
+        } else {
+            $whatsapp_section = "
+                <div style='background: linear-gradient(135deg, rgba(37, 211, 102, 0.08) 0%, rgba(20, 184, 166, 0.08) 100%); border: 2px solid #25D366; padding: 22px; margin: 25px 0; border-radius: 14px; text-align: center; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.12);'>
+                    <div style='font-size: 26px; margin-bottom: 6px;'>💬</div>
+                    <strong style='color: #15803d; font-size: 16px; display: block; margin-bottom: 8px;'>Join Our Official Members WhatsApp Group!</strong>
+                    <p style='font-size: 13px; color: #475569; margin: 0 0 16px 0; line-height: 1.5;'>Stay updated with daily workout schedules, trainer announcements, events &amp; gym community updates.</p>
+                    <div style='display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;'>
+                        <a href='{$male_group_link}' target='_blank' style='display: inline-block; background-color: #25D366; color: #ffffff; text-decoration: none; padding: 10px 22px; border-radius: 8px; font-weight: 800; font-size: 13px; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);'>
+                            🟢 Join Male Group &rarr;
+                        </a>
+                        <a href='{$female_group_link}' target='_blank' style='display: inline-block; background-color: #25D366; color: #ffffff; text-decoration: none; padding: 10px 22px; border-radius: 8px; font-weight: 800; font-size: 13px; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);'>
+                            🟢 Join Female Group &rarr;
+                        </a>
+                    </div>
+                </div>
+            ";
+        }
 
         // Construct HTML Receipt Body
         $mail_body = "
@@ -1491,8 +1541,6 @@ if (!function_exists('send_payment_email')) {
                 <p>Dear <strong>$name</strong>,</p>
                 <p>Thank you for your payment. Below are the details of your subscription renewal transaction at <strong>$gym_name</strong>. Your official payment receipt PDF has been attached to this email.</p>
                 
-
-
                 <table class='details-table'>
                     <tr>
                         <th>Membership ID</th>
@@ -1534,6 +1582,8 @@ if (!function_exists('send_payment_email')) {
                     </tr>
                 </table>
                 
+                $whatsapp_section
+
                 <div class='footer'>
                     This is an automated transaction confirmation from $gym_name.<br>
                     Need help? Contact support: <a href='mailto:$gym_email' style='color: #ff6b00; text-decoration: none;'>$gym_email</a><br>
@@ -1554,7 +1604,7 @@ if (!function_exists('send_payment_email')) {
         // Send WhatsApp Payment Confirmation with PDF receipt attached
         $q_mob = mysqli_query($con, "SELECT mobile FROM users WHERE userid = '" . mysqli_real_escape_string($con, $memID) . "'");
         if ($q_mob && $mob_row = mysqli_fetch_assoc($q_mob)) {
-            send_whatsapp_payment_confirmation($con, $mob_row['mobile'], $name, $planName, $paid_amount, $expiredate, $payment_mode, $pdf_path);
+            send_whatsapp_payment_confirmation($con, $mob_row['mobile'], $name, $planName, $paid_amount, $expiredate, $payment_mode, $pdf_path, $memID);
         }
 
         if ($pdf_path && file_exists($pdf_path)) {
@@ -1589,6 +1639,30 @@ if (!function_exists('send_pt_email')) {
         $gym_email = $gym['gym_email'];
         
         $subject = "Personal Training Enrollment Confirmed - $gym_name";
+        $memID_esc = mysqli_real_escape_string($con, $memID);
+
+        // Determine WhatsApp group link based on member's gender
+        $gender_str = '';
+        $gender_q = mysqli_query($con, "SELECT gender FROM users WHERE userid = '$memID_esc'");
+        if ($gender_q && mysqli_num_rows($gender_q) > 0) {
+            $gender_row = mysqli_fetch_assoc($gender_q);
+            $gender_str = strtolower(trim($gender_row['gender'] ?? ''));
+        }
+
+        $male_group_link = "https://chat.whatsapp.com/LMkWJql6kT91P5X59caDI0?s=sw&p=i&ilr=0";
+        $female_group_link = "https://chat.whatsapp.com/ISk4F5HqcJhBK477gJ55Ee?s=sw&p=i&ilr=0";
+        $whatsapp_link = ($gender_str === 'female' || $gender_str === 'f') ? $female_group_link : $male_group_link;
+
+        $whatsapp_section = "
+            <div style='background: linear-gradient(135deg, rgba(37, 211, 102, 0.08) 0%, rgba(20, 184, 166, 0.08) 100%); border: 2px solid #25D366; padding: 22px; margin: 25px 0; border-radius: 14px; text-align: center; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.12);'>
+                <div style='font-size: 26px; margin-bottom: 6px;'>💬</div>
+                <strong style='color: #15803d; font-size: 16px; display: block; margin-bottom: 8px;'>Join Our Official Members WhatsApp Group!</strong>
+                <p style='font-size: 13px; color: #475569; margin: 0 0 16px 0; line-height: 1.5;'>Stay connected with trainers, workout announcements, gym schedules &amp; fitness updates!</p>
+                <a href='{$whatsapp_link}' target='_blank' style='display: inline-block; background-color: #25D366; color: #ffffff; text-decoration: none; padding: 12px 28px; border-radius: 10px; font-weight: 800; font-size: 14px; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35); text-transform: uppercase; letter-spacing: 0.5px;'>
+                    🟢 Join WhatsApp Group &rarr;
+                </a>
+            </div>
+        ";
         
         // Construct HTML Receipt Body
         $mail_body = "
@@ -1645,6 +1719,8 @@ if (!function_exists('send_pt_email')) {
                     </tr>
                 </table>
 
+                $whatsapp_section
+
                 <p>Your personal trainer will work directly with you to outline your customized workout routines, diet logs, and monitor your physical achievements. You can view your training history anytime in the member portal.</p>
                 
                 <div class='footer'>
@@ -1665,7 +1741,7 @@ if (!function_exists('send_pt_email')) {
         // Send WhatsApp PT Payment Confirmation with PDF receipt attached
         $q_mob = mysqli_query($con, "SELECT mobile FROM users WHERE userid = '" . mysqli_real_escape_string($con, $memID) . "'");
         if ($q_mob && $mob_row = mysqli_fetch_assoc($q_mob)) {
-            send_whatsapp_payment_confirmation($con, $mob_row['mobile'], $name, "Personal Training ($trainer_name)", $amount, $expire_date, $payment_mode, $pdf_path);
+            send_whatsapp_payment_confirmation($con, $mob_row['mobile'], $name, "Personal Training ($trainer_name)", $amount, $expire_date, $payment_mode, $pdf_path, $memID);
         }
 
         if ($pdf_path && file_exists($pdf_path)) {
@@ -1694,7 +1770,7 @@ if (!function_exists('send_pt_email')) {
 }
 
 if (!function_exists('send_whatsapp_payment_confirmation')) {
-    function send_whatsapp_payment_confirmation($con, $mobile, $name, $planName, $amount, $expiredate, $payment_mode, $pdf_path = null) {
+    function send_whatsapp_payment_confirmation($con, $mobile, $name, $planName, $amount, $expiredate, $payment_mode, $pdf_path = null, $memID = '') {
         if (empty($mobile)) {
             return false;
         }
@@ -1705,11 +1781,22 @@ if (!function_exists('send_whatsapp_payment_confirmation')) {
         if (strlen($wa_mobile) === 10) {
             $wa_mobile = '91' . $wa_mobile;
         }
+
+        // Determine WhatsApp group link
+        $wa_group_msg = "";
+        if (!empty($memID)) {
+            $memID_esc = mysqli_real_escape_string($con, $memID);
+            $gender_q = mysqli_query($con, "SELECT gender FROM users WHERE userid = '$memID_esc'");
+            $gender_str = ($gender_q && $gender_row = mysqli_fetch_assoc($gender_q)) ? strtolower(trim($gender_row['gender'] ?? '')) : '';
+            $link = ($gender_str === 'female' || $gender_str === 'f') ? "https://chat.whatsapp.com/ISk4F5HqcJhBK477gJ55Ee?s=sw&p=i&ilr=0" : "https://chat.whatsapp.com/LMkWJql6kT91P5X59caDI0?s=sw&p=i&ilr=0";
+            $wa_group_msg = "💬 *Join Our Members WhatsApp Group:*\n👉 {$link}\n\n";
+        }
         
         $message = "🏋️ *{$gym_name}* Payment Confirmation 🏋️\n\n" .
                    "Dear *{$name}*,\n\n" .
                    "Thank you for your payment of *₹" . number_format($amount) . "* for the plan *{$planName}* via *{$payment_mode}*.\n\n" .
                    "Your subscription is now *ACTIVE* and will expire on *{$expiredate}*.\n\n" .
+                   $wa_group_msg .
                    "Log in to your member portal to view receipt and workout routines:\n" .
                    "👉 https://sudarshanfitness.de\n\n" .
                    "Thank you,\n" .
