@@ -250,6 +250,28 @@ if (!$con) {
         mysqli_query($con, "ALTER TABLE walkin_enquiries ADD COLUMN photo_base64 LONGTEXT DEFAULT NULL");
     }
 
+    // Self-healing database check: ensure expenses table and payment_mode exist for physical vs digital audit
+    @mysqli_query($con, "CREATE TABLE IF NOT EXISTS expenses (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        expense_name VARCHAR(255) NOT NULL,
+        amount INT NOT NULL,
+        category VARCHAR(100) NOT NULL,
+        payment_mode VARCHAR(50) DEFAULT 'Cash',
+        voucher_no VARCHAR(100) DEFAULT NULL,
+        expense_date DATE NOT NULL,
+        remarks TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB");
+
+    $chk_exp_mode = mysqli_query($con, "SHOW COLUMNS FROM expenses LIKE 'payment_mode'");
+    if ($chk_exp_mode && mysqli_num_rows($chk_exp_mode) === 0) {
+        @mysqli_query($con, "ALTER TABLE expenses ADD COLUMN payment_mode VARCHAR(50) DEFAULT 'Cash'");
+    }
+    $chk_exp_vouch = mysqli_query($con, "SHOW COLUMNS FROM expenses LIKE 'voucher_no'");
+    if ($chk_exp_vouch && mysqli_num_rows($chk_exp_vouch) === 0) {
+        @mysqli_query($con, "ALTER TABLE expenses ADD COLUMN voucher_no VARCHAR(100) DEFAULT NULL");
+    }
+
     // Self-healing uploads directory protection against Git deploy wipes
     $uploads_dir = __DIR__ . '/../uploads';
     $member_photos_dir = __DIR__ . '/../uploads/member_photos';

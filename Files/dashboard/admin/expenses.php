@@ -39,14 +39,16 @@ if (isset($_POST['add_expense'])) {
     $expense_name = mysqli_real_escape_string($con, trim($_POST['expense_name']));
     $amount       = intval($_POST['amount']);
     $category     = mysqli_real_escape_string($con, $_POST['category']);
+    $payment_mode = mysqli_real_escape_string($con, $_POST['payment_mode'] ?? 'Cash');
+    $voucher_no   = mysqli_real_escape_string($con, trim($_POST['voucher_no'] ?? ''));
     $expense_date = mysqli_real_escape_string($con, $_POST['expense_date']);
     $remarks      = mysqli_real_escape_string($con, trim($_POST['remarks'] ?? ''));
 
     if (empty($expense_name) || $amount <= 0 || empty($expense_date) || empty($category)) {
         echo "<script>alert('Please fill in all required fields and provide a valid amount.');</script>";
     } else {
-        $insert_query = "INSERT INTO expenses (expense_name, amount, category, expense_date, remarks) 
-                         VALUES ('$expense_name', $amount, '$category', '$expense_date', '$remarks')";
+        $insert_query = "INSERT INTO expenses (expense_name, amount, category, payment_mode, voucher_no, expense_date, remarks) 
+                         VALUES ('$expense_name', $amount, '$category', '$payment_mode', '$voucher_no', '$expense_date', '$remarks')";
         if (mysqli_query($con, $insert_query)) {
             echo "<script>alert('Expense logged successfully!');</script>";
             echo "<meta http-equiv='refresh' content='0; url=expenses.php'>";
@@ -63,6 +65,7 @@ $filter_month = isset($_GET['filter_month']) ? $_GET['filter_month'] : date('Y-m
 $filter_year  = isset($_GET['filter_year']) ? intval($_GET['filter_year']) : intval(date('Y'));
 $start_date   = isset($_GET['start_date']) ? $_GET['start_date'] : date('Y-m-01');
 $end_date     = isset($_GET['end_date']) ? $_GET['end_date'] : date('Y-m-t');
+$filter_mode  = isset($_GET['mode']) ? strtolower(trim($_GET['mode'])) : 'all'; // 'all', 'cash', 'upi'
 
 // Handle Export CSV
 if (isset($_GET['export_csv'])) {
@@ -76,13 +79,19 @@ if (isset($_GET['export_csv'])) {
         $csv_where = "expense_date BETWEEN '$start_date' AND '$end_date'";
     }
     
+    if ($filter_mode === 'cash') {
+        $csv_where .= " AND (payment_mode LIKE '%cash%' OR payment_mode IS NULL OR payment_mode = '')";
+    } elseif ($filter_mode === 'upi') {
+        $csv_where .= " AND (payment_mode LIKE '%upi%' OR payment_mode LIKE '%online%' OR payment_mode LIKE '%bank%')";
+    }
+    
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename=expenses_report_' . date('Ymd_His') . '.csv');
     $out = fopen('php://output', 'w');
-    fputcsv($out, ['ID', 'Expense Name', 'Category', 'Amount (INR)', 'Expense Date', 'Remarks']);
+    fputcsv($out, ['ID', 'Expense Name', 'Category', 'Payment Mode', 'Voucher/Bill No', 'Amount (INR)', 'Expense Date', 'Remarks']);
     $res = mysqli_query($con, "SELECT * FROM expenses WHERE $csv_where ORDER BY expense_date DESC");
     while ($r = mysqli_fetch_assoc($res)) {
-        fputcsv($out, [$r['id'], $r['expense_name'], $r['category'], $r['amount'], $r['expense_date'], $r['remarks']]);
+        fputcsv($out, [$r['id'], $r['expense_name'], $r['category'], $r['payment_mode'] ?? 'Cash', $r['voucher_no'] ?? '—', $r['amount'], $r['expense_date'], $r['remarks']]);
     }
     fclose($out);
     exit();
@@ -94,17 +103,18 @@ $q_overall = mysqli_query($con, "SELECT SUM(amount) AS total FROM expenses");
 $r_overall = mysqli_fetch_assoc($q_overall);
 $overall_total = isset($r_overall['total']) ? intval($r_overall['total']) : 0;
 
-// 2. Current Year Total
-$q_cy = mysqli_query($con, "SELECT SUM(amount) AS total FROM expenses WHERE YEAR(expense_date) = YEAR(CURDATE())");
-$r_cy = mysqli_fetch_assoc($q_cy);
-$current_year_total = isset($r_cy['total']) ? intval($r_cy['total']) : 0;
+// 2. Current Month Breakdown (Cash vs UPI)
+$q_cm_all = mysqli_query($con, "SELECT 
+    SUM(amount) as total,
+    SUM(IF(payment_mode LIKE '%cash%' OR payment_mode IS NULL OR payment_mode = '', amount, 0)) as cash_total,
+    SUM(IF(payment_mode LIKE '%upi%' OR payment_mode LIKE '%online%' OR payment_mode LIKE '%bank%', amount, 0)) as upi_total
+    FROM expenses WHERE YEAR(expense_date) = YEAR(CURDATE()) AND MONTH(expense_date) = MONTH(CURDATE())");
+$r_cm_all = mysqli_fetch_assoc($q_cm_all);
+$current_month_total = isset($r_cm_all['total']) ? intval($r_cm_all['total']) : 0;
+$current_month_cash  = isset($r_cm_all['cash_total']) ? intval($r_cm_all['cash_total']) : 0;
+$current_month_upi   = isset($r_cm_all['upi_total']) ? intval($r_cm_all['upi_total']) : 0;
 
-// 3. Current Month Total
-$q_cm = mysqli_query($con, "SELECT SUM(amount) AS total FROM expenses WHERE YEAR(expense_date) = YEAR(CURDATE()) AND MONTH(expense_date) = MONTH(CURDATE())");
-$r_cm = mysqli_fetch_assoc($q_cm);
-$current_month_total = isset($r_cm['total']) ? intval($r_cm['total']) : 0;
-
-// 4. Filtered Period Query & Total
+// 3. Filtered Period Query & Total
 $where_clause = "1=1";
 $period_label = "Overall All-Time Expenses";
 
@@ -121,9 +131,24 @@ if ($view_mode === 'month') {
     $period_label = "Expenses from " . date('d M Y', strtotime($start_date)) . " to " . date('d M Y', strtotime($end_date));
 }
 
-$q_filtered = mysqli_query($con, "SELECT SUM(amount) AS total, COUNT(*) as cnt FROM expenses WHERE $where_clause");
+if ($filter_mode === 'cash') {
+    $where_clause .= " AND (payment_mode LIKE '%cash%' OR payment_mode IS NULL OR payment_mode = '')";
+    $period_label .= " (Cash Only)";
+} elseif ($filter_mode === 'upi') {
+    $where_clause .= " AND (payment_mode LIKE '%upi%' OR payment_mode LIKE '%online%' OR payment_mode LIKE '%bank%')";
+    $period_label .= " (UPI/Bank Only)";
+}
+
+$q_filtered = mysqli_query($con, "SELECT 
+    SUM(amount) AS total, 
+    SUM(IF(payment_mode LIKE '%cash%' OR payment_mode IS NULL OR payment_mode = '', amount, 0)) as cash_total,
+    SUM(IF(payment_mode LIKE '%upi%' OR payment_mode LIKE '%online%' OR payment_mode LIKE '%bank%', amount, 0)) as upi_total,
+    COUNT(*) as cnt 
+    FROM expenses WHERE $where_clause");
 $r_filtered = mysqli_fetch_assoc($q_filtered);
 $filtered_total = isset($r_filtered['total']) ? intval($r_filtered['total']) : 0;
+$filtered_cash  = isset($r_filtered['cash_total']) ? intval($r_filtered['cash_total']) : 0;
+$filtered_upi   = isset($r_filtered['upi_total']) ? intval($r_filtered['upi_total']) : 0;
 $filtered_count = isset($r_filtered['cnt']) ? intval($r_filtered['cnt']) : 0;
 
 // ── Year-by-Year Summary (Overall Yearly Breakdown) ──────────────────────────
@@ -361,16 +386,16 @@ if (!in_array(intval(date('Y')), $avail_years)) {
             </div>
             <div class="col-md-3 col-sm-6" style="margin-bottom: 12px;">
                 <div class="stat-card" style="border-color: rgba(245, 158, 11, 0.4);">
-                    <div class="lbl">This Month (<?php echo date('M Y'); ?>)</div>
-                    <div class="val" style="color: #fcd34d;">₹<?php echo number_format($current_month_total); ?></div>
-                    <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Current month outgoings</div>
+                    <div class="lbl">💵 Physical Cash Expenses</div>
+                    <div class="val" style="color: #f59e0b;">₹<?php echo number_format($filtered_cash); ?></div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Out of physical cash register</div>
                 </div>
             </div>
             <div class="col-md-3 col-sm-6" style="margin-bottom: 12px;">
-                <div class="stat-card" style="border-color: rgba(59, 130, 246, 0.4);">
-                    <div class="lbl">This Year (<?php echo date('Y'); ?>) Total</div>
-                    <div class="val" style="color: #93c5fd;">₹<?php echo number_format($current_year_total); ?></div>
-                    <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Year <?php echo date('Y'); ?> expenses</div>
+                <div class="stat-card" style="border-color: rgba(56, 189, 248, 0.4);">
+                    <div class="lbl">💳 Digital / UPI Expenses</div>
+                    <div class="val" style="color: #38bdf8;">₹<?php echo number_format($filtered_upi); ?></div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Out of bank / online UPI</div>
                 </div>
             </div>
             <div class="col-md-3 col-sm-6" style="margin-bottom: 12px;">
@@ -387,14 +412,14 @@ if (!in_array(intval(date('Y')), $avail_years)) {
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:15px;">
                 <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
                     <span style="font-weight:700;font-size:13px;color:#fff;">View Mode:</span>
-                    <a href="?view_mode=month&filter_month=<?php echo $filter_month; ?>" class="mode-tab <?php echo $view_mode === 'month' ? 'active' : ''; ?>">📅 Monthly View</a>
-                    <a href="?view_mode=year&filter_year=<?php echo $filter_year; ?>" class="mode-tab <?php echo $view_mode === 'year' ? 'active' : ''; ?>">🗓️ Yearly View</a>
-                    <a href="?view_mode=all_time" class="mode-tab <?php echo $view_mode === 'all_time' ? 'active' : ''; ?>">🌐 Overall All-Time</a>
-                    <a href="?view_mode=custom" class="mode-tab <?php echo $view_mode === 'custom' ? 'active' : ''; ?>">🔍 Custom Dates</a>
+                    <a href="?view_mode=month&filter_month=<?php echo $filter_month; ?>&mode=<?php echo $filter_mode; ?>" class="mode-tab <?php echo $view_mode === 'month' ? 'active' : ''; ?>">📅 Monthly View</a>
+                    <a href="?view_mode=year&filter_year=<?php echo $filter_year; ?>&mode=<?php echo $filter_mode; ?>" class="mode-tab <?php echo $view_mode === 'year' ? 'active' : ''; ?>">🗓️ Yearly View</a>
+                    <a href="?view_mode=all_time&mode=<?php echo $filter_mode; ?>" class="mode-tab <?php echo $view_mode === 'all_time' ? 'active' : ''; ?>">🌐 Overall All-Time</a>
+                    <a href="?view_mode=custom&mode=<?php echo $filter_mode; ?>" class="mode-tab <?php echo $view_mode === 'custom' ? 'active' : ''; ?>">🔍 Custom Dates</a>
                 </div>
 
                 <!-- Mode Specific Inputs -->
-                <form method="get" action="" style="display:flex;align-items:center;gap:10px;margin:0;">
+                <form method="get" action="" style="display:flex;align-items:center;gap:10px;margin:0;flex-wrap:wrap;">
                     <input type="hidden" name="view_mode" value="<?php echo htmlspecialchars($view_mode); ?>">
 
                     <?php if ($view_mode === 'month'): ?>
@@ -403,7 +428,9 @@ if (!in_array(intval(date('Y')), $avail_years)) {
                     <?php elseif ($view_mode === 'year'): ?>
                         <label style="font-size:12px;color:#94a3b8;margin:0;">Select Year:</label>
                         <select name="filter_year" class="form-control-premium" style="margin:0;width:auto;" onchange="this.form.submit()">
-                            <?php foreach ($avail_years as $yr): ?>
+                            <?php 
+                            $avail_years = range(intval(date('Y')), 2020);
+                            foreach ($avail_years as $yr): ?>
                                 <option value="<?php echo $yr; ?>" <?php echo $yr === $filter_year ? 'selected' : ''; ?>><?php echo $yr; ?></option>
                             <?php endforeach; ?>
                         </select>
@@ -413,6 +440,12 @@ if (!in_array(intval(date('Y')), $avail_years)) {
                         <input type="date" name="end_date" class="form-control-premium" style="margin:0;width:auto;" value="<?php echo htmlspecialchars($end_date); ?>">
                         <button type="submit" class="mode-tab active" style="padding:7px 14px;">Apply</button>
                     <?php endif; ?>
+
+                    <select name="mode" class="form-control-premium" style="margin:0;width:auto;" onchange="this.form.submit()">
+                        <option value="all" <?php echo $filter_mode === 'all' ? 'selected' : ''; ?>>All Modes (₹<?php echo number_format($filtered_total); ?>)</option>
+                        <option value="cash" <?php echo $filter_mode === 'cash' ? 'selected' : ''; ?>>💵 Cash Only (₹<?php echo number_format($filtered_cash); ?>)</option>
+                        <option value="upi" <?php echo $filter_mode === 'upi' ? 'selected' : ''; ?>>💳 UPI Only (₹<?php echo number_format($filtered_upi); ?>)</option>
+                    </select>
                 </form>
             </div>
         </div>
@@ -431,6 +464,17 @@ if (!in_array(intval(date('Y')), $avail_years)) {
                         <label style="font-weight:600;font-size:12px;color:#e2e8f0;display:block;margin-bottom:4px;">Amount (INR ₹) *</label>
                         <input class="form-control-premium" type="number" min="1" name="amount" placeholder="e.g. 5000" required>
 
+                        <label style="font-weight:600;font-size:12px;color:#e2e8f0;display:block;margin-bottom:4px;">Payment Mode / Account *</label>
+                        <select class="form-control-premium" name="payment_mode" required>
+                            <option value="Cash">💵 Physical Cash (Cash Drawer)</option>
+                            <option value="UPI">💳 UPI / QR Code (Digital Bank)</option>
+                            <option value="Bank Transfer">🏦 Bank Transfer (NEFT/IMPS)</option>
+                            <option value="Cheque">📑 Cheque / DD</option>
+                        </select>
+
+                        <label style="font-weight:600;font-size:12px;color:#e2e8f0;display:block;margin-bottom:4px;">Voucher / Receipt / Bill No</label>
+                        <input class="form-control-premium" type="text" name="voucher_no" placeholder="e.g. Bill #482, Voucher #12">
+
                         <label style="font-weight:600;font-size:12px;color:#e2e8f0;display:block;margin-bottom:4px;">Category *</label>
                         <select class="form-control-premium" name="category" required>
                             <option value="Maintenance">Maintenance &amp; Repairs</option>
@@ -447,7 +491,7 @@ if (!in_array(intval(date('Y')), $avail_years)) {
                         <input class="form-control-premium" type="date" name="expense_date" value="<?php echo date('Y-m-d'); ?>" required>
 
                         <label style="font-weight:600;font-size:12px;color:#e2e8f0;display:block;margin-bottom:4px;">Remarks / Invoice Notes</label>
-                        <textarea class="form-control-premium" name="remarks" rows="3" placeholder="Optional invoice # or remarks..."></textarea>
+                        <textarea class="form-control-premium" name="remarks" rows="2" placeholder="Optional remarks..."></textarea>
 
                         <button type="submit" name="add_expense" class="premium-btn">Log Expense</button>
                     </form>
@@ -457,6 +501,13 @@ if (!in_array(intval(date('Y')), $avail_years)) {
                 <div class="glass-panel">
                     <h3 style="margin-top:0;margin-bottom:16px;font-weight:800;color:#fff;font-size:14px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:10px;">🏷️ Category Breakdown</h3>
                     <?php
+                    $q_cat_breakdown = mysqli_query($con, "
+                        SELECT category, SUM(amount) as cat_total, COUNT(*) as cat_count
+                        FROM expenses
+                        WHERE $where_clause
+                        GROUP BY category
+                        ORDER BY cat_total DESC
+                    ");
                     $has_cat = false;
                     if ($q_cat_breakdown && mysqli_num_rows($q_cat_breakdown) > 0) {
                         while ($cat = mysqli_fetch_assoc($q_cat_breakdown)) {
@@ -480,84 +531,15 @@ if (!in_array(intval(date('Y')), $avail_years)) {
 
             <!-- Right Column: Outgoings Logs + Yearly Summaries -->
             <div class="col-md-8">
-                <!-- If Yearly or All-Time mode, show Month-by-Month / Year-by-Year breakdown tables -->
-                <?php if ($view_mode === 'all_time'): ?>
-                <div class="glass-panel">
-                    <h3 style="margin-top:0;margin-bottom:16px;font-weight:800;color:#ff6b00;font-size:15px;text-transform:uppercase;letter-spacing:1px;">🗓️ Overall Year-by-Year Breakdown</h3>
-                    <div style="overflow-x:auto;">
-                        <table class="premium-table">
-                            <thead>
-                                <tr>
-                                    <th>Year</th>
-                                    <th>Total Expenses</th>
-                                    <th>Total Logs</th>
-                                    <th>Avg Per Month</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                if ($q_yearly_breakdown && mysqli_num_rows($q_yearly_breakdown) > 0) {
-                                    while ($yr_row = mysqli_fetch_assoc($q_yearly_breakdown)) {
-                                        $avg_mth = round($yr_row['yr_total'] / 12);
-                                        echo "<tr>";
-                                        echo "<td><strong style='color:#fff;font-size:15px;'>" . $yr_row['yr'] . "</strong></td>";
-                                        echo "<td style='color:#ef4444;font-weight:900;font-size:15px;'>₹" . number_format($yr_row['yr_total']) . "</td>";
-                                        echo "<td>" . $yr_row['yr_count'] . " items</td>";
-                                        echo "<td>₹" . number_format($avg_mth) . " / mo</td>";
-                                        echo "<td><a href='?view_mode=year&filter_year=" . $yr_row['yr'] . "' class='delete-btn' style='border-color:rgba(255,107,0,0.4);color:#ff6b00!important;'>View Year →</a></td>";
-                                        echo "</tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='5' style='text-align:center;padding:20px;'>No yearly expense records found.</td></tr>";
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <?php endif; ?>
-
-                <?php if ($view_mode === 'year'): ?>
-                <div class="glass-panel">
-                    <h3 style="margin-top:0;margin-bottom:16px;font-weight:800;color:#f59e0b;font-size:15px;text-transform:uppercase;letter-spacing:1px;">📊 Year <?php echo $filter_year; ?> — Month-by-Month Breakdown</h3>
-                    <div style="overflow-x:auto;">
-                        <table class="premium-table">
-                            <thead>
-                                <tr>
-                                    <th>Month</th>
-                                    <th>Monthly Expense</th>
-                                    <th>Logs Count</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                if ($q_monthly_breakdown && mysqli_num_rows($q_monthly_breakdown) > 0) {
-                                    while ($mb = mysqli_fetch_assoc($q_monthly_breakdown)) {
-                                        $m_param = sprintf('%04d-%02d', $filter_year, $mb['mth']);
-                                        echo "<tr>";
-                                        echo "<td><strong style='color:#fff;'>" . $mb['mth_name'] . " " . $filter_year . "</strong></td>";
-                                        echo "<td style='color:#ef4444;font-weight:800;'>₹" . number_format($mb['mth_total']) . "</td>";
-                                        echo "<td>" . $mb['mth_count'] . " items</td>";
-                                        echo "<td><a href='?view_mode=month&filter_month=" . $m_param . "' class='delete-btn' style='border-color:rgba(59,130,246,0.4);color:#60a5fa!important;'>View Month →</a></td>";
-                                        echo "</tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='4' style='text-align:center;padding:20px;'>No expenses logged in Year " . $filter_year . ".</td></tr>";
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <?php endif; ?>
-
                 <!-- Filtered Expenses List Table -->
                 <div class="glass-panel">
                     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:16px;gap:10px;">
                         <h3 style="margin:0;font-weight:800;color:#fff;font-size:15px;text-transform:uppercase;letter-spacing:1px;"><?php echo $period_label; ?></h3>
-                        <span style="font-size:14px;font-weight:900;color:#ef4444;">Total: ₹<?php echo number_format($filtered_total); ?></span>
+                        <div style="font-size:13px;font-weight:800;">
+                            <span style="color:#f59e0b;margin-right:12px;">Cash: ₹<?php echo number_format($filtered_cash); ?></span>
+                            <span style="color:#38bdf8;margin-right:12px;">UPI: ₹<?php echo number_format($filtered_upi); ?></span>
+                            <span style="color:#ef4444;">Total: ₹<?php echo number_format($filtered_total); ?></span>
+                        </div>
                     </div>
 
                     <div style="overflow-x: auto;">
@@ -567,8 +549,9 @@ if (!in_array(intval(date('Y')), $avail_years)) {
                                     <th>Date</th>
                                     <th>Expense Title</th>
                                     <th>Category</th>
+                                    <th>Mode</th>
                                     <th>Amount</th>
-                                    <th>Remarks</th>
+                                    <th>Voucher / Ref</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -579,12 +562,19 @@ if (!in_array(intval(date('Y')), $avail_years)) {
 
                                 if ($list_res && mysqli_num_rows($list_res) > 0) {
                                     while ($row = mysqli_fetch_assoc($list_res)) {
+                                        $exp_mode = $row['payment_mode'] ?? 'Cash';
+                                        $is_exp_upi = (stripos($exp_mode, 'upi') !== false || stripos($exp_mode, 'online') !== false || stripos($exp_mode, 'bank') !== false);
+                                        $mode_badge = $is_exp_upi 
+                                            ? "<span style='background:rgba(56,189,248,0.15);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);padding:2px 8px;border-radius:6px;font-size:11px;font-weight:bold;'>💳 " . htmlspecialchars($exp_mode) . "</span>"
+                                            : "<span style='background:rgba(245,158,11,0.15);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);padding:2px 8px;border-radius:6px;font-size:11px;font-weight:bold;'>💵 " . htmlspecialchars($exp_mode) . "</span>";
+
                                         echo "<tr>";
                                         echo "<td style='white-space:nowrap;'>" . date('d M Y', strtotime($row['expense_date'])) . "</td>";
                                         echo "<td><strong style='color:#fff;'>" . htmlspecialchars($row['expense_name']) . "</strong></td>";
                                         echo "<td><span class='category-badge'>" . htmlspecialchars($row['category']) . "</span></td>";
+                                        echo "<td>" . $mode_badge . "</td>";
                                         echo "<td style='color: #ef4444; font-weight: 800; white-space:nowrap;'>₹" . number_format($row['amount']) . "</td>";
-                                        echo "<td style='color:#94a3b8;font-size:12px;'>" . htmlspecialchars($row['remarks'] ?: '—') . "</td>";
+                                        echo "<td style='color:#94a3b8;font-size:12px;'>" . htmlspecialchars($row['voucher_no'] ?: ($row['remarks'] ?: '—')) . "</td>";
                                         echo "<td>
                                                 <form method='post' action='' style='display:inline;' onsubmit='return confirm(\"Are you sure you want to delete this expense log?\");'>
                                                     <input type='hidden' name='expense_id' value='" . $row['id'] . "'>
@@ -594,7 +584,7 @@ if (!in_array(intval(date('Y')), $avail_years)) {
                                         echo "</tr>";
                                     }
                                 } else {
-                                    echo "<tr><td colspan='6' style='text-align: center; padding: 40px; color:#64748b;'>No expenses found for the selected period.</td></tr>";
+                                    echo "<tr><td colspan='7' style='text-align: center; padding: 40px; color:#64748b;'>No expenses found for the selected period.</td></tr>";
                                 }
                                 ?>
                             </tbody>

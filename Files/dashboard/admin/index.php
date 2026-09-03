@@ -381,14 +381,17 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
 			<?php
 			// ── FINANCIAL REVENUE & INCOME CALCULATIONS ────────────────────────────────
-			$total_mem_income = 0; $total_pt_income = 0; $overall_income = 0;
-			$year_mem_income  = 0; $year_pt_income  = 0; $year_income    = 0;
-			$month_mem_income = 0; $month_pt_income = 0; $month_income   = 0;
+			$total_mem_income = 0; $total_pt_income = 0; $total_bal_income = 0; $overall_income = 0;
+			$year_mem_income  = 0; $year_pt_income  = 0; $year_bal_income  = 0; $year_income    = 0;
+			$month_mem_income = 0; $month_pt_income = 0; $month_bal_income = 0; $month_income   = 0;
+			$month_upi_income = 0; $month_cash_income = 0;
+			$month_expenses   = 0; $month_cash_expense = 0; $month_upi_expense = 0;
 			$overall_expenses = 0; $net_profit       = 0;
 
 			$curr_yr = date('Y');
 			$curr_ym = date('Y-m');
 
+			// 1. All-time income
 			$q_inc_mem = @mysqli_query($con, "SELECT SUM(COALESCE(IF(e.paid_amount > 0 AND (e.discount_amount = 0 OR e.paid_amount != p.amount), e.paid_amount, GREATEST(0, p.amount - COALESCE(e.discount_amount, 0))), e.paid_amount, 0)) AS total FROM enrolls_to e LEFT JOIN plan p ON e.pid = p.pid");
 			if ($q_inc_mem && $r_inc_mem = @mysqli_fetch_assoc($q_inc_mem)) {
 			    $total_mem_income = intval($r_inc_mem['total'] ?? 0);
@@ -397,8 +400,13 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			if ($q_inc_pt && $r_inc_pt = @mysqli_fetch_assoc($q_inc_pt)) {
 			    $total_pt_income = intval($r_inc_pt['total'] ?? 0);
 			}
-			$overall_income = $total_mem_income + $total_pt_income;
+			$q_inc_bal = @mysqli_query($con, "SELECT SUM(amount) AS total FROM balance_collections");
+			if ($q_inc_bal && $r_inc_bal = @mysqli_fetch_assoc($q_inc_bal)) {
+			    $total_bal_income = intval($r_inc_bal['total'] ?? 0);
+			}
+			$overall_income = $total_mem_income + $total_pt_income + $total_bal_income;
 
+			// 2. Year income
 			$q_y_mem = @mysqli_query($con, "SELECT SUM(COALESCE(IF(e.paid_amount > 0 AND (e.discount_amount = 0 OR e.paid_amount != p.amount), e.paid_amount, GREATEST(0, p.amount - COALESCE(e.discount_amount, 0))), e.paid_amount, 0)) AS total FROM enrolls_to e LEFT JOIN plan p ON e.pid = p.pid WHERE e.paid_date LIKE '$curr_yr-%'");
 			if ($q_y_mem && $r_y_mem = @mysqli_fetch_assoc($q_y_mem)) {
 			    $year_mem_income = intval($r_y_mem['total'] ?? 0);
@@ -407,19 +415,20 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			if ($q_y_pt && $r_y_pt = @mysqli_fetch_assoc($q_y_pt)) {
 			    $year_pt_income = intval($r_y_pt['total'] ?? 0);
 			}
-			$year_income = $year_mem_income + $year_pt_income;
+			$q_y_bal = @mysqli_query($con, "SELECT SUM(amount) AS total FROM balance_collections WHERE collection_date LIKE '$curr_yr-%'");
+			if ($q_y_bal && $r_y_bal = @mysqli_fetch_assoc($q_y_bal)) {
+			    $year_bal_income = intval($r_y_bal['total'] ?? 0);
+			}
+			$year_income = $year_mem_income + $year_pt_income + $year_bal_income;
 
-			$month_mem_income = 0; $month_pt_income = 0; $month_bal_income = 0; $month_income = 0;
-			$month_upi_income = 0; $month_cash_income = 0;
-
-			// Monthly Membership Breakdown by Payment Mode
+			// 3. Monthly Membership Breakdown by Payment Mode
 			$q_m_mem = @mysqli_query($con, "SELECT e.payment_mode, SUM(COALESCE(IF(e.paid_amount > 0 AND (e.discount_amount = 0 OR e.paid_amount != p.amount), e.paid_amount, GREATEST(0, p.amount - COALESCE(e.discount_amount, 0))), e.paid_amount, 0)) AS total FROM enrolls_to e LEFT JOIN plan p ON e.pid = p.pid WHERE e.paid_date LIKE '$curr_ym-%' GROUP BY e.payment_mode");
 			if ($q_m_mem) {
 			    while ($r_mm = @mysqli_fetch_assoc($q_m_mem)) {
 			        $tot = intval($r_mm['total'] ?? 0);
 			        $month_mem_income += $tot;
 			        $m_mode = strtolower(trim($r_mm['payment_mode'] ?? 'cash'));
-			        if (strpos($m_mode, 'upi') !== false || strpos($m_mode, 'online') !== false) {
+			        if (strpos($m_mode, 'upi') !== false || strpos($m_mode, 'online') !== false || strpos($m_mode, 'bank') !== false) {
 			            $month_upi_income += $tot;
 			        } else {
 			            $month_cash_income += $tot;
@@ -434,7 +443,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			        $tot = intval($r_mp['total'] ?? 0);
 			        $month_pt_income += $tot;
 			        $p_mode = strtolower(trim($r_mp['payment_mode'] ?? 'cash'));
-			        if (strpos($p_mode, 'upi') !== false || strpos($p_mode, 'online') !== false) {
+			        if (strpos($p_mode, 'upi') !== false || strpos($p_mode, 'online') !== false || strpos($p_mode, 'bank') !== false) {
 			            $month_upi_income += $tot;
 			        } else {
 			            $month_cash_income += $tot;
@@ -449,7 +458,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			        $tot = intval($r_mb['total'] ?? 0);
 			        $month_bal_income += $tot;
 			        $b_mode = strtolower(trim($r_mb['payment_mode'] ?? 'cash'));
-			        if (strpos($b_mode, 'upi') !== false || strpos($b_mode, 'online') !== false) {
+			        if (strpos($b_mode, 'upi') !== false || strpos($b_mode, 'online') !== false || strpos($b_mode, 'bank') !== false) {
 			            $month_upi_income += $tot;
 			        } else {
 			            $month_cash_income += $tot;
@@ -458,6 +467,21 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			}
 
 			$month_income = $month_mem_income + $month_pt_income + $month_bal_income;
+
+			// 4. Monthly Expenses Breakdown by Payment Mode
+			$q_m_exp = @mysqli_query($con, "SELECT 
+			    SUM(amount) as total,
+			    SUM(IF(payment_mode LIKE '%cash%' OR payment_mode IS NULL OR payment_mode = '', amount, 0)) as cash_total,
+			    SUM(IF(payment_mode LIKE '%upi%' OR payment_mode LIKE '%online%' OR payment_mode LIKE '%bank%', amount, 0)) as upi_total
+			    FROM expenses WHERE expense_date LIKE '$curr_ym-%'");
+			if ($q_m_exp && $r_m_exp = @mysqli_fetch_assoc($q_m_exp)) {
+			    $month_expenses    = intval($r_m_exp['total'] ?? 0);
+			    $month_cash_expense = intval($r_m_exp['cash_total'] ?? 0);
+			    $month_upi_expense  = intval($r_m_exp['upi_total'] ?? 0);
+			}
+
+			$month_net_cash = $month_cash_income - $month_cash_expense;
+			$month_net_upi  = $month_upi_income - $month_upi_expense;
 
 			$q_exp_all = @mysqli_query($con, "SELECT SUM(amount) as total FROM expenses");
 			if ($q_exp_all && $r_exp_all = @mysqli_fetch_assoc($q_exp_all)) {
@@ -474,7 +498,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 						<span style="font-size: 26px;">💰</span>
 						<div>
 							<h3 style="color: #ffffff; font-weight: 800; font-size: 16px; margin: 0; text-transform: uppercase; letter-spacing: 1px;">Financial Income &amp; Revenue Overview</h3>
-							<span style="color: #94a3b8; font-size: 12px;">Real-time collection analytics across membership &amp; PT</span>
+							<span style="color: #94a3b8; font-size: 12px;">Audited physical cash drawer &amp; digital bank ledger</span>
 						</div>
 					</div>
 					<div style="display:flex; gap:8px;">
@@ -484,14 +508,26 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 				</div>
 
 				<div class="row" style="margin:0;">
-					<!-- Monthly Income Card with UPI vs Cash Separator -->
+					<!-- Monthly Net Cash in Hand -->
 					<div class="col-md-3 col-sm-6" style="padding: 6px;">
-						<div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 14px; padding: 16px; text-align: center;">
-							<div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">This Month Income</div>
-							<div style="color: #10b981; font-size: 26px; font-weight: 900; margin-top: 4px;">₹<?php echo number_format($month_income); ?></div>
-							<div style="display: flex; justify-content: space-around; margin-top: 8px; border-top: 1px dashed rgba(255,255,255,0.12); padding-top: 6px; font-size: 11px; font-weight: 800;">
-								<span style="color: #38bdf8;" title="UPI / Online Collections">💳 UPI: ₹<?php echo number_format($month_upi_income); ?></span>
-								<span style="color: #f59e0b;" title="Cash Collections">💵 Cash: ₹<?php echo number_format($month_cash_income); ?></span>
+						<div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 14px; padding: 16px; text-align: center;">
+							<div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">💵 Physical Cash in Hand</div>
+							<div style="color: <?php echo $month_net_cash >= 0 ? '#f59e0b' : '#ef4444'; ?>; font-size: 26px; font-weight: 900; margin-top: 4px;">₹<?php echo number_format($month_net_cash); ?></div>
+							<div style="display: flex; justify-content: space-around; margin-top: 8px; border-top: 1px dashed rgba(255,255,255,0.12); padding-top: 6px; font-size: 10.5px; font-weight: 800;">
+								<span style="color: #10b981;" title="Cash Inflow">+₹<?php echo number_format($month_cash_income); ?></span>
+								<span style="color: #ef4444;" title="Cash Expenses">-₹<?php echo number_format($month_cash_expense); ?></span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Monthly Digital / UPI Surplus -->
+					<div class="col-md-3 col-sm-6" style="padding: 6px;">
+						<div style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 14px; padding: 16px; text-align: center;">
+							<div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">💳 Digital / UPI Surplus</div>
+							<div style="color: <?php echo $month_net_upi >= 0 ? '#38bdf8' : '#ef4444'; ?>; font-size: 26px; font-weight: 900; margin-top: 4px;">₹<?php echo number_format($month_net_upi); ?></div>
+							<div style="display: flex; justify-content: space-around; margin-top: 8px; border-top: 1px dashed rgba(255,255,255,0.12); padding-top: 6px; font-size: 10.5px; font-weight: 800;">
+								<span style="color: #10b981;" title="UPI Inflow">+₹<?php echo number_format($month_upi_income); ?></span>
+								<span style="color: #ef4444;" title="UPI Expenses">-₹<?php echo number_format($month_upi_expense); ?></span>
 							</div>
 						</div>
 					</div>
@@ -499,18 +535,9 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					<!-- Yearly Income Card -->
 					<div class="col-md-3 col-sm-6" style="padding: 6px;">
 						<div style="background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 14px; padding: 16px; text-align: center;">
-							<div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">Year <?php echo date('Y'); ?> Income</div>
+							<div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">Year <?php echo date('Y'); ?> Gross Income</div>
 							<div style="color: #60a5fa; font-size: 26px; font-weight: 900; margin-top: 4px;">₹<?php echo number_format($year_income); ?></div>
-							<div style="color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 4px;">Annual revenue so far</div>
-						</div>
-					</div>
-
-					<!-- Overall Lifetime Income Card -->
-					<div class="col-md-3 col-sm-6" style="padding: 6px;">
-						<div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 14px; padding: 16px; text-align: center;">
-							<div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">🌐 Overall Lifetime Income</div>
-							<div style="color: #f59e0b; font-size: 26px; font-weight: 900; margin-top: 4px;">₹<?php echo number_format($overall_income); ?></div>
-							<div style="color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 4px;">All-time gross collection</div>
+							<div style="color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 4px;">Annual collections so far</div>
 						</div>
 					</div>
 
@@ -519,7 +546,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 						<div style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 14px; padding: 16px; text-align: center;">
 							<div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">💎 Net Lifetime Profit</div>
 							<div style="color: <?php echo $net_profit >= 0 ? '#c084fc' : '#ef4444'; ?>; font-size: 26px; font-weight: 900; margin-top: 4px;">₹<?php echo number_format($net_profit); ?></div>
-							<div style="color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 4px;">Income minus expenses</div>
+							<div style="color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 4px;">Gross income minus expenses</div>
 						</div>
 					</div>
 				</div>
