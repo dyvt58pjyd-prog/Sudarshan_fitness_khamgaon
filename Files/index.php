@@ -113,6 +113,12 @@ if (substr($logo_path, 0, 6) === '../../') {
         100% { background-color: transparent; filter: none; }
     }
 
+    @keyframes float-hanuman {
+        0% { transform: translateY(0px); box-shadow: 0 0 20px rgba(255, 123, 0, 0.5); }
+        50% { transform: translateY(-8px); box-shadow: 0 0 40px rgba(30, 144, 255, 0.8); border-color: #1e90ff; }
+        100% { transform: translateY(0px); box-shadow: 0 0 20px rgba(255, 123, 0, 0.5); }
+    }
+
     .lightning-active {
         animation: system-lightning-flash 0.5s ease-out;
     }
@@ -281,10 +287,17 @@ if (substr($logo_path, 0, 6) === '../../') {
             <div class="login-header login-caret">
                 <div class="login-content" style="text-align: center;">
                     <div style="font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; color: #ff7b00; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; text-shadow: 0 0 12px rgba(255,123,0,0.5);">[ HIDDEN LEAF PORTAL ]</div>
+                    
+                    <!-- Hanuman Motivation Avatar -->
+                    <div style="margin: 15px auto 25px auto; text-align: center;">
+                        <img src="./images/hanuman_gym.jpg" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 3px solid #ff7b00; animation: float-hanuman 4s ease-in-out infinite;">
+                        <div style="margin-top: 12px; font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 900; color: #ff7b00; letter-spacing: 2px; text-shadow: 0 0 15px rgba(255,123,0,0.8);">AWAKEN YOUR INNER STRENGTH</div>
+                    </div>
+
                     <a href="#" class="logo">
-                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="filter: drop-shadow(0 0 25px rgba(255,123,0,0.7)); max-height: 95px; width: auto;" />
+                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="filter: drop-shadow(0 0 25px rgba(255,123,0,0.7)); max-height: 75px; width: auto;" />
                     </a>
-                    <p class="description" style="color: #64748b; font-size: 12px; font-weight: 600; margin-top: 8px;">
+                    <p class="description" style="color: #64748b; font-size: 12px; font-weight: 600; margin-top: 15px;">
                         Select your category to access your <?php echo htmlspecialchars($gym['gym_name']); ?> account.
                     </p>
                 </div>
