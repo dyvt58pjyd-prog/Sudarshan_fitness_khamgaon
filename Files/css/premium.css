@@ -1,20 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Outfit:wght@300;400;600;700;800;900&display=swap');
 
 :root {
-  --bg-dark: #030712;        /* System Abyss Black */
-  --bg-darker: #010309;      /* Void Portal Background */
-  --accent-primary: #ff003c;  /* Electric Crimson Red Glow */
-  --accent-hover: #d90429;
+  --bg-dark: #0f0a05;        /* Ninja Black/Brown */
+  --bg-darker: #080502;      /* Leaf Night */
+  --accent-primary: #ff7b00;  /* Naruto Orange Glow */
+  --accent-hover: #e65c00;
   --text-main: #f8fafc;       /* System White Text */
-  --text-muted: #64748b;     /* System Blue-Gray Muted Text */
-  --glass-bg: rgba(15, 7, 18, 0.94); /* System Window Holographic Glass */
-  --glass-border: rgba(255, 0, 60, 0.45); /* Crimson Red Border */
-  --glass-shadow: 0 0 35px 0 rgba(255, 0, 60, 0.35); /* Red Glow Shadow */
-  --monarch-purple: #7000ff; /* Shadow Monarch Purple Energy */
-  --quest-gold: #ffb703;    /* Quest Clear Gold */
+  --text-muted: #94a3b8;     /* Muted Text */
+  --glass-bg: rgba(15, 10, 5, 0.94); /* Holographic Glass */
+  --glass-border: rgba(255, 123, 0, 0.45); /* Orange Border */
+  --glass-shadow: 0 0 35px 0 rgba(255, 123, 0, 0.35); /* Orange Glow Shadow */
+  --monarch-purple: #1e90ff; /* Rasengan Blue Energy */
+  --quest-gold: #f1c40f;    /* Hokage Gold */
   --success: #10b981;
   --warning: #ffb703;
-  --danger: #ff0054;
+  --danger: #ef4444;
   --info: #0077ff;
 }
 
@@ -32,8 +32,8 @@ body, html {
   color: var(--text-main);
   background-color: var(--bg-dark);
   background-image: 
-    radial-gradient(circle at 50% 10%, rgba(255, 0, 60, 0.2) 0%, transparent 60%),
-    radial-gradient(circle at 90% 80%, rgba(112, 0, 255, 0.15) 0%, transparent 50%);
+    radial-gradient(circle at 50% 10%, rgba(255, 123, 0, 0.2) 0%, transparent 60%),
+    radial-gradient(circle at 90% 80%, rgba(30, 144, 255, 0.15) 0%, transparent 50%);
 }
 
 /* ============================================================
@@ -42,28 +42,28 @@ body, html {
 
 @keyframes system-hologram-pulse {
   0% {
-    box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), inset 0 0 10px rgba(112, 0, 255, 0.2);
-    border-color: rgba(0, 240, 255, 0.4);
+    box-shadow: 0 0 15px rgba(255, 123, 0, 0.3), inset 0 0 10px rgba(30, 144, 255, 0.2);
+    border-color: rgba(255, 123, 0, 0.4);
   }
   50% {
-    box-shadow: 0 0 40px rgba(0, 240, 255, 0.8), inset 0 0 25px rgba(112, 0, 255, 0.5);
-    border-color: rgba(0, 240, 255, 0.8);
+    box-shadow: 0 0 40px rgba(255, 123, 0, 0.8), inset 0 0 25px rgba(30, 144, 255, 0.5);
+    border-color: rgba(255, 123, 0, 0.8);
   }
   100% {
-    box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), inset 0 0 10px rgba(112, 0, 255, 0.2);
-    border-color: rgba(0, 240, 255, 0.4);
+    box-shadow: 0 0 15px rgba(255, 123, 0, 0.3), inset 0 0 10px rgba(30, 144, 255, 0.2);
+    border-color: rgba(255, 123, 0, 0.4);
   }
 }
 
 @keyframes monarch-purple-aura {
   0% {
-    box-shadow: 0 0 20px rgba(112, 0, 255, 0.4);
+    box-shadow: 0 0 20px rgba(30, 144, 255, 0.4);
   }
   50% {
-    box-shadow: 0 0 50px rgba(112, 0, 255, 0.9), 0 0 80px rgba(0, 240, 255, 0.4);
+    box-shadow: 0 0 50px rgba(30, 144, 255, 0.9), 0 0 80px rgba(255, 123, 0, 0.4);
   }
   100% {
-    box-shadow: 0 0 20px rgba(112, 0, 255, 0.4);
+    box-shadow: 0 0 20px rgba(30, 144, 255, 0.4);
   }
 }
 

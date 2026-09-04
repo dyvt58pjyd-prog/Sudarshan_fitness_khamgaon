@@ -36,11 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['activation_key'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #07090e;
-            --card-bg: rgba(15, 20, 32, 0.92);
-            --card-border: rgba(239, 68, 68, 0.35);
-            --accent-red: #ef4444;
-            --accent-amber: #f59e0b;
+            --bg-color: #0f0a05;
+            --card-bg: rgba(15, 10, 5, 0.92);
+            --card-border: rgba(255, 123, 0, 0.2);
+            --accent: #ff7b00;
+            --accent-hover: #e65c00;
             --accent-green: #10b981;
             --accent-indigo: #6366f1;
             --text-main: #f8fafc;
@@ -57,11 +57,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['activation_key'])) {
         body {
             background-color: var(--bg-color);
             background-image: 
-                radial-gradient(circle at 50% 15%, rgba(239, 68, 68, 0.15) 0%, transparent 55%),
-                radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.08) 0%, transparent 45%),
-                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
+                radial-gradient(circle at 50% 50%, rgba(255, 123, 0, 0.08) 0%, transparent 60%),
+                linear-gradient(rgba(255, 123, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 123, 0, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 30px 30px, 30px 30px;
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
@@ -77,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['activation_key'])) {
             border: 1px solid var(--card-border);
             border-radius: 24px;
             padding: 40px 32px;
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 40px rgba(239, 68, 68, 0.2);
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 123, 0, 0.1);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             text-align: center;
@@ -93,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['activation_key'])) {
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #ef4444, #f59e0b, #ef4444);
+            background: linear-gradient(90deg, #ff7b00, #e65c00, #ff7b00);
         }
 
         @keyframes fadeIn {
@@ -104,16 +103,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['activation_key'])) {
         .lock-icon {
             width: 84px;
             height: 84px;
-            background: rgba(239, 68, 68, 0.12);
-            border: 2px solid rgba(239, 68, 68, 0.4);
+            background: rgba(255, 123, 0, 0.12);
+            border: 2px solid rgba(255, 123, 0, 0.4);
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             font-size: 36px;
-            color: var(--accent-red);
+            color: var(--accent);
             margin-bottom: 20px;
-            box-shadow: 0 0 30px rgba(239, 68, 68, 0.35);
+            box-shadow: 0 0 30px rgba(255, 123, 0, 0.35);
             animation: pulse 2.5s infinite;
         }
 
@@ -126,9 +125,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['activation_key'])) {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            color: #fca5a5;
+            background: rgba(255, 123, 0, 0.15);
+            border: 1px solid rgba(255, 123, 0, 0.4);
+            color: #ffd1a3;
             font-size: 11px;
             font-weight: 800;
             text-transform: uppercase;
@@ -173,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['activation_key'])) {
         }
 
         .hardware-pill span {
-            color: var(--accent-amber);
+            color: var(--accent);
         }
 
         .activation-form {
@@ -201,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['activation_key'])) {
             background: rgba(0, 0, 0, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 12px;
-            color: #38bdf8;
+            color: var(--accent);
             font-family: 'JetBrains Mono', monospace;
             font-size: 15px;
             font-weight: 700;
@@ -213,15 +212,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['activation_key'])) {
         }
 
         .input-key:focus {
-            border-color: var(--accent-indigo);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255, 123, 0, 0.3);
         }
 
         .btn-activate {
             width: 100%;
             padding: 14px 20px;
             margin-top: 14px;
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: linear-gradient(135deg, #ff7b00, #e65c00);
             border: none;
             border-radius: 12px;
             color: white;
@@ -233,12 +232,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['activation_key'])) {
             justify-content: center;
             gap: 8px;
             transition: all 0.2s;
-            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 8px 20px rgba(255, 123, 0, 0.3);
         }
 
         .btn-activate:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(16, 185, 129, 0.45);
+            box-shadow: 0 12px 25px rgba(255, 123, 0, 0.45);
         }
 
         .contact-box {
@@ -252,7 +251,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['activation_key'])) {
         }
 
         .contact-box a {
-            color: #38bdf8;
+            color: var(--accent);
             text-decoration: none;
             font-weight: 600;
         }
@@ -299,6 +298,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['activation_key'])) {
 </head>
 <body>
     <div class="container">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 900; color: #ff7b00; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px;">
+            [ HIDDEN LEAF SYSTEM PORTAL ]
+        </div>
+        
         <div class="lock-icon">
             <i class="fa-solid fa-lock"></i>
         </div>
