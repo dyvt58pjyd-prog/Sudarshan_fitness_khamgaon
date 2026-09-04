@@ -267,14 +267,14 @@ if ($status === 'active') {
 			<a href="?status=expired" class="tab-btn <?php echo $status === 'expired' ? 'active-tab' : ''; ?>">
 				🔴 Expired Members <span class="tab-count"><?php echo $expired_count; ?></span>
 			</a>
-			<a href="?status=1year" class="tab-btn <?php echo $status === '1year' ? 'active-tab' : ''; ?>" style="border-color: rgba(255, 0, 60, 0.4);">
-				👑 1 Year (12 Mo) <span class="tab-count" style="background: #ff003c;"><?php echo $year_count; ?></span>
+			<a href="?status=1year" class="tab-btn <?php echo $status === '1year' ? 'active-tab' : ''; ?>" style="border-color: rgba(255, 123, 0, 0.4);">
+				👑 1 Year (12 Mo) <span class="tab-count" style="background: #ff7b00;"><?php echo $year_count; ?></span>
 			</a>
 			<a href="?status=6months" class="tab-btn <?php echo $status === '6months' ? 'active-tab' : ''; ?>" style="border-color: rgba(255, 183, 3, 0.4);">
 				🔥 6 Months <span class="tab-count" style="background: #ffb703; color: #000;"><?php echo $six_month_count; ?></span>
 			</a>
-			<a href="?status=3months" class="tab-btn <?php echo $status === '3months' ? 'active-tab' : ''; ?>" style="border-color: rgba(112, 0, 255, 0.4);">
-				⚡ 3 Months <span class="tab-count" style="background: #7000ff;"><?php echo $three_month_count; ?></span>
+			<a href="?status=3months" class="tab-btn <?php echo $status === '3months' ? 'active-tab' : ''; ?>" style="border-color: rgba(30, 144, 255, 0.4);">
+				⚡ 3 Months <span class="tab-count" style="background: #1e90ff;"><?php echo $three_month_count; ?></span>
 			</a>
 			<a href="?status=1month" class="tab-btn <?php echo $status === '1month' ? 'active-tab' : ''; ?>" style="border-color: rgba(16, 185, 129, 0.4);">
 				🥉 1 Month <span class="tab-count" style="background: #10b981;"><?php echo $one_month_count; ?></span>
@@ -308,7 +308,7 @@ if ($status === 'active') {
 						
 					$p_name_display = htmlspecialchars($mem['plan_name']);
 					if (stripos($p_name_display, 'year') !== false || stripos($p_name_display, '12') !== false) {
-						$p_badge = "<span style='color: #ff003c; font-weight: 800;'>👑 $p_name_display</span>";
+						$p_badge = "<span style='color: #ff7b00; font-weight: 800;'>👑 $p_name_display</span>";
 					} elseif (stripos($p_name_display, '6') !== false) {
 						$p_badge = "<span style='color: #ffb703; font-weight: 800;'>🔥 $p_name_display</span>";
 					} elseif (stripos($p_name_display, '3') !== false) {

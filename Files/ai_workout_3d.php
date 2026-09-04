@@ -39,7 +39,7 @@ $member_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Hunter'
 $user_gender = 'Male';
 $user_height = 170; // cm default
 $user_weight = 70; // kg default
-$fitness_goal = 'Monarch Strength Awakening';
+$fitness_goal = 'Hokage Strength Awakening';
 $trainer_name = 'Sudarshan System AI';
 $user_xp = 0;
 $user_rank = 'S-Rank Hunter';
@@ -85,7 +85,7 @@ $level = floor($user_xp / 100) + 1;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>[SYSTEM WINDOW] Solo Leveling AI Trainer | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
+    <title>[SYSTEM WINDOW] Hidden Leaf AI Trainer | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- MediaPipe Pose & Camera Utils -->
@@ -94,12 +94,12 @@ $level = floor($user_xp / 100) + 1;
     
     <style>
         :root {
-            --bg-dark: #030712;
+            --bg-dark: #0f0a05;
             --card-bg: rgba(9, 14, 28, 0.9);
             --system-cyan: #00f0ff;
             --system-blue: #0077ff;
-            --monarch-purple: #7000ff;
-            --monarch-glow: rgba(112, 0, 255, 0.4);
+            --monarch-purple: #1e90ff;
+            --monarch-glow: rgba(30, 144, 255, 0.4);
             --quest-gold: #ffb703;
             --text-main: #f8fafc;
             --text-muted: #64748b;
@@ -116,7 +116,7 @@ $level = floor($user_xp / 100) + 1;
             flex-direction: column;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 50% 20%, rgba(112, 0, 255, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 50% 20%, rgba(30, 144, 255, 0.15) 0%, transparent 60%),
                 radial-gradient(circle at 80% 80%, rgba(0, 240, 255, 0.1) 0%, transparent 50%);
         }
 
@@ -187,14 +187,14 @@ $level = floor($user_xp / 100) + 1;
 
         .gender-btn.active.male {
             background: var(--system-cyan);
-            color: #030712;
+            color: #0f0a05;
             box-shadow: 0 0 20px rgba(0,240,255,0.6);
         }
 
         .gender-btn.active.female {
             background: var(--monarch-purple);
             color: #fff;
-            box-shadow: 0 0 20px rgba(112,0,255,0.6);
+            box-shadow: 0 0 20px rgba(30,144,255,0.6);
         }
 
         .btn-back {
@@ -212,7 +212,7 @@ $level = floor($user_xp / 100) + 1;
 
         .btn-back:hover {
             background: var(--system-cyan);
-            color: #030712;
+            color: #0f0a05;
             box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
         }
 
@@ -233,7 +233,7 @@ $level = floor($user_xp / 100) + 1;
             }
         }
 
-        /* Solo Leveling System Panels */
+        /* Hidden Leaf System Panels */
         .panel {
             background: var(--card-bg);
             border: 1px solid var(--system-border);
@@ -273,7 +273,7 @@ $level = floor($user_xp / 100) + 1;
 
         /* Hunter Status Window */
         .status-window {
-            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, rgba(112, 0, 255, 0.15) 100%);
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, rgba(30, 144, 255, 0.15) 100%);
             border: 1px solid var(--system-cyan);
             border-radius: 16px;
             padding: 16px;
@@ -325,7 +325,7 @@ $level = floor($user_xp / 100) + 1;
 
         .cat-pill.active {
             background: var(--system-cyan);
-            color: #030712;
+            color: #0f0a05;
             border-color: var(--system-cyan);
             box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
         }
@@ -388,7 +388,7 @@ $level = floor($user_xp / 100) + 1;
 
         /* Stage Container */
         .viewport-container {
-            background: radial-gradient(circle at 50% 40%, #0b1329 0%, #030712 100%);
+            background: radial-gradient(circle at 50% 40%, #0b1329 0%, #0f0a05 100%);
             border: 2px solid var(--system-cyan);
             border-radius: 28px;
             position: relative;
@@ -410,7 +410,7 @@ $level = floor($user_xp / 100) + 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #030712;
+            background: #0f0a05;
         }
 
         .human-demo-gif {
@@ -534,13 +534,13 @@ $level = floor($user_xp / 100) + 1;
 
         .ctrl-btn:hover, .ctrl-btn.active {
             background: var(--system-cyan);
-            color: #030712;
+            color: #0f0a05;
             box-shadow: 0 0 20px rgba(0,240,255,0.6);
         }
 
         .webcam-btn {
             background: linear-gradient(135deg, #00f0ff, #0077ff);
-            color: #030712;
+            color: #0f0a05;
             border: none;
             padding: 10px 18px;
             border-radius: 14px;
@@ -556,7 +556,7 @@ $level = floor($user_xp / 100) + 1;
         }
 
         .voice-btn {
-            background: linear-gradient(135deg, #7000ff, #480094);
+            background: linear-gradient(135deg, #1e90ff, #480094);
             color: #fff;
             border: none;
             padding: 10px 18px;
@@ -568,7 +568,7 @@ $level = floor($user_xp / 100) + 1;
             align-items: center;
             gap: 8px;
             font-family: 'Orbitron', sans-serif;
-            box-shadow: 0 0 20px rgba(112,0,255,0.5);
+            box-shadow: 0 0 20px rgba(30,144,255,0.5);
             pointer-events: auto;
         }
 
@@ -599,7 +599,7 @@ $level = floor($user_xp / 100) + 1;
 
         .muscle-tag {
             display: inline-block;
-            background: rgba(112, 0, 255, 0.25);
+            background: rgba(30, 144, 255, 0.25);
             color: #a78bfa;
             border: 1px solid var(--monarch-purple);
             padding: 4px 10px;
@@ -645,7 +645,7 @@ $level = floor($user_xp / 100) + 1;
         .btn-save-log {
             width: 100%;
             background: linear-gradient(135deg, var(--system-cyan), #0077ff);
-            color: #030712;
+            color: #0f0a05;
             border: none;
             padding: 14px;
             border-radius: 12px;
@@ -666,16 +666,16 @@ $level = floor($user_xp / 100) + 1;
 </head>
 <body>
 
-    <!-- Solo Leveling System Background Particles Canvas -->
+    <!-- Hidden Leaf System Background Particles Canvas -->
     <canvas id="systemParticleCanvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.5;"></canvas>
 
-    <!-- Solo Leveling Quest Clear Level-Up Modal -->
+    <!-- Hidden Leaf Quest Clear Level-Up Modal -->
     <div id="questClearModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.95); z-index: 10000; align-items: center; justify-content: center; flex-direction: column;">
-        <div style="border: 2px solid var(--system-cyan); background: rgba(9, 14, 28, 0.95); padding: 40px; border-radius: 24px; text-align: center; max-width: 500px; width: 90%; box-shadow: 0 0 60px rgba(0, 240, 255, 0.8), 0 0 100px rgba(112, 0, 255, 0.6); animation: levelup-gold-glow 1.5s ease-in-out infinite alternate;">
+        <div style="border: 2px solid var(--system-cyan); background: rgba(9, 14, 28, 0.95); padding: 40px; border-radius: 24px; text-align: center; max-width: 500px; width: 90%; box-shadow: 0 0 60px rgba(0, 240, 255, 0.8), 0 0 100px rgba(30, 144, 255, 0.6); animation: levelup-gold-glow 1.5s ease-in-out infinite alternate;">
             <div style="font-family: 'Orbitron'; color: var(--quest-gold); font-size: 14px; font-weight: 900; letter-spacing: 3px; margin-bottom: 8px;">[ QUEST CLEAR! ]</div>
             <h2 style="font-family: 'Orbitron'; color: #00f0ff; font-size: 28px; font-weight: 900; text-shadow: 0 0 20px #00f0ff; margin-bottom: 10px;">LEVEL UP! +50 EXP</h2>
             <p style="color: #cbd5e1; font-size: 14px; margin-bottom: 25px; line-height: 1.5;">Daily Quest Mandate Cleared! Your Hunter Stats &amp; Routine Log have been recorded in the System Database!</p>
-            <button onclick="closeQuestModal()" style="background: linear-gradient(135deg, #00f0ff, #0077ff); color: #030712; border: none; padding: 14px 30px; border-radius: 14px; font-family: 'Orbitron'; font-weight: 900; font-size: 14px; cursor: pointer; box-shadow: 0 0 30px #00f0ff;">
+            <button onclick="closeQuestModal()" style="background: linear-gradient(135deg, #00f0ff, #0077ff); color: #0f0a05; border: none; padding: 14px 30px; border-radius: 14px; font-family: 'Orbitron'; font-weight: 900; font-size: 14px; cursor: pointer; box-shadow: 0 0 30px #00f0ff;">
                 CLAIM REWARDS &amp; CONTINUE ➔
             </button>
         </div>
@@ -818,7 +818,7 @@ $level = floor($user_xp / 100) + 1;
             </div>
 
             <!-- Personalized AI Nutrition & Macro Assistant -->
-            <div class="tip-card" style="margin-top: 15px; background: rgba(112, 0, 255, 0.15); border-color: var(--monarch-purple);">
+            <div class="tip-card" style="margin-top: 15px; background: rgba(30, 144, 255, 0.15); border-color: var(--monarch-purple);">
                 <h5 style="color: #a78bfa;">🥗 SYSTEM RECOVERY &amp; NUTRITION</h5>
                 <div style="font-size: 11px; color: #94a3b8; margin-bottom: 8px;">Calculated for <?php echo htmlspecialchars($member_name); ?> (<?php echo $user_weight; ?>kg • <?php echo $user_height; ?>cm)</div>
                 
@@ -1031,7 +1031,7 @@ $level = floor($user_xp / 100) + 1;
             document.getElementById('questClearModal').style.display = 'none';
         }
 
-        // Solo Leveling System Background Particles Engine
+        // Hidden Leaf System Background Particles Engine
         function initSystemParticles() {
             const pCanvas = document.getElementById('systemParticleCanvas');
             if (!pCanvas) return;
@@ -1045,7 +1045,7 @@ $level = floor($user_xp / 100) + 1;
                     x: Math.random() * width,
                     y: Math.random() * height,
                     radius: Math.random() * 2 + 1,
-                    color: Math.random() > 0.5 ? '#00f0ff' : '#7000ff',
+                    color: Math.random() > 0.5 ? '#00f0ff' : '#1e90ff',
                     vy: -(Math.random() * 0.8 + 0.3),
                     vx: (Math.random() - 0.5) * 0.4,
                     alpha: Math.random() * 0.8 + 0.2
@@ -1170,7 +1170,7 @@ $level = floor($user_xp / 100) + 1;
             const lm = results.poseLandmarks;
 
             ctx.fillStyle = '#00f0ff';
-            ctx.strokeStyle = '#7000ff';
+            ctx.strokeStyle = '#1e90ff';
             ctx.lineWidth = 4;
 
             lm.forEach((pt) => {

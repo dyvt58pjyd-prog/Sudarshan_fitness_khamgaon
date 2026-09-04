@@ -95,9 +95,9 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
                 themeLi.style.marginRight = '15px';
                 themeLi.innerHTML = `
                     <select id="sf-theme-select" onchange="SFThemeEngine.setThemeMode(this.value)" style="background: rgba(0, 240, 255, 0.1); color: #00f0ff; border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 8px; padding: 4px 8px; font-size: 11px; font-weight: 800; font-family: 'Orbitron', sans-serif; cursor: pointer;">
-                        <option value="dark" style="background:#030712; color:#fff;">🌙 Dark Mode</option>
+                        <option value="dark" style="background:#0f0a05; color:#fff;">🌙 Dark Mode</option>
                         <option value="light" style="background:#fff; color:#000;">☀️ Light Mode</option>
-                        <option value="system" style="background:#030712; color:#fff;">💻 System Mode</option>
+                        <option value="system" style="background:#0f0a05; color:#fff;">💻 System Mode</option>
                     </select>
                 `;
                 linksList.insertBefore(themeLi, linksList.firstChild);
@@ -266,13 +266,13 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
     <?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
         <li id="ai_churn_link"><a href="churn_radar.php" style="color: #38bdf8; font-weight: bold;"><i class="entypo-chart-line"></i><span>🧠 AI Churn &amp; Retention Radar</span></a></li>
         <li id="smart_equipment_link"><a href="equipment.php" style="color: #f59e0b; font-weight: bold;"><i class="entypo-tools"></i><span>🏷️ Smart Equipment &amp; QR</span></a></li>
-        <li id="ai_manager_link"><a href="ai_gym_manager.php" style="color: #ff003c; font-weight: bold;"><i class="entypo-light-bulb"></i><span>🤖 AI Gym Manager</span></a></li>
+        <li id="ai_manager_link"><a href="ai_gym_manager.php" style="color: #ff7b00; font-weight: bold;"><i class="entypo-light-bulb"></i><span>🤖 AI Gym Manager</span></a></li>
         <li id="upi_pay_link"><a href="instant_upi_pay.php" style="color: #10b981;"><i class="entypo-vcard"></i><span>💳 Instant UPI Payment QR</span></a></li>
         <li id="equipment_link"><a href="equipment_management.php" style="color: #ffb703;"><i class="entypo-tools"></i><span>🛠️ Equipment Maintenance</span></a></li>
-        <li id="referral_link"><a href="../member/referral_program.php" target="_blank" style="color: #ff003c;"><i class="entypo-share"></i><span>🎁 Member Referral Rewards</span></a></li>
+        <li id="referral_link"><a href="../member/referral_program.php" target="_blank" style="color: #ff7b00;"><i class="entypo-share"></i><span>🎁 Member Referral Rewards</span></a></li>
         <li id="announcements_link"><a href="announcements.php" style="color: #ffb703;"><i class="entypo-megaphone"></i><span>📢 Gym Announcements</span></a></li>
         <li id="live_occupancy_link"><a href="live_occupancy.php" style="color: #10b981;"><i class="entypo-users"></i><span>⚡ Live Gym Occupancy</span></a></li>
-        <li id="digital_pass_link"><a href="../member/digital_pass.php" target="_blank" style="color: #ff003c;"><i class="entypo-vcard"></i><span>🆔 Member Digital Pass</span></a></li>
+        <li id="digital_pass_link"><a href="../member/digital_pass.php" target="_blank" style="color: #ff7b00;"><i class="entypo-vcard"></i><span>🆔 Member Digital Pass</span></a></li>
         <li id="challenges_link"><a href="challenges_leaderboard.php" style="color: #ffb703;"><i class="entypo-trophy"></i><span>🏆 Gym Leaderboard &amp; Badges</span></a></li>
         <li id="indian_diet_link"><a href="indian_diet_planner.php" style="color: #10b981;"><i class="entypo-heart"></i><span>🍛 Indian Diet Planner</span></a></li>
         <li id="trainers_manage"><a href="trainers.php"><i class="entypo-user"></i><span>🏋️ Gym Trainers</span></a></li>

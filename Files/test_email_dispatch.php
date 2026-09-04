@@ -20,7 +20,7 @@ if ($result) {
 } else {
     echo "FAILED: Email dispatch failed. Attempting direct SMTP test...\n";
     $subject = "📷 Test Registration Email - Sudarshan Fitness";
-    $body = "<h2>Test Email Confirmation</h2><p>Hello Anurag, this is a test email confirmation from Sudarshan Fitness Application System.</p><p><a href='https://sudarshanfitness.de/Files/download_app.php' style='padding: 12px 20px; background: #ff003c; color: white; border-radius: 8px; text-decoration: none;'>Install Application</a></p>";
+    $body = "<h2>Test Email Confirmation</h2><p>Hello Anurag, this is a test email confirmation from Sudarshan Fitness Application System.</p><p><a href='https://sudarshanfitness.de/Files/download_app.php' style='padding: 12px 20px; background: #ff7b00; color: white; border-radius: 8px; text-decoration: none;'>Install Application</a></p>";
     $direct = send_smtp_email($target_email, $target_name, $subject, $body);
     if ($direct) {
         echo "SUCCESS: Direct SMTP email sent successfully to {$target_email}!\n";

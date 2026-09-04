@@ -22,9 +22,9 @@ $qr_url = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" . url
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body { background: var(--bg-dark); color: #fff; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .pay-card { width: 100%; max-width: 450px; background: rgba(15, 7, 18, 0.95); border: 2px solid var(--accent-primary); border-radius: 24px; padding: 30px; box-shadow: 0 0 50px rgba(255, 0, 60, 0.35); text-align: center; position: relative; }
-        .pay-card::before { content: '[ INSTANT UPI GATEWAY ]'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #030712; border: 1px solid var(--accent-primary); color: var(--accent-primary); font-family: 'Orbitron'; font-size: 10px; font-weight: 900; padding: 3px 14px; border-radius: 10px; letter-spacing: 2px; }
-        .qr-box { background: #fff; padding: 15px; border-radius: 16px; margin: 20px auto; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(255, 0, 60, 0.4); }
+        .pay-card { width: 100%; max-width: 450px; background: rgba(15, 7, 18, 0.95); border: 2px solid var(--accent-primary); border-radius: 24px; padding: 30px; box-shadow: 0 0 50px rgba(255, 123, 0, 0.35); text-align: center; position: relative; }
+        .pay-card::before { content: '[ INSTANT UPI GATEWAY ]'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #0f0a05; border: 1px solid var(--accent-primary); color: var(--accent-primary); font-family: 'Orbitron'; font-size: 10px; font-weight: 900; padding: 3px 14px; border-radius: 10px; letter-spacing: 2px; }
+        .qr-box { background: #fff; padding: 15px; border-radius: 16px; margin: 20px auto; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(255, 123, 0, 0.4); }
     </style>
 </head>
 <body>
@@ -35,7 +35,7 @@ $qr_url = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" . url
 
         <div class="qr-box" style="position: relative;">
             <img src="<?php echo $qr_url; ?>" alt="UPI Payment QR Code" style="width: 100%; height: 100%;">
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #030712; padding: 3px; border-radius: 50%; border: 2px solid #ff003c; box-shadow: 0 0 15px rgba(255,0,60,0.8); display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #0f0a05; padding: 3px; border-radius: 50%; border: 2px solid #ff7b00; box-shadow: 0 0 15px rgba(255,123,0,0.8); display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;">
                 <img src="<?php echo htmlspecialchars($gym['gym_logo'] ?? '../../images/logo.png'); ?>" alt="Gym Logo" style="width: 34px; height: 34px; border-radius: 50%; object-fit: contain;" />
             </div>
         </div>
@@ -43,7 +43,7 @@ $qr_url = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" . url
         <div style="font-size: 28px; font-weight: 900; color: #10b981; font-family: 'Orbitron'; margin-bottom: 5px;">₹<?php echo number_format($amount); ?></div>
         <div style="font-size: 13px; color: #cbd5e1; font-weight: bold; margin-bottom: 20px;">Paying for: <?php echo $name; ?> (ID: <?php echo $uid; ?>)</div>
 
-        <button onclick="alert('✅ Payment Confirmation Received! Generating PDF Tax Invoice & Sending WhatsApp Receipt...'); window.location.href='payments.php';" style="width: 100%; background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #030712; border: none; padding: 14px; border-radius: 12px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; box-shadow: 0 0 25px rgba(255,0,60,0.5);">
+        <button onclick="alert('✅ Payment Confirmation Received! Generating PDF Tax Invoice & Sending WhatsApp Receipt...'); window.location.href='payments.php';" style="width: 100%; background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #0f0a05; border: none; padding: 14px; border-radius: 12px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; box-shadow: 0 0 25px rgba(255,123,0,0.5);">
             CONFIRM PAYMENT &amp; PRINT RECEIPT ➔
         </button>
     </div>

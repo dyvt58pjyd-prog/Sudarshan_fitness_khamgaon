@@ -33,9 +33,9 @@ $health_res = mysqli_query($con, "SELECT * FROM health_status WHERE uid = '$user
         body { background: var(--bg-dark); color: #fff; padding: 25px; }
         .card { background: rgba(15, 7, 18, 0.94); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
         .timeline-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 20px; }
-        .timeline-box { background: rgba(3,7,18,0.8); border: 1px solid rgba(255,0,60,0.3); border-radius: 16px; padding: 15px; text-align: center; }
+        .timeline-box { background: rgba(3,7,18,0.8); border: 1px solid rgba(255,123,0,0.3); border-radius: 16px; padding: 15px; text-align: center; }
         .img-ph { width: 100%; height: 200px; background: rgba(255,255,255,0.05); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 35px; color: var(--text-muted); object-fit: cover; }
-        .btn-upload { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #030712; border: none; padding: 10px 18px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; margin-top: 10px; }
+        .btn-upload { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #0f0a05; border: none; padding: 10px 18px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -46,22 +46,22 @@ $health_res = mysqli_query($con, "SELECT * FROM health_status WHERE uid = '$user
                 <h2 style="font-family: 'Orbitron'; color: var(--accent-primary); margin: 0;">📸 TRANSFORMATION TIMELINE</h2>
                 <div style="color: var(--text-muted); font-size: 13px; font-family: 'Orbitron';">SUDARSHAN FITNESS v2.0 • PRIVATE PROGRESS TRACKER</div>
             </div>
-            <a href="index.php" style="background: rgba(255,0,60,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Orbitron'; font-weight: 800; font-size: 12px;">← RETURN TO DASHBOARD</a>
+            <a href="index.php" style="background: rgba(255,123,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Orbitron'; font-weight: 800; font-size: 12px;">← RETURN TO DASHBOARD</a>
         </div>
 
         <!-- Metric Overview -->
         <div class="card">
             <h3 style="font-family: 'Orbitron'; color: #fff; margin-top: 0;">📊 Body Composition Progress</h3>
             <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px;">
-                <div style="flex: 1; min-width: 150px; background: rgba(3,7,18,0.8); border: 1px solid rgba(255,0,60,0.3); padding: 15px; border-radius: 14px; text-align: center;">
+                <div style="flex: 1; min-width: 150px; background: rgba(3,7,18,0.8); border: 1px solid rgba(255,123,0,0.3); padding: 15px; border-radius: 14px; text-align: center;">
                     <div style="font-size: 11px; color: var(--text-muted); font-family: 'Orbitron';">CURRENT WEIGHT</div>
                     <div style="font-size: 26px; font-weight: 900; color: var(--accent-primary); font-family: 'Orbitron';"><?php echo htmlspecialchars($user['weight'] ?: '70'); ?> KG</div>
                 </div>
-                <div style="flex: 1; min-width: 150px; background: rgba(3,7,18,0.8); border: 1px solid rgba(255,0,60,0.3); padding: 15px; border-radius: 14px; text-align: center;">
+                <div style="flex: 1; min-width: 150px; background: rgba(3,7,18,0.8); border: 1px solid rgba(255,123,0,0.3); padding: 15px; border-radius: 14px; text-align: center;">
                     <div style="font-size: 11px; color: var(--text-muted); font-family: 'Orbitron';">HEIGHT</div>
                     <div style="font-size: 26px; font-weight: 900; color: #ffb703; font-family: 'Orbitron';"><?php echo htmlspecialchars($user['height'] ?: '175'); ?> CM</div>
                 </div>
-                <div style="flex: 1; min-width: 150px; background: rgba(3,7,18,0.8); border: 1px solid rgba(255,0,60,0.3); padding: 15px; border-radius: 14px; text-align: center;">
+                <div style="flex: 1; min-width: 150px; background: rgba(3,7,18,0.8); border: 1px solid rgba(255,123,0,0.3); padding: 15px; border-radius: 14px; text-align: center;">
                     <div style="font-size: 11px; color: var(--text-muted); font-family: 'Orbitron';">ESTIMATED BMI</div>
                     <?php 
                     $h_m = floatval($user['height'] ?: 175) / 100;

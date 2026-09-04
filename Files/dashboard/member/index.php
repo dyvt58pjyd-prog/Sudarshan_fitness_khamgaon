@@ -514,7 +514,7 @@ function dismissWarning() {
 							}
 							?>
 							<div style="width: 100%; background: rgba(0,240,255,0.1); height: 8px; border-radius: 4px; overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); border: 1px solid rgba(0,240,255,0.3);">
-								<div style="width: <?php echo $progress_percent; ?>%; height: 100%; background: linear-gradient(90deg, #00f0ff, #7000ff); border-radius: 4px; box-shadow: 0 0 15px #00f0ff; transition: width 1s ease-in-out;"></div>
+								<div style="width: <?php echo $progress_percent; ?>%; height: 100%; background: linear-gradient(90deg, #00f0ff, #1e90ff); border-radius: 4px; box-shadow: 0 0 15px #00f0ff; transition: width 1s ease-in-out;"></div>
 							</div>
 							<div style="font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 5px; font-family: 'Orbitron';">
 								<?php echo $member_rank !== 'Titan' ? number_format($next_threshold - $member_xp) . " EXP to Rank Level Up" : "Max Rank Achieved"; ?>

@@ -25,7 +25,7 @@
     }
 
     function applyAccentColor(color) {
-        if (!color) color = localStorage.getItem(ACCENT_KEY) || '#ff003c';
+        if (!color) color = localStorage.getItem(ACCENT_KEY) || '#ff7b00';
         document.documentElement.style.setProperty('--accent-primary', color);
         localStorage.setItem(ACCENT_KEY, color);
     }

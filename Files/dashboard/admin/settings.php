@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
     <style>
         body { background: var(--bg-dark); color: #fff; padding: 25px; }
         .card { background: rgba(9, 14, 28, 0.9); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
-        .btn-save { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #030712; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
+        .btn-save { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #0f0a05; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
         .form-control { background: rgba(3,7,18,0.8); border: 1px solid rgba(0,240,255,0.3); color: #fff; padding: 10px 14px; border-radius: 10px; width: 100%; margin-bottom: 15px; }
     </style>
 </head>
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
                     <p style="color: var(--text-muted); font-size: 12px; margin-top: 4px;">Train Hard. Stay Strong. Live Better. • Premium Commercial Gym Platform</p>
                 </div>
                 <div style="text-align: right;">
-                    <span style="background: linear-gradient(135deg, #00f0ff, #7000ff); color: #030712; padding: 6px 16px; border-radius: 12px; font-weight: 900; font-family: 'Orbitron'; font-size: 12px; box-shadow: 0 0 20px rgba(0,240,255,0.6);">STATUS: ACTIVE (v2.0)</span>
+                    <span style="background: linear-gradient(135deg, #00f0ff, #1e90ff); color: #0f0a05; padding: 6px 16px; border-radius: 12px; font-weight: 900; font-family: 'Orbitron'; font-size: 12px; box-shadow: 0 0 20px rgba(0,240,255,0.6);">STATUS: ACTIVE (v2.0)</span>
                 </div>
             </div>
         </div>
@@ -86,9 +86,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
                     <label style="font-size: 12px; color: var(--text-muted); font-family: 'Orbitron'; display: block; margin-bottom: 6px;">Primary Accent Color</label>
                     <div style="display: flex; gap: 10px; align-items: center; margin-top: 5px;">
                         <button type="button" onclick="SFThemeEngine.setAccentColor('#00f0ff')" style="width: 36px; height: 36px; border-radius: 50%; background: #00f0ff; border: 2px solid #fff; cursor: pointer;" title="Electric Cyan"></button>
-                        <button type="button" onclick="SFThemeEngine.setAccentColor('#ff6b00')" style="width: 36px; height: 36px; border-radius: 50%; background: #ff6b00; border: 2px solid #fff; cursor: pointer;" title="Monarch Orange"></button>
+                        <button type="button" onclick="SFThemeEngine.setAccentColor('#ff6b00')" style="width: 36px; height: 36px; border-radius: 50%; background: #ff6b00; border: 2px solid #fff; cursor: pointer;" title="Hokage Orange"></button>
                         <button type="button" onclick="SFThemeEngine.setAccentColor('#10b981')" style="width: 36px; height: 36px; border-radius: 50%; background: #10b981; border: 2px solid #fff; cursor: pointer;" title="Emerald Green"></button>
-                        <button type="button" onclick="SFThemeEngine.setAccentColor('#7000ff')" style="width: 36px; height: 36px; border-radius: 50%; background: #7000ff; border: 2px solid #fff; cursor: pointer;" title="Shadow Purple"></button>
+                        <button type="button" onclick="SFThemeEngine.setAccentColor('#1e90ff')" style="width: 36px; height: 36px; border-radius: 50%; background: #1e90ff; border: 2px solid #fff; cursor: pointer;" title="Shadow Purple"></button>
                         <button type="button" onclick="SFThemeEngine.setAccentColor('#ffb703')" style="width: 36px; height: 36px; border-radius: 50%; background: #ffb703; border: 2px solid #fff; cursor: pointer;" title="Quest Gold"></button>
                     </div>
                 </div>

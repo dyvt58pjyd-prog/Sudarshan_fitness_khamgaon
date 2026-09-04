@@ -70,9 +70,9 @@ if (!empty($query)) {
     <style>
         body { background: var(--bg-dark); color: #fff; padding: 25px; }
         .card { background: rgba(15, 7, 18, 0.94); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
-        .btn-send { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #030712; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
-        .form-control { background: rgba(3,7,18,0.8); border: 1px solid rgba(255,0,60,0.3); color: #fff; padding: 12px 18px; border-radius: 12px; width: 100%; font-size: 14px; margin-bottom: 15px; }
-        .ai-box { background: rgba(3,7,18,0.9); border: 1px solid var(--accent-primary); border-radius: 18px; padding: 20px; color: #cbd5e1; line-height: 1.6; white-space: pre-wrap; font-size: 14px; box-shadow: 0 0 30px rgba(255,0,60,0.25); }
+        .btn-send { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #0f0a05; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
+        .form-control { background: rgba(3,7,18,0.8); border: 1px solid rgba(255,123,0,0.3); color: #fff; padding: 12px 18px; border-radius: 12px; width: 100%; font-size: 14px; margin-bottom: 15px; }
+        .ai-box { background: rgba(3,7,18,0.9); border: 1px solid var(--accent-primary); border-radius: 18px; padding: 20px; color: #cbd5e1; line-height: 1.6; white-space: pre-wrap; font-size: 14px; box-shadow: 0 0 30px rgba(255,123,0,0.25); }
     </style>
 </head>
 <body>
@@ -84,7 +84,7 @@ if (!empty($query)) {
                 <h2 style="font-family: 'Orbitron'; color: var(--accent-primary); margin: 0;">👑 OWNER AI BUSINESS COMMAND CENTER</h2>
                 <div style="color: var(--text-muted); font-size: 13px; font-family: 'Orbitron';">SUDARSHAN FITNESS v2.0 • AI GYM MANAGER &amp; DAILY EXECUTIVE PRIORITIES</div>
             </div>
-            <a href="index.php" style="background: rgba(255,0,60,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Orbitron'; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
+            <a href="index.php" style="background: rgba(255,123,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Orbitron'; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
         </div>
 
         <!-- Live KPI Snapshot -->
@@ -115,8 +115,8 @@ if (!empty($query)) {
                 <input type="text" name="query" class="form-control" placeholder="Ask AI: e.g. How is my gym performing this month? or What should I do today?" required>
                 <div style="display: flex; gap: 10px; margin-bottom: 20px;">
                     <button type="submit" class="btn-send">ASK AI MANAGER ➔</button>
-                    <button type="button" onclick="document.querySelector('input[name=query]').value='How is my gym performing this month?'; this.form.submit();" style="background: rgba(255,0,60,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 10px 16px; border-radius: 12px; font-family: 'Orbitron'; font-weight: 800; cursor: pointer;">💡 Performance Brief</button>
-                    <button type="button" onclick="document.querySelector('input[name=query]').value='What should I do today?'; this.form.submit();" style="background: rgba(255,0,60,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 10px 16px; border-radius: 12px; font-family: 'Orbitron'; font-weight: 800; cursor: pointer;">📋 Today's Priorities</button>
+                    <button type="button" onclick="document.querySelector('input[name=query]').value='How is my gym performing this month?'; this.form.submit();" style="background: rgba(255,123,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 10px 16px; border-radius: 12px; font-family: 'Orbitron'; font-weight: 800; cursor: pointer;">💡 Performance Brief</button>
+                    <button type="button" onclick="document.querySelector('input[name=query]').value='What should I do today?'; this.form.submit();" style="background: rgba(255,123,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 10px 16px; border-radius: 12px; font-family: 'Orbitron'; font-weight: 800; cursor: pointer;">📋 Today's Priorities</button>
                 </div>
             </form>
 

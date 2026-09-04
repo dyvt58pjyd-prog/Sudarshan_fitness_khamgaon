@@ -31,7 +31,7 @@ $ref_link = "https://sudarshanfitness.de/register.php?ref=" . $ref_code;
     <style>
         body { background: var(--bg-dark); color: #fff; padding: 25px; }
         .card { background: rgba(15, 7, 18, 0.94); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
-        .btn-copy { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #030712; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
+        .btn-copy { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #0f0a05; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -42,7 +42,7 @@ $ref_link = "https://sudarshanfitness.de/register.php?ref=" . $ref_code;
                 <h2 style="font-family: 'Orbitron'; color: var(--accent-primary); margin: 0;">🎁 REFERRAL &amp; REWARD PROGRAM</h2>
                 <div style="color: var(--text-muted); font-size: 13px; font-family: 'Orbitron';">SUDARSHAN FITNESS v2.0 • EARN +200 EXP &amp; DISCOUNTS</div>
             </div>
-            <a href="index.php" style="background: rgba(255,0,60,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Orbitron'; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
+            <a href="index.php" style="background: rgba(255,123,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Orbitron'; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
         </div>
 
         <div class="card" style="text-align: center; padding: 35px;">

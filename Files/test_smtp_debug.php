@@ -22,7 +22,7 @@ echo "=== TESTING DIRECT SOCKET SMTP DISPATCH TO: {$target_email} ===\n";
 
 require_once __DIR__ . '/include/smtp_mailer.php';
 
-$result = send_smtp_email($target_email, 'Anurag Test', '📷 Test Email Pass - Sudarshan Fitness', '<h2 style="color:#ff003c;">Sudarshan Fitness App Test Email</h2><p>Testing direct SMTP connection to anuragbawaskar680@gmail.com.</p><p><a href="https://sudarshanfitness.de/Files/download_app.php">Install App</a></p>');
+$result = send_smtp_email($target_email, 'Anurag Test', '📷 Test Email Pass - Sudarshan Fitness', '<h2 style="color:#ff7b00;">Sudarshan Fitness App Test Email</h2><p>Testing direct SMTP connection to anuragbawaskar680@gmail.com.</p><p><a href="https://sudarshanfitness.de/Files/download_app.php">Install App</a></p>');
 
 echo "SMTP Dispatch Result: " . ($result ? "SUCCESS (Accepted by SMTP server)" : "FAILED (Rejected or Socket Error)") . "\n\n";
 

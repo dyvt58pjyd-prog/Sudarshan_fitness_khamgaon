@@ -14,7 +14,7 @@ page_protect();
         body { background: var(--bg-dark); color: #fff; padding: 25px; }
         .card { background: rgba(15, 7, 18, 0.94); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
         .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
-        .meal-box { background: rgba(3,7,18,0.8); border: 1px solid rgba(255,0,60,0.3); border-radius: 16px; padding: 20px; margin-bottom: 15px; }
+        .meal-box { background: rgba(3,7,18,0.8); border: 1px solid rgba(255,123,0,0.3); border-radius: 16px; padding: 20px; margin-bottom: 15px; }
         .meal-title { font-family: 'Orbitron'; color: var(--accent-primary); font-size: 15px; font-weight: 800; margin-bottom: 8px; }
         .tag-diet { display: inline-block; background: rgba(16,185,129,0.2); color: #10b981; border: 1px solid #10b981; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; font-family: 'Orbitron'; margin-right: 6px; }
     </style>
@@ -28,17 +28,17 @@ page_protect();
                 <h2 style="font-family: 'Orbitron'; color: var(--accent-primary); margin: 0;">🍛 INDIAN NUTRITION &amp; DIET PLANNER</h2>
                 <div style="color: var(--text-muted); font-size: 13px; font-family: 'Orbitron';">SUDARSHAN FITNESS v2.0 • INDIA-FOCUSED MACRO DATABASE</div>
             </div>
-            <a href="index.php" style="background: rgba(255,0,60,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Orbitron'; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
+            <a href="index.php" style="background: rgba(255,123,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Orbitron'; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
         </div>
 
         <!-- Category Selector -->
         <div class="card">
             <h3 style="font-family: 'Orbitron'; color: #fff; margin-top: 0;">🥗 Select Diet Preference</h3>
             <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                <button style="background: var(--accent-primary); color: #030712; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer;">🌱 VEGETARIAN (PANEER/DAL)</button>
-                <button style="background: rgba(255,0,60,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 10px 20px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer;">🍗 HIGH PROTEIN NON-VEG</button>
-                <button style="background: rgba(255,0,60,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 10px 20px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer;">🌿 JAIN NUTRITION</button>
-                <button style="background: rgba(255,0,60,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 10px 20px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer;">🌾 VEGAN MEAL PLAN</button>
+                <button style="background: var(--accent-primary); color: #0f0a05; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer;">🌱 VEGETARIAN (PANEER/DAL)</button>
+                <button style="background: rgba(255,123,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 10px 20px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer;">🍗 HIGH PROTEIN NON-VEG</button>
+                <button style="background: rgba(255,123,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 10px 20px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer;">🌿 JAIN NUTRITION</button>
+                <button style="background: rgba(255,123,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 10px 20px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer;">🌾 VEGAN MEAL PLAN</button>
             </div>
         </div>
 

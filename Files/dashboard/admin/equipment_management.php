@@ -20,7 +20,7 @@ if ($_SESSION['role'] !== 'super_admin' && $_SESSION['role'] !== 'owner') {
         body { background: var(--bg-dark); color: #fff; padding: 25px; }
         .card { background: rgba(15, 7, 18, 0.94); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
         .table-custom { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .table-custom th, .table-custom td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,0,60,0.15); font-size: 13px; }
+        .table-custom th, .table-custom td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,123,0,0.15); font-size: 13px; }
         .table-custom th { color: var(--accent-primary); font-family: 'Orbitron'; text-transform: uppercase; }
         .status-badge { padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; font-family: 'Orbitron'; }
     </style>
@@ -34,7 +34,7 @@ if ($_SESSION['role'] !== 'super_admin' && $_SESSION['role'] !== 'owner') {
                 <h2 style="font-family: 'Orbitron'; color: var(--accent-primary); margin: 0;">🛠️ EQUIPMENT &amp; MAINTENANCE TRACKER</h2>
                 <div style="color: var(--text-muted); font-size: 13px; font-family: 'Orbitron';">SUDARSHAN FITNESS v2.0 • ASSET &amp; SERVICE REPAIR AUDIT</div>
             </div>
-            <a href="index.php" style="background: rgba(255,0,60,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Orbitron'; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
+            <a href="index.php" style="background: rgba(255,123,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Orbitron'; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
         </div>
 
         <div class="card">
@@ -74,7 +74,7 @@ if ($_SESSION['role'] !== 'super_admin' && $_SESSION['role'] !== 'owner') {
                         <td>Cable Station</td>
                         <td>10-Jan-2026</td>
                         <td>10-Jul-2026</td>
-                        <td><span class="status-badge" style="background: rgba(255,0,60,0.2); color: #ff003c; border: 1px solid #ff003c;">🔴 UNDER REPAIR</span></td>
+                        <td><span class="status-badge" style="background: rgba(255,123,0,0.2); color: #ff7b00; border: 1px solid #ff7b00;">🔴 UNDER REPAIR</span></td>
                     </tr>
                 </tbody>
             </table>

@@ -16,7 +16,7 @@ page_protect();
         .ex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin-top: 20px; }
         .ex-card { background: rgba(3,7,18,0.8); border: 1px solid rgba(0,240,255,0.3); border-radius: 16px; padding: 20px; }
         .ex-title { font-family: 'Orbitron'; font-size: 15px; color: var(--accent-primary); font-weight: 800; margin-bottom: 5px; }
-        .tag { display: inline-block; background: rgba(112,0,255,0.2); color: #a78bfa; border: 1px solid #7000ff; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; font-family: 'Orbitron'; margin-right: 5px; margin-bottom: 5px; }
+        .tag { display: inline-block; background: rgba(30,144,255,0.2); color: #a78bfa; border: 1px solid #1e90ff; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; font-family: 'Orbitron'; margin-right: 5px; margin-bottom: 5px; }
     </style>
 </head>
 <body>

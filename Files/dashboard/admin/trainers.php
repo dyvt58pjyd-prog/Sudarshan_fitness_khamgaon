@@ -35,7 +35,7 @@ $trainers_res = mysqli_query($con, "SELECT * FROM admin WHERE role = 'trainer'")
     <style>
         body { background: var(--bg-dark); color: #fff; padding: 25px; }
         .card { background: rgba(9, 14, 28, 0.9); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
-        .btn-add { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #030712; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
+        .btn-add { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #0f0a05; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
         .table-custom { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .table-custom th, .table-custom td { padding: 14px; text-align: left; border-bottom: 1px solid rgba(0,240,255,0.15); }
         .table-custom th { color: var(--accent-primary); font-family: 'Orbitron'; font-size: 13px; text-transform: uppercase; }
@@ -110,7 +110,7 @@ $trainers_res = mysqli_query($con, "SELECT * FROM admin WHERE role = 'trainer'")
                                 <td style="font-family: 'Orbitron'; color: var(--accent-primary);"><?php echo htmlspecialchars($row['username']); ?></td>
                                 <td style="font-weight: 700;"><?php echo htmlspecialchars($row['Full_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['mobile']); ?></td>
-                                <td><span style="background: rgba(112,0,255,0.2); color: #a78bfa; border: 1px solid #7000ff; padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: bold; font-family: 'Orbitron';">TRAINER</span></td>
+                                <td><span style="background: rgba(30,144,255,0.2); color: #a78bfa; border: 1px solid #1e90ff; padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: bold; font-family: 'Orbitron';">TRAINER</span></td>
                                 <td><strong style="color: #ffb703; font-family: 'Orbitron';"><?php echo $client_count; ?> Members</strong></td>
                             </tr>
                         <?php endwhile; ?>

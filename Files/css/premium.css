@@ -18,7 +18,7 @@
   --info: #0077ff;
 }
 
-/* Base Typo & Solo Leveling System Font Setup */
+/* Base Typo & Hidden Leaf System Font Setup */
 body, html, p, span, a, div, td, th, li, input, select, textarea, button, label {
   font-family: 'Outfit', sans-serif !important;
 }
@@ -122,7 +122,7 @@ h1, h2, h3, h4, h5, p, span, a {
   background: var(--bg-darker) !important;
   background-image: 
     radial-gradient(circle at 20% 20%, rgba(0, 240, 255, 0.18) 0%, transparent 45%),
-    radial-gradient(circle at 80% 80%, rgba(112, 0, 255, 0.2) 0%, transparent 50%) !important;
+    radial-gradient(circle at 80% 80%, rgba(30, 144, 255, 0.2) 0%, transparent 50%) !important;
   min-height: 100vh;
   display: flex;
   align-items: center;

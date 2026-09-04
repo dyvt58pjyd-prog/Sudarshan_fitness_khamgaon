@@ -63,9 +63,9 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     <style>
         body { background: var(--bg-dark); color: #fff; padding: 25px; }
         .card { background: rgba(9, 14, 28, 0.9); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
-        .btn-action { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #030712; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; text-decoration: none; display: inline-block; }
+        .btn-action { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #0f0a05; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; text-decoration: none; display: inline-block; }
         .btn-tab { padding: 10px 18px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,240,255,0.05); color: var(--accent-primary); text-decoration: none; font-family: 'Orbitron'; font-size: 12px; font-weight: 800; }
-        .btn-tab.active { background: var(--accent-primary); color: #030712; }
+        .btn-tab.active { background: var(--accent-primary); color: #0f0a05; }
         .table-custom { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .table-custom th, .table-custom td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(0,240,255,0.15); font-size: 13px; }
         .table-custom th { color: var(--accent-primary); font-family: 'Orbitron'; text-transform: uppercase; }
@@ -103,7 +103,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
                     <input type="date" name="start_date" value="<?php echo htmlspecialchars($start_date); ?>" class="form-control" required>
                     <span style="font-size: 12px; color: var(--text-muted); font-family: 'Orbitron';">To:</span>
                     <input type="date" name="end_date" value="<?php echo htmlspecialchars($end_date); ?>" class="form-control" required>
-                    <button type="submit" style="background: var(--accent-primary); color: #030712; border: none; padding: 8px 14px; border-radius: 8px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer;">FILTER</button>
+                    <button type="submit" style="background: var(--accent-primary); color: #0f0a05; border: none; padding: 8px 14px; border-radius: 8px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer;">FILTER</button>
                 </form>
             </div>
         </div>
@@ -143,7 +143,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
                                 <td><?php echo htmlspecialchars($r['mobile']); ?></td>
                                 <td><?php echo htmlspecialchars($r['email']); ?></td>
                                 <td><?php echo htmlspecialchars($r['joining_date']); ?></td>
-                                <td><span style="background: rgba(112,0,255,0.2); color: #a78bfa; border: 1px solid #7000ff; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-family: 'Orbitron';"><?php echo htmlspecialchars($r['planName'] ?? 'No Plan'); ?></span></td>
+                                <td><span style="background: rgba(30,144,255,0.2); color: #a78bfa; border: 1px solid #1e90ff; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-family: 'Orbitron';"><?php echo htmlspecialchars($r['planName'] ?? 'No Plan'); ?></span></td>
                                 <td><strong style="color: #ffb703; font-family: 'Orbitron';"><?php echo htmlspecialchars($r['expire'] ?? 'N/A'); ?></strong></td>
                             </tr>
                         <?php endwhile; ?>

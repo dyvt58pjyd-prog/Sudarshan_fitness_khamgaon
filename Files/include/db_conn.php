@@ -967,7 +967,7 @@ if (!function_exists('run_waf_security_shield')) {
                         log_security_event($con, 'WAF_SQLI_BLOCKED', "WAF blocked SQL Injection attempt: " . htmlspecialchars(substr($data, 0, 100)), 'critical');
                         record_login_attempt($con, 'WAF_MALICIOUS_BOT', 'failed');
                         header("HTTP/1.1 403 Forbidden");
-                        die("<div style='background:#030712; color:#ef4444; font-family:sans-serif; padding:50px; text-align:center; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;'>
+                        die("<div style='background:#0f0a05; color:#ef4444; font-family:sans-serif; padding:50px; text-align:center; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;'>
                             <h1 style='font-size:32px; font-weight:900; margin-bottom:10px; text-transform:uppercase;'>🛡️ 403 WAF SECURITY BLOCK</h1>
                             <p style='color:#cbd5e1; font-size:16px; max-width:600px; line-height:1.6;'>A malicious payload signature was intercepted and blocked by the Sudarshan Fitness Web Application Firewall.</p>
                             <p style='color:#64748b; font-size:13px; margin-top:20px;'>Client IP <strong>" . get_client_ip() . "</strong> logged to security audit trail.</p>
@@ -979,7 +979,7 @@ if (!function_exists('run_waf_security_shield')) {
                         log_security_event($con, 'WAF_XSS_BLOCKED', "WAF blocked Cross-Site Scripting attempt: " . htmlspecialchars(substr($data, 0, 100)), 'critical');
                         record_login_attempt($con, 'WAF_MALICIOUS_BOT', 'failed');
                         header("HTTP/1.1 403 Forbidden");
-                        die("<div style='background:#030712; color:#ef4444; font-family:sans-serif; padding:50px; text-align:center; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;'>
+                        die("<div style='background:#0f0a05; color:#ef4444; font-family:sans-serif; padding:50px; text-align:center; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;'>
                             <h1 style='font-size:32px; font-weight:900; margin-bottom:10px; text-transform:uppercase;'>🛡️ 403 WAF SECURITY BLOCK</h1>
                             <p style='color:#cbd5e1; font-size:16px; max-width:600px; line-height:1.6;'>A malicious payload signature was intercepted and blocked by the Sudarshan Fitness Web Application Firewall.</p>
                             <p style='color:#64748b; font-size:13px; margin-top:20px;'>Client IP <strong>" . get_client_ip() . "</strong> logged to security audit trail.</p>
@@ -991,7 +991,7 @@ if (!function_exists('run_waf_security_shield')) {
                         log_security_event($con, 'WAF_PATH_TRAVERSAL_BLOCKED', "WAF blocked Path Traversal attempt: " . htmlspecialchars(substr($data, 0, 100)), 'critical');
                         record_login_attempt($con, 'WAF_MALICIOUS_BOT', 'failed');
                         header("HTTP/1.1 403 Forbidden");
-                        die("<div style='background:#030712; color:#ef4444; font-family:sans-serif; padding:50px; text-align:center; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;'>
+                        die("<div style='background:#0f0a05; color:#ef4444; font-family:sans-serif; padding:50px; text-align:center; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;'>
                             <h1 style='font-size:32px; font-weight:900; margin-bottom:10px; text-transform:uppercase;'>🛡️ 403 WAF SECURITY BLOCK</h1>
                             <p style='color:#cbd5e1; font-size:16px; max-width:600px; line-height:1.6;'>A malicious payload signature was intercepted and blocked by the Sudarshan Fitness Web Application Firewall.</p>
                             <p style='color:#64748b; font-size:13px; margin-top:20px;'>Client IP <strong>" . get_client_ip() . "</strong> logged to security audit trail.</p>
@@ -2176,11 +2176,11 @@ run_waf_security_shield($con);
 // Enforce Active IP Blacklist Check (CERT-In MIL-STD Protection)
 if (function_exists('is_ip_blocked') && is_ip_blocked($con)) {
     header("HTTP/1.1 403 Forbidden");
-    die("<div style='background:#030712; color:#ef4444; font-family:sans-serif; padding:50px; text-align:center; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;'>
+    die("<div style='background:#0f0a05; color:#ef4444; font-family:sans-serif; padding:50px; text-align:center; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;'>
         <div style='font-size:60px; margin-bottom:15px;'>🇮🇳</div>
         <h1 style='font-size:26px; font-weight:900; font-family:sans-serif; letter-spacing:1px; margin-bottom:12px;'>CERT-In MILITARY CYBER DEFENSE QUARANTINE</h1>
-        <p style='color:#cbd5e1; font-size:15px; max-width:620px; line-height:1.6; margin-bottom:20px;'>Your IP address <strong style='color:#ff003c;'>" . get_client_ip() . "</strong> has been quarantined by the Indian Military Standard Cyber Security Defense Shield due to unauthorized probe or threat detection.</p>
-        <div style='background:rgba(255,0,60,0.1); border:1px solid #ff003c; padding:12px 24px; border-radius:12px; color:#fca5a5; font-size:13px; font-weight:bold;'>
+        <p style='color:#cbd5e1; font-size:15px; max-width:620px; line-height:1.6; margin-bottom:20px;'>Your IP address <strong style='color:#ff7b00;'>" . get_client_ip() . "</strong> has been quarantined by the Indian Military Standard Cyber Security Defense Shield due to unauthorized probe or threat detection.</p>
+        <div style='background:rgba(255,123,0,0.1); border:1px solid #ff7b00; padding:12px 24px; border-radius:12px; color:#fca5a5; font-size:13px; font-weight:bold;'>
             Incident ID: MIL-DEF-" . strtoupper(substr(md5(get_client_ip() . date('Y-m-d')), 0, 8)) . " | Logged to Cyber Threat Intelligence Audit Trail
         </div>
     </div>");

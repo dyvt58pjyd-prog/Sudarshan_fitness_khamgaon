@@ -87,7 +87,7 @@ $q_ip_list = mysqli_query($con, "SELECT * FROM blocked_ips ORDER BY id DESC LIMI
             --bg: #0b0f19;
             --card-bg: rgba(15, 23, 42, 0.8);
             --border: rgba(255, 255, 255, 0.1);
-            --accent: #ff003c;
+            --accent: #ff7b00;
             --accent-green: #10b981;
             --accent-blue: #3b82f6;
         }

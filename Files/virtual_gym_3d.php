@@ -35,11 +35,11 @@ if (isset($_SESSION['user_data'])) {
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <style>
         :root {
-            --bg-dark: #030712;
+            --bg-dark: #0f0a05;
             --card-bg: rgba(9, 14, 28, 0.9);
             --system-cyan: #00f0ff;
             --system-blue: #0077ff;
-            --monarch-purple: #7000ff;
+            --monarch-purple: #1e90ff;
             --quest-gold: #ffb703;
             --text-main: #f8fafc;
             --text-muted: #64748b;
@@ -56,7 +56,7 @@ if (isset($_SESSION['user_data'])) {
             flex-direction: column;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 50% 20%, rgba(112, 0, 255, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 50% 20%, rgba(30, 144, 255, 0.15) 0%, transparent 60%),
                 radial-gradient(circle at 80% 80%, rgba(0, 240, 255, 0.1) 0%, transparent 50%);
         }
 
@@ -112,7 +112,7 @@ if (isset($_SESSION['user_data'])) {
 
         .btn-back:hover {
             background: var(--system-cyan);
-            color: #030712;
+            color: #0f0a05;
             box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
         }
 
@@ -195,7 +195,7 @@ if (isset($_SESSION['user_data'])) {
         }
 
         .viewport-container {
-            background: radial-gradient(circle at 50% 40%, #0b1329 0%, #030712 100%);
+            background: radial-gradient(circle at 50% 40%, #0b1329 0%, #0f0a05 100%);
             border: 2px solid var(--system-cyan);
             border-radius: 28px;
             position: relative;
@@ -270,7 +270,7 @@ if (isset($_SESSION['user_data'])) {
             height: 36px;
             border-radius: 50%;
             background: var(--system-cyan);
-            color: #030712;
+            color: #0f0a05;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -299,14 +299,14 @@ if (isset($_SESSION['user_data'])) {
             align-items: center;
             justify-content: center;
             gap: 10px;
-            box-shadow: 0 0 25px rgba(112,0,255,0.5);
+            box-shadow: 0 0 25px rgba(30,144,255,0.5);
             margin-top: 15px;
             transition: all 0.2s ease;
         }
 
         .btn-store-link:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 35px rgba(112,0,255,0.8);
+            box-shadow: 0 0 35px rgba(30,144,255,0.8);
         }
     </style>
 </head>
@@ -336,7 +336,7 @@ if (isset($_SESSION['user_data'])) {
                 <div class="zone-icon">🏋️</div>
                 <div>
                     <h4 style="color:#fff; font-size:14px; font-weight:800;">Free Weights Zone</h4>
-                    <p style="color:var(--text-muted); font-size:11px;">Dumbbells &amp; Monarch Barbells</p>
+                    <p style="color:var(--text-muted); font-size:11px;">Dumbbells &amp; Hokage Barbells</p>
                 </div>
             </div>
 
@@ -368,7 +368,7 @@ if (isset($_SESSION['user_data'])) {
                 <div class="zone-icon">🥤</div>
                 <div>
                     <h4 style="color:#fff; font-size:14px; font-weight:800;">Supplement Bar</h4>
-                    <p style="color:var(--text-muted); font-size:11px;">Elixirs &amp; Monarch Gear</p>
+                    <p style="color:var(--text-muted); font-size:11px;">Elixirs &amp; Hokage Gear</p>
                 </div>
             </div>
 
@@ -399,7 +399,7 @@ if (isset($_SESSION['user_data'])) {
                     <div class="speaker-avatar">⚔️</div>
                     <div>
                         <strong style="color:#fff; font-size:13px; font-family:'Orbitron';">System AI Coach</strong>
-                        <div style="font-size:10px; color:var(--system-cyan);">Shadow Monarch Guide</div>
+                        <div style="font-size:10px; color:var(--system-cyan);">Shadow Hokage Guide</div>
                     </div>
                 </div>
                 <div class="dialogue-text" id="dialogue-content">
@@ -411,7 +411,7 @@ if (isset($_SESSION['user_data'])) {
                 <button onclick="askCoach('chest')" style="background:rgba(0,240,255,0.1); border:1px solid var(--system-cyan); color:var(--system-cyan); padding:10px; border-radius:12px; font-weight:800; font-size:11px; cursor:pointer; text-align:left; font-family:'Orbitron';">
                     💪 "System Quest: Chest Hypertrophy Plan"
                 </button>
-                <button onclick="askCoach('fatloss')" style="background:rgba(112,0,255,0.15); border:1px solid var(--monarch-purple); color:#a78bfa; padding:10px; border-radius:12px; font-weight:800; font-size:11px; cursor:pointer; text-align:left; font-family:'Orbitron';">
+                <button onclick="askCoach('fatloss')" style="background:rgba(30,144,255,0.15); border:1px solid var(--monarch-purple); color:#a78bfa; padding:10px; border-radius:12px; font-weight:800; font-size:11px; cursor:pointer; text-align:left; font-family:'Orbitron';">
                     🔥 "System Quest: Cardio Stamina Protocol"
                 </button>
                 <button onclick="askCoach('protein')" style="background:rgba(255,183,3,0.15); border:1px solid var(--quest-gold); color:var(--quest-gold); padding:10px; border-radius:12px; font-weight:800; font-size:11px; cursor:pointer; text-align:left; font-family:'Orbitron';">
@@ -501,7 +501,7 @@ if (isset($_SESSION['user_data'])) {
 
             if (zone === 'weights') {
                 sub.textContent = 'ZONE 1 • FREE WEIGHTS AREA';
-                title.textContent = 'Dumbbells & Monarch Barbell Floor';
+                title.textContent = 'Dumbbells & Hokage Barbell Floor';
                 camera.position.set(-3, 2.5, 2.5);
                 controls.target.set(-3, 0.5, -2);
                 dialogue.innerHTML = '"You are in the <strong>Free Weights Zone</strong>! Heavy compound movements increase strength stats."';
@@ -525,7 +525,7 @@ if (isset($_SESSION['user_data'])) {
                 dialogue.innerHTML = '"Functional Floor! Building core stability fortifies your defense stats."';
             } else if (zone === 'shop') {
                 sub.textContent = 'ZONE 5 • SUPPLEMENT BAR';
-                title.textContent = 'Monarch Nutrition Item Shop';
+                title.textContent = 'Hokage Nutrition Item Shop';
                 camera.position.set(0, 2, 5);
                 dialogue.innerHTML = '"Welcome to the <strong>Item Shop</strong>! Purchase recovery elixirs and gear to level up!"';
             }

@@ -117,7 +117,7 @@ if (substr($logo_path, 0, 6) === '../../') {
         animation: system-lightning-flash 0.5s ease-out;
     }
 
-    /* System Gate Window Container */
+    /* Hidden Leaf Portal Window Container */
     .login-container {
         max-width: 650px !important;
         width: 95% !important;
@@ -631,13 +631,13 @@ if (substr($logo_path, 0, 6) === '../../') {
 
                     <!-- PWA Installation Modal -->
                     <div id="pwaInstallModal" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;">
-                        <div style="background: #111827; border: 2px solid #ff003c; border-radius: 20px; max-width: 440px; width: 100%; padding: 30px; text-align: center; box-shadow: 0 0 35px rgba(255,0,60,0.5); animation: pulseGlow 2s infinite alternate;">
-                            <img src="logo192.png" style="width: 80px; height: 80px; border-radius: 18px; margin-bottom: 15px; border: 2px solid #ff003c; box-shadow: 0 4px 15px rgba(255,0,60,0.4);" alt="App Logo" />
+                        <div style="background: #111827; border: 2px solid #ff7b00; border-radius: 20px; max-width: 440px; width: 100%; padding: 30px; text-align: center; box-shadow: 0 0 35px rgba(255,123,0,0.5); animation: pulseGlow 2s infinite alternate;">
+                            <img src="logo192.png" style="width: 80px; height: 80px; border-radius: 18px; margin-bottom: 15px; border: 2px solid #ff7b00; box-shadow: 0 4px 15px rgba(255,123,0,0.4);" alt="App Logo" />
                             <h3 style="color: #ffffff; font-size: 20px; font-weight: 800; margin: 0 0 10px 0; font-family: 'Orbitron', sans-serif;">INSTALL SUDARSHAN APP</h3>
                             <p style="color: #94a3b8; font-size: 13px; line-height: 1.5; margin-bottom: 25px;">
                                 Install Sudarshan Fitness directly to your phone home screen for 1-click access, instant biometric check-ins, and live workout tracking!
                             </p>
-                            <button id="pwaDirectInstallBtn" onclick="triggerChromeInstall()" style="width: 100%; background: linear-gradient(135deg, #ff003c, #7000ff); color: #ffffff; border: none; padding: 15px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; box-shadow: 0 5px 20px rgba(255,0,60,0.5); margin-bottom: 10px;">
+                            <button id="pwaDirectInstallBtn" onclick="triggerChromeInstall()" style="width: 100%; background: linear-gradient(135deg, #ff7b00, #1e90ff); color: #ffffff; border: none; padding: 15px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; box-shadow: 0 5px 20px rgba(255,123,0,0.5); margin-bottom: 10px;">
                                 📲 INSTALL CHROME PWA APP
                             </button>
                             <a href="download_app.php" style="width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; text-decoration: none; display: block; padding: 15px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; box-shadow: 0 5px 20px rgba(16,185,129,0.4); margin-bottom: 12px;">
@@ -650,11 +650,11 @@ if (substr($logo_path, 0, 6) === '../../') {
                     </div>
 
                     <!-- Official Copyright Footer -->
-                    <div style="text-align: center; margin-top: 25px; border-top: 1px solid rgba(255, 0, 60, 0.25); padding-top: 15px;">
+                    <div style="text-align: center; margin-top: 25px; border-top: 1px solid rgba(255, 123, 0, 0.25); padding-top: 15px;">
                         <div style="font-size: 11px; color: var(--text-muted); font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px;">
                             © <?php echo date('Y'); ?> <?php echo htmlspecialchars($gym['gym_name']); ?>. All Rights Reserved.
                         </div>
-                        <div style="font-size: 10px; color: #ff003c; font-weight: 800; font-family: 'Orbitron', sans-serif; margin-top: 4px; letter-spacing: 1.5px;">
+                        <div style="font-size: 10px; color: #ff7b00; font-weight: 800; font-family: 'Orbitron', sans-serif; margin-top: 4px; letter-spacing: 1.5px;">
                             POWERED BY SUDARSHAN FITNESS v2.0
                         </div>
                     </div>
