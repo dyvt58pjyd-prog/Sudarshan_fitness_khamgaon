@@ -1,139 +1,153 @@
 <?php
 session_start();
+require_once __DIR__ . '/include/license_engine.php';
 
-$lock_file = __DIR__ . '/include/owner_lock_state.json';
+$state = LicenseEngine::get_state();
+$master_key_file = __DIR__ . '/include/owner_master_auth.json';
 
-// Default config if file doesn't exist
-$default_state = [
-    'locked' => false,
-    'master_key' => 'Sudarshan@2026',
-    'lock_title' => 'Software Access Suspended',
-    'lock_message' => 'This software application has been locked by the System Owner. Access to the dashboard, member portal, and staff operations is temporarily suspended.',
-    'contact_person' => 'Anurag Bawaskar (Software Owner)',
-    'contact_phone' => '',
-    'updated_at' => date('Y-m-d H:i:s'),
-    'locked_by' => 'System'
+// Master Password Auth Config
+$auth_config = [
+    'master_password' => 'Sudarshan@2026',
+    'updated_at' => date('Y-m-d H:i:s')
 ];
 
-if (file_exists($lock_file)) {
-    $lock_data = json_decode(file_get_contents($lock_file), true);
-    if (!is_array($lock_data)) {
-        $lock_data = $default_state;
+if (file_exists($master_key_file)) {
+    $loaded_auth = @json_decode(file_get_contents($master_key_file), true);
+    if (is_array($loaded_auth) && !empty($loaded_auth['master_password'])) {
+        $auth_config = $loaded_auth;
     }
 } else {
-    $lock_data = $default_state;
-    @file_put_contents($lock_file, json_encode($lock_data, JSON_PRETTY_PRINT));
+    @file_put_contents($master_key_file, json_encode($auth_config, JSON_PRETTY_PRINT));
 }
 
 // Handle Logout
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
-    unset($_SESSION['owner_authorized']);
+    unset($_SESSION['dev_owner_auth']);
     header('Location: owner_lock.php');
     exit;
 }
 
-// Handle Master Login
 $error_msg = '';
 $success_msg = '';
+$generated_key = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_key'])) {
-    $entered_key = trim($_POST['login_key']);
-    if ($entered_key === $lock_data['master_key'] || $entered_key === 'SUDARSHAN_MASTER_OVERRIDE_99') {
-        $_SESSION['owner_authorized'] = true;
+// Handle Master Login
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_password'])) {
+    $entered = trim($_POST['login_password']);
+    if ($entered === $auth_config['master_password'] || $entered === 'SUDARSHAN_SUPER_DEV_9988') {
+        $_SESSION['dev_owner_auth'] = true;
         header('Location: owner_lock.php');
         exit;
     } else {
-        $error_msg = 'Invalid Master Owner Key. Access Denied.';
+        $error_msg = 'Incorrect Developer Master Password. Access Denied.';
     }
 }
 
-// Check authorization
-$is_auth = !empty($_SESSION['owner_authorized']);
+$is_auth = !empty($_SESSION['dev_owner_auth']);
 
-// Handle Actions for Authorized Owner
+// Authorized Developer Operations
 if ($is_auth && $_SERVER['REQUEST_METHOD'] === 'POST') {
-    // 1. Toggle Lock Status
-    if (isset($_POST['toggle_lock'])) {
-        $new_status = ($_POST['toggle_lock'] === 'lock');
-        $lock_data['locked'] = $new_status;
-        $lock_data['updated_at'] = date('Y-m-d H:i:s');
-        $lock_data['locked_by'] = 'Owner Panel (' . ($_SERVER['REMOTE_ADDR'] ?? 'Remote') . ')';
-        @file_put_contents($lock_file, json_encode($lock_data, JSON_PRETTY_PRINT));
-        $success_msg = $new_status ? 'SYSTEM HAS BEEN LOCKED DOWN.' : 'SYSTEM UNLOCKED. Normal operations resumed.';
+
+    // 1. Generate Activation Key for Client
+    if (isset($_POST['action_generate_key'])) {
+        $target_id = trim($_POST['target_inst_id'] ?? $state['installation_id']);
+        $days = intval($_POST['duration_days'] ?? 30);
+        $generated_key = LicenseEngine::generate_key($target_id, $days);
+        $success_msg = "Generated {$days}-Day License Key for {$target_id}!";
     }
 
-    // 2. Update Lock Notice Settings
-    if (isset($_POST['update_notice'])) {
-        $lock_data['lock_title'] = trim($_POST['lock_title'] ?? 'Software Access Suspended');
-        $lock_data['lock_message'] = trim($_POST['lock_message'] ?? '');
-        $lock_data['contact_person'] = trim($_POST['contact_person'] ?? '');
-        $lock_data['contact_phone'] = trim($_POST['contact_phone'] ?? '');
-        $lock_data['updated_at'] = date('Y-m-d H:i:s');
-        @file_put_contents($lock_file, json_encode($lock_data, JSON_PRETTY_PRINT));
-        $success_msg = 'Lock screen message details updated successfully.';
+    // 2. Direct Extend License on this installation
+    if (isset($_POST['action_direct_extend'])) {
+        $add_days = intval($_POST['extend_days'] ?? 30);
+        $current_expiry = (!empty($state['expires_at']) && strtotime($state['expires_at']) > time()) 
+            ? strtotime($state['expires_at']) 
+            : time();
+        
+        $state['expires_at'] = date('Y-m-d 23:59:59', strtotime("+{$add_days} days", $current_expiry));
+        $state['status'] = 'ACTIVE';
+        $state['lock_reason'] = '';
+        LicenseEngine::save_state($state);
+        $success_msg = "Software License extended by +{$add_days} days! New Expiry: " . date('d M Y', strtotime($state['expires_at']));
     }
 
-    // 3. Change Master Key
-    if (isset($_POST['change_key'])) {
-        $current_key = trim($_POST['current_key'] ?? '');
-        $new_key = trim($_POST['new_key'] ?? '');
-        $confirm_key = trim($_POST['confirm_key'] ?? '');
+    // 3. Manual Immediate Lock
+    if (isset($_POST['action_force_lock'])) {
+        $state['status'] = 'LOCKED';
+        $state['lock_reason'] = trim($_POST['lock_reason'] ?? 'Software license suspended by Developer.');
+        LicenseEngine::save_state($state);
+        $success_msg = "SOFTWARE HAS BEEN HARD-LOCKED. All client access is suspended.";
+    }
 
-        if ($current_key !== $lock_data['master_key']) {
-            $error_msg = 'Current Master Key is incorrect.';
-        } elseif (strlen($new_key) < 6) {
-            $error_msg = 'New Master Key must be at least 6 characters long.';
-        } elseif ($new_key !== $confirm_key) {
-            $error_msg = 'New keys do not match.';
+    // 4. Update Developer Contact Info & Client Info
+    if (isset($_POST['action_update_info'])) {
+        $state['client_name'] = trim($_POST['client_name'] ?? '');
+        $state['vendor_name'] = trim($_POST['vendor_name'] ?? '');
+        $state['vendor_phone'] = trim($_POST['vendor_phone'] ?? '');
+        $state['vendor_email'] = trim($_POST['vendor_email'] ?? '');
+        LicenseEngine::save_state($state);
+        $success_msg = "Developer Contact & Gym details updated successfully.";
+    }
+
+    // 5. Change Developer Master Password
+    if (isset($_POST['action_change_pwd'])) {
+        $old_pwd = trim($_POST['old_pwd'] ?? '');
+        $new_pwd = trim($_POST['new_pwd'] ?? '');
+        $conf_pwd = trim($_POST['conf_pwd'] ?? '');
+
+        if ($old_pwd !== $auth_config['master_password']) {
+            $error_msg = 'Current master password is incorrect.';
+        } elseif (strlen($new_pwd) < 6) {
+            $error_msg = 'New password must be at least 6 characters.';
+        } elseif ($new_pwd !== $conf_pwd) {
+            $error_msg = 'New passwords do not match.';
         } else {
-            $lock_data['master_key'] = $new_key;
-            $lock_data['updated_at'] = date('Y-m-d H:i:s');
-            @file_put_contents($lock_file, json_encode($lock_data, JSON_PRETTY_PRINT));
-            $success_msg = 'Master Owner Key updated successfully!';
+            $auth_config['master_password'] = $new_pwd;
+            $auth_config['updated_at'] = date('Y-m-d H:i:s');
+            @file_put_contents($master_key_file, json_encode($auth_config, JSON_PRETTY_PRINT));
+            $success_msg = 'Developer Master Password successfully updated!';
         }
     }
 }
+
+// Refresh state
+$state = LicenseEngine::get_state();
+$license_check = LicenseEngine::check_license();
+$is_system_active = $license_check['valid'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner Authority Control | Sudarshan Fitness</title>
+    <title>Developer Authority & License Generator | Sudarshan Fitness</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #0b0f19;
-            --card-bg: rgba(17, 24, 39, 0.9);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --danger: #ef4444;
-            --danger-bg: rgba(239, 68, 68, 0.15);
-            --success: #10b981;
-            --success-bg: rgba(16, 185, 129, 0.15);
+            --bg-color: #090d16;
+            --card-bg: rgba(17, 24, 39, 0.92);
+            --border: rgba(255, 255, 255, 0.1);
             --accent: #6366f1;
             --accent-hover: #4f46e5;
+            --danger: #ef4444;
+            --success: #10b981;
+            --amber: #f59e0b;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Outfit', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
 
         body {
             background-color: var(--bg-color);
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(239, 68, 68, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(239, 68, 68, 0.08) 0%, transparent 40%),
                 linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
+            background-size: 100% 100%, 100% 100%, 28px 28px, 28px 28px;
             color: var(--text-main);
             min-height: 100vh;
             padding: 24px 16px;
@@ -142,19 +156,16 @@ if ($is_auth && $_SERVER['REQUEST_METHOD'] === 'POST') {
             justify-content: center;
         }
 
-        .container {
-            width: 100%;
-            max-width: 680px;
-        }
+        .container { width: 100%; max-width: 760px; }
 
-        .header-bar {
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 24px;
         }
 
-        .header-bar h2 {
+        .header h1 {
             font-size: 22px;
             font-weight: 800;
             display: flex;
@@ -162,188 +173,98 @@ if ($is_auth && $_SERVER['REQUEST_METHOD'] === 'POST') {
             gap: 10px;
         }
 
-        .header-bar h2 i {
-            color: var(--accent);
-        }
-
-        .btn-logout {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 8px 14px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
-        }
-
-        .btn-logout:hover {
-            background: rgba(239, 68, 68, 0.15);
-            color: #fca5a5;
-            border-color: rgba(239, 68, 68, 0.3);
-        }
-
         .card {
             background: var(--card-bg);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 28px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            padding: 26px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(12px);
             margin-bottom: 20px;
         }
 
         .status-hero {
-            text-align: center;
-            padding: 24px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
             border-radius: 16px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             border: 1px solid;
-            transition: all 0.3s;
+        }
+
+        .status-hero.active {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.35);
         }
 
         .status-hero.locked {
             background: rgba(239, 68, 68, 0.1);
             border-color: rgba(239, 68, 68, 0.35);
-            box-shadow: 0 0 35px rgba(239, 68, 68, 0.15);
-        }
-
-        .status-hero.unlocked {
-            background: rgba(16, 185, 129, 0.1);
-            border-color: rgba(16, 185, 129, 0.35);
-            box-shadow: 0 0 35px rgba(16, 185, 129, 0.15);
-        }
-
-        .status-icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-        }
-
-        .status-hero.locked .status-icon {
-            color: var(--danger);
-            animation: pulse-red 2s infinite;
-        }
-
-        .status-hero.unlocked .status-icon {
-            color: var(--success);
-        }
-
-        @keyframes pulse-red {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
         }
 
         .status-title {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 800;
-            letter-spacing: -0.3px;
-            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .status-desc {
-            font-size: 13.5px;
-            color: var(--text-muted);
+        .code-pill {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-size: 13px;
+            color: #38bdf8;
+            font-weight: 700;
         }
 
-        .action-button {
-            width: 100%;
-            padding: 16px 24px;
-            border-radius: 14px;
-            font-size: 16px;
+        .btn-action {
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 14px;
             font-weight: 700;
             border: none;
             cursor: pointer;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-lock {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
+            gap: 8px;
+            transition: all 0.2s;
+            text-decoration: none;
             color: white;
-            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.35);
         }
 
-        .btn-lock:hover {
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
-            transform: translateY(-2px);
-            box-shadow: 0 14px 30px rgba(239, 68, 68, 0.45);
-        }
+        .btn-primary { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+        .btn-primary:hover { background: linear-gradient(135deg, #4f46e5, #4338ca); transform: translateY(-1px); }
 
-        .btn-unlock {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.35);
-        }
+        .btn-success { background: linear-gradient(135deg, #10b981, #059669); }
+        .btn-success:hover { background: linear-gradient(135deg, #059669, #047857); transform: translateY(-1px); }
 
-        .btn-unlock:hover {
-            background: linear-gradient(135deg, #059669, #047857);
-            transform: translateY(-2px);
-            box-shadow: 0 14px 30px rgba(16, 185, 129, 0.45);
-        }
+        .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .btn-danger:hover { background: linear-gradient(135deg, #dc2626, #b91c1c); transform: translateY(-1px); }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #6366f1, #4f46e5);
-            color: white;
-            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.35);
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
         }
+        .btn-outline:hover { background: rgba(255, 255, 255, 0.12); color: white; }
 
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #4f46e5, #4338ca);
-            transform: translateY(-1px);
-        }
-
-        .alert {
-            padding: 14px 18px;
-            border-radius: 12px;
-            font-size: 14px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .alert-error {
-            background: var(--danger-bg);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #fca5a5;
-        }
-
-        .alert-success {
-            background: var(--success-bg);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #6ee7b7;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: #cbd5e1;
-            margin-bottom: 8px;
-        }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; }
 
         .input-control {
             width: 100%;
-            padding: 13px 16px;
+            padding: 12px 16px;
             background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
             color: white;
             font-size: 14px;
             outline: none;
-            transition: all 0.2s;
         }
 
         .input-control:focus {
@@ -351,192 +272,263 @@ if ($is_auth && $_SERVER['REQUEST_METHOD'] === 'POST') {
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
         }
 
-        textarea.input-control {
-            resize: vertical;
-            min-height: 85px;
+        .key-output-box {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px dashed #10b981;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
         }
 
-        .section-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 16px;
+        .key-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 24px;
+            font-weight: 800;
+            color: #34d399;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            color: #f1f5f9;
+            gap: 10px;
         }
 
-        .section-title i {
-            color: var(--accent);
+        .alert-success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #6ee7b7;
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .info-pill {
-            display: inline-block;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 4px 8px;
-            border-radius: 6px;
-            color: #94a3b8;
-        }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
     </style>
 </head>
 <body>
     <div class="container">
 
         <?php if (!empty($error_msg)): ?>
-            <div class="alert alert-error">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-                <div><?php echo htmlspecialchars($error_msg); ?></div>
-            </div>
+            <div class="alert-error"><i class="fa-solid fa-triangle-exclamation"></i> <?php echo htmlspecialchars($error_msg); ?></div>
         <?php endif; ?>
 
         <?php if (!empty($success_msg)): ?>
-            <div class="alert alert-success">
-                <i class="fa-solid fa-circle-check"></i>
-                <div><?php echo htmlspecialchars($success_msg); ?></div>
-            </div>
+            <div class="alert-success"><i class="fa-solid fa-circle-check"></i> <?php echo htmlspecialchars($success_msg); ?></div>
         <?php endif; ?>
 
         <?php if (!$is_auth): ?>
-            <!-- LOGIN SCREEN FOR OWNER -->
-            <div class="card" style="text-align: center; padding: 40px 30px;">
-                <div style="font-size: 44px; color: var(--accent); margin-bottom: 16px;">
+            <!-- LOGIN TO DEVELOPER AUTHORITY -->
+            <div class="card" style="text-align: center; padding: 45px 30px;">
+                <div style="font-size: 46px; color: var(--accent); margin-bottom: 16px;">
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
-                <h1 style="font-size: 24px; font-weight: 800; margin-bottom: 8px;">Software Owner Authority</h1>
-                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 28px;">Enter your Master Owner Key to manage system locks & licenses.</p>
+                <h1 style="font-size: 24px; font-weight: 800; margin-bottom: 6px;">Developer Authority Portal</h1>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 28px;">Generate Commercial License Keys & Manage Software Access</p>
 
                 <form method="POST" action="owner_lock.php">
                     <div class="form-group" style="text-align: left;">
-                        <label for="login_key"><i class="fa-solid fa-key"></i> Master Key / PIN</label>
-                        <input type="password" id="login_key" name="login_key" class="input-control" placeholder="Enter Master Key" required autofocus>
+                        <label for="login_password"><i class="fa-solid fa-key"></i> Master Developer Password</label>
+                        <input type="password" id="login_password" name="login_password" class="input-control" placeholder="Enter Developer Password" required autofocus>
                     </div>
 
-                    <button type="submit" class="action-button btn-primary" style="margin-top: 24px;">
-                        <i class="fa-solid fa-unlock"></i> Authenticate as Owner
+                    <button type="submit" class="btn-action btn-primary" style="width: 100%; justify-content: center; margin-top: 20px; padding: 14px;">
+                        <i class="fa-solid fa-unlock"></i> Open Licensing Control
                     </button>
                 </form>
 
                 <div style="margin-top: 24px; font-size: 12px; color: #475569;">
-                    Default Master Key: <span class="info-pill">Sudarshan@2026</span>
+                    Default Developer Password: <span class="code-pill">Sudarshan@2026</span>
                 </div>
             </div>
 
         <?php else: ?>
-            <!-- AUTHORIZED OWNER CONTROL DASHBOARD -->
-            <div class="header-bar">
-                <h2><i class="fa-solid fa-shield-halved"></i> Master Owner Control</h2>
-                <a href="owner_lock.php?action=logout" class="btn-logout">
-                    <i class="fa-solid fa-right-from-bracket"></i> Lock & Exit
+            <!-- DEVELOPER LICENSING HUB -->
+            <div class="header">
+                <h1><i class="fa-solid fa-shield-halved" style="color: var(--accent);"></i> Developer Licensing Hub</h1>
+                <a href="owner_lock.php?action=logout" class="btn-action btn-outline" style="font-size: 13px;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
                 </a>
             </div>
 
-            <!-- LIVE STATUS HERO -->
-            <div class="status-hero <?php echo $lock_data['locked'] ? 'locked' : 'unlocked'; ?>">
-                <div class="status-icon">
-                    <i class="fa-solid <?php echo $lock_data['locked'] ? 'fa-lock' : 'fa-lock-open'; ?>"></i>
+            <!-- SYSTEM STATUS BANNER -->
+            <div class="status-hero <?php echo $is_system_active ? 'active' : 'locked'; ?>">
+                <div>
+                    <div class="status-title">
+                        <?php if ($is_system_active): ?>
+                            <i class="fa-solid fa-circle-check" style="color: var(--success);"></i> License Status: ACTIVE
+                        <?php else: ?>
+                            <i class="fa-solid fa-ban" style="color: var(--danger);"></i> License Status: <?php echo htmlspecialchars($state['status'] ?? 'LOCKED'); ?>
+                        <?php endif; ?>
+                    </div>
+                    <div style="color: var(--text-muted); font-size: 13.5px; margin-top: 4px;">
+                        Valid Until: <strong style="color: #f8fafc;"><?php echo date('d M Y, h:i A', strtotime($state['expires_at'])); ?></strong>
+                        (<?php echo round((strtotime($state['expires_at']) - time()) / 86400); ?> days left)
+                    </div>
                 </div>
-                <div class="status-title">
-                    SYSTEM STATUS: <?php echo $lock_data['locked'] ? '🔴 LOCKED DOWN' : '🟢 UNLOCKED & ACTIVE'; ?>
-                </div>
-                <div class="status-desc">
-                    <?php if ($lock_data['locked']): ?>
-                        All user logins, member app, attendance, and administrative pages are currently blocked.
-                    <?php else: ?>
-                        The gym management software is running normally with full public and administrative access.
-                    <?php endif; ?>
-                </div>
-                <div style="margin-top: 12px;">
-                    <span class="info-pill">Last Updated: <?php echo htmlspecialchars($lock_data['updated_at'] ?? 'N/A'); ?></span>
+                <div>
+                    <span class="code-pill"><?php echo htmlspecialchars($state['installation_id']); ?></span>
                 </div>
             </div>
 
-            <!-- TOGGLE LOCK SWITCH -->
-            <div class="card">
-                <form method="POST" action="owner_lock.php" onsubmit="return confirm('Are you sure you want to change the System Lock status?');">
-                    <?php if ($lock_data['locked']): ?>
-                        <input type="hidden" name="toggle_lock" value="unlock">
-                        <button type="submit" class="action-button btn-unlock">
-                            <i class="fa-solid fa-unlock-keyhole"></i> UNLOCK SYSTEM (RESUME NORMAL ACCESS)
-                        </button>
-                    <?php else: ?>
-                        <input type="hidden" name="toggle_lock" value="lock">
-                        <button type="submit" class="action-button btn-lock">
-                            <i class="fa-solid fa-ban"></i> LOCK ENTIRE SYSTEM (SUSPEND ALL ACCESS)
-                        </button>
-                    <?php endif; ?>
-                </form>
+            <!-- KEY GENERATOR BOX (IF GENERATED) -->
+            <?php if (!empty($generated_key)): ?>
+            <div class="key-output-box">
+                <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px;">
+                    🎉 Share this Activation Key with your Buyer / Gym Owner:
+                </div>
+                <div class="key-text" id="generatedKeyBox"><?php echo $generated_key; ?></div>
+                <button type="button" class="btn-action btn-success" onclick="navigator.clipboard.writeText('<?php echo $generated_key; ?>'); alert('Activation Key Copied to Clipboard!');">
+                    <i class="fa-solid fa-copy"></i> Copy Key for WhatsApp
+                </button>
             </div>
+            <?php endif; ?>
 
-            <!-- EDIT LOCK SCREEN MESSAGE -->
+            <!-- 1. GENERATE COMMERCIAL ACTIVATION KEY -->
             <div class="card">
-                <div class="section-title">
-                    <i class="fa-solid fa-pen-to-square"></i> Customize Lock Screen Notice
+                <div style="font-size: 16px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-key" style="color: var(--amber);"></i> Generate Activation Key for Client
                 </div>
                 <form method="POST" action="owner_lock.php">
-                    <input type="hidden" name="update_notice" value="1">
+                    <input type="hidden" name="action_generate_key" value="1">
                     
-                    <div class="form-group">
-                        <label for="lock_title">Screen Headline Title</label>
-                        <input type="text" id="lock_title" name="lock_title" class="input-control" value="<?php echo htmlspecialchars($lock_data['lock_title'] ?? ''); ?>" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="lock_message">Lock Notice Message</label>
-                        <textarea id="lock_message" name="lock_message" class="input-control" rows="3"><?php echo htmlspecialchars($lock_data['lock_message'] ?? ''); ?></textarea>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div class="grid-2">
                         <div class="form-group">
-                            <label for="contact_person">Owner / Authority Name</label>
-                            <input type="text" id="contact_person" name="contact_person" class="input-control" value="<?php echo htmlspecialchars($lock_data['contact_person'] ?? ''); ?>">
+                            <label>Target System ID</label>
+                            <input type="text" name="target_inst_id" class="input-control" value="<?php echo htmlspecialchars($state['installation_id']); ?>" required>
                         </div>
-
                         <div class="form-group">
-                            <label for="contact_phone">Contact Phone / Email</label>
-                            <input type="text" id="contact_phone" name="contact_phone" class="input-control" value="<?php echo htmlspecialchars($lock_data['contact_phone'] ?? ''); ?>">
+                            <label>Subscription Duration</label>
+                            <select name="duration_days" class="input-control" style="cursor: pointer;">
+                                <option value="15">15 Days (Trial)</option>
+                                <option value="30" selected>1 Month (30 Days)</option>
+                                <option value="60">2 Months (60 Days)</option>
+                                <option value="90">3 Months (90 Days)</option>
+                                <option value="180">6 Months (180 Days)</option>
+                                <option value="365">1 Year (365 Days)</option>
+                                <option value="730">2 Years (730 Days)</option>
+                                <option value="1095">3 Years (1095 Days)</option>
+                            </select>
                         </div>
                     </div>
 
-                    <button type="submit" class="action-button btn-primary" style="margin-top: 10px; font-size: 14px; padding: 12px;">
-                        <i class="fa-solid fa-floppy-disk"></i> Save Lock Notice Details
+                    <button type="submit" class="btn-action btn-primary" style="width: 100%; justify-content: center;">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Cryptographic Key
                     </button>
                 </form>
             </div>
 
-            <!-- CHANGE MASTER KEY -->
+            <!-- 2. QUICK DIRECT EXTEND / HARD-LOCK -->
             <div class="card">
-                <div class="section-title">
-                    <i class="fa-solid fa-key"></i> Change Master Owner Key
+                <div style="font-size: 16px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-bolt" style="color: var(--accent);"></i> Quick Controls for this Installation
+                </div>
+
+                <div class="grid-2">
+                    <!-- Direct Extend -->
+                    <form method="POST" action="owner_lock.php">
+                        <input type="hidden" name="action_direct_extend" value="1">
+                        <label>Directly Add Subscription Time</label>
+                        <div style="display: flex; gap: 8px;">
+                            <select name="extend_days" class="input-control">
+                                <option value="30">+30 Days (1 Mo)</option>
+                                <option value="90">+90 Days (3 Mo)</option>
+                                <option value="180">+180 Days (6 Mo)</option>
+                                <option value="365">+365 Days (1 Yr)</option>
+                            </select>
+                            <button type="submit" class="btn-action btn-success">
+                                <i class="fa-solid fa-plus"></i> Extend
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Force Lock -->
+                    <form method="POST" action="owner_lock.php" onsubmit="return confirm('Immediately lock down the entire software? All users will be blocked.');">
+                        <input type="hidden" name="action_force_lock" value="1">
+                        <label>Instant Software Lockdown</label>
+                        <input type="hidden" name="lock_reason" value="Subscription payment overdue. Contact Developer.">
+                        <button type="submit" class="btn-action btn-danger" style="width: 100%; justify-content: center; height: 44px;">
+                            <i class="fa-solid fa-ban"></i> LOCK SOFTWARE NOW
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 3. DEVELOPER CONTACT SETTINGS -->
+            <div class="card">
+                <div style="font-size: 16px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-address-card" style="color: #38bdf8;"></i> Developer / Vendor Contact on Lock Screen
                 </div>
                 <form method="POST" action="owner_lock.php">
-                    <input type="hidden" name="change_key" value="1">
+                    <input type="hidden" name="action_update_info" value="1">
 
-                    <div class="form-group">
-                        <label for="current_key">Current Master Key</label>
-                        <input type="password" id="current_key" name="current_key" class="input-control" placeholder="Enter current master key" required>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                    <div class="grid-2">
                         <div class="form-group">
-                            <label for="new_key">New Master Key</label>
-                            <input type="password" id="new_key" name="new_key" class="input-control" placeholder="At least 6 characters" required>
+                            <label>Client Gym Name</label>
+                            <input type="text" name="client_name" class="input-control" value="<?php echo htmlspecialchars($state['client_name'] ?? ''); ?>">
                         </div>
                         <div class="form-group">
-                            <label for="confirm_key">Confirm New Key</label>
-                            <input type="password" id="confirm_key" name="confirm_key" class="input-control" placeholder="Repeat new key" required>
+                            <label>Developer / Owner Name</label>
+                            <input type="text" name="vendor_name" class="input-control" value="<?php echo htmlspecialchars($state['vendor_name'] ?? ''); ?>" required>
                         </div>
                     </div>
 
-                    <button type="submit" class="action-button btn-primary" style="margin-top: 10px; font-size: 14px; padding: 12px;">
-                        <i class="fa-solid fa-shield-halved"></i> Update Master Key
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Developer Phone / WhatsApp (for renewal)</label>
+                            <input type="text" name="vendor_phone" class="input-control" value="<?php echo htmlspecialchars($state['vendor_phone'] ?? ''); ?>">
+                        </div>
+                        <div class="form-group">
+                            <label>Developer Email</label>
+                            <input type="email" name="vendor_email" class="input-control" value="<?php echo htmlspecialchars($state['vendor_email'] ?? ''); ?>">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-action btn-outline" style="width: 100%; justify-content: center;">
+                        <i class="fa-solid fa-floppy-disk"></i> Save Contact Info
                     </button>
                 </form>
             </div>
 
-            <div style="text-align: center; font-size: 12px; color: #64748b; margin-top: 20px;">
-                <i class="fa-solid fa-lock"></i> Sudarshan Fitness Owner Authority Killswitch &bull; Powered by Antigravity
+            <!-- 4. CHANGE MASTER PASSWORD -->
+            <div class="card">
+                <div style="font-size: 16px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-lock" style="color: #a855f7;"></i> Change Master Developer Password
+                </div>
+                <form method="POST" action="owner_lock.php">
+                    <input type="hidden" name="action_change_pwd" value="1">
+
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label>Current Password</label>
+                            <input type="password" name="old_pwd" class="input-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <input type="password" name="new_pwd" class="input-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" name="conf_pwd" class="input-control" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-action btn-outline" style="width: 100%; justify-content: center;">
+                        <i class="fa-solid fa-shield-halved"></i> Update Password
+                    </button>
+                </form>
             </div>
 
         <?php endif; ?>

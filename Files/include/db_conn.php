@@ -15,21 +15,16 @@ ini_set('display_errors', 0);
 ini_set('log_errors', 1); // Log them silently instead of breaking UI
 ini_set('error_log', __DIR__ . '/php_error_log.txt');
 
-// Master Owner Authority Lock Check
-$owner_lock_file = __DIR__ . '/owner_lock_state.json';
-if (file_exists($owner_lock_file)) {
-    $owner_lock_raw = @file_get_contents($owner_lock_file);
-    if (!empty($owner_lock_raw)) {
-        $lock_data = @json_decode($owner_lock_raw, true);
-        if (is_array($lock_data) && !empty($lock_data['locked'])) {
-            $current_script = basename(isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : (isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : ''));
-            // Whitelist owner lock dashboard, deployment webhook, and CLI cron jobs
-            if ($current_script !== 'owner_lock.php' && $current_script !== 'deploy.php' && php_sapi_name() !== 'cli') {
-                http_response_code(503);
-                include __DIR__ . '/owner_lock_screen.php';
-                exit;
-            }
-        }
+// Master Commercial Software License & Lockdown Engine
+require_once __DIR__ . '/license_engine.php';
+$license_check = LicenseEngine::check_license();
+if (!$license_check['valid']) {
+    $current_script = basename(isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : (isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : ''));
+    // Whitelist developer licensing portal, deployment webhook, and CLI cron jobs
+    if ($current_script !== 'owner_lock.php' && $current_script !== 'deploy.php' && php_sapi_name() !== 'cli') {
+        http_response_code(402);
+        include __DIR__ . '/license_lock_screen.php';
+        exit;
     }
 }
 
