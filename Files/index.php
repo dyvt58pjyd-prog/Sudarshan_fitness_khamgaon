@@ -43,11 +43,11 @@ if (substr($logo_path, 0, 6) === '../../') {
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- OpenGraph SEO -->
     <meta property="og:title" content="<?php echo htmlspecialchars($gym['gym_name']); ?> | System Portal">
-    <meta property="og:description" content="Hidden Leaf Portal | Access your premium Sudarshan Fitness portal.">
+    <meta property="og:description" content="Sudarshan Fitness | Access your premium Sudarshan Fitness portal.">
     <meta property="og:image" content="<?php echo htmlspecialchars($logo_path); ?>">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
-	<title>[HIDDEN LEAF PORTAL] <?php echo htmlspecialchars($gym['gym_name']); ?> | Gate Login</title>
+	<title>[SUDARSHAN FITNESS] <?php echo htmlspecialchars($gym['gym_name']); ?> | Gate Login</title>
 	<link rel="shortcut icon" href="<?php echo htmlspecialchars($logo_path); ?>" type="image/jpeg">
     <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
@@ -286,7 +286,7 @@ if (substr($logo_path, 0, 6) === '../../') {
         <div class="login-container">
             <div class="login-header login-caret">
                 <div class="login-content" style="text-align: center;">
-                    <div style="font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; color: #ff7b00; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; text-shadow: 0 0 12px rgba(255,123,0,0.5);">[ HIDDEN LEAF PORTAL ]</div>
+                    <div style="font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; color: #ff7b00; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; text-shadow: 0 0 12px rgba(255,123,0,0.5);">[ SUDARSHAN FITNESS ]</div>
                     
                     <!-- Hanuman Motivation Avatar -->
                     <div style="margin: 15px auto 25px auto; text-align: center;">
