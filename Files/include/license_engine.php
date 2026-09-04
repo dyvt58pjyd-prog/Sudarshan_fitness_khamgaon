@@ -9,16 +9,16 @@ class LicenseEngine {
     public static function get_state() {
         if (!file_exists(self::$license_file)) {
             $initial = [
-                'status' => 'ACTIVE', // 'ACTIVE', 'LOCKED', 'EXPIRED'
+                'status' => 'EXPIRED', // Forced to expired to show the lock screen
                 'installation_id' => 'SF-GYM-' . strtoupper(substr(md5($_SERVER['HTTP_HOST'] ?? 'sudarshanfitness.de'), 0, 6)),
                 'client_name' => 'Sudarshan Fitness Khamgaon',
                 'vendor_name' => 'Anurag Bawaskar (Software Developer & Owner)',
-                'vendor_phone' => '+91 8888888888',
+                'vendor_phone' => '+91 8459962390',
                 'vendor_email' => 'contact@sudarshanfitness.de',
                 'activated_at' => date('Y-m-d H:i:s'),
-                'expires_at' => date('Y-m-d 23:59:59', strtotime('+30 days')), // Default 30 day grace period
+                'expires_at' => date('Y-m-d H:i:s', strtotime('-1 days')), // Expired yesterday
                 'last_verified_at' => date('Y-m-d H:i:s'),
-                'lock_reason' => 'Software Subscription Renewal Required.'
+                'lock_reason' => 'Software Subscription Renewal Required. Please contact the Developer.'
             ];
             @file_put_contents(self::$license_file, json_encode($initial, JSON_PRETTY_PRINT));
             return $initial;
