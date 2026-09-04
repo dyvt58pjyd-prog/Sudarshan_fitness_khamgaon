@@ -78,6 +78,15 @@ if ($is_auth && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $success_msg = "SOFTWARE HAS BEEN HARD-LOCKED. All client access is suspended.";
     }
 
+    // 3.5 Force Expire (Reset to 0 Days)
+    if (isset($_POST['action_force_expire'])) {
+        $state['status'] = 'EXPIRED';
+        $state['expires_at'] = date('Y-m-d H:i:s', strtotime('-1 days'));
+        $state['lock_reason'] = 'Software license expired. Renewal required.';
+        LicenseEngine::save_state($state);
+        $success_msg = "LICENSE EXPIRED. Days reset to 0. Customer must buy a new license to continue.";
+    }
+
     // 4. Update Developer Contact Info & Client Info
     if (isset($_POST['action_update_info'])) {
         $state['client_name'] = trim($_POST['client_name'] ?? '');
@@ -436,31 +445,40 @@ $is_system_active = $license_check['valid'];
                     <i class="fa-solid fa-bolt" style="color: var(--accent);"></i> Quick Controls for this Installation
                 </div>
 
-                <div class="grid-2">
+                <div class="grid-3">
                     <!-- Direct Extend -->
                     <form method="POST" action="owner_lock.php">
                         <input type="hidden" name="action_direct_extend" value="1">
-                        <label>Directly Add Subscription Time</label>
+                        <label>Add Time</label>
                         <div style="display: flex; gap: 8px;">
-                            <select name="extend_days" class="input-control">
-                                <option value="30">+30 Days (1 Mo)</option>
-                                <option value="90">+90 Days (3 Mo)</option>
-                                <option value="180">+180 Days (6 Mo)</option>
-                                <option value="365">+365 Days (1 Yr)</option>
+                            <select name="extend_days" class="input-control" style="width: 110px; padding: 12px 8px;">
+                                <option value="30">+30 Days</option>
+                                <option value="90">+90 Days</option>
+                                <option value="180">+180 Days</option>
+                                <option value="365">+365 Days</option>
                             </select>
-                            <button type="submit" class="btn-action btn-success">
-                                <i class="fa-solid fa-plus"></i> Extend
+                            <button type="submit" class="btn-action btn-success" style="padding: 12px 10px;">
+                                <i class="fa-solid fa-plus"></i> Add
                             </button>
                         </div>
+                    </form>
+
+                    <!-- Force Expire -->
+                    <form method="POST" action="owner_lock.php" onsubmit="return confirm('Expire the license and reset days to 0? The customer will need to buy a new license.');">
+                        <input type="hidden" name="action_force_expire" value="1">
+                        <label>Reset License</label>
+                        <button type="submit" class="btn-action btn-outline" style="width: 100%; justify-content: center; height: 44px; border-color: #f59e0b; color: #f59e0b;">
+                            <i class="fa-solid fa-clock-rotate-left"></i> EXPIRE (0 DAYS)
+                        </button>
                     </form>
 
                     <!-- Force Lock -->
                     <form method="POST" action="owner_lock.php" onsubmit="return confirm('Immediately lock down the entire software? All users will be blocked.');">
                         <input type="hidden" name="action_force_lock" value="1">
-                        <label>Instant Software Lockdown</label>
+                        <label>Instant Lockdown</label>
                         <input type="hidden" name="lock_reason" value="Subscription payment overdue. Contact Developer.">
                         <button type="submit" class="btn-action btn-danger" style="width: 100%; justify-content: center; height: 44px;">
-                            <i class="fa-solid fa-ban"></i> LOCK SOFTWARE NOW
+                            <i class="fa-solid fa-ban"></i> LOCK NOW
                         </button>
                     </form>
                 </div>
