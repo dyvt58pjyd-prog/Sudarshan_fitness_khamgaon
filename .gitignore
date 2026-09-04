@@ -36,3 +36,4 @@ android_twa/upload_cert.pem
 # APK/AAB binaries (served from Files/ not repo)
 *.apk
 *.aab
+Files/include/license_data.json
