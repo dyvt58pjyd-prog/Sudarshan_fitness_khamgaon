@@ -410,42 +410,42 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
 			<?php if (in_array($current_role, ['super_admin', 'owner', 'reception'])): ?>
 			<!-- 💰 FINANCIAL REVENUE & INCOME DASHBOARD WIDGET -->
-			<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(13, 17, 23, 0.95) 100%); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 20px; padding: 22px 24px; margin-top: 15px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
-				<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom: 18px; border-bottom: 1px solid rgba(16, 185, 129, 0.2); padding-bottom: 12px;">
-					<div style="display:flex; align-items:center; gap:10px;">
-						<span style="font-size: 26px;">💰</span>
+			<div style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(25px) saturate(200%); -webkit-backdrop-filter: blur(25px) saturate(200%); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 24px; padding: 24px; margin-top: 15px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+				<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom: 20px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); padding-bottom: 16px;">
+					<div style="display:flex; align-items:center; gap:12px;">
+						<span style="font-size: 28px;">💰</span>
 						<div>
-							<h3 style="color: #ffffff; font-weight: 800; font-size: 16px; margin: 0; text-transform: uppercase; letter-spacing: 1px;">Financial Income &amp; Revenue Overview</h3>
-							<span style="color: #94a3b8; font-size: 12px;">Audited physical cash drawer &amp; digital bank ledger</span>
+							<h3 style="color: #1d1d1f; font-weight: 800; font-size: 18px; margin: 0; letter-spacing: -0.5px; font-family: 'Inter', sans-serif;">Financial Overview</h3>
+							<span style="color: #86868b; font-size: 13px; font-weight: 500;">Audited physical cash & digital ledger</span>
 						</div>
 					</div>
-					<div style="display:flex; gap:8px;">
-						<a href="revenue_month.php" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #6ee7b7; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none;">Monthly Income &amp; Auditing →</a>
-						<a href="expenses.php" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none;">Expenses Ledger →</a>
+					<div style="display:flex; gap:10px;">
+						<a href="revenue_month.php" style="background: rgba(52, 199, 89, 0.1); border: 1px solid rgba(52, 199, 89, 0.2); color: #34c759; padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s;">Income & Auditing →</a>
+						<a href="expenses.php" style="background: rgba(255, 59, 48, 0.1); border: 1px solid rgba(255, 59, 48, 0.2); color: #ff3b30; padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s;">Expenses Ledger →</a>
 					</div>
 				</div>
 
 				<div class="row" style="margin:0;">
 					<!-- Monthly Net Cash in Hand -->
 					<div class="col-md-3 col-sm-6" style="padding: 6px;">
-						<div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 14px; padding: 16px; text-align: center;">
-							<div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">💵 Physical Cash in Hand</div>
-							<div style="color: <?php echo $month_net_cash >= 0 ? '#f59e0b' : '#ef4444'; ?>; font-size: 26px; font-weight: 900; margin-top: 4px;">₹<?php echo number_format($month_net_cash); ?></div>
-							<div style="display: flex; justify-content: space-around; margin-top: 8px; border-top: 1px dashed rgba(255,255,255,0.12); padding-top: 6px; font-size: 10.5px; font-weight: 800;">
-								<span style="color: #10b981;" title="Cash Inflow">+₹<?php echo number_format($month_cash_income); ?></span>
-								<span style="color: #ef4444;" title="Cash Expenses">-₹<?php echo number_format($month_cash_expense); ?></span>
+						<div style="background: rgba(255, 149, 0, 0.05); border: 1px solid rgba(255, 149, 0, 0.2); border-radius: 16px; padding: 20px; text-align: center;">
+							<div style="color: #86868b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">💵 Physical Cash</div>
+							<div style="color: <?php echo $month_net_cash >= 0 ? '#ff9500' : '#ff3b30'; ?>; font-size: 28px; font-weight: 800; margin-top: 8px; font-family: 'Inter', sans-serif;">₹<?php echo number_format($month_net_cash); ?></div>
+							<div style="display: flex; justify-content: space-around; margin-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 10px; font-size: 12px; font-weight: 600;">
+								<span style="color: #34c759;" title="Cash Inflow">+₹<?php echo number_format($month_cash_income); ?></span>
+								<span style="color: #ff3b30;" title="Cash Expenses">-₹<?php echo number_format($month_cash_expense); ?></span>
 							</div>
 						</div>
 					</div>
 
 					<!-- Monthly Digital / UPI Surplus -->
 					<div class="col-md-3 col-sm-6" style="padding: 6px;">
-						<div style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 14px; padding: 16px; text-align: center;">
-							<div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">💳 Digital / UPI Surplus</div>
-							<div style="color: <?php echo $month_net_upi >= 0 ? '#38bdf8' : '#ef4444'; ?>; font-size: 26px; font-weight: 900; margin-top: 4px;">₹<?php echo number_format($month_net_upi); ?></div>
-							<div style="display: flex; justify-content: space-around; margin-top: 8px; border-top: 1px dashed rgba(255,255,255,0.12); padding-top: 6px; font-size: 10.5px; font-weight: 800;">
-								<span style="color: #10b981;" title="UPI Inflow">+₹<?php echo number_format($month_upi_income); ?></span>
-								<span style="color: #ef4444;" title="UPI Expenses">-₹<?php echo number_format($month_upi_expense); ?></span>
+						<div style="background: rgba(0, 122, 255, 0.05); border: 1px solid rgba(0, 122, 255, 0.2); border-radius: 16px; padding: 20px; text-align: center;">
+							<div style="color: #86868b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">💳 Digital / UPI</div>
+							<div style="color: <?php echo $month_net_upi >= 0 ? '#007aff' : '#ff3b30'; ?>; font-size: 28px; font-weight: 800; margin-top: 8px; font-family: 'Inter', sans-serif;">₹<?php echo number_format($month_net_upi); ?></div>
+							<div style="display: flex; justify-content: space-around; margin-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 10px; font-size: 12px; font-weight: 600;">
+								<span style="color: #34c759;" title="UPI Inflow">+₹<?php echo number_format($month_upi_income); ?></span>
+								<span style="color: #ff3b30;" title="UPI Expenses">-₹<?php echo number_format($month_upi_expense); ?></span>
 							</div>
 						</div>
 					</div>
@@ -479,21 +479,29 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
                 gap: 20px !important;
             }
             .dashboard-grid a div, .dashboard-grid div.grid-action-box {
-                background: rgba(15, 7, 18, 0.94) !important;
-                border: 1px solid rgba(255, 107, 0, 0.4) !important;
-                border-radius: 18px !important;
-                box-shadow: 0 0 25px rgba(255, 107, 0, 0.2) !important;
-                transition: all 0.25s ease-in-out !important;
+                background: rgba(255, 255, 255, 0.8) !important;
+                backdrop-filter: blur(25px) saturate(200%) !important;
+                -webkit-backdrop-filter: blur(25px) saturate(200%) !important;
+                border: 1px solid rgba(255, 255, 255, 0.6) !important;
+                border-radius: 24px !important;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255,255,255,0.8) !important;
+                transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+                color: #1d1d1f !important;
             }
             .dashboard-grid a div:hover {
-                border-color: #ff6b00 !important;
-                box-shadow: 0 0 40px rgba(255, 107, 0, 0.7), 0 0 70px rgba(255, 215, 0, 0.4) !important;
+                background: rgba(255, 255, 255, 0.95) !important;
+                border-color: #007aff !important;
+                box-shadow: 0 15px 35px rgba(0, 122, 255, 0.15), inset 0 1px 0 rgba(255,255,255,0.8) !important;
                 transform: translateY(-4px) scale(1.02) !important;
             }
             .dashboard-grid a div h4 {
-                font-family: 'Orbitron', sans-serif !important;
-                color: #ff6b00 !important;
-                letter-spacing: 0.5px !important;
+                font-family: 'Inter', -apple-system, sans-serif !important;
+                color: #1d1d1f !important;
+                letter-spacing: -0.3px !important;
+                font-weight: 700 !important;
+            }
+            .dashboard-grid a div span {
+                color: #86868b !important;
             }
             
             @media (max-width: 767px) {
@@ -526,9 +534,9 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					
 					<!-- Category 1: 👥 FRONT DESK & VISITOR MANAGEMENT -->
 					<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
-					<div style="margin-bottom: 35px;">
-						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
-							<span style="font-size: 22px;">👥</span> Front Desk & Visitor Management
+					<div style="margin-bottom: 40px;">
+						<h3 style="color: #1d1d1f; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
+							<span style="font-size: 24px;">👥</span> Front Desk & Visitor Management
 						</h3>
 						<div class="dashboard-grid">
 							
@@ -619,7 +627,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
 					<!-- Category 2: 🔑 ATTENDANCE & BIOMETRIC CONTROL -->
 					<div style="margin-bottom: 35px;">
-						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+						<h3 style="color: #1d1d1f; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
 							<span style="font-size: 22px;">🔑</span> Attendance & Access Control
 						</h3>
 						<div class="dashboard-grid">
@@ -704,7 +712,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
 					<!-- Category 3: 📋 MEMBERS & SYSTEM DIRECTORY -->
 					<div style="margin-bottom: 35px;">
-						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+						<h3 style="color: #1d1d1f; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
 							<span style="font-size: 22px;">📋</span> Members & Fitness Directory
 						</h3>
 						<div class="dashboard-grid">
@@ -744,7 +752,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					<!-- Category 4: 💰 BILLING, SUBSCRIPTIONS & ANALYTICS -->
 					<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
 					<div style="margin-bottom: 35px;">
-						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+						<h3 style="color: #1d1d1f; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
 							<span style="font-size: 22px;">💰</span> Billing, Subscriptions & Analytics
 						</h3>
 						<div class="dashboard-grid">
@@ -869,7 +877,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					<!-- Category 5: 🏋️ PERSONAL TRAINING & EXERCISE ROUTINES -->
 					<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'trainer' || $current_role === 'reception'): ?>
 					<div style="margin-bottom: 35px;">
-						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+						<h3 style="color: #1d1d1f; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
 							<span style="font-size: 22px;">🏋️</span> Personal Training & Routines
 						</h3>
 						<div class="dashboard-grid">
@@ -969,7 +977,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					<!-- Category 6: ⚙️ SYSTEM SETTINGS & ADMIN CONTROL -->
 					<?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
 					<div style="margin-bottom: 30px;">
-						<h3 style="color: #ffffff; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+						<h3 style="color: #1d1d1f; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
 							<span style="font-size: 22px;">⚙️</span> System Settings & Admin Panel
 						</h3>
 						<div class="dashboard-grid">

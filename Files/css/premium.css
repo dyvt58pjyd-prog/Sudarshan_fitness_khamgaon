@@ -146,16 +146,34 @@ body, html {
 /* ==================
    DASHBOARD TILES
    ================== */
-.page-container { background: var(--bg-darker) !important; }
-.main-content { background: var(--bg-dark) !important; min-height: 100vh; padding: 24px !important; }
+.page-container { 
+    background-color: #f5f5f7 !important;
+    background-image: 
+        radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+        radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+        radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%) !important;
+    background-attachment: fixed !important;
+    background-size: cover !important;
+    padding-left: 0 !important; /* Sidebar removed */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+    min-height: 100vh;
+}
+
+.main-content { 
+    background: transparent !important; 
+    min-height: 100vh; 
+    padding: 30px !important; 
+}
 
 .tile-stats {
-  background: var(--card-bg) !important;
-  border: 1px solid var(--card-border) !important;
-  border-radius: 12px !important;
-  box-shadow: var(--card-shadow) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(25px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(25px) saturate(200%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255,255,255,0.2) inset !important;
   padding: 24px !important;
-  transition: all 0.2s ease !important;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
   position: relative;
   overflow: hidden;
   margin-bottom: 24px;
@@ -164,13 +182,13 @@ body, html {
 
 .tile-stats:hover {
   transform: translateY(-4px) !important;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255,255,255,0.3) inset !important;
 }
 
-.tile-red { border-left: 4px solid var(--danger) !important; }
-.tile-green { border-left: 4px solid var(--success) !important; }
-.tile-aqua { border-left: 4px solid var(--info) !important; }
-.tile-blue { border-left: 4px solid var(--accent-primary) !important; }
+.tile-red { border-bottom: 4px solid #ff3b30 !important; border-left: none !important; }
+.tile-green { border-bottom: 4px solid #34c759 !important; border-left: none !important; }
+.tile-aqua { border-bottom: 4px solid #32ade6 !important; border-left: none !important; }
+.tile-blue { border-bottom: 4px solid #007aff !important; border-left: none !important; }
 
 .tile-stats .num h2 {
   color: var(--text-muted) !important;

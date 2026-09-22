@@ -32,52 +32,37 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
 </div>
 
 <style>
-    /* Modern SaaS Layout Fixes */
+    /* Modern SaaS Layout Fixes - Sidebar Removed */
     .page-container {
-        padding-left: 280px; /* Sidebar width */
-        transition: padding-left 0.3s ease;
-    }
-    .page-container.sidebar-collapsed {
-        padding-left: 70px;
+        padding-left: 0; /* Sidebar removed */
     }
     
     .sidebar-menu {
-        width: 280px;
-        position: fixed;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        z-index: 1000;
-        transition: width 0.3s ease;
-    }
-    .sidebar-collapsed .sidebar-menu {
-        width: 70px;
+        display: none !important; /* Force hide old sidebar container */
     }
 
-    @media (max-width: 767px) {
-        .page-container { padding-left: 0 !important; }
-        .sidebar-menu { 
-            transform: translateX(-100%);
-        }
-        .sidebar-menu.mobile-is-visible {
-            transform: translateX(0);
-        }
-        
-        .links-list {
-            display: flex !important;
-            flex-direction: row !important;
-            flex-wrap: wrap !important;
-            justify-content: center !important;
-            align-items: center !important;
-            gap: 12px !important;
-            margin-top: 10px !important;
-            padding: 0 !important;
-            float: none !important;
-        }
-        .links-list li {
-            margin: 0 !important;
-            padding: 0 !important;
-        }
+    /* Top Navigation Breadcrumb Button */
+    .btn-dashboard-home {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        padding: 8px 16px;
+        color: #1d1d1f;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .btn-dashboard-home:hover {
+        background: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.1);
     }
 </style>
 <script src="../../js/theme_engine.js"></script>
@@ -168,136 +153,12 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
     </div>
 </div>
 
-<ul id="main-menu" class="" >
-    <!-- 1. DASHBOARD -->
-    <li id="dash"><a href="index.php"><i class="entypo-gauge"></i><span>Dashboard</span></a></li>
-    
-    <!-- 2. FRONT DESK / VISITORS -->
-    <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
-        <li id="visitor_entry"><a href="visitor_entry.php" style="color: #3b82f6;"><i class="entypo-vcard"></i><span>New Visitor Entry</span></a></li>
-        <li id="visitors_list"><a href="visitors_list.php"><i class="entypo-folder"></i><span>Visitor Logs</span></a></li>
-    <?php endif; ?>
-
-    <!-- 3. MEMBERS & REGISTRATION -->
-    <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
-        <li id="regis"><a href="new_entry.php"><i class="entypo-user-add"></i><span>New Registration</span></a></li>
-        <li id="manual_approve"><a href="manual_approve.php" style="color: #f59e0b;"><i class="entypo-check"></i><span>Manual Approve (Bookings)</span></a></li>
-    <?php endif; ?>
-    
-    <li class="" id="hassubopen"><a href="#" onclick="memberExpand(1)"><i class="entypo-users"></i><span>Members</span></a>
-        <ul id="memExpand">
-            <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
-                <li class="active"><a href="view_mem.php"><span>Edit Members</span></a></li>
-            <?php endif; ?>
-            <li><a href="table_view.php"><span>View Members</span></a></li>
-            <li><a href="migrate_couples.php"><span>Link Legacy Couples</span></a></li>
-            <li id="assign_routine"><a href="assign_routine.php"><span>Assign Routines</span></a></li>
-        </ul>
-    </li>
-    <li id="searchmem"><a href="search_member.php"><i class="entypo-search"></i><span>Search Member</span></a></li>
-
-    <!-- 4. ATTENDANCE & ACCESS -->
-    <li id="walkin_enquiries"><a href="enquiries.php" style="color: #ff6b00;"><i class="entypo-user-add"></i><span>📝 Walk-In Enquiries</span></a></li>
-    <li id="print_visitor_qr"><a href="print_enquiry_qr.php" target="_blank"><i class="entypo-print"></i><span>🖨️ Visitor QR Poster</span></a></li>
-    <li id="attendance_portal"><a href="attendance.php"><i class="entypo-camera"></i><span>Attendance Portal</span></a></li>
-    <li id="qr_gate_link"><a href="../../qr_checkin.php" target="_blank"><i class="entypo-vcard"></i><span>📷 QR Gate Terminal</span></a></li>
-    <li id="kiosk_link"><a href="kiosk.php" target="_blank"><i class="entypo-monitor"></i><span>Front Desk Kiosk</span></a></li>
-    <li id="biometric_manage"><a href="biometric_management.php"><i class="entypo-key"></i><span>Biometric Management</span></a></li>
-    <?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
-        <li id="biometric_logs_link"><a href="biometric_logs.php"><i class="entypo-list"></i><span>Biometric Logs</span></a></li>
-        <li id="biometric_simulator_link"><a href="biometric_simulator.php"><i class="entypo-switch"></i><span>Biometric Simulator</span></a></li>
-    <?php endif; ?>
-
-    <!-- 5. BILLING & PAYMENTS -->
-    <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
-        <li id="payment_requests"><a href="payment_requests.php" style="color: #10b981;"><i class="entypo-check"></i><span>Payment Approvals (UPI)</span></a></li>
-        <li id="paymnt"><a href="payments.php"><i class="entypo-star"></i><span>Make Payment</span></a></li>
-        <li id="pending_dues"><a href="pending_dues.php" style="color: #ef4444;"><i class="entypo-attention"></i><span>Pending Dues</span></a></li>
-        <li id="inventory"><a href="inventory.php" style="color: #10b981;"><i class="entypo-basket"></i><span>Inventory Store</span></a></li>
-        <li id="nutrition_store"><a href="nutrition_store.php" style="color: #f97316;"><i class="entypo-leaf"></i><span>🍎 Nutrition &amp; Supplement Store</span></a></li>
-        <li id="online_paymnt_records"><a href="online_payments_records.php"><i class="entypo-folder"></i><span>Online Payments Records</span></a></li>
-        <li id="invoices_link"><a href="invoices.php"><i class="entypo-doc-text"></i><span>Invoices</span></a></li>
-        <li id="renewal_remind"><a href="send_renewal_reminders.php" style="color:#f59e0b;"><i class="entypo-mail"></i><span>📧 Renewal Reminders</span></a></li>
-    <?php endif; ?>
-
-    <!-- 6. ANALYTICS & SUBSCRIPTIONS -->
-    <?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
-        <li class="" id="planhassubopen"><a href="#" onclick="memberExpand(2)"><i class="entypo-quote"></i><span>Plan Details</span></a>
-            <ul id="planExpand">
-                <li class="active"><a href="new_plan.php"><span>New Plan</span></a></li>
-                <li><a href="view_plan.php"><span>Edit Subscription Details</span></a></li>
-            </ul>
-        </li>
-        <li class="" id="overviewhassubopen"><a href="#" onclick="memberExpand(3)"><i class="entypo-box"></i><span>Overview</span></a>
-            <ul id="overviewExpand">
-                <li class="active"><a href="over_members_month.php"><span>Members per Month</span></a></li>
-                <li><a href="over_members_year.php"><span>Members per Year</span></a></li>
-                <li><a href="revenue_month.php"><span>Income per Month</span></a></li>
-            </ul>
-        </li>
-        <li id="churn_analytics"><a href="churn_analytics.php"><i class="entypo-chart-line"></i><span>Churn Risk Analytics</span></a></li>
-        <li id="renewal_pipeline"><a href="renewal_pipeline.php"><i class="entypo-chart-bar"></i><span>Renewal Pipeline</span></a></li>
-    <?php endif; ?>
-
-    <!-- 7. PERSONAL TRAINING & ROUTINES -->
-    <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'trainer' || $current_role === 'reception'): ?>
-        <li class="" id="pthassubopen"><a href="#" onclick="memberExpand(5)"><i class="entypo-heart"></i><span>Personal Training</span></a>
-            <ul id="ptExpand">
-                <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
-                    <li><a href="enroll_pt.php"><span>Enroll PT Client</span></a></li>
-                <?php endif; ?>
-                <li><a href="view_pt_clients.php"><span>PT Client Assignments</span></a></li>
-                <?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
-                <li><a href="transfer_pt.php" style="color:#ff6b00;"><span>🔄 Transfer PT</span></a></li>
-                <?php endif; ?>
-                <li><a href="add_pt.php"><span>Record PT Workout/Diet</span></a></li>
-                <li><a href="view_pt.php"><span>View PT Session Logs</span></a></li>
-            </ul>
-        </li>
-    <?php endif; ?>
-    
-    <li class="" id="routinehassubopen"><a href="#" onclick="memberExpand(4)"><i class="entypo-alert"></i><span>Exercise Routine</span></a>
-        <ul id="routineExpand">
-            <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'trainer'): ?>
-                <li class="active"><a href="addroutine.php"><span>Add Routine</span></a></li>
-                <li><a href="editroutine.php"><span>Edit Routine</span></a></li>
-            <?php endif; ?>
-            <li><a href="viewroutine.php"><span>View Routine</span></a></li>
-        </ul>
-    </li>
-
-    <?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'trainer' || $current_role === 'reception'): ?>
-        <li id="bmicalc"><a href="bmi_calc.php"><i class="entypo-chart-bar"></i><span>BMI Calculator</span></a></li>
-    <?php endif; ?>
-
-    <!-- 8. SETTINGS & ADMIN -->
-    <?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
-        <li id="ai_churn_link"><a href="churn_radar.php" style="color: #38bdf8; font-weight: bold;"><i class="entypo-chart-line"></i><span>🧠 AI Churn &amp; Retention Radar</span></a></li>
-        <li id="smart_equipment_link"><a href="equipment.php" style="color: #f59e0b; font-weight: bold;"><i class="entypo-tools"></i><span>🏷️ Smart Equipment &amp; QR</span></a></li>
-        <li id="ai_manager_link"><a href="ai_gym_manager.php" style="color: #ff6b00; font-weight: bold;"><i class="entypo-light-bulb"></i><span>🤖 AI Gym Manager</span></a></li>
-        <li id="upi_pay_link"><a href="instant_upi_pay.php" style="color: #10b981;"><i class="entypo-vcard"></i><span>💳 Instant UPI Payment QR</span></a></li>
-        <li id="equipment_link"><a href="equipment_management.php" style="color: #ffb703;"><i class="entypo-tools"></i><span>🛠️ Equipment Maintenance</span></a></li>
-        <li id="referral_link"><a href="../member/referral_program.php" target="_blank" style="color: #ff6b00;"><i class="entypo-share"></i><span>🎁 Member Referral Rewards</span></a></li>
-        <li id="announcements_link"><a href="announcements.php" style="color: #ffb703;"><i class="entypo-megaphone"></i><span>📢 Gym Announcements</span></a></li>
-        <li id="live_occupancy_link"><a href="live_occupancy.php" style="color: #10b981;"><i class="entypo-users"></i><span>⚡ Live Gym Occupancy</span></a></li>
-        <li id="digital_pass_link"><a href="../member/digital_pass.php" target="_blank" style="color: #ff6b00;"><i class="entypo-vcard"></i><span>🆔 Member Digital Pass</span></a></li>
-        <li id="challenges_link"><a href="challenges_leaderboard.php" style="color: #ffb703;"><i class="entypo-trophy"></i><span>🏆 Gym Leaderboard &amp; Badges</span></a></li>
-        <li id="indian_diet_link"><a href="indian_diet_planner.php" style="color: #10b981;"><i class="entypo-heart"></i><span>🍛 Indian Diet Planner</span></a></li>
-        <li id="trainers_manage"><a href="trainers.php"><i class="entypo-user"></i><span>🏋️ Gym Trainers</span></a></li>
-        <li id="workout_library"><a href="workout_plans.php"><i class="entypo-flash"></i><span>💪 Workout Library</span></a></li>
-        <li id="audit_logs_link"><a href="audit_log.php"><i class="entypo-book-open"></i><span>📜 Audit Logs</span></a></li>
-        <li id="security_center_link"><a href="security_center.php" style="color: #ef4444; font-weight: bold;"><i class="entypo-shield"></i><span>🛡️ Super Security Center</span></a></li>
-        <li id="sys_settings"><a href="settings.php" style="color: #10b981;"><i class="entypo-cog"></i><span>⚙️ System Settings (v2.0)</span></a></li>
-        <li id="expenses_ledger"><a href="expenses.php"><i class="entypo-book-open"></i><span>Expenses Ledger</span></a></li>
-        <li id="staffmanage"><a href="manage_staff.php"><i class="entypo-users"></i><span>Manage Staff</span></a></li>
-        <li id="gymsettings"><a href="gym_settings.php"><i class="entypo-tools"></i><span>Gym Profile Settings</span></a></li>
-        <li id="databackup"><a href="backup_data.php"><i class="entypo-drive"></i><span>Data Import/Export</span></a></li>
-    <?php endif; ?>
-
-    <!-- 9. PROFILE & LOGOUT -->
-    <li id="adminprofile"><a href="more-userprofile.php"><i class="entypo-folder"></i><span>Profile</span></a></li>
-    <li><a href="logout.php"><i class="entypo-logout"></i><span>Logout</span></a></li>
-</ul>
+<!-- Top Navigation Breadcrumb (Visible on all pages) -->
+<div style="padding: 20px 24px; position: sticky; top: 0; z-index: 900;">
+    <a href="index.php" class="btn-dashboard-home">
+        <i class="entypo-layout"></i> Dashboard Hub
+    </a>
+</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
