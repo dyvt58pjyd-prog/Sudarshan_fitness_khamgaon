@@ -143,8 +143,8 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 		}
     </style>
 </head>
-<body class="page-body page-fade" style="background-color: #f5f5f7 !important;">
-    <div class="page-container" id="navbarcollapse" style="padding-left: 0 !important; width: 100% !important; max-width: 100% !important;">	
+<body class="page-body page-fade" style="background: #f5f5f7 !important; min-height: 100vh;">
+    <div class="page-container" id="navbarcollapse" style="background: #f5f5f7 !important; padding-left: 0 !important; width: 100% !important; max-width: 100% !important; min-height: 100vh;">	
         
         <?php include('nav.php'); ?>
 

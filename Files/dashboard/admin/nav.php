@@ -32,6 +32,32 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
 </div>
 
 <style>
+    /* Security Watermark Styling */
+    .security-watermark {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 9999;
+        pointer-events: none; /* Let clicks pass through */
+        overflow: hidden;
+        display: flex;
+        flex-wrap: wrap;
+        opacity: 0.03; /* Barely visible */
+        justify-content: center;
+        align-content: center;
+        gap: 50px;
+        transform: rotate(-15deg) scale(1.5);
+    }
+    .security-watermark span {
+        font-size: 24px;
+        font-weight: 800;
+        color: #000;
+        white-space: nowrap;
+        font-family: 'Inter', sans-serif;
+    }
+
     /* Modern SaaS Layout Fixes - Sidebar Removed */
     .page-container {
         padding-left: 0; /* Sidebar removed */
