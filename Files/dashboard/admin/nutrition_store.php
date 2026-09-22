@@ -40,7 +40,7 @@ $q_orders = mysqli_query($con, "SELECT * FROM nutrition_orders ORDER BY id DESC 
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
-    <link rel="stylesheet" href="../../css/premium.css">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <style>
         .sec-card {
             background: var(--glass-bg);

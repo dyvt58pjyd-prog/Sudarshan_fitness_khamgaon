@@ -14,14 +14,15 @@ page_protect();
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
 	<link href="a1style.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
 	<style>
  		#button1
 		{
 		width:126px;
 		}
 		.page-container .sidebar-menu #main-menu li#planhassubopen > a {
-    		background-color: #2b303a;
-    		color: #ffffff;
+    		background-color: rgba(0, 122, 255, 0.1);
+    		color: #007aff;
 		}
 	</style>
 </head>

@@ -202,7 +202,7 @@ $gym = get_gym_details($con);
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
-    <link rel="stylesheet" href="../../css/premium.css">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <style>
         .page-container .sidebar-menu #main-menu li#searchmem > a {
             background-color: rgba(255, 107, 0, 0.1) !important;

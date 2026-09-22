@@ -85,12 +85,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_bmi'])) {
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
-    <link rel="stylesheet" href="../../css/premium.css">
     <link href="a1style.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <style>
         .page-container .sidebar-menu #main-menu li#bmicalc > a {
-            background-color: #2b303a;
-            color: #ffffff;
+            background-color: rgba(0, 122, 255, 0.1);
+            color: #007aff;
         }
         #boxx {
             width: 100% !important;
@@ -98,30 +98,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_bmi'])) {
         }
         textarea#boxx {
             height: auto !important;
-            background: rgba(15, 23, 42, 0.6) !important;
-            color: #ffffff !important;
-            border: 1px solid rgba(255, 107, 0, 0.3) !important;
+            background: #ffffff !important;
+            color: #1d1d1f !important;
+            border: 1px solid rgba(0, 0, 0, 0.12) !important;
             border-radius: 8px !important;
-            padding: 8px 12px !important;
-            transition: all 0.2s ease-in-out !important;
+            padding: 8px 14px !important;
+            transition: all 0.2s ease !important;
         }
         textarea#boxx:focus {
-            border-color: #ff6b00 !important;
+            border-color: #007aff !important;
             outline: none !important;
-            box-shadow: 0 0 8px rgba(255, 107, 0, 0.3) !important;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15) !important;
         }
         .a1-container table td {
             padding: 10px 0 !important;
             vertical-align: middle !important;
+            color: #1d1d1f !important;
+            font-weight: 600;
+            font-size: 13px;
         }
         .bmi-display-card {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(255, 107, 0, 0.25);
-            border-radius: 12px;
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
             padding: 25px;
             margin-top: 20px;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
         .bmi-num {
             font-size: 54px;
@@ -227,8 +230,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_bmi'])) {
                 
                 <!-- Left Column: Search Section -->
                 <div style="flex: 1; min-width: 320px;">
-                    <div class="a1-card-8 a1-light-gray" style="border-radius: 12px; overflow: hidden; border: 1px solid rgba(255, 107, 0, 0.2); box-shadow: 0 4px 20px rgba(0,0,0,0.4); padding: 20px; background: rgba(0,0,0,0.2);">
-                        <h4 style="color: #ff6b00; border-bottom: 1px solid rgba(255,107,0,0.2); padding-bottom: 10px; margin-top:0;">Find Member</h4>
+                    <div class="a1-card-8" style="border-radius: 16px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 24px; background: #ffffff;">
+                        <h4 style="color: #007aff; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 10px; margin-top:0; font-weight: 700;">Find Member</h4>
                         <form method="post" action="bmi_calc.php">
                             <table width="100%" border="0">
                                 <tr>
@@ -269,8 +272,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_bmi'])) {
                 <!-- Right Column: BMI Calculator & Health Status Form -->
                 <div style="flex: 1.5; min-width: 380px;">
                     <?php if ($member): ?>
-                        <div class="a1-card-8 a1-light-gray" style="border-radius: 12px; overflow: hidden; border: 1px solid rgba(255, 107, 0, 0.2); box-shadow: 0 4px 20px rgba(0,0,0,0.4); padding: 20px;">
-                            <div style="display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,107,0,0.2); padding-bottom: 15px; margin-bottom: 20px;">
+                        <div class="a1-card-8" style="border-radius: 16px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 24px; background: #ffffff;">
+                            <div style="display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 15px; margin-bottom: 20px;">
                                 <?php if (!empty($member['photo'])): ?>
                                     <img src="<?php echo htmlspecialchars($member['photo']); ?>" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-primary);" />
                                 <?php endif; ?>

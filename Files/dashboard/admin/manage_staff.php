@@ -82,8 +82,8 @@ if (isset($_POST['add_staff'])) {
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
-    <link rel="stylesheet" href="../../css/premium.css">
     <link href="a1style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <!-- Load Outfits font -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -91,26 +91,26 @@ if (isset($_POST['add_staff'])) {
             font-family: 'Outfit', sans-serif;
         }
         .page-container .sidebar-menu #main-menu li#staffmanage > a {
-            background-color: rgba(59, 130, 246, 0.1) !important;
+            background-color: rgba(0, 122, 255, 0.1) !important;
             color: var(--accent-primary) !important;
             font-weight: 600 !important;
             box-shadow: inset 3px 0 0 var(--accent-primary);
         }
         .form-control-premium {
-            background: rgba(15, 23, 42, 0.6) !important;
-            border: 1px solid var(--glass-border) !important;
-            border-radius: 12px !important;
-            color: var(--text-main) !important;
+            background: var(--input-bg) !important;
+            border: 1px solid var(--input-border) !important;
+            border-radius: 10px !important;
+            color: var(--input-color) !important;
             padding: 12px 15px !important;
             width: 100%;
             margin-bottom: 20px;
             font-size: 14px;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
         }
         .form-control-premium:focus {
             border-color: var(--accent-primary) !important;
-            box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.25) !important;
-            background: rgba(15, 23, 42, 0.8) !important;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15) !important;
+            background: var(--input-bg) !important;
         }
         .staff-container {
             display: grid;

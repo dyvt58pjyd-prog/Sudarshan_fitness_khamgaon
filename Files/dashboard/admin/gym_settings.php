@@ -148,32 +148,31 @@ if (isset($_POST['batch_action'])) {
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
-    <link rel="stylesheet" href="../../css/premium.css">
     <link href="a1style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <style>
         .page-container .sidebar-menu #main-menu li#gymsettings > a {
-            background-color: rgba(59, 130, 246, 0.1) !important;
+            background-color: rgba(0, 122, 255, 0.1) !important;
             color: var(--accent-primary) !important;
             font-weight: 600 !important;
             box-shadow: inset 3px 0 0 var(--accent-primary);
         }
         .form-control-premium {
-            background: rgba(15, 23, 42, 0.6) !important;
-            border: 1px solid var(--glass-border) !important;
+            background: var(--input-bg) !important;
+            border: 1px solid var(--input-border) !important;
             border-radius: 10px !important;
-            color: var(--text-main) !important;
+            color: var(--input-color) !important;
             padding: 10px !important;
             width: 100%;
             margin-bottom: 15px;
         }
         .form-control-premium:focus {
             border-color: var(--accent-primary) !important;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15) !important;
         }
         .settings-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 20px;
             padding: 30px;
             max-width: 700px;

@@ -29,7 +29,7 @@ $trainers_res = mysqli_query($con, "SELECT * FROM admin WHERE role = 'trainer'")
 <head>
     <meta charset="UTF-8">
     <title>Trainer Management | Sudarshan Fitness v2.0</title>
-    <link rel="stylesheet" href="../../css/premium.css">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="../../css/entypo.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <style>

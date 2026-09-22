@@ -41,51 +41,62 @@ if ($cnt_q) {
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
-    <link rel="stylesheet" href="../../css/premium.css">
     <link href="a1style.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <style>
     	.page-container .sidebar-menu #main-menu li#regis > a {
-    	background-color: #2b303a;
-    	color: #ffffff;
+    	background-color: rgba(0, 122, 255, 0.1);
+    	color: #007aff;
 		}
         #boxx, .boxx-style {
             width: 320px !important;
             height: 40px !important;
-            padding: 8px 12px !important;
-            font-size: 14px !important;
-            border: 1px solid rgba(255, 107, 0, 0.3) !important;
+            padding: 8px 14px !important;
+            font-size: 13.5px !important;
+            border: 1px solid rgba(0, 0, 0, 0.12) !important;
             border-radius: 8px !important;
-            background: rgba(15, 23, 42, 0.6) !important;
-            color: #ffffff !important;
+            background: #ffffff !important;
+            color: #1d1d1f !important;
             box-sizing: border-box !important;
-            transition: all 0.2s ease-in-out !important;
+            transition: all 0.2s ease !important;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03) !important;
         }
         #boxx:focus, .boxx-style:focus {
-            border-color: #ff6b00 !important;
+            border-color: #007aff !important;
             outline: none !important;
-            box-shadow: 0 0 8px rgba(255, 107, 0, 0.3) !important;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15) !important;
         }
         #boxx[readonly], .boxx-style[readonly] {
-            background: rgba(255, 255, 255, 0.05) !important;
-            color: rgba(255, 255, 255, 0.4) !important;
-            border-color: rgba(255, 255, 255, 0.1) !important;
+            background: #f5f5f7 !important;
+            color: #86868b !important;
+            border-color: rgba(0, 0, 0, 0.08) !important;
+            cursor: not-allowed;
         }
         select#boxx, select.boxx-style {
             height: 40px !important;
-            background-color: rgba(15, 23, 42, 0.6) !important;
-            color: #ffffff !important;
-            padding: 8px 12px !important;
-            border: 1px solid rgba(255, 107, 0, 0.3) !important;
+            background-color: #ffffff !important;
+            color: #1d1d1f !important;
+            padding: 8px 14px !important;
+            border: 1px solid rgba(0, 0, 0, 0.12) !important;
         }
         select#boxx option, select.boxx-style option {
-            background: #121212 !important;
-            color: #ffffff !important;
+            background: #ffffff !important;
+            color: #1d1d1f !important;
         }
-        /* Custom table td spacing to make sections distinct */
+        /* Custom table td styling: clean dark typography matching theme */
         .a1-container table td {
-            padding: 10px 0 !important;
+            padding: 9px 0 !important;
             vertical-align: middle !important;
+            color: #1d1d1f !important;
+            font-size: 12.5px !important;
+            font-weight: 600 !important;
+            letter-spacing: -0.2px !important;
+        }
+        .sf-ocr-banner {
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.06) 0%, rgba(240, 246, 255, 0.95) 100%) !important;
+            border-bottom: 1px solid rgba(0, 122, 255, 0.18) !important;
+            padding: 15px 20px !important;
         }
     </style>
 
@@ -156,20 +167,20 @@ if ($cnt_q) {
 		<hr />
         
         <div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
-        <div class="a1-card-8 a1-light-gray" style="width:620px; margin:0 auto; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255, 107, 0, 0.2); box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
-		<div class="a1-container a1-dark-gray a1-center">
-        	<h6>NEW ENTRY</h6>
+        <div class="a1-card-8" style="width:620px; margin:0 auto; border-radius: 16px; overflow: hidden; background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);">
+		<div class="a1-container a1-center" style="background: #f8fafc; border-bottom: 1px solid rgba(0, 0, 0, 0.06); padding: 14px 20px;">
+        	<h6 style="margin: 0; font-weight: 700; color: #1d1d1f; font-size: 14px; letter-spacing: 0.5px;">NEW ENTRY</h6>
         </div>
 
         <!-- 🪪 SMART AADHAAR & ID OCR AUTO-FILL SCANNER -->
-        <div style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(15, 23, 42, 0.95) 100%); border-bottom: 2px solid #38bdf8; padding: 15px 20px;">
+        <div class="sf-ocr-banner">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                 <div>
-                    <span style="font-size: 13px; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px;">🪪 Smart Aadhaar / ID Card OCR Scanner</span>
-                    <p style="margin: 3px 0 0 0; font-size: 11px; color: #94a3b8;">Upload or scan an Aadhaar / Driving License to auto-fill Name, DOB, Gender &amp; Address instantly.</p>
+                    <span style="font-size: 13px; font-weight: 700; color: #007aff; text-transform: uppercase; letter-spacing: 0.5px;">🪪 Smart Aadhaar / ID Card OCR Scanner</span>
+                    <p style="margin: 3px 0 0 0; font-size: 11.5px; color: #64748b;">Upload or scan an Aadhaar / Driving License to auto-fill Name, DOB, Gender &amp; Address instantly.</p>
                 </div>
                 <div>
-                    <label for="ocr-id-file" class="a1-btn a1-blue" style="cursor: pointer; font-size: 11.5px; font-weight: bold; border-radius: 8px; padding: 6px 14px; margin: 0; display: inline-flex; align-items: center; gap: 6px;">
+                    <label for="ocr-id-file" class="a1-btn a1-blue" style="cursor: pointer; font-size: 12px; font-weight: 600; border-radius: 8px; padding: 7px 15px; margin: 0; display: inline-flex; align-items: center; gap: 6px; background: #007aff; box-shadow: 0 2px 6px rgba(0,122,255,0.25);">
                         <i class="entypo-camera"></i> Scan ID Card
                     </label>
                     <input type="file" id="ocr-id-file" accept="image/*" style="display: none;" onchange="processIdCardOcr(this)">
@@ -210,7 +221,7 @@ if ($cnt_q) {
              </tr>
             <tr>
                <td height="35">STATE:</td>
-               <td height="35"><input type="text" name="state" id="boxx" value="Maharashtra" readonly style="background-color: #222; color: #888;" required size="30"></td>
+               <td height="35"><input type="text" name="state" id="boxx" value="Maharashtra" readonly required size="30"></td>
              </tr>
             <tr>
                <td height="35">GENDER:</td>
@@ -400,12 +411,12 @@ if ($cnt_q) {
               </script>
               <tr>
                 <td colspan="2">
-                    <div id="staff-qr-container" style="display: none; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,107,0,0.3); text-align: center; margin: 10px 0;">
-                        <h4 style="color: #fff; margin-top: 0; margin-bottom: 5px;">Scan to Pay: <span id="staff-qr-amount" style="color: #ff6b00;">₹0</span></h4>
-                        <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 15px;">Ask member to scan this QR code. Proceed to submit only after physical verification.</p>
+                    <div id="staff-qr-container" style="display: none; background: rgba(0,0,0,0.03); padding: 15px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.08); text-align: center; margin: 10px 0;">
+                        <h4 style="color: #1d1d1f; margin-top: 0; margin-bottom: 5px; font-weight: 700;">Scan to Pay: <span id="staff-qr-amount" style="color: #007aff;">₹0</span></h4>
+                        <p style="color: #64748b; font-size: 12px; margin-bottom: 15px;">Ask member to scan this QR code. Proceed to submit only after physical verification.</p>
                         <div style="position: relative; display: inline-block;">
-                            <img id="staff-qr-code" style="display: block; background: #fff; padding: 10px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); width: 200px; height: 200px;" />
-                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #2c1b18; padding: 3px; border-radius: 50%; border: 2px solid #ff6b00; box-shadow: 0 0 15px rgba(255,107,0,0.8); display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;">
+                            <img id="staff-qr-code" style="display: block; background: #fff; padding: 10px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); width: 200px; height: 200px;" />
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ffffff; padding: 3px; border-radius: 50%; border: 2px solid #007aff; box-shadow: 0 2px 8px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;">
                               <img src="<?php echo htmlspecialchars($gym['gym_logo'] ?? '../../images/logo.png'); ?>" alt="Gym Logo" style="width: 34px; height: 34px; border-radius: 50%; object-fit: contain;" />
                             </div>
                         </div>
@@ -464,20 +475,20 @@ if ($cnt_q) {
                </td>
              </tr>
              
-             <!-- COUPLE PLAN TOGGLE -->
-             <tr>
-                 <td height="35">REGISTER AS COUPLE?</td>
-                 <td height="35">
-                     <label style="color: #fff; cursor: pointer; display: flex; align-items: center; gap: 10px;">
-                         <input type="checkbox" name="is_couple" id="is_couple" value="1" onchange="toggleCoupleFields()" style="width: 20px; height: 20px;">
-                         Yes, register a partner with this plan
-                     </label>
-                 </td>
-             </tr>
-             
-             <!-- COUPLE FIELDS -->
-             <tbody id="couple_fields" style="display: none; background: rgba(255, 107, 0, 0.05);">
-                 <tr><td colspan="2"><h4 style="color: #ff6b00; margin-top: 15px; margin-bottom: 5px;">Partner Details</h4><hr style="border-color: rgba(255,107,0,0.2);"></td></tr>
+              <!-- COUPLE PLAN TOGGLE -->
+              <tr>
+                  <td height="35">REGISTER AS COUPLE?</td>
+                  <td height="35">
+                      <label style="color: #1d1d1f; cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 600;">
+                          <input type="checkbox" name="is_couple" id="is_couple" value="1" onchange="toggleCoupleFields()" style="width: 20px; height: 20px;">
+                          Yes, register a partner with this plan
+                      </label>
+                  </td>
+              </tr>
+              
+              <!-- COUPLE FIELDS -->
+              <tbody id="couple_fields" style="display: none; background: rgba(0, 122, 255, 0.04); border-radius: 8px;">
+                  <tr><td colspan="2"><h4 style="color: #007aff; margin-top: 15px; margin-bottom: 5px; font-weight: 700;">Partner Details</h4><hr style="border-color: rgba(0, 122, 255, 0.15);"></td></tr>
                  <tr>
                    <td height="35">PARTNER NAME:</td>
                    <td height="35"><input name="partner_name" id="partner_name" class="boxx-style" placeholder="Enter partner's full name"/></td>
@@ -532,11 +543,13 @@ if ($cnt_q) {
                  }
              </script>
              
-             <tr>
-             <td height="35">&nbsp;</td>
-             <td height="35"><input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="Register Member" >
-                 <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset"></td>
-             </tr>
+                          <tr>
+              <td height="35">&nbsp;</td>
+              <td height="35">
+                  <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="Register Member" style="padding: 10px 24px; font-size: 14px; font-weight: 600; border-radius: 8px; cursor: pointer;">
+                  <input class="a1-btn" type="reset" name="reset" id="reset" value="Reset" style="padding: 10px 20px; font-size: 14px; font-weight: 600; border-radius: 8px; cursor: pointer; background: #e5e5ea; color: #1d1d1f; border: none; margin-left: 8px;">
+              </td>
+              </tr>
            </table></td>
          </tr>
          </table>

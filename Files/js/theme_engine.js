@@ -6,11 +6,12 @@
 (function () {
     const THEME_KEY = 'sf_v2_theme_mode';
     const ACCENT_KEY = 'sf_v2_accent_color';
+    const MIGRATION_KEY = 'sf_v2_apple_migrated_light_v5';
 
-    // One-time automatic migration to reset stale dark/brown cache to Apple Minimalist Light
-    if (!localStorage.getItem('sf_v2_apple_migrated')) {
+    // Auto-migrate any stale dark or legacy setting to default Apple Minimalist Light
+    if (!localStorage.getItem(MIGRATION_KEY)) {
         localStorage.setItem(THEME_KEY, 'light');
-        localStorage.setItem('sf_v2_apple_migrated', '1');
+        localStorage.setItem(MIGRATION_KEY, '1');
     }
 
     function applyThemeMode(theme) {
@@ -28,6 +29,12 @@
         }
 
         localStorage.setItem(THEME_KEY, theme);
+
+        // Keep dropdown select in sync if rendered
+        const select = document.getElementById('sf-theme-select');
+        if (select && select.value !== theme) {
+            select.value = theme;
+        }
     }
 
     function applyAccentColor(color) {

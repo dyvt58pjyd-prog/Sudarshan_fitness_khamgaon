@@ -137,7 +137,7 @@ $last_sync_str = $last_heartbeat > 0 ? date("d M Y, h:i A", $last_heartbeat) : '
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
-    <link rel="stylesheet" href="../../css/premium.css">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <link href="a1style.css" rel="stylesheet" type="text/css">
     <style>
         .page-container .sidebar-menu #main-menu li#biometric_manage > a {
@@ -282,10 +282,10 @@ $last_sync_str = $last_heartbeat > 0 ? date("d M Y, h:i A", $last_heartbeat) : '
         
         .bio-id-input {
             width: 90px;
-            background: rgba(15, 23, 42, 0.6) !important;
-            border: 1px solid var(--glass-border) !important;
+            background: var(--input-bg) !important;
+            border: 1px solid var(--input-border) !important;
             border-radius: 6px !important;
-            color: var(--text-main) !important;
+            color: var(--input-color) !important;
             padding: 5px 8px !important;
             text-align: center;
             font-family: monospace;

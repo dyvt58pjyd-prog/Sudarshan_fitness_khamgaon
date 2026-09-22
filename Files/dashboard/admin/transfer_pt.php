@@ -114,7 +114,7 @@ $q_logs = mysqli_query($con, "
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
-    <link rel="stylesheet" href="../../css/premium.css">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <link href="a1style.css" rel="stylesheet" type="text/css">
     <style>
         .page-container .sidebar-menu #main-menu li#pthassubopen > a { background-color:#2b303a;color:#fff; }

@@ -109,8 +109,8 @@ if ($status === 'active') {
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
-	<link rel="stylesheet" href="../../css/premium.css">
 	<link href="a1style.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
 	
 	<style>
  	#button1
@@ -119,53 +119,54 @@ if ($status === 'active') {
 	}
 
 	.page-container .sidebar-menu #main-menu li#hassubopen > a {
-	background-color: #2b303a;
-	color: #ffffff;
+	background-color: rgba(0, 122, 255, 0.1);
+	color: #007aff;
 	}
 
 	.member-tabs-container {
 		display: flex;
-		gap: 12px;
+		gap: 10px;
 		margin-bottom: 25px;
 		flex-wrap: wrap;
 	}
 	.tab-btn {
-		background: rgba(255, 255, 255, 0.03);
-		color: #a3a3a3;
-		border: 1px solid rgba(255, 107, 0, 0.15);
-		padding: 10px 22px;
-		border-radius: 8px;
+		background: #ffffff;
+		color: #1d1d1f;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		padding: 9px 18px;
+		border-radius: 10px;
 		text-decoration: none !important;
 		font-weight: 600;
 		font-size: 13px;
-		transition: all 0.3s ease;
+		transition: all 0.2s ease;
 		display: inline-flex;
 		align-items: center;
 		gap: 8px;
-		box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+		box-shadow: 0 2px 6px rgba(0,0,0,0.03);
 	}
 	.tab-btn:hover {
-		background: rgba(255, 107, 0, 0.08);
-		color: #ffffff;
-		border-color: rgba(255, 107, 0, 0.4);
-		box-shadow: 0 0 12px rgba(255, 107, 0, 0.2);
+		background: #f8fafc;
+		color: #007aff;
+		border-color: rgba(0, 122, 255, 0.3);
+		transform: translateY(-1px);
 	}
 	.tab-btn.active-tab {
-		background: linear-gradient(135deg, rgba(255, 107, 0, 0.25), rgba(255, 107, 0, 0.08));
+		background: #007aff;
 		color: #ffffff;
-		border-color: #ff6b00;
-		box-shadow: 0 0 15px rgba(255, 107, 0, 0.3);
+		border-color: #007aff;
+		box-shadow: 0 4px 12px rgba(0, 122, 255, 0.25);
 	}
 	.tab-count {
-		background: rgba(255, 255, 255, 0.1);
+		background: rgba(0, 0, 0, 0.06);
 		padding: 2px 8px;
 		border-radius: 20px;
 		font-size: 11px;
-		font-weight: bold;
-		color: #ffffff;
+		font-weight: 700;
+		color: #1d1d1f;
 	}
 	.tab-btn.active-tab .tab-count {
-		background: #ff6b00;
+		background: rgba(255, 255, 255, 0.25);
+		color: #ffffff;
 	}
 	.status-badge {
 		padding: 2px 8px;

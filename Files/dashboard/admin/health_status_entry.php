@@ -80,6 +80,7 @@ else{
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
 	<link href="a1style.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
 	
 	<style>
  	#button1
@@ -88,16 +89,19 @@ else{
 	}
 	#boxx
 	{
-		width:220px;
+		width:240px;
 	}
-	</style>
-
-	<style>
-    	.page-container .sidebar-menu #main-menu li#health_status > a {
-    	background-color: #2b303a;
-    	color: #ffffff;
-		}
-
+	.page-container .sidebar-menu #main-menu li#health_status > a {
+    	background-color: rgba(0, 122, 255, 0.1);
+    	color: #007aff;
+	}
+	.a1-container table td {
+		padding: 9px 0 !important;
+		vertical-align: middle !important;
+		color: #1d1d1f !important;
+		font-weight: 600;
+		font-size: 13px;
+	}
     </style>
 
 </head>
@@ -170,9 +174,9 @@ else{
 
 		
 		<div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
-        <div class="a1-card-8 a1-light-gray" style="width:500px; margin:0 auto;">
-		<div class="a1-container a1-dark-gray a1-center">
-        	<h6>EDIT HEALTH STATUS</h6>
+        <div class="a1-card-8" style="width:500px; margin:0 auto; border-radius: 16px; overflow: hidden; background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);">
+		<div class="a1-container a1-center" style="background: #f8fafc; border-bottom: 1px solid rgba(0, 0, 0, 0.06); padding: 14px 20px;">
+        	<h6 style="margin: 0; font-weight: 700; color: #1d1d1f; font-size: 14px; letter-spacing: 0.5px;">EDIT HEALTH STATUS</h6>
         </div>
        <form id="form1" name="form1" method="post" class="a1-container" action="">
          <table width="100%" border="0" align="center">

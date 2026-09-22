@@ -1,4 +1,4 @@
-﻿html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}
+html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}
 html{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
 article,aside,details,figcaption,figure,footer,header,main,menu,nav,section,summary{display:block}
 audio,canvas,progress,video{display:inline-block}progress{vertical-align:baseline}
@@ -297,8 +297,8 @@ input[type=checkbox].a1-check:disabled+.a1-validate,input[type=radio].a1-radio:d
 .a1-white,.a1-hover-white:hover{color:#000!important;background-color:#fff!important}
 .a1-black,.a1-hover-black:hover{color:#fff!important;background-color:#000!important}
 .a1-grey,.a1-hover-grey:hover,.a1-gray,.a1-hover-gray:hover{color:#000!important;background-color:#9e9e9e!important}
-.a1-light-grey,.a1-hover-light-grey:hover,.a1-light-gray,.a1-hover-light-gray:hover{color:#000!important;background-color:#f1f1f1!important}
-.a1-dark-grey,.a1-hover-dark-grey:hover,.a1-dark-gray,.a1-hover-dark-gray:hover{color:#fff!important;background-color:#616161!important}
+.a1-light-grey,.a1-hover-light-grey:hover,.a1-light-gray,.a1-hover-light-gray:hover{color:var(--text-main, #1d1d1f)!important;background-color:var(--card-bg, #ffffff)!important}
+.a1-dark-grey,.a1-hover-dark-grey:hover,.a1-dark-gray,.a1-hover-dark-gray:hover{color:var(--header-color, #1d1d1f)!important;background-color:var(--header-bg, #f8fafc)!important}
 .a1-pale-red,.a1-hover-pale-red:hover{color:#000!important;background-color:#ffdddd!important}
 .a1-pale-green,.a1-hover-pale-green:hover{color:#000!important;background-color:#ddffdd!important}
 .a1-pale-yellow,.a1-hover-pale-yellow:hover{color:#000!important;background-color:#ffffcc!important}

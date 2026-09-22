@@ -31,7 +31,7 @@ if (isset($_GET['delete'])) {
     <link rel="stylesheet" href="../../css/style.css" id="style-resource-5">
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
-    <link rel="stylesheet" href="../../css/premium.css">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <style>
         .campaign-form {
             background: var(--bg-darker);

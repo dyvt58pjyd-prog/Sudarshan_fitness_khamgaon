@@ -52,7 +52,7 @@ if ($res_mems) {
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
-    <link rel="stylesheet" href="../../css/premium.css">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <link href="a1style.css" rel="stylesheet" type="text/css">
     <style>
         .page-container .sidebar-menu #main-menu li#biometric_simulator_link > a {
@@ -268,7 +268,7 @@ if ($res_mems) {
                     <form id="simulator-form" onsubmit="event.preventDefault(); triggerSimulatedScan();">
                         <div class="form-group" style="margin-bottom: 20px;">
                             <label style="color: var(--text-main); font-weight: 600; margin-bottom: 8px;">Select Gym Member</label>
-                            <select class="form-control-premium" id="member-select" style="background: rgba(15, 23, 42, 0.6) !important; border: 1px solid var(--glass-border) !important; border-radius: 10px !important; color: var(--text-main) !important; height: auto !important; padding: 10px !important;" onchange="updateSelectedMemberStatus()">
+                            <select class="form-control-premium" id="member-select" style="background: var(--input-bg) !important; border: 1px solid var(--input-border) !important; border-radius: 10px !important; color: var(--input-color) !important; height: auto !important; padding: 10px !important;" onchange="updateSelectedMemberStatus()">
                                 <option value="" disabled selected>-- Select Member (Biometric ID) --</option>
                                 <?php foreach ($members as $m): 
                                     $status_text = $m['checked_in_today'] ? ' (Inside Gym)' : ($m['checked_out_today'] ? ' (Checked Out)' : ' (Not in Today)');
@@ -282,7 +282,7 @@ if ($res_mems) {
 
                         <div class="form-group" style="margin-bottom: 20px;">
                             <label style="color: var(--text-main); font-weight: 600; margin-bottom: 8px;">Simulated Timestamp</label>
-                            <input type="datetime-local" class="form-control-premium" id="scan-time" style="background: rgba(15, 23, 42, 0.6) !important; border: 1px solid var(--glass-border) !important; border-radius: 10px !important; color: var(--text-main) !important; padding: 10px !important;">
+                            <input type="datetime-local" class="form-control-premium" id="scan-time" style="background: var(--input-bg) !important; border: 1px solid var(--input-border) !important; border-radius: 10px !important; color: var(--input-color) !important; padding: 10px !important;">
                             <span class="text-muted" style="font-size: 11px; display: block; margin-top: 5px;">Leave blank to use current local time.</span>
                         </div>
 

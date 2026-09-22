@@ -36,7 +36,7 @@ function get_severity_badge($sev) {
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
-    <link rel="stylesheet" href="../../css/premium.css">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
 </head>
 <body class="page-body page-fade" onload="collapseSidebar()">
     <div class="page-container sidebar-collapsed" id="navbarcollapse">    
