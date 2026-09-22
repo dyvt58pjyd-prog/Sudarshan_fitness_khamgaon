@@ -202,10 +202,10 @@ $month_data = get_monthly_collection($con, date('Y-m'));
         .sidebar-menu ul { list-style: none; padding: 0; }
         .sidebar-menu ul li { margin-bottom: 10px; }
         .sidebar-menu ul li a { color: #9ca3af; text-decoration: none; display: block; padding: 12px 15px; border-radius: 8px; font-weight: 600; transition: all 0.2s; }
-        .sidebar-menu ul li a:hover, .sidebar-menu ul li.active a { background: linear-gradient(135deg, #ff6b00, #e65c00); color: #fff; box-shadow: 0 4px 15px rgba(255,107,0,0.3); }
+        .sidebar-menu ul li a:hover, .sidebar-menu ul li.active a { background: linear-gradient(135deg, #ff6b00, #e65000); color: #fff; box-shadow: 0 4px 15px rgba(255,107,0,0.3); }
         
         .nav-card { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 30px; margin-top: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .btn-primary { display: inline-block; margin-top: 20px; background: linear-gradient(135deg, #ff6b00, #e65c00); color: #fff; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: all 0.2s; box-shadow: 0 4px 15px rgba(255,107,0,0.3); border: none; }
+        .btn-primary { display: inline-block; margin-top: 20px; background: linear-gradient(135deg, #ff6b00, #e65000); color: #fff; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: all 0.2s; box-shadow: 0 4px 15px rgba(255,107,0,0.3); border: none; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,0,0.4); }
     </style>
 </head>

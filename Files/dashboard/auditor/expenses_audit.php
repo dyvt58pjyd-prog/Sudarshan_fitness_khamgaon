@@ -83,14 +83,14 @@ $res_list = mysqli_query($con, $list_query);
         .sidebar-menu ul { list-style: none; padding: 0; }
         .sidebar-menu ul li { margin-bottom: 10px; }
         .sidebar-menu ul li a { color: #9ca3af; text-decoration: none; display: block; padding: 12px 15px; border-radius: 8px; font-weight: 600; transition: all 0.2s; }
-        .sidebar-menu ul li a:hover, .sidebar-menu ul li.active a { background: linear-gradient(135deg, #ff6b00, #e65c00); color: #fff; box-shadow: 0 4px 15px rgba(255,107,0,0.3); }
+        .sidebar-menu ul li a:hover, .sidebar-menu ul li.active a { background: linear-gradient(135deg, #ff6b00, #e65000); color: #fff; box-shadow: 0 4px 15px rgba(255,107,0,0.3); }
         
         .nav-card { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         
         .form-control-custom { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 14px; width: 100%; box-sizing: border-box; }
         .form-control-custom:focus { border-color: #ff6b00; outline: none; }
         
-        .btn-primary { background: linear-gradient(135deg, #ff6b00, #e65c00); color: #fff; padding: 10px 22px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(255,107,0,0.3); }
+        .btn-primary { background: linear-gradient(135deg, #ff6b00, #e65000); color: #fff; padding: 10px 22px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(255,107,0,0.3); }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,0,0.4); }
         
         .btn-danger { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }

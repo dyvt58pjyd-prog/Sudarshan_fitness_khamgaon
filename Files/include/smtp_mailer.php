@@ -323,7 +323,7 @@ if (!function_exists('send_member_qr_pass_email')) {
                     </div>
 
                     <div style='margin-top: 25px; text-align: center;'>
-                        <a href='https://sudarshanfitness.de/Files/download_app.php' style='display: block; width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #ff7b00, #1e90ff); color: #ffffff; text-decoration: none; padding: 16px 20px; border-radius: 14px; font-weight: 800; font-size: 15px; box-shadow: 0 6px 25px rgba(255,123,0,0.5); text-transform: uppercase; letter-spacing: 0.5px;'>📲 INSTALL APPLICATION ON PHONE (DIRECT 1-CLICK APK)</a>
+                        <a href='https://sudarshanfitness.de/Files/download_app.php' style='display: block; width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #ff6b00, #ffd700); color: #ffffff; text-decoration: none; padding: 16px 20px; border-radius: 14px; font-weight: 800; font-size: 15px; box-shadow: 0 6px 25px rgba(255,107,0,0.5); text-transform: uppercase; letter-spacing: 0.5px;'>📲 INSTALL APPLICATION ON PHONE (DIRECT 1-CLICK APK)</a>
                         <div style='font-size: 11px; color: #94a3b8; margin-top: 8px;'>Tap to install Sudarshan Fitness native app (5.3 MB) directly on your phone</div>
                     </div>
 

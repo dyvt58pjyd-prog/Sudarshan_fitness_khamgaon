@@ -55,14 +55,14 @@ if (substr($logo_path, 0, 6) === '../../') {
 	<link rel="stylesheet" type="text/css" href="./css/entypo.css">
 	<link rel="stylesheet" href="./css/premium.css"/>
     <style>
-    /* Naruto Hidden Leaf Portal Background */
+    /* Naruto Shree Ganesha Portal Background */
     body.login-page {
-        background: #0f0a05 !important;
+        background: #2c1b18 !important;
         position: relative;
         overflow-x: hidden;
         background-image: 
-            radial-gradient(circle at 50% 20%, rgba(255, 123, 0, 0.25) 0%, transparent 60%),
-            radial-gradient(circle at 50% 80%, rgba(30, 144, 255, 0.18) 0%, transparent 50%) !important;
+            radial-gradient(circle at 50% 20%, rgba(255, 107, 0, 0.25) 0%, transparent 60%),
+            radial-gradient(circle at 50% 80%, rgba(255, 215, 0, 0.18) 0%, transparent 50%) !important;
         min-height: 100vh;
         display: flex;
         align-items: center;
@@ -76,8 +76,8 @@ if (substr($logo_path, 0, 6) === '../../') {
         width: 750px;
         height: 750px;
         border-radius: 50%;
-        border: 2px dashed rgba(30, 144, 255, 0.4);
-        box-shadow: 0 0 50px rgba(30, 144, 255, 0.3), inset 0 0 50px rgba(255, 123, 0, 0.3);
+        border: 2px dashed rgba(255, 215, 0, 0.4);
+        box-shadow: 0 0 50px rgba(255, 215, 0, 0.3), inset 0 0 50px rgba(255, 107, 0, 0.3);
         animation: portal-ring-spin 25s linear infinite;
         pointer-events: none;
         z-index: 1;
@@ -88,8 +88,8 @@ if (substr($logo_path, 0, 6) === '../../') {
         width: 550px;
         height: 550px;
         border-radius: 50%;
-        border: 2px solid rgba(255, 123, 0, 0.4);
-        box-shadow: 0 0 40px rgba(255, 123, 0, 0.4);
+        border: 2px solid rgba(255, 107, 0, 0.4);
+        box-shadow: 0 0 40px rgba(255, 107, 0, 0.4);
         animation: portal-ring-spin-reverse 18s linear infinite;
         pointer-events: none;
         z-index: 1;
@@ -106,32 +106,32 @@ if (substr($logo_path, 0, 6) === '../../') {
     }
 
     @keyframes system-lightning-flash {
-        0% { background-color: rgba(30, 144, 255, 0.15); filter: brightness(1.6); }
+        0% { background-color: rgba(255, 215, 0, 0.15); filter: brightness(1.6); }
         20% { background-color: transparent; filter: none; }
-        40% { background-color: rgba(255, 123, 0, 0.15); filter: brightness(1.8); }
+        40% { background-color: rgba(255, 107, 0, 0.15); filter: brightness(1.8); }
         60% { background-color: transparent; filter: none; }
         100% { background-color: transparent; filter: none; }
     }
 
     @keyframes float-hanuman {
-        0% { transform: translateY(0px); box-shadow: 0 0 20px rgba(255, 123, 0, 0.5); }
-        50% { transform: translateY(-8px); box-shadow: 0 0 40px rgba(30, 144, 255, 0.8); border-color: #1e90ff; }
-        100% { transform: translateY(0px); box-shadow: 0 0 20px rgba(255, 123, 0, 0.5); }
+        0% { transform: translateY(0px); box-shadow: 0 0 20px rgba(255, 107, 0, 0.5); }
+        50% { transform: translateY(-8px); box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); border-color: #ffd700; }
+        100% { transform: translateY(0px); box-shadow: 0 0 20px rgba(255, 107, 0, 0.5); }
     }
 
     .lightning-active {
         animation: system-lightning-flash 0.5s ease-out;
     }
 
-    /* Hidden Leaf Portal Window Container */
+    /* Shree Ganesha Portal Window Container */
     .login-container {
         max-width: 650px !important;
         width: 95% !important;
         background: rgba(15, 10, 5, 0.95) !important;
-        border: 2px solid #ff7b00 !important;
+        border: 2px solid #ff6b00 !important;
         border-radius: 28px !important;
         padding: 35px 30px !important;
-        box-shadow: 0 0 50px rgba(255, 123, 0, 0.35) !important;
+        box-shadow: 0 0 50px rgba(255, 107, 0, 0.35) !important;
         position: relative;
         z-index: 10;
         animation: system-hologram-pulse 6s ease-in-out infinite alternate !important;
@@ -161,8 +161,8 @@ if (substr($logo_path, 0, 6) === '../../') {
     }
 
     .category-tab {
-        background: rgba(255, 123, 0, 0.04) !important;
-        border: 1px solid rgba(255, 123, 0, 0.25) !important;
+        background: rgba(255, 107, 0, 0.04) !important;
+        border: 1px solid rgba(255, 107, 0, 0.25) !important;
         border-radius: 14px !important;
         padding: 14px 6px !important;
         text-align: center !important;
@@ -176,9 +176,9 @@ if (substr($logo_path, 0, 6) === '../../') {
     }
 
     .category-tab[data-role="member"]:hover, .category-tab[data-role="member"].active {
-        border-color: #ff7b00 !important;
-        background: rgba(255, 123, 0, 0.22) !important;
-        box-shadow: 0 0 25px rgba(255, 123, 0, 0.6) !important;
+        border-color: #ff6b00 !important;
+        background: rgba(255, 107, 0, 0.22) !important;
+        box-shadow: 0 0 25px rgba(255, 107, 0, 0.6) !important;
         transform: scale(1.04);
     }
     .category-tab[data-role="reception"]:hover, .category-tab[data-role="reception"].active {
@@ -188,9 +188,9 @@ if (substr($logo_path, 0, 6) === '../../') {
         transform: scale(1.04);
     }
     .category-tab[data-role="trainer"]:hover, .category-tab[data-role="trainer"].active {
-        border-color: #1e90ff !important;
-        background: rgba(30, 144, 255, 0.25) !important;
-        box-shadow: 0 0 25px rgba(30, 144, 255, 0.6) !important;
+        border-color: #ffd700 !important;
+        background: rgba(255, 215, 0, 0.25) !important;
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.6) !important;
         transform: scale(1.04);
     }
     .category-tab[data-role="owner"]:hover, .category-tab[data-role="owner"].active {
@@ -233,15 +233,15 @@ if (substr($logo_path, 0, 6) === '../../') {
     .category-tab.active span {
         color: #ffffff !important;
     }
-    .category-tab[data-role="member"].active i { color: #ff7b00 !important; }
+    .category-tab[data-role="member"].active i { color: #ff6b00 !important; }
     .category-tab[data-role="reception"].active i { color: #ffb703 !important; }
-    .category-tab[data-role="trainer"].active i { color: #1e90ff !important; }
+    .category-tab[data-role="trainer"].active i { color: #ffd700 !important; }
     .category-tab[data-role="owner"].active i { color: #f1c40f !important; }
     .category-tab[data-role="super_admin"].active i { color: #10b981 !important; }
 
     .form-control {
         background: rgba(15, 10, 5, 0.85) !important;
-        border: 1px solid rgba(255, 123, 0, 0.35) !important;
+        border: 1px solid rgba(255, 107, 0, 0.35) !important;
         color: #ffffff !important;
         border-radius: 14px !important;
         padding: 14px 18px !important;
@@ -249,12 +249,12 @@ if (substr($logo_path, 0, 6) === '../../') {
     }
 
     .form-control:focus {
-        border-color: #ff7b00 !important;
-        box-shadow: 0 0 25px rgba(255, 123, 0, 0.5) !important;
+        border-color: #ff6b00 !important;
+        box-shadow: 0 0 25px rgba(255, 107, 0, 0.5) !important;
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, #ff7b00, #e65c00) !important;
+        background: linear-gradient(135deg, #ff6b00, #e65000) !important;
         color: #ffffff !important;
         border: none !important;
         padding: 15px !important;
@@ -263,13 +263,13 @@ if (substr($logo_path, 0, 6) === '../../') {
         font-weight: 900 !important;
         font-size: 14px !important;
         letter-spacing: 1px !important;
-        box-shadow: 0 0 35px rgba(255, 123, 0, 0.7) !important;
+        box-shadow: 0 0 35px rgba(255, 107, 0, 0.7) !important;
         transition: all 0.2s ease !important;
     }
 
     .btn-primary:hover {
         transform: translateY(-2px) !important;
-        box-shadow: 0 0 50px rgba(255, 123, 0, 0.95) !important;
+        box-shadow: 0 0 50px rgba(255, 107, 0, 0.95) !important;
     }
     </style>
 </head>
@@ -286,16 +286,16 @@ if (substr($logo_path, 0, 6) === '../../') {
         <div class="login-container">
             <div class="login-header login-caret">
                 <div class="login-content" style="text-align: center;">
-                    <div style="font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; color: #ff7b00; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; text-shadow: 0 0 12px rgba(255,123,0,0.5);">[ SUDARSHAN FITNESS ]</div>
+                    <div style="font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; color: #ff6b00; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; text-shadow: 0 0 12px rgba(255,107,0,0.5);">[ SUDARSHAN FITNESS ]</div>
                     
                     <!-- Hanuman Motivation Avatar -->
                     <div style="margin: 15px auto 25px auto; text-align: center;">
-                        <img src="./images/hanuman_gym.jpg" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 3px solid #ff7b00; animation: float-hanuman 4s ease-in-out infinite;">
-                        <div style="margin-top: 12px; font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 900; color: #ff7b00; letter-spacing: 2px; text-shadow: 0 0 15px rgba(255,123,0,0.8);">AWAKEN YOUR INNER STRENGTH</div>
+                        <img src="./images/ganesha_gym.jpg" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 3px solid #ff6b00; animation: float-hanuman 4s ease-in-out infinite;">
+                        <div style="margin-top: 12px; font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 900; color: #ff6b00; letter-spacing: 2px; text-shadow: 0 0 15px rgba(255,107,0,0.8);">OM GANAPATAYE NAMAHA</div>
                     </div>
 
                     <a href="#" class="logo">
-                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="filter: drop-shadow(0 0 25px rgba(255,123,0,0.7)); max-height: 75px; width: auto;" />
+                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="filter: drop-shadow(0 0 25px rgba(255,107,0,0.7)); max-height: 75px; width: auto;" />
                     </a>
                     <p class="description" style="color: #64748b; font-size: 12px; font-weight: 600; margin-top: 15px;">
                         Select your category to access your <?php echo htmlspecialchars($gym['gym_name']); ?> account.
@@ -344,7 +344,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                         <!-- Username/UserID input -->
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon" style="background: rgba(255,123,0,0.15); border-color: rgba(255,123,0,0.35); color: #ff7b00;">
+                                <div class="input-group-addon" style="background: rgba(255,107,0,0.15); border-color: rgba(255,107,0,0.35); color: #ff6b00;">
                                     <i class="entypo-user"></i>
                                 </div>
                                 <input type="text" placeholder="Ninja ID / Username" class="form-control" name="user_id_auth" id="textfield" required>
@@ -354,7 +354,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                         <!-- Password input -->
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon" style="background: rgba(255,123,0,0.15); border-color: rgba(255,123,0,0.35); color: #ff7b00;">
+                                <div class="input-group-addon" style="background: rgba(255,107,0,0.15); border-color: rgba(255,107,0,0.35); color: #ff6b00;">
                                     <i class="entypo-key"></i>
                                 </div>
                                 <input type="password" name="pass_key" id="pwfield" class="form-control" required placeholder="SYSTEM ACCESS PIN">
@@ -369,7 +369,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                             
                             <!-- Action Grid for Self Registration & Quick Portals -->
                             <div style="margin-top: 15px;">
-                                <a href="register.php" style="background: rgba(255, 123, 0, 0.2); color: #ff7b00; border: 1.5px solid #ff7b00; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 13px; text-decoration: none; text-align: center; padding: 13px; border-radius: 12px; display: block; box-shadow: 0 0 20px rgba(255,123,0,0.3); margin-bottom: 10px;">
+                                <a href="register.php" style="background: rgba(255, 107, 0, 0.2); color: #ff6b00; border: 1.5px solid #ff6b00; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 13px; text-decoration: none; text-align: center; padding: 13px; border-radius: 12px; display: block; box-shadow: 0 0 20px rgba(255,107,0,0.3); margin-bottom: 10px;">
                                     ✍️ SELF REGISTRATION (JOIN ACADEMY)
                                 </a>
                                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
@@ -382,7 +382,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                                 </div>
                             </div>
 
-                            <button type="button" id="faceIdLoginBtn" class="btn btn-success" style="width: 100%; display: block; margin-top: 12px; background: linear-gradient(135deg, #1e90ff, #ff7b00); border: 1px solid #ff7b00; font-family: 'Orbitron', sans-serif; font-weight: 900; box-shadow: 0 0 25px rgba(30,144,255,0.6);" onclick="loginWithFaceID()">
+                            <button type="button" id="faceIdLoginBtn" class="btn btn-success" style="width: 100%; display: block; margin-top: 12px; background: linear-gradient(135deg, #ffd700, #ff6b00); border: 1px solid #ff6b00; font-family: 'Orbitron', sans-serif; font-weight: 900; box-shadow: 0 0 25px rgba(255,215,0,0.6);" onclick="loginWithFaceID()">
                                 <i class="entypo-camera"></i>
                                 SHARINGAN BIOMETRIC SCAN
                             </button>
@@ -393,11 +393,11 @@ if (substr($logo_path, 0, 6) === '../../') {
 
                     <!-- Face Scan UI Container -->
                     <div id="faceScanContainer" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,10,5,0.95); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
-                        <h2 style="color: #ff7b00; margin-bottom: 20px; font-family: 'Orbitron';">[ SHARINGAN BIOMETRIC SCAN ]</h2>
-                        <div style="position: relative; width: 300px; height: 300px; border-radius: 50%; overflow: hidden; border: 4px solid #ff7b00; box-shadow: 0 0 40px #ff7b00;">
+                        <h2 style="color: #ff6b00; margin-bottom: 20px; font-family: 'Orbitron';">[ SHARINGAN BIOMETRIC SCAN ]</h2>
+                        <div style="position: relative; width: 300px; height: 300px; border-radius: 50%; overflow: hidden; border: 4px solid #ff6b00; box-shadow: 0 0 40px #ff6b00;">
                             <video id="loginVideo" autoplay muted playsinline style="width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1);"></video>
                         </div>
-                        <p id="loginStatusMsg" style="color: #cbd5e1; margin-top: 20px; font-size: 16px; font-family: 'Orbitron';">Awakening Sharingan...</p>
+                        <p id="loginStatusMsg" style="color: #cbd5e1; margin-top: 20px; font-size: 16px; font-family: 'Orbitron';">Awakening Divine...</p>
                         <button type="button" class="btn btn-danger" style="margin-top: 20px; font-family: 'Orbitron';" onclick="cancelFaceLogin()">CANCEL JUTSU</button>
                     </div>
 
@@ -431,7 +431,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                                 x: Math.random() * w,
                                 y: Math.random() * h,
                                 size: Math.random() * 2 + 1,
-                                color: Math.random() > 0.5 ? '#ff7b00' : '#1e90ff',
+                                color: Math.random() > 0.5 ? '#ff6b00' : '#ffd700',
                                 vy: -(Math.random() * 0.7 + 0.3),
                                 vx: (Math.random() - 0.5) * 0.5,
                                 alpha: Math.random() * 0.8 + 0.2
@@ -644,13 +644,13 @@ if (substr($logo_path, 0, 6) === '../../') {
 
                     <!-- PWA Installation Modal -->
                     <div id="pwaInstallModal" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;">
-                        <div style="background: #111827; border: 2px solid #ff7b00; border-radius: 20px; max-width: 440px; width: 100%; padding: 30px; text-align: center; box-shadow: 0 0 35px rgba(255,123,0,0.5); animation: pulseGlow 2s infinite alternate;">
-                            <img src="logo192.png" style="width: 80px; height: 80px; border-radius: 18px; margin-bottom: 15px; border: 2px solid #ff7b00; box-shadow: 0 4px 15px rgba(255,123,0,0.4);" alt="App Logo" />
+                        <div style="background: #111827; border: 2px solid #ff6b00; border-radius: 20px; max-width: 440px; width: 100%; padding: 30px; text-align: center; box-shadow: 0 0 35px rgba(255,107,0,0.5); animation: pulseGlow 2s infinite alternate;">
+                            <img src="logo192.png" style="width: 80px; height: 80px; border-radius: 18px; margin-bottom: 15px; border: 2px solid #ff6b00; box-shadow: 0 4px 15px rgba(255,107,0,0.4);" alt="App Logo" />
                             <h3 style="color: #ffffff; font-size: 20px; font-weight: 800; margin: 0 0 10px 0; font-family: 'Orbitron', sans-serif;">INSTALL SUDARSHAN APP</h3>
                             <p style="color: #94a3b8; font-size: 13px; line-height: 1.5; margin-bottom: 25px;">
                                 Install Sudarshan Fitness directly to your phone home screen for 1-click access, instant biometric check-ins, and live workout tracking!
                             </p>
-                            <button id="pwaDirectInstallBtn" onclick="triggerChromeInstall()" style="width: 100%; background: linear-gradient(135deg, #ff7b00, #1e90ff); color: #ffffff; border: none; padding: 15px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; box-shadow: 0 5px 20px rgba(255,123,0,0.5); margin-bottom: 10px;">
+                            <button id="pwaDirectInstallBtn" onclick="triggerChromeInstall()" style="width: 100%; background: linear-gradient(135deg, #ff6b00, #ffd700); color: #ffffff; border: none; padding: 15px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; box-shadow: 0 5px 20px rgba(255,107,0,0.5); margin-bottom: 10px;">
                                 📲 INSTALL CHROME PWA APP
                             </button>
                             <a href="download_app.php" style="width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; text-decoration: none; display: block; padding: 15px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; box-shadow: 0 5px 20px rgba(16,185,129,0.4); margin-bottom: 12px;">
@@ -663,11 +663,11 @@ if (substr($logo_path, 0, 6) === '../../') {
                     </div>
 
                     <!-- Official Copyright Footer -->
-                    <div style="text-align: center; margin-top: 25px; border-top: 1px solid rgba(255, 123, 0, 0.25); padding-top: 15px;">
+                    <div style="text-align: center; margin-top: 25px; border-top: 1px solid rgba(255, 107, 0, 0.25); padding-top: 15px;">
                         <div style="font-size: 11px; color: var(--text-muted); font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px;">
                             © <?php echo date('Y'); ?> <?php echo htmlspecialchars($gym['gym_name']); ?>. All Rights Reserved.
                         </div>
-                        <div style="font-size: 10px; color: #ff7b00; font-weight: 800; font-family: 'Orbitron', sans-serif; margin-top: 4px; letter-spacing: 1.5px;">
+                        <div style="font-size: 10px; color: #ff6b00; font-weight: 800; font-family: 'Orbitron', sans-serif; margin-top: 4px; letter-spacing: 1.5px;">
                             POWERED BY SUDARSHAN FITNESS v2.0
                         </div>
                     </div>
