@@ -26,10 +26,10 @@ $gym = get_gym_details($con);
     <link rel="stylesheet" href="../../css/entypo.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background: var(--bg-dark); color: #fff; padding: 25px; }
-        .card { background: rgba(15, 7, 18, 0.94); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
-        .btn-post { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #2c1b18; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
-        .form-control { background: rgba(3,7,18,0.8); border: 1px solid rgba(255,107,0,0.3); color: #fff; padding: 12px 18px; border-radius: 12px; width: 100%; font-size: 14px; margin-bottom: 15px; }
+        body { background: var(--bg-dark); color: var(--text-main); padding: 25px; }
+        .card { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
+        .btn-post { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #ffffff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
+        .form-control { background: rgba(3,7,18,0.8); border: 1px solid rgba(255,107,0,0.3); color: var(--text-main); padding: 12px 18px; border-radius: 12px; width: 100%; font-size: 14px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -51,7 +51,7 @@ $gym = get_gym_details($con);
         <?php endif; ?>
 
         <div class="card">
-            <h3 style="font-family: 'Orbitron'; color: #fff; margin-top: 0;">Broadcast Live Message to All Members</h3>
+            <h3 style="font-family: 'Orbitron'; color: var(--text-main); margin-top: 0;">Broadcast Live Message to All Members</h3>
             <form method="POST">
                 <textarea name="ann_text" class="form-control" rows="4" placeholder="e.g. 🔥 Special Sunday Deadlift & Squat Workshop at 8:00 AM! Free entry for all members!" required></textarea>
                 <button type="submit" name="post_announcement" class="btn-post">PUBLISH ANNOUNCEMENT BANNER ➔</button>

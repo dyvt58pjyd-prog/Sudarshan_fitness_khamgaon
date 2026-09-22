@@ -249,7 +249,7 @@ if ($res_mems) {
             <div class="simulator-grid">
                 <!-- Left Panel: Device Controller -->
                 <div class="portal-card">
-                    <h3 style="margin-top: 0; color: #ffffff; font-weight: 700;">Simulate Device Swipe</h3>
+                    <h3 style="margin-top: 0; color: var(--text-main, #1d1d1f); font-weight: 700;">Simulate Device Swipe</h3>
                     <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 25px;">
                         Select a member from the database below to simulate a physical check-in or check-out fingerprint scanner trigger.
                     </p>
@@ -295,7 +295,7 @@ if ($res_mems) {
                 <!-- Right Panel: Dev Log Console -->
                 <div class="portal-card">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <h3 style="margin: 0; color: #ffffff; font-weight: 700;">Live Device Event Logs</h3>
+                        <h3 style="margin: 0; color: var(--text-main, #1d1d1f); font-weight: 700;">Live Device Event Logs</h3>
                         <button class="btn btn-xs btn-default" onclick="clearConsoleLog()" style="padding: 3px 10px; font-size: 11px;">Clear</button>
                     </div>
                     

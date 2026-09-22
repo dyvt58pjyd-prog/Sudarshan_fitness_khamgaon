@@ -220,7 +220,7 @@ for ($days = 1; $days <= 5; $days++) {
         <div class="main-content">
             <div class="row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
                 <div class="col-md-6 col-sm-8 clearfix">
-                    <h2 style="font-weight: 700; margin: 0; color: #fff; letter-spacing: -0.5px;">
+                    <h2 style="font-weight: 700; margin: 0; color: var(--text-main, #1d1d1f); letter-spacing: -0.5px;">
                         <i class="entypo-chat" style="color: #25D366;"></i> WhatsApp Official API
                     </h2>
                 </div>

@@ -33,13 +33,13 @@ $trainers_res = mysqli_query($con, "SELECT * FROM admin WHERE role = 'trainer'")
     <link rel="stylesheet" href="../../css/entypo.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background: var(--bg-dark); color: #fff; padding: 25px; }
+        body { background: var(--bg-dark); color: var(--text-main); padding: 25px; }
         .card { background: rgba(9, 14, 28, 0.9); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
-        .btn-add { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #2c1b18; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
+        .btn-add { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #ffffff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
         .table-custom { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .table-custom th, .table-custom td { padding: 14px; text-align: left; border-bottom: 1px solid rgba(0,240,255,0.15); }
         .table-custom th { color: var(--accent-primary); font-family: 'Orbitron'; font-size: 13px; text-transform: uppercase; }
-        .form-control { background: rgba(3,7,18,0.8); border: 1px solid rgba(0,240,255,0.3); color: #fff; padding: 10px 14px; border-radius: 10px; width: 100%; margin-bottom: 15px; }
+        .form-control { background: rgba(3,7,18,0.8); border: 1px solid rgba(0,240,255,0.3); color: var(--text-main); padding: 10px 14px; border-radius: 10px; width: 100%; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -61,7 +61,7 @@ $trainers_res = mysqli_query($con, "SELECT * FROM admin WHERE role = 'trainer'")
         <?php endif; ?>
 
         <div class="card">
-            <h3 style="font-family: 'Orbitron'; color: #fff; margin-top: 0;">➕ Register New Gym Trainer</h3>
+            <h3 style="font-family: 'Orbitron'; color: var(--text-main); margin-top: 0;">➕ Register New Gym Trainer</h3>
             <form method="POST">
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px;">
                     <div>
@@ -86,7 +86,7 @@ $trainers_res = mysqli_query($con, "SELECT * FROM admin WHERE role = 'trainer'")
         </div>
 
         <div class="card">
-            <h3 style="font-family: 'Orbitron'; color: #fff; margin-top: 0;">📋 Active Gym Trainers Directory</h3>
+            <h3 style="font-family: 'Orbitron'; color: var(--text-main); margin-top: 0;">📋 Active Gym Trainers Directory</h3>
             <table class="table-custom">
                 <thead>
                     <tr>

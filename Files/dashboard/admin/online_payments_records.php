@@ -249,7 +249,7 @@ $res_list = mysqli_query($con, $q_list);
                                             <?php echo htmlspecialchars(date('M d, Y h:i A', strtotime($row_p['submitted_at']))); ?>
                                         </td>
                                         <td style="padding: 15px 12px;">
-                                            <strong style="color: #ffffff; display: block;"><?php echo htmlspecialchars($row_p['username']); ?></strong>
+                                            <strong style="color: var(--text-main, #1d1d1f); display: block;"><?php echo htmlspecialchars($row_p['username']); ?></strong>
                                             <span style="font-size: 12px; color: var(--text-muted); display: block;">ID: <?php echo htmlspecialchars($row_p['uid']); ?></span>
                                             <span style="font-size: 12px; color: var(--text-muted); display: block;">Email: <?php echo htmlspecialchars($row_p['email']); ?></span>
                                             <span style="font-size: 12px; color: var(--text-muted); display: block;">Mobile: <?php echo htmlspecialchars($row_p['mobile']); ?></span>
@@ -344,7 +344,7 @@ $res_list = mysqli_query($con, $q_list);
                                             <?php echo htmlspecialchars(date('M d, Y h:i A', strtotime($row['submitted_at']))); ?>
                                         </td>
                                         <td style="padding: 15px 12px;">
-                                            <strong style="color: #ffffff; display: block;"><?php echo htmlspecialchars($row['username']); ?></strong>
+                                            <strong style="color: var(--text-main, #1d1d1f); display: block;"><?php echo htmlspecialchars($row['username']); ?></strong>
                                             <span style="font-size: 12px; color: var(--text-muted); display: block;">ID: <?php echo htmlspecialchars($row['uid']); ?></span>
                                             <span style="font-size: 12px; color: var(--text-muted); display: block;">Email: <?php echo htmlspecialchars($row['email']); ?></span>
                                             <?php if (!empty($row['utr'])): ?>

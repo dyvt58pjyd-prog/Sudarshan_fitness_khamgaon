@@ -357,7 +357,7 @@ $gym = get_gym_details($con);
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2>Member Profile & History</h2>
-                <a href="search_member.php" class="a1-btn" style="background: rgba(255,255,255,0.08) !important; color: #fff !important; text-decoration: none;">&larr; Back to Search</a>
+                <a href="search_member.php" class="a1-btn" style="background: rgba(0,0,0,0.05) !important; color: var(--text-main, #1d1d1f) !important; text-decoration: none;">&larr; Back to Search</a>
             </div>
             <hr />
 
@@ -367,7 +367,7 @@ $gym = get_gym_details($con);
                         <?php $mem_photo_url = get_member_photo_url($member, '../../'); ?>
                         <img src="<?php echo $mem_photo_url; ?>" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-primary); box-shadow: 0 0 10px rgba(255,107,0,0.3);" alt="Member Photo">
                         <div>
-                            <h3 style="margin: 0 0 5px 0; color: #fff; font-weight: 700;"><?php echo htmlspecialchars($member['username']); ?></h3>
+                            <h3 style="margin: 0 0 5px 0; color: var(--text-main, #1d1d1f); font-weight: 700;"><?php echo htmlspecialchars($member['username']); ?></h3>
                             <span style="color: var(--text-muted); font-size: 14px;">Membership ID: <strong><?php echo htmlspecialchars($member['userid']); ?></strong></span>
                         </div>
                     </div>
@@ -397,8 +397,8 @@ $gym = get_gym_details($con);
                             <span style="font-size: 36px;">💑</span>
                             <div>
                                 <span style="color: #ff6b00; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">✨ Couple Plan Partner Linked</span>
-                                <h3 style="margin: 4px 0 2px 0; color: #fff; font-weight: 800; font-size: 18px;"><?php echo htmlspecialchars($partner_data['username']); ?></h3>
-                                <span style="color: #cbd5e1; font-size: 13px;">Membership ID: <strong style="color: #38bdf8;"><?php echo htmlspecialchars($partner_data['userid']); ?></strong> | Mobile: <strong><?php echo htmlspecialchars($partner_data['mobile']); ?></strong></span>
+                                <h3 style="margin: 4px 0 2px 0; color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 18px;"><?php echo htmlspecialchars($partner_data['username']); ?></h3>
+                                <span style="color: var(--text-muted, #64748b); font-size: 13px;">Membership ID: <strong style="color: #007aff;"><?php echo htmlspecialchars($partner_data['userid']); ?></strong> | Mobile: <strong style="color: var(--text-main, #1d1d1f);"><?php echo htmlspecialchars($partner_data['mobile']); ?></strong></span>
                             </div>
                         </div>
                         <div style="display: flex; gap: 10px; align-items: center;">
@@ -421,7 +421,7 @@ $gym = get_gym_details($con);
                                 <h4 style="margin: 0 0 4px 0; color: #f59e0b; font-weight: 800; font-size: 16px; text-transform: uppercase;">
                                     COUPLE PLAN DETECTED — NO PARTNER LINKED YET
                                 </h4>
-                                <p style="margin: 0; color: #cbd5e1; font-size: 13px;">
+                                <p style="margin: 0; color: var(--text-muted, #64748b); font-size: 13px;">
                                     <strong><?php echo htmlspecialchars($member['username']); ?></strong> is subscribed to <strong><?php echo htmlspecialchars($active_plan['planName'] ?? 'Couple Plan'); ?></strong>, but no partner is assigned yet. Register a new partner or link an existing member below!
                                 </p>
                             </div>
@@ -435,31 +435,31 @@ $gym = get_gym_details($con);
                     </div>
 
                     <!-- Form A: Add New Partner -->
-                    <div id="form_new_p" style="background: rgba(0,0,0,0.3); border-radius: 12px; padding: 18px; border: 1px solid rgba(255,255,255,0.1);">
-                        <h5 style="color: #38bdf8; margin: 0 0 12px 0; font-weight: 700;">Register &amp; Link New Partner Account</h5>
+                    <div id="form_new_p" style="background: var(--bg-dark, #f5f5f7); border-radius: 12px; padding: 18px; border: 1px solid var(--card-border, rgba(0,0,0,0.08));">
+                        <h5 style="color: #007aff; margin: 0 0 12px 0; font-weight: 700;">Register &amp; Link New Partner Account</h5>
                         <form method="POST">
                             <input type="hidden" name="action" value="add_new_partner">
                             <input type="hidden" name="primary_uid" value="<?php echo htmlspecialchars($member['userid']); ?>">
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 15px;">
                                 <div>
-                                    <label style="color: #94a3b8; font-size: 12px; display: block; margin-bottom: 4px;">Partner Full Name *</label>
-                                    <input type="text" name="partner_name" class="form-control-custom" placeholder="e.g. Spouse / Partner Name" required style="width:100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 12px; border-radius: 8px;">
+                                    <label style="color: var(--text-main, #1d1d1f); font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Partner Full Name *</label>
+                                    <input type="text" name="partner_name" class="form-control-custom" placeholder="e.g. Spouse / Partner Name" required style="width:100%; background: var(--input-bg, #ffffff); border: 1px solid var(--input-border, rgba(0,0,0,0.14)); color: var(--input-color, #1d1d1f); padding: 8px 12px; border-radius: 8px;">
                                 </div>
                                 <div>
-                                    <label style="color: #94a3b8; font-size: 12px; display: block; margin-bottom: 4px;">Partner Mobile *</label>
-                                    <input type="number" name="partner_mobile" class="form-control-custom" placeholder="10-digit Mobile" required style="width:100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 12px; border-radius: 8px;">
+                                    <label style="color: var(--text-main, #1d1d1f); font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Partner Mobile *</label>
+                                    <input type="number" name="partner_mobile" class="form-control-custom" placeholder="10-digit Mobile" required style="width:100%; background: var(--input-bg, #ffffff); border: 1px solid var(--input-border, rgba(0,0,0,0.14)); color: var(--input-color, #1d1d1f); padding: 8px 12px; border-radius: 8px;">
                                 </div>
                                 <div>
-                                    <label style="color: #94a3b8; font-size: 12px; display: block; margin-bottom: 4px;">Gender *</label>
-                                    <select name="partner_gender" class="form-control-custom" required style="width:100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 12px; border-radius: 8px;">
+                                    <label style="color: var(--text-main, #1d1d1f); font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Gender *</label>
+                                    <select name="partner_gender" class="form-control-custom" required style="width:100%; background: var(--input-bg, #ffffff); border: 1px solid var(--input-border, rgba(0,0,0,0.14)); color: var(--input-color, #1d1d1f); padding: 8px 12px; border-radius: 8px;">
                                         <option value="Female">Female</option>
                                         <option value="Male">Male</option>
                                         <option value="Transgender">Transgender</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label style="color: #94a3b8; font-size: 12px; display: block; margin-bottom: 4px;">Date of Birth</label>
-                                    <input type="date" name="partner_dob" class="form-control-custom" style="width:100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 12px; border-radius: 8px;">
+                                    <label style="color: var(--text-main, #1d1d1f); font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Date of Birth</label>
+                                    <input type="date" name="partner_dob" class="form-control-custom" style="width:100%; background: var(--input-bg, #ffffff); border: 1px solid var(--input-border, rgba(0,0,0,0.14)); color: var(--input-color, #1d1d1f); padding: 8px 12px; border-radius: 8px;">
                                 </div>
                             </div>
                             <button type="submit" class="a1-btn a1-green" style="padding: 9px 20px;">Create &amp; Link Partner Account</button>
@@ -467,14 +467,14 @@ $gym = get_gym_details($con);
                     </div>
 
                     <!-- Form B: Link Existing Member -->
-                    <div id="form_ex_p" style="display: none; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 18px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div id="form_ex_p" style="display: none; background: var(--bg-dark, #f5f5f7); border-radius: 12px; padding: 18px; border: 1px solid var(--card-border, rgba(0,0,0,0.08));">
                         <h5 style="color: #f59e0b; margin: 0 0 12px 0; font-weight: 700;">Link Existing Member ID</h5>
                         <form method="POST" style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
                             <input type="hidden" name="action" value="link_existing_partner">
                             <input type="hidden" name="primary_uid" value="<?php echo htmlspecialchars($member['userid']); ?>">
                             <div style="flex: 1; min-width: 220px;">
-                                <label style="color: #94a3b8; font-size: 12px; display: block; margin-bottom: 4px;">Partner Member ID or Mobile Number</label>
-                                <input type="text" name="existing_partner_uid" class="form-control-custom" placeholder="e.g. 204 or Mobile" required style="width:100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 12px; border-radius: 8px;">
+                                <label style="color: var(--text-main, #1d1d1f); font-size: 12px; font-weight: 600; display: block; margin-bottom: 4px;">Partner Member ID or Mobile Number</label>
+                                <input type="text" name="existing_partner_uid" class="form-control-custom" placeholder="e.g. 204 or Mobile" required style="width:100%; background: var(--input-bg, #ffffff); border: 1px solid var(--input-border, rgba(0,0,0,0.14)); color: var(--input-color, #1d1d1f); padding: 8px 12px; border-radius: 8px;">
                             </div>
                             <button type="submit" class="a1-btn a1-orange" style="padding: 9px 20px;">Link Member as Partner</button>
                         </form>
@@ -646,28 +646,28 @@ $gym = get_gym_details($con);
                         if ($bmi_sug['category'] !== 'No Data'):
                         ?>
                         <div style="margin-top: 20px; border-top: 1px solid rgba(255, 107, 0, 0.2); padding-top: 15px;">
-                            <h5 style="color: #ff6b00; font-weight: 700; margin: 0 0 10px 0;">BMI Suggestions & Plan</h5>
+                            <h5 style="color: #007aff; font-weight: 700; margin: 0 0 10px 0;">BMI Suggestions & Plan</h5>
                             <div style="font-size: 13px; line-height: 1.4; margin-bottom: 10px;">
-                                <strong style="color: #ffffff;">Goal:</strong> <?php echo htmlspecialchars($bmi_sug['goal']); ?>
+                                <strong style="color: var(--text-main, #1d1d1f);">Goal:</strong> <?php echo htmlspecialchars($bmi_sug['goal']); ?>
                             </div>
                             
                             <div style="margin-bottom: 12px;">
-                                <strong style="color: #ff6b00; font-size: 11px; text-transform: uppercase; display: block; margin-bottom: 4px;">Recommended Workouts:</strong>
-                                <div style="font-size: 12px; color: #cbd5e1; background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); white-space: pre-line;">
+                                <strong style="color: #007aff; font-size: 11px; text-transform: uppercase; display: block; margin-bottom: 4px;">Recommended Workouts:</strong>
+                                <div style="font-size: 12px; color: var(--text-main, #1d1d1f); background: var(--bg-dark, #f5f5f7); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--card-border, rgba(0,0,0,0.08)); white-space: pre-line;">
                                     <?php echo htmlspecialchars($bmi_sug['workouts']); ?>
                                 </div>
                             </div>
                             
                             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                                <div style="flex: 1; min-width: 140px; background: rgba(16, 185, 129, 0.05); padding: 8px; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.15);">
+                                <div style="flex: 1; min-width: 140px; background: rgba(16, 185, 129, 0.08); padding: 8px; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.2);">
                                     <strong style="color: #10b981; font-size: 11px; text-transform: uppercase; display: block; margin-bottom: 4px;">Vegetarian Diet:</strong>
-                                    <div style="font-size: 11px; color: #cbd5e1; white-space: pre-line;">
+                                    <div style="font-size: 11px; color: var(--text-main, #1d1d1f); white-space: pre-line;">
                                         <?php echo htmlspecialchars($bmi_sug['veg_diet']); ?>
                                     </div>
                                 </div>
-                                <div style="flex: 1; min-width: 140px; background: rgba(239, 68, 68, 0.05); padding: 8px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.15);">
+                                <div style="flex: 1; min-width: 140px; background: rgba(239, 68, 68, 0.08); padding: 8px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.2);">
                                     <strong style="color: #ef4444; font-size: 11px; text-transform: uppercase; display: block; margin-bottom: 4px;">Non-Veg Diet:</strong>
-                                    <div style="font-size: 11px; color: #cbd5e1; white-space: pre-line;">
+                                    <div style="font-size: 11px; color: var(--text-main, #1d1d1f); white-space: pre-line;">
                                         <?php echo htmlspecialchars($bmi_sug['nonveg_diet']); ?>
                                     </div>
                                 </div>
@@ -683,8 +683,8 @@ $gym = get_gym_details($con);
                 </div>
 
                 <!-- Workout Routine Section -->
-                <div class="info-section" style="margin-top: 30px; background: rgba(255, 107, 0, 0.02); border-color: rgba(255, 107, 0, 0.15);">
-                    <h4 style="border-color: rgba(255,107,0,0.25);">Workout Routine Package</h4>
+                <div class="info-section" style="margin-top: 30px; background: rgba(0, 122, 255, 0.02); border-color: rgba(0, 122, 255, 0.12);">
+                    <h4 style="border-color: rgba(0, 122, 255, 0.2);">Workout Routine Package</h4>
                     <?php if ($routine): ?>
                         <p style="font-size: 14px; margin-bottom: 15px;">Assigned Workout Package: <strong style="color: var(--accent-primary);"><?php echo htmlspecialchars($routine['tname']); ?></strong></p>
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px;">
@@ -725,7 +725,7 @@ $gym = get_gym_details($con);
 
                 <!-- Payment History Table -->
                 <div style="margin-top: 35px;">
-                    <h3 style="margin-bottom: 15px; color: #fff; font-weight: 700; font-size: 18px;">Subscription & Payment Ledger</h3>
+                    <h3 style="margin-bottom: 15px; color: var(--text-main, #1d1d1f); font-weight: 700; font-size: 18px;">Subscription & Payment Ledger</h3>
                     <table class="table" style="width: 100%;">
                         <thead>
                             <tr>
@@ -793,7 +793,7 @@ $gym = get_gym_details($con);
 
                 <!-- Personal Training Ledger Table -->
                 <div style="margin-top: 35px;">
-                    <h3 style="margin-bottom: 15px; color: #fff; font-weight: 700; font-size: 18px;">Personal Training Ledger</h3>
+                    <h3 style="margin-bottom: 15px; color: var(--text-main, #1d1d1f); font-weight: 700; font-size: 18px;">Personal Training Ledger</h3>
                     <table class="table" style="width: 100%;">
                         <thead>
                             <tr>
@@ -844,7 +844,7 @@ $gym = get_gym_details($con);
 
                 <!-- Face Attendance History Section -->
                 <div style="margin-top: 35px;">
-                    <h3 style="margin-bottom: 15px; color: #fff; font-weight: 700; font-size: 18px;">Face ID Attendance Ledger</h3>
+                    <h3 style="margin-bottom: 15px; color: var(--text-main, #1d1d1f); font-weight: 700; font-size: 18px;">Face ID Attendance Ledger</h3>
                     <table class="table" style="width: 100%;">
                         <thead>
                             <tr>

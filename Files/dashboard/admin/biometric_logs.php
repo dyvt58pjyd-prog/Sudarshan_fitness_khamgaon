@@ -151,7 +151,7 @@ if ($res_logs) {
             <hr />
 
             <div class="logs-card">
-                <h3 style="margin-top: 0; color: #ffffff; font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <h3 style="margin-top: 0; color: var(--text-main, #1d1d1f); font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
                     <i class="entypo-list" style="color: var(--accent-primary);"></i> Audit Entries &amp; Exits
                 </h3>
                 <p style="color: var(--text-muted); font-size: 13.5px; margin-bottom: 25px; line-height: 1.5;">
@@ -171,10 +171,10 @@ if ($res_logs) {
                     </div>
                 </form>
 
-                <div class="table-responsive" style="border: 1px solid var(--glass-border); border-radius: 12px; background: rgba(0,0,0,0.15); overflow: hidden;">
+                <div class="table-responsive" style="border: 1px solid var(--border-color, var(--glass-border)); border-radius: 12px; background: var(--bg-card, #ffffff); overflow: hidden;">
                     <table class="table-premium">
                         <thead>
-                            <tr style="background: rgba(0,0,0,0.25);">
+                            <tr style="background: var(--hover-bg, rgba(0,0,0,0.03)); color: var(--text-muted);">
                                 <th style="width: 8%;">Photo</th>
                                 <th style="width: 25%;">Gym Member</th>
                                 <th style="width: 17%;">ID Number</th>
@@ -195,7 +195,7 @@ if ($res_logs) {
                                             <img src="<?php echo $photo_src; ?>" class="member-avatar" alt="Avatar">
                                         </td>
                                         <td>
-                                            <strong style="color: #ffffff; font-size: 14.5px;"><?php echo htmlspecialchars($l['username']); ?></strong>
+                                            <strong style="color: var(--text-main, #1d1d1f); font-size: 14.5px;"><?php echo htmlspecialchars($l['username']); ?></strong>
                                         </td>
                                         <td>
                                             <span style="color: var(--text-muted); font-family: monospace; font-size: 13px; font-weight: bold;">
@@ -203,7 +203,7 @@ if ($res_logs) {
                                             </span>
                                         </td>
                                         <td>
-                                            <strong style="color: #ffffff;"><?php echo $date_formatted; ?></strong>
+                                            <strong style="color: var(--text-main, #1d1d1f);"><?php echo $date_formatted; ?></strong>
                                             <div style="color: var(--text-muted); font-size: 11px; margin-top: 1px;"><?php echo $day_str; ?></div>
                                         </td>
                                         <td>

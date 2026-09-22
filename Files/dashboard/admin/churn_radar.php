@@ -71,12 +71,13 @@ $retention_rate = ($total_active > 0) ? round((count($consistent) / $total_activ
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <link href="a1style.css" rel="stylesheet" type="text/css">
     <style>
         .risk-badge { padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 11px; text-transform: uppercase; }
-        .risk-high { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid #ef4444; }
-        .risk-mod { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid #f59e0b; }
-        .risk-low { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; }
+        .risk-high { background: rgba(239, 68, 68, 0.15); color: #dc2626; border: 1px solid #ef4444; }
+        .risk-mod { background: rgba(245, 158, 11, 0.15); color: #d97706; border: 1px solid #f59e0b; }
+        .risk-low { background: rgba(16, 185, 129, 0.15); color: #059669; border: 1px solid #10b981; }
     </style>
 </head>
 <body class="page-body page-fade" onload="collapseSidebar();">
@@ -99,8 +100,8 @@ $retention_rate = ($total_active > 0) ? round((count($consistent) / $total_activ
         <div class="main-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
                 <div>
-                    <h2 style="margin: 0; font-weight: 800; text-transform: uppercase; color: #fff;">🧠 AI Member Churn Prediction &amp; Retention Radar</h2>
-                    <p style="color: #94a3b8; font-size: 13px; margin-top: 4px;">Predictive attendance analysis detecting members at risk of quitting, with automated 1-click re-engagement.</p>
+                    <h2 style="margin: 0; font-weight: 800; text-transform: uppercase; color: var(--text-main, #1d1d1f);">🧠 AI Member Churn Prediction &amp; Retention Radar</h2>
+                    <p style="color: var(--text-muted, #64748b); font-size: 13px; margin-top: 4px;">Predictive attendance analysis detecting members at risk of quitting, with automated 1-click re-engagement.</p>
                 </div>
                 <div>
                     <a href="index.php" class="a1-btn a1-blue" style="font-size: 12px; font-weight: bold; border-radius: 8px;">← Back to Dashboard</a>
@@ -108,41 +109,41 @@ $retention_rate = ($total_active > 0) ? round((count($consistent) / $total_activ
             </div>
 
             <?php if (!empty($msg)): ?>
-                <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #10b981; padding: 12px 18px; border-radius: 12px; margin-bottom: 20px; font-weight: bold;">
+                <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #059669; padding: 12px 18px; border-radius: 12px; margin-bottom: 20px; font-weight: bold;">
                     <?php echo $msg; ?>
                 </div>
             <?php endif; ?>
 
             <!-- Metrics Grid -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px;">
-                <div style="background: rgba(239, 68, 68, 0.12); border: 2px solid #ef4444; border-radius: 16px; padding: 18px; text-align: center;">
-                    <div style="font-size: 11px; font-weight: 800; color: #ef4444; text-transform: uppercase;">🔴 High Dropout Risk (Absent 7+ Days)</div>
-                    <div style="font-size: 32px; font-weight: 900; color: #ef4444; margin-top: 4px; font-family: 'Orbitron', sans-serif;"><?php echo count($high_risk); ?></div>
-                    <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Need Immediate Follow-Up</div>
+                <div style="background: rgba(239, 68, 68, 0.08); border: 1.5px solid #ef4444; border-radius: 16px; padding: 18px; text-align: center;">
+                    <div style="font-size: 11px; font-weight: 800; color: #dc2626; text-transform: uppercase;">🔴 High Dropout Risk (Absent 7+ Days)</div>
+                    <div style="font-size: 32px; font-weight: 900; color: #dc2626; margin-top: 4px; font-family: 'Orbitron', sans-serif;"><?php echo count($high_risk); ?></div>
+                    <div style="font-size: 11px; color: var(--text-muted, #64748b); margin-top: 2px;">Need Immediate Follow-Up</div>
                 </div>
 
-                <div style="background: rgba(245, 158, 11, 0.12); border: 2px solid #f59e0b; border-radius: 16px; padding: 18px; text-align: center;">
-                    <div style="font-size: 11px; font-weight: 800; color: #f59e0b; text-transform: uppercase;">🟡 Moderate Risk (Absent 4-6 Days)</div>
-                    <div style="font-size: 32px; font-weight: 900; color: #f59e0b; margin-top: 4px; font-family: 'Orbitron', sans-serif;"><?php echo count($moderate_risk); ?></div>
-                    <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Dropping Attendance</div>
+                <div style="background: rgba(245, 158, 11, 0.08); border: 1.5px solid #f59e0b; border-radius: 16px; padding: 18px; text-align: center;">
+                    <div style="font-size: 11px; font-weight: 800; color: #d97706; text-transform: uppercase;">🟡 Moderate Risk (Absent 4-6 Days)</div>
+                    <div style="font-size: 32px; font-weight: 900; color: #d97706; margin-top: 4px; font-family: 'Orbitron', sans-serif;"><?php echo count($moderate_risk); ?></div>
+                    <div style="font-size: 11px; color: var(--text-muted, #64748b); margin-top: 2px;">Dropping Attendance</div>
                 </div>
 
-                <div style="background: rgba(16, 185, 129, 0.12); border: 2px solid #10b981; border-radius: 16px; padding: 18px; text-align: center;">
-                    <div style="font-size: 11px; font-weight: 800; color: #10b981; text-transform: uppercase;">🟢 Active &amp; Consistent Athletes</div>
-                    <div style="font-size: 32px; font-weight: 900; color: #10b981; margin-top: 4px; font-family: 'Orbitron', sans-serif;"><?php echo count($consistent); ?></div>
-                    <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Working Out Regularly</div>
+                <div style="background: rgba(16, 185, 129, 0.08); border: 1.5px solid #10b981; border-radius: 16px; padding: 18px; text-align: center;">
+                    <div style="font-size: 11px; font-weight: 800; color: #059669; text-transform: uppercase;">🟢 Active &amp; Consistent Athletes</div>
+                    <div style="font-size: 32px; font-weight: 900; color: #059669; margin-top: 4px; font-family: 'Orbitron', sans-serif;"><?php echo count($consistent); ?></div>
+                    <div style="font-size: 11px; color: var(--text-muted, #64748b); margin-top: 2px;">Working Out Regularly</div>
                 </div>
 
-                <div style="background: rgba(56, 189, 248, 0.12); border: 2px solid #38bdf8; border-radius: 16px; padding: 18px; text-align: center;">
-                    <div style="font-size: 11px; font-weight: 800; color: #38bdf8; text-transform: uppercase;">📊 Gym Retention Health Score</div>
-                    <div style="font-size: 32px; font-weight: 900; color: #38bdf8; margin-top: 4px; font-family: 'Orbitron', sans-serif;"><?php echo $retention_rate; ?>%</div>
-                    <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Healthy Active Ratio</div>
+                <div style="background: rgba(56, 189, 248, 0.08); border: 1.5px solid #38bdf8; border-radius: 16px; padding: 18px; text-align: center;">
+                    <div style="font-size: 11px; font-weight: 800; color: #0284c7; text-transform: uppercase;">📊 Gym Retention Health Score</div>
+                    <div style="font-size: 32px; font-weight: 900; color: #0284c7; margin-top: 4px; font-family: 'Orbitron', sans-serif;"><?php echo $retention_rate; ?>%</div>
+                    <div style="font-size: 11px; color: var(--text-muted, #64748b); margin-top: 2px;">Healthy Active Ratio</div>
                 </div>
             </div>
 
             <!-- At-Risk Action List -->
-            <div style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 22px; margin-bottom: 30px;">
-                <h3 style="margin-top: 0; color: #fff; font-size: 16px; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px;">
+            <div style="background: var(--bg-card, #ffffff); border: 1px solid var(--border-color, rgba(0,0,0,0.08)); border-radius: 18px; padding: 22px; margin-bottom: 30px; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
+                <h3 style="margin-top: 0; color: var(--text-main, #1d1d1f); font-size: 16px; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.08)); padding-bottom: 12px;">
                     🎯 At-Risk Member Re-engagement Table
                 </h3>
 
@@ -152,7 +153,7 @@ $retention_rate = ($total_active > 0) ? round((count($consistent) / $total_activ
                 ?>
                 <table class="table table-bordered table-striped" style="font-size: 13.5px; width: 100%;">
                     <thead>
-                        <tr style="background: rgba(255,255,255,0.05); color: #94a3b8; text-transform: uppercase; font-size: 11px;">
+                        <tr style="background: var(--hover-bg, rgba(0,0,0,0.04)); color: var(--text-muted, #64748b); text-transform: uppercase; font-size: 11px;">
                             <th>Member ID</th>
                             <th>Name</th>
                             <th>Mobile</th>
@@ -166,12 +167,12 @@ $retention_rate = ($total_active > 0) ? round((count($consistent) / $total_activ
                     <tbody>
                         <?php foreach ($at_risk_list as $mem): ?>
                         <tr>
-                            <td><strong style="color: #38bdf8;">#<?php echo htmlspecialchars($mem['userid']); ?></strong></td>
-                            <td><strong><?php echo htmlspecialchars($mem['username']); ?></strong></td>
-                            <td><?php echo htmlspecialchars($mem['mobile']); ?></td>
-                            <td><?php echo htmlspecialchars($mem['planName']); ?></td>
-                            <td><?php echo !empty($mem['last_attendance']) ? date('d M Y', strtotime($mem['last_attendance'])) : '<span style="color:#ef4444;">Never Attended</span>'; ?></td>
-                            <td><strong style="color: <?php echo $mem['days_absent'] >= 7 ? '#ef4444' : '#f59e0b'; ?>;"><?php echo $mem['days_absent']; ?> Days</strong></td>
+                            <td><strong style="color: #0284c7;">#<?php echo htmlspecialchars($mem['userid']); ?></strong></td>
+                            <td><strong style="color: var(--text-main, #1d1d1f);"><?php echo htmlspecialchars($mem['username']); ?></strong></td>
+                            <td style="color: var(--text-main, #1d1d1f);"><?php echo htmlspecialchars($mem['mobile']); ?></td>
+                            <td style="color: var(--text-main, #1d1d1f);"><?php echo htmlspecialchars($mem['planName']); ?></td>
+                            <td style="color: var(--text-muted, #64748b);"><?php echo !empty($mem['last_attendance']) ? date('d M Y', strtotime($mem['last_attendance'])) : '<span style="color:#dc2626;">Never Attended</span>'; ?></td>
+                            <td><strong style="color: <?php echo $mem['days_absent'] >= 7 ? '#dc2626' : '#d97706'; ?>;"><?php echo $mem['days_absent']; ?> Days</strong></td>
                             <td>
                                 <span class="risk-badge <?php echo $mem['risk_level'] === 'HIGH' ? 'risk-high' : 'risk-mod'; ?>">
                                     <?php echo $mem['risk_level']; ?> RISK

@@ -249,14 +249,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_bmi'])) {
 
                         <!-- Search Results -->
                         <?php if (!empty($search_query)): ?>
-                            <h5 style="margin-top: 25px; color: #a3a3a3; font-weight: bold;">Search Results (<?php echo count($search_results); ?>)</h5>
+                            <h5 style="margin-top: 25px; color: var(--text-muted, #64748b); font-weight: bold;">Search Results (<?php echo count($search_results); ?>)</h5>
                             <?php if (count($search_results) > 0): ?>
                                 <ul class="search-results-list">
                                     <?php foreach ($search_results as $res): ?>
                                         <li class="search-result-item" onclick="window.location.href='bmi_calc.php?uid=<?php echo urlencode($res['userid']); ?>'">
                                             <div>
-                                                <strong style="color: #ffffff;"><?php echo htmlspecialchars($res['username']); ?></strong>
-                                                <div style="font-size: 11px; color: #a3a3a3; margin-top:2px;">ID: <?php echo htmlspecialchars($res['userid']); ?></div>
+                                                <strong style="color: var(--text-main, #1d1d1f);"><?php echo htmlspecialchars($res['username']); ?></strong>
+                                                <div style="font-size: 11px; color: var(--text-muted, #64748b); margin-top:2px;">ID: <?php echo htmlspecialchars($res['userid']); ?></div>
                                             </div>
                                             <span style="font-size: 12px; color: var(--accent-primary); font-weight: bold;"><?php echo htmlspecialchars($res['mobile']); ?></span>
                                         </li>
@@ -278,8 +278,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_bmi'])) {
                                     <img src="<?php echo htmlspecialchars($member['photo']); ?>" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-primary);" />
                                 <?php endif; ?>
                                 <div>
-                                    <h4 style="color: #ffffff; margin: 0; font-weight: 700;"><?php echo htmlspecialchars($member['username']); ?></h4>
-                                    <span style="font-size: 12px; color: #a3a3a3;">Membership ID: <?php echo htmlspecialchars($member['userid']); ?></span>
+                                    <h4 style="color: var(--text-main, #1d1d1f); margin: 0; font-weight: 700;"><?php echo htmlspecialchars($member['username']); ?></h4>
+                                    <span style="font-size: 12px; color: var(--text-muted, #64748b);">Membership ID: <?php echo htmlspecialchars($member['userid']); ?></span>
                                 </div>
                             </div>
 
@@ -327,36 +327,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_bmi'])) {
 
                             <!-- Interactive BMI Display Card -->
                             <div class="bmi-display-card" id="bmi_card" style="display: none;">
-                                <div style="font-size: 11px; text-transform: uppercase; color: #a3a3a3; letter-spacing: 2px; font-weight: bold;">Calculated Body Mass Index (BMI)</div>
+                                <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted, #64748b); letter-spacing: 2px; font-weight: bold;">Calculated Body Mass Index (BMI)</div>
                                 <div class="bmi-num" id="bmi_value">--</div>
                                 <div class="bmi-category" id="bmi_category">--</div>
                                 
                                 <div class="bmi-scale-bar">
                                     <div class="bmi-pointer" id="bmi_pointer" style="left: 0%;"></div>
                                 </div>
-                                <div style="display: flex; justify-content: space-between; font-size: 10px; color: #a3a3a3; margin-bottom: 20px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted, #64748b); margin-bottom: 20px;">
                                     <span>&lt; 18.5 (Under)</span>
                                     <span>18.5 - 25 (Normal)</span>
                                     <span>25 - 30 (Over)</span>
                                     <span>30+ (Obese)</span>
                                 </div>
 
-                                <div style="border-top: 1px solid rgba(255, 107, 0, 0.15); padding-top: 20px; text-align: left;">
-                                    <h5 style="color: #ff6b00; font-weight: 700; margin-top: 0; font-size: 14px;">Goal: <span id="bmi_goal" style="color: #ffffff; font-weight: 500;">--</span></h5>
+                                <div style="border-top: 1px solid rgba(0, 122, 255, 0.15); padding-top: 20px; text-align: left;">
+                                    <h5 style="color: #007aff; font-weight: 700; margin-top: 0; font-size: 14px;">Goal: <span id="bmi_goal" style="color: var(--text-main, #1d1d1f); font-weight: 500;">--</span></h5>
                                     
                                     <div style="margin-top: 15px;">
                                         <strong style="color: var(--accent-primary); font-size: 12px; text-transform: uppercase; display: block; margin-bottom: 5px; letter-spacing: 0.5px;">Recommended Workouts:</strong>
-                                        <p id="bmi_workouts" style="font-size: 13px; line-height: 1.5; color: #e2e8f0; margin: 0; white-space: pre-line;">--</p>
+                                        <p id="bmi_workouts" style="font-size: 13px; line-height: 1.5; color: var(--text-main, #1d1d1f); margin: 0; white-space: pre-line;">--</p>
                                     </div>
                                     
                                     <div style="margin-top: 15px; display: flex; gap: 15px; flex-wrap: wrap;">
-                                        <div style="flex: 1; min-width: 180px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,107,0,0.15);">
+                                        <div style="flex: 1; min-width: 180px; background: var(--bg-dark, #f5f5f7); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border, rgba(0,0,0,0.08));">
                                             <strong style="color: #10b981; font-size: 12px; text-transform: uppercase; display: block; margin-bottom: 5px; letter-spacing: 0.5px;">Vegetarian Diet:</strong>
-                                            <p id="bmi_veg_diet" style="font-size: 12px; line-height: 1.5; color: #cbd5e1; margin: 0; white-space: pre-line;">--</p>
+                                            <p id="bmi_veg_diet" style="font-size: 12px; line-height: 1.5; color: var(--text-main, #1d1d1f); margin: 0; white-space: pre-line;">--</p>
                                         </div>
-                                        <div style="flex: 1; min-width: 180px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,107,0,0.15);">
+                                        <div style="flex: 1; min-width: 180px; background: var(--bg-dark, #f5f5f7); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border, rgba(0,0,0,0.08));">
                                             <strong style="color: #ef4444; font-size: 12px; text-transform: uppercase; display: block; margin-bottom: 5px; letter-spacing: 0.5px;">Non-Vegetarian Diet:</strong>
-                                            <p id="bmi_nonveg_diet" style="font-size: 12px; line-height: 1.5; color: #cbd5e1; margin: 0; white-space: pre-line;">--</p>
+                                            <p id="bmi_nonveg_diet" style="font-size: 12px; line-height: 1.5; color: var(--text-main, #1d1d1f); margin: 0; white-space: pre-line;">--</p>
                                         </div>
                                     </div>
                                 </div>

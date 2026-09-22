@@ -31,6 +31,95 @@
   --info: #007aff;
 }
 
+/* ==================
+   LIGHT MODE TEXT CONTRAST & VISIBILITY ENGINE
+   ================== */
+:root, [data-theme="light"], html:not([data-theme="dark"]) {
+  color: #1d1d1f;
+}
+
+/* Headings in light mode must always be rich dark charcoal */
+:root:not([data-theme="dark"]) h1, :root:not([data-theme="dark"]) h2, :root:not([data-theme="dark"]) h3,
+:root:not([data-theme="dark"]) h4, :root:not([data-theme="dark"]) h5, :root:not([data-theme="dark"]) h6,
+[data-theme="light"] h1, [data-theme="light"] h2, [data-theme="light"] h3,
+[data-theme="light"] h4, [data-theme="light"] h5, [data-theme="light"] h6 {
+  color: #1d1d1f;
+}
+
+/* Dashboard tiles text */
+.dashboard-grid h4,
+[data-theme="light"] .dashboard-grid h4,
+:root:not([data-theme="dark"]) .dashboard-grid h4 {
+  color: #1d1d1f !important;
+}
+
+.dashboard-grid span,
+[data-theme="light"] .dashboard-grid span,
+:root:not([data-theme="dark"]) .dashboard-grid span {
+  color: #64748b !important;
+}
+
+/* Card, panel, and table typography in light mode */
+:root:not([data-theme="dark"]) .a1-card,
+:root:not([data-theme="dark"]) .a1-card-8,
+:root:not([data-theme="dark"]) .portal-card,
+:root:not([data-theme="dark"]) .panel,
+:root:not([data-theme="dark"]) .table,
+:root:not([data-theme="dark"]) table,
+[data-theme="light"] .a1-card,
+[data-theme="light"] .a1-card-8,
+[data-theme="light"] .portal-card,
+[data-theme="light"] .panel,
+[data-theme="light"] .table,
+[data-theme="light"] table {
+  color: #1d1d1f !important;
+}
+
+:root:not([data-theme="dark"]) .table td,
+:root:not([data-theme="dark"]) table td,
+:root:not([data-theme="dark"]) .table th,
+:root:not([data-theme="dark"]) table th,
+[data-theme="light"] .table td,
+[data-theme="light"] table td,
+[data-theme="light"] .table th,
+[data-theme="light"] table th {
+  color: #1d1d1f !important;
+}
+
+:root:not([data-theme="dark"]) label:not(.btn):not([class*="badge"]),
+[data-theme="light"] label:not(.btn):not([class*="badge"]) {
+  color: #1d1d1f;
+}
+
+/* Intercept and correct legacy white/pale inline styles on elements that are NOT on dark backgrounds */
+:root:not([data-theme="dark"]) [style*="color: #fff"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not([style*="background: #0"]):not([style*="background:#0"]):not([style*="background: #1"]):not([style*="background:#1"]):not([style*="background: #2"]):not([style*="background:#2"]):not([style*="background: rgb"]):not([style*="background:rgb"]):not(button),
+:root:not([data-theme="dark"]) [style*="color: #ffffff"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not([style*="background: #0"]):not([style*="background:#0"]):not([style*="background: #1"]):not([style*="background:#1"]):not([style*="background: #2"]):not([style*="background:#2"]):not([style*="background: rgb"]):not([style*="background:rgb"]):not(button),
+:root:not([data-theme="dark"]) [style*="color:#fff"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not([style*="background: #0"]):not([style*="background:#0"]):not([style*="background: #1"]):not([style*="background:#1"]):not([style*="background: #2"]):not([style*="background:#2"]):not([style*="background: rgb"]):not([style*="background:rgb"]):not(button),
+:root:not([data-theme="dark"]) [style*="color:#ffffff"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not([style*="background: #0"]):not([style*="background:#0"]):not([style*="background: #1"]):not([style*="background:#1"]):not([style*="background: #2"]):not([style*="background:#2"]):not([style*="background: rgb"]):not([style*="background:rgb"]):not(button),
+:root:not([data-theme="dark"]) [style*="color: white"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not([style*="background: #0"]):not([style*="background:#0"]):not([style*="background: #1"]):not([style*="background:#1"]):not([style*="background: #2"]):not([style*="background:#2"]):not([style*="background: rgb"]):not([style*="background:rgb"]):not(button),
+:root:not([data-theme="dark"]) [style*="color:white"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not([style*="background: #0"]):not([style*="background:#0"]):not([style*="background: #1"]):not([style*="background:#1"]):not([style*="background: #2"]):not([style*="background:#2"]):not([style*="background: rgb"]):not([style*="background:rgb"]):not(button),
+[data-theme="light"] [style*="color: #fff"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not([style*="background: #0"]):not([style*="background:#0"]):not([style*="background: #1"]):not([style*="background:#1"]):not([style*="background: #2"]):not([style*="background:#2"]):not([style*="background: rgb"]):not([style*="background:rgb"]):not(button),
+[data-theme="light"] [style*="color: #ffffff"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not([style*="background: #0"]):not([style*="background:#0"]):not([style*="background: #1"]):not([style*="background:#1"]):not([style*="background: #2"]):not([style*="background:#2"]):not([style*="background: rgb"]):not([style*="background:rgb"]):not(button),
+[data-theme="light"] [style*="color:#fff"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not([style*="background: #0"]):not([style*="background:#0"]):not([style*="background: #1"]):not([style*="background:#1"]):not([style*="background: #2"]):not([style*="background:#2"]):not([style*="background: rgb"]):not([style*="background:rgb"]):not(button),
+[data-theme="light"] [style*="color:#ffffff"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not([style*="background: #0"]):not([style*="background:#0"]):not([style*="background: #1"]):not([style*="background:#1"]):not([style*="background: #2"]):not([style*="background:#2"]):not([style*="background: rgb"]):not([style*="background:rgb"]):not(button),
+[data-theme="light"] [style*="color: white"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not([style*="background: #0"]):not([style*="background:#0"]):not([style*="background: #1"]):not([style*="background:#1"]):not([style*="background: #2"]):not([style*="background:#2"]):not([style*="background: rgb"]):not([style*="background:rgb"]):not(button),
+[data-theme="light"] [style*="color:white"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not([style*="background: #0"]):not([style*="background:#0"]):not([style*="background: #1"]):not([style*="background:#1"]):not([style*="background: #2"]):not([style*="background:#2"]):not([style*="background: rgb"]):not([style*="background:rgb"]):not(button) {
+  color: #1d1d1f !important;
+}
+
+/* Also pale grays like #cbd5e1, #e2e8f0, #94a3b8, #a3a3a3 */
+:root:not([data-theme="dark"]) [style*="color: #cbd5e1"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not(button),
+:root:not([data-theme="dark"]) [style*="color: #e2e8f0"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not(button),
+:root:not([data-theme="dark"]) [style*="color: #94a3b8"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not(button),
+:root:not([data-theme="dark"]) [style*="color: #a3a3a3"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not(button),
+[data-theme="light"] [style*="color: #cbd5e1"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not(button),
+[data-theme="light"] [style*="color: #e2e8f0"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not(button),
+[data-theme="light"] [style*="color: #94a3b8"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not(button),
+[data-theme="light"] [style*="color: #a3a3a3"]:not(.sidebar-menu *):not(.btn):not(.a1-btn):not([class*="badge"]):not([class*="label"]):not(button) {
+  color: #64748b !important;
+}
+
+
 [data-theme="dark"] {
   --bg-dark: #121214;
   --bg-darker: #1c1c1e;

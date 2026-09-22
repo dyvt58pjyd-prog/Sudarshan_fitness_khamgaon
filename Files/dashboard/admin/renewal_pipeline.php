@@ -337,9 +337,9 @@ foreach ($projection_data as $date => $val) {
             width: 32px;
             height: 32px;
             border-radius: 8px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #ffffff;
+            background: rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.1);
+            color: var(--text-main, #1d1d1f);
             text-decoration: none;
             transition: all 0.2s;
             margin-left: 5px;
@@ -450,7 +450,7 @@ foreach ($projection_data as $date => $val) {
             <div class="row" style="margin-top: 15px;">
                 <div class="col-md-7">
                     <div style="background: var(--glass-bg); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; box-shadow: var(--glass-shadow); height: 350px; display: flex; flex-direction: column;">
-                        <h4 style="margin-top: 0; color: #ffffff; font-weight: 700; margin-bottom: 15px;">15-Day Renewal Cash Flow Projection</h4>
+                        <h4 style="margin-top: 0; color: var(--text-main, #1d1d1f); font-weight: 700; margin-bottom: 15px;">15-Day Renewal Cash Flow Projection</h4>
                         <div style="flex-grow: 1; position: relative;">
                             <canvas id="projectionChart"></canvas>
                         </div>
@@ -459,12 +459,12 @@ foreach ($projection_data as $date => $val) {
                 <div class="col-md-5">
                     <div style="background: var(--glass-bg); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; box-shadow: var(--glass-shadow); height: 350px; display: flex; flex-direction: column; justify-content: space-between;">
                         <div>
-                            <h4 style="margin-top: 0; color: #ffffff; font-weight: 700; margin-bottom: 10px;">Bulk WhatsApp Campaign</h4>
+                            <h4 style="margin-top: 0; color: var(--text-main, #1d1d1f); font-weight: 700; margin-bottom: 10px;">Bulk WhatsApp Campaign</h4>
                             <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6; margin-bottom: 15px;">
                                 Queue personalized WhatsApp renewal reminders to all <strong><?php echo count($members); ?> members</strong> currently in the 15-day pipeline. The system will adapt the template for expired versus expiring members dynamically.
                             </p>
                             
-                            <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 15px; font-size: 12px; font-family: monospace; color: #e2e8f0; max-height: 120px; overflow-y: auto;">
+                            <div style="background: var(--bg-dark, #f5f5f7); border: 1px solid var(--card-border, rgba(0,0,0,0.08)); border-radius: 10px; padding: 15px; font-size: 12px; font-family: monospace; color: var(--text-main, #1d1d1f); max-height: 120px; overflow-y: auto;">
                                 <span style="color: var(--accent-primary); font-weight: bold;">[SAMPLE REMINDER TEXT]</span><br>
                                 🏋️ Sudarshan Fitness Renewal<br>
                                 Hello [Name], your plan [PlanName] is expiring in [X] days (on [ExpiryDate]). Please renew before expiry to prevent scan lockages. 💪
@@ -485,12 +485,12 @@ foreach ($projection_data as $date => $val) {
             <div class="row" style="margin-top: 30px; margin-bottom: 50px;">
                 <div class="col-md-12">
                     <div style="background: var(--glass-bg); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 30px; box-shadow: var(--glass-shadow);">
-                        <h3 style="margin-top: 0; color: #ffffff; font-weight: 700; margin-bottom: 20px;">Renewal Pipeline Members</h3>
+                        <h3 style="margin-top: 0; color: var(--text-main, #1d1d1f); font-weight: 700; margin-bottom: 20px;">Renewal Pipeline Members</h3>
                         
-                        <div class="table-responsive" style="border: 1px solid var(--glass-border); border-radius: 12px; background: rgba(0,0,0,0.15); overflow: hidden;">
+                        <div class="table-responsive" style="border: 1px solid var(--card-border, rgba(0,0,0,0.08)); border-radius: 12px; background: transparent; overflow: hidden;">
                             <table class="table-premium">
                                 <thead>
-                                    <tr style="background: rgba(0,0,0,0.25);">
+                                    <tr style="background: var(--header-bg, #f8fafc);">
                                         <th>Member ID</th>
                                         <th>Name</th>
                                         <th>Contact Details</th>
@@ -506,13 +506,13 @@ foreach ($projection_data as $date => $val) {
                                         <?php foreach ($members as $m): ?>
                                             <tr>
                                                 <td><span style="font-family: monospace; font-weight: bold; color: var(--text-muted);"><?php echo htmlspecialchars($m['userid']); ?></span></td>
-                                                <td><strong style="color: #ffffff;"><?php echo htmlspecialchars($m['username']); ?></strong></td>
+                                                <td><strong style="color: var(--text-main, #1d1d1f);"><?php echo htmlspecialchars($m['username']); ?></strong></td>
                                                 <td>
-                                                    <span style="color: #ffffff;"><?php echo htmlspecialchars($m['mobile']); ?></span>
+                                                    <span style="color: var(--text-main, #1d1d1f);"><?php echo htmlspecialchars($m['mobile']); ?></span>
                                                     <div style="color: var(--text-muted); font-size: 11px;"><?php echo htmlspecialchars($m['email']); ?></div>
                                                 </td>
-                                                <td><span style="font-weight: 500; color: #ffffff;"><?php echo date('d-M-Y', strtotime($m['expire'])); ?></span></td>
-                                                <td><span style="color: #ffffff; font-weight: 500;"><?php echo htmlspecialchars($m['planName']); ?></span></td>
+                                                <td><span style="font-weight: 500; color: var(--text-main, #1d1d1f);"><?php echo date('d-M-Y', strtotime($m['expire'])); ?></span></td>
+                                                <td><span style="color: var(--text-main, #1d1d1f); font-weight: 500;"><?php echo htmlspecialchars($m['planName']); ?></span></td>
                                                 <td>
                                                     <?php if ($m['status_cat'] === 'expired'): ?>
                                                         <span class="status-badge status-expired">Expired <?php echo abs($m['days_diff']); ?>d ago</span>

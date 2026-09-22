@@ -149,13 +149,13 @@ $res = mysqli_query($con, $query);
                                             ?>
                                         </td>
                                         <td style="padding: 15px 12px; vertical-align: middle;">
-                                            <strong style="color: #ffffff; display: block; font-size: 15px;"><?php echo htmlspecialchars($row['name']); ?></strong>
+                                            <strong style="color: var(--text-main, #1d1d1f); display: block; font-size: 15px;"><?php echo htmlspecialchars($row['name']); ?></strong>
                                             <span style="font-size: 13px; color: var(--accent-primary); display: block; margin-top: 5px;"><i class="entypo-phone"></i> <?php echo htmlspecialchars($row['mobile']); ?></span>
                                         </td>
                                         <td style="padding: 15px 12px; vertical-align: middle; max-width: 250px;">
-                                            <div style="font-size: 13px; color: #e2e8f0; margin-bottom: 5px;"><i class="entypo-location"></i> <?php echo htmlspecialchars($row['address']); ?></div>
+                                            <div style="font-size: 13px; color: var(--text-main, #1d1d1f); margin-bottom: 5px;"><i class="entypo-location"></i> <?php echo htmlspecialchars($row['address']); ?></div>
                                             <?php if (!empty($row['notes'])): ?>
-                                                <div style="font-size: 12px; color: var(--text-muted); background: rgba(0,0,0,0.3); padding: 5px 8px; border-radius: 4px;">
+                                                <div style="font-size: 12px; color: var(--text-muted); background: var(--bg-dark, #f5f5f7); padding: 5px 8px; border-radius: 4px; border: 1px solid var(--card-border, rgba(0,0,0,0.08));">
                                                     <strong>Note:</strong> <?php echo htmlspecialchars($row['notes']); ?>
                                                 </div>
                                             <?php endif; ?>

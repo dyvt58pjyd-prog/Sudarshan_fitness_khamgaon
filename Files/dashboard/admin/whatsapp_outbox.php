@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         <div class="main-content">
             <div class="row" style="margin-bottom: 20px;">
                 <div class="col-md-6">
-                    <h2 style="color: #fff; font-weight: 700;"><i class="entypo-paper-plane"></i> WhatsApp Message Queue</h2>
+                    <h2 style="color: var(--text-main, #1d1d1f); font-weight: 700;"><i class="entypo-paper-plane" style="color: var(--accent-primary);"></i> WhatsApp Message Queue</h2>
                 </div>
                 <div class="col-md-6 text-right">
                     <form method="POST" action="" onsubmit="return confirm('Are you sure you want to clear all messages?');">

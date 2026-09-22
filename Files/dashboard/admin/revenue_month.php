@@ -70,8 +70,8 @@ $gym = get_gym_details($con);
 
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
                 <div>
-                    <h2 style="margin: 0; font-weight: 800; text-transform: uppercase; color: #fff;">📊 Monthly Income &amp; Auditing Breakdown</h2>
-                    <p style="color: #94a3b8; font-size: 13px; margin-top: 4px;">Audited monthly collection breakdown with dedicated <strong>💳 UPI Monthly</strong> and <strong>💵 Cash Monthly</strong> separators.</p>
+                    <h2 style="margin: 0; font-weight: 800; text-transform: uppercase; color: var(--text-main, #1d1d1f);">📊 Monthly Income &amp; Auditing Breakdown</h2>
+                    <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Audited monthly collection breakdown with dedicated <strong>💳 UPI Monthly</strong> and <strong>💵 Cash Monthly</strong> separators.</p>
                 </div>
                 <div>
                     <a href="export_payments.php" class="a1-btn a1-green" style="font-size: 12px; font-weight: bold; border-radius: 8px;">
@@ -81,12 +81,12 @@ $gym = get_gym_details($con);
             </div>
 
             <!-- Filter Controls Form -->
-            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 18px 20px; margin-bottom: 25px;">
+            <div style="background: var(--card-bg, #ffffff); border: 1px solid var(--card-border, rgba(0,0,0,0.08)); border-radius: 14px; padding: 18px 20px; margin-bottom: 25px;">
                 <form onsubmit="event.preventDefault(); showMember();" style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
                     <?php
                     $yearArray = range(2000, max(intval(date('Y')), isset($_SESSION['working_year']) ? $_SESSION['working_year'] : date('Y')));
                     ?>
-                    <label style="color: #cbd5e1; font-size: 13px; font-weight: 700; margin: 0;">Year:</label>
+                    <label style="color: var(--text-main, #1d1d1f); font-size: 13px; font-weight: 700; margin: 0;">Year:</label>
                     <select name="year" id="syear" class="filter-select" onchange="showMember();">
                         <option value="0">Select Year</option>
                         <?php

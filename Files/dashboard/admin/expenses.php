@@ -205,25 +205,24 @@ if (!in_array(intval(date('Y')), $avail_years)) {
             box-shadow: inset 3px 0 0 #ef4444;
         }
         .stat-card {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: var(--bg-card, #ffffff);
+            border: 1px solid var(--border-color, rgba(0,0,0,0.08));
             border-radius: 18px;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
             transition: transform 0.2s;
         }
         .stat-card:hover { transform: translateY(-3px); }
         .stat-card .val { font-size: 28px; font-weight: 900; line-height: 1.2; margin-top: 6px; }
-        .stat-card .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; }
+        .stat-card .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted, #64748b); }
         
         .mode-tab {
             padding: 9px 18px;
             border-radius: 10px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #94a3b8;
+            background: var(--hover-bg, rgba(0,0,0,0.04));
+            border: 1px solid var(--border-color, rgba(0,0,0,0.1));
+            color: var(--text-muted, #64748b);
             font-size: 12px;
             font-weight: 700;
             cursor: pointer;
@@ -234,15 +233,15 @@ if (!in_array(intval(date('Y')), $avail_years)) {
             gap: 6px;
         }
         .mode-tab:hover, .mode-tab.active {
-            background: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.15);
             border-color: #ef4444;
-            color: #ffffff;
+            color: #ef4444;
         }
         .form-control-premium {
-            background: rgba(15, 23, 42, 0.8) !important;
-            border: 1px solid rgba(255,255,255,0.1) !important;
+            background: var(--input-bg, #f8fafc) !important;
+            border: 1px solid var(--border-color, rgba(0,0,0,0.12)) !important;
             border-radius: 10px !important;
-            color: #ffffff !important;
+            color: var(--text-main, #1d1d1f) !important;
             padding: 10px 14px !important;
             width: 100%;
             margin-bottom: 14px;
@@ -253,13 +252,12 @@ if (!in_array(intval(date('Y')), $avail_years)) {
             box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important;
         }
         .glass-panel {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: var(--bg-card, #ffffff);
+            border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
             border-radius: 20px;
             padding: 24px;
             margin-bottom: 24px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }
         .premium-btn {
             background: linear-gradient(135deg, #ef4444, #dc2626);
@@ -285,27 +283,27 @@ if (!in_array(intval(date('Y')), $avail_years)) {
             border-collapse: collapse;
         }
         .premium-table th {
-            background: rgba(239, 68, 68, 0.12);
-            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
             font-weight: 700;
             text-transform: uppercase;
             font-size: 11px;
             letter-spacing: 1px;
             padding: 11px 14px;
-            border-bottom: 1px solid rgba(239, 68, 68, 0.3);
+            border-bottom: 1px solid rgba(239, 68, 68, 0.25);
             text-align: left;
         }
         .premium-table td {
             padding: 11px 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.06));
             font-size: 13px;
-            color: #e2e8f0;
+            color: var(--text-main, #1d1d1f);
         }
         .premium-table tr:hover td { background: rgba(239, 68, 68, 0.04); }
         .category-badge {
-            background: rgba(239, 68, 68, 0.15);
-            color: #fca5a5;
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.25);
             padding: 3px 9px;
             border-radius: 6px;
             font-size: 11px;
@@ -326,10 +324,10 @@ if (!in_array(intval(date('Y')), $avail_years)) {
         .delete-btn:hover { background: #ef4444; color: white !important; }
         .cat-chip {
             display: inline-flex; align-items: center; justify-content: space-between;
-            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            background: var(--bg-main, #f8fafc); border: 1px solid var(--border-color, rgba(0,0,0,0.08));
             border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; width: 100%;
         }
-        .cat-chip .name { font-size: 13px; font-weight: 600; color: #fff; }
+        .cat-chip .name { font-size: 13px; font-weight: 600; color: var(--text-main, #1d1d1f); }
         .cat-chip .val { font-size: 14px; font-weight: 800; color: #ef4444; }
     </style>
 </head>
@@ -411,7 +409,7 @@ if (!in_array(intval(date('Y')), $avail_years)) {
         <div class="glass-panel" style="padding:18px;">
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:15px;">
                 <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                    <span style="font-weight:700;font-size:13px;color:#fff;">View Mode:</span>
+                    <span style="font-weight:700;font-size:13px;color:var(--text-main, #1d1d1f);">View Mode:</span>
                     <a href="?view_mode=month&filter_month=<?php echo $filter_month; ?>&mode=<?php echo $filter_mode; ?>" class="mode-tab <?php echo $view_mode === 'month' ? 'active' : ''; ?>">📅 Monthly View</a>
                     <a href="?view_mode=year&filter_year=<?php echo $filter_year; ?>&mode=<?php echo $filter_mode; ?>" class="mode-tab <?php echo $view_mode === 'year' ? 'active' : ''; ?>">🗓️ Yearly View</a>
                     <a href="?view_mode=all_time&mode=<?php echo $filter_mode; ?>" class="mode-tab <?php echo $view_mode === 'all_time' ? 'active' : ''; ?>">🌐 Overall All-Time</a>
@@ -456,15 +454,15 @@ if (!in_array(intval(date('Y')), $avail_years)) {
             <div class="col-md-4">
                 <!-- Log Expense Form -->
                 <div class="glass-panel">
-                    <h3 style="margin-top:0;margin-bottom:18px;font-weight:800;color:#ef4444;font-size:15px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:10px;">➕ Log New Expense</h3>
+                    <h3 style="margin-top:0;margin-bottom:18px;font-weight:800;color:#ef4444;font-size:15px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border-color, rgba(0,0,0,0.1));padding-bottom:10px;">➕ Log New Expense</h3>
                     <form method="post" action="">
-                        <label style="font-weight:600;font-size:12px;color:#e2e8f0;display:block;margin-bottom:4px;">Expense Title / Name *</label>
+                        <label style="font-weight:600;font-size:12px;color:var(--text-main, #1d1d1f);display:block;margin-bottom:4px;">Expense Title / Name *</label>
                         <input class="form-control-premium" type="text" name="expense_name" placeholder="e.g. Electricity Bill, Staff Salary" required>
 
-                        <label style="font-weight:600;font-size:12px;color:#e2e8f0;display:block;margin-bottom:4px;">Amount (INR ₹) *</label>
+                        <label style="font-weight:600;font-size:12px;color:var(--text-main, #1d1d1f);display:block;margin-bottom:4px;">Amount (INR ₹) *</label>
                         <input class="form-control-premium" type="number" min="1" name="amount" placeholder="e.g. 5000" required>
 
-                        <label style="font-weight:600;font-size:12px;color:#e2e8f0;display:block;margin-bottom:4px;">Payment Mode / Account *</label>
+                        <label style="font-weight:600;font-size:12px;color:var(--text-main, #1d1d1f);display:block;margin-bottom:4px;">Payment Mode / Account *</label>
                         <select class="form-control-premium" name="payment_mode" required>
                             <option value="Cash">💵 Physical Cash (Cash Drawer)</option>
                             <option value="UPI">💳 UPI / QR Code (Digital Bank)</option>
@@ -472,10 +470,10 @@ if (!in_array(intval(date('Y')), $avail_years)) {
                             <option value="Cheque">📑 Cheque / DD</option>
                         </select>
 
-                        <label style="font-weight:600;font-size:12px;color:#e2e8f0;display:block;margin-bottom:4px;">Voucher / Receipt / Bill No</label>
+                        <label style="font-weight:600;font-size:12px;color:var(--text-main, #1d1d1f);display:block;margin-bottom:4px;">Voucher / Receipt / Bill No</label>
                         <input class="form-control-premium" type="text" name="voucher_no" placeholder="e.g. Bill #482, Voucher #12">
 
-                        <label style="font-weight:600;font-size:12px;color:#e2e8f0;display:block;margin-bottom:4px;">Category *</label>
+                        <label style="font-weight:600;font-size:12px;color:var(--text-main, #1d1d1f);display:block;margin-bottom:4px;">Category *</label>
                         <select class="form-control-premium" name="category" required>
                             <option value="Maintenance">Maintenance &amp; Repairs</option>
                             <option value="Rent">Rent &amp; Lease</option>
@@ -487,10 +485,10 @@ if (!in_array(intval(date('Y')), $avail_years)) {
                             <option value="Other">Other Miscellaneous</option>
                         </select>
 
-                        <label style="font-weight:600;font-size:12px;color:#e2e8f0;display:block;margin-bottom:4px;">Expense Date *</label>
+                        <label style="font-weight:600;font-size:12px;color:var(--text-main, #1d1d1f);display:block;margin-bottom:4px;">Expense Date *</label>
                         <input class="form-control-premium" type="date" name="expense_date" value="<?php echo date('Y-m-d'); ?>" required>
 
-                        <label style="font-weight:600;font-size:12px;color:#e2e8f0;display:block;margin-bottom:4px;">Remarks / Invoice Notes</label>
+                        <label style="font-weight:600;font-size:12px;color:var(--text-main, #1d1d1f);display:block;margin-bottom:4px;">Remarks / Invoice Notes</label>
                         <textarea class="form-control-premium" name="remarks" rows="2" placeholder="Optional remarks..."></textarea>
 
                         <button type="submit" name="add_expense" class="premium-btn">Log Expense</button>
@@ -499,7 +497,7 @@ if (!in_array(intval(date('Y')), $avail_years)) {
 
                 <!-- Category Breakdown for Selected Period -->
                 <div class="glass-panel">
-                    <h3 style="margin-top:0;margin-bottom:16px;font-weight:800;color:#fff;font-size:14px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:10px;">🏷️ Category Breakdown</h3>
+                    <h3 style="margin-top:0;margin-bottom:16px;font-weight:800;color:var(--text-main, #1d1d1f);font-size:14px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border-color, rgba(0,0,0,0.1));padding-bottom:10px;">🏷️ Category Breakdown</h3>
                     <?php
                     $q_cat_breakdown = mysqli_query($con, "
                         SELECT category, SUM(amount) as cat_total, COUNT(*) as cat_count
@@ -516,14 +514,14 @@ if (!in_array(intval(date('Y')), $avail_years)) {
                             echo "<div class='cat-chip'>
                                 <div>
                                     <div class='name'>" . htmlspecialchars($cat['category']) . "</div>
-                                    <div style='font-size:11px;color:#94a3b8;'>" . $cat['cat_count'] . " log" . ($cat['cat_count'] > 1 ? 's' : '') . " ({$cat_pct}%)</div>
+                                    <div style='font-size:11px;color:var(--text-muted, #64748b);'>" . $cat['cat_count'] . " log" . ($cat['cat_count'] > 1 ? 's' : '') . " ({$cat_pct}%)</div>
                                 </div>
                                 <div class='val'>₹" . number_format($cat['cat_total']) . "</div>
                             </div>";
                         }
                     }
                     if (!$has_cat) {
-                        echo "<p style='color:#64748b;font-size:13px;text-align:center;margin:10px 0;'>No expenses recorded for this period.</p>";
+                        echo "<p style='color:var(--text-muted, #64748b);font-size:13px;text-align:center;margin:10px 0;'>No expenses recorded for this period.</p>";
                     }
                     ?>
                 </div>
@@ -534,11 +532,11 @@ if (!in_array(intval(date('Y')), $avail_years)) {
                 <!-- Filtered Expenses List Table -->
                 <div class="glass-panel">
                     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:16px;gap:10px;">
-                        <h3 style="margin:0;font-weight:800;color:#fff;font-size:15px;text-transform:uppercase;letter-spacing:1px;"><?php echo $period_label; ?></h3>
+                        <h3 style="margin:0;font-weight:800;color:var(--text-main, #1d1d1f);font-size:15px;text-transform:uppercase;letter-spacing:1px;"><?php echo $period_label; ?></h3>
                         <div style="font-size:13px;font-weight:800;">
-                            <span style="color:#f59e0b;margin-right:12px;">Cash: ₹<?php echo number_format($filtered_cash); ?></span>
-                            <span style="color:#38bdf8;margin-right:12px;">UPI: ₹<?php echo number_format($filtered_upi); ?></span>
-                            <span style="color:#ef4444;">Total: ₹<?php echo number_format($filtered_total); ?></span>
+                            <span style="color:#d97706;margin-right:12px;">Cash: ₹<?php echo number_format($filtered_cash); ?></span>
+                            <span style="color:#0284c7;margin-right:12px;">UPI: ₹<?php echo number_format($filtered_upi); ?></span>
+                            <span style="color:#dc2626;">Total: ₹<?php echo number_format($filtered_total); ?></span>
                         </div>
                     </div>
 
@@ -565,16 +563,16 @@ if (!in_array(intval(date('Y')), $avail_years)) {
                                         $exp_mode = $row['payment_mode'] ?? 'Cash';
                                         $is_exp_upi = (stripos($exp_mode, 'upi') !== false || stripos($exp_mode, 'online') !== false || stripos($exp_mode, 'bank') !== false);
                                         $mode_badge = $is_exp_upi 
-                                            ? "<span style='background:rgba(56,189,248,0.15);color:#38bdf8;border:1px solid rgba(56,189,248,0.3);padding:2px 8px;border-radius:6px;font-size:11px;font-weight:bold;'>💳 " . htmlspecialchars($exp_mode) . "</span>"
-                                            : "<span style='background:rgba(245,158,11,0.15);color:#f59e0b;border:1px solid rgba(245,158,11,0.3);padding:2px 8px;border-radius:6px;font-size:11px;font-weight:bold;'>💵 " . htmlspecialchars($exp_mode) . "</span>";
+                                            ? "<span style='background:rgba(56,189,248,0.15);color:#0284c7;border:1px solid rgba(56,189,248,0.3);padding:2px 8px;border-radius:6px;font-size:11px;font-weight:bold;'>💳 " . htmlspecialchars($exp_mode) . "</span>"
+                                            : "<span style='background:rgba(245,158,11,0.15);color:#d97706;border:1px solid rgba(245,158,11,0.3);padding:2px 8px;border-radius:6px;font-size:11px;font-weight:bold;'>💵 " . htmlspecialchars($exp_mode) . "</span>";
 
                                         echo "<tr>";
-                                        echo "<td style='white-space:nowrap;'>" . date('d M Y', strtotime($row['expense_date'])) . "</td>";
-                                        echo "<td><strong style='color:#fff;'>" . htmlspecialchars($row['expense_name']) . "</strong></td>";
+                                        echo "<td style='white-space:nowrap;color:var(--text-muted, #64748b);'>" . date('d M Y', strtotime($row['expense_date'])) . "</td>";
+                                        echo "<td><strong style='color:var(--text-main, #1d1d1f);'>" . htmlspecialchars($row['expense_name']) . "</strong></td>";
                                         echo "<td><span class='category-badge'>" . htmlspecialchars($row['category']) . "</span></td>";
                                         echo "<td>" . $mode_badge . "</td>";
-                                        echo "<td style='color: #ef4444; font-weight: 800; white-space:nowrap;'>₹" . number_format($row['amount']) . "</td>";
-                                        echo "<td style='color:#94a3b8;font-size:12px;'>" . htmlspecialchars($row['voucher_no'] ?: ($row['remarks'] ?: '—')) . "</td>";
+                                        echo "<td style='color: #dc2626; font-weight: 800; white-space:nowrap;'>₹" . number_format($row['amount']) . "</td>";
+                                        echo "<td style='color:var(--text-muted, #64748b);font-size:12px;'>" . htmlspecialchars($row['voucher_no'] ?: ($row['remarks'] ?: '—')) . "</td>";
                                         echo "<td>
                                                 <form method='post' action='' style='display:inline;' onsubmit='return confirm(\"Are you sure you want to delete this expense log?\");'>
                                                     <input type='hidden' name='expense_id' value='" . $row['id'] . "'>

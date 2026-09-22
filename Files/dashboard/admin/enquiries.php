@@ -174,38 +174,48 @@ $pending_count = mysqli_num_rows($q_pending);
     <title><?php echo htmlspecialchars($gym['gym_name']); ?> | Walk-In Visitor Enquiries</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/entypo.css">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <style>
         :root {
-            --bg: #0b0f19;
-            --card-bg: rgba(30, 41, 59, 0.7);
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
             --accent: #ff6b00;
             --accent-green: #10b981;
-            --border: rgba(255, 255, 255, 0.1);
+            --border: rgba(0, 0, 0, 0.08);
+            --text-main: #1d1d1f;
+            --text-muted: #64748b;
         }
-        body { background: var(--bg); color: #fff; font-family: 'Outfit', sans-serif; padding: 25px; margin: 0; }
-        .header-box { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 20px 30px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 25px; }
-        .header-title h2 { margin: 0; font-size: 22px; font-weight: 800; color: #fff; }
-        .badge-pending { background: rgba(255,107,0,0.2); color: var(--accent); border: 1px solid var(--accent); padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 13px; }
+        [data-theme="dark"] {
+            --bg: #0b0f19;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+        }
+        body { background: var(--bg); color: var(--text-main); font-family: 'Outfit', sans-serif; padding: 25px; margin: 0; }
+        .header-box { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 20px 30px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 25px; box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+        .header-title h2 { margin: 0; font-size: 22px; font-weight: 800; color: var(--text-main); }
+        .badge-pending { background: rgba(255,107,0,0.1); color: var(--accent); border: 1px solid var(--accent); padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 13px; }
         .enquiry-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
-        .enquiry-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 25px; position: relative; backdrop-filter: blur(10px); }
-        .visitor-photo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); background: #000; }
+        .enquiry-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 25px; position: relative; box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+        .visitor-photo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); background: #eee; }
         .card-header { display: flex; gap: 15px; align-items: center; margin-bottom: 15px; }
-        .visitor-name { font-size: 18px; font-weight: 800; color: #fff; }
-        .visitor-phone { font-size: 13px; color: #38bdf8; font-weight: 700; }
+        .visitor-name { font-size: 18px; font-weight: 800; color: var(--text-main); }
+        .visitor-phone { font-size: 13px; color: #0284c7; font-weight: 700; }
         .info-table { width: 100%; font-size: 12px; margin-bottom: 15px; }
-        .info-table td { padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .info-label { color: #94a3b8; font-weight: 600; }
-        .info-val { color: #fff; font-weight: 700; text-align: right; }
+        .info-table td { padding: 4px 0; border-bottom: 1px solid var(--border); }
+        .info-label { color: var(--text-muted); font-weight: 600; }
+        .info-val { color: var(--text-main); font-weight: 700; text-align: right; }
         .btn-approve { width: 100%; background: linear-gradient(135deg, var(--accent), #ff8800); color: #fff; border: none; padding: 12px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; }
         
         /* Modal Style */
-        .modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: #1e293b; border: 2px solid var(--accent); border-radius: 24px; padding: 30px; max-width: 550px; width: 100%; color: #fff; }
+        .modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: var(--card-bg); border: 2px solid var(--accent); border-radius: 24px; padding: 30px; max-width: 550px; width: 100%; color: var(--text-main); box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
         .modal-title { font-size: 20px; font-weight: 800; color: var(--accent); margin-bottom: 15px; }
         .form-row { margin-bottom: 15px; }
-        .form-row label { display: block; font-size: 12px; font-weight: 700; color: #94a3b8; margin-bottom: 5px; text-transform: uppercase; }
-        .form-input { width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border); background: #0f172a; color: #fff; font-size: 14px; outline: none; }
-        .alert-success { background: rgba(16,185,129,0.2); border: 1px solid #10b981; color: #10b981; padding: 12px; border-radius: 12px; margin-bottom: 20px; font-weight: bold; }
+        .form-row label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; }
+        .form-input { width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text-main); font-size: 14px; outline: none; }
+        .alert-success { background: rgba(16,185,129,0.15); border: 1px solid #10b981; color: #059669; padding: 12px; border-radius: 12px; margin-bottom: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -213,12 +223,12 @@ $pending_count = mysqli_num_rows($q_pending);
     <div class="header-box">
         <div class="header-title">
             <h2>📝 Walk-In Visitor Enquiries &amp; Gym Tours</h2>
-            <span style="font-size: 12px; color: #94a3b8;">Review client tour registrations and approve membership activation</span>
+            <span style="font-size: 12px; color: var(--text-muted);">Review client tour registrations and approve membership activation</span>
         </div>
         <div class="badge-pending">
             ⚡ <?php echo $pending_count; ?> Pending Enquiries
         </div>
-        <a href="../../guest_enquiry.php" target="_blank" style="background: rgba(255,255,255,0.1); color: #fff; padding: 8px 16px; border-radius: 12px; text-decoration: none; font-size: 13px; font-weight: bold;">📱 Public Registration QR Form</a>
+        <a href="../../guest_enquiry.php" target="_blank" style="background: var(--hover-bg, rgba(0,0,0,0.06)); color: var(--text-main); border: 1px solid var(--border); padding: 8px 16px; border-radius: 12px; text-decoration: none; font-size: 13px; font-weight: bold;">📱 Public Registration QR Form</a>
     </div>
 
     <?php echo $msg; ?>
@@ -270,7 +280,7 @@ $pending_count = mysqli_num_rows($q_pending);
     <!-- Approval Modal -->
     <div class="modal" id="approveModal">
         <div class="modal-content">
-            <div class="modal-title">🏋️ Activate Membership for <span id="m_name" style="color: #fff;">Client</span></div>
+            <div class="modal-title">🏋️ Activate Membership for <span id="m_name" style="color: var(--text-main);">Client</span></div>
 
             <form method="POST" action="">
                 <input type="hidden" name="action" value="convert_enquiry">
@@ -316,10 +326,10 @@ $pending_count = mysqli_num_rows($q_pending);
                 </div>
 
                 <!-- UPI Payment QR Code Container -->
-                <div id="modal-upi-qr-box" style="display: none; background: rgba(0,0,0,0.3); border: 1px dashed rgba(255,107,0,0.5); padding: 15px; border-radius: 16px; text-align: center; margin: 15px 0;">
-                    <h4 style="color: #fff; margin: 0 0 5px 0; font-size: 14px;">Scan to Pay UPI: <span id="upi-qr-amount-text" style="color: #ff6b00; font-weight: 800; font-size: 16px;">₹0</span></h4>
-                    <p style="color: #94a3b8; font-size: 11px; margin-bottom: 12px;">Ask client to scan &amp; pay via Google Pay, PhonePe, Paytm, or BHIM.</p>
-                    <div style="background: #ffffff; padding: 12px; border-radius: 14px; display: inline-block; box-shadow: 0 8px 20px rgba(0,0,0,0.4);">
+                <div id="modal-upi-qr-box" style="display: none; background: var(--bg); border: 1px dashed rgba(255,107,0,0.5); padding: 15px; border-radius: 16px; text-align: center; margin: 15px 0;">
+                    <h4 style="color: var(--text-main); margin: 0 0 5px 0; font-size: 14px;">Scan to Pay UPI: <span id="upi-qr-amount-text" style="color: #ff6b00; font-weight: 800; font-size: 16px;">₹0</span></h4>
+                    <p style="color: var(--text-muted); font-size: 11px; margin-bottom: 12px;">Ask client to scan &amp; pay via Google Pay, PhonePe, Paytm, or BHIM.</p>
+                    <div style="background: #ffffff; padding: 12px; border-radius: 14px; display: inline-block; box-shadow: 0 8px 20px rgba(0,0,0,0.15);">
                         <canvas id="modal-upi-qr-canvas"></canvas>
                     </div>
                 </div>
@@ -331,8 +341,8 @@ $pending_count = mysqli_num_rows($q_pending);
 
                 <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
                     <button type="submit" class="btn-approve" style="flex: 2; min-width: 180px;">Confirm &amp; Register Member 🚀</button>
-                    <button type="button" onclick="confirmDeleteFromModal()" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fca5a5; padding: 12px 16px; border-radius: 12px; font-weight: bold; cursor: pointer;">🗑️ Delete</button>
-                    <button type="button" onclick="document.getElementById('approveModal').style.display='none'" style="background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 12px 16px; border-radius: 12px; font-weight: bold; cursor: pointer;">Cancel</button>
+                    <button type="button" onclick="confirmDeleteFromModal()" style="background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #dc2626; padding: 12px 16px; border-radius: 12px; font-weight: bold; cursor: pointer;">🗑️ Delete</button>
+                    <button type="button" onclick="document.getElementById('approveModal').style.display='none'" style="background: var(--hover-bg, rgba(0,0,0,0.06)); color: var(--text-muted); border: 1px solid var(--border); padding: 12px 16px; border-radius: 12px; font-weight: bold; cursor: pointer;">Cancel</button>
                 </div>
             </form>
         </div>

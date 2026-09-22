@@ -566,11 +566,11 @@ page_protect();
                             <i class="entypo-lock" style="font-size: 28px;"></i>
                         </div>
                         
-                        <h3 style="margin-top: 0; font-weight: 700; color: #fff; font-size: 20px;">Manual Gate Entry</h3>
+                        <h3 style="margin-top: 0; font-weight: 700; color: var(--text-main, #1d1d1f); font-size: 20px;">Manual Gate Entry</h3>
                         <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 25px; line-height: 1.5;">Enter your membership entry code below to authenticate and unlock the gate.</p>
                         
                         <form id="tempCodeForm" onsubmit="submitTempCode(event)">
-                            <input type="text" id="entry_code_input" class="form-control-premium" required maxlength="10" placeholder="Type Code Here" style="text-align: center; font-size: 24px; letter-spacing: 4px; font-family: monospace; font-weight: bold; height: 50px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(255,107,0,0.3) !important;">
+                            <input type="text" id="entry_code_input" class="form-control-premium" required maxlength="10" placeholder="Type Code Here" style="text-align: center; font-size: 24px; letter-spacing: 4px; font-family: monospace; font-weight: bold; height: 50px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(0,122,255,0.3) !important;">
                             
                             <div id="modal_error_msg" style="color: #ef4444; font-size: 13px; font-weight: bold; margin-bottom: 20px; display: none;">Invalid Entry Code</div>
                             
@@ -582,9 +582,9 @@ page_protect();
                 <!-- Controls & Enrolled Directory -->
                 <div class="controls-card">
                     <div>
-                        <h4 style="margin-top: 0; margin-bottom: 15px; font-weight: 600;">Face ID Engine Status</h4>
+                        <h4 style="margin-top: 0; margin-bottom: 15px; font-weight: 600; color: var(--text-main, #1d1d1f);">Face ID Engine Status</h4>
                         
-                        <div style="background: rgba(0,0,0,0.2); padding: 12px 15px; border-radius: 8px; font-size: 13px; display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="background: var(--bg-dark, #f5f5f7); border: 1px solid var(--card-border, rgba(0,0,0,0.08)); padding: 12px 15px; border-radius: 8px; font-size: 13px; display: flex; align-items: center; margin-bottom: 20px; color: var(--text-main, #1d1d1f);">
                             <span id="status_dot" class="status-dot status-loading"></span>
                             <span id="status_text">Loading Face ID engines...</span>
                         </div>
@@ -616,9 +616,9 @@ page_protect();
                                     ?>
                                     <div class="member-row" id="member_row_<?php echo $m_id; ?>">
                                         <div style="display: flex; align-items: center; gap: 10px;">
-                                            <img src="<?php echo $m_photo; ?>" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);">
+                                            <img src="<?php echo $m_photo; ?>" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid var(--card-border, rgba(0,0,0,0.1));">
                                             <div>
-                                                <div style="font-size: 12px; font-weight: 600; color: #fff; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?php echo $m_name; ?></div>
+                                                <div style="font-size: 12px; font-weight: 600; color: var(--text-main, #1d1d1f); max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?php echo $m_name; ?></div>
                                                 <div style="font-size: 10px; color: var(--text-muted); font-family: monospace;">ID: <?php echo $m_id; ?></div>
                                             </div>
                                         </div>
@@ -641,14 +641,14 @@ page_protect();
             <div class="row" style="margin-top: 40px; clear: both;">
                 <div class="col-md-12">
                     <div class="portal-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; box-shadow: var(--glass-shadow); margin-bottom: 30px;">
-                        <h3 style="margin-top: 0; margin-bottom: 20px; color: #ffffff; font-weight: 700; display: flex; align-items: center; gap: 10px;">
+                        <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--text-main, #1d1d1f); font-weight: 700; display: flex; align-items: center; gap: 10px;">
                             <i class="entypo-list" style="color: var(--accent-primary);"></i> Face Entry Details
                         </h3>
                         
                         <div class="table-responsive">
                             <table class="table" style="width: 100%; border-collapse: collapse; color: var(--text-main);">
                                 <thead>
-                                    <tr style="border-bottom: 2px solid rgba(255,255,255,0.08); text-align: left;">
+                                    <tr style="border-bottom: 2px solid var(--card-border, rgba(0,0,0,0.08)); text-align: left;">
                                         <th style="padding: 12px 15px; color: var(--text-muted); font-weight: 600;">Photo</th>
                                         <th style="padding: 12px 15px; color: var(--text-muted); font-weight: 600;">Member ID</th>
                                         <th style="padding: 12px 15px; color: var(--text-muted); font-weight: 600;">Name</th>
@@ -677,12 +677,12 @@ page_protect();
                                             $status_badge_color = $row_log['exit_time'] ? 'var(--info)' : 'var(--success)';
                                             $status_badge_bg = $row_log['exit_time'] ? 'rgba(59, 130, 246, 0.15)' : 'rgba(16, 185, 129, 0.15)';
                                             ?>
-                                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                            <tr style="border-bottom: 1px solid var(--card-border, rgba(0,0,0,0.06));">
                                                 <td style="padding: 10px 15px;">
-                                                    <img src="<?php echo htmlspecialchars($avatar); ?>" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);">
+                                                    <img src="<?php echo htmlspecialchars($avatar); ?>" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid var(--card-border, rgba(0,0,0,0.1));">
                                                 </td>
                                                 <td style="padding: 12px 15px; font-family: monospace;"><?php echo htmlspecialchars($row_log['uid']); ?></td>
-                                                <td style="padding: 12px 15px; font-weight: 600; color: #fff;"><?php echo htmlspecialchars($row_log['username']); ?></td>
+                                                <td style="padding: 12px 15px; font-weight: 600; color: var(--text-main, #1d1d1f);"><?php echo htmlspecialchars($row_log['username']); ?></td>
                                                 <td style="padding: 12px 15px;"><?php echo date('d-M-Y', strtotime($row_log['date'])) . ' (' . date('l', strtotime($row_log['date'])) . ')'; ?></td>
                                                 <td style="padding: 12px 15px; color: var(--success); font-weight: 600;"><?php echo $entry; ?></td>
                                                 <td style="padding: 12px 15px; color: var(--warning); font-weight: 600;"><?php echo $exit; ?></td>

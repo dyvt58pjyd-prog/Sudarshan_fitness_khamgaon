@@ -154,7 +154,7 @@ if (isset($_POST['add_staff'])) {
             margin: 0;
             font-size: 22px;
             font-weight: 700;
-            color: #ffffff;
+            color: var(--text-main, #1d1d1f);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -300,7 +300,7 @@ if (isset($_POST['add_staff'])) {
         .stat-card-staff .count {
             font-size: 22px;
             font-weight: 800;
-            color: #ffffff;
+            color: var(--text-main, #1d1d1f);
             line-height: 1;
         }
         .stat-card-staff .label {

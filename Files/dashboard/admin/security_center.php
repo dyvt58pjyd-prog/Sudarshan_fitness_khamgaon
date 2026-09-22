@@ -80,48 +80,58 @@ $q_ip_list = mysqli_query($con, "SELECT * FROM blocked_ips ORDER BY id DESC LIMI
 <head>
     <meta charset="utf-8">
     <title><?php echo htmlspecialchars($gym['gym_name']); ?> | Security Master Command Center</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../css/entypo.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <style>
         :root {
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --border: rgba(0, 0, 0, 0.08);
+            --accent: #ff6b00;
+            --accent-green: #10b981;
+            --accent-blue: #0284c7;
+            --text-main: #1d1d1f;
+            --text-muted: #64748b;
+        }
+        [data-theme="dark"] {
             --bg: #0b0f19;
             --card-bg: rgba(15, 23, 42, 0.8);
             --border: rgba(255, 255, 255, 0.1);
-            --accent: #ff6b00;
-            --accent-green: #10b981;
             --accent-blue: #3b82f6;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
         }
-        body { background: var(--bg); color: #fff; font-family: 'Outfit', sans-serif; padding: 25px; margin: 0; }
-        .header-box { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(30,41,59,0.9), rgba(15,23,42,0.95)); padding: 22px 30px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
-        .header-title h2 { margin: 0; font-size: 22px; font-weight: 800; color: #fff; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+        body { background: var(--bg); color: var(--text-main); font-family: 'Outfit', sans-serif; padding: 25px; margin: 0; }
+        .header-box { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 22px 30px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .header-title h2 { margin: 0; font-size: 22px; font-weight: 800; color: var(--text-main); font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
         
         .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
-        .stat-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 20px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.3); backdrop-filter: blur(10px); }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 20px; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
         .stat-val { font-size: 28px; font-weight: 900; margin-top: 5px; }
-        .stat-lbl { color: #94a3b8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-lbl { color: var(--text-muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .sec-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 25px; margin-bottom: 25px; backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .sec-title { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px; }
+        .sec-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .sec-title { font-size: 16px; font-weight: 800; color: var(--text-main); margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
 
         .table-custom { width: 100%; border-collapse: collapse; font-size: 13px; }
-        .table-custom th { background: rgba(255,255,255,0.05); color: #94a3b8; text-transform: uppercase; font-size: 11px; padding: 12px 14px; text-align: left; font-weight: 700; border-bottom: 1px solid var(--border); }
-        .table-custom td { padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); color: #e2e8f0; }
+        .table-custom th { background: var(--hover-bg, rgba(0,0,0,0.04)); color: var(--text-muted); text-transform: uppercase; font-size: 11px; padding: 12px 14px; text-align: left; font-weight: 700; border-bottom: 1px solid var(--border); }
+        .table-custom td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--text-main); }
 
         .badge-sev { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; display: inline-block; }
-        .badge-critical { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
-        .badge-warning { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid #f59e0b; }
-        .badge-info { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #3b82f6; }
+        .badge-critical { background: rgba(239, 68, 68, 0.15); color: #dc2626; border: 1px solid #ef4444; }
+        .badge-warning { background: rgba(245, 158, 11, 0.15); color: #d97706; border: 1px solid #f59e0b; }
+        .badge-info { background: rgba(59, 130, 246, 0.15); color: #0284c7; border: 1px solid #3b82f6; }
 
-        .btn-action { background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: #fff; padding: 8px 16px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
-        .btn-action:hover { background: rgba(255,255,255,0.2); }
-        .btn-danger { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fca5a5; }
-        .btn-danger:hover { background: rgba(239, 68, 68, 0.4); }
+        .btn-action { background: var(--hover-bg, rgba(0,0,0,0.06)); border: 1px solid var(--border); color: var(--text-main); padding: 8px 16px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+        .btn-action:hover { background: var(--border); }
+        .btn-danger { background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #dc2626; }
+        .btn-danger:hover { background: #ef4444; color: #fff; }
 
-        .form-input { background: #0f172a; border: 1px solid var(--border); color: #fff; padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none; }
+        .form-input { background: var(--bg); border: 1px solid var(--border); color: var(--text-main); padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none; }
         .alert-bar { padding: 14px 20px; border-radius: 14px; margin-bottom: 25px; font-weight: bold; font-size: 14px; }
-        .alert-success { background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #10b981; }
-        .alert-danger { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fca5a5; }
-        .alert-info { background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; color: #93c5fd; }
+        .alert-success { background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #059669; }
+        .alert-danger { background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #dc2626; }
+        .alert-info { background: rgba(59, 130, 246, 0.15); border: 1px solid #3b82f6; color: #0284c7; }
     </style>
 </head>
 <body>
@@ -130,7 +140,7 @@ $q_ip_list = mysqli_query($con, "SELECT * FROM blocked_ips ORDER BY id DESC LIMI
     <div class="header-box">
         <div class="header-title">
             <h2>🛡️ Super Security Command Center &amp; Threat Monitor</h2>
-            <span style="font-size: 12px; color: #94a3b8;">Real-time perimeter defense, session binding, brute-force shield &amp; security audit log</span>
+            <span style="font-size: 12px; color: var(--text-muted);">Real-time perimeter defense, session binding, brute-force shield &amp; security audit log</span>
         </div>
         <div style="display: flex; gap: 10px;">
             <a href="index.php" class="btn-action">← Return to Dashboard</a>
@@ -169,37 +179,35 @@ $q_ip_list = mysqli_query($con, "SELECT * FROM blocked_ips ORDER BY id DESC LIMI
     </div>
 
     <!-- Security Hardening Status Checklist -->
-    <div class="sec-box" style="border: 2px solid #10b981; background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(15,23,42,0.95));">
+    <div class="sec-box" style="border: 2px solid #10b981; background: var(--bg-card, #ffffff);">
         <div class="sec-title">
             <span>🇮🇳 CERT-In Indian Military Standard Cyber Security Protection (MIL-STD-256-INDIA)</span>
-            <span style="font-size: 11px; color: #10b981; background: rgba(16,185,129,0.2); border: 1px solid #10b981; padding: 4px 12px; border-radius: 8px; font-weight: 900;">🎖️ MILITARY DEFENSE SHIELD ACTIVE</span>
+            <span style="font-size: 11px; color: #059669; background: rgba(16,185,129,0.15); border: 1px solid #10b981; padding: 4px 12px; border-radius: 8px; font-weight: 900;">🎖️ MILITARY DEFENSE SHIELD ACTIVE</span>
         </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
-            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 14px;">
-                <div style="color: #10b981; font-weight: 800; font-size: 13px;">✅ CERT-In HTTP Defense Headers Enforced</div>
-                <div style="color: #94a3b8; font-size: 11px; margin-top: 4px;">Strict-Transport-Security, X-Frame-Options (SAMEORIGIN), X-XSS-Protection &amp; CSP Headers.</div>
+            <div style="background: var(--bg, #f8fafc); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 14px;">
+                <div style="color: #059669; font-weight: 800; font-size: 13px;">✅ CERT-In HTTP Defense Headers Enforced</div>
+                <div style="color: var(--text-muted, #64748b); font-size: 11px; margin-top: 4px;">Strict-Transport-Security, X-Frame-Options (SAMEORIGIN), X-XSS-Protection &amp; CSP Headers.</div>
             </div>
-            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 14px;">
-                <div style="color: #10b981; font-weight: 800; font-size: 13px;">✅ Web Application Firewall (WAF Payload Deep Inspection)</div>
-                <div style="color: #94a3b8; font-size: 11px; margin-top: 4px;">Real-time perimeter inspection blocks SQL Injection, XSS, Path Traversal &amp; RCE probes.</div>
+            <div style="background: var(--bg, #f8fafc); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 14px;">
+                <div style="color: #059669; font-weight: 800; font-size: 13px;">✅ Web Application Firewall (WAF Payload Deep Inspection)</div>
+                <div style="color: var(--text-muted, #64748b); font-size: 11px; margin-top: 4px;">Real-time perimeter inspection blocks SQL Injection, XSS, Path Traversal &amp; RCE probes.</div>
             </div>
-            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 14px;">
-                <div style="color: #10b981; font-weight: 800; font-size: 13px;">✅ Master Security PIN Gate (268724)</div>
-                <div style="color: #94a3b8; font-size: 11px; margin-top: 4px;">Zero-Trust dual authorization required for structural, financial &amp; security parameter edits.</div>
+            <div style="background: var(--bg, #f8fafc); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 14px;">
+                <div style="color: #059669; font-weight: 800; font-size: 13px;">✅ Master Security PIN Gate (268724)</div>
+                <div style="color: var(--text-muted, #64748b); font-size: 11px; margin-top: 4px;">Zero-Trust dual authorization required for structural, financial &amp; security parameter edits.</div>
             </div>
-            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 14px;">
-                <div style="color: #10b981; font-weight: 800; font-size: 13px;">✅ Session Hijacking &amp; Subnet Fingerprint Lock</div>
-                <div style="color: #94a3b8; font-size: 11px; margin-top: 4px;">User-Agent hash and IP subnet binding terminates hijacked administrative cookies.</div>
+            <div style="background: var(--bg, #f8fafc); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 14px;">
+                <div style="color: #059669; font-weight: 800; font-size: 13px;">✅ Session Hijacking &amp; Subnet Fingerprint Lock</div>
+                <div style="color: var(--text-muted, #64748b); font-size: 11px; margin-top: 4px;">User-Agent hash and IP subnet binding terminates hijacked administrative cookies.</div>
             </div>
-            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 14px;">
-                <div style="color: #10b981; font-weight: 800; font-size: 13px;">✅ Automated IP Quarantine Lockout (5 Attempts)</div>
-                <div style="color: #94a3b8; font-size: 11px; margin-top: 4px;">Quarantines intruder IPs automatically into threat blocklist upon rate limit overflow.</div>
+            <div style="background: var(--bg, #f8fafc); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 14px;">
+                <div style="color: #059669; font-weight: 800; font-size: 13px;">✅ Automated IP Quarantine Lockout (5 Attempts)</div>
+                <div style="color: var(--text-muted, #64748b); font-size: 11px; margin-top: 4px;">Quarantines intruder IPs automatically into threat blocklist upon rate limit overflow.</div>
             </div>
-            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 14px;">
-                <div style="color: #10b981; font-weight: 800; font-size: 13px;">✅ Base64 Encrypted Data Vault &amp; Audit Trail</div>
-                <div style="color: #94a3b8; font-size: 11px; margin-top: 4px;">Permanent Base64 database photo persistence &amp; real-time forensic event logging.</div>
-            </div>
-        </div>
+            <div style="background: var(--bg, #f8fafc); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 14px;">
+                <div style="color: #059669; font-weight: 800; font-size: 13px;">✅ Base64 Encrypted Data Vault &amp; Audit Trail</div>
+                <div style="color: var(--text-muted, #64748b); font-size: 11px; margin-top: 4px;">Permanent Base64 database photo persistence &amp; real-time forensic event logging.</div>
             </div>
         </div>
     </div>

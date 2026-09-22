@@ -55,13 +55,14 @@ $open_tickets = mysqli_query($con, "SELECT t.*, e.equipment_name FROM equipment_
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <link href="a1style.css" rel="stylesheet" type="text/css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <style>
         .badge { padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 11px; text-transform: uppercase; }
-        .badge-op { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid #10b981; }
-        .badge-maint { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid #ef4444; }
-        .form-control-dark { width: 100%; padding: 10px; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; margin-bottom: 10px; }
+        .badge-op { background: rgba(16,185,129,0.15); color: #059669; border: 1px solid #10b981; }
+        .badge-maint { background: rgba(239,68,68,0.15); color: #dc2626; border: 1px solid #ef4444; }
+        .form-control-dark { width: 100%; padding: 10px; background: var(--input-bg, #f8fafc); border: 1px solid var(--border-color, rgba(0,0,0,0.15)); border-radius: 8px; color: var(--text-main, #1d1d1f); margin-bottom: 10px; }
     </style>
 </head>
 <body class="page-body page-fade" onload="collapseSidebar();">
@@ -80,8 +81,8 @@ $open_tickets = mysqli_query($con, "SELECT t.*, e.equipment_name FROM equipment_
         <div class="main-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
                 <div>
-                    <h2 style="margin: 0; font-weight: 800; text-transform: uppercase; color: #fff;">🏷️ Smart Equipment &amp; QR Telemetry System</h2>
-                    <p style="color: #94a3b8; font-size: 13px; margin-top: 4px;">Manage gym machinery, generate printable QR stickers, and track maintenance issues.</p>
+                    <h2 style="margin: 0; font-weight: 800; text-transform: uppercase; color: var(--text-main, #1d1d1f);">🏷️ Smart Equipment &amp; QR Telemetry System</h2>
+                    <p style="color: var(--text-muted, #64748b); font-size: 13px; margin-top: 4px;">Manage gym machinery, generate printable QR stickers, and track maintenance issues.</p>
                 </div>
                 <div>
                     <a href="#addEqBox" class="a1-btn a1-blue" style="font-size: 12px; font-weight: bold; border-radius: 8px;">+ Register New Machine</a>
@@ -89,22 +90,22 @@ $open_tickets = mysqli_query($con, "SELECT t.*, e.equipment_name FROM equipment_
             </div>
 
             <?php if (!empty($msg)): ?>
-                <div style="background: rgba(16,185,129,0.15); border: 1px solid #10b981; color: #10b981; padding: 12px 18px; border-radius: 12px; margin-bottom: 20px; font-weight: bold;">
+                <div style="background: rgba(16,185,129,0.15); border: 1px solid #10b981; color: #059669; padding: 12px 18px; border-radius: 12px; margin-bottom: 20px; font-weight: bold;">
                     <?php echo $msg; ?>
                 </div>
             <?php endif; ?>
 
             <!-- Open Maintenance Tickets Bar -->
             <?php if ($open_tickets && mysqli_num_rows($open_tickets) > 0): ?>
-            <div style="background: rgba(239, 68, 68, 0.1); border: 2px solid #ef4444; border-radius: 16px; padding: 18px 20px; margin-bottom: 25px;">
-                <h3 style="color: #ef4444; margin-top: 0; font-size: 15px; font-weight: 800; text-transform: uppercase;">⚠️ Active Maintenance Issues Reported</h3>
+            <div style="background: rgba(239, 68, 68, 0.08); border: 1.5px solid #ef4444; border-radius: 16px; padding: 18px 20px; margin-bottom: 25px;">
+                <h3 style="color: #dc2626; margin-top: 0; font-size: 15px; font-weight: 800; text-transform: uppercase;">⚠️ Active Maintenance Issues Reported</h3>
                 <div style="display: grid; gap: 10px; margin-top: 12px;">
                     <?php while ($tk = mysqli_fetch_assoc($open_tickets)): ?>
-                    <div style="background: rgba(0,0,0,0.3); padding: 12px 16px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div style="background: var(--bg-card, #ffffff); border: 1px solid var(--border-color, rgba(239,68,68,0.2)); padding: 12px 16px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                         <div>
-                            <strong style="color: #fff;"><?php echo htmlspecialchars($tk['equipment_name']); ?></strong> — 
-                            <span style="color: #fca5a5;"><?php echo htmlspecialchars($tk['issue_description']); ?></span>
-                            <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Reported by: <?php echo htmlspecialchars($tk['reported_by']); ?> • <?php echo date('d M Y, h:i A', strtotime($tk['created_at'])); ?></div>
+                            <strong style="color: var(--text-main, #1d1d1f);"><?php echo htmlspecialchars($tk['equipment_name']); ?></strong> — 
+                            <span style="color: #dc2626; font-weight: 600;"><?php echo htmlspecialchars($tk['issue_description']); ?></span>
+                            <div style="font-size: 11px; color: var(--text-muted, #64748b); margin-top: 2px;">Reported by: <?php echo htmlspecialchars($tk['reported_by']); ?> • <?php echo date('d M Y, h:i A', strtotime($tk['created_at'])); ?></div>
                         </div>
                         <form method="POST" style="margin: 0;">
                             <input type="hidden" name="ticket_id" value="<?php echo $tk['id']; ?>">
@@ -120,14 +121,14 @@ $open_tickets = mysqli_query($con, "SELECT t.*, e.equipment_name FROM equipment_
             <?php endif; ?>
 
             <!-- Equipment Inventory Grid -->
-            <div style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 22px; margin-bottom: 30px;">
-                <h3 style="margin-top: 0; color: #fff; font-size: 16px; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px;">
+            <div style="background: var(--bg-card, #ffffff); border: 1px solid var(--border-color, rgba(0,0,0,0.08)); border-radius: 18px; padding: 22px; margin-bottom: 30px; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
+                <h3 style="margin-top: 0; color: var(--text-main, #1d1d1f); font-size: 16px; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.08)); padding-bottom: 12px;">
                     Gym Machinery Inventory &amp; Smart QR Pass
                 </h3>
 
                 <table class="table table-bordered table-striped" style="font-size: 13px; width: 100%;">
                     <thead>
-                        <tr style="background: rgba(255,255,255,0.05); color: #94a3b8; text-transform: uppercase; font-size: 11px;">
+                        <tr style="background: var(--hover-bg, rgba(0,0,0,0.04)); color: var(--text-muted, #64748b); text-transform: uppercase; font-size: 11px;">
                             <th>ID</th>
                             <th>Equipment Name</th>
                             <th>Category</th>
@@ -140,10 +141,10 @@ $open_tickets = mysqli_query($con, "SELECT t.*, e.equipment_name FROM equipment_
                     <tbody>
                         <?php while ($eq = mysqli_fetch_assoc($equipment_list)): ?>
                         <tr>
-                            <td>#<?php echo $eq['id']; ?></td>
-                            <td><strong style="color: #fff; font-size: 14px;"><?php echo htmlspecialchars($eq['equipment_name']); ?></strong></td>
-                            <td><span style="background: rgba(255,255,255,0.08); padding: 3px 8px; border-radius: 6px;"><?php echo htmlspecialchars($eq['category']); ?></span></td>
-                            <td><strong style="color: #38bdf8;"><?php echo htmlspecialchars($eq['muscle_group']); ?></strong></td>
+                            <td style="color: var(--text-muted, #64748b);">#<?php echo $eq['id']; ?></td>
+                            <td><strong style="color: var(--text-main, #1d1d1f); font-size: 14px;"><?php echo htmlspecialchars($eq['equipment_name']); ?></strong></td>
+                            <td><span style="background: var(--hover-bg, rgba(0,0,0,0.06)); color: var(--text-main, #1d1d1f); padding: 3px 8px; border-radius: 6px;"><?php echo htmlspecialchars($eq['category']); ?></span></td>
+                            <td><strong style="color: #0284c7;"><?php echo htmlspecialchars($eq['muscle_group']); ?></strong></td>
                             <td>
                                 <a href="equipment.php?id=<?php echo $eq['id']; ?>&toggle_status=<?php echo $eq['status']; ?>" title="Click to toggle status" style="text-decoration: none;">
                                     <span class="badge <?php echo $eq['status'] === 'operational' ? 'badge-op' : 'badge-maint'; ?>">
@@ -168,15 +169,15 @@ $open_tickets = mysqli_query($con, "SELECT t.*, e.equipment_name FROM equipment_
             </div>
 
             <!-- Add Machine Box -->
-            <div id="addEqBox" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 22px; max-width: 600px;">
-                <h3 style="margin-top: 0; color: #fff; font-size: 16px; font-weight: 800; text-transform: uppercase;">
+            <div id="addEqBox" style="background: var(--bg-card, #ffffff); border: 1px solid var(--border-color, rgba(0,0,0,0.08)); border-radius: 18px; padding: 22px; max-width: 600px; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
+                <h3 style="margin-top: 0; color: var(--text-main, #1d1d1f); font-size: 16px; font-weight: 800; text-transform: uppercase;">
                     + Register New Gym Machine
                 </h3>
                 <form method="POST">
-                    <label style="color: #cbd5e1; font-size: 12px; font-weight: bold;">Equipment Name *</label>
+                    <label style="color: var(--text-main, #1d1d1f); font-size: 12px; font-weight: bold;">Equipment Name *</label>
                     <input type="text" name="equipment_name" class="form-control-dark" placeholder="e.g. Incline Dumbbell Bench" required>
 
-                    <label style="color: #cbd5e1; font-size: 12px; font-weight: bold;">Category</label>
+                    <label style="color: var(--text-main, #1d1d1f); font-size: 12px; font-weight: bold;">Category</label>
                     <select name="category" class="form-control-dark">
                         <option value="Strength">Strength (Free Weights / Plate Loaded)</option>
                         <option value="Cables">Cables &amp; Pulleys</option>
@@ -184,10 +185,10 @@ $open_tickets = mysqli_query($con, "SELECT t.*, e.equipment_name FROM equipment_
                         <option value="Selectorized">Selectorized Pin-Loaded Machines</option>
                     </select>
 
-                    <label style="color: #cbd5e1; font-size: 12px; font-weight: bold;">Targeted Muscle Groups *</label>
+                    <label style="color: var(--text-main, #1d1d1f); font-size: 12px; font-weight: bold;">Targeted Muscle Groups *</label>
                     <input type="text" name="muscle_group" class="form-control-dark" placeholder="e.g. Upper Chest, Triceps" required>
 
-                    <label style="color: #cbd5e1; font-size: 12px; font-weight: bold;">Form Execution Instructions</label>
+                    <label style="color: var(--text-main, #1d1d1f); font-size: 12px; font-weight: bold;">Form Execution Instructions</label>
                     <textarea name="instructions" rows="2" class="form-control-dark" placeholder="Tips for safe form and biomechanics"></textarea>
 
                     <button type="submit" name="add_equipment" class="a1-btn a1-green" style="font-weight: bold; border-radius: 10px; padding: 10px 20px; cursor: pointer; margin-top: 5px;">

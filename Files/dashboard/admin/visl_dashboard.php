@@ -16,36 +16,34 @@ if (isset($_POST['mark_called'])) {
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <link href="a1style.css" rel="stylesheet" type="text/css">
     <style>
         body {
-            background: #0f172a;
-            color: #f8fafc;
+            background: var(--bg-main, #f8fafc);
+            color: var(--text-main, #1d1d1f);
             font-family: 'Inter', sans-serif;
-            background-image: radial-gradient(circle at 100% 0%, rgba(14, 165, 233, 0.1) 0%, transparent 50%),
-                              radial-gradient(circle at 0% 100%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
         }
         h2 {
-            color: #fff;
+            color: var(--text-main, #1d1d1f);
             font-weight: 800;
             font-size: 28px;
             letter-spacing: -0.5px;
             margin-bottom: 5px;
         }
         p {
-            color: #94a3b8;
+            color: var(--text-muted, #64748b);
             font-size: 15px;
         }
-        hr { border-color: rgba(255,255,255,0.05); }
+        hr { border-color: var(--border-color, rgba(0,0,0,0.08)); }
 
         .visl-card {
-            background: linear-gradient(145deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: var(--bg-card, #ffffff);
+            border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
             border-radius: 20px;
             padding: 25px;
             margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
             border-left: 6px solid #0ea5e9;
             transition: all 0.3s ease;
             position: relative;
@@ -53,24 +51,17 @@ if (isset($_POST['mark_called'])) {
         }
         .visl-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             border-left-color: #38bdf8;
-        }
-        .visl-card::after {
-            content: '';
-            position: absolute;
-            top: 0; right: 0; bottom: 0; left: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
-            pointer-events: none;
         }
         .visl-card.called {
             border-left-color: #10b981;
-            opacity: 0.6;
-            background: linear-gradient(145deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.5) 100%);
+            opacity: 0.7;
+            background: var(--hover-bg, #f8fafc);
         }
         .visl-card.called:hover {
             transform: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }
         .visl-header {
             display: flex;
@@ -81,11 +72,11 @@ if (isset($_POST['mark_called'])) {
         .visl-name { 
             font-size: 20px; 
             font-weight: 700; 
-            color: #fff; 
+            color: var(--text-main, #1d1d1f); 
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        .visl-meta { font-size: 12px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .visl-meta { font-size: 12px; color: var(--text-muted, #64748b); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
         
         .visl-body {
             display: flex;
@@ -99,26 +90,26 @@ if (isset($_POST['mark_called'])) {
             border-radius: 12px;
             object-fit: cover;
             border: 2px solid rgba(14, 165, 233, 0.4);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            background: rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background: #eee;
         }
         
-        .visl-details { flex-grow: 1; font-size: 14px; color: #cbd5e1; line-height: 1.6; }
+        .visl-details { flex-grow: 1; font-size: 14px; color: var(--text-main, #1d1d1f); line-height: 1.6; }
         .visl-details i { color: #0ea5e9; margin-right: 8px; width: 16px; text-align: center; }
         .visl-tag {
             display: inline-block;
-            background: rgba(14, 165, 233, 0.15);
+            background: rgba(14, 165, 233, 0.1);
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 700;
-            color: #38bdf8;
+            color: #0284c7;
             margin-top: 15px;
             border: 1px solid rgba(14, 165, 233, 0.3);
         }
         .visl-card.called .visl-tag {
-            background: rgba(16, 185, 129, 0.15);
-            color: #34d399;
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
             border-color: rgba(16, 185, 129, 0.3);
         }
         .btn-mark-called {

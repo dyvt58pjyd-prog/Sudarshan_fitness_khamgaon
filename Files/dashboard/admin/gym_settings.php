@@ -262,8 +262,8 @@ if (isset($_POST['batch_action'])) {
                             Members renewing their membership in the app and website will send payment directly to this UPI ID and Bank Account.
                         </p>
 
-                        <label style="color: #fff; font-weight: bold;">Gym UPI VPA Address (For Instant Member Renewals) *</label>
-                        <input class="form-control-premium" type="text" name="upi_id" value="<?php echo isset($gym['upi_id']) ? htmlspecialchars($gym['upi_id']) : 'anuragbawaskar4326@sbi'; ?>" placeholder="e.g. anuragbawaskar4326@sbi" required style="border-color: #10b981 !important; font-weight: bold; font-size: 15px; color: #38bdf8 !important;">
+                        <label style="color: var(--text-main, #1d1d1f); font-weight: bold;">Gym UPI VPA Address (For Instant Member Renewals) *</label>
+                        <input class="form-control-premium" type="text" name="upi_id" value="<?php echo isset($gym['upi_id']) ? htmlspecialchars($gym['upi_id']) : 'anuragbawaskar4326@sbi'; ?>" placeholder="e.g. anuragbawaskar4326@sbi" required style="border-color: #10b981 !important; font-weight: bold; font-size: 15px; color: #0284c7 !important;">
 
                         <div class="row" style="margin-top: 10px;">
                             <div class="col-sm-6">
@@ -307,7 +307,7 @@ if (isset($_POST['batch_action'])) {
                         
                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
                             <input type="checkbox" id="women_batch_enabled" name="women_batch_enabled" value="1" <?php echo (isset($gym['women_batch_enabled']) && $gym['women_batch_enabled'] == 1) ? 'checked' : ''; ?> style="width: 18px; height: 18px; cursor: pointer;">
-                            <label for="women_batch_enabled" style="margin-bottom: 0; cursor: pointer; color: #fff; font-weight: 600;">Enable Women-Only Exclusive Batch Security</label>
+                            <label for="women_batch_enabled" style="margin-bottom: 0; cursor: pointer; color: var(--text-main, #1d1d1f); font-weight: 600;">Enable Women-Only Exclusive Batch Security</label>
                         </div>
                         
                         <div class="row">
@@ -343,16 +343,16 @@ if (isset($_POST['batch_action'])) {
 
             <!-- Batch Timing & Limit Managers -->
             <div class="settings-card" style="margin-top: 30px;">
-                <h3 style="color: #ffffff; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                <h3 style="color: var(--text-main, #1d1d1f); font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
                     <span style="font-size: 20px;">⏱️</span> Manage Gym Batches, Hours & Occupancy Limits
                 </h3>
 
                 <form method="post" action="">
                     <input type="hidden" name="batch_action" value="update">
                     <div class="table-responsive">
-                        <table class="table table-bordered" style="color: #fff;">
+                        <table class="table table-bordered" style="color: var(--text-main, #1d1d1f);">
                             <thead>
-                                <tr style="background: rgba(255,255,255,0.02);">
+                                <tr style="background: var(--hover-bg, rgba(0,0,0,0.03)); color: var(--text-muted, #64748b);">
                                     <th>Batch ID (Key)</th>
                                     <th>Batch Name / Label</th>
                                     <th>Start Time</th>
@@ -415,7 +415,7 @@ if (isset($_POST['batch_action'])) {
 
             <!-- Create New Batch Card -->
             <div class="settings-card" style="margin-top: 30px; background: rgba(16, 185, 129, 0.03); border-color: rgba(16, 185, 129, 0.2);">
-                <h4 style="color: #ffffff; font-weight: 700; margin-bottom: 15px;">➕ Create a New Gym Session Batch</h4>
+                <h4 style="color: var(--text-main, #1d1d1f); font-weight: 700; margin-bottom: 15px;">➕ Create a New Gym Session Batch</h4>
                 <form method="post" action="">
                     <input type="hidden" name="batch_action" value="add">
                     <div class="row">

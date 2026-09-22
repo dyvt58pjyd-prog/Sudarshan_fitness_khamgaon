@@ -121,7 +121,7 @@ if ($plans_res) {
             <hr />
 
             <div class="settings-card">
-                <h3 style="margin-top: 0; color: #ffffff; font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <h3 style="margin-top: 0; color: var(--text-main, #1d1d1f); font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
                     <i class="entypo-lock" style="color: var(--accent-primary);"></i> Set Maximum Allowed Discounts
                 </h3>
                 <p style="color: var(--text-muted); font-size: 13.5px; margin-bottom: 25px; line-height: 1.5;">
@@ -129,8 +129,8 @@ if ($plans_res) {
                 </p>
 
                 <form method="post" action="">
-                    <div style="background: rgba(0,0,0,0.2); border-radius: 12px; padding: 20px; border: 1px solid var(--glass-border); margin-bottom: 25px;">
-                        <div style="display: flex; justify-content: space-between; font-weight: 700; color: var(--text-muted); font-size: 12px; text-transform: uppercase; border-bottom: 2px solid rgba(255,255,255,0.08); padding-bottom: 10px; margin-bottom: 10px;">
+                    <div style="background: var(--bg-dark, #f5f5f7); border-radius: 12px; padding: 20px; border: 1px solid var(--card-border, rgba(0,0,0,0.08)); margin-bottom: 25px;">
+                        <div style="display: flex; justify-content: space-between; font-weight: 700; color: var(--text-muted); font-size: 12px; text-transform: uppercase; border-bottom: 2px solid var(--card-border, rgba(0,0,0,0.08)); padding-bottom: 10px; margin-bottom: 10px;">
                             <span>Plan Details</span>
                             <span style="min-width: 200px; text-align: right; padding-right: 15px;">Max Discount Limit (₹)</span>
                         </div>
@@ -138,7 +138,7 @@ if ($plans_res) {
                             <?php foreach ($plans as $p): ?>
                                 <div class="plan-row">
                                     <div>
-                                        <strong style="color: #ffffff; font-size: 14.5px;"><?php echo htmlspecialchars($p['planName']); ?></strong>
+                                        <strong style="color: var(--text-main, #1d1d1f); font-size: 14.5px;"><?php echo htmlspecialchars($p['planName']); ?></strong>
                                         <div style="color: var(--text-muted); font-size: 12px; margin-top: 2px;">
                                             Price: ₹<?php echo number_format($p['amount']); ?> | Validity: <?php echo $p['validity']; ?> Month(s)
                                         </div>

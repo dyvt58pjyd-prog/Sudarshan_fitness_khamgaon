@@ -48,7 +48,7 @@ $gym = get_gym_details($con);
         }
         .btn-submit {
             background: var(--accent-primary);
-            color: #000;
+            color: #ffffff !important;
             border: none;
             padding: 12px 25px;
             border-radius: 10px;
@@ -119,7 +119,7 @@ $gym = get_gym_details($con);
                         
                         <div class="col-md-6">
                             <label style="color: var(--text-main); font-weight: 600;"><i class="entypo-camera"></i> Photo Capture / Upload *</label>
-                            <div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; border: 1px solid var(--glass-border); text-align: center;">
+                            <div style="background: var(--bg-dark, #f5f5f7); padding: 20px; border-radius: 12px; border: 1px solid var(--card-border, rgba(0,0,0,0.08)); text-align: center;">
                                 <video id="webcam-video" autoplay playsinline style="width: 100%; max-width: 250px; border-radius: 12px; display: none; margin: 0 auto; border: 2px solid var(--accent-primary);"></video>
                                 <img id="photo-preview" style="width: 100%; max-width: 250px; border-radius: 12px; display: none; margin: 0 auto; border: 2px solid var(--success);" />
                                 <canvas id="photo-canvas" style="display: none;"></canvas>
@@ -141,8 +141,8 @@ $gym = get_gym_details($con);
                                     </button>
                                 </div>
                                 
-                                <div style="margin-top: 15px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 15px; text-align: left;">
-                                    <label style="display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #fff;">Or Upload Photo File</label>
+                                <div style="margin-top: 15px; border-top: 1px dashed var(--card-border, rgba(0,0,0,0.1)); padding-top: 15px; text-align: left;">
+                                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: var(--text-main, #1d1d1f);">Or Upload Photo File</label>
                                     <input type="file" name="upload_photo" id="upload_photo" accept="image/*" class="form-control-premium" style="padding: 6px !important; margin: 0;" onchange="previewUploadedPhoto(this)">
                                 </div>
                                 

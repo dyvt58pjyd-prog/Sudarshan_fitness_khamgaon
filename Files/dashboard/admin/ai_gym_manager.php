@@ -68,11 +68,11 @@ if (!empty($query)) {
     <link rel="stylesheet" href="../../css/entypo.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background: var(--bg-dark); color: #fff; padding: 25px; }
-        .card { background: rgba(15, 7, 18, 0.94); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
-        .btn-send { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #2c1b18; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
-        .form-control { background: rgba(3,7,18,0.8); border: 1px solid rgba(255,107,0,0.3); color: #fff; padding: 12px 18px; border-radius: 12px; width: 100%; font-size: 14px; margin-bottom: 15px; }
-        .ai-box { background: rgba(3,7,18,0.9); border: 1px solid var(--accent-primary); border-radius: 18px; padding: 20px; color: #cbd5e1; line-height: 1.6; white-space: pre-wrap; font-size: 14px; box-shadow: 0 0 30px rgba(255,107,0,0.25); }
+        body { background: var(--bg-dark); color: var(--text-main); padding: 25px; }
+        .card { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
+        .btn-send { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #ffffff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
+        .form-control { background: rgba(3,7,18,0.8); border: 1px solid rgba(255,107,0,0.3); color: var(--text-main); padding: 12px 18px; border-radius: 12px; width: 100%; font-size: 14px; margin-bottom: 15px; }
+        .ai-box { background: var(--bg-dark); border: 1px solid var(--accent-primary); border-radius: 18px; padding: 20px; color: var(--text-main); line-height: 1.6; white-space: pre-wrap; font-size: 14px; box-shadow: 0 0 30px rgba(255,107,0,0.25); }
     </style>
 </head>
 <body>
@@ -91,7 +91,7 @@ if (!empty($query)) {
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px;">
             <div class="card" style="margin-bottom: 0; text-align: center;">
                 <div style="font-size: 11px; color: var(--text-muted); font-family: 'Orbitron';">TOTAL MEMBERS</div>
-                <div style="font-size: 32px; font-weight: 900; color: #fff; font-family: 'Orbitron';"><?php echo number_format($m_total); ?></div>
+                <div style="font-size: 32px; font-weight: 900; color: var(--text-main); font-family: 'Orbitron';"><?php echo number_format($m_total); ?></div>
             </div>
             <div class="card" style="margin-bottom: 0; text-align: center;">
                 <div style="font-size: 11px; color: var(--text-muted); font-family: 'Orbitron';">ACTIVE SUBSCRIBERS</div>
@@ -109,7 +109,7 @@ if (!empty($query)) {
 
         <!-- AI Executive Chat Box -->
         <div class="card">
-            <h3 style="font-family: 'Orbitron'; color: #fff; margin-top: 0;">🤖 Ask AI Gym Manager</h3>
+            <h3 style="font-family: 'Orbitron'; color: var(--text-main); margin-top: 0;">🤖 Ask AI Gym Manager</h3>
             
             <form method="POST">
                 <input type="text" name="query" class="form-control" placeholder="Ask AI: e.g. How is my gym performing this month? or What should I do today?" required>

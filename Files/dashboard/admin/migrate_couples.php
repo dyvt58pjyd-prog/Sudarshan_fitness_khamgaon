@@ -48,6 +48,7 @@ if (isset($_POST['add_partner'])) {
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <link href="a1style.css" rel="stylesheet" type="text/css">
     <style>
         .page-container .sidebar-menu #main-menu li#hassubopen > a {
@@ -55,9 +56,9 @@ if (isset($_POST['add_partner'])) {
             color: #ffffff;
         }
         .form-control-custom {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #fff;
+            background: var(--input-bg, #f8fafc);
+            border: 1px solid var(--border-color, rgba(0, 0, 0, 0.15));
+            color: var(--text-main, #1d1d1f);
             padding: 8px 12px;
             border-radius: 6px;
             font-size: 13px;

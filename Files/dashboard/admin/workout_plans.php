@@ -11,7 +11,7 @@ page_protect();
     <link rel="stylesheet" href="../../css/entypo.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background: var(--bg-dark); color: #fff; padding: 25px; }
+        body { background: var(--bg-dark); color: var(--text-main); padding: 25px; }
         .card { background: rgba(9, 14, 28, 0.9); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
         .ex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin-top: 20px; }
         .ex-card { background: rgba(3,7,18,0.8); border: 1px solid rgba(0,240,255,0.3); border-radius: 16px; padding: 20px; }
@@ -32,7 +32,7 @@ page_protect();
         </div>
 
         <div class="card">
-            <h3 style="font-family: 'Orbitron'; color: #fff; margin-top: 0;">💪 Master Exercise Database</h3>
+            <h3 style="font-family: 'Orbitron'; color: var(--text-main); margin-top: 0;">💪 Master Exercise Database</h3>
             <div class="ex-grid">
                 <div class="ex-card">
                     <div class="ex-title">Barbell Bench Press</div>

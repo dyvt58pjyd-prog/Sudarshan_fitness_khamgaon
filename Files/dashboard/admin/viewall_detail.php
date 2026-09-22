@@ -306,19 +306,19 @@ if (isset($_POST['name'])) {
               <tr>
                 <td height="35" valign="top" style="padding-top: 10px;">RECOMMENDED WORKOUTS:</td>
                 <td height="35" style="padding-top: 10px;">
-                    <textarea readonly="" id="boxxe" rows="4" style="height: auto; width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.05); color: #ffffff; padding: 8px; border: 1px solid #ccc; border-radius: 4px;"><?php echo htmlspecialchars($bmi_sug['workouts'])?></textarea>
+                    <textarea readonly="" id="boxxe" rows="4" style="height: auto; width: 100%; box-sizing: border-box; background: var(--input-bg, #f8fafc); color: var(--text-main, #1d1d1f); padding: 8px; border: 1px solid var(--border-color, #ccc); border-radius: 4px;"><?php echo htmlspecialchars($bmi_sug['workouts'])?></textarea>
                 </td>
               </tr>
               <tr>
                 <td height="35" valign="top" style="padding-top: 10px;">VEGETARIAN DIET:</td>
                 <td height="35" style="padding-top: 10px;">
-                    <textarea readonly="" id="boxxe" rows="4" style="height: auto; width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.05); color: #ffffff; padding: 8px; border: 1px solid #ccc; border-radius: 4px;"><?php echo htmlspecialchars($bmi_sug['veg_diet'])?></textarea>
+                    <textarea readonly="" id="boxxe" rows="4" style="height: auto; width: 100%; box-sizing: border-box; background: var(--input-bg, #f8fafc); color: var(--text-main, #1d1d1f); padding: 8px; border: 1px solid var(--border-color, #ccc); border-radius: 4px;"><?php echo htmlspecialchars($bmi_sug['veg_diet'])?></textarea>
                 </td>
               </tr>
               <tr>
                 <td height="35" valign="top" style="padding-top: 10px;">NON-VEGETARIAN DIET:</td>
                 <td height="35" style="padding-top: 10px;">
-                    <textarea readonly="" id="boxxe" rows="4" style="height: auto; width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.05); color: #ffffff; padding: 8px; border: 1px solid #ccc; border-radius: 4px;"><?php echo htmlspecialchars($bmi_sug['nonveg_diet'])?></textarea>
+                    <textarea readonly="" id="boxxe" rows="4" style="height: auto; width: 100%; box-sizing: border-box; background: var(--input-bg, #f8fafc); color: var(--text-main, #1d1d1f); padding: 8px; border: 1px solid var(--border-color, #ccc); border-radius: 4px;"><?php echo htmlspecialchars($bmi_sug['nonveg_diet'])?></textarea>
                 </td>
               </tr>
               <?php endif; ?>

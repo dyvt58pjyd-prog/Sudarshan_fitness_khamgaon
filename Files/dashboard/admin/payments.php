@@ -13,6 +13,7 @@ page_protect();
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <link href="a1style.css" type="text/css" rel="stylesheet">
     <style>
     	.page-container .sidebar-menu #main-menu li#paymnt > a {
@@ -26,9 +27,9 @@ page_protect();
             flex-wrap: wrap;
         }
         .tab-btn {
-            background: rgba(255, 255, 255, 0.03);
-            color: #a3a3a3;
-            border: 1px solid rgba(255, 107, 0, 0.15);
+            background: var(--bg-card, #ffffff);
+            color: var(--text-muted, #64748b);
+            border: 1px solid var(--border-color, rgba(255, 107, 0, 0.2));
             padding: 10px 22px;
             border-radius: 8px;
             text-decoration: none !important;
@@ -38,19 +39,18 @@ page_protect();
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
         }
         .tab-btn:hover {
             background: rgba(255, 107, 0, 0.08);
-            color: #ffffff;
+            color: #ff6b00;
             border-color: rgba(255, 107, 0, 0.4);
-            box-shadow: 0 0 12px rgba(255, 107, 0, 0.2);
         }
         .tab-btn.active-tab {
-            background: linear-gradient(135deg, rgba(255, 107, 0, 0.25), rgba(255, 107, 0, 0.08));
-            color: #ffffff;
+            background: #ff6b00;
+            color: #ffffff !important;
             border-color: #ff6b00;
-            box-shadow: 0 0 15px rgba(255, 107, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
         }
     </style>
 

@@ -17,7 +17,7 @@ if ($_SESSION['role'] !== 'super_admin' && $_SESSION['role'] !== 'owner') {
     <link rel="stylesheet" href="../../css/entypo.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background: var(--bg-dark); color: #fff; padding: 25px; }
+        body { background: var(--bg-dark); color: var(--text-main); padding: 25px; }
         .card { background: rgba(9, 14, 28, 0.9); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
         .table-custom { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .table-custom th, .table-custom td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(0,240,255,0.15); font-size: 13px; }
@@ -37,7 +37,7 @@ if ($_SESSION['role'] !== 'super_admin' && $_SESSION['role'] !== 'owner') {
         </div>
 
         <div class="card">
-            <h3 style="font-family: 'Orbitron'; color: #fff; margin-top: 0;">🔐 Recent Security &amp; Activity Audit Trail</h3>
+            <h3 style="font-family: 'Orbitron'; color: var(--text-main); margin-top: 0;">🔐 Recent Security &amp; Activity Audit Trail</h3>
             <table class="table-custom">
                 <thead>
                     <tr>

@@ -282,7 +282,7 @@ usort($invoices, function($a, $b) {
             <hr />
 
             <div class="invoices-card">
-                <h3 style="margin-top: 0; color: #ffffff; font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <h3 style="margin-top: 0; color: var(--text-main, #1d1d1f); font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
                     <i class="entypo-doc-text" style="color: var(--accent-primary);"></i> Captured Payments &amp; Receipts
                 </h3>
                 
@@ -322,10 +322,10 @@ usort($invoices, function($a, $b) {
                     </div>
                 </form>
 
-                <div class="table-responsive" style="border: 1px solid var(--glass-border); border-radius: 12px; background: rgba(0,0,0,0.15); overflow: hidden;">
+                <div class="table-responsive" style="border: 1px solid var(--card-border, rgba(0,0,0,0.08)); border-radius: 12px; background: transparent; overflow: hidden;">
                     <table class="table-premium">
                         <thead>
-                           <tr style="background: rgba(0,0,0,0.25);">
+                           <tr style="background: var(--header-bg, #f8fafc);">
                                 <th style="width: 5%;">ID</th>
                                 <th style="width: 25%;">Member</th>
                                 <th style="width: 15%;">Plan Subscribed</th>
@@ -352,7 +352,7 @@ usort($invoices, function($a, $b) {
                                             <div style="display: flex; align-items: center; gap: 8px;">
                                                 <img src="<?php echo $avatar; ?>" class="member-avatar" alt="Avatar" onerror="this.onerror=null; this.src='../../images/logo.png';">
                                                 <div>
-                                                    <a href="read_member.php?name=<?php echo urlencode($inv['uid']); ?>" style="color: #ffffff; font-weight: bold; text-decoration: none;">
+                                                    <a href="read_member.php?name=<?php echo urlencode($inv['uid']); ?>" style="color: var(--text-main, #1d1d1f); font-weight: bold; text-decoration: none;">
                                                         <?php echo htmlspecialchars($inv['username']); ?>
                                                     </a>
                                                     <div style="font-size: 10.5px; color: var(--text-muted); font-family: monospace; margin-top: 1px;">
@@ -362,7 +362,7 @@ usort($invoices, function($a, $b) {
                                             </div>
                                         </td>
                                         <td>
-                                            <strong style="color: #ffffff;"><?php echo htmlspecialchars($inv['planName']); ?></strong>
+                                            <strong style="color: var(--text-main, #1d1d1f);"><?php echo htmlspecialchars($inv['planName']); ?></strong>
                                         </td>
                                         <td>
                                             <span style="font-size: 12px;"><?php echo date('d-M-Y', strtotime($inv['paid_date'])); ?></span>
@@ -378,7 +378,7 @@ usort($invoices, function($a, $b) {
                                             ₹<?php echo number_format($paid_amt); ?>
                                         </td>
                                         <td>
-                                            <span class="badge-premium" style="background: rgba(255,255,255,0.06); color: #ffffff;">
+                                            <span class="badge-premium" style="background: rgba(0,0,0,0.06); color: var(--text-main, #1d1d1f);">
                                                 <?php echo htmlspecialchars($inv['payment_mode']); ?>
                                             </span>
                                         </td>

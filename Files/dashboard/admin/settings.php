@@ -30,10 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
     <link rel="stylesheet" href="../../css/entypo.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background: var(--bg-dark); color: #fff; padding: 25px; }
+        body { background: var(--bg-dark); color: var(--text-main); padding: 25px; }
         .card { background: rgba(9, 14, 28, 0.9); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
-        .btn-save { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #2c1b18; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
-        .form-control { background: rgba(3,7,18,0.8); border: 1px solid rgba(0,240,255,0.3); color: #fff; padding: 10px 14px; border-radius: 10px; width: 100%; margin-bottom: 15px; }
+        .btn-save { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #ffffff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
+        .form-control { background: rgba(3,7,18,0.8); border: 1px solid rgba(0,240,255,0.3); color: var(--text-main); padding: 10px 14px; border-radius: 10px; width: 100%; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -59,18 +59,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
                 <div>
                     <div style="font-family: 'Orbitron'; font-size: 11px; color: var(--accent-primary); font-weight: 900; letter-spacing: 2px;">[ APPLICATION PLATFORM ]</div>
-                    <h3 style="font-family: 'Orbitron'; margin: 4px 0 0 0; color: #fff; font-size: 22px;">SUDARSHAN FITNESS v2.0</h3>
+                    <h3 style="font-family: 'Orbitron'; margin: 4px 0 0 0; color: var(--text-main); font-size: 22px;">SUDARSHAN FITNESS v2.0</h3>
                     <p style="color: var(--text-muted); font-size: 12px; margin-top: 4px;">Train Hard. Stay Strong. Live Better. • Premium Commercial Gym Platform</p>
                 </div>
                 <div style="text-align: right;">
-                    <span style="background: linear-gradient(135deg, #00f0ff, #ffd700); color: #2c1b18; padding: 6px 16px; border-radius: 12px; font-weight: 900; font-family: 'Orbitron'; font-size: 12px; box-shadow: 0 0 20px rgba(0,240,255,0.6);">STATUS: ACTIVE (v2.0)</span>
+                    <span style="background: linear-gradient(135deg, #00f0ff, #ffd700); color: #ffffff; padding: 6px 16px; border-radius: 12px; font-weight: 900; font-family: 'Orbitron'; font-size: 12px; box-shadow: 0 0 20px rgba(0,240,255,0.6);">STATUS: ACTIVE (v2.0)</span>
                 </div>
             </div>
         </div>
 
         <!-- Appearance & Theme Customizer Card -->
         <div class="card">
-            <h3 style="font-family: 'Orbitron'; color: #fff; margin-top: 0;">🎨 Appearance &amp; Theme Customizer</h3>
+            <h3 style="font-family: 'Orbitron'; color: var(--text-main); margin-top: 0;">🎨 Appearance &amp; Theme Customizer</h3>
             <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Choose your visual theme preference and primary system accent color across Sudarshan Fitness v2.0.</p>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
 
         <!-- Gym Profile Configuration -->
         <div class="card">
-            <h3 style="font-family: 'Orbitron'; color: #fff; margin-top: 0;">🏢 Gym Identity &amp; Profile Details</h3>
+            <h3 style="font-family: 'Orbitron'; color: var(--text-main); margin-top: 0;">🏢 Gym Identity &amp; Profile Details</h3>
             <form method="POST">
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px;">
                     <div>
