@@ -130,11 +130,11 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
     
     <title>SUDARSHAN FITNESS | Dashboard </title>
 
-    <link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
+    <link rel="stylesheet" href="../../css/style.css?v=<?php echo time(); ?>" id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
-    <link rel="stylesheet" href="../../css/dashMain.css">
+    <link rel="stylesheet" href="../../css/dashMain.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
-    <link rel="stylesheet" href="../../css/premium.css">
+    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
     	.page-container .sidebar-menu #main-menu li#dash > a {
