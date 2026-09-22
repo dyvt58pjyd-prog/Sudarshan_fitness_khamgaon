@@ -143,37 +143,12 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 		}
     </style>
 </head>
-<body class="page-body page-fade" onload="collapseSidebar()">
-    <div class="page-container sidebar-collapsed" id="navbarcollapse">	
-	
-		<div class="sidebar-menu">
-	
-			<header class="logo-env">
-			
-			<!-- logo -->
-			<div class="logo">
-				<a href="main.php">
-					<?php 
-                        $sidebar_logo = $gym_settings_data["gym_logo"] ?? "../../images/logo.png";
-                        ?>
-                        <img src="<?php echo htmlspecialchars($sidebar_logo); ?>" alt="Gym Logo" style="max-height: 80px; max-width: 192px;" />
-				</a>
-			</div>
-			
-					<!-- logo collapse icon -->
-					<div class="sidebar-collapse" onclick="collapseSidebar()">
-				<a href="#" class="sidebar-collapse-icon with-animation"><!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition -->
-					<i class="entypo-menu"></i>
-				</a>
-			</div>
-							
-			
-		
-			</header>
-    		<?php include('nav.php'); ?>
-    	</div>
+<body class="page-body page-fade" style="background-color: #f5f5f7 !important;">
+    <div class="page-container" id="navbarcollapse" style="padding-left: 0 !important; width: 100% !important; max-width: 100% !important;">	
+        
+        <?php include('nav.php'); ?>
 
-    		<div class="main-content">
+    	<div class="main-content" style="margin-left: 0 !important; padding: 24px !important;">
 		
 				<?php if (isset($_GET['pin_success'])): ?>
 				    <div style="background: rgba(16, 185, 129, 0.15); border: 2px solid #10b981; color: #10b981; padding: 16px 20px; border-radius: 16px; margin-bottom: 20px; font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 10px 25px rgba(16,185,129,0.2);">

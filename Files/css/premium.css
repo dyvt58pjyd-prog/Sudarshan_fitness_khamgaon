@@ -149,9 +149,8 @@ body, html {
 .page-container { 
     background-color: #f5f5f7 !important;
     background-image: 
-        radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-        radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-        radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%) !important;
+        radial-gradient(at 0% 0%, rgba(0, 113, 227, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(255, 45, 85, 0.05) 0px, transparent 50%) !important;
     background-attachment: fixed !important;
     background-size: cover !important;
     padding-left: 0 !important; /* Sidebar removed */
@@ -163,6 +162,8 @@ body, html {
     background: transparent !important; 
     min-height: 100vh; 
     padding: 30px !important; 
+    margin-left: 0 !important;
+    width: 100% !important;
 }
 
 .tile-stats {
