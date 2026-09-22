@@ -265,6 +265,13 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
             color: #1d1d1f !important;
         }
 
+        /* Hide Footer */
+        #dev-credit-footer,
+        footer.main,
+        footer {
+            display: none !important;
+        }
+
         /* Subtle Security Watermark */
         .security-watermark span {
             color: #000000 !important;
@@ -2627,7 +2634,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 				</div>
 			</div>
    
-    	<?php include('footer.php'); ?>
+    	<div style="height: 40px;"></div>
 </div>
 
 <script>
@@ -2658,6 +2665,7 @@ function triggerOutboxRetry() {
         });
 }
 </script>
-    <?php include '../../include/dev_credit.php'; ?>
+    <script src="../../js/celebration.js"></script>
+    <script src="../../js/ui_sounds.js"></script>
     </body>
 </html>
