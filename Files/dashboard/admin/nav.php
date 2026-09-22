@@ -105,9 +105,9 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
                 themeLi.id = 'sf-theme-switcher-wrapper';
                 themeLi.style.marginRight = '15px';
                 themeLi.innerHTML = `
-                    <select id="sf-theme-select" onchange="SFThemeEngine.setThemeMode(this.value)" style="background: var(--card-bg); color: var(--text-main); border: 1px solid var(--card-border); border-radius: 6px; padding: 6px 10px; font-size: 13px; font-weight: 500; font-family: 'Inter', sans-serif; cursor: pointer;">
-                        <option value="dark">🌙 Dark Mode</option>
+                    <select id="sf-theme-select" onchange="SFThemeEngine.setThemeMode(this.value)" style="background: rgba(255, 255, 255, 0.9); color: #1d1d1f; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 8px; padding: 6px 12px; font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
                         <option value="light">☀️ Light Mode</option>
+                        <option value="dark">🌙 Dark Mode</option>
                         <option value="system">💻 System Mode</option>
                     </select>
                 `;
@@ -122,34 +122,8 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
                 const yearLi = document.createElement('li');
                 yearLi.id = 'nav-working-year';
                 yearLi.style.marginRight = '15px';
-                yearLi.innerHTML = yearSelector.outerHTML.replace('style="', 'style="background: var(--card-bg); color: var(--text-main); border: 1px solid var(--card-border); border-radius: 6px; padding: 6px 10px; font-size: 13px; font-weight: 500; font-family: \'Inter\', sans-serif; ');
+                yearLi.innerHTML = yearSelector.outerHTML.replace('style="', 'style="background: rgba(255, 255, 255, 0.9); color: #1d1d1f; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 8px; padding: 4px 10px; font-size: 13px; font-weight: 600; font-family: \'Inter\', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.04); ');
                 linksList.insertBefore(yearLi, linksList.firstChild);
-            }
-
-            if (yearSelector) {
-                yearSelector.style.display = 'inline-flex';
-                yearSelector.style.alignItems = 'center';
-                yearSelector.style.gap = '8px';
-                yearSelector.style.margin = '0 15px 0 0';
-                yearSelector.style.padding = '4px 10px';
-                yearSelector.style.background = 'rgba(0, 240, 255, 0.1)';
-                yearSelector.style.border = '1px solid rgba(0, 240, 255, 0.3)';
-                yearSelector.style.borderRadius = '8px';
-                
-                const label = yearSelector.querySelector('span');
-                if (label) {
-                    label.style.display = 'inline';
-                    label.style.marginRight = '5px';
-                    label.style.marginBottom = '0';
-                    label.style.fontSize = '11px';
-                    label.style.color = '#00f0ff';
-                    label.style.fontWeight = 'bold';
-                    label.style.fontFamily = "'Orbitron', sans-serif";
-                }
-                
-                const li = document.createElement('li');
-                li.appendChild(yearSelector);
-                linksList.insertBefore(li, linksList.firstChild);
             }
         }
         
@@ -160,22 +134,22 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
                 if (!document.getElementById('nav-dashboard-home')) {
                     const li = document.createElement('li');
                     li.id = 'nav-dashboard-home';
-                    li.innerHTML = '<a href="index.php" style="color: #00f0ff; font-weight: bold; font-size: 13px; font-family: \'Orbitron\';"><i class="entypo-home" style="margin-right: 4px;"></i>Dashboard Home</a>';
+                    li.innerHTML = '<a href="index.php" style="color: #007aff; font-weight: 600; font-size: 13px; font-family: \'Inter\', sans-serif;"><i class="entypo-home" style="margin-right: 4px;"></i>Dashboard Home</a>';
                     linksList.insertBefore(li, linksList.firstChild);
                 }
             }
         }
     });
 </script>
-<link rel="stylesheet" href="../../css/premium.css">
+<link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
 
 <!-- Working Year Selector -->
 <div class="working-year-selector" style="display: none;">
-    <span style="color: #a3a3a3; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">Operating Year</span>
-    <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
-        <a href="?set_working_year=<?php echo $working_year - 1; ?>" style="background: rgba(255, 107, 0, 0.15); color: #ff6b00; border: 1px solid rgba(255,107,0,0.3); padding: 2px 8px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 12px; transition: all 0.2s;">&lt;</a>
-        <span style="color: #ffffff; font-size: 16px; font-weight: 700; min-width: 50px; display: inline-block; text-shadow: 0 0 8px rgba(255,107,0,0.6);"><?php echo $working_year; ?></span>
-        <a href="?set_working_year=<?php echo $working_year + 1; ?>" style="background: rgba(255, 107, 0, 0.15); color: #ff6b00; border: 1px solid rgba(255,107,0,0.3); padding: 2px 8px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 12px; transition: all 0.2s;">&gt;</a>
+    <span style="color: #86868b; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px; font-weight: 600;">Operating Year</span>
+    <div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
+        <a href="?set_working_year=<?php echo $working_year - 1; ?>" style="background: rgba(0, 122, 255, 0.1); color: #007aff; border: 1px solid rgba(0, 122, 255, 0.2); padding: 2px 8px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 12px; transition: all 0.2s;">&lt;</a>
+        <span style="color: #1d1d1f; font-size: 15px; font-weight: 700; min-width: 45px; display: inline-block; font-family: 'Inter', sans-serif;"><?php echo $working_year; ?></span>
+        <a href="?set_working_year=<?php echo $working_year + 1; ?>" style="background: rgba(0, 122, 255, 0.1); color: #007aff; border: 1px solid rgba(0, 122, 255, 0.2); padding: 2px 8px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 12px; transition: all 0.2s;">&gt;</a>
     </div>
 </div>
 

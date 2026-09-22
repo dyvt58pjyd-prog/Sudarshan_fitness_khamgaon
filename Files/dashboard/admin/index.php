@@ -136,24 +136,170 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
     <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-    	.page-container .sidebar-menu #main-menu li#dash > a {
-            background-color: var(--bg-darker);
-            color: var(--accent-primary);
-		}
+    <style id="sf-apple-minimalist-theme">
+        /* =========================================================
+           APPLE PREMIUM MINIMALIST THEME ENGINE (Full Overhaul)
+           Eliminates legacy dark brown (#2c1b18 / #1f100a) completely
+           ========================================================= */
+        html, body {
+            background-color: #f5f5f7 !important;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 113, 227, 0.07) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(255, 45, 85, 0.05) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(52, 199, 89, 0.04) 0px, transparent 50%) !important;
+            background-attachment: fixed !important;
+            background-size: cover !important;
+            color: #1d1d1f !important;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            min-height: 100vh !important;
+            margin: 0 !important;
+        }
+
+        .page-container, 
+        .page-container .main-content,
+        .main-content,
+        div.main-content,
+        #navbarcollapse {
+            background: transparent !important;
+            background-color: transparent !important;
+            color: #1d1d1f !important;
+            border: none !important;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6,
+        .main-content h1, .main-content h2, .main-content h3, .main-content h4,
+        .page-container h1, .page-container h2, .page-container h3, .page-container h4 {
+            color: #1d1d1f !important;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        }
+
+        .main-content h2 {
+            font-size: 26px !important;
+            font-weight: 800 !important;
+            letter-spacing: -0.6px !important;
+            margin-top: 15px !important;
+            margin-bottom: 20px !important;
+            color: #1d1d1f !important;
+        }
+
+        /* Header Links / User info */
+        .links-list, .links-list li, .links-list a {
+            color: #1d1d1f !important;
+            font-weight: 600 !important;
+            font-size: 13px !important;
+        }
+        .links-list a:hover {
+            color: #007aff !important;
+        }
+
+        /* Category Titles */
+        .category-header,
+        .main-content .row h3 {
+            color: #1d1d1f !important;
+            font-weight: 800 !important;
+            margin-bottom: 20px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+            padding-bottom: 12px !important;
+            font-family: 'Inter', sans-serif !important;
+            letter-spacing: -0.5px !important;
+            font-size: 19px !important;
+        }
+
+        /* Apple Glass Action Grid */
+        .dashboard-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+            gap: 20px !important;
+        }
+        .dashboard-grid a > div, 
+        .dashboard-grid > div, 
+        .dashboard-grid div.grid-action-box {
+            background: rgba(255, 255, 255, 0.85) !important;
+            backdrop-filter: blur(30px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(30px) saturate(200%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.8) !important;
+            border-radius: 22px !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+            color: #1d1d1f !important;
+            padding: 22px !important;
+            text-align: center !important;
+        }
+        .dashboard-grid a > div:hover,
+        .dashboard-grid > div:hover {
+            background: #ffffff !important;
+            border-color: #007aff !important;
+            box-shadow: 0 14px 35px rgba(0, 122, 255, 0.15) !important;
+            transform: translateY(-4px) scale(1.02) !important;
+        }
+        .dashboard-grid h4,
+        .dashboard-grid a > div h4,
+        .dashboard-grid > div h4 {
+            font-family: 'Inter', -apple-system, sans-serif !important;
+            color: #1d1d1f !important;
+            letter-spacing: -0.3px !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            margin: 0 0 5px 0 !important;
+        }
+        .dashboard-grid span,
+        .dashboard-grid a > div span,
+        .dashboard-grid > div span {
+            color: #86868b !important;
+            font-size: 12px !important;
+            font-weight: 500 !important;
+        }
+
+        /* Financial Overview & General Cards */
+        .portal-card, .a1-card-8, .panel {
+            background: rgba(255, 255, 255, 0.85) !important;
+            backdrop-filter: blur(30px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(30px) saturate(200%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.8) !important;
+            border-radius: 24px !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+            color: #1d1d1f !important;
+        }
+
+        /* Subtle Security Watermark */
+        .security-watermark span {
+            color: #000000 !important;
+            opacity: 0.025 !important;
+        }
+
+        @media (max-width: 767px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px !important;
+            }
+            .dashboard-grid a > div, .dashboard-grid > div {
+                padding: 16px 8px !important;
+                border-radius: 16px !important;
+            }
+            .dashboard-grid h4 {
+                font-size: 13px !important;
+            }
+            .dashboard-grid span {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body class="page-body page-fade" style="background: #f5f5f7 !important; min-height: 100vh;">
-    <div class="page-container" id="navbarcollapse" style="background: #f5f5f7 !important; padding-left: 0 !important; width: 100% !important; max-width: 100% !important; min-height: 100vh;">	
+    <div class="page-container" id="navbarcollapse" style="background: transparent !important; padding-left: 0 !important; width: 100% !important; max-width: 100% !important; min-height: 100vh;">	
         
         <?php include('nav.php'); ?>
 
-    	<div class="main-content" style="margin-left: 0 !important; padding: 24px !important;">
+    	<div class="main-content" style="background: transparent !important; margin-left: 0 !important; padding: 24px !important;">
 		
 				<?php if (isset($_GET['pin_success'])): ?>
-				    <div style="background: rgba(16, 185, 129, 0.15); border: 2px solid #10b981; color: #10b981; padding: 16px 20px; border-radius: 16px; margin-bottom: 20px; font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 10px 25px rgba(16,185,129,0.2);">
+				    <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); color: #059669; padding: 16px 20px; border-radius: 16px; margin-bottom: 20px; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(16,185,129,0.1);">
 				        <div>🔒 Security PIN Updated! Your owner/superadmin account is now secured with your private 6-digit PIN.</div>
-				        <button onclick="this.parentElement.style.display='none'" style="background: none; border: none; color: #10b981; font-weight: bold; cursor: pointer; font-size: 18px;">✕</button>
+				        <button onclick="this.parentElement.style.display='none'" style="background: none; border: none; color: #059669; font-weight: bold; cursor: pointer; font-size: 18px;">✕</button>
 				    </div>
 				<?php endif; ?>
 		
@@ -187,7 +333,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
 
 			<div id="gate-alert-container" style="margin-top: 15px; margin-bottom: 15px;"></div>
-			<h2>SUDARSHAN FITNESS</h2>
+			<h2 style="color: #1d1d1f !important; font-weight: 800; font-size: 26px; letter-spacing: -0.6px; margin-top: 15px; margin-bottom: 20px;">SUDARSHAN FITNESS</h2>
 
 
 
@@ -201,7 +347,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			?>
 			<div class="row" id="wa-outbox-alert-row" style="margin-bottom: 20px; margin-left: 0; margin-right: 0;">
 			    <div class="col-md-12" style="padding: 0;">
-			        <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; color: #ffffff;">
+			        <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 16px; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; color: #991b1b;">
 			            <div style="display: flex; align-items: center; gap: 10px;">
 			                <span style="font-size: 20px;">⚠️</span>
 			                <span><strong>WhatsApp Notification Service is offline:</strong> <span id="wa-pending-count-text"><?php echo $pending_count; ?></span> alerts are currently pending in the outbox retry queue.</span>
@@ -366,81 +512,26 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
 					<!-- Yearly Income Card -->
 					<div class="col-md-3 col-sm-6" style="padding: 6px;">
-						<div style="background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 14px; padding: 16px; text-align: center;">
-							<div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">Year <?php echo date('Y'); ?> Gross Income</div>
-							<div style="color: #60a5fa; font-size: 26px; font-weight: 900; margin-top: 4px;">₹<?php echo number_format($year_income); ?></div>
-							<div style="color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 4px;">Annual collections so far</div>
+						<div style="background: rgba(0, 122, 255, 0.05); border: 1px solid rgba(0, 122, 255, 0.18); border-radius: 16px; padding: 20px; text-align: center;">
+							<div style="color: #86868b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Year <?php echo date('Y'); ?> Gross Income</div>
+							<div style="color: #007aff; font-size: 28px; font-weight: 800; margin-top: 8px; font-family: 'Inter', sans-serif;">₹<?php echo number_format($year_income); ?></div>
+							<div style="color: #86868b; font-size: 11px; margin-top: 8px; font-weight: 500;">Annual collections so far</div>
 						</div>
 					</div>
 
 					<!-- Net Lifetime Profit Card -->
 					<div class="col-md-3 col-sm-6" style="padding: 6px;">
-						<div style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 14px; padding: 16px; text-align: center;">
-							<div style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">💎 Net Lifetime Profit</div>
-							<div style="color: <?php echo $net_profit >= 0 ? '#c084fc' : '#ef4444'; ?>; font-size: 26px; font-weight: 900; margin-top: 4px;">₹<?php echo number_format($net_profit); ?></div>
-							<div style="color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 4px;">Gross income minus expenses</div>
+						<div style="background: rgba(175, 82, 222, 0.05); border: 1px solid rgba(175, 82, 222, 0.18); border-radius: 16px; padding: 20px; text-align: center;">
+							<div style="color: #86868b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">💎 Net Lifetime Profit</div>
+							<div style="color: <?php echo $net_profit >= 0 ? '#af52de' : '#ff3b30'; ?>; font-size: 28px; font-weight: 800; margin-top: 8px; font-family: 'Inter', sans-serif;">₹<?php echo number_format($net_profit); ?></div>
+							<div style="color: #86868b; font-size: 11px; margin-top: 8px; font-weight: 500;">Gross income minus expenses</div>
 						</div>
 					</div>
 				</div>
 			</div>
 			<?php endif; ?>
 
-			<hr>
-            <style>
-            .dashboard-grid {
-                display: grid !important;
-                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
-                gap: 20px !important;
-            }
-            .dashboard-grid a div, .dashboard-grid div.grid-action-box {
-                background: rgba(255, 255, 255, 0.8) !important;
-                backdrop-filter: blur(25px) saturate(200%) !important;
-                -webkit-backdrop-filter: blur(25px) saturate(200%) !important;
-                border: 1px solid rgba(255, 255, 255, 0.6) !important;
-                border-radius: 24px !important;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255,255,255,0.8) !important;
-                transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-                color: #1d1d1f !important;
-            }
-            .dashboard-grid a div:hover {
-                background: rgba(255, 255, 255, 0.95) !important;
-                border-color: #007aff !important;
-                box-shadow: 0 15px 35px rgba(0, 122, 255, 0.15), inset 0 1px 0 rgba(255,255,255,0.8) !important;
-                transform: translateY(-4px) scale(1.02) !important;
-            }
-            .dashboard-grid a div h4 {
-                font-family: 'Inter', -apple-system, sans-serif !important;
-                color: #1d1d1f !important;
-                letter-spacing: -0.3px !important;
-                font-weight: 700 !important;
-            }
-            .dashboard-grid a div span {
-                color: #86868b !important;
-            }
-            
-            @media (max-width: 767px) {
-                .dashboard-grid {
-                    grid-template-columns: repeat(2, 1fr) !important;
-                    gap: 12px !important;
-                }
-                .dashboard-grid a div {
-                    padding: 16px 8px !important;
-                    border-radius: 14px !important;
-                }
-                .dashboard-grid a div div {
-                    font-size: 32px !important;
-                    margin-bottom: 8px !important;
-                }
-                .dashboard-grid a div h4 {
-                    font-size: 13px !important;
-                    margin-bottom: 0 !important;
-                    line-height: 1.3 !important;
-                }
-                .dashboard-grid a div span {
-                    display: none !important; /* Hide description on mobile to look neat */
-                }
-            }
-            </style>
+			<hr style="border: 0; height: 1px; background: rgba(0, 0, 0, 0.06); margin: 30px 0;">
 
 			<!-- Big Boxed Simple Quick Actions Categorized Grid (Sidebar Replacement) -->
 			<div class="row" style="margin-bottom: 30px; margin-left: 0; margin-right: 0;">
