@@ -55,45 +55,51 @@ if (substr($logo_path, 0, 6) === '../../') {
 	<link rel="stylesheet" type="text/css" href="./css/entypo.css">
 	<link rel="stylesheet" href="./css/premium.css"/>
     <style>
-    /* Option 2: Premium Fitness Minimalist (Apple-like) Theme */
+    /* Option 2: True Premium Apple-like Aesthetic */
     #titan-login-body {
+        /* MacOS style soft mesh gradient */
         background-color: #f5f5f7 !important;
-        background-image: linear-gradient(135deg, #f5f5f7 0%, #e8e8ed 100%) !important;
+        background-image: 
+            radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+            radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+            radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%) !important;
+        background-attachment: fixed !important;
+        background-size: cover !important;
         min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        display: block;
         margin: 0;
+        padding: 40px 20px;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+        box-sizing: border-box;
     }
 
     #titan-login-container {
-        max-width: 500px !important;
+        max-width: 480px !important;
         width: 100% !important;
-        background: rgba(255, 255, 255, 0.75) !important;
-        backdrop-filter: blur(25px) saturate(200%) !important;
-        -webkit-backdrop-filter: blur(25px) saturate(200%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.4) !important;
-        border-radius: 24px !important;
-        padding: 45px 40px !important;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0,0,0,0.05) !important;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.85) !important;
+        backdrop-filter: blur(40px) saturate(200%) !important;
+        -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
+        border: 1px solid rgba(255, 255, 255, 0.5) !important;
+        border-radius: 32px !important;
+        padding: 40px 35px !important;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255,255,255,0.2) inset !important;
         position: relative;
         z-index: 10;
-        margin: 0 20px;
     }
 
     #titan-login-body .login-categories {
         display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important;
-        gap: 12px !important;
-        margin-bottom: 30px !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 8px !important;
+        margin-bottom: 25px !important;
     }
 
     #titan-login-body .category-tab {
-        background: rgba(255, 255, 255, 0.5) !important;
-        border: 1px solid rgba(0, 0, 0, 0.05) !important;
-        border-radius: 12px !important;
-        padding: 12px 6px !important;
+        background: rgba(0, 0, 0, 0.03) !important;
+        border: 1px solid transparent !important;
+        border-radius: 16px !important;
+        padding: 10px 4px !important;
         text-align: center !important;
         cursor: pointer !important;
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
@@ -101,37 +107,36 @@ if (substr($logo_path, 0, 6) === '../../') {
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 8px !important;
+        gap: 6px !important;
     }
 
     #titan-login-body .category-tab:hover {
-        background: rgba(255, 255, 255, 0.9) !important;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+        background: rgba(0, 0, 0, 0.06) !important;
+        transform: scale(1.02);
     }
 
     #titan-login-body .category-tab.active {
         background: #ffffff !important;
-        border-color: rgba(0,0,0,0.1) !important;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.08) !important;
-        transform: translateY(-2px);
+        border-color: rgba(0,0,0,0.05) !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+        transform: scale(1.05);
     }
 
     #titan-login-body .category-tab i {
-        font-size: 22px !important;
+        font-size: 20px !important;
         color: #86868b !important;
         transition: color 0.3s ease;
     }
     
     #titan-login-body .category-tab.active i {
-        color: #1d1d1f !important;
+        color: #0071e3 !important;
     }
 
     #titan-login-body .category-tab span {
-        font-size: 11px !important;
-        font-weight: 600 !important;
+        font-size: 10px !important;
+        font-weight: 700 !important;
         color: #86868b !important;
-        letter-spacing: 0.2px !important;
+        letter-spacing: 0px !important;
         transition: color 0.3s ease;
     }
 
@@ -139,37 +144,55 @@ if (substr($logo_path, 0, 6) === '../../') {
         color: #1d1d1f !important;
     }
 
-    #titan-login-body .form-control {
-        background: rgba(255, 255, 255, 0.8) !important;
-        border: 1px solid rgba(0, 0, 0, 0.1) !important;
-        color: #1d1d1f !important;
-        border-radius: 12px !important;
-        padding: 16px 18px !important;
-        font-size: 15px !important;
-        margin-bottom: 20px !important;
-        font-weight: 500;
-        box-shadow: inset 0 1px 2px rgba(0,0,0,0.02) !important;
-        transition: all 0.3s ease;
+    /* Override input group styles completely */
+    #titan-login-body .input-group {
+        display: flex !important;
+        align-items: center !important;
+        background: rgba(255, 255, 255, 0.9) !important;
+        border: 1.5px solid rgba(0, 0, 0, 0.08) !important;
+        border-radius: 16px !important;
+        margin-bottom: 16px !important;
+        padding: 4px 12px !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.02) !important;
     }
 
-    #titan-login-body .form-control::placeholder {
-        color: #86868b !important;
-        font-weight: 400;
-    }
-
-    #titan-login-body .form-control:focus {
-        background: #ffffff !important;
+    #titan-login-body .input-group:focus-within {
         border-color: #0071e3 !important;
         box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.15) !important;
-        outline: none;
+        background: #ffffff !important;
     }
 
     #titan-login-body .input-group-addon {
-        background: rgba(255, 255, 255, 0.8) !important;
-        border: 1px solid rgba(0, 0, 0, 0.1) !important;
-        border-right: none !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 10px 0 4px !important;
         color: #86868b !important;
-        border-radius: 12px 0 0 12px !important;
+        font-size: 18px !important;
+    }
+
+    #titan-login-body .form-control {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        color: #1d1d1f !important;
+        padding: 12px 0 !important;
+        font-size: 16px !important;
+        font-weight: 500 !important;
+        width: 100% !important;
+        margin: 0 !important;
+    }
+    
+    #titan-login-body .form-control:focus {
+        outline: none !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    #titan-login-body .form-control::placeholder {
+        color: #a1a1a6 !important;
+        font-weight: 400 !important;
     }
 
     #titan-login-body .btn-primary {
@@ -177,28 +200,37 @@ if (substr($logo_path, 0, 6) === '../../') {
         color: #ffffff !important;
         border: none !important;
         padding: 16px !important;
-        border-radius: 14px !important;
+        border-radius: 16px !important;
         font-weight: 600 !important;
         font-size: 16px !important;
         width: 100% !important;
-        box-shadow: 0 4px 12px rgba(29, 29, 31, 0.2) !important;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+        margin-top: 8px !important;
     }
 
     #titan-login-body .btn-primary:hover {
         background: #000000 !important;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
-        transform: translateY(-1px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25) !important;
+        transform: translateY(-2px);
     }
     
     #titan-login-body .industrial-title {
         color: #1d1d1f !important;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
-        font-weight: 700 !important;
-        font-size: 26px !important;
+        font-weight: 800 !important;
+        font-size: 24px !important;
         letter-spacing: -0.5px !important;
-        margin-top: 15px !important;
-        margin-bottom: 5px !important;
+        margin-top: 10px !important;
+        margin-bottom: 2px !important;
+    }
+    
+    #titan-login-body .btn-action {
+        border-radius: 12px !important;
+        font-weight: 600 !important;
+        font-size: 13px !important;
+        padding: 12px !important;
+        border: 1px solid rgba(0,0,0,0.05) !important;
+        transition: all 0.3s ease !important;
     }
     </style>
 </head>
@@ -209,18 +241,15 @@ if (substr($logo_path, 0, 6) === '../../') {
             <div class="login-header login-caret">
                 <div class="login-content" style="text-align: center;">
                     
-                    <div style="margin: 0 auto 15px auto; text-align: center;">
-                        <img src="./images/ganesha_gym.jpg" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(0,0,0,0.05); box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    <div style="display: flex; justify-content: center; align-items: center; gap: -10px; margin-bottom: 15px;">
+                        <img src="./images/ganesha_gym.jpg" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 8px 16px rgba(0,0,0,0.1); z-index: 2;">
+                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="height: 50px; width: auto; margin-left: -15px; border-radius: 8px; z-index: 1;" />
                     </div>
-
-                    <a href="#" class="logo">
-                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="max-height: 50px; width: auto; margin-bottom: 5px;" />
-                    </a>
 
                     <div class="industrial-title">
-                        Welcome to <?php echo htmlspecialchars($gym['gym_name']); ?>
+                        <?php echo htmlspecialchars($gym['gym_name']); ?>
                     </div>
-                    <p class="description" style="color: #86868b; font-size: 14px; font-weight: 500; margin-bottom: 25px;">
+                    <p class="description" style="color: #86868b; font-size: 13px; font-weight: 500; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px;">
                         Secure Access Portal
                     </p>
                 </div>
@@ -276,7 +305,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                         </div>
 
                         <!-- Username/UserID input -->
-                        <div class="form-group">
+                        <div class="form-group" style="margin-bottom: 0;">
                             <div class="input-group">
                                 <div class="input-group-addon">
                                     <i class="entypo-user"></i>
@@ -286,7 +315,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                         </div>
 
                         <!-- Password input -->
-                        <div class="form-group">
+                        <div class="form-group" style="margin-bottom: 0;">
                             <div class="input-group">
                                 <div class="input-group-addon">
                                     <i class="entypo-lock"></i>
@@ -295,26 +324,12 @@ if (substr($logo_path, 0, 6) === '../../') {
                             </div>
                         </div>
 
-                        <div class="form-group" style="margin-top: 30px;">
-                            <button type="submit" name="btnLogin" class="btn btn-primary" style="margin-bottom: 15px;">
+                        <div class="form-group" style="margin-top: 20px;">
+                            <button type="submit" name="btnLogin" class="btn btn-primary" style="margin-bottom: 20px;">
                                 Sign In
                             </button>
                             
                             <!-- Action Grid for Self Registration & Quick Portals -->
-                            <div style="margin-top: 15px;">
-                                <a href="register.php" style="background: rgba(255, 107, 0, 0.2); color: #ff6b00; border: 1.5px solid #ff6b00; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 13px; text-decoration: none; text-align: center; padding: 13px; border-radius: 12px; display: block; box-shadow: 0 0 20px rgba(255,107,0,0.3); margin-bottom: 10px;">
-                                    ✍️ SELF REGISTRATION (JOIN ACADEMY)
-                                </a>
-                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                                    <a href="guest_enquiry.php" style="background: rgba(255, 183, 3, 0.15); color: #ffb703; border: 1px solid #ffb703; font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 11px; text-decoration: none; text-align: center; padding: 11px 6px; border-radius: 12px; display: block; box-shadow: 0 0 15px rgba(255,183,3,0.2);">
-                                        🎁 Free Trial
-                                    </a>
-                                    <a href="prebook.php" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 11px; text-decoration: none; text-align: center; padding: 11px 6px; border-radius: 12px; display: block; box-shadow: 0 0 15px rgba(16,185,129,0.2);">
-                                        ⚡ Pre-Book Slot
-                                    </a>
-                                </div>
-                            </div>
-
                             <button type="button" id="faceIdLoginBtn" class="btn btn-success" style="width: 100%; display: block; margin-top: 12px; background: linear-gradient(135deg, #ffd700, #ff6b00); border: 1px solid #ff6b00; font-family: 'Orbitron', sans-serif; font-weight: 900; box-shadow: 0 0 25px rgba(255,215,0,0.6);" onclick="loginWithFaceID()">
                                 <i class="entypo-camera"></i>
                                 SHARINGAN BIOMETRIC SCAN
