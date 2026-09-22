@@ -7,6 +7,9 @@ if (!headers_sent()) {
     header("Referrer-Policy: strict-origin-when-cross-origin");
     header("Permissions-Policy: camera=*, microphone=(), display-capture=()");
     header("X-Military-Cyber-Defense: CERT-In MIL-STD-256-INDIA");
+    
+    // Strict Content Security Policy (CSP) against XSS & Data Injection
+    header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn.plot.ly; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: https: blob:; connect-src 'self'; frame-src 'self' https://www.youtube.com;");
 }
 
 // Suppress PHP deprecation warnings, notices, and warnings to prevent breaking JSON/AJAX responses
@@ -905,6 +908,7 @@ if (!function_exists('is_ip_blocked')) {
     }
 }
 
+
 if (!function_exists('record_login_attempt')) {
     function record_login_attempt($con, $username, $status = 'failed') {
         if (!$con) return;
@@ -1165,6 +1169,8 @@ if (!function_exists('check_and_upgrade_db')) {
             blocked_by VARCHAR(50) DEFAULT 'system',
             PRIMARY KEY (id)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+
         // Phase 3: Gamification and Heatmap Schema
         $cols = mysqli_query($con, "SHOW COLUMNS FROM users LIKE 'xp_points'");
         if(mysqli_num_rows($cols) == 0) mysqli_query($con, "ALTER TABLE users ADD COLUMN xp_points INT DEFAULT 0");

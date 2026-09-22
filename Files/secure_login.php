@@ -34,6 +34,8 @@ if ($pass_key == "" || $user_id_auth == "") {
     
     if ($count == 1) {
         $row = mysqli_fetch_assoc($result);
+        
+
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }

@@ -124,81 +124,75 @@ if ($status === 'active') {
 	<link href="a1style.css" rel="stylesheet" type="text/css">
 	
 	<style>
- 	#button1
-	{
-	width:126px;
+ 	#button1 {
+	    width: 126px;
 	}
 
 	.page-container .sidebar-menu #main-menu li#hassubopen > a {
-	background-color: #2b303a;
-	color: #ffffff;
+	    background-color: var(--bg-darker);
+	    color: var(--accent-primary);
 	}
 
 	.member-tabs-container {
 		display: flex;
 		gap: 12px;
-		margin-bottom: 25px;
+		margin-bottom: 24px;
 		flex-wrap: wrap;
 	}
 	.tab-btn {
-		background: rgba(255, 255, 255, 0.03);
-		color: #a3a3a3;
-		border: 1px solid rgba(255, 107, 0, 0.15);
-		padding: 10px 22px;
+		background: var(--card-bg);
+		color: var(--text-muted);
+		border: 1px solid var(--card-border);
+		padding: 10px 20px;
 		border-radius: 8px;
 		text-decoration: none !important;
 		font-weight: 600;
 		font-size: 13px;
-		transition: all 0.3s ease;
+		transition: all 0.2s ease;
 		display: inline-flex;
 		align-items: center;
 		gap: 8px;
-		box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+		box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 	}
 	.tab-btn:hover {
-		background: rgba(255, 107, 0, 0.08);
-		color: #ffffff;
-		border-color: rgba(255, 107, 0, 0.4);
-		box-shadow: 0 0 12px rgba(255, 107, 0, 0.2);
+		background: var(--bg-darker);
+		color: var(--text-main);
 	}
 	.tab-btn.active-tab {
-		background: linear-gradient(135deg, rgba(255, 107, 0, 0.25), rgba(255, 107, 0, 0.08));
+		background: var(--accent-primary);
 		color: #ffffff;
-		border-color: #ff6b00;
-		box-shadow: 0 0 15px rgba(255, 107, 0, 0.3);
+		border-color: var(--accent-primary);
 	}
 	.tab-count {
-		background: rgba(255, 255, 255, 0.1);
+		background: rgba(0, 0, 0, 0.1);
 		padding: 2px 8px;
-		border-radius: 20px;
+		border-radius: 12px;
 		font-size: 11px;
-		font-weight: bold;
-		color: #ffffff;
+		font-weight: 700;
 	}
 	.tab-btn.active-tab .tab-count {
-		background: #ff6b00;
+		background: rgba(255, 255, 255, 0.25);
+		color: #ffffff;
 	}
 	.status-badge {
-		padding: 2px 8px;
-		border-radius: 4px;
-		font-size: 10px;
-		font-weight: 800;
+		padding: 4px 8px;
+		border-radius: 6px;
+		font-size: 11px;
+		font-weight: 600;
 		text-transform: uppercase;
 		display: inline-block;
 		margin-left: 8px;
 		letter-spacing: 0.5px;
 	}
 	.status-active {
-		background: rgba(16, 185, 129, 0.12);
-		color: #10b981;
-		border: 1px solid rgba(16, 185, 129, 0.3);
-		text-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+		background: rgba(16, 185, 129, 0.1);
+		color: var(--success);
+		border: 1px solid rgba(16, 185, 129, 0.2);
 	}
 	.status-expired {
-		background: rgba(239, 68, 68, 0.12);
-		color: #ef4444;
-		border: 1px solid rgba(239, 68, 68, 0.3);
-		text-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+		background: rgba(239, 68, 68, 0.1);
+		color: var(--danger);
+		border: 1px solid rgba(239, 68, 68, 0.2);
 	}
 	</style>
 

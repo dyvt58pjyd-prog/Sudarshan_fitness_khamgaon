@@ -17,6 +17,8 @@ if ($last_check !== $today_str) {
         ob_start();
         @include __DIR__ . '/../../api/inactivity_check.php';
         @include __DIR__ . '/../../api/daily_celebration_check.php';
+        $_GET['trigger'] = '1';
+        @include __DIR__ . '/../../api/cron_backup.php';
         if (ob_get_length()) ob_end_clean();
     } catch (\Exception $ex) {
         if (ob_get_length()) ob_end_clean();
@@ -134,99 +136,15 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
     <link rel="stylesheet" href="../../css/premium.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-     <style>
+    <style>
     	.page-container .sidebar-menu #main-menu li#dash > a {
-    	background-color: #2b303a;
-    	color: #ffffff;
+            background-color: var(--bg-darker);
+            color: var(--accent-primary);
 		}
-
-        /* Crimson Red Gym UI Theme Overrides */
-        .tile-stats {
-            background: rgba(15, 7, 18, 0.94) !important;
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
-            border: 2px solid rgba(255, 107, 0, 0.45) !important;
-            border-radius: 24px !important;
-            padding: 30px 20px !important;
-            margin-bottom: 30px !important;
-            box-shadow: 0 0 35px rgba(255, 107, 0, 0.25), inset 0 0 15px rgba(255, 215, 0, 0.2) !important;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            animation: system-hologram-pulse 6s ease-in-out infinite alternate !important;
-        }
-        .tile-stats:hover {
-            transform: translateY(-5px);
-            border-color: #ff6b00 !important;
-            box-shadow: 0 0 50px rgba(255, 107, 0, 0.7), 0 0 80px rgba(255, 215, 0, 0.4) !important;
-        }
-        .tile-stats .icon {
-            color: rgba(255,107,0,0.15) !important;
-            bottom: 20px !important;
-            right: 20px !important;
-            font-size: 80px !important;
-        }
-        .tile-stats h2 {
-            font-family: 'Orbitron', sans-serif !important;
-            font-size: 13px !important;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #ff6b00 !important;
-            margin-top: 0 !important;
-            font-weight: 800 !important;
-        }
-        .tile-stats .num {
-            font-family: 'Orbitron', sans-serif !important;
-            font-size: 42px !important;
-            font-weight: 900 !important;
-            color: #ffffff !important;
-            text-shadow: 0 0 20px #ff6b00;
-            margin-top: 15px;
-        }
-        
-        /* Colored Glowing Borders */
-        .tile-red { border-bottom: 4px solid #ff6b00 !important; box-shadow: inset 0 -15px 30px -20px rgba(255,107,0,0.6) !important; }
-        .tile-green { border-bottom: 4px solid #10b981 !important; box-shadow: inset 0 -15px 30px -20px rgba(16,185,129,0.5) !important; }
-        .tile-aqua { border-bottom: 4px solid #ff6b00 !important; box-shadow: inset 0 -15px 30px -20px rgba(255,107,0,0.5) !important; }
-        .tile-blue { border-bottom: 4px solid #ffd700 !important; box-shadow: inset 0 -15px 30px -20px rgba(255,215,0,0.5) !important; }
-        
-        .tile-red:hover { border-color: #ff6b00 !important; }
-        .tile-green:hover { border-color: #10b981 !important; }
-        .tile-aqua:hover { border-color: #ff6b00 !important; }
-        .tile-blue:hover { border-color: #ffd700 !important; }
-        
-        /* Darker panel override */
-        .panel {
-            background: rgba(15, 7, 18, 0.94) !important;
-            backdrop-filter: blur(15px) !important;
-            border: 1px solid rgba(255, 107, 0, 0.4) !important;
-            border-radius: 20px !important;
-            box-shadow: 0 0 35px rgba(255, 107, 0, 0.2) !important;
-        }
-        .panel-heading {
-            background: transparent !important;
-            border-bottom: 1px solid rgba(255, 107, 0, 0.3) !important;
-        }
-        .panel-title { font-family: 'Orbitron', sans-serif !important; color: #ff6b00 !important; font-weight: 900 !important; }
-        
-        /* Table overrides */
-        .table > tbody > tr {
-            transition: background 0.3s ease, box-shadow 0.3s ease !important;
-        }
-        .table > tbody > tr:hover {
-            background: rgba(255, 107, 0, 0.08) !important;
-            box-shadow: inset 0 0 20px rgba(255, 107, 0, 0.3) !important;
-        }
-
     </style>
-
 </head>
-    <body class="page-body page-fade" onload="collapseSidebar()" style="background-color: #2c1b18; background-image: radial-gradient(circle at 50% 10%, rgba(255, 107, 0, 0.22) 0%, transparent 60%), radial-gradient(circle at 90% 80%, rgba(255, 215, 0, 0.15) 0%, transparent 50%);">
-
-        <!-- Particle HUD Background -->
-        <div id="particles-js" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;"></div>
-
-    	<div class="page-container sidebar-collapsed" id="navbarcollapse">	
+<body class="page-body page-fade" onload="collapseSidebar()">
+    <div class="page-container sidebar-collapsed" id="navbarcollapse">	
 	
 		<div class="sidebar-menu">
 	

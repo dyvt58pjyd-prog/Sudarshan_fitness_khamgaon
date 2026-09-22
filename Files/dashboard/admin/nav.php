@@ -22,43 +22,47 @@ if (!isset($_SESSION['working_year'])) {
 $working_year = $_SESSION['working_year'];
 $gym_settings_data = get_gym_details($con);
 $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
+$watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" . $current_role . ")" : "UNAUTHORIZED";
 ?>
-<style>
-    /* Completely hide the sidebar menu and collapse controls */
-    .sidebar-menu, .sidebar-collapse, #navbarcollapse .sidebar-menu, .sidebar-collapsed .sidebar-menu {
-        display: none !important;
-        width: 0 !important;
-        max-width: 0 !important;
-        min-width: 0 !important;
-        flex: 0 0 0 !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
-    }
-    
-    /* Make main content occupy 100% width and remove sidebar spacing offsets */
-    .page-container, .page-container.sidebar-collapsed {
-        padding-left: 0 !important;
-    }
-    
-    .page-container .main-content, .page-container.sidebar-collapsed .main-content {
-        margin-left: 0 !important;
-        padding-left: 30px !important;
-        padding-right: 30px !important;
-        left: 0 !important;
-        width: 100% !important;
-        position: relative !important;
-    }
+<!-- SECURITY WATERMARK OVERLAY -->
+<div class="security-watermark">
+    <?php for($i = 0; $i < 30; $i++): ?>
+        <span><?php echo htmlspecialchars($watermark_text); ?></span>
+    <?php endfor; ?>
+</div>
 
-    @media (min-width: 768px) {
-        .page-container, .page-container.sidebar-collapsed {
-            padding-left: 0 !important;
-        }
-        .page-container .main-content, .page-container.sidebar-collapsed .main-content {
-            margin-left: 0 !important;
-        }
+<style>
+    /* Modern SaaS Layout Fixes */
+    .page-container {
+        padding-left: 280px; /* Sidebar width */
+        transition: padding-left 0.3s ease;
+    }
+    .page-container.sidebar-collapsed {
+        padding-left: 70px;
+    }
+    
+    .sidebar-menu {
+        width: 280px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 1000;
+        transition: width 0.3s ease;
+    }
+    .sidebar-collapsed .sidebar-menu {
+        width: 70px;
     }
 
     @media (max-width: 767px) {
+        .page-container { padding-left: 0 !important; }
+        .sidebar-menu { 
+            transform: translateX(-100%);
+        }
+        .sidebar-menu.mobile-is-visible {
+            transform: translateX(0);
+        }
+        
         .links-list {
             display: flex !important;
             flex-direction: row !important;
@@ -73,10 +77,6 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
         .links-list li {
             margin: 0 !important;
             padding: 0 !important;
-        }
-        .page-container .main-content, .page-container.sidebar-collapsed .main-content {
-            padding-left: 15px !important;
-            padding-right: 15px !important;
         }
     }
 </style>
@@ -94,10 +94,10 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
                 themeLi.id = 'sf-theme-switcher-wrapper';
                 themeLi.style.marginRight = '15px';
                 themeLi.innerHTML = `
-                    <select id="sf-theme-select" onchange="SFThemeEngine.setThemeMode(this.value)" style="background: rgba(0, 240, 255, 0.1); color: #00f0ff; border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 8px; padding: 4px 8px; font-size: 11px; font-weight: 800; font-family: 'Orbitron', sans-serif; cursor: pointer;">
-                        <option value="dark" style="background:#2c1b18; color:#fff;">🌙 Dark Mode</option>
-                        <option value="light" style="background:#fff; color:#000;">☀️ Light Mode</option>
-                        <option value="system" style="background:#2c1b18; color:#fff;">💻 System Mode</option>
+                    <select id="sf-theme-select" onchange="SFThemeEngine.setThemeMode(this.value)" style="background: var(--card-bg); color: var(--text-main); border: 1px solid var(--card-border); border-radius: 6px; padding: 6px 10px; font-size: 13px; font-weight: 500; font-family: 'Inter', sans-serif; cursor: pointer;">
+                        <option value="dark">🌙 Dark Mode</option>
+                        <option value="light">☀️ Light Mode</option>
+                        <option value="system">💻 System Mode</option>
                     </select>
                 `;
                 linksList.insertBefore(themeLi, linksList.firstChild);
@@ -105,6 +105,14 @@ $current_role = isset($_SESSION['role']) ? $_SESSION['role'] : 'super_admin';
                 // Set select default value
                 const currentMode = SFThemeEngine.getThemeMode();
                 document.getElementById('sf-theme-select').value = currentMode;
+            }
+
+            if (yearSelector && !document.getElementById('nav-working-year')) {
+                const yearLi = document.createElement('li');
+                yearLi.id = 'nav-working-year';
+                yearLi.style.marginRight = '15px';
+                yearLi.innerHTML = yearSelector.outerHTML.replace('style="', 'style="background: var(--card-bg); color: var(--text-main); border: 1px solid var(--card-border); border-radius: 6px; padding: 6px 10px; font-size: 13px; font-weight: 500; font-family: \'Inter\', sans-serif; ');
+                linksList.insertBefore(yearLi, linksList.firstChild);
             }
 
             if (yearSelector) {

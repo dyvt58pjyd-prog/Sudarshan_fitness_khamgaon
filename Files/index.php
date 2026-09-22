@@ -55,256 +55,190 @@ if (substr($logo_path, 0, 6) === '../../') {
 	<link rel="stylesheet" type="text/css" href="./css/entypo.css">
 	<link rel="stylesheet" href="./css/premium.css"/>
     <style>
-    /* Naruto Shree Ganesha Portal Background */
-    body.login-page {
-        background: #2c1b18 !important;
-        position: relative;
-        overflow-x: hidden;
-        background-image: 
-            radial-gradient(circle at 50% 20%, rgba(255, 107, 0, 0.25) 0%, transparent 60%),
-            radial-gradient(circle at 50% 80%, rgba(255, 215, 0, 0.18) 0%, transparent 50%) !important;
+    /* Option 2: Premium Fitness Minimalist (Apple-like) Theme */
+    #titan-login-body {
+        background-color: #f5f5f7 !important;
+        background-image: linear-gradient(135deg, #f5f5f7 0%, #e8e8ed 100%) !important;
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
         margin: 0;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
     }
 
-    /* Rotating Holographic Portal Ring Behind Container */
-    .portal-ring-background {
-        position: absolute;
-        width: 750px;
-        height: 750px;
-        border-radius: 50%;
-        border: 2px dashed rgba(255, 215, 0, 0.4);
-        box-shadow: 0 0 50px rgba(255, 215, 0, 0.3), inset 0 0 50px rgba(255, 107, 0, 0.3);
-        animation: portal-ring-spin 25s linear infinite;
-        pointer-events: none;
-        z-index: 1;
-    }
-
-    .portal-ring-inner {
-        position: absolute;
-        width: 550px;
-        height: 550px;
-        border-radius: 50%;
-        border: 2px solid rgba(255, 107, 0, 0.4);
-        box-shadow: 0 0 40px rgba(255, 107, 0, 0.4);
-        animation: portal-ring-spin-reverse 18s linear infinite;
-        pointer-events: none;
-        z-index: 1;
-    }
-
-    @keyframes portal-ring-spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-
-    @keyframes portal-ring-spin-reverse {
-        0% { transform: rotate(360deg); }
-        100% { transform: rotate(0deg); }
-    }
-
-    @keyframes system-lightning-flash {
-        0% { background-color: rgba(255, 215, 0, 0.15); filter: brightness(1.6); }
-        20% { background-color: transparent; filter: none; }
-        40% { background-color: rgba(255, 107, 0, 0.15); filter: brightness(1.8); }
-        60% { background-color: transparent; filter: none; }
-        100% { background-color: transparent; filter: none; }
-    }
-
-    @keyframes float-hanuman {
-        0% { transform: translateY(0px); box-shadow: 0 0 20px rgba(255, 107, 0, 0.5); }
-        50% { transform: translateY(-8px); box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); border-color: #ffd700; }
-        100% { transform: translateY(0px); box-shadow: 0 0 20px rgba(255, 107, 0, 0.5); }
-    }
-
-    .lightning-active {
-        animation: system-lightning-flash 0.5s ease-out;
-    }
-
-    /* Shree Ganesha Portal Window Container */
-    .login-container {
-        max-width: 650px !important;
-        width: 95% !important;
-        background: rgba(15, 10, 5, 0.95) !important;
-        border: 2px solid #ff6b00 !important;
-        border-radius: 28px !important;
-        padding: 35px 30px !important;
-        box-shadow: 0 0 50px rgba(255, 107, 0, 0.35) !important;
+    #titan-login-container {
+        max-width: 500px !important;
+        width: 100% !important;
+        background: rgba(255, 255, 255, 0.75) !important;
+        backdrop-filter: blur(25px) saturate(200%) !important;
+        -webkit-backdrop-filter: blur(25px) saturate(200%) !important;
+        border: 1px solid rgba(255, 255, 255, 0.4) !important;
+        border-radius: 24px !important;
+        padding: 45px 40px !important;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0,0,0,0.05) !important;
         position: relative;
         z-index: 10;
-        animation: system-hologram-pulse 6s ease-in-out infinite alternate !important;
+        margin: 0 20px;
     }
 
-    .login-categories {
+    #titan-login-body .login-categories {
         display: grid !important;
         grid-template-columns: repeat(3, 1fr) !important;
         gap: 12px !important;
-        margin-bottom: 25px !important;
+        margin-bottom: 30px !important;
     }
 
-    @media (max-width: 550px) {
-        .login-categories {
-            grid-template-columns: repeat(3, 1fr) !important;
-            gap: 8px !important;
-        }
-        .category-tab {
-            padding: 12px 6px !important;
-        }
-        .category-tab i {
-            font-size: 20px !important;
-        }
-        .category-tab span {
-            font-size: 9px !important;
-        }
-    }
-
-    .category-tab {
-        background: rgba(255, 107, 0, 0.04) !important;
-        border: 1px solid rgba(255, 107, 0, 0.25) !important;
-        border-radius: 14px !important;
-        padding: 14px 6px !important;
+    #titan-login-body .category-tab {
+        background: rgba(255, 255, 255, 0.5) !important;
+        border: 1px solid rgba(0, 0, 0, 0.05) !important;
+        border-radius: 12px !important;
+        padding: 12px 6px !important;
         text-align: center !important;
         cursor: pointer !important;
-        transition: all 0.25s ease !important;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 6px !important;
+        gap: 8px !important;
     }
 
-    .category-tab[data-role="member"]:hover, .category-tab[data-role="member"].active {
-        border-color: #ff6b00 !important;
-        background: rgba(255, 107, 0, 0.22) !important;
-        box-shadow: 0 0 25px rgba(255, 107, 0, 0.6) !important;
-        transform: scale(1.04);
-    }
-    .category-tab[data-role="reception"]:hover, .category-tab[data-role="reception"].active {
-        border-color: #ffb703 !important;
-        background: rgba(255, 183, 3, 0.22) !important;
-        box-shadow: 0 0 25px rgba(255, 183, 3, 0.6) !important;
-        transform: scale(1.04);
-    }
-    .category-tab[data-role="trainer"]:hover, .category-tab[data-role="trainer"].active {
-        border-color: #ffd700 !important;
-        background: rgba(255, 215, 0, 0.25) !important;
-        box-shadow: 0 0 25px rgba(255, 215, 0, 0.6) !important;
-        transform: scale(1.04);
-    }
-    .category-tab[data-role="owner"]:hover, .category-tab[data-role="owner"].active {
-        border-color: #f1c40f !important;
-        background: rgba(241, 196, 15, 0.25) !important;
-        box-shadow: 0 0 25px rgba(241, 196, 15, 0.6) !important;
-        transform: scale(1.04);
-    }
-    .category-tab[data-role="auditor"]:hover, .category-tab[data-role="auditor"].active {
-        border-color: #38bdf8 !important;
-        background: rgba(56, 189, 248, 0.22) !important;
-        box-shadow: 0 0 25px rgba(56, 189, 248, 0.6) !important;
-        transform: scale(1.04);
-    }
-    .category-tab[data-role="super_admin"]:hover, .category-tab[data-role="super_admin"].active {
-        border-color: #10b981 !important;
-        background: rgba(16, 185, 129, 0.25) !important;
-        box-shadow: 0 0 25px rgba(16, 185, 129, 0.6) !important;
-        transform: scale(1.04);
-    }
-    .category-tab[data-role="nutrition_partner"]:hover, .category-tab[data-role="nutrition_partner"].active {
-        border-color: #f97316 !important;
-        background: rgba(249, 115, 22, 0.25) !important;
-        box-shadow: 0 0 25px rgba(249, 115, 22, 0.6) !important;
-        transform: scale(1.04);
+    #titan-login-body .category-tab:hover {
+        background: rgba(255, 255, 255, 0.9) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
     }
 
-    .category-tab i {
-        font-size: 24px !important;
-    }
-    .category-tab span {
-        font-size: 10px !important;
-        font-weight: 800 !important;
-        font-family: 'Orbitron', sans-serif !important;
-        color: rgba(255, 255, 255, 0.8) !important;
-        text-transform: uppercase !important;
-        letter-spacing: 0.5px !important;
+    #titan-login-body .category-tab.active {
+        background: #ffffff !important;
+        border-color: rgba(0,0,0,0.1) !important;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.08) !important;
+        transform: translateY(-2px);
     }
 
-    .category-tab.active span {
-        color: #ffffff !important;
+    #titan-login-body .category-tab i {
+        font-size: 22px !important;
+        color: #86868b !important;
+        transition: color 0.3s ease;
     }
-    .category-tab[data-role="member"].active i { color: #ff6b00 !important; }
-    .category-tab[data-role="reception"].active i { color: #ffb703 !important; }
-    .category-tab[data-role="trainer"].active i { color: #ffd700 !important; }
-    .category-tab[data-role="owner"].active i { color: #f1c40f !important; }
-    .category-tab[data-role="super_admin"].active i { color: #10b981 !important; }
-
-    .form-control {
-        background: rgba(15, 10, 5, 0.85) !important;
-        border: 1px solid rgba(255, 107, 0, 0.35) !important;
-        color: #ffffff !important;
-        border-radius: 14px !important;
-        padding: 14px 18px !important;
-        font-size: 14px !important;
+    
+    #titan-login-body .category-tab.active i {
+        color: #1d1d1f !important;
     }
 
-    .form-control:focus {
-        border-color: #ff6b00 !important;
-        box-shadow: 0 0 25px rgba(255, 107, 0, 0.5) !important;
+    #titan-login-body .category-tab span {
+        font-size: 11px !important;
+        font-weight: 600 !important;
+        color: #86868b !important;
+        letter-spacing: 0.2px !important;
+        transition: color 0.3s ease;
     }
 
-    .btn-primary {
-        background: linear-gradient(135deg, #ff6b00, #e65000) !important;
+    #titan-login-body .category-tab.active span {
+        color: #1d1d1f !important;
+    }
+
+    #titan-login-body .form-control {
+        background: rgba(255, 255, 255, 0.8) !important;
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+        color: #1d1d1f !important;
+        border-radius: 12px !important;
+        padding: 16px 18px !important;
+        font-size: 15px !important;
+        margin-bottom: 20px !important;
+        font-weight: 500;
+        box-shadow: inset 0 1px 2px rgba(0,0,0,0.02) !important;
+        transition: all 0.3s ease;
+    }
+
+    #titan-login-body .form-control::placeholder {
+        color: #86868b !important;
+        font-weight: 400;
+    }
+
+    #titan-login-body .form-control:focus {
+        background: #ffffff !important;
+        border-color: #0071e3 !important;
+        box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.15) !important;
+        outline: none;
+    }
+
+    #titan-login-body .input-group-addon {
+        background: rgba(255, 255, 255, 0.8) !important;
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+        border-right: none !important;
+        color: #86868b !important;
+        border-radius: 12px 0 0 12px !important;
+    }
+
+    #titan-login-body .btn-primary {
+        background: #1d1d1f !important;
         color: #ffffff !important;
         border: none !important;
-        padding: 15px !important;
+        padding: 16px !important;
         border-radius: 14px !important;
-        font-family: 'Orbitron', sans-serif !important;
-        font-weight: 900 !important;
-        font-size: 14px !important;
-        letter-spacing: 1px !important;
-        box-shadow: 0 0 35px rgba(255, 107, 0, 0.7) !important;
-        transition: all 0.2s ease !important;
+        font-weight: 600 !important;
+        font-size: 16px !important;
+        width: 100% !important;
+        box-shadow: 0 4px 12px rgba(29, 29, 31, 0.2) !important;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
     }
 
-    .btn-primary:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 0 50px rgba(255, 107, 0, 0.95) !important;
+    #titan-login-body .btn-primary:hover {
+        background: #000000 !important;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
+        transform: translateY(-1px);
+    }
+    
+    #titan-login-body .industrial-title {
+        color: #1d1d1f !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+        font-weight: 700 !important;
+        font-size: 26px !important;
+        letter-spacing: -0.5px !important;
+        margin-top: 15px !important;
+        margin-bottom: 5px !important;
     }
     </style>
 </head>
-<body class="page-body login-page login-form-fall">
-
-    <!-- Naruto Floating Chakra Particles Canvas -->
-    <canvas id="loginParticlesCanvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; opacity: 0.6;"></canvas>
-
-    <!-- Rotating Holographic Portal Rings -->
-    <div class="portal-ring-background"></div>
-    <div class="portal-ring-inner"></div>
+<body id="titan-login-body" class="page-body login-page login-form-fall">
 
     <div id="container">
-        <div class="login-container">
+        <div id="titan-login-container" class="login-container">
             <div class="login-header login-caret">
                 <div class="login-content" style="text-align: center;">
-                    <div style="font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; color: #ff6b00; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; text-shadow: 0 0 12px rgba(255,107,0,0.5);">[ SUDARSHAN FITNESS ]</div>
                     
-                    <!-- Hanuman Motivation Avatar -->
-                    <div style="margin: 15px auto 25px auto; text-align: center;">
-                        <img src="./images/ganesha_gym.jpg" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 3px solid #ff6b00; animation: float-hanuman 4s ease-in-out infinite;">
-                        <div style="margin-top: 12px; font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 900; color: #ff6b00; letter-spacing: 2px; text-shadow: 0 0 15px rgba(255,107,0,0.8);">OM GANAPATAYE NAMAHA</div>
+                    <div style="margin: 0 auto 15px auto; text-align: center;">
+                        <img src="./images/ganesha_gym.jpg" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(0,0,0,0.05); box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                     </div>
 
                     <a href="#" class="logo">
-                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="filter: drop-shadow(0 0 25px rgba(255,107,0,0.7)); max-height: 75px; width: auto;" />
+                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="max-height: 50px; width: auto; margin-bottom: 5px;" />
                     </a>
-                    <p class="description" style="color: #64748b; font-size: 12px; font-weight: 600; margin-top: 15px;">
-                        Select your category to access your <?php echo htmlspecialchars($gym['gym_name']); ?> account.
+
+                    <div class="industrial-title">
+                        Welcome to <?php echo htmlspecialchars($gym['gym_name']); ?>
+                    </div>
+                    <p class="description" style="color: #86868b; font-size: 14px; font-weight: 500; margin-bottom: 25px;">
+                        Secure Access Portal
                     </p>
                 </div>
             </div>
 
             <div class="login-form">
                 <div class="login-content">
+                    <?php if (isset($_GET['error'])): ?>
+                        <?php 
+                        $err = $_GET['error'];
+                        $msg = 'ACCESS DENIED. INVALID CREDENTIALS.';
+                        if ($err === 'ip_locked') $msg = 'SYSTEM SECURITY LOCK. TOO MANY FAILED ATTEMPTS. TRY AGAIN IN 15 MINUTES.';
+                        if ($err === 'intruder_alert') $msg = 'INTRUDER ALERT. SECURITY LOCKDOWN ACTIVATED. IP LOGGED.';
+                        ?>
+                        <div style="background: rgba(255, 59, 48, 0.1); border: 1px solid rgba(255, 59, 48, 0.2); padding: 14px; margin-bottom: 24px; border-radius: 12px; color: #ff3b30; font-weight: 500; font-size: 13px; text-align: left;">
+                            <i class="entypo-attention" style="margin-right: 6px;"></i> <?php echo htmlspecialchars($msg); ?>
+                        </div>
+                    <?php endif; ?>
                     <form action="secure_login.php" method="post" id="bb">
                         <!-- Hidden Input for selected role -->
                         <input type="hidden" name="login_role" id="login_role" value="<?php echo htmlspecialchars($selected_role); ?>">
@@ -313,7 +247,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                         <div class="login-categories">
                             <div class="category-tab <?php echo ($selected_role === 'member') ? 'active' : ''; ?>" data-role="member" onclick="selectRole('member')">
                                 <i class="entypo-user"></i>
-                                <span>Gym Member</span>
+                                <span>Member</span>
                             </div>
                             <div class="category-tab <?php echo ($selected_role === 'reception') ? 'active' : ''; ?>" data-role="reception" onclick="selectRole('reception')">
                                 <i class="entypo-address"></i>
@@ -333,38 +267,37 @@ if (substr($logo_path, 0, 6) === '../../') {
                             </div>
                             <div class="category-tab <?php echo ($selected_role === 'super_admin') ? 'active' : ''; ?>" data-role="super_admin" onclick="selectRole('super_admin')">
                                 <i class="entypo-cog"></i>
-                                <span>App Developer</span>
+                                <span>Developer</span>
                             </div>
                             <div class="category-tab <?php echo ($selected_role === 'nutrition_partner') ? 'active' : ''; ?>" data-role="nutrition_partner" onclick="selectRole('nutrition_partner')">
                                 <i class="entypo-basket"></i>
-                                <span>Store Partner</span>
+                                <span>Store</span>
                             </div>
                         </div>
 
                         <!-- Username/UserID input -->
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon" style="background: rgba(255,107,0,0.15); border-color: rgba(255,107,0,0.35); color: #ff6b00;">
+                                <div class="input-group-addon">
                                     <i class="entypo-user"></i>
                                 </div>
-                                <input type="text" placeholder="Ninja ID / Username" class="form-control" name="user_id_auth" id="textfield" required>
+                                <input type="text" placeholder="Member ID or Email" class="form-control" name="user_id_auth" id="textfield" required>
                             </div>
                         </div>
 
                         <!-- Password input -->
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon" style="background: rgba(255,107,0,0.15); border-color: rgba(255,107,0,0.35); color: #ff6b00;">
-                                    <i class="entypo-key"></i>
+                                <div class="input-group-addon">
+                                    <i class="entypo-lock"></i>
                                 </div>
-                                <input type="password" name="pass_key" id="pwfield" class="form-control" required placeholder="SYSTEM ACCESS PIN">
+                                <input type="password" name="pass_key" id="pwfield" class="form-control" required placeholder="Password">
                             </div>
                         </div>
 
-                        <div class="form-group" style="margin-top: 25px;">
-                            <button type="submit" name="btnLogin" class="btn btn-primary" style="width: 100%; margin-bottom: 15px;">
-                                ENTER HIDDEN LEAF ➔
-                                <i class="entypo-login"></i>
+                        <div class="form-group" style="margin-top: 30px;">
+                            <button type="submit" name="btnLogin" class="btn btn-primary" style="margin-bottom: 15px;">
+                                Sign In
                             </button>
                             
                             <!-- Action Grid for Self Registration & Quick Portals -->
@@ -631,7 +564,6 @@ if (substr($logo_path, 0, 6) === '../../') {
 
                     document.addEventListener('DOMContentLoaded', () => {
                         selectRole('<?php echo $selected_role; ?>');
-                        initLoginParticles();
                         setTimeout(loadLoginModels, 500);
 
                         const urlParams = new URLSearchParams(window.location.search);
@@ -663,11 +595,11 @@ if (substr($logo_path, 0, 6) === '../../') {
                     </div>
 
                     <!-- Official Copyright Footer -->
-                    <div style="text-align: center; margin-top: 25px; border-top: 1px solid rgba(255, 107, 0, 0.25); padding-top: 15px;">
-                        <div style="font-size: 11px; color: var(--text-muted); font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px;">
+                    <div style="text-align: center; margin-top: 25px; border-top: 1px solid var(--card-border); padding-top: 15px;">
+                        <div style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', sans-serif; letter-spacing: 0.5px;">
                             © <?php echo date('Y'); ?> <?php echo htmlspecialchars($gym['gym_name']); ?>. All Rights Reserved.
                         </div>
-                        <div style="font-size: 10px; color: #ff6b00; font-weight: 800; font-family: 'Orbitron', sans-serif; margin-top: 4px; letter-spacing: 1.5px;">
+                        <div style="font-size: 11px; color: var(--accent-primary); font-weight: 700; font-family: 'Inter', sans-serif; margin-top: 6px; letter-spacing: 1px;">
                             POWERED BY SUDARSHAN FITNESS v2.0
                         </div>
                     </div>
