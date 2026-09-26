@@ -54,9 +54,93 @@ if (substr($logo_path, 0, 6) === '../../') {
 	<link rel="stylesheet" href="./css/style.css"/>
 	<link rel="stylesheet" type="text/css" href="./css/entypo.css">
 	<link rel="stylesheet" href="./css/premium.css"/>
+    <script src="./js/theme_engine.js"></script>
     <style>
-    /* Option 2: True Premium Apple-like Aesthetic */
+    /* Energetic Navratri & Garba Surge Login Aesthetic */
+    [data-theme="festive"] #titan-login-body,
+    body.festive-theme-active #titan-login-body,
+    [data-theme="festive"] {
+        background-color: #0c071e !important;
+        background-image: 
+            radial-gradient(at 0% 0%, rgba(42, 8, 69, 0.95) 0, transparent 55%), 
+            radial-gradient(at 100% 0%, rgba(233, 30, 99, 0.35) 0, transparent 50%), 
+            radial-gradient(at 50% 100%, rgba(255, 87, 34, 0.3) 0, transparent 60%) !important;
+        background-attachment: fixed !important;
+        background-size: cover !important;
+    }
+
+    [data-theme="festive"] #titan-login-container,
+    body.festive-theme-active #titan-login-container {
+        background: rgba(24, 13, 56, 0.88) !important;
+        backdrop-filter: blur(30px) saturate(180%) !important;
+        -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
+        border: 1.5px solid rgba(255, 193, 7, 0.4) !important;
+        box-shadow: 0 30px 60px rgba(233, 30, 99, 0.3), 0 0 30px rgba(255, 87, 34, 0.2) !important;
+    }
+
+    [data-theme="festive"] .industrial-title,
+    body.festive-theme-active .industrial-title {
+        color: #fffdf5 !important;
+        text-shadow: 0 0 10px rgba(255, 193, 7, 0.4) !important;
+    }
+
+    [data-theme="festive"] .category-tab,
+    body.festive-theme-active .category-tab {
+        background: rgba(255, 255, 255, 0.06) !important;
+        border: 1px solid rgba(255, 87, 34, 0.2) !important;
+    }
+
+    [data-theme="festive"] .category-tab.active,
+    body.festive-theme-active .category-tab.active {
+        background: linear-gradient(135deg, #FF5722 0%, #E91E63 100%) !important;
+        border-color: #FFC107 !important;
+        box-shadow: 0 4px 15px rgba(255, 87, 34, 0.5) !important;
+    }
+
+    [data-theme="festive"] .category-tab i,
+    [data-theme="festive"] .category-tab span,
+    body.festive-theme-active .category-tab i,
+    body.festive-theme-active .category-tab span {
+        color: #e2b8ff !important;
+    }
+
+    [data-theme="festive"] .category-tab.active i,
+    [data-theme="festive"] .category-tab.active span,
+    body.festive-theme-active .category-tab.active i,
+    body.festive-theme-active .category-tab.active span {
+        color: #ffffff !important;
+    }
+
+    [data-theme="festive"] .input-group,
+    body.festive-theme-active .input-group {
+        background: rgba(35, 18, 77, 0.9) !important;
+        border: 1px solid rgba(255, 87, 34, 0.4) !important;
+    }
+
+    [data-theme="festive"] .input-group:focus-within,
+    body.festive-theme-active .input-group:focus-within {
+        border-color: #FFC107 !important;
+        box-shadow: 0 0 18px rgba(255, 87, 34, 0.6) !important;
+    }
+
+    [data-theme="festive"] .input-group-addon,
+    [data-theme="festive"] .form-control,
+    body.festive-theme-active .input-group-addon,
+    body.festive-theme-active .form-control {
+        color: #ffffff !important;
+    }
+
+    [data-theme="festive"] .btn-primary,
+    body.festive-theme-active .btn-primary {
+        background: linear-gradient(135deg, #FF5722 0%, #E91E63 50%, #FFC107 100%) !important;
+        color: #ffffff !important;
+        font-weight: 800 !important;
+        box-shadow: 0 8px 25px rgba(255, 87, 34, 0.5) !important;
+    }
+
+    /* Standard Apple Minimalist Default */
     #titan-login-body {
+
         /* MacOS style soft mesh gradient */
         background-color: #f5f5f7 !important;
         background-image: 
@@ -241,6 +325,12 @@ if (substr($logo_path, 0, 6) === '../../') {
             <div class="login-header login-caret">
                 <div class="login-content" style="text-align: center;">
                     
+                    <div style="margin-bottom: 14px;">
+                        <div style="background: linear-gradient(135deg, #FF5722 0%, #E91E63 50%, #FFC107 100%); color: #ffffff; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; display: inline-block; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(255, 87, 34, 0.4); text-transform: uppercase;">
+                            ✨ 🔱 NAVRATRI & GARBA SURGE EDITION 🔱 ✨
+                        </div>
+                    </div>
+
                     <div style="display: flex; justify-content: center; align-items: center; gap: -10px; margin-bottom: 15px;">
                         <img src="./images/ganesha_gym.jpg" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 8px 16px rgba(0,0,0,0.1); z-index: 2;">
                         <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="height: 50px; width: auto; margin-left: -15px; border-radius: 8px; z-index: 1;" />
@@ -249,9 +339,24 @@ if (substr($logo_path, 0, 6) === '../../') {
                     <div class="industrial-title">
                         <?php echo htmlspecialchars($gym['gym_name']); ?>
                     </div>
-                    <p class="description" style="color: #86868b; font-size: 13px; font-weight: 500; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px;">
+                    <p class="description" style="color: #d8b4fe; font-size: 13px; font-weight: 600; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">
                         Secure Access Portal
                     </p>
+                    
+                    <!-- Quick Theme Selector Pill -->
+                    <div style="margin-bottom: 20px;">
+                        <select id="sf-theme-select-login" onchange="SFThemeEngine.setThemeMode(this.value)" style="background: rgba(35, 18, 77, 0.85); color: #FFC107; border: 1.5px solid #FF5722; border-radius: 12px; padding: 6px 14px; font-size: 12px; font-weight: 700; cursor: pointer; outline: none; box-shadow: 0 4px 12px rgba(255,87,34,0.3);">
+                            <option value="festive">🔱 Theme 2: Navratri & Garba Surge</option>
+                            <option value="dark">🌙 Dark Mode</option>
+                            <option value="light">☀️ Light Mode</option>
+                        </select>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                var sel = document.getElementById('sf-theme-select-login');
+                                if (sel) sel.value = SFThemeEngine.getThemeMode();
+                            });
+                        </script>
+                    </div>
                 </div>
             </div>
 

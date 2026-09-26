@@ -105,7 +105,8 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
                 themeLi.id = 'sf-theme-switcher-wrapper';
                 themeLi.style.marginRight = '15px';
                 themeLi.innerHTML = `
-                    <select id="sf-theme-select" onchange="SFThemeEngine.setThemeMode(this.value)" style="background: rgba(255, 255, 255, 0.9); color: #1d1d1f; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 8px; padding: 6px 12px; font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+                    <select id="sf-theme-select" onchange="SFThemeEngine.setThemeMode(this.value)" style="background: rgba(255, 255, 255, 0.95); color: #1d1d1f; border: 1.5px solid #ff5722; border-radius: 10px; padding: 6px 12px; font-size: 13px; font-weight: 700; font-family: 'Inter', sans-serif; cursor: pointer; box-shadow: 0 4px 12px rgba(255,87,34,0.25);">
+                        <option value="festive">🔱 Navratri & Garba Surge</option>
                         <option value="light">☀️ Light Mode</option>
                         <option value="dark">🌙 Dark Mode</option>
                         <option value="system">💻 System Mode</option>
@@ -153,12 +154,16 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
     </div>
 </div>
 
-<!-- Top Navigation Breadcrumb (Visible on all pages) -->
-<div style="padding: 20px 24px; position: sticky; top: 0; z-index: 900;">
+<!-- Top Navigation Breadcrumb & Festive Header -->
+<div style="padding: 15px 24px; position: sticky; top: 0; z-index: 900; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
     <a href="index.php" class="btn-dashboard-home">
         <i class="entypo-layout"></i> Dashboard Hub
     </a>
+    <div id="sf-festive-nav-banner" style="background: linear-gradient(135deg, #FF5722 0%, #E91E63 50%, #FFC107 100%); color: #ffffff; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(255, 87, 34, 0.4); text-transform: uppercase; letter-spacing: 0.5px;">
+        <span>✨ 🔱 NAVRATRI & GARBA SURGE EDITION 🔱 ✨</span>
+    </div>
 </div>
+
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {

@@ -515,3 +515,142 @@ tr:hover {
   box-shadow: 0 2px 6px rgba(52, 199, 89, 0.25) !important;
 }
 
+/* ==========================================================================
+   FESTIVE THEME 2: ENERGETIC NAVRATRI & GARBA SURGE
+   ========================================================================== */
+[data-theme="festive"] {
+  --bg-dark: #0c071e;
+  --bg-darker: #160b33;
+  --accent-primary: #ff5722;
+  --accent-hover: #e91e63;
+  --text-main: #fffdf5;
+  --text-muted: #d8b4fe;
+  --card-bg: rgba(24, 13, 56, 0.88);
+  --card-border: rgba(255, 87, 34, 0.35);
+  --card-shadow: 0 15px 45px rgba(233, 30, 99, 0.25), 0 0 25px rgba(255, 87, 34, 0.15);
+  --glass-bg: rgba(24, 13, 56, 0.92);
+  --glass-border: rgba(255, 193, 7, 0.4);
+  --glass-shadow: 0 20px 50px rgba(255, 87, 34, 0.25);
+  --input-bg: #23124d;
+  --input-border: rgba(255, 87, 34, 0.4);
+  --input-color: #ffffff;
+  --input-readonly-bg: #150933;
+  --input-readonly-color: #c084fc;
+  --header-bg: #160b33;
+  --header-border: rgba(255, 193, 7, 0.3);
+  --header-color: #fffdf5;
+  --table-td-color: #fffdf5;
+  --banner-bg: linear-gradient(135deg, rgba(255, 87, 34, 0.35) 0%, rgba(233, 30, 99, 0.4) 50%, rgba(255, 193, 7, 0.25) 100%);
+  --banner-border: #ff5722;
+  --banner-text: #ffc107;
+  --success: #00e676;
+  --warning: #ffc107;
+  --danger: #ff1744;
+  --info: #00e5ff;
+}
+
+[data-theme="festive"] body,
+[data-theme="festive"] html,
+body.festive-theme-active {
+  background-color: #0c071e !important;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(42, 8, 69, 0.95) 0px, transparent 55%),
+    radial-gradient(at 100% 0%, rgba(233, 30, 99, 0.3) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(255, 87, 34, 0.25) 0px, transparent 60%) !important;
+  background-attachment: fixed !important;
+  color: #fffdf5 !important;
+}
+
+/* Navratri Vibrant Header & Cards */
+[data-theme="festive"] .a1-card,
+[data-theme="festive"] .a1-card-8,
+[data-theme="festive"] .portal-card,
+[data-theme="festive"] .panel,
+[data-theme="festive"] .dashboard-tile,
+[data-theme="festive"] .tile-stats {
+  background: rgba(24, 13, 56, 0.88) !important;
+  border: 1px dashed rgba(255, 193, 7, 0.4) !important;
+  outline: 1px solid rgba(255, 87, 34, 0.3) !important;
+  box-shadow: 0 15px 35px rgba(233, 30, 99, 0.2) !important;
+  border-radius: 16px !important;
+  color: #fffdf5 !important;
+}
+
+/* Vibrant Typography */
+[data-theme="festive"] h1, [data-theme="festive"] h2, [data-theme="festive"] h3,
+[data-theme="festive"] h4, [data-theme="festive"] h5, [data-theme="festive"] h6,
+[data-theme="festive"] label, [data-theme="festive"] span, [data-theme="festive"] p,
+[data-theme="festive"] td, [data-theme="festive"] th {
+  color: #fffdf5 !important;
+}
+
+[data-theme="festive"] .dashboard-grid h4,
+[data-theme="festive"] .dashboard-grid span {
+  color: #fffdf5 !important;
+}
+
+/* Festive Neon Gradient Buttons */
+[data-theme="festive"] .btn-primary,
+[data-theme="festive"] .a1-btn,
+[data-theme="festive"] .a1-blue,
+[data-theme="festive"] .btn-action {
+  background: linear-gradient(135deg, #ff5722 0%, #e91e63 50%, #ffc107 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 20px rgba(255, 87, 34, 0.4), 0 0 12px rgba(233, 30, 99, 0.3) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  border-radius: 10px !important;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+[data-theme="festive"] .btn-primary:hover,
+[data-theme="festive"] .a1-btn:hover,
+[data-theme="festive"] .a1-blue:hover,
+[data-theme="festive"] .btn-action:hover {
+  transform: translateY(-3px) scale(1.03) !important;
+  box-shadow: 0 8px 30px rgba(255, 87, 34, 0.6), 0 0 25px rgba(255, 193, 7, 0.6) !important;
+}
+
+/* Festive Navigation Bar */
+[data-theme="festive"] .btn-dashboard-home {
+  background: rgba(42, 18, 86, 0.9) !important;
+  color: #ffc107 !important;
+  border: 1px solid rgba(255, 193, 7, 0.4) !important;
+  box-shadow: 0 4px 20px rgba(255, 87, 34, 0.3) !important;
+}
+
+[data-theme="festive"] .btn-dashboard-home:hover {
+  background: linear-gradient(135deg, #ff5722 0%, #e91e63 100%) !important;
+  color: #ffffff !important;
+}
+
+/* Table styling for Festive Mode */
+[data-theme="festive"] table,
+[data-theme="festive"] .table {
+  background: transparent !important;
+  color: #fffdf5 !important;
+}
+
+[data-theme="festive"] table th,
+[data-theme="festive"] .table th {
+  background: rgba(35, 18, 77, 0.95) !important;
+  color: #ffc107 !important;
+  border-bottom: 2px solid #ff5722 !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+[data-theme="festive"] table td,
+[data-theme="festive"] .table td {
+  border-bottom: 1px solid rgba(255, 87, 34, 0.18) !important;
+  color: #fffdf5 !important;
+}
+
+[data-theme="festive"] table tr:hover,
+[data-theme="festive"] .table tr:hover {
+  background: rgba(255, 87, 34, 0.15) !important;
+}
+
+
