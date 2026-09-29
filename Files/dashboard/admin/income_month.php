@@ -147,7 +147,7 @@ $monthName = date("F", mktime(0, 0, 0, intval($month), 10));
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 20px;">
         
         <!-- 💵 1. Physical Cash Register Reconciliation Card -->
-        <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(255, 255, 255, 0.95) 100%); border: 2px solid #f59e0b; border-radius: 16px; padding: 18px 20px; box-shadow: 0 8px 24px rgba(245, 158, 11, 0.1);">
+        <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, var(--glass-bg) 100%); border: 2px solid #f59e0b; border-radius: 16px; padding: 18px 20px; box-shadow: 0 8px 24px rgba(245, 158, 11, 0.1);">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #f59e0b; letter-spacing: 1px;">💵 Physical Cash Register</span>
                 <span style="font-size: 11px; background: rgba(245, 158, 11, 0.2); color: #f59e0b; padding: 2px 8px; border-radius: 10px; font-weight: bold;"><?php echo $cash_count; ?> In / <?php echo $exp_cash_count; ?> Out</span>
@@ -163,7 +163,7 @@ $monthName = date("F", mktime(0, 0, 0, intval($month), 10));
         </div>
 
         <!-- 💳 2. Digital Bank Account Reconciliation Card -->
-        <div style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(255, 255, 255, 0.95) 100%); border: 2px solid #38bdf8; border-radius: 16px; padding: 18px 20px; box-shadow: 0 8px 24px rgba(56, 189, 248, 0.1);">
+        <div style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, var(--glass-bg) 100%); border: 2px solid #38bdf8; border-radius: 16px; padding: 18px 20px; box-shadow: 0 8px 24px rgba(56, 189, 248, 0.1);">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #0284c7; letter-spacing: 1px;">💳 Digital / UPI Bank Account</span>
                 <span style="font-size: 11px; background: rgba(56, 189, 248, 0.2); color: #0284c7; padding: 2px 8px; border-radius: 10px; font-weight: bold;"><?php echo $upi_count; ?> In / <?php echo $exp_upi_count; ?> Out</span>
@@ -179,7 +179,7 @@ $monthName = date("F", mktime(0, 0, 0, intval($month), 10));
         </div>
 
         <!-- 💎 3. True Combined Net Profit Card -->
-        <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(255, 255, 255, 0.95) 100%); border: 2px solid #10b981; border-radius: 16px; padding: 18px 20px; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.1);">
+        <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, var(--glass-bg) 100%); border: 2px solid #10b981; border-radius: 16px; padding: 18px 20px; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.1);">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #10b981; letter-spacing: 1px;">💎 True Net Profit</span>
                 <span style="font-size: 11px; background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 2px 8px; border-radius: 10px; font-weight: bold;">Audited Net</span>
@@ -337,7 +337,7 @@ $monthName = date("F", mktime(0, 0, 0, intval($month), 10));
         ?>
             <tr>
                 <td><?php echo $e_sno; ?></td>
-                <td><strong style="color: var(--text-main, #1d1d1f);"><?php echo htmlspecialchars($erow['username']); ?></strong></td>
+                <td><strong style="color: var(--text-main, var(--text-main));"><?php echo htmlspecialchars($erow['username']); ?></strong></td>
                 <td><span style="background:rgba(239,68,68,0.15);color:#fca5a5;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:bold;"><?php echo htmlspecialchars($erow['gender']); ?></span></td>
                 <td><?php echo date('d M Y', strtotime($erow['paid_date'])); ?></td>
                 <td style="text-align: center;">

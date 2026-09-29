@@ -74,7 +74,7 @@ $gym = get_gym_details($con);
             padding: 40px;
             max-width: 850px;
             margin: 0 auto;
-            background: #ffffff;
+            background: var(--glass-bg);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
             position: relative;
             overflow: hidden;
@@ -287,7 +287,7 @@ $gym = get_gym_details($con);
         @media print {
             body {
                 margin: 0;
-                background: #ffffff;
+                background: var(--glass-bg);
             }
             .actions-wrapper {
                 display: none;

@@ -32,7 +32,7 @@ $enquiry_url = "https://sudarshanfitness.de/Files/guest_enquiry.php";
         .tagline { color: #ff6b00; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; }
 
         .qr-box {
-            background: #ffffff;
+            background: var(--glass-bg);
             padding: 25px;
             border-radius: 24px;
             display: inline-block;
@@ -58,9 +58,9 @@ $enquiry_url = "https://sudarshanfitness.de/Files/guest_enquiry.php";
         }
 
         @media print {
-            body { background: #fff; color: #000; padding: 0; }
-            .poster { border-color: #000; box-shadow: none; background: #fff; color: #000; }
-            .gym-name, .instruction-heading { color: #000; }
+            body { background: var(--glass-bg); color: var(--text-main); padding: 0; }
+            .poster { border-color: var(--text-main); box-shadow: none; background: var(--glass-bg); color: var(--text-main); }
+            .gym-name, .instruction-heading { color: var(--text-main); }
             .instruction-desc { color: #333; }
             .print-btn { display: none; }
         }

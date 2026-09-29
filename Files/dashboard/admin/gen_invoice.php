@@ -128,7 +128,7 @@ $total_paid = $paid_amount;
             width: 100%;
             max-width: 850px;
             box-sizing: border-box;
-            background: #ffffff;
+            background: var(--glass-bg);
             box-shadow: var(--card-shadow);
             position: relative;
             overflow: hidden;
@@ -392,7 +392,7 @@ $total_paid = $paid_amount;
         @media print {
             body {
                 margin: 0;
-                background: #ffffff;
+                background: var(--glass-bg);
             }
             .actions-wrapper {
                 display: none;

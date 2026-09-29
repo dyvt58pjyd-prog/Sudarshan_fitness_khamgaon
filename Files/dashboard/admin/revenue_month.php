@@ -70,7 +70,7 @@ $gym = get_gym_details($con);
 
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
                 <div>
-                    <h2 style="margin: 0; font-weight: 800; text-transform: uppercase; color: var(--text-main, #1d1d1f);">📊 Monthly Income &amp; Auditing Breakdown</h2>
+                    <h2 style="margin: 0; font-weight: 800; text-transform: uppercase; color: var(--text-main, var(--text-main));">📊 Monthly Income &amp; Auditing Breakdown</h2>
                     <p style="color: var(--text-muted); font-size: 13px; margin-top: 4px;">Audited monthly collection breakdown with dedicated <strong>💳 UPI Monthly</strong> and <strong>💵 Cash Monthly</strong> separators.</p>
                 </div>
                 <div>
@@ -86,7 +86,7 @@ $gym = get_gym_details($con);
                     <?php
                     $yearArray = range(2000, max(intval(date('Y')), isset($_SESSION['working_year']) ? $_SESSION['working_year'] : date('Y')));
                     ?>
-                    <label style="color: var(--text-main, #1d1d1f); font-size: 13px; font-weight: 700; margin: 0;">Year:</label>
+                    <label style="color: var(--text-main, var(--text-main)); font-size: 13px; font-weight: 700; margin: 0;">Year:</label>
                     <select name="year" id="syear" class="filter-select" onchange="showMember();">
                         <option value="0">Select Year</option>
                         <?php

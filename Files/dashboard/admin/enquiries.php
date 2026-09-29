@@ -182,7 +182,7 @@ $pending_count = mysqli_num_rows($q_pending);
             --accent: #ff6b00;
             --accent-green: #10b981;
             --border: rgba(0, 0, 0, 0.08);
-            --text-main: #1d1d1f;
+            --text-main: var(--text-main);
             --text-muted: #64748b;
         }
         [data-theme="dark"] {
@@ -193,11 +193,11 @@ $pending_count = mysqli_num_rows($q_pending);
             --text-muted: #94a3b8;
         }
         body { background: var(--bg); color: var(--text-main); font-family: 'Outfit', sans-serif; padding: 25px; margin: 0; }
-        .header-box { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 20px 30px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 25px; box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+        .header-box { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 20px 30px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 25px; box-shadow: 0 4px 16px rgba(255,255,255,0.05); }
         .header-title h2 { margin: 0; font-size: 22px; font-weight: 800; color: var(--text-main); }
         .badge-pending { background: rgba(255,107,0,0.1); color: var(--accent); border: 1px solid var(--accent); padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 13px; }
         .enquiry-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
-        .enquiry-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 25px; position: relative; box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+        .enquiry-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 25px; position: relative; box-shadow: 0 4px 16px rgba(255,255,255,0.05); }
         .visitor-photo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); background: #eee; }
         .card-header { display: flex; gap: 15px; align-items: center; margin-bottom: 15px; }
         .visitor-name { font-size: 18px; font-weight: 800; color: var(--text-main); }
@@ -329,7 +329,7 @@ $pending_count = mysqli_num_rows($q_pending);
                 <div id="modal-upi-qr-box" style="display: none; background: var(--bg); border: 1px dashed rgba(255,107,0,0.5); padding: 15px; border-radius: 16px; text-align: center; margin: 15px 0;">
                     <h4 style="color: var(--text-main); margin: 0 0 5px 0; font-size: 14px;">Scan to Pay UPI: <span id="upi-qr-amount-text" style="color: #ff6b00; font-weight: 800; font-size: 16px;">₹0</span></h4>
                     <p style="color: var(--text-muted); font-size: 11px; margin-bottom: 12px;">Ask client to scan &amp; pay via Google Pay, PhonePe, Paytm, or BHIM.</p>
-                    <div style="background: #ffffff; padding: 12px; border-radius: 14px; display: inline-block; box-shadow: 0 8px 20px rgba(0,0,0,0.15);">
+                    <div style="background: var(--glass-bg); padding: 12px; border-radius: 14px; display: inline-block; box-shadow: 0 8px 20px rgba(0,0,0,0.15);">
                         <canvas id="modal-upi-qr-canvas"></canvas>
                     </div>
                 </div>

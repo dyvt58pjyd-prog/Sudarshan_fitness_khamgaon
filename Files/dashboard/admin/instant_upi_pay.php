@@ -24,7 +24,7 @@ $qr_url = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" . url
         body { background: var(--bg-dark); color: #fff; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .pay-card { width: 100%; max-width: 450px; background: rgba(15, 7, 18, 0.95); border: 2px solid var(--accent-primary); border-radius: 24px; padding: 30px; box-shadow: 0 0 50px rgba(255, 107, 0, 0.35); text-align: center; position: relative; }
         .pay-card::before { content: '[ INSTANT UPI GATEWAY ]'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #2c1b18; border: 1px solid var(--accent-primary); color: var(--accent-primary); font-family: 'Orbitron'; font-size: 10px; font-weight: 900; padding: 3px 14px; border-radius: 10px; letter-spacing: 2px; }
-        .qr-box { background: #fff; padding: 15px; border-radius: 16px; margin: 20px auto; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(255, 107, 0, 0.4); }
+        .qr-box { background: var(--glass-bg); padding: 15px; border-radius: 16px; margin: 20px auto; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(255, 107, 0, 0.4); }
     </style>
 </head>
 <body>

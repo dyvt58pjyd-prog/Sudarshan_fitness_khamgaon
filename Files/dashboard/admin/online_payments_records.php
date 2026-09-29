@@ -249,7 +249,7 @@ $res_list = mysqli_query($con, $q_list);
                                             <?php echo htmlspecialchars(date('M d, Y h:i A', strtotime($row_p['submitted_at']))); ?>
                                         </td>
                                         <td style="padding: 15px 12px;">
-                                            <strong style="color: var(--text-main, #1d1d1f); display: block;"><?php echo htmlspecialchars($row_p['username']); ?></strong>
+                                            <strong style="color: var(--text-main, var(--text-main)); display: block;"><?php echo htmlspecialchars($row_p['username']); ?></strong>
                                             <span style="font-size: 12px; color: var(--text-muted); display: block;">ID: <?php echo htmlspecialchars($row_p['uid']); ?></span>
                                             <span style="font-size: 12px; color: var(--text-muted); display: block;">Email: <?php echo htmlspecialchars($row_p['email']); ?></span>
                                             <span style="font-size: 12px; color: var(--text-muted); display: block;">Mobile: <?php echo htmlspecialchars($row_p['mobile']); ?></span>
@@ -279,7 +279,7 @@ $res_list = mysqli_query($con, $q_list);
                                             <div style="display: inline-flex; gap: 8px;">
                                                 <form action="" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to APPROVE this registration & payment?');">
                                                     <input type="hidden" name="approve_id" value="<?php echo $row_p['id']; ?>">
-                                                    <button type="submit" class="btn btn-success" style="font-weight: 600; padding: 6px 12px; border-radius: 6px; background-color: var(--success); border-color: var(--success); color: #000000; font-size: 12px;">Approve</button>
+                                                    <button type="submit" class="btn btn-success" style="font-weight: 600; padding: 6px 12px; border-radius: 6px; background-color: var(--success); border-color: var(--success); color: var(--text-main); font-size: 12px;">Approve</button>
                                                 </form>
                                                 <form action="" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to REJECT this registration & payment?');">
                                                     <input type="hidden" name="reject_id" value="<?php echo $row_p['id']; ?>">
@@ -313,7 +313,7 @@ $res_list = mysqli_query($con, $q_list);
             <form method="get" action="" style="margin-bottom: 25px;">
                 <div style="display: flex; gap: 10px; max-width: 600px; align-items: center;">
                     <input class="form-control-premium" type="text" name="search" placeholder="Search by ID, Member Name, Plan, Date..." value="<?php echo htmlspecialchars($search); ?>" style="margin-bottom: 0;">
-                    <button type="submit" class="btn btn-primary" style="padding: 10px 20px; font-weight: 600; background: var(--accent-primary); border-color: var(--accent-primary); color: #000000; height: 42px;">Search</button>
+                    <button type="submit" class="btn btn-primary" style="padding: 10px 20px; font-weight: 600; background: var(--accent-primary); border-color: var(--accent-primary); color: var(--text-main); height: 42px;">Search</button>
                     <?php if (!empty($search)): ?>
                         <a href="online_payments_records.php" class="btn btn-default" style="padding: 0 20px; display: inline-flex; align-items: center; justify-content: center; height: 42px; text-decoration: none;">Clear</a>
                     <?php endif; ?>
@@ -344,7 +344,7 @@ $res_list = mysqli_query($con, $q_list);
                                             <?php echo htmlspecialchars(date('M d, Y h:i A', strtotime($row['submitted_at']))); ?>
                                         </td>
                                         <td style="padding: 15px 12px;">
-                                            <strong style="color: var(--text-main, #1d1d1f); display: block;"><?php echo htmlspecialchars($row['username']); ?></strong>
+                                            <strong style="color: var(--text-main, var(--text-main)); display: block;"><?php echo htmlspecialchars($row['username']); ?></strong>
                                             <span style="font-size: 12px; color: var(--text-muted); display: block;">ID: <?php echo htmlspecialchars($row['uid']); ?></span>
                                             <span style="font-size: 12px; color: var(--text-muted); display: block;">Email: <?php echo htmlspecialchars($row['email']); ?></span>
                                             <?php if (!empty($row['utr'])): ?>

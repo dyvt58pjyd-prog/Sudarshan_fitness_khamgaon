@@ -98,8 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_bmi'])) {
         }
         textarea#boxx {
             height: auto !important;
-            background: #ffffff !important;
-            color: #1d1d1f !important;
+            background: var(--glass-bg) !important;
+            color: var(--text-main) !important;
             border: 1px solid rgba(0, 0, 0, 0.12) !important;
             border-radius: 8px !important;
             padding: 8px 14px !important;
@@ -113,12 +113,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_bmi'])) {
         .a1-container table td {
             padding: 10px 0 !important;
             vertical-align: middle !important;
-            color: #1d1d1f !important;
+            color: var(--text-main) !important;
             font-weight: 600;
             font-size: 13px;
         }
         .bmi-display-card {
-            background: #ffffff;
+            background: var(--glass-bg);
             border: 1px solid rgba(0, 0, 0, 0.08);
             border-radius: 16px;
             padding: 25px;
@@ -153,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_bmi'])) {
         .bmi-pointer {
             width: 16px;
             height: 16px;
-            background: #ffffff;
+            background: var(--glass-bg);
             border: 3px solid #ff6b00;
             border-radius: 50%;
             position: absolute;
@@ -230,7 +230,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_bmi'])) {
                 
                 <!-- Left Column: Search Section -->
                 <div style="flex: 1; min-width: 320px;">
-                    <div class="a1-card-8" style="border-radius: 16px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 24px; background: #ffffff;">
+                    <div class="a1-card-8" style="border-radius: 16px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 10px 30px rgba(255,255,255,0.05); padding: 24px; background: var(--glass-bg);">
                         <h4 style="color: #007aff; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 10px; margin-top:0; font-weight: 700;">Find Member</h4>
                         <form method="post" action="bmi_calc.php">
                             <table width="100%" border="0">
@@ -255,7 +255,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_bmi'])) {
                                     <?php foreach ($search_results as $res): ?>
                                         <li class="search-result-item" onclick="window.location.href='bmi_calc.php?uid=<?php echo urlencode($res['userid']); ?>'">
                                             <div>
-                                                <strong style="color: var(--text-main, #1d1d1f);"><?php echo htmlspecialchars($res['username']); ?></strong>
+                                                <strong style="color: var(--text-main, var(--text-main));"><?php echo htmlspecialchars($res['username']); ?></strong>
                                                 <div style="font-size: 11px; color: var(--text-muted, #64748b); margin-top:2px;">ID: <?php echo htmlspecialchars($res['userid']); ?></div>
                                             </div>
                                             <span style="font-size: 12px; color: var(--accent-primary); font-weight: bold;"><?php echo htmlspecialchars($res['mobile']); ?></span>
@@ -272,13 +272,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_bmi'])) {
                 <!-- Right Column: BMI Calculator & Health Status Form -->
                 <div style="flex: 1.5; min-width: 380px;">
                     <?php if ($member): ?>
-                        <div class="a1-card-8" style="border-radius: 16px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 24px; background: #ffffff;">
+                        <div class="a1-card-8" style="border-radius: 16px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 10px 30px rgba(255,255,255,0.05); padding: 24px; background: var(--glass-bg);">
                             <div style="display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 15px; margin-bottom: 20px;">
                                 <?php if (!empty($member['photo'])): ?>
                                     <img src="<?php echo htmlspecialchars($member['photo']); ?>" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-primary);" />
                                 <?php endif; ?>
                                 <div>
-                                    <h4 style="color: var(--text-main, #1d1d1f); margin: 0; font-weight: 700;"><?php echo htmlspecialchars($member['username']); ?></h4>
+                                    <h4 style="color: var(--text-main, var(--text-main)); margin: 0; font-weight: 700;"><?php echo htmlspecialchars($member['username']); ?></h4>
                                     <span style="font-size: 12px; color: var(--text-muted, #64748b);">Membership ID: <?php echo htmlspecialchars($member['userid']); ?></span>
                                 </div>
                             </div>
@@ -342,21 +342,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_bmi'])) {
                                 </div>
 
                                 <div style="border-top: 1px solid rgba(0, 122, 255, 0.15); padding-top: 20px; text-align: left;">
-                                    <h5 style="color: #007aff; font-weight: 700; margin-top: 0; font-size: 14px;">Goal: <span id="bmi_goal" style="color: var(--text-main, #1d1d1f); font-weight: 500;">--</span></h5>
+                                    <h5 style="color: #007aff; font-weight: 700; margin-top: 0; font-size: 14px;">Goal: <span id="bmi_goal" style="color: var(--text-main, var(--text-main)); font-weight: 500;">--</span></h5>
                                     
                                     <div style="margin-top: 15px;">
                                         <strong style="color: var(--accent-primary); font-size: 12px; text-transform: uppercase; display: block; margin-bottom: 5px; letter-spacing: 0.5px;">Recommended Workouts:</strong>
-                                        <p id="bmi_workouts" style="font-size: 13px; line-height: 1.5; color: var(--text-main, #1d1d1f); margin: 0; white-space: pre-line;">--</p>
+                                        <p id="bmi_workouts" style="font-size: 13px; line-height: 1.5; color: var(--text-main, var(--text-main)); margin: 0; white-space: pre-line;">--</p>
                                     </div>
                                     
                                     <div style="margin-top: 15px; display: flex; gap: 15px; flex-wrap: wrap;">
-                                        <div style="flex: 1; min-width: 180px; background: var(--bg-dark, #f5f5f7); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border, rgba(0,0,0,0.08));">
+                                        <div style="flex: 1; min-width: 180px; background: var(--bg-dark, var(--bg-dark)); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border, rgba(0,0,0,0.08));">
                                             <strong style="color: #10b981; font-size: 12px; text-transform: uppercase; display: block; margin-bottom: 5px; letter-spacing: 0.5px;">Vegetarian Diet:</strong>
-                                            <p id="bmi_veg_diet" style="font-size: 12px; line-height: 1.5; color: var(--text-main, #1d1d1f); margin: 0; white-space: pre-line;">--</p>
+                                            <p id="bmi_veg_diet" style="font-size: 12px; line-height: 1.5; color: var(--text-main, var(--text-main)); margin: 0; white-space: pre-line;">--</p>
                                         </div>
-                                        <div style="flex: 1; min-width: 180px; background: var(--bg-dark, #f5f5f7); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border, rgba(0,0,0,0.08));">
+                                        <div style="flex: 1; min-width: 180px; background: var(--bg-dark, var(--bg-dark)); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border, rgba(0,0,0,0.08));">
                                             <strong style="color: #ef4444; font-size: 12px; text-transform: uppercase; display: block; margin-bottom: 5px; letter-spacing: 0.5px;">Non-Vegetarian Diet:</strong>
-                                            <p id="bmi_nonveg_diet" style="font-size: 12px; line-height: 1.5; color: var(--text-main, #1d1d1f); margin: 0; white-space: pre-line;">--</p>
+                                            <p id="bmi_nonveg_diet" style="font-size: 12px; line-height: 1.5; color: var(--text-main, var(--text-main)); margin: 0; white-space: pre-line;">--</p>
                                         </div>
                                     </div>
                                 </div>

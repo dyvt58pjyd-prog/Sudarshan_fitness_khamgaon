@@ -85,7 +85,7 @@ $res = mysqli_query($con, $query);
         <div class="main-content">
             <div class="row">
                 <div class="col-md-6 col-sm-8 clearfix">
-                    <a href="visitor_entry.php" class="btn btn-primary" style="background: var(--accent-primary); color: #000; border: none; font-weight: bold;"><i class="entypo-plus"></i> New Visitor Entry</a>
+                    <a href="visitor_entry.php" class="btn btn-primary" style="background: var(--accent-primary); color: var(--text-main); border: none; font-weight: bold;"><i class="entypo-plus"></i> New Visitor Entry</a>
                 </div>
                 <div class="col-md-6 col-sm-4 clearfix hidden-xs">
                     <ul class="list-inline links-list pull-right">
@@ -106,7 +106,7 @@ $res = mysqli_query($con, $query);
             <form method="get" action="" style="margin-bottom: 25px;">
                 <div style="display: flex; gap: 10px; max-width: 600px; align-items: center;">
                     <input class="form-control-premium" type="text" name="search" placeholder="Search by Name, Mobile, or Address..." value="<?php echo htmlspecialchars($search); ?>" style="margin-bottom: 0;">
-                    <button type="submit" class="btn btn-primary" style="padding: 10px 20px; font-weight: 600; background: var(--accent-primary); border-color: var(--accent-primary); color: #000000; height: 42px;">Search</button>
+                    <button type="submit" class="btn btn-primary" style="padding: 10px 20px; font-weight: 600; background: var(--accent-primary); border-color: var(--accent-primary); color: var(--text-main); height: 42px;">Search</button>
                     <?php if (!empty($search)): ?>
                         <a href="visitors_list.php" class="btn btn-default" style="padding: 0 20px; display: inline-flex; align-items: center; justify-content: center; height: 42px; text-decoration: none;">Clear</a>
                     <?php endif; ?>
@@ -149,13 +149,13 @@ $res = mysqli_query($con, $query);
                                             ?>
                                         </td>
                                         <td style="padding: 15px 12px; vertical-align: middle;">
-                                            <strong style="color: var(--text-main, #1d1d1f); display: block; font-size: 15px;"><?php echo htmlspecialchars($row['name']); ?></strong>
+                                            <strong style="color: var(--text-main, var(--text-main)); display: block; font-size: 15px;"><?php echo htmlspecialchars($row['name']); ?></strong>
                                             <span style="font-size: 13px; color: var(--accent-primary); display: block; margin-top: 5px;"><i class="entypo-phone"></i> <?php echo htmlspecialchars($row['mobile']); ?></span>
                                         </td>
                                         <td style="padding: 15px 12px; vertical-align: middle; max-width: 250px;">
-                                            <div style="font-size: 13px; color: var(--text-main, #1d1d1f); margin-bottom: 5px;"><i class="entypo-location"></i> <?php echo htmlspecialchars($row['address']); ?></div>
+                                            <div style="font-size: 13px; color: var(--text-main, var(--text-main)); margin-bottom: 5px;"><i class="entypo-location"></i> <?php echo htmlspecialchars($row['address']); ?></div>
                                             <?php if (!empty($row['notes'])): ?>
-                                                <div style="font-size: 12px; color: var(--text-muted); background: var(--bg-dark, #f5f5f7); padding: 5px 8px; border-radius: 4px; border: 1px solid var(--card-border, rgba(0,0,0,0.08));">
+                                                <div style="font-size: 12px; color: var(--text-muted); background: var(--bg-dark, var(--bg-dark)); padding: 5px 8px; border-radius: 4px; border: 1px solid var(--card-border, rgba(0,0,0,0.08));">
                                                     <strong>Note:</strong> <?php echo htmlspecialchars($row['notes']); ?>
                                                 </div>
                                             <?php endif; ?>

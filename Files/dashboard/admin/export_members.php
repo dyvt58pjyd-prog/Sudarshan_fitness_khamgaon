@@ -41,7 +41,7 @@ $res = mysqli_query($con, $query);
 <style>
   body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background-color: #ffffff;
+    background-color: var(--glass-bg);
   }
   table {
     border-collapse: collapse;
@@ -63,7 +63,7 @@ $res = mysqli_query($con, $query);
     color: #333333;
   }
   .odd-row {
-    background-color: #ffffff;
+    background-color: var(--glass-bg);
   }
   .even-row {
     background-color: #f9f9f9;

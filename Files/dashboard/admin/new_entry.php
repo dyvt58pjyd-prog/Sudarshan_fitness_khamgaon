@@ -56,8 +56,8 @@ if ($cnt_q) {
             font-size: 13.5px !important;
             border: 1px solid rgba(0, 0, 0, 0.12) !important;
             border-radius: 8px !important;
-            background: #ffffff !important;
-            color: #1d1d1f !important;
+            background: var(--glass-bg) !important;
+            color: var(--text-main) !important;
             box-sizing: border-box !important;
             transition: all 0.2s ease !important;
             box-shadow: 0 1px 2px rgba(0,0,0,0.03) !important;
@@ -68,27 +68,27 @@ if ($cnt_q) {
             box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15) !important;
         }
         #boxx[readonly], .boxx-style[readonly] {
-            background: #f5f5f7 !important;
-            color: #86868b !important;
+            background: var(--bg-dark) !important;
+            color: var(--text-muted) !important;
             border-color: rgba(0, 0, 0, 0.08) !important;
             cursor: not-allowed;
         }
         select#boxx, select.boxx-style {
             height: 40px !important;
-            background-color: #ffffff !important;
-            color: #1d1d1f !important;
+            background-color: var(--glass-bg) !important;
+            color: var(--text-main) !important;
             padding: 8px 14px !important;
             border: 1px solid rgba(0, 0, 0, 0.12) !important;
         }
         select#boxx option, select.boxx-style option {
-            background: #ffffff !important;
-            color: #1d1d1f !important;
+            background: var(--glass-bg) !important;
+            color: var(--text-main) !important;
         }
         /* Custom table td styling: clean dark typography matching theme */
         .a1-container table td {
             padding: 9px 0 !important;
             vertical-align: middle !important;
-            color: #1d1d1f !important;
+            color: var(--text-main) !important;
             font-size: 12.5px !important;
             font-weight: 600 !important;
             letter-spacing: -0.2px !important;
@@ -167,9 +167,9 @@ if ($cnt_q) {
 		<hr />
         
         <div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
-        <div class="a1-card-8" style="width:620px; margin:0 auto; border-radius: 16px; overflow: hidden; background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);">
+        <div class="a1-card-8" style="width:620px; margin:0 auto; border-radius: 16px; overflow: hidden; background: var(--glass-bg); border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);">
 		<div class="a1-container a1-center" style="background: #f8fafc; border-bottom: 1px solid rgba(0, 0, 0, 0.06); padding: 14px 20px;">
-        	<h6 style="margin: 0; font-weight: 700; color: #1d1d1f; font-size: 14px; letter-spacing: 0.5px;">NEW ENTRY</h6>
+        	<h6 style="margin: 0; font-weight: 700; color: var(--text-main); font-size: 14px; letter-spacing: 0.5px;">NEW ENTRY</h6>
         </div>
 
         <!-- 🪪 SMART AADHAAR & ID OCR AUTO-FILL SCANNER -->
@@ -412,11 +412,11 @@ if ($cnt_q) {
               <tr>
                 <td colspan="2">
                     <div id="staff-qr-container" style="display: none; background: rgba(0,0,0,0.03); padding: 15px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.08); text-align: center; margin: 10px 0;">
-                        <h4 style="color: #1d1d1f; margin-top: 0; margin-bottom: 5px; font-weight: 700;">Scan to Pay: <span id="staff-qr-amount" style="color: #007aff;">₹0</span></h4>
+                        <h4 style="color: var(--text-main); margin-top: 0; margin-bottom: 5px; font-weight: 700;">Scan to Pay: <span id="staff-qr-amount" style="color: #007aff;">₹0</span></h4>
                         <p style="color: #64748b; font-size: 12px; margin-bottom: 15px;">Ask member to scan this QR code. Proceed to submit only after physical verification.</p>
                         <div style="position: relative; display: inline-block;">
-                            <img id="staff-qr-code" style="display: block; background: #fff; padding: 10px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); width: 200px; height: 200px;" />
-                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ffffff; padding: 3px; border-radius: 50%; border: 2px solid #007aff; box-shadow: 0 2px 8px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;">
+                            <img id="staff-qr-code" style="display: block; background: var(--glass-bg); padding: 10px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); width: 200px; height: 200px;" />
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--glass-bg); padding: 3px; border-radius: 50%; border: 2px solid #007aff; box-shadow: 0 2px 8px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;">
                               <img src="<?php echo htmlspecialchars($gym['gym_logo'] ?? '../../images/logo.png'); ?>" alt="Gym Logo" style="width: 34px; height: 34px; border-radius: 50%; object-fit: contain;" />
                             </div>
                         </div>
@@ -479,7 +479,7 @@ if ($cnt_q) {
               <tr>
                   <td height="35">REGISTER AS COUPLE?</td>
                   <td height="35">
-                      <label style="color: #1d1d1f; cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 600;">
+                      <label style="color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 600;">
                           <input type="checkbox" name="is_couple" id="is_couple" value="1" onchange="toggleCoupleFields()" style="width: 20px; height: 20px;">
                           Yes, register a partner with this plan
                       </label>
@@ -547,7 +547,7 @@ if ($cnt_q) {
               <td height="35">&nbsp;</td>
               <td height="35">
                   <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="Register Member" style="padding: 10px 24px; font-size: 14px; font-weight: 600; border-radius: 8px; cursor: pointer;">
-                  <input class="a1-btn" type="reset" name="reset" id="reset" value="Reset" style="padding: 10px 20px; font-size: 14px; font-weight: 600; border-radius: 8px; cursor: pointer; background: #e5e5ea; color: #1d1d1f; border: none; margin-left: 8px;">
+                  <input class="a1-btn" type="reset" name="reset" id="reset" value="Reset" style="padding: 10px 20px; font-size: 14px; font-weight: 600; border-radius: 8px; cursor: pointer; background: #e5e5ea; color: var(--text-main); border: none; margin-left: 8px;">
               </td>
               </tr>
            </table></td>

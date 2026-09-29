@@ -124,7 +124,7 @@ $q_logs = mysqli_query($con, "
             border-radius: 18px;
             padding: 28px;
             margin-bottom: 28px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(255,255,255,0.05);
         }
         .transfer-card h3 {
             color: #ff6b00;
@@ -152,11 +152,11 @@ $q_logs = mysqli_query($con, "
         }
         .pt-row:hover { border-color: rgba(255,107,0,0.35); }
         .pt-row .member-info { min-width: 180px; }
-        .pt-row .member-info strong { display: block; color: var(--text-main, #1d1d1f); font-size: 14px; font-weight: 700; }
+        .pt-row .member-info strong { display: block; color: var(--text-main, var(--text-main)); font-size: 14px; font-weight: 700; }
         .pt-row .member-info span { color: var(--text-muted, #64748b); font-size: 12px; }
         .pt-row .trainer-info { min-width: 160px; }
         .pt-row .trainer-info label { display: block; color: #ff6b00; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-        .pt-row .trainer-info span { color: var(--text-main, #1d1d1f); font-size: 13px; font-weight: 600; }
+        .pt-row .trainer-info span { color: var(--text-main, var(--text-main)); font-size: 13px; font-weight: 600; }
         .pt-row .expiry-info { min-width: 120px; text-align: center; }
         .pt-row .expiry-info label { display: block; color: var(--text-muted, #64748b); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
         .pt-row .expiry-info span { color: #10b981; font-size: 13px; font-weight: 700; }
@@ -195,22 +195,22 @@ $q_logs = mysqli_query($con, "
         }
         .transfer-modal h3 { color: #ff6b00; margin-top: 0; font-size: 18px; font-weight: 800; }
         .transfer-modal .info-block { background: rgba(255,107,0,0.08); border: 1px solid rgba(255,107,0,0.2); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; }
-        .transfer-modal .info-block p { margin: 4px 0; font-size: 13px; color: var(--text-main, #1d1d1f); }
+        .transfer-modal .info-block p { margin: 4px 0; font-size: 13px; color: var(--text-main, var(--text-main)); }
         .transfer-modal .info-block strong { color: #ff6b00; }
         .transfer-modal label { display: block; color: var(--text-muted, #64748b); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
         .transfer-modal select, .transfer-modal textarea {
             width: 100%; border-radius: 10px; border: 1px solid var(--border-color, rgba(0,0,0,0.12));
-            background: var(--input-bg, #f8fafc); color: var(--text-main, #1d1d1f);
+            background: var(--input-bg, #f8fafc); color: var(--text-main, var(--text-main));
             padding: 10px 14px; font-size: 13px; margin-bottom: 16px;
             box-sizing: border-box;
         }
-        .transfer-modal select option { background: var(--bg-card, #ffffff); color: var(--text-main, #1d1d1f); }
+        .transfer-modal select option { background: var(--bg-card, #ffffff); color: var(--text-main, var(--text-main)); }
         .transfer-modal .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
         .btn-cancel-modal { background: var(--hover-bg, #f1f5f9); border: 1px solid var(--border-color, rgba(0,0,0,0.1)); color: var(--text-muted, #64748b); padding: 9px 18px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; }
         .btn-cancel-modal:hover { background: rgba(0,0,0,0.08); }
         .log-table { width: 100%; border-collapse: collapse; }
         .log-table th { background: rgba(255,107,0,0.1); color: #ff6b00; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 10px 12px; text-align: left; border-bottom: 1px solid rgba(255,107,0,0.2); }
-        .log-table td { padding: 10px 12px; font-size: 13px; color: var(--text-main, #1d1d1f); border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.06)); }
+        .log-table td { padding: 10px 12px; font-size: 13px; color: var(--text-main, var(--text-main)); border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.06)); }
         .log-table tr:hover td { background: rgba(255,107,0,0.04); }
         .arrow-icon { font-size: 18px; color: #ff6b00; }
         .msg-box { border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; font-size: 14px; font-weight: 600; }
@@ -219,7 +219,7 @@ $q_logs = mysqli_query($con, "
         .msg-warning { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); color: #d97706; }
         .empty-state { text-align: center; padding: 40px; color: #64748b; }
         .empty-state div { font-size: 40px; margin-bottom: 12px; }
-        .search-bar { width: 100%; padding: 10px 14px; background: var(--input-bg, #f8fafc); border: 1px solid var(--border-color, rgba(0,0,0,0.12)); border-radius: 10px; color: var(--text-main, #1d1d1f); font-size: 13px; margin-bottom: 18px; box-sizing: border-box; }
+        .search-bar { width: 100%; padding: 10px 14px; background: var(--input-bg, #f8fafc); border: 1px solid var(--border-color, rgba(0,0,0,0.12)); border-radius: 10px; color: var(--text-main, var(--text-main)); font-size: 13px; margin-bottom: 18px; box-sizing: border-box; }
     </style>
 </head>
 <body class="page-body page-fade" onload="collapseSidebar()">
@@ -336,7 +336,7 @@ $q_logs = mysqli_query($con, "
                 <?php $i = 1; while ($log = mysqli_fetch_assoc($q_logs)): ?>
                 <tr>
                     <td style="color:var(--text-muted, #64748b);"><?php echo $i++; ?></td>
-                    <td><strong style="color:var(--text-main, #1d1d1f);"><?php echo htmlspecialchars($log['member_name']); ?></strong></td>
+                    <td><strong style="color:var(--text-main, var(--text-main));"><?php echo htmlspecialchars($log['member_name']); ?></strong></td>
                     <td style="color:#ef4444;font-weight:600;"><?php echo htmlspecialchars($log['old_trainer_name'] ?: $log['old_trainer']); ?></td>
                     <td class="arrow-icon">→</td>
                     <td style="color:#10b981;font-weight:600;"><?php echo htmlspecialchars($log['new_trainer_name'] ?: $log['new_trainer']); ?></td>

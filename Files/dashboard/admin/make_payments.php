@@ -54,7 +54,7 @@ if ($uid) {
 	.a1-container table td {
 		padding: 9px 0 !important;
 		vertical-align: middle !important;
-		color: #1d1d1f !important;
+		color: var(--text-main) !important;
 		font-weight: 600;
 		font-size: 13px;
 	}
@@ -131,9 +131,9 @@ if ($uid) {
 		
 		
 		<div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
-        <div class="a1-card-8" style="width:520px; margin:0 auto; border-radius: 16px; overflow: hidden; background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);">
+        <div class="a1-card-8" style="width:520px; margin:0 auto; border-radius: 16px; overflow: hidden; background: var(--glass-bg); border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);">
 		<div class="a1-container a1-center" style="background: #f8fafc; border-bottom: 1px solid rgba(0, 0, 0, 0.06); padding: 14px 20px;">
-        	<h6 style="margin: 0; font-weight: 700; color: #1d1d1f; font-size: 14px; letter-spacing: 0.5px;">MAKE PAYMENT</h6>
+        	<h6 style="margin: 0; font-weight: 700; color: var(--text-main); font-size: 14px; letter-spacing: 0.5px;">MAKE PAYMENT</h6>
         </div>
        <form id="form1" name="form1" method="post" class="a1-container" action="submit_payments.php">
          <table width="100%" border="0" align="center">
@@ -183,7 +183,7 @@ if ($uid) {
                  <td colspan="2" style="text-align: center; padding: 15px 0;">
                    <div style="background: rgba(15, 7, 18, 0.95); border: 2px solid #ff6b00; border-radius: 16px; padding: 20px; max-width: 280px; margin: 0 auto; box-shadow: 0 0 25px rgba(255, 107, 0, 0.35);">
                      <div style="font-family: 'Orbitron', sans-serif; color: #ff6b00; font-weight: 800; font-size: 13px; margin-bottom: 8px;">📱 SCAN &amp; PAY VIA UPI</div>
-                      <div style="background: #fff; padding: 10px; border-radius: 12px; display: inline-block; position: relative;">
+                      <div style="background: var(--glass-bg); padding: 10px; border-radius: 12px; display: inline-block; position: relative;">
                         <img id="upi_qr_image" src="" alt="UPI QR Code" style="width: 180px; height: 180px; display: block;" />
                         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #2c1b18; padding: 3px; border-radius: 50%; border: 2px solid #ff6b00; box-shadow: 0 0 15px rgba(255,107,0,0.8); display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
                           <img src="<?php echo htmlspecialchars($gym_settings_data['gym_logo'] ?? '../../images/logo.png'); ?>" alt="Gym Logo" style="width: 32px; height: 32px; border-radius: 50%; object-fit: contain;" />

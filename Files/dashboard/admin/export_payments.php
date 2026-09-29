@@ -132,7 +132,7 @@ usort($invoices, function($a, $b) {
 </xml>
 <![endif]-->
 <style>
-  body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #ffffff; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--glass-bg); }
   table { border-collapse: collapse; margin-top: 10px; width: 100%; }
   th { background-color: #ff6b00; color: #ffffff; font-weight: bold; text-align: center; border: 1px solid #cccccc; padding: 10px; font-size: 11pt; }
   td { border: 1px solid #dddddd; padding: 8px; font-size: 10pt; color: #333333; }

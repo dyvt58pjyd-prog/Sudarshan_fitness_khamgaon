@@ -21,11 +21,11 @@ if (isset($_POST['mark_called'])) {
     <style>
         body {
             background: var(--bg-main, #f8fafc);
-            color: var(--text-main, #1d1d1f);
+            color: var(--text-main, var(--text-main));
             font-family: 'Inter', sans-serif;
         }
         h2 {
-            color: var(--text-main, #1d1d1f);
+            color: var(--text-main, var(--text-main));
             font-weight: 800;
             font-size: 28px;
             letter-spacing: -0.5px;
@@ -43,7 +43,7 @@ if (isset($_POST['mark_called'])) {
             border-radius: 20px;
             padding: 25px;
             margin-bottom: 25px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(255,255,255,0.05);
             border-left: 6px solid #0ea5e9;
             transition: all 0.3s ease;
             position: relative;
@@ -61,7 +61,7 @@ if (isset($_POST['mark_called'])) {
         }
         .visl-card.called:hover {
             transform: none;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(255,255,255,0.05);
         }
         .visl-header {
             display: flex;
@@ -72,7 +72,7 @@ if (isset($_POST['mark_called'])) {
         .visl-name { 
             font-size: 20px; 
             font-weight: 700; 
-            color: var(--text-main, #1d1d1f); 
+            color: var(--text-main, var(--text-main)); 
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -94,7 +94,7 @@ if (isset($_POST['mark_called'])) {
             background: #eee;
         }
         
-        .visl-details { flex-grow: 1; font-size: 14px; color: var(--text-main, #1d1d1f); line-height: 1.6; }
+        .visl-details { flex-grow: 1; font-size: 14px; color: var(--text-main, var(--text-main)); line-height: 1.6; }
         .visl-details i { color: #0ea5e9; margin-right: 8px; width: 16px; text-align: center; }
         .visl-tag {
             display: inline-block;

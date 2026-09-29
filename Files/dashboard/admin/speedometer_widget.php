@@ -46,7 +46,7 @@ if ($percentage >= 50 && $percentage < 80) {
                 </svg>
                 
                 <!-- Needle -->
-                <div style="position: absolute; bottom: -5px; left: calc(50% - 2px); width: 4px; height: 45px; background: #fff; border-radius: 4px; transform-origin: bottom center; transform: rotate(<?php echo $rotation; ?>deg); transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 5;"></div>
+                <div style="position: absolute; bottom: -5px; left: calc(50% - 2px); width: 4px; height: 45px; background: var(--glass-bg); border-radius: 4px; transform-origin: bottom center; transform: rotate(<?php echo $rotation; ?>deg); transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 5;"></div>
                 
                 <!-- Center Pin -->
                 <div style="position: absolute; bottom: -8px; left: calc(50% - 8px); width: 16px; height: 16px; background: <?php echo $status_color; ?>; border-radius: 50%; border: 3px solid #222; z-index: 10;"></div>

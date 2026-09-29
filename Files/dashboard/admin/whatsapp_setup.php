@@ -220,7 +220,7 @@ for ($days = 1; $days <= 5; $days++) {
         <div class="main-content">
             <div class="row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
                 <div class="col-md-6 col-sm-8 clearfix">
-                    <h2 style="font-weight: 700; margin: 0; color: var(--text-main, #1d1d1f); letter-spacing: -0.5px;">
+                    <h2 style="font-weight: 700; margin: 0; color: var(--text-main, var(--text-main)); letter-spacing: -0.5px;">
                         <i class="entypo-chat" style="color: #25D366;"></i> WhatsApp Official API
                     </h2>
                 </div>
@@ -294,7 +294,7 @@ for ($days = 1; $days <= 5; $days++) {
                                                 <td style="border-color: var(--glass-border); padding: 15px;"><?php echo htmlspecialchars($member['planName']); ?></td>
                                                 <td style="border-color: var(--glass-border); padding: 15px;"><?php echo htmlspecialchars($member['expire']); ?></td>
                                                 <td style="border-color: var(--glass-border); padding: 15px;">
-                                                    <span class="badge badge-warning" style="background-color: var(--warning); color: #000; padding: 6px 10px; border-radius: 6px;"><?php echo $member['days_left']; ?> days left</span>
+                                                    <span class="badge badge-warning" style="background-color: var(--warning); color: var(--text-main); padding: 6px 10px; border-radius: 6px;"><?php echo $member['days_left']; ?> days left</span>
                                                 </td>
                                                 <td style="border-color: var(--glass-border); padding: 15px; text-align: center;">
                                                     <button class="btn btn-primary" style="padding: 6px 12px; border-radius: 6px;" 

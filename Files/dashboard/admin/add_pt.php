@@ -24,8 +24,8 @@ page_protect();
         }
         textarea#boxx {
             height: auto !important;
-            background: #ffffff !important;
-            color: #1d1d1f !important;
+            background: var(--glass-bg) !important;
+            color: var(--text-main) !important;
             border: 1px solid rgba(0, 0, 0, 0.12) !important;
             border-radius: 8px !important;
             padding: 8px 14px !important;
@@ -39,7 +39,7 @@ page_protect();
         .a1-container table td {
             padding: 10px 0 !important;
             vertical-align: middle !important;
-            color: #1d1d1f !important;
+            color: var(--text-main) !important;
             font-weight: 600;
             font-size: 13px;
         }
@@ -88,9 +88,9 @@ page_protect();
             <hr />
 
             <div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
-                <div class="a1-card-8" style="width:620px; margin:0 auto; border-radius: 16px; overflow: hidden; background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);">
+                <div class="a1-card-8" style="width:620px; margin:0 auto; border-radius: 16px; overflow: hidden; background: var(--glass-bg); border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);">
                     <div class="a1-container a1-center" style="background: #f8fafc; border-bottom: 1px solid rgba(0, 0, 0, 0.06); padding: 14px 20px;">
-                        <h6 style="margin: 0; font-weight: 700; color: #1d1d1f; font-size: 14px; letter-spacing: 0.5px;">RECORD PT DATA</h6>
+                        <h6 style="margin: 0; font-weight: 700; color: var(--text-main); font-size: 14px; letter-spacing: 0.5px;">RECORD PT DATA</h6>
                     </div>
                     <form id="form1" name="form1" method="post" class="a1-container" action="submit_pt.php">
                         <table width="100%" border="0" align="center">

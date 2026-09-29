@@ -53,7 +53,7 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
     .security-watermark span {
         font-size: 24px;
         font-weight: 800;
-        color: #000;
+        color: var(--text-main);
         white-space: nowrap;
         font-family: 'Inter', sans-serif;
     }
@@ -69,24 +69,24 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
 
     /* Top Navigation Breadcrumb Button */
     .btn-dashboard-home {
-        background: rgba(255, 255, 255, 0.85);
+        background: var(--glass-bg);
         backdrop-filter: blur(20px);
         border: 1px solid rgba(0, 0, 0, 0.1);
         border-radius: 12px;
         padding: 8px 16px;
-        color: #1d1d1f;
+        color: var(--text-main);
         font-weight: 600;
         font-family: 'Inter', sans-serif;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 12px rgba(255,255,255,0.05);
         transition: all 0.3s ease;
     }
     
     .btn-dashboard-home:hover {
-        background: #fff;
+        background: var(--glass-bg);
         transform: translateY(-2px);
         box-shadow: 0 6px 16px rgba(0,0,0,0.1);
     }
@@ -106,9 +106,9 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
                 themeLi.style.marginRight = '15px';
                 themeLi.innerHTML = `
                     <select id="sf-theme-select" onchange="SFThemeEngine.setThemeMode(this.value)" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 1.5px solid #ff7b00; border-radius: 10px; padding: 6px 12px; font-size: 13px; font-weight: 700; font-family: 'Outfit', sans-serif; cursor: pointer; box-shadow: 0 4px 12px rgba(255,123,0,0.25);">
-                        <option value="dark" style="color: #000;">🌙 Dark Mode (Naruto)</option>
-                        <option value="system" style="color: #000;">💻 System Mode</option>
-                        <option value="light" style="color: #000;">☀️ Light Mode</option>
+                        <option value="dark" style="color: var(--text-main);">🌙 Dark Mode (Naruto)</option>
+                        <option value="system" style="color: var(--text-main);">💻 System Mode</option>
+                        <option value="light" style="color: var(--text-main);">☀️ Light Mode</option>
                     </select>
                 `;
                 linksList.insertBefore(themeLi, linksList.firstChild);
@@ -122,7 +122,7 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
                 const yearLi = document.createElement('li');
                 yearLi.id = 'nav-working-year';
                 yearLi.style.marginRight = '15px';
-                yearLi.innerHTML = yearSelector.outerHTML.replace('style="', 'style="background: rgba(255, 255, 255, 0.9); color: #1d1d1f; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 8px; padding: 4px 10px; font-size: 13px; font-weight: 600; font-family: \'Inter\', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.04); ');
+                yearLi.innerHTML = yearSelector.outerHTML.replace('style="', 'style="background: rgba(255, 255, 255, 0.9); color: var(--text-main); border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 8px; padding: 4px 10px; font-size: 13px; font-weight: 600; font-family: \'Inter\', sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.04); ');
                 linksList.insertBefore(yearLi, linksList.firstChild);
             }
         }
@@ -145,10 +145,10 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
 
 <!-- Working Year Selector -->
 <div class="working-year-selector" style="display: none;">
-    <span style="color: #86868b; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px; font-weight: 600;">Operating Year</span>
+    <span style="color: var(--text-muted); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px; font-weight: 600;">Operating Year</span>
     <div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
         <a href="?set_working_year=<?php echo $working_year - 1; ?>" style="background: rgba(0, 122, 255, 0.1); color: #007aff; border: 1px solid rgba(0, 122, 255, 0.2); padding: 2px 8px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 12px; transition: all 0.2s;">&lt;</a>
-        <span style="color: #1d1d1f; font-size: 15px; font-weight: 700; min-width: 45px; display: inline-block; font-family: 'Inter', sans-serif;"><?php echo $working_year; ?></span>
+        <span style="color: var(--text-main); font-size: 15px; font-weight: 700; min-width: 45px; display: inline-block; font-family: 'Inter', sans-serif;"><?php echo $working_year; ?></span>
         <a href="?set_working_year=<?php echo $working_year + 1; ?>" style="background: rgba(0, 122, 255, 0.1); color: #007aff; border: 1px solid rgba(0, 122, 255, 0.2); padding: 2px 8px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 12px; transition: all 0.2s;">&gt;</a>
     </div>
 </div>

@@ -90,7 +90,7 @@ $q_ip_list = mysqli_query($con, "SELECT * FROM blocked_ips ORDER BY id DESC LIMI
             --accent: #ff6b00;
             --accent-green: #10b981;
             --accent-blue: #0284c7;
-            --text-main: #1d1d1f;
+            --text-main: var(--text-main);
             --text-muted: #64748b;
         }
         [data-theme="dark"] {
@@ -102,15 +102,15 @@ $q_ip_list = mysqli_query($con, "SELECT * FROM blocked_ips ORDER BY id DESC LIMI
             --text-muted: #94a3b8;
         }
         body { background: var(--bg); color: var(--text-main); font-family: 'Outfit', sans-serif; padding: 25px; margin: 0; }
-        .header-box { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 22px 30px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .header-box { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 22px 30px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 25px; box-shadow: 0 4px 20px rgba(255,255,255,0.05); }
         .header-title h2 { margin: 0; font-size: 22px; font-weight: 800; color: var(--text-main); font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
         
         .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
-        .stat-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 20px; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.05); }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 20px; text-align: center; box-shadow: 0 4px 16px rgba(255,255,255,0.05); }
         .stat-val { font-size: 28px; font-weight: 900; margin-top: 5px; }
         .stat-lbl { color: var(--text-muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .sec-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .sec-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(255,255,255,0.05); }
         .sec-title { font-size: 16px; font-weight: 800; color: var(--text-main); margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
 
         .table-custom { width: 100%; border-collapse: collapse; font-size: 13px; }

@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['et_id']) && isset($_PO
             <head>
                 <style>
                     body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
-                    .receipt-box { background-color: #ffffff; padding: 30px; border-radius: 8px; max-width: 500px; margin: 0 auto; border-top: 5px solid #ff6b00; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+                    .receipt-box { background-color: var(--glass-bg); padding: 30px; border-radius: 8px; max-width: 500px; margin: 0 auto; border-top: 5px solid #ff6b00; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
                     .header { text-align: center; margin-bottom: 20px; }
                     .header h2 { color: #333; margin: 0; }
                     .details { line-height: 1.6; color: #555; margin-bottom: 20px; }

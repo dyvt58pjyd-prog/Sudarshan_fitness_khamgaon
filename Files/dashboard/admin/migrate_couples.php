@@ -58,7 +58,7 @@ if (isset($_POST['add_partner'])) {
         .form-control-custom {
             background: var(--input-bg, #f8fafc);
             border: 1px solid var(--border-color, rgba(0, 0, 0, 0.15));
-            color: var(--text-main, #1d1d1f);
+            color: var(--text-main, var(--text-main));
             padding: 8px 12px;
             border-radius: 6px;
             font-size: 13px;

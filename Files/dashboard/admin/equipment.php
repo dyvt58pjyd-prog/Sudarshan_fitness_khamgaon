@@ -62,7 +62,7 @@ $open_tickets = mysqli_query($con, "SELECT t.*, e.equipment_name FROM equipment_
         .badge { padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 11px; text-transform: uppercase; }
         .badge-op { background: rgba(16,185,129,0.15); color: #059669; border: 1px solid #10b981; }
         .badge-maint { background: rgba(239,68,68,0.15); color: #dc2626; border: 1px solid #ef4444; }
-        .form-control-dark { width: 100%; padding: 10px; background: var(--input-bg, #f8fafc); border: 1px solid var(--border-color, rgba(0,0,0,0.15)); border-radius: 8px; color: var(--text-main, #1d1d1f); margin-bottom: 10px; }
+        .form-control-dark { width: 100%; padding: 10px; background: var(--input-bg, #f8fafc); border: 1px solid var(--border-color, rgba(0,0,0,0.15)); border-radius: 8px; color: var(--text-main, var(--text-main)); margin-bottom: 10px; }
     </style>
 </head>
 <body class="page-body page-fade" onload="collapseSidebar();">
@@ -81,7 +81,7 @@ $open_tickets = mysqli_query($con, "SELECT t.*, e.equipment_name FROM equipment_
         <div class="main-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
                 <div>
-                    <h2 style="margin: 0; font-weight: 800; text-transform: uppercase; color: var(--text-main, #1d1d1f);">🏷️ Smart Equipment &amp; QR Telemetry System</h2>
+                    <h2 style="margin: 0; font-weight: 800; text-transform: uppercase; color: var(--text-main, var(--text-main));">🏷️ Smart Equipment &amp; QR Telemetry System</h2>
                     <p style="color: var(--text-muted, #64748b); font-size: 13px; margin-top: 4px;">Manage gym machinery, generate printable QR stickers, and track maintenance issues.</p>
                 </div>
                 <div>
@@ -103,7 +103,7 @@ $open_tickets = mysqli_query($con, "SELECT t.*, e.equipment_name FROM equipment_
                     <?php while ($tk = mysqli_fetch_assoc($open_tickets)): ?>
                     <div style="background: var(--bg-card, #ffffff); border: 1px solid var(--border-color, rgba(239,68,68,0.2)); padding: 12px 16px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                         <div>
-                            <strong style="color: var(--text-main, #1d1d1f);"><?php echo htmlspecialchars($tk['equipment_name']); ?></strong> — 
+                            <strong style="color: var(--text-main, var(--text-main));"><?php echo htmlspecialchars($tk['equipment_name']); ?></strong> — 
                             <span style="color: #dc2626; font-weight: 600;"><?php echo htmlspecialchars($tk['issue_description']); ?></span>
                             <div style="font-size: 11px; color: var(--text-muted, #64748b); margin-top: 2px;">Reported by: <?php echo htmlspecialchars($tk['reported_by']); ?> • <?php echo date('d M Y, h:i A', strtotime($tk['created_at'])); ?></div>
                         </div>
@@ -121,8 +121,8 @@ $open_tickets = mysqli_query($con, "SELECT t.*, e.equipment_name FROM equipment_
             <?php endif; ?>
 
             <!-- Equipment Inventory Grid -->
-            <div style="background: var(--bg-card, #ffffff); border: 1px solid var(--border-color, rgba(0,0,0,0.08)); border-radius: 18px; padding: 22px; margin-bottom: 30px; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
-                <h3 style="margin-top: 0; color: var(--text-main, #1d1d1f); font-size: 16px; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.08)); padding-bottom: 12px;">
+            <div style="background: var(--bg-card, #ffffff); border: 1px solid var(--border-color, rgba(0,0,0,0.08)); border-radius: 18px; padding: 22px; margin-bottom: 30px; box-shadow: 0 4px 16px rgba(255,255,255,0.05);">
+                <h3 style="margin-top: 0; color: var(--text-main, var(--text-main)); font-size: 16px; font-weight: 800; text-transform: uppercase; border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.08)); padding-bottom: 12px;">
                     Gym Machinery Inventory &amp; Smart QR Pass
                 </h3>
 
@@ -142,8 +142,8 @@ $open_tickets = mysqli_query($con, "SELECT t.*, e.equipment_name FROM equipment_
                         <?php while ($eq = mysqli_fetch_assoc($equipment_list)): ?>
                         <tr>
                             <td style="color: var(--text-muted, #64748b);">#<?php echo $eq['id']; ?></td>
-                            <td><strong style="color: var(--text-main, #1d1d1f); font-size: 14px;"><?php echo htmlspecialchars($eq['equipment_name']); ?></strong></td>
-                            <td><span style="background: var(--hover-bg, rgba(0,0,0,0.06)); color: var(--text-main, #1d1d1f); padding: 3px 8px; border-radius: 6px;"><?php echo htmlspecialchars($eq['category']); ?></span></td>
+                            <td><strong style="color: var(--text-main, var(--text-main)); font-size: 14px;"><?php echo htmlspecialchars($eq['equipment_name']); ?></strong></td>
+                            <td><span style="background: var(--hover-bg, rgba(0,0,0,0.06)); color: var(--text-main, var(--text-main)); padding: 3px 8px; border-radius: 6px;"><?php echo htmlspecialchars($eq['category']); ?></span></td>
                             <td><strong style="color: #0284c7;"><?php echo htmlspecialchars($eq['muscle_group']); ?></strong></td>
                             <td>
                                 <a href="equipment.php?id=<?php echo $eq['id']; ?>&toggle_status=<?php echo $eq['status']; ?>" title="Click to toggle status" style="text-decoration: none;">
@@ -169,15 +169,15 @@ $open_tickets = mysqli_query($con, "SELECT t.*, e.equipment_name FROM equipment_
             </div>
 
             <!-- Add Machine Box -->
-            <div id="addEqBox" style="background: var(--bg-card, #ffffff); border: 1px solid var(--border-color, rgba(0,0,0,0.08)); border-radius: 18px; padding: 22px; max-width: 600px; box-shadow: 0 4px 16px rgba(0,0,0,0.05);">
-                <h3 style="margin-top: 0; color: var(--text-main, #1d1d1f); font-size: 16px; font-weight: 800; text-transform: uppercase;">
+            <div id="addEqBox" style="background: var(--bg-card, #ffffff); border: 1px solid var(--border-color, rgba(0,0,0,0.08)); border-radius: 18px; padding: 22px; max-width: 600px; box-shadow: 0 4px 16px rgba(255,255,255,0.05);">
+                <h3 style="margin-top: 0; color: var(--text-main, var(--text-main)); font-size: 16px; font-weight: 800; text-transform: uppercase;">
                     + Register New Gym Machine
                 </h3>
                 <form method="POST">
-                    <label style="color: var(--text-main, #1d1d1f); font-size: 12px; font-weight: bold;">Equipment Name *</label>
+                    <label style="color: var(--text-main, var(--text-main)); font-size: 12px; font-weight: bold;">Equipment Name *</label>
                     <input type="text" name="equipment_name" class="form-control-dark" placeholder="e.g. Incline Dumbbell Bench" required>
 
-                    <label style="color: var(--text-main, #1d1d1f); font-size: 12px; font-weight: bold;">Category</label>
+                    <label style="color: var(--text-main, var(--text-main)); font-size: 12px; font-weight: bold;">Category</label>
                     <select name="category" class="form-control-dark">
                         <option value="Strength">Strength (Free Weights / Plate Loaded)</option>
                         <option value="Cables">Cables &amp; Pulleys</option>
@@ -185,10 +185,10 @@ $open_tickets = mysqli_query($con, "SELECT t.*, e.equipment_name FROM equipment_
                         <option value="Selectorized">Selectorized Pin-Loaded Machines</option>
                     </select>
 
-                    <label style="color: var(--text-main, #1d1d1f); font-size: 12px; font-weight: bold;">Targeted Muscle Groups *</label>
+                    <label style="color: var(--text-main, var(--text-main)); font-size: 12px; font-weight: bold;">Targeted Muscle Groups *</label>
                     <input type="text" name="muscle_group" class="form-control-dark" placeholder="e.g. Upper Chest, Triceps" required>
 
-                    <label style="color: var(--text-main, #1d1d1f); font-size: 12px; font-weight: bold;">Form Execution Instructions</label>
+                    <label style="color: var(--text-main, var(--text-main)); font-size: 12px; font-weight: bold;">Form Execution Instructions</label>
                     <textarea name="instructions" rows="2" class="form-control-dark" placeholder="Tips for safe form and biomechanics"></textarea>
 
                     <button type="submit" name="add_equipment" class="a1-btn a1-green" style="font-weight: bold; border-radius: 10px; padding: 10px 20px; cursor: pointer; margin-top: 5px;">
@@ -199,8 +199,8 @@ $open_tickets = mysqli_query($con, "SELECT t.*, e.equipment_name FROM equipment_
 
             <!-- Print QR Sticker Modal Container -->
             <div id="qrPrintModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center;">
-                <div style="background: #fff; color: #000; border-radius: 20px; padding: 30px; text-align: center; max-width: 320px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
-                    <h3 id="modalEqTitle" style="margin-top: 0; font-size: 16px; font-weight: 900; color: #000;"></h3>
+                <div style="background: var(--glass-bg); color: var(--text-main); border-radius: 20px; padding: 30px; text-align: center; max-width: 320px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+                    <h3 id="modalEqTitle" style="margin-top: 0; font-size: 16px; font-weight: 900; color: var(--text-main);"></h3>
                     <div style="margin: 15px 0;">
                         <canvas id="stickerCanvas"></canvas>
                     </div>

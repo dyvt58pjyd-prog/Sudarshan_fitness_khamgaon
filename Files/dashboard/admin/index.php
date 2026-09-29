@@ -65,7 +65,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
         <head>
             <style>
                 body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
-                .container { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+                .container { background-color: var(--glass-bg); border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(255,255,255,0.05); position: relative; overflow: hidden; }
                 .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #ff6b00, #ff8c00); }
                 h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
                 p { font-size: 14px; line-height: 1.6; color: #475569; }
@@ -142,14 +142,14 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
            Eliminates legacy dark brown (#2c1b18 / #1f100a) completely
            ========================================================= */
         html, body {
-            background-color: #f5f5f7 !important;
+            background-color: var(--bg-dark) !important;
             background-image: 
                 radial-gradient(at 0% 0%, rgba(0, 113, 227, 0.07) 0px, transparent 50%),
                 radial-gradient(at 100% 0%, rgba(255, 45, 85, 0.05) 0px, transparent 50%),
                 radial-gradient(at 50% 100%, rgba(52, 199, 89, 0.04) 0px, transparent 50%) !important;
             background-attachment: fixed !important;
             background-size: cover !important;
-            color: #1d1d1f !important;
+            color: var(--text-main) !important;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
             min-height: 100vh !important;
             margin: 0 !important;
@@ -162,7 +162,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
         #navbarcollapse {
             background: transparent !important;
             background-color: transparent !important;
-            color: #1d1d1f !important;
+            color: var(--text-main) !important;
             border: none !important;
         }
 
@@ -170,7 +170,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
         h1, h2, h3, h4, h5, h6,
         .main-content h1, .main-content h2, .main-content h3, .main-content h4,
         .page-container h1, .page-container h2, .page-container h3, .page-container h4 {
-            color: #1d1d1f !important;
+            color: var(--text-main) !important;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
         }
 
@@ -180,12 +180,12 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
             letter-spacing: -0.6px !important;
             margin-top: 15px !important;
             margin-bottom: 20px !important;
-            color: #1d1d1f !important;
+            color: var(--text-main) !important;
         }
 
         /* Header Links / User info */
         .links-list, .links-list li, .links-list a {
-            color: #1d1d1f !important;
+            color: var(--text-main) !important;
             font-weight: 600 !important;
             font-size: 13px !important;
         }
@@ -196,7 +196,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
         /* Category Titles */
         .category-header,
         .main-content .row h3 {
-            color: #1d1d1f !important;
+            color: var(--text-main) !important;
             font-weight: 800 !important;
             margin-bottom: 20px !important;
             display: flex !important;
@@ -218,20 +218,20 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
         .dashboard-grid a > div, 
         .dashboard-grid > div, 
         .dashboard-grid div.grid-action-box {
-            background: rgba(255, 255, 255, 0.85) !important;
+            background: var(--glass-bg) !important;
             backdrop-filter: blur(30px) saturate(200%) !important;
             -webkit-backdrop-filter: blur(30px) saturate(200%) !important;
             border: 1px solid rgba(255, 255, 255, 0.8) !important;
             border-radius: 22px !important;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02) !important;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-            color: #1d1d1f !important;
+            color: var(--text-main) !important;
             padding: 22px !important;
             text-align: center !important;
         }
         .dashboard-grid a > div:hover,
         .dashboard-grid > div:hover {
-            background: #ffffff !important;
+            background: var(--glass-bg) !important;
             border-color: #007aff !important;
             box-shadow: 0 14px 35px rgba(0, 122, 255, 0.15) !important;
             transform: translateY(-4px) scale(1.02) !important;
@@ -240,7 +240,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
         .dashboard-grid a > div h4,
         .dashboard-grid > div h4 {
             font-family: 'Inter', -apple-system, sans-serif !important;
-            color: #1d1d1f !important;
+            color: var(--text-main) !important;
             letter-spacing: -0.3px !important;
             font-weight: 700 !important;
             font-size: 14px !important;
@@ -249,20 +249,20 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
         .dashboard-grid span,
         .dashboard-grid a > div span,
         .dashboard-grid > div span {
-            color: #86868b !important;
+            color: var(--text-muted) !important;
             font-size: 12px !important;
             font-weight: 500 !important;
         }
 
         /* Financial Overview & General Cards */
         .portal-card, .a1-card-8, .panel {
-            background: rgba(255, 255, 255, 0.85) !important;
+            background: var(--glass-bg) !important;
             backdrop-filter: blur(30px) saturate(200%) !important;
             -webkit-backdrop-filter: blur(30px) saturate(200%) !important;
             border: 1px solid rgba(255, 255, 255, 0.8) !important;
             border-radius: 24px !important;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
-            color: #1d1d1f !important;
+            color: var(--text-main) !important;
         }
 
         /* Hide Footer */
@@ -274,7 +274,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
         /* Subtle Security Watermark */
         .security-watermark span {
-            color: #000000 !important;
+            color: var(--text-main) !important;
             opacity: 0.025 !important;
         }
 
@@ -296,7 +296,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
         }
     </style>
 </head>
-<body class="page-body page-fade" style="background: #f5f5f7 !important; min-height: 100vh;">
+<body class="page-body page-fade" style="background: var(--bg-dark) !important; min-height: 100vh;">
     <div class="page-container" id="navbarcollapse" style="background: transparent !important; padding-left: 0 !important; width: 100% !important; max-width: 100% !important; min-height: 100vh;">	
         
         <?php include('nav.php'); ?>
@@ -340,7 +340,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
 
 			<div id="gate-alert-container" style="margin-top: 15px; margin-bottom: 15px;"></div>
-			<h2 style="color: #1d1d1f !important; font-weight: 800; font-size: 26px; letter-spacing: -0.6px; margin-top: 15px; margin-bottom: 20px;">SUDARSHAN FITNESS</h2>
+			<h2 style="color: var(--text-main) !important; font-weight: 800; font-size: 26px; letter-spacing: -0.6px; margin-top: 15px; margin-bottom: 20px;">SUDARSHAN FITNESS</h2>
 
 
 
@@ -477,13 +477,13 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
 			<?php if (in_array($current_role, ['super_admin', 'owner', 'reception'])): ?>
 			<!-- 💰 FINANCIAL REVENUE & INCOME DASHBOARD WIDGET -->
-			<div style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(25px) saturate(200%); -webkit-backdrop-filter: blur(25px) saturate(200%); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 24px; padding: 24px; margin-top: 15px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+			<div style="background: var(--glass-bg); backdrop-filter: blur(25px) saturate(200%); -webkit-backdrop-filter: blur(25px) saturate(200%); border: 1px solid var(--glass-border); border-radius: 24px; padding: 24px; margin-top: 15px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(255,255,255,0.05);">
 				<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom: 20px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); padding-bottom: 16px;">
 					<div style="display:flex; align-items:center; gap:12px;">
 						<span style="font-size: 28px;">💰</span>
 						<div>
-							<h3 style="color: #1d1d1f; font-weight: 800; font-size: 18px; margin: 0; letter-spacing: -0.5px; font-family: 'Inter', sans-serif;">Financial Overview</h3>
-							<span style="color: #86868b; font-size: 13px; font-weight: 500;">Audited physical cash & digital ledger</span>
+							<h3 style="color: var(--text-main); font-weight: 800; font-size: 18px; margin: 0; letter-spacing: -0.5px; font-family: 'Inter', sans-serif;">Financial Overview</h3>
+							<span style="color: var(--text-muted); font-size: 13px; font-weight: 500;">Audited physical cash & digital ledger</span>
 						</div>
 					</div>
 					<div style="display:flex; gap:10px;">
@@ -496,9 +496,9 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					<!-- Monthly Net Cash in Hand -->
 					<div class="col-md-3 col-sm-6" style="padding: 6px;">
 						<div style="background: rgba(255, 149, 0, 0.05); border: 1px solid rgba(255, 149, 0, 0.2); border-radius: 16px; padding: 20px; text-align: center;">
-							<div style="color: #86868b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">💵 Physical Cash</div>
+							<div style="color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">💵 Physical Cash</div>
 							<div style="color: <?php echo $month_net_cash >= 0 ? '#ff9500' : '#ff3b30'; ?>; font-size: 28px; font-weight: 800; margin-top: 8px; font-family: 'Inter', sans-serif;">₹<?php echo number_format($month_net_cash); ?></div>
-							<div style="display: flex; justify-content: space-around; margin-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 10px; font-size: 12px; font-weight: 600;">
+							<div style="display: flex; justify-content: space-around; margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; font-size: 12px; font-weight: 600;">
 								<span style="color: #34c759;" title="Cash Inflow">+₹<?php echo number_format($month_cash_income); ?></span>
 								<span style="color: #ff3b30;" title="Cash Expenses">-₹<?php echo number_format($month_cash_expense); ?></span>
 							</div>
@@ -508,9 +508,9 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					<!-- Monthly Digital / UPI Surplus -->
 					<div class="col-md-3 col-sm-6" style="padding: 6px;">
 						<div style="background: rgba(0, 122, 255, 0.05); border: 1px solid rgba(0, 122, 255, 0.2); border-radius: 16px; padding: 20px; text-align: center;">
-							<div style="color: #86868b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">💳 Digital / UPI</div>
+							<div style="color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">💳 Digital / UPI</div>
 							<div style="color: <?php echo $month_net_upi >= 0 ? '#007aff' : '#ff3b30'; ?>; font-size: 28px; font-weight: 800; margin-top: 8px; font-family: 'Inter', sans-serif;">₹<?php echo number_format($month_net_upi); ?></div>
-							<div style="display: flex; justify-content: space-around; margin-top: 12px; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 10px; font-size: 12px; font-weight: 600;">
+							<div style="display: flex; justify-content: space-around; margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; font-size: 12px; font-weight: 600;">
 								<span style="color: #34c759;" title="UPI Inflow">+₹<?php echo number_format($month_upi_income); ?></span>
 								<span style="color: #ff3b30;" title="UPI Expenses">-₹<?php echo number_format($month_upi_expense); ?></span>
 							</div>
@@ -520,18 +520,18 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					<!-- Yearly Income Card -->
 					<div class="col-md-3 col-sm-6" style="padding: 6px;">
 						<div style="background: rgba(0, 122, 255, 0.05); border: 1px solid rgba(0, 122, 255, 0.18); border-radius: 16px; padding: 20px; text-align: center;">
-							<div style="color: #86868b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Year <?php echo date('Y'); ?> Gross Income</div>
+							<div style="color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Year <?php echo date('Y'); ?> Gross Income</div>
 							<div style="color: #007aff; font-size: 28px; font-weight: 800; margin-top: 8px; font-family: 'Inter', sans-serif;">₹<?php echo number_format($year_income); ?></div>
-							<div style="color: #86868b; font-size: 11px; margin-top: 8px; font-weight: 500;">Annual collections so far</div>
+							<div style="color: var(--text-muted); font-size: 11px; margin-top: 8px; font-weight: 500;">Annual collections so far</div>
 						</div>
 					</div>
 
 					<!-- Net Lifetime Profit Card -->
 					<div class="col-md-3 col-sm-6" style="padding: 6px;">
 						<div style="background: rgba(175, 82, 222, 0.05); border: 1px solid rgba(175, 82, 222, 0.18); border-radius: 16px; padding: 20px; text-align: center;">
-							<div style="color: #86868b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">💎 Net Lifetime Profit</div>
+							<div style="color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">💎 Net Lifetime Profit</div>
 							<div style="color: <?php echo $net_profit >= 0 ? '#af52de' : '#ff3b30'; ?>; font-size: 28px; font-weight: 800; margin-top: 8px; font-family: 'Inter', sans-serif;">₹<?php echo number_format($net_profit); ?></div>
-							<div style="color: #86868b; font-size: 11px; margin-top: 8px; font-weight: 500;">Gross income minus expenses</div>
+							<div style="color: var(--text-muted); font-size: 11px; margin-top: 8px; font-weight: 500;">Gross income minus expenses</div>
 						</div>
 					</div>
 				</div>
@@ -547,7 +547,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					<!-- Category 1: 👥 FRONT DESK & VISITOR MANAGEMENT -->
 					<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
 					<div style="margin-bottom: 40px;">
-						<h3 style="color: #1d1d1f; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
+						<h3 style="color: var(--text-main); font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
 							<span style="font-size: 24px;">👥</span> Front Desk & Visitor Management
 						</h3>
 						<div class="dashboard-grid">
@@ -556,7 +556,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(255, 107, 0, 0.05) 100%); border: 2px solid #ff6b00; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">👤➕</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">New Registration</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">New Registration</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Add new gym admission</span>
 								</div>
 							</a>
@@ -565,7 +565,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%); border: 2px solid #f59e0b; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📋✓</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Manual Approvals</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Manual Approvals</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Verify offline bookings</span>
 								</div>
 							</a>
@@ -574,7 +574,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📝👥</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Visitor Entry</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Visitor Entry</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Log inquiry details & snaps</span>
 								</div>
 							</a>
@@ -583,7 +583,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.05) 100%); border: 2px solid #0ea5e9; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📁👥</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Visitor Logs</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Visitor Logs</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Search previous visit logs</span>
 								</div>
 							</a>
@@ -592,7 +592,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0.05) 100%); border: 2px solid #8b5cf6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">🤖📈</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">VISL Dashboard</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">VISL Dashboard</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Real-time SalesBot inquiries</span>
 								</div>
 							</a>
@@ -601,7 +601,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">🔍👤</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Search Member</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Search Member</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Lookup profile statistics</span>
 								</div>
 							</a>
@@ -610,7 +610,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%); border: 2px solid #a855f7; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">💳⭐</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Make Payment</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Make Payment</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Collect offline package fees</span>
 								</div>
 							</a>
@@ -619,7 +619,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%); border: 2px solid #ef4444; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">⏳⚠️</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Pending Fees</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Pending Fees</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Collect outstanding balances</span>
 								</div>
 							</a>
@@ -628,7 +628,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">🛒💊</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Inventory Store</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Inventory Store</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Sell products & track stock</span>
 								</div>
 							</a>
@@ -639,7 +639,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
 					<!-- Category 2: 🔑 ATTENDANCE & BIOMETRIC CONTROL -->
 					<div style="margin-bottom: 35px;">
-						<h3 style="color: #1d1d1f; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
+						<h3 style="color: var(--text-main); font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
 							<span style="font-size: 22px;">🔑</span> Attendance & Access Control
 						</h3>
 						<div class="dashboard-grid">
@@ -648,7 +648,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">🔑🚪</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Biometric Lock</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Biometric Lock</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Enable or disable gates</span>
 								</div>
 							</a>
@@ -657,7 +657,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%); border: 2px solid #ef4444; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📷🚪</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Attendance Portal</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Attendance Portal</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">View scans & calendar logs</span>
 								</div>
 							</a>
@@ -666,7 +666,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(255, 107, 0, 0.05) 100%); border: 2px solid #ff6b00; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📝🏋️</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Walk-In Enquiries</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Walk-In Enquiries</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Review visitor tours &amp; approvals</span>
 								</div>
 							</a>
@@ -675,7 +675,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">🖨️📱</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Visitor QR Poster</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Visitor QR Poster</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Print reception desk standee</span>
 								</div>
 							</a>
@@ -684,7 +684,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(255, 107, 0, 0.05) 100%); border: 2px solid #ff6b00; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📷🚪</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">QR Gate Terminal</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">QR Gate Terminal</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Launch QR Entrance Gate Scanner</span>
 								</div>
 							</a>
@@ -693,7 +693,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.05) 100%); border: 2px solid #06b6d4; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">🖥️🚪</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Front Desk Kiosk</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Front Desk Kiosk</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Launch kiosk monitor mode</span>
 								</div>
 							</a>
@@ -704,7 +704,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(244, 63, 94, 0.15) 0%, rgba(244, 63, 94, 0.05) 100%); border: 2px solid #f43f5e; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📋📊</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Biometric Logs</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Biometric Logs</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Audit machine communications</span>
 								</div>
 							</a>
@@ -713,7 +713,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(20, 184, 166, 0.15) 0%, rgba(20, 184, 166, 0.05) 100%); border: 2px solid #14b8a6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">🔄🎛️</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Gate Simulator</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Gate Simulator</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Trigger mock attendance scans</span>
 								</div>
 							</a>
@@ -724,7 +724,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 
 					<!-- Category 3: 📋 MEMBERS & SYSTEM DIRECTORY -->
 					<div style="margin-bottom: 35px;">
-						<h3 style="color: #1d1d1f; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
+						<h3 style="color: var(--text-main); font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
 							<span style="font-size: 22px;">📋</span> Members & Fitness Directory
 						</h3>
 						<div class="dashboard-grid">
@@ -734,7 +734,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">✏️👤</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Manage Members</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Manage Members</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Edit client files & details</span>
 								</div>
 							</a>
@@ -744,7 +744,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📋🔍</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">View Directory</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">View Directory</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Search membership list grid</span>
 								</div>
 							</a>
@@ -753,7 +753,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(251, 191, 36, 0.05) 100%); border: 2px solid #fbbf24; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📋🏋️</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Assign Routine</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Assign Routine</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Bind routine plans to members</span>
 								</div>
 							</a>
@@ -764,7 +764,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					<!-- Category 4: 💰 BILLING, SUBSCRIPTIONS & ANALYTICS -->
 					<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'reception'): ?>
 					<div style="margin-bottom: 35px;">
-						<h3 style="color: #1d1d1f; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
+						<h3 style="color: var(--text-main); font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
 							<span style="font-size: 22px;">💰</span> Billing, Subscriptions & Analytics
 						</h3>
 						<div class="dashboard-grid">
@@ -773,7 +773,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%); border: 2px solid #ef4444; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">💰✓</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Verify Payments</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Verify Payments</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Pending registrations approvals</span>
 								</div>
 							</a>
@@ -782,7 +782,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📁💳</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Online Records</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Online Records</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">App verified UPI transfers log</span>
 								</div>
 							</a>
@@ -791,14 +791,14 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📄🧾</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Invoices & Receipts</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Invoices & Receipts</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Print official tax receipts & PDFs</span>
 								</div>
 							</a>
 
 							<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 22px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
 								<div style="font-size: 40px; margin-bottom: 10px;">📅💳</div>
-								<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Daily Collection</h4>
+								<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Daily Collection</h4>
 								<form action="invoices.php" method="GET" style="margin-top: 10px;">
 									<input type="date" name="start_date" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 6px; border-radius: 5px; width: 100%; margin-bottom: 8px; font-size: 12px; color-scheme: dark;" required onchange="this.form.end_date.value = this.value;">
 									<input type="hidden" name="end_date" value="">
@@ -811,7 +811,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%); border: 2px solid #22c55e; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📧⬇️</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Export Emails</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Export Emails</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Download all members as CSV</span>
 								</div>
 							</a>
@@ -820,7 +820,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">👤📲</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Face ID Setup</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Face ID Setup</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Generate Face ID enrollment links for Owners</span>
 								</div>
 							</a>
@@ -831,7 +831,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%); border: 2px solid #f59e0b; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">✏️🧾</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Edit Plans</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Edit Plans</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Alter membership subscription prices</span>
 								</div>
 							</a>
@@ -840,7 +840,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%); border: 2px solid #a855f7; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">➕🧾</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Create Plan</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Create Plan</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Add custom duration options</span>
 								</div>
 							</a>
@@ -849,7 +849,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.05) 100%); border: 2px solid #06b6d4; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">💰📊</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Revenue Earnings</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Revenue Earnings</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">View dynamic business analytics</span>
 								</div>
 							</a>
@@ -858,7 +858,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📈📉</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Churn Risk</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Churn Risk</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">AI inactivity retention predictions</span>
 								</div>
 							</a>
@@ -867,7 +867,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.05) 100%); border: 2px solid #0ea5e9; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📊📈</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Renewal Pipeline</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Renewal Pipeline</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Track expiring memberships queue</span>
 								</div>
 							</a>
@@ -889,7 +889,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					<!-- Category 5: 🏋️ PERSONAL TRAINING & EXERCISE ROUTINES -->
 					<?php if ($current_role === 'super_admin' || $current_role === 'owner' || $current_role === 'trainer' || $current_role === 'reception'): ?>
 					<div style="margin-bottom: 35px;">
-						<h3 style="color: #1d1d1f; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
+						<h3 style="color: var(--text-main); font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
 							<span style="font-size: 22px;">🏋️</span> Personal Training & Routines
 						</h3>
 						<div class="dashboard-grid">
@@ -899,7 +899,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">🤝 PT</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Enroll PT Client</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Enroll PT Client</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Register coach assignments</span>
 								</div>
 							</a>
@@ -909,7 +909,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📋 PT</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">PT Assignments</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">PT Assignments</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Track personal training clients</span>
 								</div>
 							</a>
@@ -930,7 +930,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(251, 191, 36, 0.05) 100%); border: 2px solid #fbbf24; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">✏️ PT</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Record PT Session</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Record PT Session</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Log workout/nutrition notes</span>
 								</div>
 							</a>
@@ -939,7 +939,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%); border: 2px solid #a855f7; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">🔍 PT</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">PT Session Logs</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">PT Session Logs</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Review previous workouts data</span>
 								</div>
 							</a>
@@ -949,7 +949,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.05) 100%); border: 2px solid #06b6d4; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">🏋️➕</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Add Routine</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Add Routine</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Add custom workout structures</span>
 								</div>
 							</a>
@@ -958,7 +958,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">🏋️✏️</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Edit Routine</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Edit Routine</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Modify existing routine templates</span>
 								</div>
 							</a>
@@ -968,7 +968,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.05) 100%); border: 2px solid #0ea5e9; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">🏋️🔍</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">View Routine</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">View Routine</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Preview exercises & reps lists</span>
 								</div>
 							</a>
@@ -977,7 +977,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(20, 184, 166, 0.15) 0%, rgba(20, 184, 166, 0.05) 100%); border: 2px solid #14b8a6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">⚖️📊</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">BMI Calc</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">BMI Calc</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Calculate client BMI metric</span>
 								</div>
 							</a>
@@ -989,7 +989,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					<!-- Category 6: ⚙️ SYSTEM SETTINGS & ADMIN CONTROL -->
 					<?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
 					<div style="margin-bottom: 30px;">
-						<h3 style="color: #1d1d1f; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
+						<h3 style="color: var(--text-main); font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; font-family: 'Inter', sans-serif; letter-spacing: -0.5px;">
 							<span style="font-size: 22px;">⚙️</span> System Settings & Admin Panel
 						</h3>
 						<div class="dashboard-grid">
@@ -998,7 +998,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">⚙️📅</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Auto Campaigns</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Auto Campaigns</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Configure reminders automations</span>
 								</div>
 							</a>
@@ -1007,7 +1007,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%); border: 2px solid #3b82f6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📣💬</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">WA Broadcast</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">WA Broadcast</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Send bulk messages to users</span>
 								</div>
 							</a>
@@ -1016,7 +1016,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(251, 191, 36, 0.05) 100%); border: 2px solid #fbbf24; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📖💵</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Expenses Ledger</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Expenses Ledger</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Record gym payouts & costs</span>
 								</div>
 							</a>
@@ -1025,7 +1025,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%); border: 2px solid #a855f7; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">👥🛡️</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Manage Staff</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Manage Staff</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Audit employee security roles</span>
 								</div>
 							</a>
@@ -1034,7 +1034,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.05) 100%); border: 2px solid #06b6d4; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">⚙️🏢</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Gym Settings</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Gym Settings</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Branding, logos & exclusive hours</span>
 								</div>
 							</a>
@@ -1043,7 +1043,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">💬⚙️</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">WhatsApp Setup</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">WhatsApp Setup</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Link Meta cloud credentials</span>
 								</div>
 							</a>
@@ -1053,7 +1053,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0.05) 100%); border: 2px solid #0ea5e9; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📧⚙️</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">SMTP Email</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">SMTP Email</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Manage SMTP server nodes</span>
 								</div>
 							</a>
@@ -1062,7 +1062,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%); border: 2px solid #ef4444; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">🔒⚙️</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Discount Lock</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Discount Lock</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Override manual discounts rules</span>
 								</div>
 							</a>
@@ -1072,7 +1072,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(20, 184, 166, 0.15) 0%, rgba(20, 184, 166, 0.05) 100%); border: 2px solid #14b8a6; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">💾⚙️</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Backup System</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Backup System</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Import/Export database dumps</span>
 								</div>
 							</a>
@@ -1081,7 +1081,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(255, 107, 0, 0.05) 100%); border: 2px solid #ff6b00; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">👤⚙️</div>
-									<h4 style="color: var(--text-main, #1d1d1f); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">My Profile</h4>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">My Profile</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Update my login credential keys</span>
 								</div>
 							</a>
@@ -1108,7 +1108,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="position: absolute; width: 8px; height: 8px; background: #ff6b00; border: 2px solid #ffffff; border-radius: 50%; z-index: 10; box-shadow: 0 0 8px rgba(255,107,0,0.8);"></div>
 								
 								<!-- Hour Hand -->
-								<div id="hour-hand" style="position: absolute; width: 4px; height: 32px; background: #ffffff; border-radius: 4px; bottom: 50%; left: calc(50% - 2px); transform-origin: bottom center; z-index: 5; transition: transform 0.1s cubic-bezier(0.4, 2.08, 0.55, 0.44);"></div>
+								<div id="hour-hand" style="position: absolute; width: 4px; height: 32px; background: var(--glass-bg); border-radius: 4px; bottom: 50%; left: calc(50% - 2px); transform-origin: bottom center; z-index: 5; transition: transform 0.1s cubic-bezier(0.4, 2.08, 0.55, 0.44);"></div>
 								
 								<!-- Minute Hand -->
 								<div id="min-hand" style="position: absolute; width: 3px; height: 44px; background: #ff6b00; border-radius: 3px; bottom: 50%; left: calc(50% - 1.5px); transform-origin: bottom center; z-index: 6; transition: transform 0.1s cubic-bezier(0.4, 2.08, 0.55, 0.44);"></div>
@@ -1125,7 +1125,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 							
 							<!-- Greeting & Digital Time info -->
 							<div>
-								<h3 id="smart-greeting" style="margin: 0 0 5px 0; font-weight: 700; color: var(--text-main, #1d1d1f); font-size: 20px;">System Loading...</h3>
+								<h3 id="smart-greeting" style="margin: 0 0 5px 0; font-weight: 700; color: var(--text-main, var(--text-main)); font-size: 20px;">System Loading...</h3>
 								<div style="font-size: 26px; font-weight: 800; color: #ff6b00; font-family: monospace; display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
 									<span id="digital-clock">00:00:00</span>
 									<span style="font-size: 13px; background: rgba(255, 107, 0, 0.15); padding: 1px 6px; border-radius: 4px; border: 1px solid rgba(255,107,0,0.3);" id="time-ampm">PM</span>
@@ -1140,25 +1140,25 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<span>🧠 Automated Smart Services</span>
 								<span id="services-sync-indicator" style="font-size: 9px; color: var(--text-muted); text-transform: none; font-weight: normal;">polling...</span>
 							</div>
-							<div style="font-size: 13px; color: var(--text-main, #1d1d1f); display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+							<div style="font-size: 13px; color: var(--text-main, var(--text-main)); display: flex; align-items: center; justify-content: space-between; gap: 10px;">
 								<span>Gate Controller Node:</span>
 								<span id="gate-status" style="color: #3b82f6; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><span style="display:inline-block; width:6px; height:6px; background:#3b82f6; border-radius:50%;"></span> checking...</span>
 							</div>
-							<div style="font-size: 13px; color: var(--text-main, #1d1d1f); display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+							<div style="font-size: 13px; color: var(--text-main, var(--text-main)); display: flex; align-items: center; justify-content: space-between; gap: 10px;">
 								<span>WhatsApp AI Daemon:</span>
 								<span style="display: inline-flex; align-items: center; gap: 6px;">
 									<span id="whatsapp-restart-container"></span>
 									<span id="whatsapp-status" style="color: #3b82f6; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><span style="display:inline-block; width:6px; height:6px; background:#3b82f6; border-radius:50%;"></span> checking...</span>
 								</span>
 							</div>
-							<div style="font-size: 13px; color: var(--text-main, #1d1d1f); display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+							<div style="font-size: 13px; color: var(--text-main, var(--text-main)); display: flex; align-items: center; justify-content: space-between; gap: 10px;">
 								<span>Biometric Sync Gateway:</span>
 								<span style="display: inline-flex; align-items: center; gap: 6px;">
 									<span id="biometric-restart-container"></span>
 									<span id="biometric-status" style="color: #3b82f6; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><span style="display:inline-block; width:6px; height:6px; background:#3b82f6; border-radius:50%;"></span> checking...</span>
 								</span>
 							</div>
-							<div style="font-size: 13px; color: var(--text-main, #1d1d1f); display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+							<div style="font-size: 13px; color: var(--text-main, var(--text-main)); display: flex; align-items: center; justify-content: space-between; gap: 10px;">
 								<span>Auto Expiry Auditing:</span>
 								<span id="expiry-status" style="color: #3b82f6; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><span style="display:inline-block; width:6px; height:6px; background:#3b82f6; border-radius:50%;"></span> checking...</span>
 							</div>
@@ -1581,7 +1581,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 							
 							html += `
 								<tr style="border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px;">
-									<td style="padding: 10px 12px; font-weight: 600; color: var(--text-main, #1d1d1f);">${log.name}</td>
+									<td style="padding: 10px 12px; font-weight: 600; color: var(--text-main, var(--text-main));">${log.name}</td>
 									<td style="padding: 10px 12px; font-family: monospace; font-size:12px;">${log.biometric_id}</td>
 									<td style="padding: 10px 12px; color: var(--text-muted);">${log.date}</td>
 									<td style="padding: 10px 12px; color: #ff6b00; font-family: monospace; font-weight:bold;">${log.time}</td>
@@ -1823,7 +1823,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
             <div class="row" style="margin-bottom: 30px; margin-left: 0; margin-right: 0;">
                 <div class="col-md-12" style="padding: 0;">
                     <div class="portal-card" style="background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; box-shadow: var(--glass-shadow); color: #ffffff;">
-                        <h3 style="color: var(--text-main, #1d1d1f); font-weight: 700; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                        <h3 style="color: var(--text-main, var(--text-main)); font-weight: 700; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
                             <span style="font-size: 20px;">💳</span> Today's Collection Breakdown
                         </h3>
                         <div style="display: flex; gap: 20px; flex-wrap: wrap;">
@@ -1837,7 +1837,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
                             </div>
                             <div style="flex: 1; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; border-left: 4px solid #ff6b00;">
                                 <div style="color: #9ca3af; font-size: 13px; text-transform: uppercase;">Total Today</div>
-                                <div style="font-size: 24px; font-weight: bold; color: var(--text-main, #1d1d1f);">₹<?php echo number_format($total_today); ?></div>
+                                <div style="font-size: 24px; font-weight: bold; color: var(--text-main, var(--text-main));">₹<?php echo number_format($total_today); ?></div>
                             </div>
                         </div>
                     </div>
@@ -1848,7 +1848,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			<div class="row" style="margin-bottom: 30px; margin-left: 0; margin-right: 0;">
 				<div class="col-md-12" style="padding: 0;">
 					<div class="portal-card" style="background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; box-shadow: var(--glass-shadow); color: #ffffff;">
-						<h3 style="color: var(--text-main, #1d1d1f); font-weight: 700; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+						<h3 style="color: var(--text-main, var(--text-main)); font-weight: 700; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
 							<span style="font-size: 20px;">⏱️</span> Live Session Batch Occupancy & Spots Remaining
 						</h3>
 						<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
@@ -1875,7 +1875,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<div style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
 									<div>
 										<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-											<h4 style="margin: 0; font-weight: 700; color: var(--text-main, #1d1d1f); font-size: 15px;"><?php echo htmlspecialchars($b['batch_name']); ?></h4>
+											<h4 style="margin: 0; font-weight: 700; color: var(--text-main, var(--text-main)); font-size: 15px;"><?php echo htmlspecialchars($b['batch_name']); ?></h4>
 											<span style="font-size: 11px; color: var(--text-muted); font-weight: bold;"><?php echo date('h:i A', strtotime($b['start_time'])); ?> - <?php echo date('h:i A', strtotime($b['end_time'])); ?></span>
 										</div>
 										<div style="font-size: 24px; font-weight: 800; color: #ff6b00; margin-bottom: 15px; font-family: monospace;">
@@ -2000,7 +2000,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			<div class="row" style="margin-top: 30px; margin-left: 0; margin-right: 0;">
 				<div class="col-md-12" style="padding: 0;">
 					<div class="portal-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; box-shadow: var(--glass-shadow); color: #ffffff;">
-						<h3 style="margin: 0 0 20px 0; color: var(--text-main, #1d1d1f); font-weight: 700; display: flex; align-items: center; gap: 10px;">
+						<h3 style="margin: 0 0 20px 0; color: var(--text-main, var(--text-main)); font-weight: 700; display: flex; align-items: center; gap: 10px;">
 							<i class="entypo-chart-bar" style="color: var(--accent-primary);"></i> Gym Analytics &amp; Visual Insights
 						</h3>
 						
@@ -2158,7 +2158,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 				<div class="col-md-12" style="padding: 0;">
 					<div class="portal-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; box-shadow: var(--glass-shadow); margin-bottom: 30px; color: #ffffff;">
 						<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
-							<h3 style="margin: 0; color: var(--text-main, #1d1d1f); font-weight: 700; display: flex; align-items: center; gap: 10px;">
+							<h3 style="margin: 0; color: var(--text-main, var(--text-main)); font-weight: 700; display: flex; align-items: center; gap: 10px;">
 								<i class="entypo-chart-line" style="color: var(--accent-primary);"></i> Monthly Profitability Report (<?php echo date('F Y'); ?>)
 							</h3>
 							<a href="expenses.php" class="btn btn-xs btn-info" style="background: rgba(59, 130, 246, 0.15); border: 1px solid var(--info); color: var(--info); border-radius: 4px; padding: 5px 12px; font-weight: 600; text-decoration: none;">
@@ -2203,7 +2203,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 				<div class="col-md-12">
 					<div class="portal-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; box-shadow: var(--glass-shadow); margin-bottom: 30px;">
 						<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-							<h3 style="margin: 0; color: var(--text-main, #1d1d1f); font-weight: 700; display: flex; align-items: center; gap: 10px;">
+							<h3 style="margin: 0; color: var(--text-main, var(--text-main)); font-weight: 700; display: flex; align-items: center; gap: 10px;">
 								<i class="entypo-alert" style="color: var(--accent-primary);"></i> Membership Expiry &amp; Alerts
 							</h3>
 							<span class="status-badge" style="background: rgba(255, 107, 0, 0.15); color: var(--accent-primary); border-color: var(--accent-primary); padding: 2px 10px; border: 1px solid var(--accent-primary); border-radius: 20px; font-size: 12px; font-weight: 600;">
@@ -2277,7 +2277,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 												?>
 												<tr style="border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.2s;">
 													<td style="padding: 12px 15px; font-family: monospace;"><?php echo htmlspecialchars($row['uid']); ?></td>
-													<td style="padding: 12px 15px; font-weight: 600; color: var(--text-main, #1d1d1f);"><?php echo htmlspecialchars($row['username']); ?></td>
+													<td style="padding: 12px 15px; font-weight: 600; color: var(--text-main, var(--text-main));"><?php echo htmlspecialchars($row['username']); ?></td>
 													<td style="padding: 12px 15px;"><?php echo htmlspecialchars($row['planName']); ?></td>
 													<td style="padding: 12px 15px; color: var(--text-muted);"><?php echo htmlspecialchars($row['expire']); ?></td>
 													<td style="padding: 12px 15px;">
@@ -2340,7 +2340,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					<?php if ($_SESSION['role'] === 'trainer'): ?>
 						<!-- Trainer View: My Assigned Clients -->
 						<div class="portal-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; box-shadow: var(--glass-shadow); margin-bottom: 30px;">
-							<h3 style="margin: 0 0 20px 0; color: var(--text-main, #1d1d1f); font-weight: 700; display: flex; align-items: center; gap: 10px;">
+							<h3 style="margin: 0 0 20px 0; color: var(--text-main, var(--text-main)); font-weight: 700; display: flex; align-items: center; gap: 10px;">
 								<i class="entypo-users" style="color: var(--accent-primary);"></i> My Assigned Active PT Clients
 							</h3>
 							<div class="table-responsive">
@@ -2377,7 +2377,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 												?>
 												<tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
 													<td style="padding: 12px 15px; font-family: monospace;"><?php echo htmlspecialchars($c_row['userid']); ?></td>
-													<td style="padding: 12px 15px; font-weight: 600; color: var(--text-main, #1d1d1f);"><?php echo htmlspecialchars($c_row['username']); ?></td>
+													<td style="padding: 12px 15px; font-weight: 600; color: var(--text-main, var(--text-main));"><?php echo htmlspecialchars($c_row['username']); ?></td>
 													<td style="padding: 12px 15px;"><?php echo htmlspecialchars($c_row['mobile']); ?></td>
 													<td style="padding: 12px 15px;"><?php echo htmlspecialchars($c_row['email']); ?></td>
 													<td style="padding: 12px 15px; color: #ff6b00; font-weight: 600;"><?php echo htmlspecialchars($c_row['expire_date']); ?></td>
@@ -2405,7 +2405,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 					<?php elseif ($_SESSION['role'] === 'super_admin' || $_SESSION['role'] === 'owner'): ?>
 						<!-- Admin/Owner View: Personal Trainers Client Counts -->
 						<div class="portal-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; box-shadow: var(--glass-shadow); margin-bottom: 30px;">
-							<h3 style="margin: 0 0 20px 0; color: var(--text-main, #1d1d1f); font-weight: 700; display: flex; align-items: center; gap: 10px;">
+							<h3 style="margin: 0 0 20px 0; color: var(--text-main, var(--text-main)); font-weight: 700; display: flex; align-items: center; gap: 10px;">
 								<i class="entypo-users" style="color: var(--accent-primary);"></i> Personal Trainer Active Client Allocation
 							</h3>
 							<div class="table-responsive">
@@ -2441,7 +2441,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 												?>
 												<tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
 													<td style="padding: 12px 15px; font-family: monospace;"><?php echo htmlspecialchars($t_row['username']); ?></td>
-													<td style="padding: 12px 15px; font-weight: 600; color: var(--text-main, #1d1d1f);"><?php echo htmlspecialchars($t_row['Full_name']); ?></td>
+													<td style="padding: 12px 15px; font-weight: 600; color: var(--text-main, var(--text-main));"><?php echo htmlspecialchars($t_row['Full_name']); ?></td>
 													<td style="padding: 12px 15px; text-align: center;">
 														<span style="display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; background: <?php echo $t_row['client_count'] > 0 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255,255,255,0.05)'; ?>; color: <?php echo $t_row['client_count'] > 0 ? 'var(--success)' : 'var(--text-muted)'; ?>; border: 1px solid <?php echo $t_row['client_count'] > 0 ? 'var(--success)' : 'rgba(255,255,255,0.1)'; ?>;">
 															<?php echo $t_row['client_count']; ?> Client(s)
@@ -2473,7 +2473,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			<div class="row" style="margin-top: 20px;">
 				<div class="col-md-12">
 					<div class="portal-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; box-shadow: var(--glass-shadow); margin-bottom: 20px; color: #ffffff;">
-						<h3 style="margin: 0 0 20px 0; color: var(--text-main, #1d1d1f); font-weight: 700; display: flex; align-items: center; gap: 10px;">
+						<h3 style="margin: 0 0 20px 0; color: var(--text-main, var(--text-main)); font-weight: 700; display: flex; align-items: center; gap: 10px;">
 							<i class="entypo-gift" style="color: #ff6b00;"></i> Today's Member Celebrations
 							<?php
 							$today_md = date('m-d');
@@ -2590,7 +2590,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			<div class="row" style="margin-top: 20px;">
 				<div class="col-md-7">
 					<div class="portal-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; box-shadow: var(--glass-shadow); margin-bottom: 30px;">
-						<h3 style="margin: 0 0 20px 0; color: var(--text-main, #1d1d1f); font-weight: 700; display: flex; align-items: center; gap: 10px;">
+						<h3 style="margin: 0 0 20px 0; color: var(--text-main, var(--text-main)); font-weight: 700; display: flex; align-items: center; gap: 10px;">
 							<i class="entypo-clock" style="color: var(--accent-primary);"></i> Live Attendance Punch Feed
 						</h3>
 						<div class="table-responsive">
@@ -2617,7 +2617,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 				</div>
 				<div class="col-md-5">
 					<div class="portal-card" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; box-shadow: var(--glass-shadow); margin-bottom: 30px;">
-						<h3 style="margin: 0 0 20px 0; color: var(--text-main, #1d1d1f); font-weight: 700; display: flex; align-items: center; gap: 10px;">
+						<h3 style="margin: 0 0 20px 0; color: var(--text-main, var(--text-main)); font-weight: 700; display: flex; align-items: center; gap: 10px;">
 							<i class="entypo-drive" style="color: var(--accent-primary);"></i> Database Integrity &amp; SQL Backups
 						</h3>
 						<p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 15px;">

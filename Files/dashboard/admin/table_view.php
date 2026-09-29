@@ -130,8 +130,8 @@ if ($status === 'active') {
 		flex-wrap: wrap;
 	}
 	.tab-btn {
-		background: #ffffff;
-		color: #1d1d1f;
+		background: var(--glass-bg);
+		color: var(--text-main);
 		border: 1px solid rgba(0, 0, 0, 0.1);
 		padding: 9px 18px;
 		border-radius: 10px;
@@ -162,7 +162,7 @@ if ($status === 'active') {
 		border-radius: 20px;
 		font-size: 11px;
 		font-weight: 700;
-		color: #1d1d1f;
+		color: var(--text-main);
 	}
 	.tab-btn.active-tab .tab-count {
 		background: rgba(255, 255, 255, 0.25);
@@ -272,7 +272,7 @@ if ($status === 'active') {
 				👑 1 Year (12 Mo) <span class="tab-count" style="background: #ff6b00;"><?php echo $year_count; ?></span>
 			</a>
 			<a href="?status=6months" class="tab-btn <?php echo $status === '6months' ? 'active-tab' : ''; ?>" style="border-color: rgba(255, 183, 3, 0.4);">
-				🔥 6 Months <span class="tab-count" style="background: #ffb703; color: #000;"><?php echo $six_month_count; ?></span>
+				🔥 6 Months <span class="tab-count" style="background: #ffb703; color: var(--text-main);"><?php echo $six_month_count; ?></span>
 			</a>
 			<a href="?status=3months" class="tab-btn <?php echo $status === '3months' ? 'active-tab' : ''; ?>" style="border-color: rgba(255, 215, 0, 0.4);">
 				⚡ 3 Months <span class="tab-count" style="background: #ffd700;"><?php echo $three_month_count; ?></span>
