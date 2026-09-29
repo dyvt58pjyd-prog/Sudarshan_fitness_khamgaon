@@ -56,104 +56,19 @@ if (substr($logo_path, 0, 6) === '../../') {
 	<link rel="stylesheet" href="./css/premium.css"/>
     <script src="./js/theme_engine.js"></script>
     <style>
-    /* Energetic Navratri & Garba Surge Login Aesthetic */
-    [data-theme="festive"] #titan-login-body,
-    body.festive-theme-active #titan-login-body,
-    [data-theme="festive"] {
-        background-color: #0c071e !important;
-        background-image: 
-            radial-gradient(at 0% 0%, rgba(42, 8, 69, 0.95) 0, transparent 55%), 
-            radial-gradient(at 100% 0%, rgba(233, 30, 99, 0.35) 0, transparent 50%), 
-            radial-gradient(at 50% 100%, rgba(255, 87, 34, 0.3) 0, transparent 60%) !important;
-        background-attachment: fixed !important;
-        background-size: cover !important;
-    }
-
-    [data-theme="festive"] #titan-login-container,
-    body.festive-theme-active #titan-login-container {
-        background: rgba(24, 13, 56, 0.88) !important;
-        backdrop-filter: blur(30px) saturate(180%) !important;
-        -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
-        border: 1.5px solid rgba(255, 193, 7, 0.4) !important;
-        box-shadow: 0 30px 60px rgba(233, 30, 99, 0.3), 0 0 30px rgba(255, 87, 34, 0.2) !important;
-    }
-
-    [data-theme="festive"] .industrial-title,
-    body.festive-theme-active .industrial-title {
-        color: #fffdf5 !important;
-        text-shadow: 0 0 10px rgba(255, 193, 7, 0.4) !important;
-    }
-
-    [data-theme="festive"] .category-tab,
-    body.festive-theme-active .category-tab {
-        background: rgba(255, 255, 255, 0.06) !important;
-        border: 1px solid rgba(255, 87, 34, 0.2) !important;
-    }
-
-    [data-theme="festive"] .category-tab.active,
-    body.festive-theme-active .category-tab.active {
-        background: linear-gradient(135deg, #FF5722 0%, #E91E63 100%) !important;
-        border-color: #FFC107 !important;
-        box-shadow: 0 4px 15px rgba(255, 87, 34, 0.5) !important;
-    }
-
-    [data-theme="festive"] .category-tab i,
-    [data-theme="festive"] .category-tab span,
-    body.festive-theme-active .category-tab i,
-    body.festive-theme-active .category-tab span {
-        color: #e2b8ff !important;
-    }
-
-    [data-theme="festive"] .category-tab.active i,
-    [data-theme="festive"] .category-tab.active span,
-    body.festive-theme-active .category-tab.active i,
-    body.festive-theme-active .category-tab.active span {
-        color: #ffffff !important;
-    }
-
-    [data-theme="festive"] .input-group,
-    body.festive-theme-active .input-group {
-        background: rgba(35, 18, 77, 0.9) !important;
-        border: 1px solid rgba(255, 87, 34, 0.4) !important;
-    }
-
-    [data-theme="festive"] .input-group:focus-within,
-    body.festive-theme-active .input-group:focus-within {
-        border-color: #FFC107 !important;
-        box-shadow: 0 0 18px rgba(255, 87, 34, 0.6) !important;
-    }
-
-    [data-theme="festive"] .input-group-addon,
-    [data-theme="festive"] .form-control,
-    body.festive-theme-active .input-group-addon,
-    body.festive-theme-active .form-control {
-        color: #ffffff !important;
-    }
-
-    [data-theme="festive"] .btn-primary,
-    body.festive-theme-active .btn-primary {
-        background: linear-gradient(135deg, #FF5722 0%, #E91E63 50%, #FFC107 100%) !important;
-        color: #ffffff !important;
-        font-weight: 800 !important;
-        box-shadow: 0 8px 25px rgba(255, 87, 34, 0.5) !important;
-    }
-
-    /* Standard Apple Minimalist Default */
+    /* Naruto Theme Login Aesthetic */
     #titan-login-body {
-
-        /* MacOS style soft mesh gradient */
-        background-color: #f5f5f7 !important;
+        background-color: var(--bg-dark) !important;
         background-image: 
-            radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-            radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-            radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%) !important;
+            radial-gradient(circle at 50% 10%, rgba(255, 123, 0, 0.2) 0%, transparent 60%),
+            radial-gradient(circle at 90% 80%, rgba(30, 144, 255, 0.15) 0%, transparent 50%) !important;
         background-attachment: fixed !important;
         background-size: cover !important;
         min-height: 100vh;
         display: block;
         margin: 0;
         padding: 40px 20px;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+        font-family: 'Outfit', sans-serif !important;
         box-sizing: border-box;
     }
 
@@ -161,13 +76,13 @@ if (substr($logo_path, 0, 6) === '../../') {
         max-width: 480px !important;
         width: 100% !important;
         margin: 0 auto;
-        background: rgba(255, 255, 255, 0.85) !important;
-        backdrop-filter: blur(40px) saturate(200%) !important;
-        -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.5) !important;
-        border-radius: 32px !important;
+        background: var(--glass-bg) !important;
+        backdrop-filter: blur(15px) !important;
+        -webkit-backdrop-filter: blur(15px) !important;
+        border: 1px solid var(--glass-border) !important;
+        border-radius: 20px !important;
         padding: 40px 35px !important;
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255,255,255,0.2) inset !important;
+        box-shadow: var(--glass-shadow) !important;
         position: relative;
         z-index: 10;
     }
@@ -180,8 +95,8 @@ if (substr($logo_path, 0, 6) === '../../') {
     }
 
     #titan-login-body .category-tab {
-        background: rgba(0, 0, 0, 0.03) !important;
-        border: 1px solid transparent !important;
+        background: rgba(255, 123, 0, 0.05) !important;
+        border: 1px solid rgba(255, 123, 0, 0.2) !important;
         border-radius: 16px !important;
         padding: 10px 4px !important;
         text-align: center !important;
@@ -195,63 +110,63 @@ if (substr($logo_path, 0, 6) === '../../') {
     }
 
     #titan-login-body .category-tab:hover {
-        background: rgba(0, 0, 0, 0.06) !important;
+        background: rgba(255, 123, 0, 0.1) !important;
         transform: scale(1.02);
     }
 
     #titan-login-body .category-tab.active {
-        background: #ffffff !important;
-        border-color: rgba(0,0,0,0.05) !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+        background: rgba(255, 123, 0, 0.2) !important;
+        border-color: var(--accent-primary) !important;
+        box-shadow: 0 4px 12px rgba(255, 123, 0, 0.3) !important;
         transform: scale(1.05);
     }
 
     #titan-login-body .category-tab i {
         font-size: 20px !important;
-        color: #86868b !important;
+        color: var(--text-muted) !important;
         transition: color 0.3s ease;
     }
     
     #titan-login-body .category-tab.active i {
-        color: #0071e3 !important;
+        color: var(--accent-primary) !important;
     }
 
     #titan-login-body .category-tab span {
         font-size: 10px !important;
         font-weight: 700 !important;
-        color: #86868b !important;
+        color: var(--text-muted) !important;
         letter-spacing: 0px !important;
         transition: color 0.3s ease;
     }
 
     #titan-login-body .category-tab.active span {
-        color: #1d1d1f !important;
+        color: var(--text-main) !important;
     }
 
     /* Override input group styles completely */
     #titan-login-body .input-group {
         display: flex !important;
         align-items: center !important;
-        background: rgba(255, 255, 255, 0.9) !important;
-        border: 1.5px solid rgba(0, 0, 0, 0.08) !important;
+        background: rgba(0, 0, 0, 0.4) !important;
+        border: 1.5px solid rgba(255, 123, 0, 0.2) !important;
         border-radius: 16px !important;
         margin-bottom: 16px !important;
         padding: 4px 12px !important;
         transition: all 0.3s ease !important;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.02) !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2) !important;
     }
 
     #titan-login-body .input-group:focus-within {
-        border-color: #0071e3 !important;
-        box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.15) !important;
-        background: #ffffff !important;
+        border-color: var(--accent-primary) !important;
+        box-shadow: 0 0 0 4px rgba(255, 123, 0, 0.15) !important;
+        background: rgba(0, 0, 0, 0.6) !important;
     }
 
     #titan-login-body .input-group-addon {
         background: transparent !important;
         border: none !important;
         padding: 0 10px 0 4px !important;
-        color: #86868b !important;
+        color: var(--text-muted) !important;
         font-size: 18px !important;
     }
 
@@ -259,7 +174,7 @@ if (substr($logo_path, 0, 6) === '../../') {
         background: transparent !important;
         border: none !important;
         box-shadow: none !important;
-        color: #1d1d1f !important;
+        color: var(--text-main) !important;
         padding: 12px 0 !important;
         font-size: 16px !important;
         font-weight: 500 !important;
@@ -275,12 +190,12 @@ if (substr($logo_path, 0, 6) === '../../') {
     }
 
     #titan-login-body .form-control::placeholder {
-        color: #a1a1a6 !important;
+        color: var(--text-muted) !important;
         font-weight: 400 !important;
     }
 
     #titan-login-body .btn-primary {
-        background: #1d1d1f !important;
+        background: var(--accent-primary) !important;
         color: #ffffff !important;
         border: none !important;
         padding: 16px !important;
@@ -288,19 +203,20 @@ if (substr($logo_path, 0, 6) === '../../') {
         font-weight: 600 !important;
         font-size: 16px !important;
         width: 100% !important;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+        box-shadow: 0 8px 20px rgba(255, 123, 0, 0.3) !important;
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
         margin-top: 8px !important;
     }
 
     #titan-login-body .btn-primary:hover {
-        background: #000000 !important;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25) !important;
+        background: var(--accent-hover) !important;
+        box-shadow: 0 10px 25px rgba(255, 123, 0, 0.4) !important;
         transform: translateY(-2px);
     }
     
     #titan-login-body .industrial-title {
-        color: #1d1d1f !important;
+        color: var(--text-main) !important;
+        font-family: 'Orbitron', sans-serif !important;
         font-weight: 800 !important;
         font-size: 24px !important;
         letter-spacing: -0.5px !important;
@@ -313,7 +229,7 @@ if (substr($logo_path, 0, 6) === '../../') {
         font-weight: 600 !important;
         font-size: 13px !important;
         padding: 12px !important;
-        border: 1px solid rgba(0,0,0,0.05) !important;
+        border: 1px solid rgba(255,123,0,0.2) !important;
         transition: all 0.3s ease !important;
     }
     </style>
@@ -324,31 +240,24 @@ if (substr($logo_path, 0, 6) === '../../') {
         <div id="titan-login-container" class="login-container">
             <div class="login-header login-caret">
                 <div class="login-content" style="text-align: center;">
-                    
-                    <div style="margin-bottom: 14px;">
-                        <div style="background: linear-gradient(135deg, #FF5722 0%, #E91E63 50%, #FFC107 100%); color: #ffffff; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; display: inline-block; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(255, 87, 34, 0.4); text-transform: uppercase;">
-                            ✨ 🔱 NAVRATRI & GARBA SURGE EDITION 🔱 ✨
-                        </div>
-                    </div>
 
-                    <div style="display: flex; justify-content: center; align-items: center; gap: -10px; margin-bottom: 15px;">
-                        <img src="./images/ganesha_gym.jpg" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 8px 16px rgba(0,0,0,0.1); z-index: 2;">
-                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="height: 50px; width: auto; margin-left: -15px; border-radius: 8px; z-index: 1;" />
+                    <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 15px;">
+                        <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Gym Logo" style="height: 60px; width: auto; border-radius: 8px; z-index: 1;" />
                     </div>
 
                     <div class="industrial-title">
                         <?php echo htmlspecialchars($gym['gym_name']); ?>
                     </div>
-                    <p class="description" style="color: #d8b4fe; font-size: 13px; font-weight: 600; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">
+                    <p class="description" style="color: var(--text-muted); font-size: 13px; font-weight: 600; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">
                         Secure Access Portal
                     </p>
                     
                     <!-- Quick Theme Selector Pill -->
                     <div style="margin-bottom: 20px;">
-                        <select id="sf-theme-select-login" onchange="SFThemeEngine.setThemeMode(this.value)" style="background: rgba(35, 18, 77, 0.85); color: #FFC107; border: 1.5px solid #FF5722; border-radius: 12px; padding: 6px 14px; font-size: 12px; font-weight: 700; cursor: pointer; outline: none; box-shadow: 0 4px 12px rgba(255,87,34,0.3);">
-                            <option value="festive">🔱 Theme 2: Navratri & Garba Surge</option>
-                            <option value="dark">🌙 Dark Mode</option>
-                            <option value="light">☀️ Light Mode</option>
+                        <select id="sf-theme-select-login" onchange="SFThemeEngine.setThemeMode(this.value)" style="background: rgba(255, 123, 0, 0.1); color: #fff; border: 1.5px solid #ff7b00; border-radius: 12px; padding: 6px 14px; font-size: 12px; font-weight: 700; cursor: pointer; outline: none; box-shadow: 0 4px 12px rgba(255,123,0,0.3);">
+                            <option value="dark" style="color: #000;">🌙 Dark Mode (Naruto)</option>
+                            <option value="system" style="color: #000;">💻 System Mode</option>
+                            <option value="light" style="color: #000;">☀️ Light Mode</option>
                         </select>
                         <script>
                             document.addEventListener('DOMContentLoaded', function() {

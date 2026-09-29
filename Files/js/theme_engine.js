@@ -1,60 +1,38 @@
 /**
  * Sudarshan Fitness v2.0 Theme Engine
- * Persistent Theme Switcher (Festive Navratri / Dark / Light / System Mode + Accent Customizer)
+ * Persistent Theme Switcher (Dark / Light / System Mode + Primary Accent Customizer)
  */
 
 (function () {
     const THEME_KEY = 'sf_v2_theme_mode';
     const ACCENT_KEY = 'sf_v2_accent_color';
-    const FESTIVE_MIGRATION_KEY = 'sf_v2_festive_navratri_v1';
-
-    // Set default theme to 'festive' for the upcoming Hindu festival season!
-    if (!localStorage.getItem(FESTIVE_MIGRATION_KEY)) {
-        localStorage.setItem(THEME_KEY, 'festive');
-        localStorage.setItem(FESTIVE_MIGRATION_KEY, '1');
-    }
 
     function applyThemeMode(theme) {
-        if (!theme) theme = localStorage.getItem(THEME_KEY) || 'festive';
+        if (!theme) theme = localStorage.getItem(THEME_KEY) || 'dark';
 
         let effectiveTheme = theme;
         if (theme === 'system') {
             effectiveTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
 
-        document.documentElement.setAttribute('data-theme', effectiveTheme);
-        
-        if (effectiveTheme === 'festive') {
-            document.body && document.body.classList.add('festive-theme-active');
+        if (effectiveTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
         } else {
-            document.body && document.body.classList.remove('festive-theme-active');
+            document.documentElement.removeAttribute('data-theme');
         }
 
         localStorage.setItem(THEME_KEY, theme);
-
-        // Keep dropdown select in sync if rendered
-        const select = document.getElementById('sf-theme-select');
-        if (select && select.value !== theme) {
-            select.value = theme;
-        }
     }
 
     function applyAccentColor(color) {
-        if (!color) color = localStorage.getItem(ACCENT_KEY) || '#FF5722';
+        if (!color) color = localStorage.getItem(ACCENT_KEY) || '#ff7b00';
         document.documentElement.style.setProperty('--accent-primary', color);
         localStorage.setItem(ACCENT_KEY, color);
     }
 
     // Initialize immediately to prevent FOUC
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            applyThemeMode();
-            applyAccentColor();
-        });
-    } else {
-        applyThemeMode();
-        applyAccentColor();
-    }
+    applyThemeMode();
+    applyAccentColor();
 
     // Listen to system preference changes
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
@@ -69,15 +47,13 @@
             applyThemeMode(mode);
         },
         getThemeMode: function () {
-            return localStorage.getItem(THEME_KEY) || 'festive';
+            return localStorage.getItem(THEME_KEY) || 'dark';
         },
         setAccentColor: function (hexColor) {
             applyAccentColor(hexColor);
         },
         getAccentColor: function () {
-            return localStorage.getItem(ACCENT_KEY) || '#FF5722';
+            return localStorage.getItem(ACCENT_KEY) || '#00f0ff';
         }
     };
 })();
-
-
