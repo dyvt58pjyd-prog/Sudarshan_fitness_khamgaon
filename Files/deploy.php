@@ -8,10 +8,10 @@ if (!isset($_GET['key']) || $_GET['key'] !== $secret) {
 }
 
 $cwd = __DIR__;
+require_once __DIR__ . '/include/db_conn.php';
 
 // Execute test email first if requested
 if (isset($_GET['test_email']) && !empty($_GET['test_email'])) {
-    require_once __DIR__ . '/include/db_conn.php';
     require_once __DIR__ . '/include/smtp_mailer.php';
     $target_email = trim($_GET['test_email']);
     $sent = send_member_qr_pass_email($con, $target_email, 'Anurag Bawaskar', 'M-1001', '12 Month VIP Premium Membership', date('Y-m-d', strtotime('+1 year')));
