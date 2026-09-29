@@ -59,5 +59,8 @@ credentials to access the rest of the functionalities.
 
  ![Sample Portfolio](https://github.com/Rocktim53/Titan-Gym/blob/master/screenshot/userprofile.png)
 
+<!-- Sudarshan Fitness Deployment Verified: 2026-09-29 -->
+
+
 
 
