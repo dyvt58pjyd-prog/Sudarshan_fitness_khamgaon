@@ -105,7 +105,7 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
                 themeLi.id = 'sf-theme-switcher-wrapper';
                 themeLi.style.marginRight = '15px';
                 themeLi.innerHTML = `
-                    <select id="sf-theme-select" onchange="SFThemeEngine.setThemeMode(this.value)" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 1.5px solid #ff7b00; border-radius: 10px; padding: 6px 12px; font-size: 13px; font-weight: 700; font-family: 'Outfit', sans-serif; cursor: pointer; box-shadow: 0 4px 12px rgba(255,123,0,0.25);">
+                    <select id="sf-theme-select" onchange="SFThemeEngine.setThemeMode(this.value)" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: 1.5px solid #ff7b00; border-radius: 10px; padding: 6px 12px; font-size: 13px; font-weight: 700; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; cursor: pointer; box-shadow: 0 4px 12px rgba(255,123,0,0.25);">
                         <option value="dark" style="color: var(--text-main);">🌙 Dark Mode (Naruto)</option>
                         <option value="system" style="color: var(--text-main);">💻 System Mode</option>
                         <option value="light" style="color: var(--text-main);">☀️ Light Mode</option>

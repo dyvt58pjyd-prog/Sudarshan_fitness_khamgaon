@@ -63,7 +63,7 @@ $q_catalog = mysqli_query($con, "SELECT * FROM nutrition_products $where_clause 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Nutrition &amp; Supplement Store | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #070a13;
@@ -71,7 +71,7 @@ $q_catalog = mysqli_query($con, "SELECT * FROM nutrition_products $where_clause 
             --accent-orange: #f97316;
             --border: rgba(249, 115, 22, 0.25);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; }
         body { background: var(--bg-dark); color: #f8fafc; padding-bottom: 90px; }
 
         .header {

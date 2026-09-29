@@ -403,7 +403,7 @@ if (isset($_POST['submit_payment'])) {
                         <div class="qr-section">
                             <!-- Official Gym Payment Receiving Address Display -->
                             <div style="background: rgba(16, 185, 129, 0.1); border: 2px solid #10b981; border-radius: 16px; padding: 18px; margin-bottom: 20px; text-align: center; box-shadow: 0 0 25px rgba(16, 185, 129, 0.2);">
-                                <div style="font-size: 11px; font-weight: 900; color: #10b981; text-transform: uppercase; letter-spacing: 1.5px; font-family: 'Orbitron', sans-serif;">
+                                <div style="font-size: 11px; font-weight: 900; color: #10b981; text-transform: uppercase; letter-spacing: 1.5px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;">
                                     💳 OFFICIAL RECEIVING PAYMENT ADDRESS (VPA)
                                 </div>
                                 <div id="display-upi-vpa" style="font-size: 20px; font-weight: 900; color: #38bdf8; margin: 10px 0; font-family: monospace; letter-spacing: 1px; word-break: break-all;">
@@ -413,7 +413,7 @@ if (isset($_POST['submit_payment'])) {
                                     Payee / Merchant: <strong><?php echo htmlspecialchars(!empty($gym['bank_holder']) ? $gym['bank_holder'] : $gym['gym_name']); ?></strong>
                                 </div>
 
-                                <button type="button" onclick="copyUpiAddress()" class="btn btn-success" style="font-weight: 800; font-family: 'Orbitron', sans-serif; padding: 10px 22px; border-radius: 10px; background: linear-gradient(135deg, #10b981, #059669); border: none; box-shadow: 0 4px 15px rgba(16,185,129,0.4); cursor: pointer;">
+                                <button type="button" onclick="copyUpiAddress()" class="btn btn-success" style="font-weight: 800; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; padding: 10px 22px; border-radius: 10px; background: linear-gradient(135deg, #10b981, #059669); border: none; box-shadow: 0 4px 15px rgba(16,185,129,0.4); cursor: pointer;">
                                     📋 CLICK TO COPY UPI ID
                                 </button>
 

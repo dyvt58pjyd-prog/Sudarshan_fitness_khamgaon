@@ -25,10 +25,10 @@ $gym = get_gym_details($con);
     <meta charset="utf-8">
     <title><?php echo htmlspecialchars($gym['gym_name']); ?> | PT Payment Receipt</title>
     <!-- Load modern typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             color: #1e293b;
             margin: 40px;
             background: #f8fafc;

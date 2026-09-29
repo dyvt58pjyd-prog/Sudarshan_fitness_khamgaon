@@ -172,7 +172,7 @@ $pending_count = mysqli_num_rows($q_pending);
 <head>
     <meta charset="utf-8">
     <title><?php echo htmlspecialchars($gym['gym_name']); ?> | Walk-In Visitor Enquiries</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/entypo.css">
     <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <style>
@@ -192,7 +192,7 @@ $pending_count = mysqli_num_rows($q_pending);
             --text-main: #ffffff;
             --text-muted: #94a3b8;
         }
-        body { background: var(--bg); color: var(--text-main); font-family: 'Outfit', sans-serif; padding: 25px; margin: 0; }
+        body { background: var(--bg); color: var(--text-main); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; padding: 25px; margin: 0; }
         .header-box { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 20px 30px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 25px; box-shadow: 0 4px 16px rgba(255,255,255,0.05); }
         .header-title h2 { margin: 0; font-size: 22px; font-weight: 800; color: var(--text-main); }
         .badge-pending { background: rgba(255,107,0,0.1); color: var(--accent); border: 1px solid var(--accent); padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 13px; }

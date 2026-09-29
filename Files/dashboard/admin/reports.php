@@ -59,17 +59,17 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     <title>Reports &amp; Export Center | Sudarshan Fitness v2.0</title>
     <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="../../css/entypo.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { background: var(--bg-dark); color: var(--text-main); padding: 25px; }
         .card { background: rgba(9, 14, 28, 0.9); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
-        .btn-action { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #ffffff; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; text-decoration: none; display: inline-block; }
-        .btn-tab { padding: 10px 18px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,240,255,0.05); color: var(--accent-primary); text-decoration: none; font-family: 'Orbitron'; font-size: 12px; font-weight: 800; }
+        .btn-action { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #ffffff; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 800; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-decoration: none; display: inline-block; }
+        .btn-tab { padding: 10px 18px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,240,255,0.05); color: var(--accent-primary); text-decoration: none; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 800; }
         .btn-tab.active { background: var(--accent-primary); color: #ffffff; }
         .table-custom { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .table-custom th, .table-custom td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(0,240,255,0.15); font-size: 13px; }
-        .table-custom th { color: var(--accent-primary); font-family: 'Orbitron'; text-transform: uppercase; }
-        .form-control { background: rgba(3,7,18,0.8); border: 1px solid rgba(0,240,255,0.3); color: var(--text-main); padding: 8px 12px; border-radius: 8px; font-family: 'Outfit'; color-scheme: dark; }
+        .table-custom th { color: var(--accent-primary); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-transform: uppercase; }
+        .form-control { background: rgba(3,7,18,0.8); border: 1px solid rgba(0,240,255,0.3); color: var(--text-main); padding: 8px 12px; border-radius: 8px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color-scheme: dark; }
     </style>
 </head>
 <body>
@@ -78,8 +78,8 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     <div style="max-width: 1300px; margin: 0 auto;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <div>
-                <h2 style="font-family: 'Orbitron'; color: var(--accent-primary); margin: 0;">📊 REPORTS &amp; EXPORT CENTER</h2>
-                <div style="color: var(--text-muted); font-size: 13px; font-family: 'Orbitron';">SUDARSHAN FITNESS v2.0 • FINANCIAL &amp; ATTENDANCE REPORTING</div>
+                <h2 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--accent-primary); margin: 0;">📊 REPORTS &amp; EXPORT CENTER</h2>
+                <div style="color: var(--text-muted); font-size: 13px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">SUDARSHAN FITNESS v2.0 • FINANCIAL &amp; ATTENDANCE REPORTING</div>
             </div>
             <div>
                 <a href="?type=<?php echo $report_type; ?>&start_date=<?php echo $start_date; ?>&end_date=<?php echo $end_date; ?>&export=csv" class="btn-action">📥 EXPORT CSV ➔</a>
@@ -99,18 +99,18 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
 
                 <form method="GET" style="display: flex; gap: 8px; align-items: center;">
                     <input type="hidden" name="type" value="<?php echo htmlspecialchars($report_type); ?>">
-                    <span style="font-size: 12px; color: var(--text-muted); font-family: 'Orbitron';">From:</span>
+                    <span style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">From:</span>
                     <input type="date" name="start_date" value="<?php echo htmlspecialchars($start_date); ?>" class="form-control" required>
-                    <span style="font-size: 12px; color: var(--text-muted); font-family: 'Orbitron';">To:</span>
+                    <span style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">To:</span>
                     <input type="date" name="end_date" value="<?php echo htmlspecialchars($end_date); ?>" class="form-control" required>
-                    <button type="submit" style="background: var(--accent-primary); color: #ffffff; border: none; padding: 8px 14px; border-radius: 8px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer;">FILTER</button>
+                    <button type="submit" style="background: var(--accent-primary); color: #ffffff; border: none; padding: 8px 14px; border-radius: 8px; font-weight: bold; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; cursor: pointer;">FILTER</button>
                 </form>
             </div>
         </div>
 
         <!-- Report Content -->
         <div class="card">
-            <h3 style="font-family: 'Orbitron'; color: var(--text-main); margin-top: 0; text-transform: uppercase;">
+            <h3 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--text-main); margin-top: 0; text-transform: uppercase;">
                 📋 <?php echo htmlspecialchars($report_type); ?> Report Data
             </h3>
 
@@ -138,13 +138,13 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
                     <tbody>
                         <?php while($r = mysqli_fetch_assoc($res)): ?>
                             <tr>
-                                <td style="font-family: 'Orbitron'; color: var(--accent-primary);"><?php echo htmlspecialchars($r['userid']); ?></td>
+                                <td style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--accent-primary);"><?php echo htmlspecialchars($r['userid']); ?></td>
                                 <td style="font-weight: bold;"><?php echo htmlspecialchars($r['username']); ?></td>
                                 <td><?php echo htmlspecialchars($r['mobile']); ?></td>
                                 <td><?php echo htmlspecialchars($r['email']); ?></td>
                                 <td><?php echo htmlspecialchars($r['joining_date']); ?></td>
-                                <td><span style="background: rgba(255,215,0,0.2); color: #a78bfa; border: 1px solid #ffd700; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-family: 'Orbitron';"><?php echo htmlspecialchars($r['planName'] ?? 'No Plan'); ?></span></td>
-                                <td><strong style="color: #ffb703; font-family: 'Orbitron';"><?php echo htmlspecialchars($r['expire'] ?? 'N/A'); ?></strong></td>
+                                <td><span style="background: rgba(255,215,0,0.2); color: #a78bfa; border: 1px solid #ffd700; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;"><?php echo htmlspecialchars($r['planName'] ?? 'No Plan'); ?></span></td>
+                                <td><strong style="color: #ffb703; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;"><?php echo htmlspecialchars($r['expire'] ?? 'N/A'); ?></strong></td>
                             </tr>
                         <?php endwhile; ?>
                     </tbody>
@@ -170,10 +170,10 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
                     <tbody>
                         <?php while($r = mysqli_fetch_assoc($res)): ?>
                             <tr>
-                                <td style="font-family: 'Orbitron'; color: var(--accent-primary);"><?php echo htmlspecialchars($r['et_id']); ?></td>
+                                <td style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--accent-primary);"><?php echo htmlspecialchars($r['et_id']); ?></td>
                                 <td style="font-weight: bold;"><?php echo htmlspecialchars($r['username']); ?></td>
                                 <td><?php echo htmlspecialchars($r['planName']); ?></td>
-                                <td style="color: #10b981; font-weight: bold; font-family: 'Orbitron';">₹<?php echo number_format($r['paid_amount']); ?></td>
+                                <td style="color: #10b981; font-weight: bold; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">₹<?php echo number_format($r['paid_amount']); ?></td>
                                 <td>₹<?php echo number_format($r['discount_amount']); ?></td>
                                 <td style="color: #ff0054; font-weight: bold;">₹<?php echo number_format($r['balance']); ?></td>
                                 <td><?php echo htmlspecialchars($r['paid_date']); ?></td>
@@ -201,9 +201,9 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
                         <?php while($r = mysqli_fetch_assoc($res)): ?>
                             <tr>
                                 <td style="font-weight: bold;"><?php echo htmlspecialchars($r['date']); ?></td>
-                                <td style="font-family: 'Orbitron'; color: var(--accent-primary);"><?php echo htmlspecialchars($r['uid']); ?></td>
+                                <td style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--accent-primary);"><?php echo htmlspecialchars($r['uid']); ?></td>
                                 <td><?php echo htmlspecialchars($r['username']); ?></td>
-                                <td><span style="color: #00f0ff; font-family: 'Orbitron';"><?php echo htmlspecialchars($r['entry_time'] ?? 'Recorded'); ?></span></td>
+                                <td><span style="color: #00f0ff; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;"><?php echo htmlspecialchars($r['entry_time'] ?? 'Recorded'); ?></span></td>
                                 <td><?php echo htmlspecialchars($r['exit_time'] ?? '--'); ?></td>
                             </tr>
                         <?php endwhile; ?>
@@ -230,8 +230,8 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
                             <tr>
                                 <td><?php echo htmlspecialchars($r['expense_date']); ?></td>
                                 <td style="font-weight: bold;"><?php echo htmlspecialchars($r['expense_name']); ?></td>
-                                <td><span style="background: rgba(255,0,84,0.15); color: #ff0054; border: 1px solid #ff0054; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-family: 'Orbitron';"><?php echo htmlspecialchars($r['category']); ?></span></td>
-                                <td style="color: #ff0054; font-weight: bold; font-family: 'Orbitron';">₹<?php echo number_format($r['amount']); ?></td>
+                                <td><span style="background: rgba(255,0,84,0.15); color: #ff0054; border: 1px solid #ff0054; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;"><?php echo htmlspecialchars($r['category']); ?></span></td>
+                                <td style="color: #ff0054; font-weight: bold; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">₹<?php echo number_format($r['amount']); ?></td>
                                 <td><?php echo htmlspecialchars($r['remarks'] ?? '-'); ?></td>
                             </tr>
                         <?php endwhile; ?>

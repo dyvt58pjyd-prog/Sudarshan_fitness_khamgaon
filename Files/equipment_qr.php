@@ -32,9 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['report_issue'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title><?php echo $eq ? htmlspecialchars($eq['equipment_name']) : 'Gym Equipment'; ?> | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; }
         body { background: #0b0f19; color: #f8fafc; min-height: 100vh; padding: 20px 15px; display: flex; justify-content: center; }
         .card { width: 100%; max-width: 440px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
         .badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['report_issue'])) {
 
     <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <span style="font-family: 'Orbitron', sans-serif; font-size: 11px; color: #38bdf8; font-weight: 800;">🏋️ SMART EQUIPMENT QR</span>
+            <span style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; font-size: 11px; color: #38bdf8; font-weight: 800;">🏋️ SMART EQUIPMENT QR</span>
             <span class="badge <?php echo ($eq && $eq['status'] === 'operational') ? 'badge-op' : 'badge-maint'; ?>">
                 <?php echo ($eq && $eq['status'] === 'operational') ? '🟢 OPERATIONAL' : '🔴 MAINTENANCE'; ?>
             </span>

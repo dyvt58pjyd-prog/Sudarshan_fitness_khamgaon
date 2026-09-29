@@ -24,7 +24,7 @@ $partner_name = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Nutrit
     align-items: center;
     gap: 12px;
     color: #fff;
-    font-family: 'Orbitron', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
     font-weight: 800;
     font-size: 16px;
     text-decoration: none !important;

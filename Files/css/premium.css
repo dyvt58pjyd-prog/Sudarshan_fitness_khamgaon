@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Outfit:wght@300;400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
   --bg-dark: #0f0a05;        /* Ninja Black/Brown */
@@ -20,11 +20,11 @@
 
 /* Base Typo & Hidden Leaf System Font Setup */
 body, html, p, span, a, div, td, th, li, input, select, textarea, button, label {
-  font-family: 'Outfit', sans-serif !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif !important;
 }
 
 h1, h2, h3, h4, h5, h6, .page-title, .panel-title, .system-title, .portal-title {
-  font-family: 'Orbitron', sans-serif !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif !important;
   letter-spacing: 1px;
 }
 

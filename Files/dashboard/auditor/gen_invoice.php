@@ -43,7 +43,7 @@ $total_paid = $paid_amount;
     <meta charset="utf-8">
     <title><?php echo htmlspecialchars($gym['gym_name']); ?> | Payment Receipt</title>
     <!-- Load modern typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
@@ -58,7 +58,7 @@ $total_paid = $paid_amount;
             --card-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.05), 0 0 0 1px rgba(15, 23, 42, 0.03);
         }
         body {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             color: var(--text-main);
             margin: 40px 20px;
             background: var(--bg-gradient);

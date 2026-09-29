@@ -24,11 +24,11 @@ $gym = get_gym_details($con);
     <title>Gym Announcements | Sudarshan Fitness v2.0</title>
     <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="../../css/entypo.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { background: var(--bg-dark); color: var(--text-main); padding: 25px; }
         .card { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
-        .btn-post { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #ffffff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
+        .btn-post { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #ffffff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; cursor: pointer; }
         .form-control { background: rgba(3,7,18,0.8); border: 1px solid rgba(255,107,0,0.3); color: var(--text-main); padding: 12px 18px; border-radius: 12px; width: 100%; font-size: 14px; margin-bottom: 15px; }
     </style>
 </head>
@@ -38,10 +38,10 @@ $gym = get_gym_details($con);
     <div style="max-width: 1100px; margin: 0 auto;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <div>
-                <h2 style="font-family: 'Orbitron'; color: var(--accent-primary); margin: 0;">📢 GYM ANNOUNCEMENTS &amp; BROADCAST</h2>
-                <div style="color: var(--text-muted); font-size: 13px; font-family: 'Orbitron';">SUDARSHAN FITNESS v2.0 • LIVE MEMBER BANNER MESSAGES</div>
+                <h2 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--accent-primary); margin: 0;">📢 GYM ANNOUNCEMENTS &amp; BROADCAST</h2>
+                <div style="color: var(--text-muted); font-size: 13px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">SUDARSHAN FITNESS v2.0 • LIVE MEMBER BANNER MESSAGES</div>
             </div>
-            <a href="index.php" style="background: rgba(255,107,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Orbitron'; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
+            <a href="index.php" style="background: rgba(255,107,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
         </div>
 
         <?php if ($msg): ?>
@@ -51,7 +51,7 @@ $gym = get_gym_details($con);
         <?php endif; ?>
 
         <div class="card">
-            <h3 style="font-family: 'Orbitron'; color: var(--text-main); margin-top: 0;">Broadcast Live Message to All Members</h3>
+            <h3 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--text-main); margin-top: 0;">Broadcast Live Message to All Members</h3>
             <form method="POST">
                 <textarea name="ann_text" class="form-control" rows="4" placeholder="e.g. 🔥 Special Sunday Deadlift & Squat Workshop at 8:00 AM! Free entry for all members!" required></textarea>
                 <button type="submit" name="post_announcement" class="btn-post">PUBLISH ANNOUNCEMENT BANNER ➔</button>

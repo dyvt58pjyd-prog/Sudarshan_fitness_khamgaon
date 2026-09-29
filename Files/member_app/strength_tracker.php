@@ -45,10 +45,10 @@ if ($best_1rm) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>1RM Strength Tracker | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; }
         body { background: #2c1b18; color: #f8fafc; min-height: 100vh; padding: 20px 15px; }
         .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .card { background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
@@ -61,7 +61,7 @@ if ($best_1rm) {
 
     <div class="header-bar">
         <a href="dashboard.php" style="color: #94a3b8; text-decoration: none; font-size: 13px; font-weight: 700;">← Back to App</a>
-        <span style="font-family: 'Orbitron', sans-serif; font-size: 11px; color: #f59e0b; font-weight: 800;">⚡ 1RM STRENGTH MATRIX</span>
+        <span style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; font-size: 11px; color: #f59e0b; font-weight: 800;">⚡ 1RM STRENGTH MATRIX</span>
     </div>
 
     <div style="margin-bottom: 20px;">

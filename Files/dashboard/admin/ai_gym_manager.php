@@ -66,11 +66,11 @@ if (!empty($query)) {
     <title>AI Gym Manager Command Center | Sudarshan Fitness v2.0</title>
     <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="../../css/entypo.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { background: var(--bg-dark); color: var(--text-main); padding: 25px; }
         .card { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
-        .btn-send { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #ffffff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
+        .btn-send { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #ffffff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; cursor: pointer; }
         .form-control { background: rgba(3,7,18,0.8); border: 1px solid rgba(255,107,0,0.3); color: var(--text-main); padding: 12px 18px; border-radius: 12px; width: 100%; font-size: 14px; margin-bottom: 15px; }
         .ai-box { background: var(--bg-dark); border: 1px solid var(--accent-primary); border-radius: 18px; padding: 20px; color: var(--text-main); line-height: 1.6; white-space: pre-wrap; font-size: 14px; box-shadow: 0 0 30px rgba(255,107,0,0.25); }
     </style>
@@ -81,42 +81,42 @@ if (!empty($query)) {
     <div style="max-width: 1200px; margin: 0 auto;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <div>
-                <h2 style="font-family: 'Orbitron'; color: var(--accent-primary); margin: 0;">👑 OWNER AI BUSINESS COMMAND CENTER</h2>
-                <div style="color: var(--text-muted); font-size: 13px; font-family: 'Orbitron';">SUDARSHAN FITNESS v2.0 • AI GYM MANAGER &amp; DAILY EXECUTIVE PRIORITIES</div>
+                <h2 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--accent-primary); margin: 0;">👑 OWNER AI BUSINESS COMMAND CENTER</h2>
+                <div style="color: var(--text-muted); font-size: 13px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">SUDARSHAN FITNESS v2.0 • AI GYM MANAGER &amp; DAILY EXECUTIVE PRIORITIES</div>
             </div>
-            <a href="index.php" style="background: rgba(255,107,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Orbitron'; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
+            <a href="index.php" style="background: rgba(255,107,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
         </div>
 
         <!-- Live KPI Snapshot -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px;">
             <div class="card" style="margin-bottom: 0; text-align: center;">
-                <div style="font-size: 11px; color: var(--text-muted); font-family: 'Orbitron';">TOTAL MEMBERS</div>
-                <div style="font-size: 32px; font-weight: 900; color: var(--text-main); font-family: 'Orbitron';"><?php echo number_format($m_total); ?></div>
+                <div style="font-size: 11px; color: var(--text-muted); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">TOTAL MEMBERS</div>
+                <div style="font-size: 32px; font-weight: 900; color: var(--text-main); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;"><?php echo number_format($m_total); ?></div>
             </div>
             <div class="card" style="margin-bottom: 0; text-align: center;">
-                <div style="font-size: 11px; color: var(--text-muted); font-family: 'Orbitron';">ACTIVE SUBSCRIBERS</div>
-                <div style="font-size: 32px; font-weight: 900; color: #10b981; font-family: 'Orbitron';"><?php echo number_format($m_active); ?></div>
+                <div style="font-size: 11px; color: var(--text-muted); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">ACTIVE SUBSCRIBERS</div>
+                <div style="font-size: 32px; font-weight: 900; color: #10b981; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;"><?php echo number_format($m_active); ?></div>
             </div>
             <div class="card" style="margin-bottom: 0; text-align: center;">
-                <div style="font-size: 11px; color: var(--text-muted); font-family: 'Orbitron';">TOTAL REVENUE</div>
-                <div style="font-size: 32px; font-weight: 900; color: var(--accent-primary); font-family: 'Orbitron';">₹<?php echo number_format($total_rev); ?></div>
+                <div style="font-size: 11px; color: var(--text-muted); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">TOTAL REVENUE</div>
+                <div style="font-size: 32px; font-weight: 900; color: var(--accent-primary); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">₹<?php echo number_format($total_rev); ?></div>
             </div>
             <div class="card" style="margin-bottom: 0; text-align: center;">
-                <div style="font-size: 11px; color: var(--text-muted); font-family: 'Orbitron';">NET PROFIT</div>
-                <div style="font-size: 32px; font-weight: 900; color: #ffb703; font-family: 'Orbitron';">₹<?php echo number_format($net_profit); ?></div>
+                <div style="font-size: 11px; color: var(--text-muted); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">NET PROFIT</div>
+                <div style="font-size: 32px; font-weight: 900; color: #ffb703; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">₹<?php echo number_format($net_profit); ?></div>
             </div>
         </div>
 
         <!-- AI Executive Chat Box -->
         <div class="card">
-            <h3 style="font-family: 'Orbitron'; color: var(--text-main); margin-top: 0;">🤖 Ask AI Gym Manager</h3>
+            <h3 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--text-main); margin-top: 0;">🤖 Ask AI Gym Manager</h3>
             
             <form method="POST">
                 <input type="text" name="query" class="form-control" placeholder="Ask AI: e.g. How is my gym performing this month? or What should I do today?" required>
                 <div style="display: flex; gap: 10px; margin-bottom: 20px;">
                     <button type="submit" class="btn-send">ASK AI MANAGER ➔</button>
-                    <button type="button" onclick="document.querySelector('input[name=query]').value='How is my gym performing this month?'; this.form.submit();" style="background: rgba(255,107,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 10px 16px; border-radius: 12px; font-family: 'Orbitron'; font-weight: 800; cursor: pointer;">💡 Performance Brief</button>
-                    <button type="button" onclick="document.querySelector('input[name=query]').value='What should I do today?'; this.form.submit();" style="background: rgba(255,107,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 10px 16px; border-radius: 12px; font-family: 'Orbitron'; font-weight: 800; cursor: pointer;">📋 Today's Priorities</button>
+                    <button type="button" onclick="document.querySelector('input[name=query]').value='How is my gym performing this month?'; this.form.submit();" style="background: rgba(255,107,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 10px 16px; border-radius: 12px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 800; cursor: pointer;">💡 Performance Brief</button>
+                    <button type="button" onclick="document.querySelector('input[name=query]').value='What should I do today?'; this.form.submit();" style="background: rgba(255,107,0,0.15); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 10px 16px; border-radius: 12px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 800; cursor: pointer;">📋 Today's Priorities</button>
                 </div>
             </form>
 

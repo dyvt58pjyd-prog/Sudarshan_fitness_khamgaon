@@ -80,7 +80,7 @@ $q_ip_list = mysqli_query($con, "SELECT * FROM blocked_ips ORDER BY id DESC LIMI
 <head>
     <meta charset="utf-8">
     <title><?php echo htmlspecialchars($gym['gym_name']); ?> | Security Master Command Center</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <style>
         :root {
@@ -101,9 +101,9 @@ $q_ip_list = mysqli_query($con, "SELECT * FROM blocked_ips ORDER BY id DESC LIMI
             --text-main: #ffffff;
             --text-muted: #94a3b8;
         }
-        body { background: var(--bg); color: var(--text-main); font-family: 'Outfit', sans-serif; padding: 25px; margin: 0; }
+        body { background: var(--bg); color: var(--text-main); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; padding: 25px; margin: 0; }
         .header-box { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 22px 30px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 25px; box-shadow: 0 4px 20px rgba(255,255,255,0.05); }
-        .header-title h2 { margin: 0; font-size: 22px; font-weight: 800; color: var(--text-main); font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+        .header-title h2 { margin: 0; font-size: 22px; font-weight: 800; color: var(--text-main); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; letter-spacing: 1px; }
         
         .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
         .stat-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 20px; text-align: center; box-shadow: 0 4px 16px rgba(255,255,255,0.05); }
@@ -111,7 +111,7 @@ $q_ip_list = mysqli_query($con, "SELECT * FROM blocked_ips ORDER BY id DESC LIMI
         .stat-lbl { color: var(--text-muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 
         .sec-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 20px rgba(255,255,255,0.05); }
-        .sec-title { font-size: 16px; font-weight: 800; color: var(--text-main); margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+        .sec-title { font-size: 16px; font-weight: 800; color: var(--text-main); margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
 
         .table-custom { width: 100%; border-collapse: collapse; font-size: 13px; }
         .table-custom th { background: var(--hover-bg, rgba(0,0,0,0.04)); color: var(--text-muted); text-transform: uppercase; font-size: 11px; padding: 12px 14px; text-align: left; font-weight: 700; border-bottom: 1px solid var(--border); }

@@ -29,7 +29,7 @@ if (isset($_SESSION['user_data'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>[SYSTEM PORTAL] 3D Virtual Gym Simulator | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Three.js 3D WebGL Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -46,7 +46,7 @@ if (isset($_SESSION['user_data'])) {
             --system-border: rgba(0, 240, 255, 0.35);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; }
 
         body {
             background: var(--bg-dark);
@@ -86,7 +86,7 @@ if (isset($_SESSION['user_data'])) {
         }
 
         .page-title {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             font-size: 18px;
             font-weight: 900;
             background: linear-gradient(135deg, #00f0ff, #0077ff);
@@ -106,7 +106,7 @@ if (isset($_SESSION['user_data'])) {
             font-size: 13px;
             font-weight: 800;
             text-decoration: none;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             transition: all 0.2s ease;
         }
 
@@ -146,7 +146,7 @@ if (isset($_SESSION['user_data'])) {
         }
 
         .panel-title {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             font-size: 14px;
             font-weight: 900;
             color: var(--system-cyan);
@@ -235,7 +235,7 @@ if (isset($_SESSION['user_data'])) {
         }
 
         .vp-title-box h3 {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             font-size: 18px;
             font-weight: 900;
             color: #fff;
@@ -293,7 +293,7 @@ if (isset($_SESSION['user_data'])) {
             border-radius: 14px;
             font-size: 13px;
             font-weight: 900;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -317,7 +317,7 @@ if (isset($_SESSION['user_data'])) {
             <img src="<?php echo htmlspecialchars($gym['gym_logo']); ?>" class="gym-logo" alt="Gym Logo">
             <div>
                 <div class="page-title">[ SYSTEM FLOOR NAVIGATOR ]</div>
-                <div style="font-size: 11px; color: var(--system-cyan); font-family: 'Orbitron'; font-weight: 700;">SOLO LEVELING MONARCH ENVIRONMENT</div>
+                <div style="font-size: 11px; color: var(--system-cyan); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 700;">SOLO LEVELING MONARCH ENVIRONMENT</div>
             </div>
         </div>
 
@@ -398,7 +398,7 @@ if (isset($_SESSION['user_data'])) {
                 <div class="dialogue-speaker">
                     <div class="speaker-avatar">⚔️</div>
                     <div>
-                        <strong style="color:#fff; font-size:13px; font-family:'Orbitron';">System AI Coach</strong>
+                        <strong style="color:#fff; font-size:13px; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">System AI Coach</strong>
                         <div style="font-size:10px; color:var(--system-cyan);">Shadow Vighnaharta Guide</div>
                     </div>
                 </div>
@@ -408,13 +408,13 @@ if (isset($_SESSION['user_data'])) {
             </div>
 
             <div style="display:flex; flex-direction:column; gap:8px; margin-top:15px;">
-                <button onclick="askCoach('chest')" style="background:rgba(0,240,255,0.1); border:1px solid var(--system-cyan); color:var(--system-cyan); padding:10px; border-radius:12px; font-weight:800; font-size:11px; cursor:pointer; text-align:left; font-family:'Orbitron';">
+                <button onclick="askCoach('chest')" style="background:rgba(0,240,255,0.1); border:1px solid var(--system-cyan); color:var(--system-cyan); padding:10px; border-radius:12px; font-weight:800; font-size:11px; cursor:pointer; text-align:left; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
                     💪 "System Quest: Chest Hypertrophy Plan"
                 </button>
-                <button onclick="askCoach('fatloss')" style="background:rgba(255,215,0,0.15); border:1px solid var(--monarch-purple); color:#a78bfa; padding:10px; border-radius:12px; font-weight:800; font-size:11px; cursor:pointer; text-align:left; font-family:'Orbitron';">
+                <button onclick="askCoach('fatloss')" style="background:rgba(255,215,0,0.15); border:1px solid var(--monarch-purple); color:#a78bfa; padding:10px; border-radius:12px; font-weight:800; font-size:11px; cursor:pointer; text-align:left; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
                     🔥 "System Quest: Cardio Stamina Protocol"
                 </button>
-                <button onclick="askCoach('protein')" style="background:rgba(255,183,3,0.15); border:1px solid var(--quest-gold); color:var(--quest-gold); padding:10px; border-radius:12px; font-weight:800; font-size:11px; cursor:pointer; text-align:left; font-family:'Orbitron';">
+                <button onclick="askCoach('protein')" style="background:rgba(255,183,3,0.15); border:1px solid var(--quest-gold); color:var(--quest-gold); padding:10px; border-radius:12px; font-weight:800; font-size:11px; cursor:pointer; text-align:left; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
                     🥤 "Item Shop: Recovery Elixir Recommendations"
                 </button>
             </div>

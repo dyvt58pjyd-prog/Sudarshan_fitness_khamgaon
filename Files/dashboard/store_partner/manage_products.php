@@ -66,7 +66,7 @@ $q_all_products = mysqli_query($con, "SELECT * FROM nutrition_products ORDER BY 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Catalog Manager | Sudarshan Nutrition</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #0b0f19;
@@ -74,7 +74,7 @@ $q_all_products = mysqli_query($con, "SELECT * FROM nutrition_products ORDER BY 
             --accent-orange: #f97316;
             --border-color: rgba(249, 115, 22, 0.25);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; }
         body { background: var(--bg-dark); color: #f8fafc; min-height: 100vh; }
         
         .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
@@ -87,7 +87,7 @@ $q_all_products = mysqli_query($con, "SELECT * FROM nutrition_products ORDER BY 
             flex-wrap: wrap;
             gap: 15px;
         }
-        .page-title { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 800; color: #fff; }
+        .page-title { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; font-size: 22px; font-weight: 800; color: #fff; }
 
         .form-card {
             background: var(--card-bg);

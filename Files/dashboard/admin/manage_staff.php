@@ -85,10 +85,10 @@ if (isset($_POST['add_staff'])) {
     <link href="a1style.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <!-- Load Outfits font -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
         }
         .page-container .sidebar-menu #main-menu li#staffmanage > a {
             background-color: rgba(0, 122, 255, 0.1) !important;

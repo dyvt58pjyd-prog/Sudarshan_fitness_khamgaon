@@ -118,25 +118,25 @@ $retention_rate = ($total_active > 0) ? round((count($consistent) / $total_activ
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px;">
                 <div style="background: rgba(239, 68, 68, 0.08); border: 1.5px solid #ef4444; border-radius: 16px; padding: 18px; text-align: center;">
                     <div style="font-size: 11px; font-weight: 800; color: #dc2626; text-transform: uppercase;">🔴 High Dropout Risk (Absent 7+ Days)</div>
-                    <div style="font-size: 32px; font-weight: 900; color: #dc2626; margin-top: 4px; font-family: 'Orbitron', sans-serif;"><?php echo count($high_risk); ?></div>
+                    <div style="font-size: 32px; font-weight: 900; color: #dc2626; margin-top: 4px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;"><?php echo count($high_risk); ?></div>
                     <div style="font-size: 11px; color: var(--text-muted, #64748b); margin-top: 2px;">Need Immediate Follow-Up</div>
                 </div>
 
                 <div style="background: rgba(245, 158, 11, 0.08); border: 1.5px solid #f59e0b; border-radius: 16px; padding: 18px; text-align: center;">
                     <div style="font-size: 11px; font-weight: 800; color: #d97706; text-transform: uppercase;">🟡 Moderate Risk (Absent 4-6 Days)</div>
-                    <div style="font-size: 32px; font-weight: 900; color: #d97706; margin-top: 4px; font-family: 'Orbitron', sans-serif;"><?php echo count($moderate_risk); ?></div>
+                    <div style="font-size: 32px; font-weight: 900; color: #d97706; margin-top: 4px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;"><?php echo count($moderate_risk); ?></div>
                     <div style="font-size: 11px; color: var(--text-muted, #64748b); margin-top: 2px;">Dropping Attendance</div>
                 </div>
 
                 <div style="background: rgba(16, 185, 129, 0.08); border: 1.5px solid #10b981; border-radius: 16px; padding: 18px; text-align: center;">
                     <div style="font-size: 11px; font-weight: 800; color: #059669; text-transform: uppercase;">🟢 Active &amp; Consistent Athletes</div>
-                    <div style="font-size: 32px; font-weight: 900; color: #059669; margin-top: 4px; font-family: 'Orbitron', sans-serif;"><?php echo count($consistent); ?></div>
+                    <div style="font-size: 32px; font-weight: 900; color: #059669; margin-top: 4px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;"><?php echo count($consistent); ?></div>
                     <div style="font-size: 11px; color: var(--text-muted, #64748b); margin-top: 2px;">Working Out Regularly</div>
                 </div>
 
                 <div style="background: rgba(56, 189, 248, 0.08); border: 1.5px solid #38bdf8; border-radius: 16px; padding: 18px; text-align: center;">
                     <div style="font-size: 11px; font-weight: 800; color: #0284c7; text-transform: uppercase;">📊 Gym Retention Health Score</div>
-                    <div style="font-size: 32px; font-weight: 900; color: #0284c7; margin-top: 4px; font-family: 'Orbitron', sans-serif;"><?php echo $retention_rate; ?>%</div>
+                    <div style="font-size: 32px; font-weight: 900; color: #0284c7; margin-top: 4px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;"><?php echo $retention_rate; ?>%</div>
                     <div style="font-size: 11px; color: var(--text-muted, #64748b); margin-top: 2px;">Healthy Active Ratio</div>
                 </div>
             </div>

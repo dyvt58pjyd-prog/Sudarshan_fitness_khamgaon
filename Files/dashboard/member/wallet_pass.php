@@ -92,11 +92,11 @@ $wa_url = "https://wa.me/?text=" . urlencode($wa_text);
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Sudarshan Pass">
     <link rel="apple-touch-icon" href="../../images/logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; }
         body { background: #2c1b18; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 15px; }
         
         .pass-container {
@@ -133,7 +133,7 @@ $wa_url = "https://wa.me/?text=" . urlencode($wa_text);
             border: 1px solid rgba(255,215,0,0.4);
         }
 
-        .gym-meta-title { font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 900; letter-spacing: 1px; color: #fff; text-transform: uppercase; }
+        .gym-meta-title { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; font-size: 13px; font-weight: 900; letter-spacing: 1px; color: #fff; text-transform: uppercase; }
         .gym-meta-sub { font-size: 9.5px; color: rgba(255,255,255,0.8); letter-spacing: 0.5px; text-transform: uppercase; font-weight: 700; }
 
         .status-pill {
@@ -165,7 +165,7 @@ $wa_url = "https://wa.me/?text=" . urlencode($wa_text);
         .member-photo-frame img { width: 100%; height: 100%; object-fit: cover; }
 
         .member-name { font-size: 22px; font-weight: 900; color: #fff; letter-spacing: 0.5px; margin-bottom: 2px; }
-        .member-id-tag { font-family: 'Orbitron', monospace; font-size: 12px; color: #38bdf8; font-weight: 800; letter-spacing: 1px; }
+        .member-id-tag { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, monospace; font-size: 12px; color: #38bdf8; font-weight: 800; letter-spacing: 1px; }
 
         /* Comprehensive Matrix Grid */
         .details-grid {

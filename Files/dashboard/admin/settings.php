@@ -28,11 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
     <title>System Settings | Sudarshan Fitness v2.0</title>
     <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="../../css/entypo.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { background: var(--bg-dark); color: var(--text-main); padding: 25px; }
         .card { background: rgba(9, 14, 28, 0.9); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
-        .btn-save { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #ffffff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
+        .btn-save { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #ffffff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; cursor: pointer; }
         .form-control { background: rgba(3,7,18,0.8); border: 1px solid rgba(0,240,255,0.3); color: var(--text-main); padding: 10px 14px; border-radius: 10px; width: 100%; margin-bottom: 15px; }
     </style>
 </head>
@@ -42,10 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
     <div style="max-width: 1100px; margin: 0 auto;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <div>
-                <h2 style="font-family: 'Orbitron'; color: var(--accent-primary); margin: 0;">⚙️ SYSTEM SETTINGS</h2>
-                <div style="color: var(--text-muted); font-size: 13px; font-family: 'Orbitron';">SUDARSHAN FITNESS v2.0 • GLOBAL CONFIGURATION</div>
+                <h2 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--accent-primary); margin: 0;">⚙️ SYSTEM SETTINGS</h2>
+                <div style="color: var(--text-muted); font-size: 13px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">SUDARSHAN FITNESS v2.0 • GLOBAL CONFIGURATION</div>
             </div>
-            <a href="index.php" style="background: rgba(0,240,255,0.1); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Orbitron'; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
+            <a href="index.php" style="background: rgba(0,240,255,0.1); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
         </div>
 
         <?php if ($msg): ?>
@@ -58,24 +58,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
         <div class="card" style="border-color: #00f0ff; background: rgba(0,240,255,0.04);">
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
                 <div>
-                    <div style="font-family: 'Orbitron'; font-size: 11px; color: var(--accent-primary); font-weight: 900; letter-spacing: 2px;">[ APPLICATION PLATFORM ]</div>
-                    <h3 style="font-family: 'Orbitron'; margin: 4px 0 0 0; color: var(--text-main); font-size: 22px;">SUDARSHAN FITNESS v2.0</h3>
+                    <div style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 11px; color: var(--accent-primary); font-weight: 900; letter-spacing: 2px;">[ APPLICATION PLATFORM ]</div>
+                    <h3 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 4px 0 0 0; color: var(--text-main); font-size: 22px;">SUDARSHAN FITNESS v2.0</h3>
                     <p style="color: var(--text-muted); font-size: 12px; margin-top: 4px;">Train Hard. Stay Strong. Live Better. • Premium Commercial Gym Platform</p>
                 </div>
                 <div style="text-align: right;">
-                    <span style="background: linear-gradient(135deg, #00f0ff, #ffd700); color: #ffffff; padding: 6px 16px; border-radius: 12px; font-weight: 900; font-family: 'Orbitron'; font-size: 12px; box-shadow: 0 0 20px rgba(0,240,255,0.6);">STATUS: ACTIVE (v2.0)</span>
+                    <span style="background: linear-gradient(135deg, #00f0ff, #ffd700); color: #ffffff; padding: 6px 16px; border-radius: 12px; font-weight: 900; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 12px; box-shadow: 0 0 20px rgba(0,240,255,0.6);">STATUS: ACTIVE (v2.0)</span>
                 </div>
             </div>
         </div>
 
         <!-- Appearance & Theme Customizer Card -->
         <div class="card">
-            <h3 style="font-family: 'Orbitron'; color: var(--text-main); margin-top: 0;">🎨 Appearance &amp; Theme Customizer</h3>
+            <h3 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--text-main); margin-top: 0;">🎨 Appearance &amp; Theme Customizer</h3>
             <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Choose your visual theme preference and primary system accent color across Sudarshan Fitness v2.0.</p>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
                 <div>
-                    <label style="font-size: 12px; color: var(--text-muted); font-family: 'Orbitron'; display: block; margin-bottom: 6px;">Theme Mode</label>
+                    <label style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; display: block; margin-bottom: 6px;">Theme Mode</label>
                     <select onchange="SFThemeEngine.setThemeMode(this.value)" class="form-control" style="cursor: pointer;">
                         <option value="dark">🌙 Dark Mode (Default Gym Interface)</option>
                         <option value="light">☀️ Light Mode (Clean Commercial Interface)</option>
@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
                     </select>
                 </div>
                 <div>
-                    <label style="font-size: 12px; color: var(--text-muted); font-family: 'Orbitron'; display: block; margin-bottom: 6px;">Primary Accent Color</label>
+                    <label style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; display: block; margin-bottom: 6px;">Primary Accent Color</label>
                     <div style="display: flex; gap: 10px; align-items: center; margin-top: 5px;">
                         <button type="button" onclick="SFThemeEngine.setAccentColor('#00f0ff')" style="width: 36px; height: 36px; border-radius: 50%; background: #00f0ff; border: 2px solid #fff; cursor: pointer;" title="Electric Cyan"></button>
                         <button type="button" onclick="SFThemeEngine.setAccentColor('#ff6b00')" style="width: 36px; height: 36px; border-radius: 50%; background: #ff6b00; border: 2px solid #fff; cursor: pointer;" title="Vighnaharta Orange"></button>
@@ -97,24 +97,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
 
         <!-- Gym Profile Configuration -->
         <div class="card">
-            <h3 style="font-family: 'Orbitron'; color: var(--text-main); margin-top: 0;">🏢 Gym Identity &amp; Profile Details</h3>
+            <h3 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--text-main); margin-top: 0;">🏢 Gym Identity &amp; Profile Details</h3>
             <form method="POST">
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px;">
                     <div>
-                        <label style="font-size: 12px; color: var(--text-muted); font-family: 'Orbitron';">Gym Name</label>
+                        <label style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">Gym Name</label>
                         <input type="text" name="gym_name" class="form-control" value="<?php echo htmlspecialchars($gym['gym_name']); ?>" required>
                     </div>
                     <div>
-                        <label style="font-size: 12px; color: var(--text-muted); font-family: 'Orbitron';">Gym Contact Mobile</label>
+                        <label style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">Gym Contact Mobile</label>
                         <input type="text" name="gym_contact" class="form-control" value="<?php echo htmlspecialchars($gym['gym_contact'] ?? ''); ?>" required>
                     </div>
                     <div>
-                        <label style="font-size: 12px; color: var(--text-muted); font-family: 'Orbitron';">Official Gym Email</label>
+                        <label style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">Official Gym Email</label>
                         <input type="email" name="gym_email" class="form-control" value="<?php echo htmlspecialchars($gym['gym_email'] ?? ''); ?>" required>
                     </div>
                 </div>
                 <div>
-                    <label style="font-size: 12px; color: var(--text-muted); font-family: 'Orbitron';">Gym Address</label>
+                    <label style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">Gym Address</label>
                     <textarea name="gym_address" class="form-control" rows="3" required><?php echo htmlspecialchars($gym['gym_address'] ?? ''); ?></textarea>
                 </div>
                 <button type="submit" name="save_settings" class="btn-save">SAVE CONFIGURATION ➔</button>

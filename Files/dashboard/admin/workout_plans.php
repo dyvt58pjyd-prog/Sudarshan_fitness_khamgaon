@@ -9,14 +9,14 @@ page_protect();
     <title>Workout Plans &amp; Exercise Library | Sudarshan Fitness v2.0</title>
     <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="../../css/entypo.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { background: var(--bg-dark); color: var(--text-main); padding: 25px; }
         .card { background: rgba(9, 14, 28, 0.9); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
         .ex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin-top: 20px; }
         .ex-card { background: rgba(3,7,18,0.8); border: 1px solid rgba(0,240,255,0.3); border-radius: 16px; padding: 20px; }
-        .ex-title { font-family: 'Orbitron'; font-size: 15px; color: var(--accent-primary); font-weight: 800; margin-bottom: 5px; }
-        .tag { display: inline-block; background: rgba(255,215,0,0.2); color: #a78bfa; border: 1px solid #ffd700; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; font-family: 'Orbitron'; margin-right: 5px; margin-bottom: 5px; }
+        .ex-title { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; color: var(--accent-primary); font-weight: 800; margin-bottom: 5px; }
+        .tag { display: inline-block; background: rgba(255,215,0,0.2); color: #a78bfa; border: 1px solid #ffd700; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin-right: 5px; margin-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -25,14 +25,14 @@ page_protect();
     <div style="max-width: 1300px; margin: 0 auto;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <div>
-                <h2 style="font-family: 'Orbitron'; color: var(--accent-primary); margin: 0;">🏋️ WORKOUT PLANS &amp; EXERCISE LIBRARY</h2>
-                <div style="color: var(--text-muted); font-size: 13px; font-family: 'Orbitron';">SUDARSHAN FITNESS v2.0 • CUSTOMIZABLE WORKOUT ROUTINES</div>
+                <h2 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--accent-primary); margin: 0;">🏋️ WORKOUT PLANS &amp; EXERCISE LIBRARY</h2>
+                <div style="color: var(--text-muted); font-size: 13px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">SUDARSHAN FITNESS v2.0 • CUSTOMIZABLE WORKOUT ROUTINES</div>
             </div>
-            <a href="index.php" style="background: rgba(0,240,255,0.1); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Orbitron'; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
+            <a href="index.php" style="background: rgba(0,240,255,0.1); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
         </div>
 
         <div class="card">
-            <h3 style="font-family: 'Orbitron'; color: var(--text-main); margin-top: 0;">💪 Master Exercise Database</h3>
+            <h3 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--text-main); margin-top: 0;">💪 Master Exercise Database</h3>
             <div class="ex-grid">
                 <div class="ex-card">
                     <div class="ex-title">Barbell Bench Press</div>

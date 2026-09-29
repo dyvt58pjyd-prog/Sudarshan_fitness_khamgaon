@@ -34,7 +34,7 @@ $q_recent_orders = mysqli_query($con, "SELECT * FROM nutrition_orders ORDER BY i
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nutrition Partner Portal | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #0b0f19;
@@ -42,7 +42,7 @@ $q_recent_orders = mysqli_query($con, "SELECT * FROM nutrition_orders ORDER BY i
             --accent-orange: #f97316;
             --border-color: rgba(249, 115, 22, 0.25);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; }
         body { background: var(--bg-dark); color: #f8fafc; min-height: 100vh; }
         
         .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
@@ -60,7 +60,7 @@ $q_recent_orders = mysqli_query($con, "SELECT * FROM nutrition_orders ORDER BY i
             gap: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .hero-title { font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 800; color: #fff; }
+        .hero-title { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; font-size: 24px; font-weight: 800; color: #fff; }
         .hero-sub { color: #94a3b8; font-size: 14px; margin-top: 6px; }
 
         .btn-add {
@@ -106,7 +106,7 @@ $q_recent_orders = mysqli_query($con, "SELECT * FROM nutrition_orders ORDER BY i
             font-size: 24px;
             color: var(--accent-orange);
         }
-        .stat-num { font-size: 28px; font-weight: 800; font-family: 'Orbitron', sans-serif; color: #fff; }
+        .stat-num { font-size: 28px; font-weight: 800; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; color: #fff; }
         .stat-lbl { color: #94a3b8; font-size: 12px; font-weight: 600; text-transform: uppercase; margin-top: 2px; }
 
         .section-box {

@@ -31,14 +31,14 @@ $trainers_res = mysqli_query($con, "SELECT * FROM admin WHERE role = 'trainer'")
     <title>Trainer Management | Sudarshan Fitness v2.0</title>
     <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="../../css/entypo.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { background: var(--bg-dark); color: var(--text-main); padding: 25px; }
         .card { background: rgba(9, 14, 28, 0.9); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
-        .btn-add { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #ffffff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Orbitron'; cursor: pointer; }
+        .btn-add { background: linear-gradient(135deg, var(--accent-primary), #0077ff); color: #ffffff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; cursor: pointer; }
         .table-custom { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .table-custom th, .table-custom td { padding: 14px; text-align: left; border-bottom: 1px solid rgba(0,240,255,0.15); }
-        .table-custom th { color: var(--accent-primary); font-family: 'Orbitron'; font-size: 13px; text-transform: uppercase; }
+        .table-custom th { color: var(--accent-primary); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 13px; text-transform: uppercase; }
         .form-control { background: rgba(3,7,18,0.8); border: 1px solid rgba(0,240,255,0.3); color: var(--text-main); padding: 10px 14px; border-radius: 10px; width: 100%; margin-bottom: 15px; }
     </style>
 </head>
@@ -48,10 +48,10 @@ $trainers_res = mysqli_query($con, "SELECT * FROM admin WHERE role = 'trainer'")
     <div style="max-width: 1200px; margin: 0 auto;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <div>
-                <h2 style="font-family: 'Orbitron'; color: var(--accent-primary); margin: 0;">🏋️ TRAINER MANAGEMENT</h2>
-                <div style="color: var(--text-muted); font-size: 13px; font-family: 'Orbitron';">SUDARSHAN FITNESS v2.0 • COACHES &amp; ASSIGNMENTS</div>
+                <h2 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--accent-primary); margin: 0;">🏋️ TRAINER MANAGEMENT</h2>
+                <div style="color: var(--text-muted); font-size: 13px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">SUDARSHAN FITNESS v2.0 • COACHES &amp; ASSIGNMENTS</div>
             </div>
-            <a href="index.php" style="background: rgba(0,240,255,0.1); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Orbitron'; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
+            <a href="index.php" style="background: rgba(0,240,255,0.1); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
         </div>
 
         <?php if ($msg): ?>
@@ -61,23 +61,23 @@ $trainers_res = mysqli_query($con, "SELECT * FROM admin WHERE role = 'trainer'")
         <?php endif; ?>
 
         <div class="card">
-            <h3 style="font-family: 'Orbitron'; color: var(--text-main); margin-top: 0;">➕ Register New Gym Trainer</h3>
+            <h3 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--text-main); margin-top: 0;">➕ Register New Gym Trainer</h3>
             <form method="POST">
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px;">
                     <div>
-                        <label style="font-size: 12px; color: var(--text-muted); font-family: 'Orbitron';">Full Name</label>
+                        <label style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">Full Name</label>
                         <input type="text" name="name" class="form-control" placeholder="e.g. Rahul Sharma" required>
                     </div>
                     <div>
-                        <label style="font-size: 12px; color: var(--text-muted); font-family: 'Orbitron';">Mobile Number</label>
+                        <label style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">Mobile Number</label>
                         <input type="text" name="mobile" class="form-control" placeholder="10-digit mobile" required>
                     </div>
                     <div>
-                        <label style="font-size: 12px; color: var(--text-muted); font-family: 'Orbitron';">Specialization</label>
+                        <label style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">Specialization</label>
                         <input type="text" name="specialization" class="form-control" placeholder="e.g. Bodybuilding &amp; Weight Loss">
                     </div>
                     <div>
-                        <label style="font-size: 12px; color: var(--text-muted); font-family: 'Orbitron';">Experience</label>
+                        <label style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">Experience</label>
                         <input type="text" name="experience" class="form-control" placeholder="e.g. 5 Years">
                     </div>
                 </div>
@@ -86,7 +86,7 @@ $trainers_res = mysqli_query($con, "SELECT * FROM admin WHERE role = 'trainer'")
         </div>
 
         <div class="card">
-            <h3 style="font-family: 'Orbitron'; color: var(--text-main); margin-top: 0;">📋 Active Gym Trainers Directory</h3>
+            <h3 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--text-main); margin-top: 0;">📋 Active Gym Trainers Directory</h3>
             <table class="table-custom">
                 <thead>
                     <tr>
@@ -107,11 +107,11 @@ $trainers_res = mysqli_query($con, "SELECT * FROM admin WHERE role = 'trainer'")
                             $client_count = $c_row ? $c_row['c'] : 0;
                             ?>
                             <tr>
-                                <td style="font-family: 'Orbitron'; color: var(--accent-primary);"><?php echo htmlspecialchars($row['username']); ?></td>
+                                <td style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--accent-primary);"><?php echo htmlspecialchars($row['username']); ?></td>
                                 <td style="font-weight: 700;"><?php echo htmlspecialchars($row['Full_name']); ?></td>
                                 <td><?php echo htmlspecialchars($row['mobile']); ?></td>
-                                <td><span style="background: rgba(255,215,0,0.2); color: #a78bfa; border: 1px solid #ffd700; padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: bold; font-family: 'Orbitron';">TRAINER</span></td>
-                                <td><strong style="color: #ffb703; font-family: 'Orbitron';"><?php echo $client_count; ?> Members</strong></td>
+                                <td><span style="background: rgba(255,215,0,0.2); color: #a78bfa; border: 1px solid #ffd700; padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: bold; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">TRAINER</span></td>
+                                <td><strong style="color: #ffb703; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;"><?php echo $client_count; ?> Members</strong></td>
                             </tr>
                         <?php endwhile; ?>
                     <?php else: ?>

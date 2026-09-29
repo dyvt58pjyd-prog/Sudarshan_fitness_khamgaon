@@ -152,7 +152,7 @@ $monthName = date("F", mktime(0, 0, 0, intval($month), 10));
                 <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #f59e0b; letter-spacing: 1px;">💵 Physical Cash Register</span>
                 <span style="font-size: 11px; background: rgba(245, 158, 11, 0.2); color: #f59e0b; padding: 2px 8px; border-radius: 10px; font-weight: bold;"><?php echo $cash_count; ?> In / <?php echo $exp_cash_count; ?> Out</span>
             </div>
-            <div style="font-size: 26px; font-weight: 900; color: <?php echo $net_cash_in_hand >= 0 ? '#f59e0b' : '#ef4444'; ?>; margin-top: 6px; font-family: 'Orbitron', sans-serif;">
+            <div style="font-size: 26px; font-weight: 900; color: <?php echo $net_cash_in_hand >= 0 ? '#f59e0b' : '#ef4444'; ?>; margin-top: 6px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;">
                 ₹<?php echo number_format($net_cash_in_hand); ?>
             </div>
             <div style="display: flex; justify-content: space-between; margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(0,0,0,0.1); font-size: 11px;">
@@ -168,7 +168,7 @@ $monthName = date("F", mktime(0, 0, 0, intval($month), 10));
                 <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #0284c7; letter-spacing: 1px;">💳 Digital / UPI Bank Account</span>
                 <span style="font-size: 11px; background: rgba(56, 189, 248, 0.2); color: #0284c7; padding: 2px 8px; border-radius: 10px; font-weight: bold;"><?php echo $upi_count; ?> In / <?php echo $exp_upi_count; ?> Out</span>
             </div>
-            <div style="font-size: 26px; font-weight: 900; color: <?php echo $net_digital_surplus >= 0 ? '#0284c7' : '#ef4444'; ?>; margin-top: 6px; font-family: 'Orbitron', sans-serif;">
+            <div style="font-size: 26px; font-weight: 900; color: <?php echo $net_digital_surplus >= 0 ? '#0284c7' : '#ef4444'; ?>; margin-top: 6px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;">
                 ₹<?php echo number_format($net_digital_surplus); ?>
             </div>
             <div style="display: flex; justify-content: space-between; margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(0,0,0,0.1); font-size: 11px;">
@@ -184,7 +184,7 @@ $monthName = date("F", mktime(0, 0, 0, intval($month), 10));
                 <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #10b981; letter-spacing: 1px;">💎 True Net Profit</span>
                 <span style="font-size: 11px; background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 2px 8px; border-radius: 10px; font-weight: bold;">Audited Net</span>
             </div>
-            <div style="font-size: 26px; font-weight: 900; color: <?php echo $true_net_profit >= 0 ? '#10b981' : '#ef4444'; ?>; margin-top: 6px; font-family: 'Orbitron', sans-serif;">
+            <div style="font-size: 26px; font-weight: 900; color: <?php echo $true_net_profit >= 0 ? '#10b981' : '#ef4444'; ?>; margin-top: 6px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;">
                 ₹<?php echo number_format($true_net_profit); ?>
             </div>
             <div style="display: flex; justify-content: space-between; margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(0,0,0,0.1); font-size: 11px;">

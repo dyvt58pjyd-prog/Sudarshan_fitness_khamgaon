@@ -15,13 +15,13 @@ if ($_SESSION['role'] !== 'super_admin' && $_SESSION['role'] !== 'owner') {
     <title>Activity Audit Logs | Sudarshan Fitness v2.0</title>
     <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="../../css/entypo.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { background: var(--bg-dark); color: var(--text-main); padding: 25px; }
         .card { background: rgba(9, 14, 28, 0.9); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--glass-shadow); }
         .table-custom { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .table-custom th, .table-custom td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(0,240,255,0.15); font-size: 13px; }
-        .table-custom th { color: var(--accent-primary); font-family: 'Orbitron'; text-transform: uppercase; }
+        .table-custom th { color: var(--accent-primary); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -30,14 +30,14 @@ if ($_SESSION['role'] !== 'super_admin' && $_SESSION['role'] !== 'owner') {
     <div style="max-width: 1200px; margin: 0 auto;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <div>
-                <h2 style="font-family: 'Orbitron'; color: var(--accent-primary); margin: 0;">📜 SYSTEM AUDIT LOGS</h2>
-                <div style="color: var(--text-muted); font-size: 13px; font-family: 'Orbitron';">SUDARSHAN FITNESS v2.0 • SECURITY &amp; TRANSACTION AUDIT TRAIL</div>
+                <h2 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--accent-primary); margin: 0;">📜 SYSTEM AUDIT LOGS</h2>
+                <div style="color: var(--text-muted); font-size: 13px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">SUDARSHAN FITNESS v2.0 • SECURITY &amp; TRANSACTION AUDIT TRAIL</div>
             </div>
-            <a href="index.php" style="background: rgba(0,240,255,0.1); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Orbitron'; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
+            <a href="index.php" style="background: rgba(0,240,255,0.1); color: var(--accent-primary); border: 1px solid var(--glass-border); padding: 8px 18px; border-radius: 12px; text-decoration: none; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 800; font-size: 12px;">← DASHBOARD</a>
         </div>
 
         <div class="card">
-            <h3 style="font-family: 'Orbitron'; color: var(--text-main); margin-top: 0;">🔐 Recent Security &amp; Activity Audit Trail</h3>
+            <h3 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--text-main); margin-top: 0;">🔐 Recent Security &amp; Activity Audit Trail</h3>
             <table class="table-custom">
                 <thead>
                     <tr>
@@ -57,10 +57,10 @@ if ($_SESSION['role'] !== 'super_admin' && $_SESSION['role'] !== 'owner') {
                         while($r = mysqli_fetch_assoc($res_recent)): ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($r['ts']); ?></td>
-                                <td style="font-weight: bold; font-family: 'Orbitron'; color: var(--accent-primary);"><?php echo htmlspecialchars($r['usr']); ?></td>
-                                <td><span style="background: rgba(0,240,255,0.15); color: #00f0ff; border: 1px solid #00f0ff; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-family: 'Orbitron';">MEMBER</span></td>
+                                <td style="font-weight: bold; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--accent-primary);"><?php echo htmlspecialchars($r['usr']); ?></td>
+                                <td><span style="background: rgba(0,240,255,0.15); color: #00f0ff; border: 1px solid #00f0ff; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">MEMBER</span></td>
                                 <td>Payment Collection of ₹<?php echo number_format($r['amt']); ?> recorded</td>
-                                <td><span style="color: #10b981; font-weight: bold; font-family: 'Orbitron';">SUCCESS ✓</span></td>
+                                <td><span style="color: #10b981; font-weight: bold; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">SUCCESS ✓</span></td>
                             </tr>
                         <?php endwhile;
                     else: ?>

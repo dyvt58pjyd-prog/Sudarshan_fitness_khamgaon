@@ -86,7 +86,7 @@ $level = floor($user_xp / 100) + 1;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>[SYSTEM WINDOW] Shree Ganesha AI Trainer | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- MediaPipe Pose & Camera Utils -->
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
@@ -106,7 +106,7 @@ $level = floor($user_xp / 100) + 1;
             --system-border: rgba(0, 240, 255, 0.35);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; }
 
         body {
             background: var(--bg-dark);
@@ -146,7 +146,7 @@ $level = floor($user_xp / 100) + 1;
         }
 
         .page-title {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             font-size: 18px;
             font-weight: 900;
             background: linear-gradient(135deg, #00f0ff, #0077ff);
@@ -182,7 +182,7 @@ $level = floor($user_xp / 100) + 1;
             font-weight: 800;
             cursor: pointer;
             transition: all 0.2s ease;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
         }
 
         .gender-btn.active.male {
@@ -206,7 +206,7 @@ $level = floor($user_xp / 100) + 1;
             font-size: 13px;
             font-weight: 800;
             text-decoration: none;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             transition: all 0.2s ease;
         }
 
@@ -257,7 +257,7 @@ $level = floor($user_xp / 100) + 1;
         }
 
         .panel-title {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             font-size: 14px;
             font-weight: 900;
             color: var(--system-cyan);
@@ -283,7 +283,7 @@ $level = floor($user_xp / 100) + 1;
         }
 
         .status-tag {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             font-size: 10px;
             color: var(--system-cyan);
             font-weight: 900;
@@ -292,7 +292,7 @@ $level = floor($user_xp / 100) + 1;
         }
 
         .hunter-name {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             font-size: 18px;
             font-weight: 900;
             color: #fff;
@@ -319,7 +319,7 @@ $level = floor($user_xp / 100) + 1;
             font-weight: 800;
             cursor: pointer;
             white-space: nowrap;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             transition: all 0.2s ease;
         }
 
@@ -472,7 +472,7 @@ $level = floor($user_xp / 100) + 1;
         }
 
         .vp-title-box h3 {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             font-size: 18px;
             font-weight: 900;
             color: #fff;
@@ -496,7 +496,7 @@ $level = floor($user_xp / 100) + 1;
             font-weight: 800;
             margin-top: 4px;
             display: inline-block;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
         }
 
         .vp-controls-bar {
@@ -528,7 +528,7 @@ $level = floor($user_xp / 100) + 1;
             font-size: 12px;
             font-weight: 800;
             cursor: pointer;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             transition: all 0.2s ease;
         }
 
@@ -550,7 +550,7 @@ $level = floor($user_xp / 100) + 1;
             display: flex;
             align-items: center;
             gap: 8px;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             box-shadow: 0 0 20px rgba(0,240,255,0.5);
             pointer-events: auto;
         }
@@ -567,7 +567,7 @@ $level = floor($user_xp / 100) + 1;
             display: flex;
             align-items: center;
             gap: 8px;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             box-shadow: 0 0 20px rgba(255,215,0,0.5);
             pointer-events: auto;
         }
@@ -581,7 +581,7 @@ $level = floor($user_xp / 100) + 1;
         }
 
         .tip-card h5 {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             font-size: 12px;
             font-weight: 800;
             color: var(--system-cyan);
@@ -606,7 +606,7 @@ $level = floor($user_xp / 100) + 1;
             border-radius: 10px;
             font-size: 10px;
             font-weight: 800;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             margin-right: 6px;
             margin-bottom: 6px;
         }
@@ -622,7 +622,7 @@ $level = floor($user_xp / 100) + 1;
         }
 
         .rep-number {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             font-size: 36px;
             font-weight: 900;
             color: var(--system-cyan);
@@ -639,7 +639,7 @@ $level = floor($user_xp / 100) + 1;
             border-radius: 8px;
             display: inline-block;
             margin-top: 6px;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
         }
 
         .btn-save-log {
@@ -652,7 +652,7 @@ $level = floor($user_xp / 100) + 1;
             font-weight: 900;
             font-size: 13px;
             cursor: pointer;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
             box-shadow: 0 0 25px rgba(0,240,255,0.6);
             margin-top: 10px;
             transition: all 0.2s ease;
@@ -672,10 +672,10 @@ $level = floor($user_xp / 100) + 1;
     <!-- Shree Ganesha Quest Clear Level-Up Modal -->
     <div id="questClearModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.95); z-index: 10000; align-items: center; justify-content: center; flex-direction: column;">
         <div style="border: 2px solid var(--system-cyan); background: rgba(9, 14, 28, 0.95); padding: 40px; border-radius: 24px; text-align: center; max-width: 500px; width: 90%; box-shadow: 0 0 60px rgba(0, 240, 255, 0.8), 0 0 100px rgba(255, 215, 0, 0.6); animation: levelup-gold-glow 1.5s ease-in-out infinite alternate;">
-            <div style="font-family: 'Orbitron'; color: var(--quest-gold); font-size: 14px; font-weight: 900; letter-spacing: 3px; margin-bottom: 8px;">[ QUEST CLEAR! ]</div>
-            <h2 style="font-family: 'Orbitron'; color: #00f0ff; font-size: 28px; font-weight: 900; text-shadow: 0 0 20px #00f0ff; margin-bottom: 10px;">LEVEL UP! +50 EXP</h2>
+            <div style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--quest-gold); font-size: 14px; font-weight: 900; letter-spacing: 3px; margin-bottom: 8px;">[ QUEST CLEAR! ]</div>
+            <h2 style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #00f0ff; font-size: 28px; font-weight: 900; text-shadow: 0 0 20px #00f0ff; margin-bottom: 10px;">LEVEL UP! +50 EXP</h2>
             <p style="color: #cbd5e1; font-size: 14px; margin-bottom: 25px; line-height: 1.5;">Daily Quest Mandate Cleared! Your Hunter Stats &amp; Routine Log have been recorded in the System Database!</p>
-            <button onclick="closeQuestModal()" style="background: linear-gradient(135deg, #00f0ff, #0077ff); color: #2c1b18; border: none; padding: 14px 30px; border-radius: 14px; font-family: 'Orbitron'; font-weight: 900; font-size: 14px; cursor: pointer; box-shadow: 0 0 30px #00f0ff;">
+            <button onclick="closeQuestModal()" style="background: linear-gradient(135deg, #00f0ff, #0077ff); color: #2c1b18; border: none; padding: 14px 30px; border-radius: 14px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 900; font-size: 14px; cursor: pointer; box-shadow: 0 0 30px #00f0ff;">
                 CLAIM REWARDS &amp; CONTINUE ➔
             </button>
         </div>
@@ -686,7 +686,7 @@ $level = floor($user_xp / 100) + 1;
             <img src="<?php echo htmlspecialchars($gym['gym_logo']); ?>" class="gym-logo" alt="Gym Logo">
             <div>
                 <div class="page-title">[ SYSTEM NOTIFICATION: SOLO LEVELING MODE ]</div>
-                <div style="font-size: 11px; color: var(--system-cyan); font-family: 'Orbitron'; font-weight: 700;">DAILY QUEST SYSTEM • SHADOW MONARCH AWAKENING</div>
+                <div style="font-size: 11px; color: var(--system-cyan); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 700;">DAILY QUEST SYSTEM • SHADOW MONARCH AWAKENING</div>
             </div>
         </div>
 
@@ -781,7 +781,7 @@ $level = floor($user_xp / 100) + 1;
             </div>
 
             <div style="margin-bottom: 15px;">
-                <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); margin-bottom: 6px; font-family: 'Orbitron';">TARGET MUSCLE MATRIX</div>
+                <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); margin-bottom: 6px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">TARGET MUSCLE MATRIX</div>
                 <div id="target-muscles-container">
                     <span class="muscle-tag">Chest</span>
                     <span class="muscle-tag">Triceps</span>
@@ -807,7 +807,7 @@ $level = floor($user_xp / 100) + 1;
 
             <!-- Live AI Rep Counter & Posture Evaluator -->
             <div class="rep-counter-box">
-                <div style="font-size: 11px; font-weight: 800; color: var(--system-cyan); text-transform: uppercase; font-family: 'Orbitron';">SYSTEM REPETITION COUNTER</div>
+                <div style="font-size: 11px; font-weight: 800; color: var(--system-cyan); text-transform: uppercase; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">SYSTEM REPETITION COUNTER</div>
                 <div class="rep-number" id="rep-display">0 REPS</div>
                 <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;" id="ai-stage-status">Position: UP • Stand in front of camera</div>
                 <div style="font-size: 12px; margin-top: 6px;" id="posture-status">Form Status: <span style="color: #10b981; font-weight: bold;">Good Posture 🟢</span></div>
@@ -824,11 +824,11 @@ $level = floor($user_xp / 100) + 1;
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11px; text-align: center;">
                     <div style="background: rgba(0,0,0,0.4); padding: 8px; border-radius: 8px; border: 1px solid var(--monarch-purple);">
-                        <span style="color: #94a3b8; display: block; font-size: 9px; font-family: 'Orbitron';">PROTEIN INTAKE</span>
+                        <span style="color: #94a3b8; display: block; font-size: 9px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">PROTEIN INTAKE</span>
                         <strong style="color: #10b981; font-size: 14px;"><?php echo $protein_g; ?>g / day</strong>
                     </div>
                     <div style="background: rgba(0,0,0,0.4); padding: 8px; border-radius: 8px; border: 1px solid var(--monarch-purple);">
-                        <span style="color: #94a3b8; display: block; font-size: 9px; font-family: 'Orbitron';">FLUID INTAKE</span>
+                        <span style="color: #94a3b8; display: block; font-size: 9px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">FLUID INTAKE</span>
                         <strong style="color: var(--system-cyan); font-size: 14px;"><?php echo $water_l; ?> Liters</strong>
                     </div>
                 </div>

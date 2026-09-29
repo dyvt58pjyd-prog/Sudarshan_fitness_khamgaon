@@ -50,7 +50,7 @@ if (substr($logo_path, 0, 6) === '../../') {
 	<title>[SUDARSHAN FITNESS] <?php echo htmlspecialchars($gym['gym_name']); ?> | Gate Login</title>
 	<link rel="shortcut icon" href="<?php echo htmlspecialchars($logo_path); ?>" type="image/jpeg">
     <link rel="manifest" href="manifest.json">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="./css/style.css"/>
 	<link rel="stylesheet" type="text/css" href="./css/entypo.css">
 	<link rel="stylesheet" href="./css/premium.css"/>
@@ -68,7 +68,7 @@ if (substr($logo_path, 0, 6) === '../../') {
         display: block;
         margin: 0;
         padding: 40px 20px;
-        font-family: 'Outfit', sans-serif !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif !important;
         box-sizing: border-box;
     }
 
@@ -216,7 +216,7 @@ if (substr($logo_path, 0, 6) === '../../') {
     
     #titan-login-body .industrial-title {
         color: var(--text-main) !important;
-        font-family: 'Orbitron', sans-serif !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif !important;
         font-weight: 800 !important;
         font-size: 24px !important;
         letter-spacing: -0.5px !important;
@@ -344,7 +344,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                             </button>
                             
                             <!-- Action Grid for Self Registration & Quick Portals -->
-                            <button type="button" id="faceIdLoginBtn" class="btn btn-success" style="width: 100%; display: block; margin-top: 12px; background: linear-gradient(135deg, #ffd700, #ff6b00); border: 1px solid #ff6b00; font-family: 'Orbitron', sans-serif; font-weight: 900; box-shadow: 0 0 25px rgba(255,215,0,0.6);" onclick="loginWithFaceID()">
+                            <button type="button" id="faceIdLoginBtn" class="btn btn-success" style="width: 100%; display: block; margin-top: 12px; background: linear-gradient(135deg, #ffd700, #ff6b00); border: 1px solid #ff6b00; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; font-weight: 900; box-shadow: 0 0 25px rgba(255,215,0,0.6);" onclick="loginWithFaceID()">
                                 <i class="entypo-camera"></i>
                                 SHARINGAN BIOMETRIC SCAN
                             </button>
@@ -355,12 +355,12 @@ if (substr($logo_path, 0, 6) === '../../') {
 
                     <!-- Face Scan UI Container -->
                     <div id="faceScanContainer" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,10,5,0.95); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
-                        <h2 style="color: #ff6b00; margin-bottom: 20px; font-family: 'Orbitron';">[ SHARINGAN BIOMETRIC SCAN ]</h2>
+                        <h2 style="color: #ff6b00; margin-bottom: 20px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">[ SHARINGAN BIOMETRIC SCAN ]</h2>
                         <div style="position: relative; width: 300px; height: 300px; border-radius: 50%; overflow: hidden; border: 4px solid #ff6b00; box-shadow: 0 0 40px #ff6b00;">
                             <video id="loginVideo" autoplay muted playsinline style="width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1);"></video>
                         </div>
-                        <p id="loginStatusMsg" style="color: #cbd5e1; margin-top: 20px; font-size: 16px; font-family: 'Orbitron';">Awakening Divine...</p>
-                        <button type="button" class="btn btn-danger" style="margin-top: 20px; font-family: 'Orbitron';" onclick="cancelFaceLogin()">CANCEL JUTSU</button>
+                        <p id="loginStatusMsg" style="color: #cbd5e1; margin-top: 20px; font-size: 16px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">Awakening Divine...</p>
+                        <button type="button" class="btn btn-danger" style="margin-top: 20px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;" onclick="cancelFaceLogin()">CANCEL JUTSU</button>
                     </div>
 
                     <script>
@@ -607,14 +607,14 @@ if (substr($logo_path, 0, 6) === '../../') {
                     <div id="pwaInstallModal" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;">
                         <div style="background: #111827; border: 2px solid #ff6b00; border-radius: 20px; max-width: 440px; width: 100%; padding: 30px; text-align: center; box-shadow: 0 0 35px rgba(255,107,0,0.5); animation: pulseGlow 2s infinite alternate;">
                             <img src="logo192.png" style="width: 80px; height: 80px; border-radius: 18px; margin-bottom: 15px; border: 2px solid #ff6b00; box-shadow: 0 4px 15px rgba(255,107,0,0.4);" alt="App Logo" />
-                            <h3 style="color: #ffffff; font-size: 20px; font-weight: 800; margin: 0 0 10px 0; font-family: 'Orbitron', sans-serif;">INSTALL SUDARSHAN APP</h3>
+                            <h3 style="color: #ffffff; font-size: 20px; font-weight: 800; margin: 0 0 10px 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;">INSTALL SUDARSHAN APP</h3>
                             <p style="color: #94a3b8; font-size: 13px; line-height: 1.5; margin-bottom: 25px;">
                                 Install Sudarshan Fitness directly to your phone home screen for 1-click access, instant biometric check-ins, and live workout tracking!
                             </p>
-                            <button id="pwaDirectInstallBtn" onclick="triggerChromeInstall()" style="width: 100%; background: linear-gradient(135deg, #ff6b00, #ffd700); color: #ffffff; border: none; padding: 15px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; box-shadow: 0 5px 20px rgba(255,107,0,0.5); margin-bottom: 10px;">
+                            <button id="pwaDirectInstallBtn" onclick="triggerChromeInstall()" style="width: 100%; background: linear-gradient(135deg, #ff6b00, #ffd700); color: #ffffff; border: none; padding: 15px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; letter-spacing: 0.5px; box-shadow: 0 5px 20px rgba(255,107,0,0.5); margin-bottom: 10px;">
                                 📲 INSTALL CHROME PWA APP
                             </button>
-                            <a href="download_app.php" style="width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; text-decoration: none; display: block; padding: 15px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; box-shadow: 0 5px 20px rgba(16,185,129,0.4); margin-bottom: 12px;">
+                            <a href="download_app.php" style="width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; text-decoration: none; display: block; padding: 15px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; letter-spacing: 0.5px; box-shadow: 0 5px 20px rgba(16,185,129,0.4); margin-bottom: 12px;">
                                 ⬇️ DOWNLOAD DIRECT ANDROID APK (5.3 MB)
                             </a>
                             <button onclick="closePwaModal()" style="background: transparent; color: #64748b; border: none; font-size: 12px; cursor: pointer; text-decoration: underline;">
