@@ -2,14 +2,7 @@
 require '../../include/db_conn.php';
 page_protect();
 
-// Require Owner/Developer Auth
-if (!isset($_SESSION['dev_owner_auth']) || $_SESSION['dev_owner_auth'] !== true) {
-    $lock_title = "AUDIT HUB LOCKED";
-    $lock_message = "The Financial Auditing Hub is restricted to Owners and Authorized Auditors only. Please enter your Master Authority PIN to access P&L statements, cycle calculations, and revenue leakage reports.";
-    $updated_at = date('Y-m-d H:i:s');
-    require '../../include/owner_lock_screen.php';
-    exit;
-}
+// Lock Removed per User Request
 
 $gym = get_gym_details($con);
 
