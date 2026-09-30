@@ -1,4 +1,6 @@
-<?php
+import os
+
+file_content = """<?php
 require '../../include/db_conn.php';
 page_protect();
 $gym = get_gym_details($con);
@@ -243,3 +245,9 @@ if ($mq) {
 
 </body>
 </html>
+"""
+
+filepath = "./Files/dashboard/admin/ai_diet.php"
+with open(filepath, "w", encoding="utf-8") as f:
+    f.write(file_content)
+print(f"Created {filepath}")

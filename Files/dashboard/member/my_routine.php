@@ -29,6 +29,8 @@ if ($rq && mysqli_num_rows($rq) > 0) {
     <title><?php echo htmlspecialchars($gym['gym_name']); ?> | My Routine</title>
     <link rel="stylesheet" href="../../css/style.css">
     <script src="../../js/Script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>.routine-text h3 { color: var(--accent-primary); margin-top: 20px; font-family: "JetBrains Mono", monospace; } .routine-text strong { color: #fff; } .routine-text ul { padding-left: 20px; } .routine-text li { margin-bottom: 8px; }</style>
     <link rel="stylesheet" href="../../css/dashMain.css">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
     <link rel="stylesheet" href="../../css/premium.css">
@@ -86,12 +88,12 @@ if ($rq && mysqli_num_rows($rq) > 0) {
 
                 <label style="color: var(--accent-primary); font-weight: bold; font-size: 18px;"><i class="entypo-list"></i> Weekly Workout Plan</label>
                 <div class="routine-text" style="margin-bottom: 30px;">
-                    <?php echo htmlspecialchars($workout); ?>
+                    <div id="workout_render"></div><script>document.getElementById("workout_render").innerHTML = marked.parse(<?php echo json_encode($workout); ?>);</script>
                 </div>
                 
                 <label style="color: var(--success); font-weight: bold; font-size: 18px;"><i class="entypo-leaf"></i> Weekly Diet Plan</label>
                 <div class="routine-text">
-                    <?php echo htmlspecialchars($diet); ?>
+                    <div id="diet_render"></div><script>document.getElementById("diet_render").innerHTML = marked.parse(<?php echo json_encode($diet); ?>);</script>
                 </div>
             </div>
 
