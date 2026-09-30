@@ -6,11 +6,24 @@ $flag=$_GET['flag'];
 
 $query="";
 
-if($flag==0)
-	$query="select * from users u INNER JOIN address a on u.userid=a.id where u.joining_date like '".$year."-".$month."___'";
-else if($flag==1)
-	$query="select * from users u INNER JOIN address a on u.userid=a.id where u.joining_date like '".$year."______'";
-  
+if($flag==0) {
+	$m = intval($month);
+	$y = intval($year);
+	$start_date = sprintf("%04d-%02d-07", $y, $m);
+
+	if ($m == 12) {
+	    $next_m = 1;
+	    $next_y = $y + 1;
+	} else {
+	    $next_m = $m + 1;
+	    $next_y = $y;
+	}
+	$end_date = sprintf("%04d-%02d-06", $next_y, $next_m);
+	$query="select * from users u INNER JOIN address a on u.userid=a.id where u.joining_date BETWEEN '".$start_date." 00:00:00' AND '".$end_date." 23:59:59'";
+}
+else if($flag==1) {
+	$query="select * from users u INNER JOIN address a on u.userid=a.id where u.joining_date like '".$year."-%'";
+}
 
 $res=mysqli_query($con,$query);
 echo "<tbody border=1>";

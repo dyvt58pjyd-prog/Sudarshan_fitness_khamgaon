@@ -374,7 +374,33 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			$overall_expenses = 0; $net_profit       = 0;
 
 			$curr_yr = date('Y');
-			$curr_ym = date('Y-m');
+			
+			// Financial Cycle: 7th to 6th of next month
+			$today_d = (int)date('d');
+			$today_m = (int)date('m');
+			$today_y = (int)date('Y');
+
+			if ($today_d >= 7) {
+			    $cycle_m_start = $today_m;
+			    $cycle_y_start = $today_y;
+			} else {
+			    $cycle_m_start = $today_m - 1;
+			    $cycle_y_start = $today_y;
+			    if ($cycle_m_start == 0) {
+			        $cycle_m_start = 12;
+			        $cycle_y_start--;
+			    }
+			}
+
+			$cycle_m_end = $cycle_m_start + 1;
+			$cycle_y_end = $cycle_y_start;
+			if ($cycle_m_end == 13) {
+			    $cycle_m_end = 1;
+			    $cycle_y_end++;
+			}
+
+			$cycle_start = sprintf("%04d-%02d-07 00:00:00", $cycle_y_start, $cycle_m_start);
+			$cycle_end   = sprintf("%04d-%02d-06 23:59:59", $cycle_y_end, $cycle_m_end);
 
 			// 1. All-time income
 			$q_inc_mem = @mysqli_query($con, "SELECT SUM(COALESCE(IF(e.paid_amount > 0 AND (e.discount_amount = 0 OR e.paid_amount != p.amount), e.paid_amount, GREATEST(0, p.amount - COALESCE(e.discount_amount, 0))), e.paid_amount, 0)) AS total FROM enrolls_to e LEFT JOIN plan p ON e.pid = p.pid");
@@ -407,7 +433,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			$year_income = $year_mem_income + $year_pt_income + $year_bal_income;
 
 			// 3. Monthly Membership Breakdown by Payment Mode
-			$q_m_mem = @mysqli_query($con, "SELECT e.payment_mode, SUM(COALESCE(IF(e.paid_amount > 0 AND (e.discount_amount = 0 OR e.paid_amount != p.amount), e.paid_amount, GREATEST(0, p.amount - COALESCE(e.discount_amount, 0))), e.paid_amount, 0)) AS total FROM enrolls_to e LEFT JOIN plan p ON e.pid = p.pid WHERE e.paid_date LIKE '$curr_ym-%' GROUP BY e.payment_mode");
+			$q_m_mem = @mysqli_query($con, "SELECT e.payment_mode, SUM(COALESCE(IF(e.paid_amount > 0 AND (e.discount_amount = 0 OR e.paid_amount != p.amount), e.paid_amount, GREATEST(0, p.amount - COALESCE(e.discount_amount, 0))), e.paid_amount, 0)) AS total FROM enrolls_to e LEFT JOIN plan p ON e.pid = p.pid WHERE e.paid_date BETWEEN '$cycle_start' AND '$cycle_end' GROUP BY e.payment_mode");
 			if ($q_m_mem) {
 			    while ($r_mm = @mysqli_fetch_assoc($q_m_mem)) {
 			        $tot = intval($r_mm['total'] ?? 0);
@@ -422,7 +448,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			}
 
 			// Monthly PT Breakdown by Payment Mode
-			$q_m_pt = @mysqli_query($con, "SELECT payment_mode, SUM(amount) AS total FROM pt_enrollments WHERE enroll_date LIKE '$curr_ym-%' GROUP BY payment_mode");
+			$q_m_pt = @mysqli_query($con, "SELECT payment_mode, SUM(amount) AS total FROM pt_enrollments WHERE enroll_date BETWEEN '$cycle_start' AND '$cycle_end' GROUP BY payment_mode");
 			if ($q_m_pt) {
 			    while ($r_mp = @mysqli_fetch_assoc($q_m_pt)) {
 			        $tot = intval($r_mp['total'] ?? 0);
@@ -437,7 +463,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			}
 
 			// Monthly Balance Settlements by Payment Mode
-			$q_m_bal = @mysqli_query($con, "SELECT payment_mode, SUM(amount) AS total FROM balance_collections WHERE collection_date LIKE '$curr_ym-%' GROUP BY payment_mode");
+			$q_m_bal = @mysqli_query($con, "SELECT payment_mode, SUM(amount) AS total FROM balance_collections WHERE collection_date BETWEEN '$cycle_start' AND '$cycle_end' GROUP BY payment_mode");
 			if ($q_m_bal) {
 			    while ($r_mb = @mysqli_fetch_assoc($q_m_bal)) {
 			        $tot = intval($r_mb['total'] ?? 0);
@@ -458,7 +484,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			    SUM(amount) as total,
 			    SUM(IF(payment_mode LIKE '%cash%' OR payment_mode IS NULL OR payment_mode = '', amount, 0)) as cash_total,
 			    SUM(IF(payment_mode LIKE '%upi%' OR payment_mode LIKE '%online%' OR payment_mode LIKE '%bank%', amount, 0)) as upi_total
-			    FROM expenses WHERE expense_date LIKE '$curr_ym-%'");
+			    FROM expenses WHERE expense_date BETWEEN '$cycle_start' AND '$cycle_end'");
 			if ($q_m_exp && $r_m_exp = @mysqli_fetch_assoc($q_m_exp)) {
 			    $month_expenses    = intval($r_m_exp['total'] ?? 0);
 			    $month_cash_expense = intval($r_m_exp['cash_total'] ?? 0);

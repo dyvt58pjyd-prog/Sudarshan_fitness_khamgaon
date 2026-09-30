@@ -5,7 +5,18 @@ $year  = mysqli_real_escape_string($con, $_GET['yy'] ?? date('Y'));
 $filter_mode = strtolower(trim($_GET['mode'] ?? 'all'));
 
 $month_pad = str_pad(intval($month), 2, "0", STR_PAD_LEFT);
-$month_prefix = $year . "-" . $month_pad;
+$m = intval($month);
+$y = intval($year);
+$start_date = sprintf("%04d-%02d-07", $y, $m);
+
+if ($m == 12) {
+    $next_m = 1;
+    $next_y = $y + 1;
+} else {
+    $next_m = $m + 1;
+    $next_y = $y;
+}
+$end_date = sprintf("%04d-%02d-06", $next_y, $next_m);
 
 // 1. Fetch Membership Enrollments
 $q_mem = "SELECT e.et_id, u.userid, u.username, u.gender, u.mobile,
@@ -14,7 +25,7 @@ $q_mem = "SELECT e.et_id, u.userid, u.username, u.gender, u.mobile,
           FROM users u 
           INNER JOIN enrolls_to e ON u.userid = e.uid
           INNER JOIN plan p ON p.pid = e.pid
-          WHERE e.paid_date LIKE '".$month_prefix."%'
+          WHERE e.paid_date BETWEEN '".$start_date." 00:00:00' AND '".$end_date." 23:59:59'
           ORDER BY e.paid_date ASC, u.userid ASC";
 $res_mem = mysqli_query($con, $q_mem);
 
@@ -25,7 +36,7 @@ $q_pt = "SELECT p.id as et_id, u.userid, u.username, u.gender, u.mobile,
          p.payment_mode, 1 as validity, 'Personal Training' as service_type
          FROM pt_enrollments p
          INNER JOIN users u ON p.uid = u.userid
-         WHERE p.enroll_date LIKE '".$month_prefix."%'
+         WHERE p.enroll_date BETWEEN '".$start_date." 00:00:00' AND '".$end_date." 23:59:59'
          ORDER BY p.enroll_date ASC";
 $res_pt = mysqli_query($con, $q_pt);
 
@@ -36,7 +47,7 @@ $q_bal = "SELECT b.id as et_id, u.userid, u.username, u.gender, u.mobile,
           b.payment_mode, 0 as validity, 'Balance Settlement' as service_type
           FROM balance_collections b
           INNER JOIN users u ON b.uid = u.userid
-          WHERE b.collection_date LIKE '".$month_prefix."%'
+          WHERE b.collection_date BETWEEN '".$start_date." 00:00:00' AND '".$end_date." 23:59:59'
           ORDER BY b.collection_date ASC";
 $res_bal = mysqli_query($con, $q_bal);
 
@@ -104,7 +115,7 @@ $q_exp = "SELECT id as et_id, '' as userid, expense_name as username, category a
           amount as base_amount, 0 as discount_amount, amount as paid_amount,
           payment_mode, 0 as validity, 'Expense' as service_type, remarks
           FROM expenses
-          WHERE expense_date LIKE '".$month_prefix."%'
+          WHERE expense_date BETWEEN '".$start_date." 00:00:00' AND '".$end_date." 23:59:59'
           ORDER BY expense_date ASC";
 $res_exp = mysqli_query($con, $q_exp);
 
