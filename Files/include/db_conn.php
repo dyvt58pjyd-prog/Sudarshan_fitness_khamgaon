@@ -1337,61 +1337,85 @@ if (!function_exists('send_member_email')) {
         <html>
         <head>
             <style>
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
-                body { font-family: 'Inter', -apple-system, sans-serif; background-color: #07090e; color: #f8fafc; padding: 20px; margin: 0; }
-                .container { background: #121622; border: 1px solid rgba(255, 107, 0, 0.2); border-radius: 16px; max-width: 600px; margin: 0 auto; overflow: hidden; box-shadow: 0 0 40px rgba(255,107,0,0.15); }
-                .header-img { width: 100%; height: 160px; object-fit: cover; border-bottom: 2px solid #ff6b00; background: #000; }
+                @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;700;900&display=swap');
+                
+                /* ANIMATIONS */
+                @keyframes pulse-border {
+                    0% { box-shadow: 0 0 5px rgba(255,107,0,0.3); border-color: rgba(255,107,0,0.3); }
+                    50% { box-shadow: 0 0 25px rgba(255,107,0,0.8); border-color: rgba(255,107,0,1); }
+                    100% { box-shadow: 0 0 5px rgba(255,107,0,0.3); border-color: rgba(255,107,0,0.3); }
+                }
+                
+                @keyframes glitch-text {
+                    0% { text-shadow: 2px 0 0 #ff6b00, -2px 0 0 #00e6ff; }
+                    25% { text-shadow: -2px 0 0 #ff6b00, 2px 0 0 #00e6ff; }
+                    50% { text-shadow: 2px 0 0 #ff6b00, -2px 0 0 #00e6ff; }
+                    75% { text-shadow: -2px 0 0 #ff6b00, 2px 0 0 #00e6ff; }
+                    100% { text-shadow: 2px 0 0 #ff6b00, -2px 0 0 #00e6ff; }
+                }
+
+                body { font-family: 'Inter', -apple-system, sans-serif; background-color: #030407; color: #f8fafc; padding: 20px; margin: 0; background-image: radial-gradient(circle at 50% 0%, rgba(255, 107, 0, 0.08) 0%, transparent 70%); }
+                .container { background: #0a0d14; border: 1px solid #ff6b00; border-radius: 4px; max-width: 600px; margin: 0 auto; overflow: hidden; animation: pulse-border 3s infinite; }
+                .header-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 2px solid #ff6b00; filter: contrast(120%) brightness(90%); }
                 .content { padding: 35px; }
-                h2 { color: #ff6b00; font-size: 22px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-top: 0; }
-                p { font-size: 14px; line-height: 1.6; color: #cbd5e1; }
-                .details-table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 25px 0; border: 1px solid rgba(255,107,0,0.15); border-radius: 10px; overflow: hidden; }
-                .details-table th, .details-table td { padding: 14px; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: left; font-size: 14px; }
-                .details-table th { color: #94a3b8; font-weight: 600; width: 40%; background: rgba(0,0,0,0.2); text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
-                .details-table td { color: #f8fafc; font-weight: 600; background: rgba(255,255,255,0.02); }
-                .login-box { background: rgba(255, 107, 0, 0.05); border: 1px solid rgba(255, 107, 0, 0.4); padding: 20px; margin: 25px 0; border-radius: 10px; }
-                .login-box strong { color: #ff6b00; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; display: block; margin-bottom: 12px; }
-                .login-box code { background: rgba(255, 107, 0, 0.15); color: #ff6b00; padding: 4px 8px; border-radius: 4px; font-size: 14px; font-weight: 800; border: 1px solid rgba(255,107,0,0.3); }
-                .footer { margin-top: 30px; font-size: 11px; color: #64748b; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; text-transform: uppercase; letter-spacing: 1px; line-height: 1.6; }
+                h2 { color: #ffffff; font-size: 26px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-top: 0; animation: glitch-text 4s infinite; font-family: 'JetBrains Mono', monospace; }
+                p { font-size: 14px; line-height: 1.6; color: #94a3b8; font-family: 'JetBrains Mono', monospace; }
+                .highlight-text { color: #ff6b00; font-weight: 800; }
+                
+                .details-table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 25px 0; border: 1px dashed rgba(255,107,0,0.4); background: rgba(0,0,0,0.3); font-family: 'JetBrains Mono', monospace; }
+                .details-table th, .details-table td { padding: 14px; border-bottom: 1px dashed rgba(255,107,0,0.1); text-align: left; font-size: 13px; }
+                .details-table th { color: #ff6b00; font-weight: 700; width: 40%; text-transform: uppercase; letter-spacing: 1px; }
+                .details-table td { color: #f8fafc; font-weight: 400; }
+                
+                .login-box { background: rgba(255, 107, 0, 0.03); border-left: 4px solid #ff6b00; padding: 20px; margin: 25px 0; font-family: 'JetBrains Mono', monospace; }
+                .login-box strong { color: #ff6b00; text-transform: uppercase; font-size: 12px; letter-spacing: 2px; display: block; margin-bottom: 12px; }
+                .login-box code { background: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 4px 10px; font-size: 15px; font-weight: 800; border: 1px solid rgba(255,107,0,0.3); }
+                
+                .btn-glow { display: inline-block; background: transparent; color: #ff6b00; text-decoration: none; padding: 14px 28px; border: 2px solid #ff6b00; font-size: 15px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; animation: pulse-border 2s infinite; font-family: 'JetBrains Mono', monospace; margin-top: 15px; }
+                
+                .footer { margin-top: 30px; font-size: 10px; color: #475569; text-align: center; border-top: 1px dashed rgba(255,107,0,0.2); padding-top: 20px; text-transform: uppercase; letter-spacing: 2px; line-height: 1.8; font-family: 'JetBrains Mono', monospace; }
             </style>
         </head>
         <body>
             <div class='container'>
-                <img src='https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop' alt='Sudarshan Fitness' class='header-img'>
+                <!-- Intense Cyber Glitch GIF -->
+                <img src='https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnkweDAyM3Y0NW16eWhvODR3NGc2cmUycWRjMm5wMndzMG1xaDF0bSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xUA7b1V7yQxV46u1z2/giphy.gif' alt='System Override' class='header-img'>
                 <div class='content'>
-                    <h2>$welcome_heading</h2>
-                    <p style='color: #ff6b00; font-family: monospace; font-size: 12px; letter-spacing: 2px;'>SYSTEM INITIALIZED // WELCOME</p>
-                    <p>Greetings <strong>$name</strong>,</p>
+                    <h2>> $welcome_heading_glitch</h2>
+                    <p style='color: #ff6b00; font-size: 11px; letter-spacing: 3px; border-bottom: 1px solid rgba(255,107,0,0.2); padding-bottom: 10px;'>[ SYSTEM OVERRIDE // CONNECTION ESTABLISHED ]</p>
+                    <p>USER IDENTIFIED: <span class='highlight-text'>$name</span></p>
                     <p>$welcome_text</p>
                     
                     " . $whatsapp_section . "
                     
                     <div class='login-box'>
-                        <strong>Portal Access Credentials</strong>
-                        <p style='margin:0 0 10px 0;'><a href='https://sudarshanfitness.de' style='color: #ff6b00; text-decoration: none; font-weight: 800;'>[ ACCESS DASHBOARD &rarr; ]</a></p>
-                        <p style='margin:0 0 5px 0;'>ID: <code>$memID</code></p>
+                        <strong>> ROOT_ACCESS_CREDENTIALS</strong>
+                        <p style='margin:0 0 12px 0;'><a href='https://sudarshanfitness.de' style='color: #ffffff; text-decoration: none; font-weight: 700; background: #ff6b00; padding: 4px 8px;'>EXECUTE_PORTAL.EXE</a></p>
+                        <p style='margin:0 0 8px 0;'>UID: <code>$memID</code></p>
                         <p style='margin:0;'>PWD: <code>$password</code></p>
                     </div>
 
+                    <p style='color: #ff6b00; font-size: 12px; margin-top: 30px;'>> DECRYPTING_TRANSACTION_LOG...</p>
                     <table class='details-table'>
-                        <tr><th>Membership ID</th><td>$memID</td></tr>
-                        <tr><th>Biometric PIN</th><td><code style='color:#ff6b00; font-size:16px;'>$entry_code</code></td></tr>
-                        <tr><th>Active Plan</th><td>$planName</td></tr>
-                        <tr><th>Plan Price</th><td>₹$amount</td></tr>
+                        <tr><th>SYS_ID</th><td>$memID</td></tr>
+                        <tr><th>BIO_PIN</th><td><code style='color:#ff6b00; font-size:16px; font-weight:bold;'>$entry_code</code></td></tr>
+                        <tr><th>CLEARANCE</th><td>$planName</td></tr>
+                        <tr><th>BASE_FEE</th><td>₹$amount</td></tr>
                         " . $pt_section . "
-                        " . (intval($discount) > 0 ? "<tr><th>Discount</th><td style='color:#ef4444;'>- ₹$discount</td></tr>" : "") . "
-                        <tr><th>Total Paid</th><td style='color:#10b981;'>₹$total_paid_with_pt</td></tr>
-                        <tr><th>Expiration</th><td style='color:#ef4444;'>$expiredate</td></tr>
+                        " . (intval($discount) > 0 ? "<tr><th>BYPASS_DISC</th><td style='color:#ff6b00;'>- ₹$discount</td></tr>" : "") . "
+                        <tr><th>NET_TRANSFER</th><td style='color:#ffffff; font-weight:bold;'>₹$total_paid_with_pt</td></tr>
+                        <tr><th>SYS_TERMINATION</th><td style='color:#ff6b00;'>$expiredate</td></tr>
                     </table>
 
-                    <div style='background: rgba(255, 107, 0, 0.05); border: 1px solid rgba(255,107,0,0.3); border-radius: 10px; padding: 20px; text-align: center; margin-top: 25px;'>
-                        <p style='color: #cbd5e1; font-size: 13px; margin: 0 0 12px 0; text-transform: uppercase; font-weight: 600; letter-spacing: 1px;'>Access Your 3D Virtual Gym</p>
-                        <a href='https://sudarshanfitness.de/Files/download_app.php' style='display: inline-block; background: #ff6b00; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 800; letter-spacing: 1px; box-shadow: 0 0 20px rgba(255,107,0,0.4); text-transform: uppercase;'>📲 Download App</a>
+                    <div style='text-align: center; margin-top: 40px;'>
+                        <p style='color: #94a3b8; font-size: 11px; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 2px;'>> INSTALL NEURAL UPLINK APP</p>
+                        <a href='https://sudarshanfitness.de/Files/download_app.php' class='btn-glow'>INITIALIZE DOWNLOAD</a>
                     </div>
                     
                     <div class='footer'>
-                        Automated System Message &bull; $gym_name<br>
-                        Support: <a href='mailto:$gym_email' style='color:#ff6b00; text-decoration:none;'>$gym_email</a><br>
-                        System Engineered by <strong>Anurag Bawaskar</strong>
+                        END_OF_TRANSMISSION // $gym_name<br>
+                        COMMS_LINK: <a href='mailto:$gym_email' style='color:#ff6b00; text-decoration:none;'>$gym_email</a><br>
+                        ARCHITECT: <span style='color:#ff6b00;'>ANURAG_BAWASKAR</span>
                     </div>
                 </div>
             </div>
@@ -1513,47 +1537,68 @@ if (!function_exists('send_payment_email')) {
         <html>
         <head>
             <style>
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
-                body { font-family: 'Inter', -apple-system, sans-serif; background-color: #07090e; color: #f8fafc; padding: 20px; margin: 0; }
-                .container { background: #121622; border: 1px solid rgba(255, 107, 0, 0.2); border-radius: 16px; max-width: 600px; margin: 0 auto; overflow: hidden; box-shadow: 0 0 40px rgba(255,107,0,0.15); }
-                .header-img { width: 100%; height: 160px; object-fit: cover; border-bottom: 2px solid #ff6b00; background: #000; }
+                @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;700;900&display=swap');
+                
+                /* ANIMATIONS */
+                @keyframes pulse-border {
+                    0% { box-shadow: 0 0 5px rgba(255,107,0,0.3); border-color: rgba(255,107,0,0.3); }
+                    50% { box-shadow: 0 0 25px rgba(255,107,0,0.8); border-color: rgba(255,107,0,1); }
+                    100% { box-shadow: 0 0 5px rgba(255,107,0,0.3); border-color: rgba(255,107,0,0.3); }
+                }
+                
+                @keyframes glitch-text {
+                    0% { text-shadow: 2px 0 0 #ff6b00, -2px 0 0 #00e6ff; }
+                    25% { text-shadow: -2px 0 0 #ff6b00, 2px 0 0 #00e6ff; }
+                    50% { text-shadow: 2px 0 0 #ff6b00, -2px 0 0 #00e6ff; }
+                    75% { text-shadow: -2px 0 0 #ff6b00, 2px 0 0 #00e6ff; }
+                    100% { text-shadow: 2px 0 0 #ff6b00, -2px 0 0 #00e6ff; }
+                }
+
+                body { font-family: 'Inter', -apple-system, sans-serif; background-color: #030407; color: #f8fafc; padding: 20px; margin: 0; background-image: radial-gradient(circle at 50% 0%, rgba(255, 107, 0, 0.08) 0%, transparent 70%); }
+                .container { background: #0a0d14; border: 1px solid #ff6b00; border-radius: 4px; max-width: 600px; margin: 0 auto; overflow: hidden; animation: pulse-border 3s infinite; }
+                .header-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 2px solid #ff6b00; filter: contrast(120%) brightness(90%); }
                 .content { padding: 35px; }
-                h2 { color: #ff6b00; font-size: 22px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-top: 0; }
-                p { font-size: 14px; line-height: 1.6; color: #cbd5e1; }
-                .details-table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 25px 0; border: 1px solid rgba(255,107,0,0.15); border-radius: 10px; overflow: hidden; }
-                .details-table th, .details-table td { padding: 14px; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: left; font-size: 14px; }
-                .details-table th { color: #94a3b8; font-weight: 600; width: 40%; background: rgba(0,0,0,0.2); text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
-                .details-table td { color: #f8fafc; font-weight: 600; background: rgba(255,255,255,0.02); }
-                .footer { margin-top: 30px; font-size: 11px; color: #64748b; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; text-transform: uppercase; letter-spacing: 1px; line-height: 1.6; }
+                h2 { color: #ffffff; font-size: 26px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-top: 0; animation: glitch-text 4s infinite; font-family: 'JetBrains Mono', monospace; }
+                p { font-size: 14px; line-height: 1.6; color: #94a3b8; font-family: 'JetBrains Mono', monospace; }
+                .highlight-text { color: #ff6b00; font-weight: 800; }
+                
+                .details-table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 25px 0; border: 1px dashed rgba(255,107,0,0.4); background: rgba(0,0,0,0.3); font-family: 'JetBrains Mono', monospace; }
+                .details-table th, .details-table td { padding: 14px; border-bottom: 1px dashed rgba(255,107,0,0.1); text-align: left; font-size: 13px; }
+                .details-table th { color: #ff6b00; font-weight: 700; width: 40%; text-transform: uppercase; letter-spacing: 1px; }
+                .details-table td { color: #f8fafc; font-weight: 400; }
+                
+                .footer { margin-top: 30px; font-size: 10px; color: #475569; text-align: center; border-top: 1px dashed rgba(255,107,0,0.2); padding-top: 20px; text-transform: uppercase; letter-spacing: 2px; line-height: 1.8; font-family: 'JetBrains Mono', monospace; }
             </style>
         </head>
         <body>
             <div class='container'>
-                <img src='https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=600&auto=format&fit=crop' alt='Payment Receipt' class='header-img'>
+                <!-- Intense Cyber Glitch GIF -->
+                <img src='https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnkweDAyM3Y0NW16eWhvODR3NGc2cmUycWRjMm5wMndzMG1xaDF0bSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xUA7b1V7yQxV46u1z2/giphy.gif' alt='Payment Receipt' class='header-img'>
                 <div class='content'>
-                    <h2>Transaction Authorized</h2>
-                    <p style='color: #ff6b00; font-family: monospace; font-size: 12px; letter-spacing: 2px;'>RECEIPT GENERATED // PAYMENT SUCCESS</p>
-                    <p>Greetings <strong>$name</strong>,</p>
-                    <p>Your payment has been fully processed and your subscription is active. Below are the details of your transaction at <strong>$gym_name</strong>. The official receipt PDF is securely attached.</p>
+                    <h2>> TXN_AUTHORIZED</h2>
+                    <p style='color: #ff6b00; font-size: 11px; letter-spacing: 3px; border-bottom: 1px solid rgba(255,107,0,0.2); padding-bottom: 10px;'>[ SECURE PAYMENT PROTOCOL // SUCCESS ]</p>
+                    <p>USER IDENTIFIED: <span class='highlight-text'>$name</span></p>
+                    <p>FUNDS TRANSFERRED SUCCESSFULLY. SUBSCRIPTION OVERRIDE COMPLETE. PDF LOG ATTACHED.</p>
                     
+                    <p style='color: #ff6b00; font-size: 12px; margin-top: 30px;'>> DECRYPTING_RECEIPT_LOG...</p>
                     <table class='details-table'>
-                        <tr><th>Membership ID</th><td>$memID</td></tr>
-                        <tr><th>Biometric PIN</th><td><code style='color:#ff6b00; font-size:16px;'>$entry_code</code></td></tr>
-                        <tr><th>Active Plan</th><td>$planName</td></tr>
-                        <tr><th>Plan Price</th><td>₹$amount</td></tr>
-                        " . (intval($discount) > 0 ? "<tr><th>Discount</th><td style='color:#ef4444;'>- ₹$discount</td></tr>" : "") . "
-                        <tr><th>Amount Paid</th><td style='color:#10b981;'>₹$paid_amount</td></tr>
-                        <tr><th>Payment Mode</th><td style='text-transform: uppercase;'>$payment_mode</td></tr>
-                        <tr><th>Expiration</th><td style='color:#ef4444;'>$expiredate</td></tr>
-                        <tr><th>Processed By</th><td>$received_by</td></tr>
+                        <tr><th>SYS_ID</th><td>$memID</td></tr>
+                        <tr><th>BIO_PIN</th><td><code style='color:#ff6b00; font-size:16px; font-weight:bold;'>$entry_code</code></td></tr>
+                        <tr><th>CLEARANCE_LVL</th><td>$planName</td></tr>
+                        <tr><th>BASE_FEE</th><td>₹$amount</td></tr>
+                        " . (intval($discount) > 0 ? "<tr><th>BYPASS_DISC</th><td style='color:#ff6b00;'>- ₹$discount</td></tr>" : "") . "
+                        <tr><th>FUNDS_CLEARED</th><td style='color:#ffffff; font-weight:bold;'>₹$paid_amount</td></tr>
+                        <tr><th>TXN_NODE</th><td style='text-transform: uppercase;'>$payment_mode</td></tr>
+                        <tr><th>SYS_TERMINATION</th><td style='color:#ff6b00;'>$expiredate</td></tr>
+                        <tr><th>AUTHORIZED_BY</th><td>$received_by</td></tr>
                     </table>
 
                     $whatsapp_section
 
                     <div class='footer'>
-                        Automated System Receipt &bull; $gym_name<br>
-                        Support: <a href='mailto:$gym_email' style='color:#ff6b00; text-decoration:none;'>$gym_email</a><br>
-                        System Engineered by <strong>Anurag Bawaskar</strong>
+                        END_OF_TRANSMISSION // $gym_name<br>
+                        COMMS_LINK: <a href='mailto:$gym_email' style='color:#ff6b00; text-decoration:none;'>$gym_email</a><br>
+                        ARCHITECT: <span style='color:#ff6b00;'>ANURAG_BAWASKAR</span>
                     </div>
                 </div>
             </div>
