@@ -227,7 +227,6 @@ if (isset($_POST['action']) && $_POST['action'] === 'generate_and_save') {
     $safe_diet = mysqli_real_escape_string($con, $selected_diet);
     $safe_workout = mysqli_real_escape_string($con, $workout);
 
-    session_start();
     $admin_user = isset($_SESSION['user_data']) ? $_SESSION['user_data'] : 'system';
 
     if(mysqli_num_rows($chk) > 0) {
