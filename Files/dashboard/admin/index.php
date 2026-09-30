@@ -311,10 +311,10 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 				<?php endif; ?>
 				<div style="background: linear-gradient(135deg, rgba(255,107,0,0.1) 0%, rgba(255,59,48,0.1) 100%); border: 1px solid rgba(255,107,0,0.3); border-radius: 16px; padding: 24px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
 					<div>
-						<h2 style="color: #ffffff; font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 800; margin: 0 0 8px 0; letter-spacing: -0.5px;"><i class="fa-solid fa-microchip" style="color: #ff6b00;"></i> AI NEURAL PLANNER</h2>
-						<p style="color: #cbd5e1; font-size: 14px; margin: 0; font-family: 'Inter', sans-serif;">Generate highly-optimized Marathi/English 30-Day Diet & Workout Protocols powered by Gemini AI.</p>
+						<h2 style="color: #ffffff; font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 800; margin: 0 0 8px 0; letter-spacing: -0.5px;"><i class="fa-solid fa-dumbbell" style="color: #ff6b00;"></i> SMART DIET PLANNER</h2>
+						<p style="color: #cbd5e1; font-size: 14px; margin: 0; font-family: 'Inter', sans-serif;">Generate highly-optimized Marathi/English 30-Day Diet & Workout Protocols.</p>
 					</div>
-					<a href="ai_diet.php" style="background: linear-gradient(135deg, #ff6b00, #ff3b30); color: #ffffff; padding: 12px 24px; border-radius: 8px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; box-shadow: 0 4px 15px rgba(255,107,0,0.4); font-size: 14px; transition: transform 0.3s;"><i class="fa-solid fa-bolt"></i> INITIALIZE AI</a>
+					<a href="ai_diet.php" style="background: linear-gradient(135deg, #ff6b00, #ff3b30); color: #ffffff; padding: 12px 24px; border-radius: 8px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; box-shadow: 0 4px 15px rgba(255,107,0,0.4); font-size: 14px; transition: transform 0.3s;"><i class="fa-solid fa-bolt"></i> GENERATE PLAN</a>
 				</div>
 		
 				<div class="row">

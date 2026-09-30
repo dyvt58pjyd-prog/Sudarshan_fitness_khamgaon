@@ -1,4 +1,6 @@
-<?php
+import os
+
+file_content = """<?php
 header('Content-Type: application/json');
 
 if (isset($_POST['action']) && $_POST['action'] === 'generate') {
@@ -193,27 +195,19 @@ if (isset($_POST['action']) && $_POST['action'] === 'generate') {
     // Headers based on language
     $greeting = "## SUDARSHAN FITNESS - OFFICIAL PROTOCOL";
     $stats = "**Member:** {$name} | **Weight:** {$weight}kg | **Height:** {$height}cm | **Goal:** {$goal}";
-    $med = $medical !== 'None' ? "
-**Medical Note:** {$medical} - Please consult doctor before high-intensity training." : "";
+    $med = $medical !== 'None' ? "\n**Medical Note:** {$medical} - Please consult doctor before high-intensity training." : "";
 
     if ($language === 'Marathi') {
         $greeting = "## सुदर्शन फिटनेस - अधिकृत आहार आणि व्यायाम योजना";
         $stats = "**सदस्य:** {$name} | **वजन:** {$weight}kg | **उंची:** {$height}cm | **उद्दिष्ट:** {$goal}";
-        $med = $medical !== 'None' ? "
-**वैद्यकीय नोंद:** {$medical} - कृपया व्यायाम सुरू करण्यापूर्वी डॉक्टरांचा सल्ला घ्या." : "";
+        $med = $medical !== 'None' ? "\n**वैद्यकीय नोंद:** {$medical} - कृपया व्यायाम सुरू करण्यापूर्वी डॉक्टरांचा सल्ला घ्या." : "";
     } elseif ($language === 'Hindi') {
         $greeting = "## सुदर्शन फिटनेस - आधिकारिक डाइट और वर्कआउट प्लान";
         $stats = "**सदस्य:** {$name} | **वजन:** {$weight}kg | **ऊंचाई:** {$height}cm | **लक्ष्य:** {$goal}";
-        $med = $medical !== 'None' ? "
-**मेडिकल नोट:** {$medical} - कृपया व्यायाम से पहले डॉक्टर की सलाह लें।" : "";
+        $med = $medical !== 'None' ? "\n**मेडिकल नोट:** {$medical} - कृपया व्यायाम से पहले डॉक्टर की सलाह लें।" : "";
     }
 
-    $final_markdown = "{$greeting}
-{$stats}{$med}
-
-" . $selected_diet . "
-
-" . $workout;
+    $final_markdown = "{$greeting}\n{$stats}{$med}\n\n" . $selected_diet . "\n\n" . $workout;
 
     // Simulate thinking time for effect
     sleep(1);
@@ -223,3 +217,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'generate') {
 }
 
 echo json_encode(['success' => false, 'error' => 'Invalid Request']);
+"""
+
+filepath = "./Files/api/ai_handler.php"
+with open(filepath, "w", encoding="utf-8") as f:
+    f.write(file_content)
+print(f"Created {filepath}")

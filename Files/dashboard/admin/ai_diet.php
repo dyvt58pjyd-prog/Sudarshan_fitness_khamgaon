@@ -74,8 +74,8 @@ $api_key = $part1 . $part2;
 <div class="page-container">
     <div class="ai-header">
         <a href="index.php" style="color: #94a3b8; text-decoration: none; font-size: 20px;"><i class="fa-solid fa-arrow-left"></i></a>
-        <h1>AI NEURAL PLANNER</h1>
-        <span class="badge-ai"><i class="fa-solid fa-microchip"></i> Gemini Engine Active</span>
+        <h1>SMART DIET PLANNER</h1>
+        <span class="badge-ai" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fa-solid fa-database"></i> System Engine Active</span>
     </div>
 
     <?php if (!$has_api_key): ?>
@@ -151,8 +151,8 @@ $api_key = $part1 . $part2;
         <div class="output-panel" id="printArea">
             <div class="ai-loader" id="aiLoader">
                 <i class="fa-solid fa-microchip" style="font-size: 40px; color: #ff6b00; margin-bottom: 15px; animation: pulse-shadow 1s infinite; border-radius: 50%;"></i>
-                <div class="glitch-loader">CONNECTING TO NEURAL NET...</div>
-                <p style="font-family: 'JetBrains Mono'; font-size: 12px; color: #94a3b8; margin-top: 10px;">Synthesizing optimal biomechanical pathways...</p>
+                <div class="glitch-loader">FETCHING PROTOCOLS...</div>
+                <p style="font-family: 'JetBrains Mono'; font-size: 12px; color: #94a3b8; margin-top: 10px;">Compiling offline fitness database...</p>
             </div>
             
             <div id="aiOutput" class="terminal-output ai-content"></div>
