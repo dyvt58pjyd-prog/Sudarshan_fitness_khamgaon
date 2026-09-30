@@ -1,4 +1,6 @@
-<?php
+import os
+
+file_content = """<?php
 require '../../include/db_conn.php';
 page_protect();
 
@@ -274,3 +276,9 @@ if ($rq && mysqli_num_rows($rq) > 0) {
     </div>
 </body>
 </html>
+"""
+
+filepath = "./Files/dashboard/member/my_routine.php"
+with open(filepath, "w", encoding="utf-8") as f:
+    f.write(file_content)
+print(f"Created {filepath}")
