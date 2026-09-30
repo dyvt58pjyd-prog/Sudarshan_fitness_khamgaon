@@ -229,7 +229,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'generate_and_save') {
 
     $admin_user = isset($_SESSION['user_data']) ? $_SESSION['user_data'] : 'system';
 
-    if(mysqli_num_rows($chk) > 0) {
+    if($chk && mysqli_num_rows($chk) > 0) {
         $q = "UPDATE member_routines SET diet_plan = '$safe_diet', workout_plan = '$safe_workout', trainer_id = '$admin_user', updated_at = CURRENT_TIMESTAMP WHERE uid = '".mysqli_real_escape_string($con, $uid)."'";
         mysqli_query($con, $q);
     } else {

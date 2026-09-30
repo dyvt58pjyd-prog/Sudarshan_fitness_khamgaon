@@ -1196,9 +1196,19 @@ if (!function_exists('check_and_upgrade_db')) {
             uid VARCHAR(20) NOT NULL,
             diet_plan TEXT,
             workout_plan TEXT,
+            trainer_id VARCHAR(50) DEFAULT NULL,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id)
         )";
+        mysqli_query($con, $member_routines_sql);
+        
+        // Ensure columns exist if table was already created
+        $cols = mysqli_query($con, "SHOW COLUMNS FROM member_routines LIKE 'trainer_id'");
+        if($cols && mysqli_num_rows($cols) == 0) mysqli_query($con, "ALTER TABLE member_routines ADD COLUMN trainer_id VARCHAR(50) DEFAULT NULL");
+        
+        $cols2 = mysqli_query($con, "SHOW COLUMNS FROM member_routines LIKE 'updated_at'");
+        if($cols2 && mysqli_num_rows($cols2) == 0) mysqli_query($con, "ALTER TABLE member_routines ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
         $walkin_sql = "CREATE TABLE IF NOT EXISTS walkin_enquiries (
             id INT(11) NOT NULL AUTO_INCREMENT,
             username VARCHAR(100) NOT NULL,
