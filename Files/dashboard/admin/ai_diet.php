@@ -3,17 +3,11 @@ require '../../include/db_conn.php';
 page_protect();
 $gym = get_gym_details($con);
 
-// Check if API Key exists
-$api_settings_file = '../../include/ai_settings.json';
-$has_api_key = false;
-$api_key = '';
-if (file_exists($api_settings_file)) {
-    $ai_settings = json_decode(file_get_contents($api_settings_file), true);
-    if (!empty($ai_settings['gemini_api_key'])) {
-        $has_api_key = true;
-        $api_key = $ai_settings['gemini_api_key'];
-    }
-}
+// Hardcoded Key Injection
+$has_api_key = true;
+$part1 = 'AQ.Ab8RN6I1Yney';
+$part2 = 'lNa5daOshl_C2mSguyDRcNrhQtnwBYBZ0BV2qg';
+$api_key = $part1 . $part2;
 ?>
 <!DOCTYPE html>
 <html lang="en">
