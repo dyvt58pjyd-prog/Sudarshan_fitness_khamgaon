@@ -49,7 +49,7 @@ Divide it into:
 4. Daily Diet Plan (Breakfast, Mid-Morning, Lunch, Pre-Workout, Post-Workout, Dinner)
 5. Crucial Rules for Success";
 
-    $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' . $api_key;
+    $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=' . $api_key;
     
     $data = [
         "contents" => [
