@@ -512,9 +512,10 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 							<span style="color: var(--text-muted); font-size: 13px; font-weight: 500;">Audited physical cash & digital ledger</span>
 						</div>
 					</div>
-					<div style="display:flex; gap:10px;">
-						<a href="revenue_month.php" style="background: rgba(52, 199, 89, 0.1); border: 1px solid rgba(52, 199, 89, 0.2); color: #34c759; padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s;">Income & Auditing →</a>
-						<a href="expenses.php" style="background: rgba(255, 59, 48, 0.1); border: 1px solid rgba(255, 59, 48, 0.2); color: #ff3b30; padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s;">Expenses Ledger →</a>
+					<div style="display:flex; flex-wrap:wrap; gap:10px;">
+						<a href="financial_audit.php" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); color: #3b82f6; padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s;"><i class="fa-solid fa-lock"></i> Financial Audit Hub</a>
+						<a href="revenue_month.php" style="background: rgba(52, 199, 89, 0.1); border: 1px solid rgba(52, 199, 89, 0.2); color: #34c759; padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s;">Income Ledger</a>
+						<a href="expenses.php" style="background: rgba(255, 59, 48, 0.1); border: 1px solid rgba(255, 59, 48, 0.2); color: #ff3b30; padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s;">Expenses Ledger</a>
 					</div>
 				</div>
 
