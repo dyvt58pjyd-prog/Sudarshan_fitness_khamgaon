@@ -556,6 +556,23 @@ function dismissWarning() {
 				</div>
 			</div>
 
+            <!-- SMART DIET & WORKOUT PROTOCOL CARD -->
+            <div class="row" style="margin-left: 0; margin-right: 0; margin-bottom: 25px;">
+                <div class="col-md-12" style="padding: 0;">
+                    <div class="portal-card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(30, 41, 59, 0.9) 100%); border: 2px solid #10b981; border-radius: 20px; padding: 25px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; color: #ffffff; box-shadow: 0 15px 35px rgba(16, 185, 129, 0.2);">
+                        <div style="flex: 1; min-width: 260px;">
+                            <div style="color: #34d399; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;">🥗 YOUR PERSONALIZED NUTRITION</div>
+                            <h3 style="margin: 0 0 10px 0; color: #fff; font-weight: 800; font-size: 22px;">Smart Diet & Workout Protocol</h3>
+                            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 18px; line-height: 1.5;">View the exact diet and exercise routine assigned to you by the gym admins.</p>
+                            
+                            <a href="my_routine.php" style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; padding: 12px 24px; border-radius: 14px; font-size: 14px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(16,185,129,0.4); animation: pulse-shadow 2s infinite;">
+                                📋 View My Diet & Workout Plan
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- 3D AI WORKOUT COACH CARD -->
             <div class="row" style="margin-left: 0; margin-right: 0; margin-bottom: 25px;">
                 <div class="col-md-12" style="padding: 0;">
