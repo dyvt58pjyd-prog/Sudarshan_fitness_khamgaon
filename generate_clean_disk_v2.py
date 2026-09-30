@@ -1,4 +1,6 @@
-<?php
+import os
+
+file_content = """<?php
 header('Content-Type: text/html');
 ?>
 <!DOCTYPE html>
@@ -71,3 +73,9 @@ header('Content-Type: text/html');
     ?>
 </body>
 </html>
+"""
+
+filepath = "./Files/clean_disk.php"
+with open(filepath, "w", encoding="utf-8") as f:
+    f.write(file_content)
+print(f"Updated {filepath}")
