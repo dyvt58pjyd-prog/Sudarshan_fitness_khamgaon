@@ -133,6 +133,25 @@ page_protect();
         </div>
 
         <?php if ($current_tab === 'plan'): ?>
+            <?php
+            $current_filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
+            ?>
+            <!-- Status Filter Shortcuts -->
+            <div style="display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap;">
+                <a href="?tab=plan&filter=all" class="a1-btn" style="padding: 7px 16px; font-size: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; <?php echo $current_filter === 'all' ? 'background: #2563eb; color: #fff;' : 'background: rgba(255,255,255,0.06); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1);'; ?>">
+                    All Members
+                </a>
+                <a href="?tab=plan&filter=expired" class="a1-btn" style="padding: 7px 16px; font-size: 12px; border-radius: 8px; text-decoration: none; font-weight: 700; <?php echo $current_filter === 'expired' ? 'background: #dc2626; color: #fff;' : 'background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.3);'; ?>">
+                    🚨 Expired Members (Overdue)
+                </a>
+                <a href="?tab=plan&filter=expiring" class="a1-btn" style="padding: 7px 16px; font-size: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; <?php echo $current_filter === 'expiring' ? 'background: #d97706; color: #fff;' : 'background: rgba(245,158,11,0.1); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3);'; ?>">
+                    ⏳ Expiring Soon (≤ 5 Days)
+                </a>
+                <a href="?tab=plan&filter=active" class="a1-btn" style="padding: 7px 16px; font-size: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; <?php echo $current_filter === 'active' ? 'background: #059669; color: #fff;' : 'background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.3);'; ?>">
+                    🟢 Active Members
+                </a>
+            </div>
+
             <!-- Membership Plan Payments Tab -->
             <table class="table table-bordered datatable" id="table-1" border=1>
                 <thead>
@@ -152,6 +171,8 @@ page_protect();
                         $query  = "select * from users WHERE YEAR(joining_date) <= " . $_SESSION['working_year'] . " ORDER BY username ASC";
                         $result = mysqli_query($con, $query);
                         $sno    = 1;
+                        $today  = date('Y-m-d');
+                        $today_ts = strtotime($today);
 
                         if ($result && mysqli_num_rows($result) > 0) {
                             while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
@@ -166,9 +187,58 @@ page_protect();
                                     $expire = $row1['expire'];
                                     $planid = $row1['pid'];
                                 }
+
+                                $status_key = 'no_plan';
+                                $badge_html = '';
+
+                                if ($expire === "No Active Plan" || empty($expire)) {
+                                    $status_key = 'no_plan';
+                                    $badge_html = '<span style="background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 11px;">No Active Plan</span>';
+                                } else {
+                                    $expire_ts = strtotime($expire);
+                                    $diff_days = round(($expire_ts - $today_ts) / 86400);
+                                    if ($diff_days < 0) {
+                                        $status_key = 'expired';
+                                        $days_ago = abs($diff_days);
+                                        $badge_html = '<div style="display: flex; flex-direction: column; gap: 3px;">
+                                            <span style="font-weight: 700; color: #ef4444; font-size: 13px;">' . htmlspecialchars($expire) . '</span>
+                                            <span style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); padding: 2px 7px; border-radius: 5px; font-weight: 800; font-size: 10.5px; width: fit-content;">
+                                                🚨 Expired (' . $days_ago . 'd ago)
+                                            </span>
+                                        </div>';
+                                    } elseif ($diff_days == 0) {
+                                        $status_key = 'expiring';
+                                        $badge_html = '<div style="display: flex; flex-direction: column; gap: 3px;">
+                                            <span style="font-weight: 700; color: #f59e0b; font-size: 13px;">' . htmlspecialchars($expire) . '</span>
+                                            <span style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); padding: 2px 7px; border-radius: 5px; font-weight: 800; font-size: 10.5px; width: fit-content;">
+                                                ⚠️ Expires Today
+                                            </span>
+                                        </div>';
+                                    } elseif ($diff_days <= 5) {
+                                        $status_key = 'expiring';
+                                        $badge_html = '<div style="display: flex; flex-direction: column; gap: 3px;">
+                                            <span style="font-weight: 700; color: #f59e0b; font-size: 13px;">' . htmlspecialchars($expire) . '</span>
+                                            <span style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); padding: 2px 7px; border-radius: 5px; font-weight: 800; font-size: 10.5px; width: fit-content;">
+                                                ⏳ ' . $diff_days . ' days left
+                                            </span>
+                                        </div>';
+                                    } else {
+                                        $status_key = 'active';
+                                        $badge_html = '<div style="display: flex; flex-direction: column; gap: 3px;">
+                                            <span style="font-weight: 700; color: #10b981; font-size: 13px;">' . htmlspecialchars($expire) . '</span>
+                                            <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); padding: 2px 7px; border-radius: 5px; font-weight: 800; font-size: 10.5px; width: fit-content;">
+                                                🟢 Active (' . $diff_days . 'd left)
+                                            </span>
+                                        </div>';
+                                    }
+                                }
+
+                                if ($current_filter === 'expired' && $status_key !== 'expired') continue;
+                                if ($current_filter === 'expiring' && $status_key !== 'expiring') continue;
+                                if ($current_filter === 'active' && $status_key !== 'active') continue;
                                 
                                 echo "<tr><td>".$sno."</td>";
-                                echo "<td>" . htmlspecialchars($expire) . "</td>";
+                                echo "<td>" . $badge_html . "</td>";
                                 echo "<td>" . htmlspecialchars($row['username']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['userid']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['mobile']) . "</td>";

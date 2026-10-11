@@ -18,8 +18,15 @@ $query="update enrolls_to set renewal='no' where uid='$memID'";
           $cdate = isset($_SESSION['working_year']) ? ($_SESSION['working_year'] . '-' . date('m-d')) : date('Y-m-d');
           $launch_date = '2026-07-08';
           $cdate = ($cdate < $launch_date) ? $launch_date : $cdate;
-          $d = calculate_expiration_date($cdate, $value[3]);
-          $expiredate=date("Y-m-d",$d); //adding validity retrieve from plan to current date
+
+          // Determine effective membership start date chosen by admin
+          $start_date_val = $cdate;
+          if (isset($_POST['start_date']) && !empty($_POST['start_date'])) {
+              $start_date_val = mysqli_real_escape_string($con, trim($_POST['start_date']));
+          }
+
+          $d = calculate_expiration_date($start_date_val, $value[3]);
+          $expiredate=date("Y-m-d",$d); //adding validity retrieve from plan to start date
           $discount = isset($_POST['discount']) ? intval($_POST['discount']) : 0;
           $transaction_date = isset($_POST['transaction_date']) && !empty($_POST['transaction_date']) ? mysqli_real_escape_string($con, $_POST['transaction_date']) : date('Y-m-d');
            $plan_price = intval($value[4]);
@@ -37,7 +44,13 @@ $query="update enrolls_to set renewal='no' where uid='$memID'";
 
            $payment_mode = isset($_POST['payment_mode']) ? mysqli_real_escape_string($con, $_POST['payment_mode']) : 'Cash';
            $received_by = isset($_SESSION['full_name']) ? mysqli_real_escape_string($con, $_SESSION['full_name']) : 'System';
-           $query2="insert into enrolls_to(pid,uid,paid_date,expire,renewal,payment_mode,received_by,discount_amount,paid_amount,balance,balance_due_date) values('$plan','$memID','$transaction_date','$expiredate','yes','$payment_mode','$received_by',$discount,$paid_now,$balance,$due_date_val)";
+
+           $chk_start_col = mysqli_query($con, "SHOW COLUMNS FROM enrolls_to LIKE 'start_date'");
+           if ($chk_start_col && mysqli_num_rows($chk_start_col) > 0) {
+               $query2="insert into enrolls_to(pid,uid,paid_date,expire,renewal,payment_mode,received_by,discount_amount,paid_amount,balance,balance_due_date,start_date) values('$plan','$memID','$transaction_date','$expiredate','yes','$payment_mode','$received_by',$discount,$paid_now,$balance,$due_date_val,'$start_date_val')";
+           } else {
+               $query2="insert into enrolls_to(pid,uid,paid_date,expire,renewal,payment_mode,received_by,discount_amount,paid_amount,balance,balance_due_date) values('$plan','$memID','$transaction_date','$expiredate','yes','$payment_mode','$received_by',$discount,$paid_now,$balance,$due_date_val)";
+           }
            if(mysqli_query($con,$query2)==1){
                 // Generate new random 6-digit entry code for gate access on renewal
                 $new_entry_code = strval(rand(100000, 999999));

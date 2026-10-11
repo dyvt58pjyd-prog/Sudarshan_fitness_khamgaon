@@ -447,6 +447,10 @@ if (!$con) {
     if ($chk_due && mysqli_num_rows($chk_due) === 0) {
         mysqli_query($con, "ALTER TABLE enrolls_to ADD COLUMN balance_due_date VARCHAR(15) DEFAULT NULL");
     }
+    $chk_sdate = mysqli_query($con, "SHOW COLUMNS FROM enrolls_to LIKE 'start_date'");
+    if ($chk_sdate && mysqli_num_rows($chk_sdate) === 0) {
+        mysqli_query($con, "ALTER TABLE enrolls_to ADD COLUMN start_date VARCHAR(15) DEFAULT NULL");
+    }
 
     // Self-healing database check: fix legacy overpayment glitches in enrolls_to
     mysqli_query($con, "UPDATE enrolls_to e INNER JOIN plan p ON e.pid = p.pid SET e.paid_amount = (p.amount - IFNULL(e.discount_amount, 0)) WHERE e.paid_amount > (p.amount - IFNULL(e.discount_amount, 0))");

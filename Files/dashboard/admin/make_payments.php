@@ -15,18 +15,64 @@ if ($uid) {
     $result1 = mysqli_query($con, $query1);
     
     $name = "";
+    $mobile = "";
     $planName = "No Active Plan";
     if ($result1 && mysqli_num_rows($result1) > 0) {
         $row1 = mysqli_fetch_assoc($result1);
         $name = $row1['username'];
+        $mobile = $row1['mobile'];
     }
     
-    if (!empty($planid)) {
+    // Fetch latest membership enrollment details
+    $prev_expire = "";
+    $prev_paid_date = "";
+    $prev_plan_id = "";
+    $query_enroll = "SELECT e.*, p.planName as p_name, p.validity 
+                     FROM enrolls_to e 
+                     LEFT JOIN plan p ON e.pid = p.pid 
+                     WHERE e.uid = '$uid' 
+                     ORDER BY e.expire DESC, e.et_id DESC LIMIT 1";
+    $res_enroll = mysqli_query($con, $query_enroll);
+    if ($res_enroll && mysqli_num_rows($res_enroll) > 0) {
+        $row_enroll = mysqli_fetch_assoc($res_enroll);
+        $prev_expire = $row_enroll['expire'];
+        $prev_paid_date = $row_enroll['paid_date'];
+        $prev_plan_id = $row_enroll['pid'];
+        if (!empty($row_enroll['p_name'])) {
+            $planName = $row_enroll['p_name'];
+        }
+    }
+
+    if (!empty($planid) && $planName == "No Active Plan") {
         $query2 = "select * from plan where pid='$planid'";
         $result2 = mysqli_query($con, $query2);
         if ($result2 && mysqli_num_rows($result2) > 0) {
             $planValue = mysqli_fetch_assoc($result2);
             $planName = $planValue['planName'];
+        }
+    }
+
+    // Expiry analysis
+    $today = date('Y-m-d');
+    $today_time = strtotime($today);
+    $is_expired = false;
+    $days_overdue = 0;
+    $days_remaining = 0;
+    $attendance_after_expiry = 0;
+
+    if (!empty($prev_expire)) {
+        $expire_time = strtotime($prev_expire);
+        $diff_days = round(($expire_time - $today_time) / 86400);
+        if ($diff_days < 0) {
+            $is_expired = true;
+            $days_overdue = abs($diff_days);
+            // Count gym visits since expiration date
+            $q_att = mysqli_query($con, "SELECT COUNT(*) as att_count FROM attendance WHERE uid = '$uid' AND date > '$prev_expire'");
+            if ($q_att && $att_row = mysqli_fetch_assoc($q_att)) {
+                $attendance_after_expiry = intval($att_row['att_count']);
+            }
+        } elseif ($diff_days >= 0) {
+            $days_remaining = $diff_days;
         }
     }
 ?>
@@ -131,10 +177,57 @@ if ($uid) {
 		
 		
 		<div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
-        <div class="a1-card-8" style="width:520px; margin:0 auto; border-radius: 16px; overflow: hidden; background: var(--glass-bg); border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);">
+        <div class="a1-card-8" style="width:580px; max-width:96%; margin:0 auto; border-radius: 16px; overflow: hidden; background: var(--glass-bg); border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);">
 		<div class="a1-container a1-center" style="background: #f8fafc; border-bottom: 1px solid rgba(0, 0, 0, 0.06); padding: 14px 20px;">
-        	<h6 style="margin: 0; font-weight: 700; color: var(--text-main); font-size: 14px; letter-spacing: 0.5px;">MAKE PAYMENT</h6>
+        	<h6 style="margin: 0; font-weight: 700; color: var(--text-main); font-size: 14px; letter-spacing: 0.5px;">MAKE MEMBERSHIP PAYMENT</h6>
         </div>
+
+        <?php if ($is_expired): ?>
+        <!-- OVERDUE / EXPIRED ALERT BANNER -->
+        <div style="background: rgba(239, 68, 68, 0.08); border-left: 4px solid #ef4444; margin: 15px 20px 5px 20px; padding: 14px 16px; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-weight: 800; color: #ef4444; font-size: 13px; display: inline-flex; align-items: center; gap: 6px;">
+                    🚨 MEMBERSHIP EXPIRED (<?php echo $days_overdue; ?> DAYS OVERDUE)
+                </span>
+                <span style="background: #ef4444; color: #ffffff; padding: 2px 8px; border-radius: 12px; font-weight: 700; font-size: 11px;">
+                    Expired On <?php echo htmlspecialchars($prev_expire); ?>
+                </span>
+            </div>
+            <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+                Previous Plan: <strong style="color: var(--text-main);"><?php echo htmlspecialchars($planName); ?></strong>
+            </div>
+            <?php if ($attendance_after_expiry > 0): ?>
+            <div style="margin-top: 8px; background: rgba(239, 68, 68, 0.12); padding: 8px 10px; border-radius: 6px; font-size: 11.5px; color: #dc2626; font-weight: 600;">
+                ⚠️ <strong>Unpaid Attendance Detected:</strong> Member attended gym <strong><?php echo $attendance_after_expiry; ?> time<?php echo $attendance_after_expiry > 1 ? 's' : ''; ?></strong> after expiring! Reissuing from previous expiry date ensures you recover these unpaid days.
+            </div>
+            <?php else: ?>
+            <div style="margin-top: 6px; font-size: 11px; color: #64748b;">
+                ℹ️ No attendance logged after expiry (Member was absent or took a break).
+            </div>
+            <?php endif; ?>
+        </div>
+        <?php elseif (!empty($prev_expire) && $days_remaining == 0): ?>
+        <!-- EXPIRES TODAY BANNER -->
+        <div style="background: rgba(245, 158, 11, 0.08); border-left: 4px solid #f59e0b; margin: 15px 20px 5px 20px; padding: 12px 16px; border-radius: 8px;">
+            <div style="font-weight: 800; color: #f59e0b; font-size: 13px;">
+                ⚠️ MEMBERSHIP EXPIRES TODAY (<?php echo htmlspecialchars($prev_expire); ?>)
+            </div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">
+                Current Plan: <strong style="color: var(--text-main);"><?php echo htmlspecialchars($planName); ?></strong>
+            </div>
+        </div>
+        <?php elseif (!empty($prev_expire) && $days_remaining > 0): ?>
+        <!-- ACTIVE MEMBERSHIP BANNER -->
+        <div style="background: rgba(16, 185, 129, 0.08); border-left: 4px solid #10b981; margin: 15px 20px 5px 20px; padding: 12px 16px; border-radius: 8px;">
+            <div style="font-weight: 800; color: #10b981; font-size: 13px;">
+                🟢 ACTIVE MEMBERSHIP (Valid until <?php echo htmlspecialchars($prev_expire); ?> — <?php echo $days_remaining; ?> days left)
+            </div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">
+                Current Plan: <strong style="color: var(--text-main);"><?php echo htmlspecialchars($planName); ?></strong>
+            </div>
+        </div>
+        <?php endif; ?>
+
        <form id="form1" name="form1" method="post" class="a1-container" action="submit_payments.php">
          <table width="100%" border="0" align="center">
          <tr>
@@ -146,28 +239,88 @@ if ($uid) {
 			   
 			   <tr>
                <td height="35">NAME:</td>
-               <td height="35"><input type="text" name="u_name" id="boxx" value="<?php echo $name; ?>" placeholder="Member Name" maxlength="30" readonly/>
-                 
+               <td height="35"><input type="text" name="u_name" id="boxx" value="<?php echo $name; ?>" placeholder="Member Name" maxlength="30" readonly/></td>
              </tr>
              <tr>
-               <td height="35">CURRENT PLAN</td>
-               <td height="35"><input type="text" name="prevPlan" id="boxx" value="<?php echo $planName; ?>" readonly></td></td>
+               <td height="35">CURRENT PLAN:</td>
+               <td height="35">
+                 <input type="text" name="prevPlan" id="boxx" value="<?php echo htmlspecialchars($planName) . (!empty($prev_expire) ? ' (Exp: ' . htmlspecialchars($prev_expire) . ')' : ''); ?>" readonly>
+               </td>
              </tr>
              <tr>
                <td height="35">SELECT NEW PLAN:</td>
-               <td height="35"><select name="plan" id="plan_select" required onchange="myplandetail(this.value); validateDiscount()">
- 							<option value="">-- Please select --</option>
- 							<?php
- 							    $query = "select * from plan where active='yes'";
- 							    $result = mysqli_query($con, $query);
- 							    if ($result && mysqli_num_rows($result) > 0) {
- 							        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
- 							            echo "<option value='" . $row['pid'] . "' data-discount-lock='" . intval($row['discount_lock']) . "'>" . htmlspecialchars($row['planName']) . "</option>";
- 							        }
- 							    }
- 							?>
- 						</select></td></td>
-              </tr>
+               <td height="35">
+                 <select name="plan" id="plan_select" required onchange="myplandetail(this.value); validateDiscount(); recalculateExpiryPreview();">
+					<option value="">-- Please select --</option>
+					<?php
+					    $query = "select * from plan where active='yes'";
+					    $result = mysqli_query($con, $query);
+					    if ($result && mysqli_num_rows($result) > 0) {
+					        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+					            echo "<option value='" . $row['pid'] . "' data-discount-lock='" . intval($row['discount_lock']) . "' data-validity='" . htmlspecialchars($row['validity']) . "' data-amount='" . htmlspecialchars($row['amount']) . "'>" . htmlspecialchars($row['planName']) . " (" . htmlspecialchars($row['validity']) . ")</option>";
+					        }
+					    }
+					?>
+				 </select>
+               </td>
+             </tr>
+
+             <!-- RENEWAL START DATE OPTIONS -->
+             <tr>
+               <td height="35" style="vertical-align: top; padding-top: 10px;">START FROM DATE:</td>
+               <td style="padding: 10px 0;">
+                 <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 107, 0, 0.25); border-radius: 10px; padding: 12px; margin-bottom: 5px;">
+                   <?php if (!empty($prev_expire)): ?>
+                   <label style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; cursor: pointer; font-size: 12px; color: var(--text-main);">
+                     <input type="radio" name="start_mode" id="start_mode_continuous" value="continuous" checked onchange="updateStartDateSelection()" style="margin-top: 2px;">
+                     <div>
+                       <strong style="color: #ff6b00;">Continue from Expiry Date (<?php echo htmlspecialchars($prev_expire); ?>)</strong>
+                       <div style="font-size: 11px; color: var(--text-muted);">Recommended if member continued coming to gym (Recovers unpaid days)</div>
+                     </div>
+                   </label>
+                   
+                   <label style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; cursor: pointer; font-size: 12px; color: var(--text-main);">
+                     <input type="radio" name="start_mode" id="start_mode_today" value="today" onchange="updateStartDateSelection()" style="margin-top: 2px;">
+                     <div>
+                       <strong>Start Fresh from Today (<?php echo date('Y-m-d'); ?>)</strong>
+                       <div style="font-size: 11px; color: var(--text-muted);">Use if member was absent or took a genuine break</div>
+                     </div>
+                   </label>
+                   <?php else: ?>
+                   <label style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; cursor: pointer; font-size: 12px; color: var(--text-main);">
+                     <input type="radio" name="start_mode" id="start_mode_today" value="today" checked onchange="updateStartDateSelection()" style="margin-top: 2px;">
+                     <div>
+                       <strong>Start from Today (<?php echo date('Y-m-d'); ?>)</strong>
+                     </div>
+                   </label>
+                   <?php endif; ?>
+                   
+                   <label style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 4px; cursor: pointer; font-size: 12px; color: var(--text-main);">
+                     <input type="radio" name="start_mode" id="start_mode_custom" value="custom" onchange="updateStartDateSelection()" style="margin-top: 2px;">
+                     <div>
+                       <strong>Custom Start Date</strong>
+                     </div>
+                   </label>
+                   
+                   <div id="custom_date_container" style="display: none; margin-top: 8px; padding-left: 20px;">
+                     <input type="date" name="custom_start_date" id="custom_start_date" value="<?php echo date('Y-m-d'); ?>" onchange="recalculateExpiryPreview()" style="padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(255, 107, 0, 0.4);">
+                   </div>
+
+                   <!-- Hidden effective start date sent to submit_payments.php -->
+                   <input type="hidden" name="start_date" id="effective_start_date" value="<?php echo !empty($prev_expire) ? htmlspecialchars($prev_expire) : date('Y-m-d'); ?>">
+                 </div>
+               </td>
+             </tr>
+
+             <!-- LIVE NEW EXPIRY PREVIEW -->
+             <tr>
+               <td height="35">NEW EXPIRY DATE:</td>
+               <td height="35">
+                 <div id="live_expiry_preview_box" style="background: rgba(16, 185, 129, 0.08); border: 1px solid #10b981; border-radius: 8px; padding: 8px 12px; font-size: 12.5px; font-weight: 700; color: #10b981;">
+                   👉 Select a plan above to view new calculated expiry date
+                 </div>
+               </td>
+             </tr>
                <tr>
                  <td height="35">TRANSACTION DATE:</td>
                  <td height="35"><input type="date" name="transaction_date" id="boxx" value="<?php echo date('Y-m-d'); ?>" required size="30"></td>
@@ -309,6 +462,80 @@ if ($uid) {
         		
         	}
 
+            function updateStartDateSelection() {
+                var checkedRadio = document.querySelector('input[name="start_mode"]:checked');
+                var mode = checkedRadio ? checkedRadio.value : 'today';
+                var customContainer = document.getElementById('custom_date_container');
+                var effectiveInput = document.getElementById('effective_start_date');
+                var prevExpire = '<?php echo addslashes($prev_expire); ?>';
+                var todayStr = '<?php echo date('Y-m-d'); ?>';
+                
+                if (mode === 'continuous') {
+                    if (customContainer) customContainer.style.display = 'none';
+                    effectiveInput.value = prevExpire || todayStr;
+                } else if (mode === 'today') {
+                    if (customContainer) customContainer.style.display = 'none';
+                    effectiveInput.value = todayStr;
+                } else if (mode === 'custom') {
+                    if (customContainer) customContainer.style.display = 'block';
+                    var customVal = document.getElementById('custom_start_date') ? document.getElementById('custom_start_date').value : todayStr;
+                    effectiveInput.value = customVal || todayStr;
+                }
+                recalculateExpiryPreview();
+            }
+
+            function recalculateExpiryPreview() {
+                var effectiveInput = document.getElementById('effective_start_date');
+                var startDateStr = effectiveInput ? effectiveInput.value : '<?php echo date('Y-m-d'); ?>';
+                if (!startDateStr) startDateStr = '<?php echo date('Y-m-d'); ?>';
+
+                var planSelect = document.getElementById('plan_select');
+                var previewBox = document.getElementById('live_expiry_preview_box');
+                if (!previewBox) return;
+
+                if (!planSelect || !planSelect.value) {
+                    previewBox.innerHTML = '<span style="color: var(--text-muted); font-weight: 500;">👉 Select a plan above to view new calculated expiry date</span>';
+                    return;
+                }
+
+                var selectedOpt = planSelect.options[planSelect.selectedIndex];
+                var validity = selectedOpt.getAttribute('data-validity') || '1';
+                validity = validity.toLowerCase().trim();
+
+                var parts = startDateStr.split('-');
+                if (parts.length !== 3) {
+                    previewBox.innerHTML = '<span style="color: #ef4444;">Invalid start date.</span>';
+                    return;
+                }
+
+                var startYear = parseInt(parts[0], 10);
+                var startMonth = parseInt(parts[1], 10) - 1;
+                var startDay = parseInt(parts[2], 10);
+
+                var expDate = new Date(startYear, startMonth, startDay);
+                var validityDesc = '';
+
+                if (validity.indexOf('d') !== -1) {
+                    var days = parseInt(validity.replace('d', ''), 10) || 30;
+                    expDate.setDate(expDate.getDate() + days);
+                    validityDesc = days + ' Days';
+                } else {
+                    var months = parseInt(validity.replace('m', ''), 10) || 1;
+                    expDate.setMonth(expDate.getMonth() + months);
+                    validityDesc = months + (months > 1 ? ' Months' : ' Month');
+                }
+
+                var yyyy = expDate.getFullYear();
+                var mm = String(expDate.getMonth() + 1).padStart(2, '0');
+                var dd = String(expDate.getDate()).padStart(2, '0');
+                var formattedExp = yyyy + '-' + mm + '-' + dd;
+
+                previewBox.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">' +
+                    '<span>📅 <strong>New Expiry: ' + formattedExp + '</strong> (' + validityDesc + ')</span>' +
+                    '<span style="font-size:11px; color:#10b981; opacity:0.85;">Effective from: ' + startDateStr + '</span>' +
+                    '</div>';
+            }
+
             function validateDiscount() {
                 const planSelect = document.getElementById('plan_select');
                 const discountInput = document.getElementById('discount_input');
@@ -336,6 +563,10 @@ if ($uid) {
                     submitBtn.disabled = false;
                 }
             }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                updateStartDateSelection();
+            });
         </script>
 
 <?php
