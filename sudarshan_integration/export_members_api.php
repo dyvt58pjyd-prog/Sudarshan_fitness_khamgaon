@@ -145,6 +145,11 @@ if (!$result) {
 $members = [];
 
 while ($row = mysqli_fetch_assoc($result)) {
+    // Skip placeholder or CSV header rows
+    if (trim(strtolower($row['username'])) === 'full name' || trim(strtolower($row['userid'])) === 'membership id') {
+        continue;
+    }
+
     // Determine member PIN: prefer biometric_id or entry_code, fallback to userid
     $member_pin = 0;
     if (!empty($row['biometric_id']) && is_numeric($row['biometric_id'])) {
