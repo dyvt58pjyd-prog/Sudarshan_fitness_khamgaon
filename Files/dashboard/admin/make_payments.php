@@ -7,6 +7,8 @@ if (isset($_POST['userID'])) {
     $uid = $_POST['userID'];
 } elseif (isset($_GET['userID'])) {
     $uid = $_GET['userID'];
+} elseif (isset($_GET['id'])) {
+    $uid = $_GET['id'];
 }
 
 if ($uid) {
@@ -81,7 +83,7 @@ if ($uid) {
 <html lang="en">
 <head>
 
-    <title>SUDARSHAN FITNESS | Make Payment</title>
+    <title>SUDARSHAN FITNESS | Renew Memberships</title>
      <link rel="stylesheet" href="../../css/style.css"  id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
     <link rel="stylesheet" href="../../css/dashMain.css">
@@ -179,7 +181,7 @@ if ($uid) {
 		<div class="a1-container a1-small a1-padding-32" style="margin-top:2px; margin-bottom:2px;">
         <div class="a1-card-8" style="width:580px; max-width:96%; margin:0 auto; border-radius: 16px; overflow: hidden; background: var(--glass-bg); border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);">
 		<div class="a1-container a1-center" style="background: #f8fafc; border-bottom: 1px solid rgba(0, 0, 0, 0.06); padding: 14px 20px;">
-        	<h6 style="margin: 0; font-weight: 700; color: var(--text-main); font-size: 14px; letter-spacing: 0.5px;">MAKE MEMBERSHIP PAYMENT</h6>
+        	<h6 style="margin: 0; font-weight: 700; color: var(--text-main); font-size: 14px; letter-spacing: 0.5px;">RENEW MEMBERSHIP</h6>
         </div>
 
         <?php if ($is_expired): ?>
@@ -417,7 +419,7 @@ if ($uid) {
          </tr>
 		  <tr>
                <td height="35">&nbsp;</td>
-               <td height="35">&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="ADD PAYMENT" >
+               <td height="35">&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp;&ensp; <input class="a1-btn a1-blue" type="submit" name="submit" id="submit" value="RENEW MEMBERSHIP" >
                  <input class="a1-btn a1-blue" type="reset" name="reset" id="reset" value="Reset"></td>
              </tr>
          </table>

@@ -125,7 +125,7 @@ page_protect();
 
         <div class="member-tabs-container">
             <a href="?tab=plan" class="tab-btn <?php echo $current_tab === 'plan' ? 'active-tab' : ''; ?>">
-                Membership Plan Payments
+                Renew Memberships
             </a>
             <a href="?tab=pt" class="tab-btn <?php echo $current_tab === 'pt' ? 'active-tab' : ''; ?>">
                 Personal Training Payments
@@ -252,7 +252,7 @@ page_protect();
                                         <form action='make_payments.php' method='post' style='margin: 0; display: inline;'>
                                             <input type='hidden' name='userID' value='" . $uid . "'/>
                                             <input type='hidden' name='planID' value='" . $planid . "'/>
-                                            <input type='submit' class='a1-btn a1-blue' style='padding: 6px 10px !important; font-size: 11px;' value='Plan Payment'/>
+                                            <input type='submit' class='a1-btn a1-blue' style='padding: 6px 10px !important; font-size: 11px;' value='Renew Membership'/>
                                         </form>
                                         <form action='enroll_pt.php' method='post' style='margin: 0; display: inline;'>
                                             <input type='hidden' name='userID' value='" . $uid . "'/>
