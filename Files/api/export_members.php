@@ -113,6 +113,8 @@ $query = "SELECT
             u.username,
             u.mobile,
             u.email,
+            u.gender,
+            u.joining_date,
             u.entry_code,
             u.biometric_id,
             e.expire,
@@ -153,6 +155,9 @@ while ($row = mysqli_fetch_assoc($result)) {
         continue;
     }
 
+    // Determine Member ID (primary gym membership identifier)
+    $member_id = is_numeric($row['userid']) ? intval($row['userid']) : $row['userid'];
+
     // Determine member PIN: prefer biometric_id or entry_code, fallback to userid
     $member_pin = 0;
     if (!empty($row['biometric_id']) && is_numeric($row['biometric_id'])) {
@@ -174,14 +179,19 @@ while ($row = mysqli_fetch_assoc($result)) {
     }
 
     $members[] = [
+        'member_id'         => $member_id,
         'member_pin'        => $member_pin,
         'full_name'         => $row['username'],
         'expiry_date'       => $expiry_date,
         'membership_plan'   => $plan_name,
         'phone'             => !empty($row['mobile']) ? $row['mobile'] : '',
         'membership_active' => $is_active,
-        // Extra identifiers for complete cross-compatibility
+        // Complete cross-compatibility identifiers
+        'id'                => $member_id,
         'userid'            => $row['userid'],
+        'membership_id'     => $row['userid'],
+        'gender'            => $row['gender'] ?? '',
+        'joining_date'      => $row['joining_date'] ?? null,
         'entry_code'        => $row['entry_code'] ?? '',
         'biometric_id'      => $row['biometric_id'] ?? null
     ];
