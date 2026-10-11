@@ -20,12 +20,12 @@ $today = date('Y-m-d');
 if ($id !== '') {
     $sql = "SELECT u.userid, u.username, u.mobile, u.gender, u.dob, u.email, u.joining_date, u.partner_uid,
                    a.streetName, a.city, a.zipcode, a.state,
-                   e.pid, e.expire, e.paid_date,
+                   e.pid, e.expire, e.paid_date, e.paid_amount, e.payment_mode,
                    p.planName, p.amount
             FROM users u
             LEFT JOIN address a ON u.userid = a.id
             LEFT JOIN (
-                SELECT e1.uid, e1.pid, e1.expire, e1.paid_date
+                SELECT e1.uid, e1.pid, e1.expire, e1.paid_date, e1.paid_amount, e1.payment_mode
                 FROM enrolls_to e1
                 INNER JOIN (
                     SELECT uid, MAX(et_id) as max_et_id
@@ -67,6 +67,8 @@ if ($id !== '') {
                 'pid'          => $row['pid'] ?? '',
                 'plan_name'    => $row['planName'] ?? 'No Active Plan',
                 'plan_price'   => $row['amount'] ?? 0,
+                'paid_amount'  => $row['paid_amount'] ?? 0,
+                'payment_mode' => $row['payment_mode'] ?? 'Cash',
                 'expire'       => $row['expire'] ?? null,
                 'is_active'    => $is_active,
                 'partner_uid'  => $row['partner_uid'] ?? null,

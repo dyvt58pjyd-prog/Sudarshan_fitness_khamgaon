@@ -11,6 +11,7 @@ $today = date('Y-m-d');
 
 // SQL Query to find "Ghost Members"
 // Logic: An active plan (expire >= today) but paid_amount is 0 or extremely low, indicating they got a 100% free override.
+// Note: Exclude verified family/couple linked members who share a legitimate membership.
 $query = "SELECT u.userid, u.username, u.mobile, e.paid_amount, e.balance, e.paid_date, e.expire, p.planName, p.amount as plan_price 
           FROM users u 
           INNER JOIN enrolls_to e ON u.userid = e.uid 
@@ -18,9 +19,23 @@ $query = "SELECT u.userid, u.username, u.mobile, e.paid_amount, e.balance, e.pai
           WHERE e.expire >= '$today' 
           AND e.paid_amount < 100 
           AND p.amount > 500
+          AND (u.partner_uid IS NULL OR u.partner_uid = '')
+          AND e.payment_mode NOT LIKE '%Couple%'
+          AND e.payment_mode NOT LIKE '%Family%'
           ORDER BY e.paid_date DESC";
 
 $result = mysqli_query($con, $query);
+
+// Query verified couple & family members
+$query_family = "SELECT u.userid, u.username, u.mobile, u.partner_uid, e.paid_amount, e.paid_date, e.expire, p.planName, p.amount as plan_price, u2.username as partner_name
+          FROM users u 
+          INNER JOIN enrolls_to e ON u.userid = e.uid 
+          INNER JOIN plan p ON e.pid = p.pid 
+          LEFT JOIN users u2 ON u.partner_uid = u2.userid
+          WHERE e.expire >= '$today' 
+          AND ((u.partner_uid IS NOT NULL AND u.partner_uid != '') OR e.payment_mode LIKE '%Couple%' OR e.payment_mode LIKE '%Family%')
+          ORDER BY e.paid_date DESC";
+$result_family = mysqli_query($con, $query_family);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -96,6 +111,56 @@ $result = mysqli_query($con, $query);
                                     <?php endwhile; ?>
                                     <?php if(mysqli_num_rows($result) === 0): ?>
                                     <tr><td colspan="7" style="text-align: center; color: var(--success); font-weight: bold; padding: 30px;">Great news! No ghost members or revenue leakage detected.</td></tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Verified Family & Couple Linked Members -->
+                    <div class="panel panel-success" style="border-color: var(--success); margin-top: 30px;">
+                        <div class="panel-heading" style="background: rgba(16, 185, 129, 0.1); border-bottom: 1px solid rgba(16, 185, 129, 0.2);">
+                            <div class="panel-title" style="color: var(--success); font-weight: bold;"><i class="entypo-users"></i> Verified Family &amp; Couple Linked Members (Legitimate Shared Access)</div>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-bordered datatable">
+                                <thead>
+                                    <tr>
+                                        <th>Member Name</th>
+                                        <th>Member ID</th>
+                                        <th>Linked Family Member / Partner</th>
+                                        <th>Plan Name</th>
+                                        <th>Amount Paid</th>
+                                        <th>Expiry Date</th>
+                                        <th>Audit Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if ($result_family && mysqli_num_rows($result_family) > 0): ?>
+                                    <?php while ($f_row = mysqli_fetch_assoc($result_family)): ?>
+                                    <tr>
+                                        <td><strong><?php echo htmlspecialchars($f_row['username']); ?></strong></td>
+                                        <td><span style="color:#007aff; font-weight:bold;">#<?php echo htmlspecialchars($f_row['userid']); ?></span></td>
+                                        <td>
+                                            <?php if (!empty($f_row['partner_uid'])): ?>
+                                                <strong><?php echo htmlspecialchars($f_row['partner_name'] ?? 'Partner'); ?></strong> 
+                                                <small style="color:var(--text-muted);">(#<?php echo htmlspecialchars($f_row['partner_uid']); ?>)</small>
+                                            <?php else: ?>
+                                                <span style="color: #64748b;">Couple Plan Enrolled</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?php echo htmlspecialchars($f_row['planName']); ?></td>
+                                        <td style="color: var(--success); font-weight: 700;">₹<?php echo number_format($f_row['paid_amount']); ?></td>
+                                        <td style="color: var(--text-main); font-weight: bold;"><?php echo htmlspecialchars($f_row['expire']); ?></td>
+                                        <td>
+                                            <span style="background: rgba(16, 185, 129, 0.15); color: #059669; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800;">
+                                                ✓ VERIFIED FAMILY/COUPLE LINK
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <?php endwhile; ?>
+                                    <?php else: ?>
+                                    <tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">No linked couple or family accounts found.</td></tr>
                                     <?php endif; ?>
                                 </tbody>
                             </table>

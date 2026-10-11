@@ -119,6 +119,12 @@ $query="INSERT INTO users(username,gender,mobile,email,dob,joining_date,userid,t
       $partner_uid = null;
       $is_couple_selected = false;
       $linked_existing_id = isset($_POST['linked_existing_member_id']) && !empty($_POST['linked_existing_member_id']) ? mysqli_real_escape_string($con, trim($_POST['linked_existing_member_id'])) : '';
+      if (empty($linked_existing_id) && !empty($_POST['existing_member_search'])) {
+          $linked_existing_id = mysqli_real_escape_string($con, trim($_POST['existing_member_search']));
+      }
+      if (empty($linked_existing_id) && !empty($_GET['family_of'])) {
+          $linked_existing_id = mysqli_real_escape_string($con, trim($_GET['family_of']));
+      }
       $couple_mode = isset($_POST['couple_mode']) ? trim($_POST['couple_mode']) : 'existing';
       $is_shared_family_plan = false;
       $shared_expire_date = null;
@@ -126,16 +132,18 @@ $query="INSERT INTO users(username,gender,mobile,email,dob,joining_date,userid,t
 
       if (!empty($linked_existing_id) && $couple_mode === 'existing') {
           // Mode 1: Link with ALREADY REGISTERED member without losing previous details
-          $q_chk_ex = mysqli_query($con, "SELECT userid, username FROM users WHERE userid = '$linked_existing_id'");
+          $q_chk_ex = mysqli_query($con, "SELECT userid, username FROM users WHERE userid = '$linked_existing_id' OR mobile = '$linked_existing_id'");
           if ($q_chk_ex && mysqli_num_rows($q_chk_ex) > 0) {
               $ex_row = mysqli_fetch_assoc($q_chk_ex);
+              $real_existing_id = $ex_row['userid'];
+              $linked_existing_id = $real_existing_id;
               // Bi-directionally link both members
-              mysqli_query($con, "UPDATE users SET partner_uid = '$linked_existing_id' WHERE userid = '$memID'");
-              mysqli_query($con, "UPDATE users SET partner_uid = '$memID' WHERE userid = '$linked_existing_id'");
+              mysqli_query($con, "UPDATE users SET partner_uid = '$real_existing_id' WHERE userid = '$memID'");
+              mysqli_query($con, "UPDATE users SET partner_uid = '$memID' WHERE userid = '$real_existing_id'");
 
               $family_plan_action = isset($_POST['family_plan_action']) ? $_POST['family_plan_action'] : 'join_existing';
               if ($family_plan_action === 'join_existing') {
-                  $qp_plan = mysqli_query($con, "SELECT pid, expire, paid_date FROM enrolls_to WHERE uid = '$linked_existing_id' ORDER BY expire DESC LIMIT 1");
+                  $qp_plan = mysqli_query($con, "SELECT pid, expire, paid_date FROM enrolls_to WHERE uid = '$real_existing_id' ORDER BY expire DESC, et_id DESC LIMIT 1");
                   if ($qp_plan && mysqli_num_rows($qp_plan) > 0) {
                       $p_plan_row = mysqli_fetch_assoc($qp_plan);
                       $plan = $p_plan_row['pid'];
@@ -199,49 +207,59 @@ $query="INSERT INTO users(username,gender,mobile,email,dob,joining_date,userid,t
           $cdate = ($cdate < $launch_date) ? $launch_date : $cdate;
           
           if ($is_shared_family_plan && !empty($shared_expire_date)) {
-              $expiredate = $shared_expire_date;
-              $discount = 0;
-              $plan_price = 0;
-          } else {
-              $d = calculate_expiration_date($cdate, $value[3]);
-              $expiredate=date("Y-m-d",$d); //adding validity retrieve from plan to current date
-              $discount = isset($_POST['discount']) ? intval($_POST['discount']) : 0;
-              $plan_price = intval($value[4]);
-          }
-          
-          // Automatic welcome bonus discount for 12000, 6000 and 3900/4000/4500 (3 Months) plans, limited to 100 members
-          if (($plan_price == 12000 || $plan_price == 6000 || $plan_price == 3900 || $plan_price == 4000 || $plan_price == 4500) && $discount == 0) {
-              $cnt_q = mysqli_query($con, "SELECT COUNT(*) as cnt FROM enrolls_to e JOIN plan p ON e.pid = p.pid WHERE e.discount_amount > 0 AND (p.amount=12000 OR p.amount=6000 OR p.amount=3900 OR p.amount=4000 OR p.amount=4500)");
-              $cnt_row = mysqli_fetch_assoc($cnt_q);
-              if (intval($cnt_row['cnt']) < 100) {
-                  if ($plan_price == 12000) {
-                      $discount = 2000;
-                  } elseif ($plan_price == 6000) {
-                      $discount = 1000;
-                  } elseif ($plan_price == 4500) {
-                      $discount = 600; // Welcome Bonus final price is 3900 (4500 - 600)
-                  } elseif ($plan_price == 4000) {
-                      $discount = 100; // Welcome Bonus final price is 3900 (4000 - 100)
-                  } elseif ($plan_price == 3900) {
-                      $discount = 0; // If plan catalog price is already 3900, final is 3900
-                  }
-              }
-          }
-          
-          $total_payable = $plan_price - $discount;
-          if ($total_payable < 0) {
-              $total_payable = 0;
-          }
-          
-          $paid_now = isset($_POST['paid_amount']) && $_POST['paid_amount'] !== '' ? floatval($_POST['paid_amount']) : $total_payable;
-          $balance = $total_payable - $paid_now;
-          if ($balance < 0) $balance = 0;
-          
-          $balance_due_date = isset($_POST['balance_due_date']) ? mysqli_real_escape_string($con, $_POST['balance_due_date']) : NULL;
-          $due_date_val = $balance > 0 && !empty($balance_due_date) ? "'$balance_due_date'" : "NULL";
+               $expiredate = $shared_expire_date;
+               $plan_price = intval($value[4]);
+               $paid_now = isset($_POST['paid_amount']) && $_POST['paid_amount'] !== '' ? floatval($_POST['paid_amount']) : 0;
+               // Discount covers the shared family benefit: Plan Price - Paid Now
+               $discount = max(0, $plan_price - $paid_now);
+               $total_payable = $paid_now;
+               $balance = 0;
+               $due_date_val = "NULL";
+               if ($paid_now == 0) {
+                   $payment_mode = 'Family Plan Shared';
+               } else {
+                   $payment_mode = isset($_POST['payment_mode']) ? mysqli_real_escape_string($con, $_POST['payment_mode']) : 'Cash';
+               }
+           } else {
+               $d = calculate_expiration_date($cdate, $value[3]);
+               $expiredate=date("Y-m-d",$d); //adding validity retrieve from plan to current date
+               $discount = isset($_POST['discount']) ? intval($_POST['discount']) : 0;
+               $plan_price = intval($value[4]);
+           
+               // Automatic welcome bonus discount for 12000, 6000 and 3900/4000/4500 (3 Months) plans, limited to 100 members
+               if (($plan_price == 12000 || $plan_price == 6000 || $plan_price == 3900 || $plan_price == 4000 || $plan_price == 4500) && $discount == 0) {
+                   $cnt_q = mysqli_query($con, "SELECT COUNT(*) as cnt FROM enrolls_to e JOIN plan p ON e.pid = p.pid WHERE e.discount_amount > 0 AND (p.amount=12000 OR p.amount=6000 OR p.amount=3900 OR p.amount=4000 OR p.amount=4500)");
+                   $cnt_row = mysqli_fetch_assoc($cnt_q);
+                   if (intval($cnt_row['cnt']) < 100) {
+                       if ($plan_price == 12000) {
+                           $discount = 2000;
+                       } elseif ($plan_price == 6000) {
+                           $discount = 1000;
+                       } elseif ($plan_price == 4500) {
+                           $discount = 600; // Welcome Bonus final price is 3900 (4500 - 600)
+                       } elseif ($plan_price == 4000) {
+                           $discount = 100; // Welcome Bonus final price is 3900 (4000 - 100)
+                       } elseif ($plan_price == 3900) {
+                           $discount = 0; // If plan catalog price is already 3900, final is 3900
+                       }
+                   }
+               }
+               
+               $total_payable = $plan_price - $discount;
+               if ($total_payable < 0) {
+                   $total_payable = 0;
+               }
+               
+               $paid_now = isset($_POST['paid_amount']) && $_POST['paid_amount'] !== '' ? floatval($_POST['paid_amount']) : $total_payable;
+               $balance = $total_payable - $paid_now;
+               if ($balance < 0) $balance = 0;
+               
+               $balance_due_date = isset($_POST['balance_due_date']) ? mysqli_real_escape_string($con, $_POST['balance_due_date']) : NULL;
+               $due_date_val = $balance > 0 && !empty($balance_due_date) ? "'$balance_due_date'" : "NULL";
 
-          $payment_mode = isset($_POST['payment_mode']) ? mysqli_real_escape_string($con, $_POST['payment_mode']) : 'Cash';
-          if ($payment_mode === 'Complimentary') {
+               $payment_mode = isset($_POST['payment_mode']) ? mysqli_real_escape_string($con, $_POST['payment_mode']) : 'Cash';
+           }
+           if ($payment_mode === 'Complimentary') {
               $paid_now = 0;
               $discount = $plan_price;
               $balance = 0;
@@ -256,10 +274,10 @@ $query="INSERT INTO users(username,gender,mobile,email,dob,joining_date,userid,t
           $query2="insert into enrolls_to(pid,uid,paid_date,expire,renewal,payment_mode,received_by,discount_amount,paid_amount,balance,balance_due_date) values('$plan','$memID','$transaction_date','$expiredate','yes','$payment_mode','$received_by',$discount,$paid_now,$balance,$due_date_val)";
           if(mysqli_query($con,$query2)==1){
               
-            // Enroll Partner (Zero payment)
+            // Enroll Partner (Zero payment on couple plan)
             if (!empty($partner_uid)) {
                 $q_partner_enroll = "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount, balance, balance_due_date) 
-                                     VALUES ('$plan', '$partner_uid', '$transaction_date', '$expiredate', 'yes', 'Couple Plan', 'System', 0, 0, 0, NULL)";
+                                     VALUES ('$plan', '$partner_uid', '$transaction_date', '$expiredate', 'yes', 'Couple Plan Shared', 'System', $plan_price, 0, 0, NULL)";
                 mysqli_query($con, $q_partner_enroll);
                 
                 // Auth for partner

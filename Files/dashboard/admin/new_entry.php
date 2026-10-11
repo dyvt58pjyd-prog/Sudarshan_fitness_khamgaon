@@ -352,6 +352,7 @@ $is_couple_mode = (isset($_GET['mode']) && $_GET['mode'] === 'couple') || !empty
                 <td height="35"><select name="payment_mode" id="payment_mode_select" required onchange="handlePaymentModeChange(); generateStaffQR();">
                     <option value="Cash" selected>Cash</option>
                     <option value="UPI">UPI</option>
+                    <option value="Family Plan Shared">👨‍👩‍👧 Family Member / Couple Shared (₹0 extra)</option>
                     <?php if (isset($_SESSION['role']) && ($_SESSION['role'] === 'super_admin' || $_SESSION['role'] === 'owner')): ?>
                         <option value="Complimentary">🌟 Superadmin Complimentary / VIP Pass (₹0)</option>
                     <?php endif; ?>
@@ -368,7 +369,7 @@ $is_couple_mode = (isset($_GET['mode']) && $_GET['mode'] === 'couple') || !empty
               <script>
                 function handlePaymentModeChange() {
                     var payMode = document.getElementById('payment_mode_select').value;
-                    if (payMode === 'Complimentary') {
+                    if (payMode === 'Complimentary' || payMode === 'Family Plan Shared') {
                         document.getElementById('paid_amount').value = '0';
                         var planSelect = document.getElementById('plan_select');
                         if (planSelect && planSelect.selectedIndex >= 0) {
@@ -383,7 +384,12 @@ $is_couple_mode = (isset($_GET['mode']) && $_GET['mode'] === 'couple') || !empty
 
                 function checkBalance() {
                     var payMode = document.getElementById('payment_mode_select').value;
-                    if (payMode === 'Complimentary') {
+                    var isCouple = document.getElementById('is_couple') ? document.getElementById('is_couple').checked : false;
+                    var isExistingMode = document.getElementById('mode_existing') ? document.getElementById('mode_existing').checked : false;
+                    var isJoinPlan = document.getElementById('plan_action_join') ? document.getElementById('plan_action_join').checked : false;
+
+                    // Family shared or complimentary memberships have ₹0 extra and no balance due
+                    if (payMode === 'Complimentary' || payMode === 'Family Plan Shared' || (isCouple && isExistingMode && isJoinPlan)) {
                         document.getElementById('balance_due_row').style.display = 'none';
                         document.getElementById('balance_due_date').required = false;
                         return;
@@ -520,7 +526,7 @@ $is_couple_mode = (isset($_GET['mode']) && $_GET['mode'] === 'couple') || !empty
                                           🔍 Search Previously Registered Member (Member ID, Name, or Mobile):
                                       </label>
                                       <div style="display: flex; gap: 8px;">
-                                          <input type="text" id="existing_member_search" class="boxx-style" placeholder="Type Member ID (e.g. 101), Name, or Mobile..." style="flex: 1;" oninput="searchExistingMember(this.value)">
+                                          <input type="text" name="existing_member_search" id="existing_member_search" class="boxx-style" placeholder="Type Member ID (e.g. 101), Name, or Mobile..." style="flex: 1;" oninput="searchExistingMember(this.value)">
                                           <button type="button" class="a1-btn a1-blue" onclick="fetchMemberById(document.getElementById('existing_member_search').value)" style="padding: 6px 16px; border-radius: 8px; font-weight: 700;">Find</button>
                                       </div>
                                       <div id="member_search_dropdown" style="display:none; position: absolute; top: 100%; left: 0; right: 0; max-height: 220px; overflow-y: auto; background: var(--bg-dark, #fff); border: 1.5px solid #007aff; border-radius: 8px; margin-top: 4px; box-shadow: 0 8px 24px rgba(0,0,0,0.18); z-index: 9999;"></div>
@@ -734,32 +740,39 @@ $is_couple_mode = (isset($_GET['mode']) && $_GET['mode'] === 'couple') || !empty
                   }
 
                   function toggleFamilyPlanAction() {
-                      var isCouple = document.getElementById('is_couple').checked;
-                      var isExistingMode = document.getElementById('mode_existing').checked;
-                      var isJoinPlan = document.getElementById('plan_action_join').checked;
-                      var planSelect = document.getElementById('plan_select');
-                      var paidAmountInp = document.getElementById('paid_amount');
+                       var isCouple = document.getElementById('is_couple').checked;
+                       var isExistingMode = document.getElementById('mode_existing').checked;
+                       var isJoinPlan = document.getElementById('plan_action_join').checked;
+                       var planSelect = document.getElementById('plan_select');
+                       var paidAmountInp = document.getElementById('paid_amount');
+                       var payModeSelect = document.getElementById('payment_mode_select');
 
-                      if (isCouple && isExistingMode && isJoinPlan && loadedFamilyData) {
-                          if (loadedFamilyData.pid && planSelect) {
-                              planSelect.value = loadedFamilyData.pid;
-                          }
-                          if (paidAmountInp) {
-                              paidAmountInp.value = '0';
-                              paidAmountInp.placeholder = '₹0 (Shared Family Plan)';
-                          }
-                      } else {
-                          if (paidAmountInp && paidAmountInp.placeholder.indexOf('Shared') !== -1) {
-                              paidAmountInp.placeholder = 'Leave empty if fully paid';
-                              paidAmountInp.value = '';
-                          }
-                      }
-                      if (typeof checkBalance === 'function') {
-                          checkBalance();
-                      }
-                  }
+                       if (isCouple && isExistingMode && isJoinPlan) {
+                           if (loadedFamilyData && loadedFamilyData.pid && planSelect) {
+                               planSelect.value = loadedFamilyData.pid;
+                           }
+                           if (paidAmountInp) {
+                               paidAmountInp.value = '0';
+                               paidAmountInp.placeholder = '₹0 (Shared Family Plan)';
+                           }
+                           if (payModeSelect) {
+                               payModeSelect.value = 'Family Plan Shared';
+                           }
+                       } else {
+                           if (paidAmountInp && paidAmountInp.placeholder.indexOf('Shared') !== -1) {
+                               paidAmountInp.placeholder = 'Leave empty if fully paid';
+                               paidAmountInp.value = '';
+                           }
+                           if (payModeSelect && payModeSelect.value === 'Family Plan Shared') {
+                               payModeSelect.value = 'Cash';
+                           }
+                       }
+                       if (typeof checkBalance === 'function') {
+                           checkBalance();
+                       }
+                   }
 
-                  function checkCoupleAutoSelect() {
+                   function checkCoupleAutoSelect() {
                        var select = document.getElementById('plan_select');
                        if (select && select.selectedIndex >= 0) {
                            var text = select.options[select.selectedIndex].text.toLowerCase();
@@ -771,7 +784,7 @@ $is_couple_mode = (isset($_GET['mode']) && $_GET['mode'] === 'couple') || !empty
                        }
                   }
 
-                  // Handle URL parameter ?family_of=101 or ?mode=couple
+                  // Handle URL parameter ?family_of=101 or ?mode=couple and Form Validation
                   document.addEventListener("DOMContentLoaded", function() {
                       var familyOf = "<?php echo htmlspecialchars($family_of); ?>";
                       var isCoupleMode = <?php echo $is_couple_mode ? 'true' : 'false'; ?>;
@@ -786,6 +799,29 @@ $is_couple_mode = (isset($_GET['mode']) && $_GET['mode'] === 'couple') || !empty
                                   fetchMemberById(familyOf);
                               }
                           }
+                      }
+
+                      var form1 = document.getElementById('form1') || document.querySelector('form');
+                      if (form1) {
+                          form1.addEventListener('submit', function(e) {
+                              var isCouple = document.getElementById('is_couple') && document.getElementById('is_couple').checked;
+                              if (isCouple) {
+                                  var isExisting = document.getElementById('mode_existing') && document.getElementById('mode_existing').checked;
+                                  if (isExisting) {
+                                      var searchVal = (document.getElementById('existing_member_search').value || '').trim();
+                                      var linkedIdInp = document.getElementById('linked_existing_member_id');
+                                      if (!linkedIdInp.value && searchVal) {
+                                          linkedIdInp.value = searchVal;
+                                      }
+                                      if (!linkedIdInp.value) {
+                                          alert('Please search and select the previously registered family member to link!');
+                                          document.getElementById('existing_member_search').focus();
+                                          e.preventDefault();
+                                          return false;
+                                      }
+                                  }
+                              }
+                          });
                       }
                   });
               </script>

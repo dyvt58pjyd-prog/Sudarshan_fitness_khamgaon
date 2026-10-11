@@ -139,11 +139,14 @@ if (!$partner_data) {
     $qp = mysqli_query($con, "SELECT * FROM users WHERE partner_uid='$m_id'");
     if ($qp && mysqli_num_rows($qp) > 0) {
         $partner_data = mysqli_fetch_assoc($qp);
+        $p_found_id = $partner_data['userid'];
+        mysqli_query($con, "UPDATE users SET partner_uid = '$p_found_id' WHERE userid = '$m_id'");
+        mysqli_query($con, "UPDATE users SET partner_uid = '$m_id' WHERE userid = '$p_found_id'");
     }
 }
 if (!$partner_data && !empty($member['mobile']) && !in_array($member['mobile'], ['0000000000', '1234567890', '9876543210', '0'])) {
     $m_id = $member['userid'];
-    // Only auto-link if member is enrolled in a Couple Plan
+    // Auto-link if member is enrolled in a Couple Plan or has matching mobile
     $chk_couple_plan = mysqli_query($con, "SELECT e.pid, p.planName FROM enrolls_to e JOIN plan p ON e.pid = p.pid WHERE e.uid = '$m_id' AND (LOWER(p.planName) LIKE '%couple%' OR LOWER(e.pid) LIKE '%couple%') LIMIT 1");
     if ($chk_couple_plan && mysqli_num_rows($chk_couple_plan) > 0) {
         $m_mob = mysqli_real_escape_string($con, $member['mobile']);
@@ -156,6 +159,37 @@ if (!$partner_data && !empty($member['mobile']) && !in_array($member['mobile'], 
         }
     }
 }
+
+// Calculate financial linkage & partner active plan
+$partner_active_plan = null;
+$partner_total_paid = 0;
+$member_total_paid = 0;
+$combined_family_paid = 0;
+
+$m_uid = $member['userid'];
+$qm_paid = mysqli_query($con, "SELECT SUM(paid_amount) as total_paid FROM enrolls_to WHERE uid = '$m_uid'");
+if ($qm_paid) {
+    $r_m_paid = mysqli_fetch_assoc($qm_paid);
+    $member_total_paid = intval($r_m_paid['total_paid'] ?? 0);
+}
+
+if ($partner_data) {
+    $p_uid = $partner_data['userid'];
+    $qp_enr = mysqli_query($con, "SELECT e.*, p.planName, p.amount as plan_amount, p.validity 
+                                  FROM enrolls_to e 
+                                  JOIN plan p ON e.pid = p.pid 
+                                  WHERE e.uid = '$p_uid' 
+                                  ORDER BY e.expire DESC, e.et_id DESC LIMIT 1");
+    if ($qp_enr && mysqli_num_rows($qp_enr) > 0) {
+        $partner_active_plan = mysqli_fetch_assoc($qp_enr);
+    }
+    $qp_paid = mysqli_query($con, "SELECT SUM(paid_amount) as total_paid FROM enrolls_to WHERE uid = '$p_uid'");
+    if ($qp_paid) {
+        $r_p_paid = mysqli_fetch_assoc($qp_paid);
+        $partner_total_paid = intval($r_p_paid['total_paid'] ?? 0);
+    }
+}
+$combined_family_paid = $member_total_paid + $partner_total_paid;
 
 // Fetch assigned routine / workout package
 $routine = null;
@@ -391,28 +425,107 @@ $gym = get_gym_details($con);
                 </div>
 
                 <?php if ($partner_data): ?>
-                <div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(255, 107, 0, 0.05)); border: 1px dashed #ff6b00; border-radius: 18px; padding: 20px; margin-top: 20px; margin-bottom: 25px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-                        <div style="display: flex; align-items: center; gap: 15px;">
-                            <span style="font-size: 36px;">💑</span>
+                <!-- PROMINENT FAMILY & COUPLE MEMBERSHIP LINK CARD -->
+                <div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.12) 0%, rgba(236, 72, 153, 0.08) 100%); border: 2px solid #ff6b00; border-radius: 18px; padding: 22px; margin-top: 20px; margin-bottom: 25px; box-shadow: 0 10px 25px rgba(255, 107, 0, 0.1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 107, 0, 0.25); padding-bottom: 12px; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 26px;">👨‍👩‍👧</span>
                             <div>
-                                <span style="color: #ff6b00; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">✨ Couple Plan Partner Linked</span>
-                                <h3 style="margin: 4px 0 2px 0; color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 18px;"><?php echo htmlspecialchars($partner_data['username']); ?></h3>
-                                <span style="color: var(--text-muted, #64748b); font-size: 13px;">Membership ID: <strong style="color: #007aff;"><?php echo htmlspecialchars($partner_data['userid']); ?></strong> | Mobile: <strong style="color: var(--text-main, var(--text-main));"><?php echo htmlspecialchars($partner_data['mobile']); ?></strong></span>
+                                <span style="background: #ff6b00; color: #fff; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 3px 8px; border-radius: 4px;">
+                                    VERIFIED FAMILY &amp; COUPLE LINK
+                                </span>
+                                <span style="color: var(--text-muted); font-size: 12px; margin-left: 8px;">Both accounts linked with preserved records</span>
                             </div>
                         </div>
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <a href="read_member.php?name=<?php echo urlencode($partner_data['userid']); ?>" class="a1-btn a1-blue" style="font-size: 12px; padding: 8px 16px; text-decoration: none; border-radius: 8px;">View Partner Profile &rarr;</a>
-                            <form method="POST" style="margin: 0;" onsubmit="return confirm('Are you sure you want to unlink this couple partner?');">
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <a href="read_member.php?name=<?php echo urlencode($partner_data['userid']); ?>" class="a1-btn a1-blue" style="font-size: 12px; padding: 7px 15px; text-decoration: none; border-radius: 8px; font-weight: 700;">
+                                👤 View Partner Profile (<?php echo htmlspecialchars($partner_data['username']); ?>) &rarr;
+                            </a>
+                            <form method="POST" style="margin: 0;" onsubmit="return confirm('Are you sure you want to unlink this family member / couple partner? Previous records of both members will remain intact.');">
                                 <input type="hidden" name="action" value="unlink_partner">
                                 <input type="hidden" name="primary_uid" value="<?php echo htmlspecialchars($member['userid']); ?>">
                                 <input type="hidden" name="partner_uid" value="<?php echo htmlspecialchars($partner_data['userid']); ?>">
-                                <button type="submit" class="a1-btn a1-orange" style="font-size: 12px; padding: 8px 14px; border-radius: 8px;">Unlink Partner</button>
+                                <button type="submit" class="a1-btn a1-orange" style="font-size: 11px; padding: 7px 12px; border-radius: 8px;">Unlink</button>
                             </form>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px;">
+                        <!-- Col 1: Partner Details -->
+                        <div style="background: var(--bg-dark, #ffffff); border-radius: 12px; padding: 16px; border: 1px solid var(--card-border, rgba(0,0,0,0.08));">
+                            <span style="font-size: 11px; font-weight: 700; color: #ff6b00; text-transform: uppercase; letter-spacing: 0.5px;">Linked Family Member</span>
+                            <div style="display: flex; gap: 14px; align-items: center; margin-top: 10px;">
+                                <?php 
+                                $p_photo = !empty($partner_data['photo']) ? $partner_data['photo'] : (!empty($partner_data['member_photo']) ? $partner_data['member_photo'] : '');
+                                if (!empty($p_photo)):
+                                ?>
+                                    <img src="<?php echo htmlspecialchars($p_photo); ?>" alt="Partner Photo" style="width: 56px; height: 56px; border-radius: 12px; object-fit: cover; border: 2px solid #ff6b00;">
+                                <?php else: ?>
+                                    <div style="width: 56px; height: 56px; border-radius: 12px; background: rgba(255, 107, 0, 0.15); border: 2px solid #ff6b00; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                        👤
+                                    </div>
+                                <?php endif; ?>
+                                <div>
+                                    <h4 style="margin: 0 0 3px 0; color: var(--text-main); font-weight: 800; font-size: 16px;">
+                                        <?php echo htmlspecialchars($partner_data['username']); ?>
+                                    </h4>
+                                    <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+                                        <span>Membership ID: <strong style="color: #007aff;">#<?php echo htmlspecialchars($partner_data['userid']); ?></strong></span> | 
+                                        <span>Gender: <strong><?php echo htmlspecialchars($partner_data['gender'] ?? 'N/A'); ?></strong></span><br>
+                                        <span>Phone: <strong style="color: var(--text-main);"><?php echo htmlspecialchars($partner_data['mobile']); ?></strong></span>
+                                        <a href="sip:+91<?php echo htmlspecialchars($partner_data['mobile']); ?>" style="color: var(--accent-primary); font-size: 11px; margin-left: 6px; text-decoration: none;">[Call]</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed rgba(255, 107, 0, 0.2); font-size: 12px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                    <span style="color: var(--text-muted);">Partner's Active Plan:</span>
+                                    <strong style="color: #ff6b00;"><?php echo htmlspecialchars($partner_active_plan['planName'] ?? 'No Active Plan'); ?></strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: var(--text-muted);">Partner's Expiry:</span>
+                                    <strong style="color: <?php echo (!empty($partner_active_plan['expire']) && $partner_active_plan['expire'] >= date('Y-m-d')) ? '#10b981' : '#ef4444'; ?>;">
+                                        <?php echo htmlspecialchars($partner_active_plan['expire'] ?? 'N/A'); ?>
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Col 2: Financial Linkage & Investment -->
+                        <div style="background: var(--bg-dark, #ffffff); border-radius: 12px; padding: 16px; border: 1px solid var(--card-border, rgba(0,0,0,0.08));">
+                            <span style="font-size: 11px; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.5px;">💰 Combined Financial &amp; Amount Linkage</span>
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; text-align: center;">
+                                <div style="background: rgba(0, 122, 255, 0.06); padding: 10px; border-radius: 8px; border: 1px solid rgba(0, 122, 255, 0.15);">
+                                    <span style="font-size: 10.5px; color: var(--text-muted); display: block;">This Member</span>
+                                    <strong style="font-size: 16px; color: #007aff;">₹<?php echo number_format($member_total_paid); ?></strong>
+                                </div>
+                                <div style="background: rgba(236, 72, 153, 0.06); padding: 10px; border-radius: 8px; border: 1px solid rgba(236, 72, 153, 0.15);">
+                                    <span style="font-size: 10.5px; color: var(--text-muted); display: block;">Partner Member</span>
+                                    <strong style="font-size: 16px; color: #ec4899;">₹<?php echo number_format($partner_total_paid); ?></strong>
+                                </div>
+                                <div style="background: rgba(16, 185, 129, 0.08); padding: 10px; border-radius: 8px; border: 1.5px solid #10b981;">
+                                    <span style="font-size: 10.5px; color: #059669; font-weight: 700; display: block;">Family Combined</span>
+                                    <strong style="font-size: 18px; color: #10b981;">₹<?php echo number_format($combined_family_paid); ?></strong>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed rgba(16, 185, 129, 0.25); font-size: 12px; color: var(--text-muted);">
+                                <?php
+                                $is_shared_exp = ($active_plan && $partner_active_plan && $active_plan['expire'] === $partner_active_plan['expire']);
+                                ?>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span>Plan Validity Status:</span>
+                                    <span style="font-weight: 700; color: <?php echo $is_shared_exp ? '#10b981' : '#007aff'; ?>;">
+                                        <?php echo $is_shared_exp ? '✓ Shared Expiry (' . htmlspecialchars($active_plan['expire']) . ')' : '✓ Synchronized Plans'; ?>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <?php else: ?>
+                <!-- PROVISION TO LINK / REGISTER FAMILY MEMBER -->
                 <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.04)); border: 2px dashed #f59e0b; border-radius: 18px; padding: 22px; margin-top: 20px; margin-bottom: 25px;">
                     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; margin-bottom: 15px;">
                         <div style="display: flex; align-items: center; gap: 15px;">
@@ -488,12 +601,14 @@ $gym = get_gym_details($con);
 
                 <script>
                 function showPForm(type) {
+                    var fn = document.getElementById('form_new_p');
+                    var fe = document.getElementById('form_ex_p');
                     if (type === 'new') {
-                        document.getElementById('form_new_p').style.display = 'block';
-                        document.getElementById('form_ex_p').style.display = 'none';
+                        fn.style.display = 'block';
+                        fe.style.display = 'none';
                     } else {
-                        document.getElementById('form_new_p').style.display = 'none';
-                        document.getElementById('form_ex_p').style.display = 'block';
+                        fn.style.display = 'none';
+                        fe.style.display = 'block';
                     }
                 }
                 </script>
@@ -767,12 +882,18 @@ $gym = get_gym_details($con);
                                         $p_paid = $p_max_payable;
                                     }
 
+                                    $is_fam_payment = (stripos($row['payment_mode'] ?? '', 'couple') !== false || stripos($row['payment_mode'] ?? '', 'family') !== false);
+                                    $plan_col_html = htmlspecialchars($row['planName']);
+                                    if ($is_fam_payment) {
+                                        $plan_col_html .= "<br><span style='font-size: 10px; background: rgba(236,72,153,0.15); color: #ec4899; padding: 2px 6px; border-radius: 4px; font-weight: bold;'>👨‍👩‍👧 Family Shared " . ($partner_data ? "(#" . htmlspecialchars($partner_data['userid']) . ")" : "") . "</span>";
+                                    }
+
                                     echo "<tr>";
                                     echo "<td style='text-align: center;'>" . $sno . "</td>";
-                                    echo "<td style='font-weight: 600; color: var(--accent-primary);'>" . htmlspecialchars($row['planName']) . "</td>";
+                                    echo "<td style='font-weight: 600; color: var(--accent-primary);'>" . $plan_col_html . "</td>";
                                     echo "<td style='text-align: center;'>" . htmlspecialchars($row['validity']) . " Months</td>";
                                     echo "<td style='text-align: right;'>₹" . htmlspecialchars($row['amount']) . "</td>";
-                                    echo "<td style='text-align: right; color: #ef4444;'>₹" . htmlspecialchars($p_disc) . "</td>";
+                                    echo "<td style='text-align: right; color: #ef4444;'>₹" . htmlspecialchars($p_disc) . ($is_fam_payment && $p_paid == 0 ? " <small style='display:block; font-size:9px;'>(Family Benefit)</small>" : "") . "</td>";
                                     echo "<td style='text-align: right; color: #10b981; font-weight: bold;'>₹" . htmlspecialchars($p_paid) . "</td>";
                                     echo "<td style='text-align: center;'>" . htmlspecialchars($row['paid_date']) . "</td>";
                                     echo "<td style='text-align: center;'>" . htmlspecialchars($row['expire']) . "</td>";

@@ -19,7 +19,7 @@ if ($m == 12) {
 $end_date = sprintf("%04d-%02d-06", $next_y, $next_m);
 
 // 1. Fetch Membership Enrollments
-$q_mem = "SELECT e.et_id, u.userid, u.username, u.gender, u.mobile,
+$q_mem = "SELECT e.et_id, u.userid, u.username, u.gender, u.mobile, u.partner_uid,
           e.paid_date, e.expire, p.planName, p.amount AS base_amount,
           e.discount_amount, e.paid_amount, e.payment_mode, p.validity, 'Membership' as service_type
           FROM users u 
@@ -58,7 +58,7 @@ if ($res_mem && mysqli_num_rows($res_mem) > 0) {
     while ($r = mysqli_fetch_assoc($res_mem)) {
         $base = intval($r['base_amount']);
         $disc = isset($r['discount_amount']) ? intval($r['discount_amount']) : 0;
-        if (isset($r['paid_amount']) && $r['paid_amount'] !== null && intval($r['paid_amount']) > 0) {
+        if (isset($r['paid_amount']) && $r['paid_amount'] !== null && $r['paid_amount'] !== '') {
             $paid = intval($r['paid_amount']);
             if ($disc > 0 && $paid === $base) $paid = $base - $disc;
         } else {
@@ -272,7 +272,11 @@ $monthName = date("F", mktime(0, 0, 0, intval($month), 10));
                     <?php endif; ?>
                 </td>
                 <td style="text-align: center;">
-                    <?php if ($is_upi): ?>
+                    <?php if (stripos($row['payment_mode'], 'couple') !== false || stripos($row['payment_mode'], 'family') !== false): ?>
+                        <span style="background: rgba(236, 72, 153, 0.15); color: #ec4899; border: 1px solid #ec4899; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;">
+                            👨‍👩‍👧 Family Shared <?php echo !empty($row['partner_uid']) ? '(#' . htmlspecialchars($row['partner_uid']) . ')' : ''; ?>
+                        </span>
+                    <?php elseif ($is_upi): ?>
                         <span style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;">
                             💳 UPI / Online
                         </span>
@@ -284,7 +288,9 @@ $monthName = date("F", mktime(0, 0, 0, intval($month), 10));
                 </td>
                 <td style="text-align: right;">
                     <strong style="color: #10b981; font-size: 14px;">₹<?php echo number_format($paid); ?></strong>
-                    <?php if ($disc > 0): ?>
+                    <?php if ($paid == 0 && (stripos($row['payment_mode'], 'couple') !== false || stripos($row['payment_mode'], 'family') !== false)): ?>
+                        <div style="font-size: 10px; color: #ec4899; font-weight: bold;">(Family Share Benefit)</div>
+                    <?php elseif ($disc > 0): ?>
                         <div style="font-size: 10px; color: #ef4444;" title="Original: ₹<?php echo $base; ?> (-₹<?php echo $disc; ?> Discount)">(-₹<?php echo $disc; ?> disc)</div>
                     <?php endif; ?>
                 </td>
