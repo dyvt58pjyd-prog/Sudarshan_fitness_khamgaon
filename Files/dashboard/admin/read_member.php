@@ -412,25 +412,30 @@ $gym = get_gym_details($con);
                         </div>
                     </div>
                 </div>
-                <?php elseif ($is_couple_plan): ?>
-                <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05)); border: 2px dashed #f59e0b; border-radius: 18px; padding: 22px; margin-top: 20px; margin-bottom: 25px;">
+                <?php else: ?>
+                <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.04)); border: 2px dashed #f59e0b; border-radius: 18px; padding: 22px; margin-top: 20px; margin-bottom: 25px;">
                     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; margin-bottom: 15px;">
                         <div style="display: flex; align-items: center; gap: 15px;">
-                            <span style="font-size: 36px;">⚠️</span>
+                            <span style="font-size: 36px;"><?php echo $is_couple_plan ? '⚠️' : '👨‍👩‍👧'; ?></span>
                             <div>
                                 <h4 style="margin: 0 0 4px 0; color: #f59e0b; font-weight: 800; font-size: 16px; text-transform: uppercase;">
-                                    COUPLE PLAN DETECTED — NO PARTNER LINKED YET
+                                    <?php echo $is_couple_plan ? 'COUPLE PLAN DETECTED — NO PARTNER LINKED YET' : 'FAMILY MEMBER / COUPLE LINK PROVISION'; ?>
                                 </h4>
                                 <p style="margin: 0; color: var(--text-muted, #64748b); font-size: 13px;">
-                                    <strong><?php echo htmlspecialchars($member['username']); ?></strong> is subscribed to <strong><?php echo htmlspecialchars($active_plan['planName'] ?? 'Couple Plan'); ?></strong>, but no partner is assigned yet. Register a new partner or link an existing member below!
+                                    <?php if ($is_couple_plan): ?>
+                                        <strong><?php echo htmlspecialchars($member['username']); ?></strong> is subscribed to <strong><?php echo htmlspecialchars($active_plan['planName'] ?? 'Couple Plan'); ?></strong>, but no partner is assigned yet. Register a new partner or link an existing member below!
+                                    <?php else: ?>
+                                        Link <strong><?php echo htmlspecialchars($member['username']); ?></strong> with another gym member as a family/couple pair, or register their family member without losing any previous records!
+                                    <?php endif; ?>
                                 </p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Toggle Buttons -->
-                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                        <button type="button" class="a1-btn a1-blue" id="btn_new_p" onclick="showPForm('new')">+ Register New Partner</button>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                        <a href="new_entry.php?family_of=<?php echo urlencode($member['userid']); ?>" class="a1-btn a1-green" style="text-decoration: none; padding: 8px 16px; border-radius: 8px; font-weight: 700;">➕ Register New Family Member</a>
+                        <button type="button" class="a1-btn a1-blue" id="btn_new_p" onclick="showPForm('new')">+ Quick Add Partner</button>
                         <button type="button" class="a1-btn a1-orange" id="btn_ex_p" onclick="showPForm('existing')">🔗 Link Existing Member</button>
                     </div>
 

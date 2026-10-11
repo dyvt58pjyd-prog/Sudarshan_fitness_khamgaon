@@ -29,6 +29,9 @@ if ($cnt_q) {
         $wb_limit_reached = true;
     }
 }
+
+$family_of = isset($_GET['family_of']) ? trim(mysqli_real_escape_string($con, $_GET['family_of'])) : '';
+$is_couple_mode = (isset($_GET['mode']) && $_GET['mode'] === 'couple') || !empty($family_of);
 ?>
 
 
@@ -475,74 +478,317 @@ if ($cnt_q) {
                </td>
              </tr>
              
-              <!-- COUPLE PLAN TOGGLE -->
+              <!-- FAMILY MEMBER & COUPLE ENTRY PROVISION -->
               <tr>
-                  <td height="35">REGISTER AS COUPLE?</td>
+                  <td height="35" style="vertical-align: middle;">FAMILY / COUPLE ENTRY?</td>
                   <td height="35">
-                      <label style="color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 600;">
-                          <input type="checkbox" name="is_couple" id="is_couple" value="1" onchange="toggleCoupleFields()" style="width: 20px; height: 20px;">
-                          Yes, register a partner with this plan
+                      <label style="color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 700;">
+                          <input type="checkbox" name="is_couple" id="is_couple" value="1" onchange="toggleCoupleFields()" style="width: 20px; height: 20px; accent-color: #ff6b00;">
+                          <span>💑 Register as Family Member / Couple Entry</span>
                       </label>
+                      <span style="font-size: 11.5px; color: var(--text-muted); display: block; margin-top: 3px;">
+                          Link this member with an already registered family member, or register both partners together.
+                      </span>
                   </td>
               </tr>
               
-              <!-- COUPLE FIELDS -->
-              <tbody id="couple_fields" style="display: none; background: rgba(0, 122, 255, 0.04); border-radius: 8px;">
-                  <tr><td colspan="2"><h4 style="color: #007aff; margin-top: 15px; margin-bottom: 5px; font-weight: 700;">Partner Details</h4><hr style="border-color: rgba(0, 122, 255, 0.15);"></td></tr>
-                 <tr>
-                   <td height="35">PARTNER NAME:</td>
-                   <td height="35"><input name="partner_name" id="partner_name" class="boxx-style" placeholder="Enter partner's full name"/></td>
-                 </tr>
-                 <tr>
-                   <td height="35">PARTNER GENDER:</td>
-                   <td height="35"><select name="partner_gender" id="partner_gender" class="boxx-style">
-                        <option value="">--Please Select--</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Transgender">Transgender</option>
-                    </select></td>
-                 </tr>
-                 <tr>
-                   <td height="35">PARTNER DOB:</td>
-                   <td height="35"><input type="date" name="partner_dob" id="partner_dob" class="boxx-style"></td>
-                 </tr>
-                 <tr>
-                   <td height="35">PARTNER PHONE:</td>
-                   <td height="35"><input type="number" name="partner_mobile" id="partner_mobile" class="boxx-style" maxlength="10" placeholder="Required for separate login login"></td>
-                 </tr>
-             </tbody>
-             
-             <script>
-                 function toggleCoupleFields() {
-                     var isCouple = document.getElementById('is_couple').checked;
-                     var fields = document.getElementById('couple_fields');
-                     
-                     if (isCouple) {
-                         fields.style.display = 'table-row-group';
-                         document.getElementById('partner_name').required = true;
-                         document.getElementById('partner_gender').required = true;
-                         document.getElementById('partner_dob').required = true;
-                     } else {
-                         fields.style.display = 'none';
-                         document.getElementById('partner_name').required = false;
-                         document.getElementById('partner_gender').required = false;
-                         document.getElementById('partner_dob').required = false;
-                     }
-                 }
+              <!-- COUPLE / FAMILY FIELDS -->
+              <tbody id="couple_fields" style="display: none;">
+                  <tr>
+                      <td colspan="2" style="padding: 14px 0 !important;">
+                          <div style="background: rgba(255, 107, 0, 0.05); border: 2px dashed rgba(255, 107, 0, 0.4); border-radius: 14px; padding: 18px;">
+                              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+                                  <h4 style="color: #ff6b00; margin: 0; font-weight: 800; font-size: 15px; display: flex; align-items: center; gap: 8px;">
+                                      <span>👨‍👩‍👧 Family Member / Couple Provision</span>
+                                  </h4>
+                                  <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                                      <label style="font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; color: var(--text-main);">
+                                          <input type="radio" name="couple_mode" id="mode_existing" value="existing" checked onchange="switchCoupleMode('existing')" style="accent-color: #ff6b00;">
+                                          🔗 Link with Already Registered Member
+                                      </label>
+                                      <label style="font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; color: var(--text-main);">
+                                          <input type="radio" name="couple_mode" id="mode_new" value="new" onchange="switchCoupleMode('new')" style="accent-color: #ff6b00;">
+                                          👥 Both Members are New
+                                      </label>
+                                  </div>
+                              </div>
 
-                 function checkCoupleAutoSelect() {
-                      var select = document.getElementById('plan_select');
-                      if (select && select.selectedIndex >= 0) {
-                          var text = select.options[select.selectedIndex].text.toLowerCase();
-                          var isCoupleCheckbox = document.getElementById('is_couple');
-                          if (text.indexOf('couple') !== -1) {
-                              isCoupleCheckbox.checked = true;
-                              toggleCoupleFields();
+                              <!-- MODE 1: LINK WITH ALREADY REGISTERED MEMBER -->
+                              <div id="couple_existing_container" style="background: var(--bg-dark, #ffffff); border-radius: 10px; padding: 16px; border: 1px solid rgba(0,0,0,0.1);">
+                                  <div style="margin-bottom: 10px; position: relative;">
+                                      <label style="font-size: 12.5px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 6px;">
+                                          🔍 Search Previously Registered Member (Member ID, Name, or Mobile):
+                                      </label>
+                                      <div style="display: flex; gap: 8px;">
+                                          <input type="text" id="existing_member_search" class="boxx-style" placeholder="Type Member ID (e.g. 101), Name, or Mobile..." style="flex: 1;" oninput="searchExistingMember(this.value)">
+                                          <button type="button" class="a1-btn a1-blue" onclick="fetchMemberById(document.getElementById('existing_member_search').value)" style="padding: 6px 16px; border-radius: 8px; font-weight: 700;">Find</button>
+                                      </div>
+                                      <div id="member_search_dropdown" style="display:none; position: absolute; top: 100%; left: 0; right: 0; max-height: 220px; overflow-y: auto; background: var(--bg-dark, #fff); border: 1.5px solid #007aff; border-radius: 8px; margin-top: 4px; box-shadow: 0 8px 24px rgba(0,0,0,0.18); z-index: 9999;"></div>
+                                  </div>
+
+                                  <!-- Hidden inputs for submission -->
+                                  <input type="hidden" name="linked_existing_member_id" id="linked_existing_member_id" value="">
+
+                                  <!-- Member Preview Card -->
+                                  <div id="existing_member_card" style="display: none; background: rgba(16, 185, 129, 0.08); border: 1.5px solid #10b981; border-radius: 10px; padding: 14px; margin-top: 12px;">
+                                      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
+                                          <div>
+                                              <span style="font-size: 11px; font-weight: 800; color: #10b981; text-transform: uppercase; letter-spacing: 0.5px;">✓ PREVIOUSLY REGISTERED MEMBER LOCATED</span>
+                                              <h4 id="card_member_name" style="margin: 4px 0 2px 0; color: var(--text-main); font-weight: 800; font-size: 16px;"></h4>
+                                              <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.6;">
+                                                  <span>Membership ID: <strong id="card_member_id" style="color: #007aff;"></strong></span> | 
+                                                  <span>Mobile: <strong id="card_member_phone" style="color: var(--text-main);"></strong></span><br>
+                                                  <span>Current Plan: <strong id="card_member_plan" style="color: #ff6b00;"></strong></span> | 
+                                                  <span>Expiry Date: <strong id="card_member_expire"></strong></span>
+                                              </div>
+                                          </div>
+                                          <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+                                              <span style="font-size: 11.5px; background: rgba(16, 185, 129, 0.2); color: #059669; padding: 4px 10px; border-radius: 6px; font-weight: 800;">
+                                                  🛡️ Existing Records 100% Preserved
+                                              </span>
+                                              <button type="button" class="a1-btn a1-green" onclick="copyFamilyAddress()" style="font-size: 11.5px; padding: 5px 12px; border-radius: 6px; font-weight: 700;">
+                                                  📋 Copy Family Address &amp; Pincode
+                                              </button>
+                                          </div>
+                                      </div>
+
+                                      <!-- Plan Linkage Choice -->
+                                      <div style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed rgba(16, 185, 129, 0.35);">
+                                          <label style="font-size: 12px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 6px;">Plan Linkage for New Family Member:</label>
+                                          <div style="display: flex; flex-direction: column; gap: 6px;">
+                                              <label style="font-size: 12.5px; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                                  <input type="radio" name="family_plan_action" id="plan_action_join" value="join_existing" checked onchange="toggleFamilyPlanAction()" style="accent-color: #10b981;">
+                                                  <span><strong>Join &amp; Share Existing Member's Plan Validity</strong> (Expiry: <span id="card_share_expire" style="color:#10b981; font-weight:bold;"></span>; ₹0 extra plan fee)</span>
+                                              </label>
+                                              <label style="font-size: 12.5px; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                                  <input type="radio" name="family_plan_action" id="plan_action_separate" value="separate" onchange="toggleFamilyPlanAction()" style="accent-color: #10b981;">
+                                                  <span><strong>Register with a Separate / New Plan</strong> (Both members remain linked as a Family/Couple pair)</span>
+                                              </label>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <!-- MODE 2: REGISTER BOTH AS NEW MEMBERS -->
+                              <div id="couple_new_container" style="display: none; background: var(--bg-dark, #ffffff); border-radius: 10px; padding: 16px; border: 1px solid rgba(0,0,0,0.1);">
+                                  <h5 style="color: #007aff; margin: 0 0 10px 0; font-weight: 700;">Partner Details (Both Registering Together):</h5>
+                                  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+                                      <div>
+                                          <label style="font-size: 12px; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Partner Full Name *</label>
+                                          <input name="partner_name" id="partner_name" class="boxx-style" placeholder="Enter partner's full name" style="width: 100% !important;">
+                                      </div>
+                                      <div>
+                                          <label style="font-size: 12px; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Partner Gender *</label>
+                                          <select name="partner_gender" id="partner_gender" class="boxx-style" style="width: 100% !important;">
+                                              <option value="">--Please Select--</option>
+                                              <option value="Male">Male</option>
+                                              <option value="Female">Female</option>
+                                              <option value="Transgender">Transgender</option>
+                                          </select>
+                                      </div>
+                                      <div>
+                                          <label style="font-size: 12px; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Partner DOB</label>
+                                          <input type="date" name="partner_dob" id="partner_dob" class="boxx-style" style="width: 100% !important;">
+                                      </div>
+                                      <div>
+                                          <label style="font-size: 12px; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Partner Phone</label>
+                                          <input type="number" name="partner_mobile" id="partner_mobile" class="boxx-style" maxlength="10" placeholder="10-digit mobile number" style="width: 100% !important;">
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </td>
+                  </tr>
+              </tbody>
+              
+              <script>
+                  var loadedFamilyData = null;
+                  var searchDebounceTimer = null;
+
+                  function toggleCoupleFields() {
+                      var isCouple = document.getElementById('is_couple').checked;
+                      var fields = document.getElementById('couple_fields');
+                      fields.style.display = isCouple ? 'table-row-group' : 'none';
+                      
+                      if (!isCouple) {
+                          document.getElementById('linked_existing_member_id').value = '';
+                          document.getElementById('existing_member_card').style.display = 'none';
+                          document.getElementById('partner_name').required = false;
+                          document.getElementById('partner_gender').required = false;
+                          document.getElementById('partner_dob').required = false;
+                          toggleFamilyPlanAction();
+                      } else {
+                          var mode = document.querySelector('input[name="couple_mode"]:checked').value;
+                          switchCoupleMode(mode);
+                      }
+                  }
+
+                  function switchCoupleMode(mode) {
+                      var isCouple = document.getElementById('is_couple').checked;
+                      if (!isCouple) return;
+
+                      var exCont = document.getElementById('couple_existing_container');
+                      var newCont = document.getElementById('couple_new_container');
+                      
+                      if (mode === 'existing') {
+                          exCont.style.display = 'block';
+                          newCont.style.display = 'none';
+                          document.getElementById('partner_name').required = false;
+                          document.getElementById('partner_gender').required = false;
+                          document.getElementById('partner_dob').required = false;
+                          toggleFamilyPlanAction();
+                      } else {
+                          exCont.style.display = 'none';
+                          newCont.style.display = 'block';
+                          document.getElementById('partner_name').required = true;
+                          document.getElementById('partner_gender').required = true;
+                          document.getElementById('partner_dob').required = true;
+                          document.getElementById('linked_existing_member_id').value = '';
+                          toggleFamilyPlanAction();
+                      }
+                  }
+
+                  function searchExistingMember(val) {
+                      clearTimeout(searchDebounceTimer);
+                      var dd = document.getElementById('member_search_dropdown');
+                      val = (val || '').trim();
+                      if (val.length < 1) {
+                          dd.style.display = 'none';
+                          return;
+                      }
+
+                      searchDebounceTimer = setTimeout(function() {
+                          fetch('get_member_ajax.php?q=' + encodeURIComponent(val))
+                              .then(function(res) { return res.json(); })
+                              .then(function(json) {
+                                  if (json.success && json.matches && json.matches.length > 0) {
+                                      var html = '';
+                                      json.matches.forEach(function(m) {
+                                          var badge = m.is_active ? '<span style="color:#10b981; font-weight:bold;">Active</span>' : '<span style="color:#ef4444;">Expired</span>';
+                                          html += '<div onclick="selectMemberFromDropdown(\'' + m.userid + '\')" style="padding: 10px 14px; border-bottom: 1px solid rgba(0,0,0,0.06); cursor: pointer; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.background=\'rgba(0,122,255,0.08)\'" onmouseout="this.style.background=\'transparent\'">';
+                                          html += '<div><strong>#' + m.userid + ' - ' + m.username + '</strong><br><small style="color:var(--text-muted);">📱 ' + m.mobile + ' | ' + m.plan_name + '</small></div>';
+                                          html += '<div>' + badge + '</div>';
+                                          html += '</div>';
+                                      });
+                                      dd.innerHTML = html;
+                                      dd.style.display = 'block';
+                                  } else {
+                                      dd.innerHTML = '<div style="padding: 10px; color: var(--text-muted); font-size: 12px; text-align: center;">No matching members found</div>';
+                                      dd.style.display = 'block';
+                                  }
+                              })
+                              .catch(function() {
+                                  dd.style.display = 'none';
+                              });
+                      }, 250);
+                  }
+
+                  function selectMemberFromDropdown(id) {
+                      document.getElementById('member_search_dropdown').style.display = 'none';
+                      document.getElementById('existing_member_search').value = id;
+                      fetchMemberById(id);
+                  }
+
+                  function fetchMemberById(id) {
+                      id = (id || '').trim();
+                      if (!id) return;
+
+                      fetch('get_member_ajax.php?id=' + encodeURIComponent(id))
+                          .then(function(res) { return res.json(); })
+                          .then(function(json) {
+                              if (json.success && json.data) {
+                                  loadedFamilyData = json.data;
+                                  document.getElementById('linked_existing_member_id').value = loadedFamilyData.userid;
+                                  document.getElementById('card_member_name').textContent = loadedFamilyData.username;
+                                  document.getElementById('card_member_id').textContent = '#' + loadedFamilyData.userid;
+                                  document.getElementById('card_member_phone').textContent = loadedFamilyData.mobile || 'N/A';
+                                  document.getElementById('card_member_plan').textContent = loadedFamilyData.plan_name;
+                                  document.getElementById('card_member_expire').textContent = loadedFamilyData.expire ? loadedFamilyData.expire : 'N/A';
+                                  document.getElementById('card_share_expire').textContent = loadedFamilyData.expire ? loadedFamilyData.expire : 'Current validity';
+                                  
+                                  document.getElementById('existing_member_card').style.display = 'block';
+                                  document.getElementById('member_search_dropdown').style.display = 'none';
+                                  toggleFamilyPlanAction();
+                              } else {
+                                  alert(json.error || 'Member not found');
+                              }
+                          })
+                          .catch(function(err) {
+                              alert('Error looking up member: ' + err);
+                          });
+                  }
+
+                  function copyFamilyAddress() {
+                      if (!loadedFamilyData) return;
+                      var streetInp = document.querySelector('input[name="street_name"]');
+                      var cityInp = document.querySelector('input[name="city"]');
+                      var zipInp = document.querySelector('input[name="zipcode"]');
+                      var stateInp = document.querySelector('input[name="state"]');
+
+                      if (streetInp && loadedFamilyData.streetName) streetInp.value = loadedFamilyData.streetName;
+                      if (cityInp && loadedFamilyData.city) cityInp.value = loadedFamilyData.city;
+                      if (zipInp && loadedFamilyData.zipcode) zipInp.value = loadedFamilyData.zipcode;
+                      if (stateInp && loadedFamilyData.state) stateInp.value = loadedFamilyData.state;
+
+                      alert('Family address and pincode successfully copied into registration form!');
+                  }
+
+                  function toggleFamilyPlanAction() {
+                      var isCouple = document.getElementById('is_couple').checked;
+                      var isExistingMode = document.getElementById('mode_existing').checked;
+                      var isJoinPlan = document.getElementById('plan_action_join').checked;
+                      var planSelect = document.getElementById('plan_select');
+                      var paidAmountInp = document.getElementById('paid_amount');
+
+                      if (isCouple && isExistingMode && isJoinPlan && loadedFamilyData) {
+                          if (loadedFamilyData.pid && planSelect) {
+                              planSelect.value = loadedFamilyData.pid;
+                          }
+                          if (paidAmountInp) {
+                              paidAmountInp.value = '0';
+                              paidAmountInp.placeholder = '₹0 (Shared Family Plan)';
+                          }
+                      } else {
+                          if (paidAmountInp && paidAmountInp.placeholder.indexOf('Shared') !== -1) {
+                              paidAmountInp.placeholder = 'Leave empty if fully paid';
+                              paidAmountInp.value = '';
                           }
                       }
-                 }
-             </script>
-             
+                      if (typeof checkBalance === 'function') {
+                          checkBalance();
+                      }
+                  }
+
+                  function checkCoupleAutoSelect() {
+                       var select = document.getElementById('plan_select');
+                       if (select && select.selectedIndex >= 0) {
+                           var text = select.options[select.selectedIndex].text.toLowerCase();
+                           var isCoupleCheckbox = document.getElementById('is_couple');
+                           if (text.indexOf('couple') !== -1) {
+                               isCoupleCheckbox.checked = true;
+                               toggleCoupleFields();
+                           }
+                       }
+                  }
+
+                  // Handle URL parameter ?family_of=101 or ?mode=couple
+                  document.addEventListener("DOMContentLoaded", function() {
+                      var familyOf = "<?php echo htmlspecialchars($family_of); ?>";
+                      var isCoupleMode = <?php echo $is_couple_mode ? 'true' : 'false'; ?>;
+                      if (isCoupleMode || familyOf) {
+                          var cb = document.getElementById('is_couple');
+                          if (cb) {
+                              cb.checked = true;
+                              toggleCoupleFields();
+                              if (familyOf) {
+                                  var searchInput = document.getElementById('existing_member_search');
+                                  if (searchInput) searchInput.value = familyOf;
+                                  fetchMemberById(familyOf);
+                              }
+                          }
+                      }
+                  });
+              </script>
                           <tr>
               <td height="35">&nbsp;</td>
               <td height="35">

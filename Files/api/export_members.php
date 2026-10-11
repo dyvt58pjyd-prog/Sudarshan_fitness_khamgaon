@@ -117,6 +117,7 @@ $query = "SELECT
             u.joining_date,
             u.entry_code,
             u.biometric_id,
+            u.partner_uid,
             e.expire,
             e.renewal,
             p.planName
@@ -193,7 +194,9 @@ while ($row = mysqli_fetch_assoc($result)) {
         'gender'            => $row['gender'] ?? '',
         'joining_date'      => $row['joining_date'] ?? null,
         'entry_code'        => $row['entry_code'] ?? '',
-        'biometric_id'      => $row['biometric_id'] ?? null
+        'biometric_id'      => $row['biometric_id'] ?? null,
+        'partner_uid'       => !empty($row['partner_uid']) ? $row['partner_uid'] : null,
+        'is_couple'         => !empty($row['partner_uid'])
     ];
 }
 

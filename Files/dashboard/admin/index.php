@@ -594,6 +594,15 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								</div>
 							</a>
 
+							<a href="new_entry.php?mode=couple" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(168, 85, 247, 0.1) 100%); border: 2px solid #ec4899; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">👥❤️</div>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Family & Couple Entry</h4>
+									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Link new & registered members</span>
+								</div>
+							</a>
+
 							<a href="manual_approve.php" style="text-decoration: none;">
 								<div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%); border: 2px solid #f59e0b; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">

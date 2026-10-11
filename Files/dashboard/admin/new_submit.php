@@ -118,44 +118,72 @@ $query="INSERT INTO users(username,gender,mobile,email,dob,joining_date,userid,t
         
       $partner_uid = null;
       $is_couple_selected = false;
-      
-      if (isset($_POST['is_couple']) && $_POST['is_couple'] == '1') {
-          $is_couple_selected = true;
-      } else if (!empty($_POST['partner_name'])) {
-          $is_couple_selected = true;
-      } else if (!empty($plan)) {
-          $q_chk_plan = mysqli_query($con, "SELECT planName FROM plan WHERE pid='$plan'");
-          if ($q_chk_plan && mysqli_num_rows($q_chk_plan) > 0) {
-              $p_row_chk = mysqli_fetch_assoc($q_chk_plan);
-              if (stripos($p_row_chk['planName'], 'couple') !== false) {
-                  $is_couple_selected = true;
-              }
-          }
-      }
+      $linked_existing_id = isset($_POST['linked_existing_member_id']) && !empty($_POST['linked_existing_member_id']) ? mysqli_real_escape_string($con, trim($_POST['linked_existing_member_id'])) : '';
+      $couple_mode = isset($_POST['couple_mode']) ? trim($_POST['couple_mode']) : 'existing';
+      $is_shared_family_plan = false;
+      $shared_expire_date = null;
+      $ex_row = null;
 
-      if ($is_couple_selected) {
-          $p_name = isset($_POST['partner_name']) && !empty($_POST['partner_name']) ? mysqli_real_escape_string($con, trim($_POST['partner_name'])) : "Partner of " . $uname;
-          $p_gender = isset($_POST['partner_gender']) && !empty($_POST['partner_gender']) ? mysqli_real_escape_string($con, trim($_POST['partner_gender'])) : ($gender == 'Male' ? 'Female' : 'Male');
-          $p_dob = isset($_POST['partner_dob']) && !empty($_POST['partner_dob']) ? mysqli_real_escape_string($con, $_POST['partner_dob']) : $dob;
-          $p_mobile = isset($_POST['partner_mobile']) && !empty($_POST['partner_mobile']) ? mysqli_real_escape_string($con, trim($_POST['partner_mobile'])) : $phn;
-          
-          // Generate unique partner ID
-          $partner_uid = get_next_free_userid($con, intval($memID) + 1);
-          
-          $p_email = "partner_" . $partner_uid . "_" . time() . "@sudarshanfitness.local";
-          if (!empty($email)) {
-              $chk_p_em = mysqli_query($con, "SELECT email FROM users WHERE email = '$email'");
-              if ($chk_p_em && mysqli_num_rows($chk_p_em) == 0) {
-                  $p_email = $email;
+      if (!empty($linked_existing_id) && $couple_mode === 'existing') {
+          // Mode 1: Link with ALREADY REGISTERED member without losing previous details
+          $q_chk_ex = mysqli_query($con, "SELECT userid, username FROM users WHERE userid = '$linked_existing_id'");
+          if ($q_chk_ex && mysqli_num_rows($q_chk_ex) > 0) {
+              $ex_row = mysqli_fetch_assoc($q_chk_ex);
+              // Bi-directionally link both members
+              mysqli_query($con, "UPDATE users SET partner_uid = '$linked_existing_id' WHERE userid = '$memID'");
+              mysqli_query($con, "UPDATE users SET partner_uid = '$memID' WHERE userid = '$linked_existing_id'");
+
+              $family_plan_action = isset($_POST['family_plan_action']) ? $_POST['family_plan_action'] : 'join_existing';
+              if ($family_plan_action === 'join_existing') {
+                  $qp_plan = mysqli_query($con, "SELECT pid, expire, paid_date FROM enrolls_to WHERE uid = '$linked_existing_id' ORDER BY expire DESC LIMIT 1");
+                  if ($qp_plan && mysqli_num_rows($qp_plan) > 0) {
+                      $p_plan_row = mysqli_fetch_assoc($qp_plan);
+                      $plan = $p_plan_row['pid'];
+                      $shared_expire_date = $p_plan_row['expire'];
+                      $is_shared_family_plan = true;
+                  }
               }
           }
-          
-          $q_partner = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, partner_uid, biometric_id, biometric_enabled, fitness_goal, biometric_batch) 
-                        VALUES ('$p_name', '$p_gender', '$p_mobile', '$p_email', '$p_dob', '$jdate', '$partner_uid', '$memID', '$partner_uid', 1, '$fitness_goal', '$biometric_batch')";
-          mysqli_query($con, $q_partner);
-          
-          // Bi-directionally link Primary User to Partner User
-          mysqli_query($con, "UPDATE users SET partner_uid = '$partner_uid' WHERE userid = '$memID'");
+      } else {
+          // Mode 2: Both members are new
+          if (isset($_POST['is_couple']) && $_POST['is_couple'] == '1' && $couple_mode === 'new') {
+              $is_couple_selected = true;
+          } else if (!empty($_POST['partner_name']) && $couple_mode === 'new') {
+              $is_couple_selected = true;
+          } else if (!empty($plan)) {
+              $q_chk_plan = mysqli_query($con, "SELECT planName FROM plan WHERE pid='$plan'");
+              if ($q_chk_plan && mysqli_num_rows($q_chk_plan) > 0) {
+                  $p_row_chk = mysqli_fetch_assoc($q_chk_plan);
+                  if (stripos($p_row_chk['planName'], 'couple') !== false && empty($linked_existing_id)) {
+                      $is_couple_selected = true;
+                  }
+              }
+          }
+
+          if ($is_couple_selected) {
+              $p_name = isset($_POST['partner_name']) && !empty($_POST['partner_name']) ? mysqli_real_escape_string($con, trim($_POST['partner_name'])) : "Partner of " . $uname;
+              $p_gender = isset($_POST['partner_gender']) && !empty($_POST['partner_gender']) ? mysqli_real_escape_string($con, trim($_POST['partner_gender'])) : ($gender == 'Male' ? 'Female' : 'Male');
+              $p_dob = isset($_POST['partner_dob']) && !empty($_POST['partner_dob']) ? mysqli_real_escape_string($con, $_POST['partner_dob']) : $dob;
+              $p_mobile = isset($_POST['partner_mobile']) && !empty($_POST['partner_mobile']) ? mysqli_real_escape_string($con, trim($_POST['partner_mobile'])) : $phn;
+              
+              // Generate unique partner ID
+              $partner_uid = get_next_free_userid($con, intval($memID) + 1);
+              
+              $p_email = "partner_" . $partner_uid . "_" . time() . "@sudarshanfitness.local";
+              if (!empty($email)) {
+                  $chk_p_em = mysqli_query($con, "SELECT email FROM users WHERE email = '$email'");
+                  if ($chk_p_em && mysqli_num_rows($chk_p_em) == 0) {
+                      $p_email = $email;
+                  }
+              }
+              
+              $q_partner = "INSERT INTO users (username, gender, mobile, email, dob, joining_date, userid, partner_uid, biometric_id, biometric_enabled, fitness_goal, biometric_batch) 
+                            VALUES ('$p_name', '$p_gender', '$p_mobile', '$p_email', '$p_dob', '$jdate', '$partner_uid', '$memID', '$partner_uid', 1, '$fitness_goal', '$biometric_batch')";
+              mysqli_query($con, $q_partner);
+              
+              // Bi-directionally link Primary User to Partner User
+              mysqli_query($con, "UPDATE users SET partner_uid = '$partner_uid' WHERE userid = '$memID'");
+          }
       }
 
       //Retrieve information of plan selected by user
@@ -170,10 +198,16 @@ $query="INSERT INTO users(username,gender,mobile,email,dob,joining_date,userid,t
           $launch_date = '2026-07-08';
           $cdate = ($cdate < $launch_date) ? $launch_date : $cdate;
           
-          $d = calculate_expiration_date($cdate, $value[3]);
-          $expiredate=date("Y-m-d",$d); //adding validity retrieve from plan to current date
-          $discount = isset($_POST['discount']) ? intval($_POST['discount']) : 0;
-          $plan_price = intval($value[4]);
+          if ($is_shared_family_plan && !empty($shared_expire_date)) {
+              $expiredate = $shared_expire_date;
+              $discount = 0;
+              $plan_price = 0;
+          } else {
+              $d = calculate_expiration_date($cdate, $value[3]);
+              $expiredate=date("Y-m-d",$d); //adding validity retrieve from plan to current date
+              $discount = isset($_POST['discount']) ? intval($_POST['discount']) : 0;
+              $plan_price = intval($value[4]);
+          }
           
           // Automatic welcome bonus discount for 12000, 6000 and 3900/4000/4500 (3 Months) plans, limited to 100 members
           if (($plan_price == 12000 || $plan_price == 6000 || $plan_price == 3900 || $plan_price == 4000 || $plan_price == 4500) && $discount == 0) {
@@ -284,8 +318,14 @@ $query="INSERT INTO users(username,gender,mobile,email,dob,joining_date,userid,t
                 // Send Confirmation Email with entry code and discount details
                 send_member_email($con, $email, $uname, $memID, $password, $value[1], $value[4], $expiredate, $entry_code, $discount, $paid_amount, $gender);
 
-                echo "<head><script>alert('Member Added Successfully!');</script></head></html>";
-                echo "<meta http-equiv='refresh' content='0; url=new_entry.php?success=1'>";
+                if (!empty($linked_existing_id)) {
+                    $ex_name_esc = addslashes($ex_row['username'] ?? "Member #$linked_existing_id");
+                    echo "<head><script>alert('Member $uname (ID: #$memID) successfully registered & linked to family member $ex_name_esc (ID: #$linked_existing_id)! Previous member records 100% preserved.');</script></head></html>";
+                    echo "<meta http-equiv='refresh' content='0; url=read_member.php?name=" . urlencode($memID) . "'>";
+                } else {
+                    echo "<head><script>alert('Member Added Successfully!');</script></head></html>";
+                    echo "<meta http-equiv='refresh' content='0; url=new_entry.php?success=1'>";
+                }
               }
               else{
                   echo "<head><script>alert('Member Added Failed');</script></head></html>";
