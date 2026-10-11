@@ -129,7 +129,9 @@ $query = "SELECT
               ) e2 ON e1.et_id = e2.max_et_id
           ) e ON u.userid = e.uid
           LEFT JOIN plan p ON e.pid = p.pid
-          WHERE u.userid != 'PENDING'
+          WHERE u.userid != 'PENDING' 
+            AND LOWER(u.userid) != 'membership id'
+            AND LOWER(u.username) != 'full name'
           ORDER BY CAST(u.userid AS UNSIGNED) ASC, u.username ASC";
 
 $result = mysqli_query($con, $query);
