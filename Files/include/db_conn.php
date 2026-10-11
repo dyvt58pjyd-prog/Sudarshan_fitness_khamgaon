@@ -1137,6 +1137,7 @@ if (!function_exists('get_member_rank')) {
 
 if (!function_exists('check_and_upgrade_db')) {
     function check_and_upgrade_db($con) {
+        if (!$con || !($con instanceof mysqli)) return;
         // Super Security System Tables
         @mysqli_query($con, "CREATE TABLE IF NOT EXISTS login_attempts (
             id INT(11) NOT NULL AUTO_INCREMENT,
@@ -2182,11 +2183,12 @@ if (!function_exists('get_member_photo_url')) {
     }
 }
 
-check_and_upgrade_db($con);
-run_waf_security_shield($con);
+if ($con && $con instanceof mysqli) {
+    check_and_upgrade_db($con);
+    run_waf_security_shield($con);
 
-// Enforce Active IP Blacklist Check (CERT-In MIL-STD Protection)
-if (function_exists('is_ip_blocked') && is_ip_blocked($con)) {
+    // Enforce Active IP Blacklist Check (CERT-In MIL-STD Protection)
+    if (function_exists('is_ip_blocked') && is_ip_blocked($con)) {
     header("HTTP/1.1 403 Forbidden");
     die("<div style='background:#2c1b18; color:#ef4444; font-family:sans-serif; padding:50px; text-align:center; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;'>
         <div style='font-size:60px; margin-bottom:15px;'>🇮🇳</div>
@@ -2196,4 +2198,5 @@ if (function_exists('is_ip_blocked') && is_ip_blocked($con)) {
             Incident ID: MIL-DEF-" . strtoupper(substr(md5(get_client_ip() . date('Y-m-d')), 0, 8)) . " | Logged to Cyber Threat Intelligence Audit Trail
         </div>
     </div>");
+    }
 }
