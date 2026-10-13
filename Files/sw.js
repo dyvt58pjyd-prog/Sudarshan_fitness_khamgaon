@@ -1,8 +1,14 @@
-const CACHE_NAME = 'sudarshan-gym-cache-v4';
+const CACHE_NAME = 'sudarshan-gym-cache-v5';
 const urlsToCache = [
   './',
   './index.php',
-  './manifest.json'
+  './manifest.json',
+  './css/style.css?v=2.6',
+  './css/dashMain.css?v=2.6',
+  './css/premium.css?v=2.6',
+  './css/entypo.css',
+  './js/Script.js',
+  './js/ui_sounds.js'
 ];
 
 // Install Event: Cache files and forcefully skip waiting to activate immediately

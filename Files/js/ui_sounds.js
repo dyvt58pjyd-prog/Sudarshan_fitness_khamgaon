@@ -1,59 +1,53 @@
 /**
  * Tactile UI Sound Effects for Sudarshan Fitness
- * Synthesizes high-tech UI sounds using the Web Audio API.
- * No external MP3 files required!
+ * Lightweight sound system optimized for low-spec Windows hardware.
  */
 
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let audioCtx = null;
 
-function playTone(freq, type, duration, vol) {
-    if (audioCtx.state === 'suspended') return; // Browser autoplay policy
-    
-    const oscillator = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
-    
-    oscillator.type = type;
-    oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
-    
-    // Quick fade out to prevent clicking
-    gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-    
-    oscillator.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-    
-    oscillator.start();
-    oscillator.stop(audioCtx.currentTime + duration);
+function getAudioContext() {
+    if (!audioCtx && (window.AudioContext || window.webkitAudioContext)) {
+        try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        } catch (e) {}
+    }
+    return audioCtx;
 }
 
-// Sound Profiles
+function playTone(freq, type, duration, vol) {
+    const ctx = getAudioContext();
+    if (!ctx || ctx.state === 'suspended') return;
+    try {
+        const oscillator = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+        oscillator.type = type;
+        oscillator.frequency.setValueAtTime(freq, ctx.currentTime);
+        gainNode.gain.setValueAtTime(vol, ctx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        oscillator.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        oscillator.start();
+        oscillator.stop(ctx.currentTime + duration);
+    } catch (e) {}
+}
+
 const sounds = {
-    hover: () => playTone(800, 'sine', 0.05, 0.02),
     click: () => {
-        playTone(1200, 'sine', 0.1, 0.05);
-        setTimeout(() => playTone(1600, 'sine', 0.1, 0.05), 50);
+        playTone(1200, 'sine', 0.08, 0.03);
     },
     success: () => {
-        playTone(523.25, 'sine', 0.1, 0.1); // C5
-        setTimeout(() => playTone(659.25, 'sine', 0.1, 0.1), 100); // E5
-        setTimeout(() => playTone(783.99, 'sine', 0.4, 0.1), 200); // G5
+        playTone(523.25, 'sine', 0.1, 0.06);
+        setTimeout(() => playTone(659.25, 'sine', 0.1, 0.06), 80);
     }
 };
 
-// Initialize after user gesture
-document.addEventListener('click', function initAudio() {
-    if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
+document.addEventListener('click', function initAudio(e) {
+    const ctx = getAudioContext();
+    if (ctx && ctx.state === 'suspended') {
+        ctx.resume();
     }
-    // document.removeEventListener('click', initAudio); // Keep it running just in case
-}, { once: false });
-
-// Attach to UI elements
-document.addEventListener('DOMContentLoaded', () => {
-    const interactables = document.querySelectorAll('a, button, .btn, input[type="submit"]');
-    
-    interactables.forEach(el => {
-        el.addEventListener('mouseenter', () => sounds.hover());
-        el.addEventListener('click', () => sounds.click());
-    });
-});
+    const target = e.target.closest('button, .btn, input[type="submit"]');
+    if (target) {
+        sounds.click();
+    }
+}, { passive: true });

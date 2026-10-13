@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
+/* System typography: Inter loaded via HTML links and local system fallback */
 :root {
   --bg-dark: #0f0a05;        /* Ninja Black/Brown */
   --bg-darker: #080502;      /* Leaf Night */
@@ -91,24 +90,23 @@ body, html {
   }
 }
 
-/* System Hologram Cards FX */
+/* System Hologram Cards FX - Optimized for High FPS on Core i3 / Windows */
 .portal-card, .login-container, .panel, .status-window, .rep-counter-box {
-  animation: system-hologram-pulse 6s ease-in-out infinite alternate !important;
   position: relative !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 1px rgba(255, 123, 0, 0.3) !important;
+  border: 1px solid var(--glass-border) !important;
+  contain: content;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
 }
 
-/* System Hologram Scanline Effect */
+.portal-card:hover, .panel:hover {
+  border-color: rgba(255, 123, 0, 0.7) !important;
+  box-shadow: 0 6px 24px rgba(255, 123, 0, 0.2) !important;
+}
+
+/* Scanline Effect disabled for low CPU load */
 .panel::after, .login-container::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.8), transparent);
-  animation: scanline-anim 8s linear infinite;
-  pointer-events: none;
-  opacity: 0.6;
+  display: none !important;
 }
 
 h1, h2, h3, h4, h5, p, span, a {

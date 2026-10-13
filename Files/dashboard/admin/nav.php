@@ -26,13 +26,13 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
 ?>
 <!-- SECURITY WATERMARK OVERLAY -->
 <div class="security-watermark">
-    <?php for($i = 0; $i < 30; $i++): ?>
+    <?php for($i = 0; $i < 6; $i++): ?>
         <span><?php echo htmlspecialchars($watermark_text); ?></span>
     <?php endfor; ?>
 </div>
 
 <style>
-    /* Security Watermark Styling */
+    /* Security Watermark Styling - GPU optimized */
     .security-watermark {
         position: fixed;
         top: 0;
@@ -40,15 +40,16 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
         width: 100vw;
         height: 100vh;
         z-index: 9999;
-        pointer-events: none; /* Let clicks pass through */
+        pointer-events: none;
         overflow: hidden;
         display: flex;
         flex-wrap: wrap;
-        opacity: 0.03; /* Barely visible */
-        justify-content: center;
-        align-content: center;
-        gap: 50px;
-        transform: rotate(-15deg) scale(1.5);
+        opacity: 0.025;
+        justify-content: space-around;
+        align-content: space-around;
+        gap: 60px;
+        contain: strict;
+        transform: rotate(-10deg);
     }
     .security-watermark span {
         font-size: 24px;

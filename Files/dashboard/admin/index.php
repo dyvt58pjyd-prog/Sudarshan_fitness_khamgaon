@@ -130,11 +130,11 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
     
     <title>SUDARSHAN FITNESS | Dashboard </title>
 
-    <link rel="stylesheet" href="../../css/style.css?v=<?php echo time(); ?>" id="style-resource-5">
+    <link rel="stylesheet" href="../../css/style.css?v=2.6" id="style-resource-5">
     <script type="text/javascript" src="../../js/Script.js"></script>
-    <link rel="stylesheet" href="../../css/dashMain.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="../../css/dashMain.css?v=2.6">
     <link rel="stylesheet" type="text/css" href="../../css/entypo.css">
-    <link rel="stylesheet" href="../../css/premium.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="../../css/premium.css?v=2.6">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style id="sf-apple-minimalist-theme">
         /* =========================================================
@@ -147,7 +147,7 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
                 radial-gradient(at 0% 0%, rgba(0, 113, 227, 0.07) 0px, transparent 50%),
                 radial-gradient(at 100% 0%, rgba(255, 45, 85, 0.05) 0px, transparent 50%),
                 radial-gradient(at 50% 100%, rgba(52, 199, 89, 0.04) 0px, transparent 50%) !important;
-            background-attachment: fixed !important;
+            background-attachment: scroll !important;
             background-size: cover !important;
             color: var(--text-main) !important;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
@@ -1684,11 +1684,15 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 				`;
 				document.head.appendChild(style);
 
-				// Start timers
+				// Start timers with Visibility API to save CPU on background tabs
 				pollServicesStatus();
 				pollLiveAttendance();
-				setInterval(pollServicesStatus, 10000); // Poll services status every 10s
-				setInterval(pollLiveAttendance, 3000);   // Poll live attendance logs every 3s
+				setInterval(() => {
+					if (!document.hidden) pollServicesStatus();
+				}, 30000); // Poll services status every 30s
+				setInterval(() => {
+					if (!document.hidden) pollLiveAttendance();
+				}, 12000); // Poll live attendance logs every 12s
 			});
 			</script>
 
@@ -1987,54 +1991,56 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 			$net_profit = $total_collections - $expenses_total;
 			$is_profitable = $net_profit >= 0;
 
-			// Attendance over the last 7 days
+			// Attendance over the last 7 days - Single Batched SQL Query
+			$seven_days_ago = date('Y-m-d', strtotime('-6 days'));
+			$att_map = [];
+			$att_res = @mysqli_query($con, "SELECT date, COUNT(*) as count FROM attendance WHERE date >= '$seven_days_ago' GROUP BY date");
+			if ($att_res) {
+				while ($r = mysqli_fetch_assoc($att_res)) {
+					$att_map[$r['date']] = intval($r['count']);
+				}
+			}
 			$att_trend_labels = [];
 			$att_trend_data = [];
 			for ($i = 6; $i >= 0; $i--) {
 				$d_str = date('Y-m-d', strtotime("-$i days"));
-				$d_label = date('M d', strtotime("-$i days"));
-				$att_q = mysqli_query($con, "SELECT COUNT(*) as count FROM attendance WHERE date = '$d_str'");
-				$att_count = 0;
-				if ($att_q && $att_row = mysqli_fetch_assoc($att_q)) {
-					$att_count = intval($att_row['count']);
-				}
-				$att_trend_labels[] = $d_label;
-				$att_trend_data[] = $att_count;
+				$att_trend_labels[] = date('M d', strtotime("-$i days"));
+				$att_trend_data[] = $att_map[$d_str] ?? 0;
 			}
 
-			// 6-Month Collections Breakdown
+			// 6-Month Collections Breakdown - Batched Aggregations
+			$six_months_ago = date('Y-m-01', strtotime('-5 months'));
+			$m_rev_map = [];
+			$m_res = @mysqli_query($con, "SELECT DATE_FORMAT(e.paid_date, '%Y-%m') as ym, 
+				SUM(COALESCE(IF(e.paid_amount > 0 AND (e.discount_amount = 0 OR e.paid_amount != p.amount), e.paid_amount, GREATEST(0, p.amount - COALESCE(e.discount_amount, 0))), e.paid_amount, 0)) as total
+				FROM enrolls_to e LEFT JOIN plan p ON e.pid = p.pid 
+				WHERE e.paid_date >= '$six_months_ago' 
+				GROUP BY DATE_FORMAT(e.paid_date, '%Y-%m')");
+			if ($m_res) {
+				while ($r = mysqli_fetch_assoc($m_res)) {
+					$m_rev_map[$r['ym']] = intval($r['total']);
+				}
+			}
+
+			$pt_rev_map = [];
+			$pt_res = @mysqli_query($con, "SELECT DATE_FORMAT(enroll_date, '%Y-%m') as ym, SUM(amount) as total 
+				FROM pt_enrollments 
+				WHERE enroll_date >= '$six_months_ago' 
+				GROUP BY DATE_FORMAT(enroll_date, '%Y-%m')");
+			if ($pt_res) {
+				while ($r = mysqli_fetch_assoc($pt_res)) {
+					$pt_rev_map[$r['ym']] = intval($r['total']);
+				}
+			}
+
 			$rev_months_labels = [];
 			$membership_rev_trend = [];
 			$pt_rev_trend = [];
 			for ($i = 5; $i >= 0; $i--) {
 				$target_month = date('Y-m', strtotime("-$i months"));
-				$month_label = date('F', strtotime("-$i months"));
-				
-				// Membership
-				$m_rev_q = mysqli_query($con, "SELECT e.paid_amount, e.discount_amount, p.amount FROM enrolls_to e 
-											   INNER JOIN plan p ON e.pid = p.pid 
-											   WHERE e.paid_date LIKE '$target_month%'");
-				$m_rev = 0;
-				if ($m_rev_q) {
-					while ($m_row = mysqli_fetch_assoc($m_rev_q)) {
-						if ($m_row['paid_amount'] !== null) {
-							$m_rev += intval($m_row['paid_amount']);
-						} else {
-							$m_rev += (intval($m_row['amount']) - intval($m_row['discount_amount']));
-						}
-					}
-				}
-				
-				// PT
-				$p_rev_q = mysqli_query($con, "SELECT SUM(amount) AS total FROM pt_enrollments WHERE enroll_date LIKE '$target_month%'");
-				$p_rev = 0;
-				if ($p_rev_q && $p_row = mysqli_fetch_assoc($p_rev_q)) {
-					$p_rev = isset($p_row['total']) ? intval($p_row['total']) : 0;
-				}
-				
-				$rev_months_labels[] = $month_label;
-				$membership_rev_trend[] = $m_rev;
-				$pt_rev_trend[] = $p_rev;
+				$rev_months_labels[] = date('F', strtotime("-$i months"));
+				$membership_rev_trend[] = $m_rev_map[$target_month] ?? 0;
+				$pt_rev_trend[] = $pt_rev_map[$target_month] ?? 0;
 			}
 			?>
 
