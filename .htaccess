@@ -14,6 +14,8 @@ RewriteRule ^member_app/?(.*)$ /Files/member_app/$1 [L,QSA]
 RewriteRule ^dashboard/?(.*)$ /Files/dashboard/$1 [L,QSA]
 RewriteRule ^css/?(.*)$ /Files/css/$1 [L,QSA]
 RewriteRule ^images/?(.*)$ /Files/images/$1 [L,QSA]
+RewriteRule ^privacy/?$ privacy.html [L,QSA]
+RewriteRule ^privacy_policy/?$ privacy.html [L,QSA]
 RewriteRule ^api/?(.*)$ /Files/api/$1 [L,QSA]
 
 # Route ALL other requests to the biometric listener if the file doesn't exist
