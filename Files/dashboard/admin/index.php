@@ -519,7 +519,8 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 						</div>
 					</div>
 					<div style="display:flex; flex-wrap:wrap; gap:10px;">
-						<a href="download_expired_members_pdf.php" target="_blank" style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); color: #ef4444; padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 7px;" title="Download list of all expired and unrenewed members"><i class="fa-solid fa-file-pdf"></i> Expired Members PDF</a>
+						<a href="download_today_expired_members_pdf.php" target="_blank" style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); color: #f59e0b; padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 7px;" title="Download list of members expired today only"><i class="fa-solid fa-calendar-day"></i> Today's Expired PDF</a>
+						<a href="download_expired_members_pdf.php" target="_blank" style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); color: #ef4444; padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 7px;" title="Download list of all expired and unrenewed members"><i class="fa-solid fa-file-pdf"></i> All Expired PDF</a>
 						<a href="financial_audit.php" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); color: #3b82f6; padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s;"><i class="fa-solid fa-lock"></i> Financial Audit Hub</a>
 						<a href="revenue_month.php" style="background: rgba(52, 199, 89, 0.1); border: 1px solid rgba(52, 199, 89, 0.2); color: #34c759; padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s;">Income Ledger</a>
 						<a href="expenses.php" style="background: rgba(255, 59, 48, 0.1); border: 1px solid rgba(255, 59, 48, 0.2); color: #ff3b30; padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s;">Expenses Ledger</a>
@@ -925,11 +926,20 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								</div>
 							</a>
 
+							<a href="download_today_expired_members_pdf.php" target="_blank" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(217, 119, 6, 0.05) 100%); border: 2px solid #f59e0b; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';this.style.boxShadow='0 0 30px rgba(245,158,11,0.4)';" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 10px 20px rgba(0,0,0,0.15)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">📅⚠️</div>
+									<h4 style="color: #f59e0b; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Today's Expired (PDF)</h4>
+									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Download members expired today only</span>
+								</div>
+							</a>
+
 							<a href="download_expired_members_pdf.php" target="_blank" style="text-decoration: none;">
 								<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.18) 0%, rgba(220, 38, 38, 0.05) 100%); border: 2px solid #ef4444; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';this.style.boxShadow='0 0 30px rgba(239,68,68,0.4)';" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 10px 20px rgba(0,0,0,0.15)';">
 									<div style="font-size: 40px; margin-bottom: 10px;">📑⚠️</div>
-									<h4 style="color: #ef4444; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Expired Members (PDF)</h4>
+									<h4 style="color: #ef4444; font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">All Expired Members (PDF)</h4>
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Download lapsed list with expiry periods</span>
 								</div>
 							</a>
@@ -2265,12 +2275,16 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								<i class="entypo-alert" style="color: var(--accent-primary);"></i> Membership Expiry &amp; Alerts
 							</h3>
 							<div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-								<!-- Download Expired Members PDF Button -->
-								<a href="download_expired_members_pdf.php" target="_blank" class="btn" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: #ffffff; border: 1px solid rgba(239, 68, 68, 0.5); border-radius: 10px; padding: 7px 16px; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 18px rgba(239, 68, 68, 0.5)';" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 14px rgba(239, 68, 68, 0.35)';">
-									<i class="entypo-download" style="font-size: 15px;"></i> Download Expired Members PDF
+								<!-- Today's Expired Members PDF Button (Daily) -->
+								<a href="download_today_expired_members_pdf.php" target="_blank" class="btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #ffffff; border: 1px solid rgba(245, 158, 11, 0.5); border-radius: 10px; padding: 7px 16px; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 18px rgba(245, 158, 11, 0.5)';" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 14px rgba(245, 158, 11, 0.35)';" title="Download PDF of members expired today only">
+									<i class="entypo-calendar" style="font-size: 15px;"></i> 📅 Today's Expired PDF
+								</a>
+								<!-- Download All Expired Members PDF Button -->
+								<a href="download_expired_members_pdf.php" target="_blank" class="btn" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: #ffffff; border: 1px solid rgba(239, 68, 68, 0.5); border-radius: 10px; padding: 7px 16px; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35); text-decoration: none; transition: all 0.2s ease-in-out;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 18px rgba(239, 68, 68, 0.5)';" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 14px rgba(239, 68, 68, 0.35)';" title="Download PDF of all lapsed and unrenewed members">
+									<i class="entypo-download" style="font-size: 15px;"></i> All Expired Members PDF
 								</a>
 								<a href="download_expired_members_pdf.php?view=1" target="_blank" class="btn" style="background: rgba(255, 255, 255, 0.08); color: var(--text-main); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 7px 12px; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; transition: all 0.2s;" title="Preview PDF report in browser tab">
-									<i class="entypo-eye"></i> View PDF
+									<i class="entypo-eye"></i> View All PDF
 								</a>
 								<span class="status-badge" style="background: rgba(255, 107, 0, 0.15); color: var(--accent-primary); border-color: var(--accent-primary); padding: 4px 12px; border: 1px solid var(--accent-primary); border-radius: 20px; font-size: 12px; font-weight: 600;">
 									Alert Threshold: &le; 5 Days

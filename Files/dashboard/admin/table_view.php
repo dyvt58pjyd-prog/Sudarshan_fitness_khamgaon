@@ -255,9 +255,12 @@ if ($status === 'active') {
 
 		<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 15px;">
 			<h3 style="margin: 0;">Member Detail</h3>
-			<div style="display: flex; gap: 10px; align-items: center;">
-				<a href="download_expired_members_pdf.php" target="_blank" class="btn" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: #ffffff; border: none; border-radius: 8px; padding: 7px 15px; font-weight: 700; font-size: 12.5px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); text-decoration: none; transition: transform 0.2s;">
-					<i class="entypo-download"></i> Download Expired Members PDF
+			<div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+				<a href="download_today_expired_members_pdf.php" target="_blank" class="btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #ffffff; border: none; border-radius: 8px; padding: 7px 15px; font-weight: 700; font-size: 12.5px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); text-decoration: none; transition: transform 0.2s;" title="Download PDF of members expired today only">
+					<i class="entypo-calendar"></i> Today's Expired PDF
+				</a>
+				<a href="download_expired_members_pdf.php" target="_blank" class="btn" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: #ffffff; border: none; border-radius: 8px; padding: 7px 15px; font-weight: 700; font-size: 12.5px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); text-decoration: none; transition: transform 0.2s;" title="Download PDF of all lapsed and unrenewed members">
+					<i class="entypo-download"></i> All Expired Members PDF
 				</a>
 				<a href="download_expired_members_pdf.php?view=1" target="_blank" class="btn" style="background: rgba(255, 255, 255, 0.08); color: var(--text-main); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 7px 12px; font-weight: 600; font-size: 12.5px; display: inline-flex; align-items: center; gap: 5px; text-decoration: none;">
 					<i class="entypo-eye"></i> View PDF
