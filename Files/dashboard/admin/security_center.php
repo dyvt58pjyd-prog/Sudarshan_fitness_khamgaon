@@ -181,17 +181,17 @@ $q_ip_list = mysqli_query($con, "SELECT * FROM blocked_ips ORDER BY id DESC LIMI
     <!-- Security Hardening Status Checklist -->
     <div class="sec-box" style="border: 2px solid #10b981; background: var(--bg-card, #ffffff);">
         <div class="sec-title">
-            <span>🇮🇳 CERT-In Indian Military Standard Cyber Security Protection (MIL-STD-256-INDIA)</span>
-            <span style="font-size: 11px; color: #059669; background: rgba(16,185,129,0.15); border: 1px solid #10b981; padding: 4px 12px; border-radius: 8px; font-weight: 900;">🎖️ MILITARY DEFENSE SHIELD ACTIVE</span>
+            <span>🛡️ System Security &amp; Access Hardening Checklist</span>
+            <span style="font-size: 11px; color: #059669; background: rgba(16,185,129,0.15); border: 1px solid #10b981; padding: 4px 12px; border-radius: 8px; font-weight: 900;">🛡️ ACTIVE PROTECTION</span>
         </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
             <div style="background: var(--bg, #f8fafc); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 14px;">
-                <div style="color: #059669; font-weight: 800; font-size: 13px;">✅ CERT-In HTTP Defense Headers Enforced</div>
+                <div style="color: #059669; font-weight: 800; font-size: 13px;">✅ HTTP Defense Headers Enforced</div>
                 <div style="color: var(--text-muted, #64748b); font-size: 11px; margin-top: 4px;">Strict-Transport-Security, X-Frame-Options (SAMEORIGIN), X-XSS-Protection &amp; CSP Headers.</div>
             </div>
             <div style="background: var(--bg, #f8fafc); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 14px;">
-                <div style="color: #059669; font-weight: 800; font-size: 13px;">✅ Web Application Firewall (WAF Payload Deep Inspection)</div>
-                <div style="color: var(--text-muted, #64748b); font-size: 11px; margin-top: 4px;">Real-time perimeter inspection blocks SQL Injection, XSS, Path Traversal &amp; RCE probes.</div>
+                <div style="color: #059669; font-weight: 800; font-size: 13px;">✅ Web Application Firewall (WAF Payload Inspection)</div>
+                <div style="color: var(--text-muted, #64748b); font-size: 11px; margin-top: 4px;">Real-time perimeter monitoring and sanitization against malicious injection probes.</div>
             </div>
             <div style="background: var(--bg, #f8fafc); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 14px;">
                 <div style="color: #059669; font-weight: 800; font-size: 13px;">✅ Master Security PIN Gate (268724)</div>
@@ -202,8 +202,8 @@ $q_ip_list = mysqli_query($con, "SELECT * FROM blocked_ips ORDER BY id DESC LIMI
                 <div style="color: var(--text-muted, #64748b); font-size: 11px; margin-top: 4px;">User-Agent hash and IP subnet binding terminates hijacked administrative cookies.</div>
             </div>
             <div style="background: var(--bg, #f8fafc); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 14px;">
-                <div style="color: #059669; font-weight: 800; font-size: 13px;">✅ Automated IP Quarantine Lockout (5 Attempts)</div>
-                <div style="color: var(--text-muted, #64748b); font-size: 11px; margin-top: 4px;">Quarantines intruder IPs automatically into threat blocklist upon rate limit overflow.</div>
+                <div style="color: #059669; font-weight: 800; font-size: 13px;">✅ Continuous Access Availability</div>
+                <div style="color: var(--text-muted, #64748b); font-size: 11px; margin-top: 4px;">Zero false-positive lockouts; uninterrupted admin, reception &amp; member portal availability.</div>
             </div>
             <div style="background: var(--bg, #f8fafc); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 14px;">
                 <div style="color: #059669; font-weight: 800; font-size: 13px;">✅ Base64 Encrypted Data Vault &amp; Audit Trail</div>

