@@ -393,7 +393,17 @@ foreach ($projection_data as $date => $val) {
                 </div>
             </div>
 
-            <h2>Renewal Pipeline &amp; Projections</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 10px;">
+                <h2 style="margin: 0;">Renewal Pipeline &amp; Projections</h2>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <a href="download_expired_members_pdf.php" target="_blank" class="btn" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: #ffffff; border: none; border-radius: 10px; padding: 9px 18px; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35); text-decoration: none; transition: all 0.2s;">
+                        <i class="entypo-download" style="font-size: 15px;"></i> Download All Expired Members PDF
+                    </a>
+                    <a href="download_expired_members_pdf.php?view=1" target="_blank" class="btn" style="background: rgba(255, 255, 255, 0.08); color: var(--text-main); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 9px 14px; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; text-decoration: none;">
+                        <i class="entypo-eye"></i> View PDF
+                    </a>
+                </div>
+            </div>
             <hr />
 
             <?php if (isset($_SESSION['nudge_msg'])): ?>

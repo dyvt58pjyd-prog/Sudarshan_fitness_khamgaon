@@ -678,3 +678,259 @@ if (!function_exists('generate_pt_receipt_pdf_file')) {
         return $temp_filename;
     }
 }
+
+if (!function_exists('generate_expired_members_pdf_file')) {
+    function generate_expired_members_pdf_file($con, $filter = 'all', $output_path = '') {
+        $today = date('Y-m-d');
+        $now_formatted = date('d-M-Y h:i A');
+        $gym = get_gym_details($con);
+        
+        $gym_name    = !empty($gym['gym_name']) ? $gym['gym_name'] : 'SUDARSHAN FITNESS';
+        $gym_address = !empty($gym['gym_address']) ? $gym['gym_address'] : 'Station Road, Khamgaon';
+        $gym_contact = !empty($gym['gym_contact']) ? $gym['gym_contact'] : '9325205075';
+        $gym_email   = !empty($gym['gym_email']) ? $gym['gym_email'] : 'sudarshan.fitness.khm@gmail.com';
+        
+        $raw_logo = isset($gym['gym_logo']) ? $gym['gym_logo'] : '../../images/logo.png';
+        $logo_path = '';
+        if (strpos($raw_logo, '/Sudarshan Data Folder/') === 0) {
+            $logo_path = dirname(dirname(__DIR__)) . $raw_logo;
+        } else {
+            $clean_rel = str_replace('../../', '', $raw_logo);
+            $logo_path = dirname(__DIR__) . '/' . $clean_rel;
+        }
+        if (!file_exists($logo_path)) {
+            $alt_logo = dirname(__DIR__) . '/images/logo.png';
+            $alt_jpg  = dirname(__DIR__) . '/images/logo.jpg';
+            if (file_exists($alt_logo)) $logo_path = $alt_logo;
+            elseif (file_exists($alt_jpg)) $logo_path = $alt_jpg;
+        }
+        
+        $clean_fn = function($str, $max_len = 0) {
+            if ($str === null || $str === '') return '';
+            $str = html_entity_decode($str, ENT_QUOTES, 'UTF-8');
+            if (function_exists('iconv')) {
+                $clean = @iconv('UTF-8', 'windows-1252//TRANSLIT//IGNORE', $str);
+                if ($clean !== false) $str = $clean;
+            } else {
+                $str = utf8_decode($str);
+            }
+            $str = preg_replace('/[^\x20-\x7E\xA0-\xFF]/', '', $str);
+            if ($max_len > 0 && strlen($str) > $max_len) {
+                $str = substr($str, 0, $max_len - 3) . '...';
+            }
+            return $str;
+        };
+
+        $query = "SELECT 
+                    u.userid, u.username, u.mobile, u.email, u.gender, u.joining_date,
+                    latest_e.expire, latest_e.paid_date, latest_e.start_date, latest_e.paid_amount,
+                    p.planName, p.validity, p.amount AS plan_price
+                  FROM users u
+                  INNER JOIN (
+                      SELECT e1.*
+                      FROM enrolls_to e1
+                      INNER JOIN (
+                          SELECT uid, MAX(et_id) AS max_et_id
+                          FROM enrolls_to
+                          GROUP BY uid
+                      ) e2 ON e1.et_id = e2.max_et_id
+                  ) latest_e ON u.userid = latest_e.uid
+                  LEFT JOIN plan p ON latest_e.pid = p.pid
+                  WHERE u.userid != 'PENDING'
+                    AND LOWER(u.userid) != 'membership id'
+                    AND LOWER(u.username) != 'full name'
+                    AND latest_e.expire < '$today'
+                    AND NOT EXISTS (
+                        SELECT 1 FROM enrolls_to e_active 
+                        WHERE e_active.uid = u.userid AND e_active.expire >= '$today'
+                    )
+                  ORDER BY latest_e.expire DESC, CAST(u.userid AS UNSIGNED) DESC";
+
+        $result = mysqli_query($con, $query);
+        $members = [];
+        $total_value = 0;
+        $cnt_30 = 0; $cnt_90 = 0; $cnt_over90 = 0;
+
+        if ($result) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $days = (int)floor((strtotime($today) - strtotime($row['expire'])) / 86400);
+                if ($days < 0) $days = 0;
+
+                $pval = intval($row['plan_price'] ?? ($row['paid_amount'] ?? 0));
+                $total_value += $pval;
+
+                if ($days <= 30) $cnt_30++;
+                elseif ($days <= 90) $cnt_90++;
+                else $cnt_over90++;
+
+                if ($filter === 'recent' && $days > 30) continue;
+                if ($filter === 'month1_3' && ($days <= 30 || $days > 90)) continue;
+                if ($filter === 'older' && $days <= 90) continue;
+
+                if ($days === 0) $period = "Today";
+                elseif ($days === 1) $period = "1 Day Ago";
+                elseif ($days < 30) $period = $days . " Days Ago";
+                elseif ($days < 365) $period = floor($days/30) . " Mo " . ($days%30) . "d Ago";
+                else $period = floor($days/365) . " Yr Ago";
+
+                $row['days_lapsed'] = $days;
+                $row['period_str'] = $period;
+                $members[] = $row;
+            }
+        }
+
+        $pdf = new FPDF('L', 'mm', 'A4');
+        $pdf->AliasNbPages();
+        $pdf->SetMargins(12, 10, 12);
+        $pdf->SetAutoPageBreak(true, 15);
+        $pdf->AddPage();
+
+        // Header
+        $pdf->SetFillColor(239, 68, 68);
+        $pdf->Rect(12, 10, 273, 2.5, 'F');
+
+        $bx = 12;
+        if (!empty($logo_path) && file_exists($logo_path)) {
+            $pdf->Image($logo_path, 12, 14, 20);
+            $bx = 35;
+        }
+
+        $pdf->SetXY($bx, 15);
+        $pdf->SetFont('Arial', 'B', 15);
+        $pdf->SetTextColor(30, 41, 59);
+        $pdf->Cell(150, 6, $clean_fn($gym_name), 0, 1, 'L');
+
+        $pdf->SetX($bx);
+        $pdf->SetFont('Arial', 'B', 8.5);
+        $pdf->SetTextColor(220, 38, 38);
+        $pdf->Cell(150, 4.5, 'AUDIT REPORT: EXPIRED & UNRENEWED MEMBERS DIRECTORY', 0, 1, 'L');
+
+        $pdf->SetX($bx);
+        $pdf->SetFont('Arial', '', 7.5);
+        $pdf->SetTextColor(100, 116, 139);
+        $pdf->Cell(150, 4, $clean_fn($gym_address . ' | Contact: ' . $gym_contact . ' | Email: ' . $gym_email), 0, 1, 'L');
+
+        $pdf->SetXY(200, 14);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetTextColor(220, 38, 38);
+        $pdf->Cell(85, 5, 'EXPIRED & UNRENEWED', 0, 1, 'R');
+        $pdf->SetFont('Arial', '', 7.5);
+        $pdf->SetTextColor(100, 116, 139);
+        $pdf->SetX(200);
+        $pdf->Cell(85, 3.8, 'Generated: ' . $clean_fn($now_formatted), 0, 1, 'R');
+        $pdf->SetX(200);
+        $pdf->Cell(85, 3.8, 'Total Expired: ' . count($members) . ' Members', 0, 1, 'R');
+
+        $pdf->SetDrawColor(226, 232, 240);
+        $pdf->Line(12, 33, 285, 33);
+
+        // KPI Box
+        $pdf->SetY(36);
+        $pdf->SetFillColor(254, 242, 242); $pdf->SetDrawColor(252, 165, 165);
+        $pdf->Rect(12, 36, 60, 15, 'DF');
+        $pdf->SetXY(12, 37.5); $pdf->SetFont('Arial', 'B', 7); $pdf->SetTextColor(220, 38, 38);
+        $pdf->Cell(60, 3.5, 'TOTAL EXPIRED MEMBERS', 0, 1, 'C');
+        $pdf->SetFont('Arial', 'B', 13); $pdf->Cell(60, 6, strval(count($members)), 0, 1, 'C');
+
+        $pdf->SetFillColor(240, 253, 244); $pdf->SetDrawColor(134, 239, 172);
+        $pdf->Rect(76, 36, 65, 15, 'DF');
+        $pdf->SetXY(76, 37.5); $pdf->SetFont('Arial', 'B', 7); $pdf->SetTextColor(22, 101, 52);
+        $pdf->Cell(65, 3.5, 'POTENTIAL RENEWAL VALUE', 0, 1, 'C');
+        $pdf->SetFont('Arial', 'B', 13); $pdf->Cell(65, 6, 'Rs. ' . number_format($total_value), 0, 1, 'C');
+
+        $pdf->SetFillColor(255, 247, 237); $pdf->SetDrawColor(253, 186, 116);
+        $pdf->Rect(145, 36, 45, 15, 'DF');
+        $pdf->SetXY(145, 37.5); $pdf->SetFont('Arial', 'B', 7); $pdf->SetTextColor(194, 65, 12);
+        $pdf->Cell(45, 3.5, '<= 30 DAYS AGO', 0, 1, 'C');
+        $pdf->SetFont('Arial', 'B', 13); $pdf->Cell(45, 6, strval($cnt_30), 0, 1, 'C');
+
+        $pdf->SetFillColor(254, 252, 232); $pdf->SetDrawColor(253, 224, 71);
+        $pdf->Rect(194, 36, 45, 15, 'DF');
+        $pdf->SetXY(194, 37.5); $pdf->SetFont('Arial', 'B', 7); $pdf->SetTextColor(161, 98, 7);
+        $pdf->Cell(45, 3.5, '31-90 DAYS AGO', 0, 1, 'C');
+        $pdf->SetFont('Arial', 'B', 13); $pdf->Cell(45, 6, strval($cnt_90), 0, 1, 'C');
+
+        $pdf->SetFillColor(241, 245, 249); $pdf->SetDrawColor(203, 213, 225);
+        $pdf->Rect(243, 36, 42, 15, 'DF');
+        $pdf->SetXY(243, 37.5); $pdf->SetFont('Arial', 'B', 7); $pdf->SetTextColor(71, 85, 105);
+        $pdf->Cell(42, 3.5, '> 90 DAYS AGO', 0, 1, 'C');
+        $pdf->SetFont('Arial', 'B', 13); $pdf->Cell(42, 6, strval($cnt_over90), 0, 1, 'C');
+
+        // Table Header function
+        $draw_th = function() use ($pdf) {
+            $pdf->SetFillColor(30, 41, 59); $pdf->SetTextColor(255, 255, 255);
+            $pdf->SetFont('Arial', 'B', 8); $pdf->SetDrawColor(51, 65, 85);
+            $pdf->Cell(10, 7.5, '#', 1, 0, 'C', true);
+            $pdf->Cell(22, 7.5, 'Member ID', 1, 0, 'C', true);
+            $pdf->Cell(46, 7.5, '  Member Name', 1, 0, 'L', true);
+            $pdf->Cell(28, 7.5, 'Mobile No.', 1, 0, 'C', true);
+            $pdf->Cell(44, 7.5, '  Email Address', 1, 0, 'L', true);
+            $pdf->Cell(38, 7.5, '  Last Plan', 1, 0, 'L', true);
+            $pdf->Cell(22, 7.5, 'Start Date', 1, 0, 'C', true);
+            $pdf->Cell(24, 7.5, 'Expiry Date', 1, 0, 'C', true);
+            $pdf->Cell(26, 7.5, 'Expired Period', 1, 0, 'C', true);
+            $pdf->Cell(13, 7.5, 'Status', 1, 1, 'C', true);
+        };
+
+        $pdf->SetY(55);
+        $draw_th();
+
+        $idx = 0;
+        foreach ($members as $m) {
+            $idx++;
+            if ($pdf->GetY() > 185) {
+                $pdf->AddPage();
+                $pdf->SetY(15);
+                $draw_th();
+            }
+
+            $pdf->SetFillColor(($idx % 2 === 0) ? 248 : 255, ($idx % 2 === 0) ? 250 : 255, ($idx % 2 === 0) ? 252 : 255);
+            $pdf->SetDrawColor(241, 245, 249);
+            $h = 7.0;
+
+            $pdf->SetFont('Arial', '', 7.5); $pdf->SetTextColor(100, 116, 139);
+            $pdf->Cell(10, $h, strval($idx), 1, 0, 'C', true);
+
+            $pdf->SetFont('Arial', 'B', 8); $pdf->SetTextColor(30, 41, 59);
+            $pdf->Cell(22, $h, $clean_fn($m['userid']), 1, 0, 'C', true);
+
+            $pdf->SetFont('Arial', 'B', 8); $pdf->SetTextColor(15, 23, 42);
+            $pdf->Cell(46, $h, '  ' . $clean_fn($m['username'], 26), 1, 0, 'L', true);
+
+            $pdf->SetFont('Arial', '', 7.5); $pdf->SetTextColor(51, 65, 85);
+            $pdf->Cell(28, $h, $clean_fn(!empty($m['mobile']) ? $m['mobile'] : '-'), 1, 0, 'C', true);
+
+            $pdf->SetFont('Arial', '', 7.2); $pdf->SetTextColor(100, 116, 139);
+            $pdf->Cell(44, $h, '  ' . $clean_fn(!empty($m['email']) ? $m['email'] : '-', 28), 1, 0, 'L', true);
+
+            $pdf->SetFont('Arial', '', 7.5); $pdf->SetTextColor(30, 41, 59);
+            $pdf->Cell(38, $h, '  ' . $clean_fn(!empty($m['planName']) ? $m['planName'] : 'Standard Plan', 24), 1, 0, 'L', true);
+
+            $sdt = !empty($m['start_date']) ? $m['start_date'] : (!empty($m['paid_date']) ? $m['paid_date'] : (!empty($m['joining_date']) ? $m['joining_date'] : '-'));
+            $pdf->SetFont('Arial', '', 7.5); $pdf->SetTextColor(100, 116, 139);
+            $pdf->Cell(22, $h, $clean_fn($sdt), 1, 0, 'C', true);
+
+            $pdf->SetFont('Arial', 'B', 8); $pdf->SetTextColor(220, 38, 38);
+            $pdf->Cell(24, $h, $clean_fn($m['expire']), 1, 0, 'C', true);
+
+            $pdf->SetFont('Arial', 'B', 7.5);
+            if ($m['days_lapsed'] <= 30) $pdf->SetTextColor(194, 65, 12);
+            elseif ($m['days_lapsed'] <= 90) $pdf->SetTextColor(161, 98, 7);
+            else $pdf->SetTextColor(100, 116, 139);
+            $pdf->Cell(26, $h, $clean_fn($m['period_str']), 1, 0, 'C', true);
+
+            $pdf->SetFont('Arial', 'B', 6.5); $pdf->SetTextColor(185, 28, 28);
+            $pdf->Cell(13, $h, 'EXPIRED', 1, 1, 'C', true);
+        }
+
+        if (empty($output_path)) {
+            $uploads_dir = dirname(__DIR__) . '/uploads';
+            if (!file_exists($uploads_dir)) @mkdir($uploads_dir, 0777, true);
+            $output_path = $uploads_dir . '/Sudarshan_Fitness_Expired_Members_' . date('Y-m-d') . '.pdf';
+        }
+
+        $pdf->Output('F', $output_path);
+        return $output_path;
+    }
+}
+
