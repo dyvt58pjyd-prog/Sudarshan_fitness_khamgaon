@@ -155,17 +155,18 @@ if (!function_exists('generate_receipt_pdf_file')) {
         $pdf->Cell(0, 4, 'Phone: ' . $gym['gym_contact'] . ' | Email: ' . $gym['gym_email'] . ' | Admin: ' . $admin_email, 0, 1);
         
         // Invoice / Receipt Title and Metadata on Right
-        $pdf->SetXY(140, 23);
+        $pdf->SetXY(130, 23);
         $pdf->SetTextColor(30, 41, 59);
         $pdf->SetFont('Helvetica', 'B', 18);
-        $pdf->Cell(55, 6, 'INVOICE / RECEIPT', 0, 1, 'R');
+        $pdf->Cell(65, 6, 'INVOICE / RECEIPT', 0, 1, 'R');
         
+        $invoice_no = '#SF-' . date('Y', strtotime($row['paid_date'])) . '-' . str_pad($row['et_id'], 4, '0', STR_PAD_LEFT);
         $pdf->SetTextColor(100, 116, 139);
         $pdf->SetFont('Helvetica', '', 8.5);
-        $pdf->SetX(140);
-        $pdf->Cell(55, 4.5, 'Receipt ID: #' . (100 + intval($row['et_id'])), 0, 1, 'R');
-        $pdf->SetX(140);
-        $pdf->Cell(55, 4.5, 'Date: ' . $row['paid_date'], 0, 1, 'R');
+        $pdf->SetX(130);
+        $pdf->Cell(65, 4.5, 'Tax Invoice: ' . $invoice_no, 0, 1, 'R');
+        $pdf->SetX(130);
+        $pdf->Cell(65, 4.5, 'Date: ' . date('d M, Y', strtotime($row['paid_date'])), 0, 1, 'R');
         
         // Elegant Pill Badge for "PAID"
         $pdf->SetFillColor(220, 252, 231); // Soft Green
@@ -316,7 +317,16 @@ if (!function_exists('generate_receipt_pdf_file')) {
         $pdf->Cell(45, 6, 'Total Paid:', 0, 0, 'R');
         $pdf->SetTextColor(255, 95, 0); // Premium Orange Accent
         $pdf->SetFont('Helvetica', 'B', 12);
-        $pdf->Cell(30, 6, 'Rs. ' . $total_paid . '  ', 0, 1, 'R');
+        $pdf->Cell(30, 6, 'Rs. ' . number_format($total_paid) . '  ', 0, 1, 'R');
+        
+        if (isset($row['balance']) && intval($row['balance']) > 0) {
+            $pdf->SetX(90);
+            $pdf->SetFont('Helvetica', 'B', 8);
+            $pdf->SetTextColor(220, 38, 38);
+            $due_date_str = !empty($row['balance_due_date']) ? date('d M Y', strtotime($row['balance_due_date'])) : 'Pending';
+            $pdf->Cell(75, 4.5, 'Balance Due (By ' . $due_date_str . '):', 0, 0, 'R');
+            $pdf->Cell(30, 4.5, 'Rs. ' . number_format($row['balance']) . '  ', 0, 1, 'R');
+        }
         
         // Quote / Motivation Divider
         $curr_y = $pdf->GetY() + 4;
@@ -486,17 +496,18 @@ if (!function_exists('generate_pt_receipt_pdf_file')) {
         $pdf->Cell(0, 4, 'Phone: ' . $gym['gym_contact'] . ' | Email: ' . $gym['gym_email'] . ' | Admin: ' . $admin_email, 0, 1);
         
         // Invoice / Receipt Title and Metadata on Right
-        $pdf->SetXY(140, 23);
+        $pdf->SetXY(130, 23);
         $pdf->SetTextColor(30, 41, 59);
         $pdf->SetFont('Helvetica', 'B', 18);
-        $pdf->Cell(55, 6, 'INVOICE / RECEIPT', 0, 1, 'R');
+        $pdf->Cell(65, 6, 'INVOICE / RECEIPT', 0, 1, 'R');
         
+        $pt_receipt_no = '#PT-' . date('Y', strtotime($row['enroll_date'])) . '-' . str_pad($row['pt_id'], 4, '0', STR_PAD_LEFT);
         $pdf->SetTextColor(100, 116, 139);
         $pdf->SetFont('Helvetica', '', 8.5);
-        $pdf->SetX(140);
-        $pdf->Cell(55, 4.5, 'Receipt ID: #PT-' . (100 + intval($row['pt_id'])), 0, 1, 'R');
-        $pdf->SetX(140);
-        $pdf->Cell(55, 4.5, 'Date: ' . $row['enroll_date'], 0, 1, 'R');
+        $pdf->SetX(130);
+        $pdf->Cell(65, 4.5, 'PT Receipt: ' . $pt_receipt_no, 0, 1, 'R');
+        $pdf->SetX(130);
+        $pdf->Cell(65, 4.5, 'Date: ' . date('d M, Y', strtotime($row['enroll_date'])), 0, 1, 'R');
         
         // Elegant Pill Badge for "PAID"
         $pdf->SetFillColor(220, 252, 231); // Soft Green

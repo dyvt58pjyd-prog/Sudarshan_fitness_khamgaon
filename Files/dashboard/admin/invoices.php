@@ -347,7 +347,15 @@ usort($invoices, function($a, $b) {
                                     $paid_amt = intval($inv['paid_amount']);
                                 ?>
                                     <tr>
-                                        <td style="font-family: monospace; font-size: 11.5px;"><?php echo 100 + intval($inv['et_id']); ?></td>
+                                        <td style="font-family: monospace; font-size: 11px; font-weight: 700; color: var(--accent-primary);">
+                                            <?php 
+                                            if (isset($inv['is_pt']) && $inv['is_pt']) {
+                                                echo '#PT-' . date('Y', strtotime($inv['paid_date'])) . '-' . str_pad($inv['et_id'], 4, '0', STR_PAD_LEFT);
+                                            } else {
+                                                echo '#SF-' . date('Y', strtotime($inv['paid_date'])) . '-' . str_pad($inv['et_id'], 4, '0', STR_PAD_LEFT);
+                                            }
+                                            ?>
+                                        </td>
                                         <td>
                                             <div style="display: flex; align-items: center; gap: 8px;">
                                                 <img src="<?php echo $avatar; ?>" class="member-avatar" alt="Avatar" onerror="this.onerror=null; this.src='../../images/logo.png';">

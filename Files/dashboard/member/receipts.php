@@ -155,9 +155,10 @@ $pt_result = mysqli_query($con, $pt_sql);
                                     
                                     $total_paid = $paid_amount;
                                     
+                                    $inv_formatted_no = '#SF-' . date('Y', strtotime($paid_date)) . '-' . str_pad($et_id, 4, '0', STR_PAD_LEFT);
                                     echo "<tr>";
                                     echo "<td style='text-align: center; color: var(--text-muted);'>" . $sno . "</td>";
-                                    echo "<td class='text-mono'>#" . (100 + intval($et_id)) . "</td>";
+                                    echo "<td class='text-mono' style='font-weight: 700; color: var(--accent-primary);'>" . $inv_formatted_no . "</td>";
                                     echo "<td>";
                                     echo "<strong>" . htmlspecialchars($plan_name) . "</strong>";
                                     echo "<br><span style='font-size: 12px; color: var(--text-muted);'>" . htmlspecialchars($row['description']) . " (" . $validity . " Month" . ($validity > 1 ? "s" : "") . ")</span>";
@@ -216,9 +217,10 @@ $pt_result = mysqli_query($con, $pt_sql);
                                     $pt_amount = intval($pt_row['amount']);
                                     $payment_mode = $pt_row['payment_mode'];
                                     
+                                    $pt_formatted_no = '#PT-' . date('Y', strtotime($enroll_date)) . '-' . str_pad($pt_id, 4, '0', STR_PAD_LEFT);
                                     echo "<tr>";
                                     echo "<td style='text-align: center; color: var(--text-muted);'>" . $pt_sno . "</td>";
-                                    echo "<td class='text-mono'>#PT-" . (100 + intval($pt_id)) . "</td>";
+                                    echo "<td class='text-mono' style='font-weight: 700; color: var(--accent-primary);'>" . $pt_formatted_no . "</td>";
                                     echo "<td><strong>Trainer: " . htmlspecialchars($trainer_name) . "</strong></td>";
                                     echo "<td>" . htmlspecialchars($enroll_date) . "</td>";
                                     echo "<td style='color: " . (strtotime($expire_date) < time() ? "var(--danger)" : "var(--success)") . ";'>" . htmlspecialchars($expire_date) . "</td>";

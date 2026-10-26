@@ -45,31 +45,45 @@ $pt_row = null;
 $pt_amount = 0;
 $total_paid = $paid_amount;
 ?>
-<<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title><?php echo htmlspecialchars($gym['gym_name']); ?> | Payment Receipt</title>
-    <!-- Load modern typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo htmlspecialchars($gym['gym_name']); ?> | Official Tax Invoice #SF-<?php echo date('Y', strtotime($row['paid_date'])); ?>-<?php echo str_pad($row['et_id'], 4, '0', STR_PAD_LEFT); ?></title>
+    <!-- Modern Typography: Inter + JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
-            --primary: #0f172a;
-            --primary-light: #1e293b;
-            --accent: #ea580c;
-            --accent-gradient: linear-gradient(135deg, #ff6b00, #ea580c);
-            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            --text-main: #334155;
-            --text-light: #64748b;
-            --border-color: rgba(226, 232, 240, 0.8);
-            --card-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.05), 0 0 0 1px rgba(15, 23, 42, 0.03);
+            --bg-page: #0b0f19;
+            --surface-card: #ffffff;
+            --brand-primary: #0f172a;
+            --brand-accent: #ff6b00;
+            --brand-accent-glow: rgba(255, 107, 0, 0.25);
+            --brand-emerald: #10b981;
+            --text-heading: #0f172a;
+            --text-body: #334155;
+            --text-muted: #64748b;
+            --border-subtle: #e2e8f0;
+            --border-card: #cbd5e1;
+            --radius-main: 22px;
         }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif;
-            color: var(--text-main);
-            margin: 40px 20px;
-            background: var(--bg-gradient);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-body);
+            background: #090d16;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 107, 0, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(56, 189, 248, 0.06) 0%, transparent 40%);
+            margin: 0;
+            padding: 35px 20px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -77,512 +91,890 @@ $total_paid = $paid_amount;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
-        .actions-wrapper {
+
+        /* Floating Top Action Toolbar */
+        .actions-toolbar {
             width: 100%;
-            max-width: 850px;
-            margin-bottom: 25px;
+            max-width: 860px;
+            margin-bottom: 24px;
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
             gap: 12px;
         }
-        .btn-print {
-            background: var(--accent-gradient);
-            border: none;
-            color: white !important;
-            padding: 10px 24px;
+
+        .back-link {
+            color: #94a3b8;
+            text-decoration: none;
             font-size: 13px;
             font-weight: 600;
-            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s;
+        }
+        .back-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(-2px);
+        }
+
+        .btn-group-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            border: none;
+            color: #ffffff !important;
+            padding: 10px 22px;
+            font-size: 13px;
+            font-weight: 700;
             letter-spacing: 0.5px;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2);
-            transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             gap: 8px;
             text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
-        .btn-print:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(234, 88, 12, 0.3);
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
-        .btn-download {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        .btn-print {
+            background: linear-gradient(135deg, #ff6b00 0%, #e05300 100%);
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
         }
-        .btn-download:hover {
-            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
+        .btn-pdf {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
         }
         .btn-whatsapp {
-            background: linear-gradient(135deg, #25d366, #128c7e);
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.25);
         }
-        .btn-whatsapp:hover {
-            box-shadow: 0 6px 16px rgba(37, 211, 102, 0.3);
-        }
-        .invoice-container {
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            border-radius: 24px;
-            padding: 45px 50px;
+
+        /* Main Executive Invoice Sheet */
+        .invoice-sheet {
             width: 100%;
-            max-width: 850px;
-            box-sizing: border-box;
-            background: var(--glass-bg);
-            box-shadow: var(--card-shadow);
+            max-width: 860px;
+            background: #ffffff;
+            border-radius: var(--radius-main);
+            padding: 45px 50px;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.45);
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
-        /* Top Banner Decorator */
-        .invoice-container::before {
+
+        /* Top Luxury Dual Stripe */
+        .invoice-sheet::before {
             content: "";
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, #0f172a, #ff6b00, #ea580c);
+            height: 7px;
+            background: linear-gradient(90deg, #ff6b00 0%, #ff9500 50%, #0f172a 100%);
         }
-        .watermark-bg {
+
+        /* Subtle Watermark */
+        .sheet-watermark {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 300px;
-            height: auto;
-            opacity: 0.05;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            width: 320px;
+            opacity: 0.035;
             pointer-events: none;
             z-index: 0;
         }
-        .invoice-header {
-            display: flex;
-            justify-content: space-between;
+
+        /* Header Section */
+        .header-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 25px;
             align-items: center;
-            border-bottom: 1px dashed rgba(226, 232, 240, 0.9);
+            border-bottom: 2px solid #f1f5f9;
             padding-bottom: 30px;
-            margin-bottom: 30px;
-            z-index: 1;
+            margin-bottom: 28px;
             position: relative;
+            z-index: 1;
         }
-        .gym-brand {
+
+        .gym-branding {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 22px;
         }
-        .gym-logo {
-            max-height: 80px;
-            max-width: 180px;
+
+        .gym-logo-frame {
+            background: #0f172a;
+            padding: 10px;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gym-logo-frame img {
+            max-height: 72px;
+            max-width: 130px;
             object-fit: contain;
+            display: block;
         }
-        .gym-details h3 {
-            margin: 0 0 5px 0;
-            color: var(--primary);
+
+        .gym-identity h1 {
             font-size: 24px;
-            font-weight: 700;
+            font-weight: 900;
+            color: var(--brand-primary);
+            margin: 0 0 4px 0;
             letter-spacing: -0.5px;
+            text-transform: uppercase;
         }
-        .gym-quote {
-            margin: 0 0 6px 0;
+
+        .gym-identity .location-pill {
+            display: inline-block;
+            background: rgba(255, 107, 0, 0.1);
+            color: var(--brand-accent);
             font-size: 10.5px;
-            color: var(--accent);
-            font-weight: 700;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 107, 0, 0.2);
+            margin-bottom: 8px;
+        }
+
+        .gym-identity p {
+            margin: 2px 0;
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Right Invoice Metadata Card */
+        .invoice-meta-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1.5px solid var(--border-subtle);
+            border-radius: 18px;
+            padding: 20px 24px;
+            text-align: right;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        }
+
+        .meta-invoice-title {
+            font-size: 12px;
+            font-weight: 900;
+            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 1.5px;
+            margin-bottom: 6px;
         }
-        .gym-details p {
-            margin: 3px 0;
-            font-size: 13px;
-            color: var(--text-light);
-            line-height: 1.4;
+
+        .meta-invoice-no {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--brand-primary);
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
         }
-        .receipt-badge {
-            background: #f8fafc;
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            border-radius: 16px;
-            padding: 18px 24px;
-            text-align: right;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+
+        .meta-invoice-date {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
         }
-        .receipt-badge h2 {
-            margin: 0 0 8px 0;
-            color: var(--primary);
-            font-size: 16px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .receipt-badge p {
-            margin: 4px 0;
-            font-size: 12.5px;
-            color: var(--text-main);
-        }
-        .client-section {
-            background: #f8fafc;
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            border-radius: 16px;
-            padding: 22px 26px;
-            margin-bottom: 30px;
-            z-index: 1;
-            position: relative;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
-        }
-        .client-section h4 {
-            margin: 0 0 14px 0;
-            color: var(--text-light);
-            text-transform: uppercase;
+
+        .status-pill-paid {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #dcfce7;
+            color: #15803d;
+            border: 1px solid #86efac;
             font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 4px 14px;
+            border-radius: 30px;
         }
-        .client-grid {
+
+        /* Member & Billing Information Grid */
+        .info-grid {
             display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 24px;
-            font-size: 13.5px;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
         }
-        .client-col {
-            line-height: 1.6;
+
+        .info-card {
+            background: #f8fafc;
+            border: 1.5px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 20px 22px;
+            position: relative;
         }
-        .client-col strong {
-            color: var(--primary-light);
-            font-weight: 600;
+
+        .info-card.accent-card {
+            border-left: 4px solid var(--brand-accent);
         }
-        .client-col span {
-            color: var(--text-main);
-            margin-left: 4px;
+
+        .info-card.blue-card {
+            border-left: 4px solid #0284c7;
         }
-        .table-invoice {
+
+        .info-card-label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .member-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--brand-primary);
+            margin-bottom: 8px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            font-size: 12.5px;
+            border-bottom: 1px dashed rgba(226, 232, 240, 0.8);
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .detail-row .lbl {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .detail-row .val {
+            color: var(--brand-primary);
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .val-mono {
+            font-family: 'JetBrains Mono', monospace !important;
+            color: var(--brand-accent) !important;
+        }
+
+        /* Line Items Table */
+        .table-invoice-wrapper {
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .invoice-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            margin-bottom: 35px;
-            z-index: 1;
-            position: relative;
         }
-        .table-invoice th, .table-invoice td {
-            padding: 16px 20px;
-            text-align: left;
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-        }
-        .table-invoice th {
-            background: var(--primary);
-            font-weight: 600;
+
+        .invoice-table th {
+            background: #0f172a;
             color: #ffffff;
-            font-size: 12.5px;
+            font-size: 11px;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            padding: 14px 18px;
+            text-align: left;
             border: none;
         }
-        .table-invoice th:first-child {
-            border-radius: 12px 0 0 12px;
+        .invoice-table th:first-child {
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
         }
-        .table-invoice th:last-child {
-            border-radius: 0 12px 12px 0;
+        .invoice-table th:last-child {
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+            text-align: right;
         }
-        .plan-name {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--primary);
-            display: block;
+
+        .invoice-table td {
+            padding: 16px 18px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 13px;
+            vertical-align: middle;
         }
-        .plan-desc {
+
+        .item-main-title {
+            font-size: 14.5px;
+            font-weight: 800;
+            color: var(--brand-primary);
+            margin-bottom: 3px;
+        }
+
+        .item-sub-desc {
             font-size: 12px;
-            color: var(--text-light);
-            margin-top: 5px;
-            display: block;
+            color: var(--text-muted);
             line-height: 1.4;
         }
-        .mode-badge {
-            background: rgba(15, 23, 42, 0.05);
+
+        .badge-mode {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #334155;
             padding: 4px 10px;
             border-radius: 6px;
             font-size: 11px;
             font-weight: 700;
-            color: var(--primary);
             text-transform: uppercase;
-            display: inline-block;
         }
-        .total-row td {
-            font-size: 15px;
-            border-bottom: none;
-            padding-top: 20px;
-        }
-        .total-amount-box {
-            background: rgba(234, 88, 12, 0.05);
-            border: 1px solid rgba(234, 88, 12, 0.15);
-            border-radius: 12px;
-            padding: 10px 18px;
-            display: inline-block;
-        }
-        .total-amount {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--accent);
-        }
-        /* PAID stamp */
-        .watermark-stamp {
-            position: absolute;
-            top: 230px;
-            right: 80px;
-            border: 2px solid #059669;
-            border-radius: 12px;
-            color: #059669;
-            font-size: 16px;
-            font-weight: 700;
-            text-transform: uppercase;
-            padding: 6px 14px;
-            transform: rotate(-10deg);
-            background: rgba(5, 150, 105, 0.04);
-            letter-spacing: 1.5px;
-            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.08);
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            pointer-events: none;
-        }
-        .watermark-stamp span {
-            font-size: 8.5px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            opacity: 0.9;
-        }
-        .received-badge {
-            background: rgba(15, 23, 42, 0.03);
-            border-left: 4px solid var(--accent);
-            padding: 12px 18px;
-            border-radius: 0 12px 12px 0;
-            margin-top: 30px;
-            font-size: 13.5px;
-            z-index: 1;
+
+        /* Settlement & Financial Summary Section */
+        .settlement-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 25px;
+            align-items: start;
+            margin-bottom: 30px;
             position: relative;
+            z-index: 1;
         }
-        .received-badge strong {
-            color: var(--accent);
+
+        .verification-callout {
+            background: #f8fafc;
+            border: 1.5px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 18px 22px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .verification-qr img {
+            width: 85px;
+            height: 85px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            display: block;
+        }
+
+        .verification-text h4 {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--brand-primary);
+            margin: 0 0 4px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .verification-text p {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            margin: 0 0 6px 0;
+            line-height: 1.5;
+        }
+
+        .gate-access-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 107, 0, 0.08);
+            border: 1px solid rgba(255, 107, 0, 0.25);
+            color: var(--brand-accent);
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
             font-weight: 700;
         }
-        .footer-receipt {
+
+        /* Totals Breakdown */
+        .financial-summary-card {
+            background: #f8fafc;
+            border: 1.5px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 20px 24px;
+        }
+
+        .calc-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 13px;
+        }
+
+        .calc-row .label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .calc-row .figure {
+            color: var(--brand-primary);
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .calc-row.discount .figure {
+            color: #ef4444;
+        }
+
+        .calc-divider {
+            height: 1.5px;
+            background: #e2e8f0;
+            margin: 10px 0;
+        }
+
+        .grand-total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 6px 0;
+        }
+
+        .grand-total-row .lbl {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--brand-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .grand-total-row .sum {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--brand-accent);
+            line-height: 1;
+        }
+
+        .pending-due-card {
+            margin-top: 12px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            padding: 8px 14px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #dc2626;
+            font-weight: 700;
+        }
+
+        /* Signature & Seal Section */
+        .signatory-section {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            margin-top: 30px;
-            z-index: 1;
+            border-top: 2px solid #f1f5f9;
+            padding-top: 25px;
+            margin-bottom: 25px;
             position: relative;
+            z-index: 1;
         }
-        .signature-block {
+
+        .received-agent {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .received-agent strong {
+            color: var(--brand-primary);
+        }
+
+        .official-seal-wrap {
             text-align: center;
-            width: 190px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
         }
-        .signature-line {
-            border-top: 1px solid rgba(148, 163, 184, 0.3);
-            padding-top: 10px;
-            font-size: 12.5px;
-            color: var(--text-main);
-            font-weight: 600;
-        }
-        .digital-seal {
-            margin-bottom: 6px;
-            font-size: 11px;
-            color: var(--text-light);
-            font-weight: 700;
+
+        .digital-gym-seal {
+            border: 2px solid #10b981;
+            color: #10b981;
+            border-radius: 50%;
+            width: 76px;
+            height: 76px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            font-weight: 900;
             letter-spacing: 0.5px;
-            opacity: 0.7;
+            text-transform: uppercase;
+            transform: rotate(-8deg);
+            background: rgba(16, 185, 129, 0.05);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
         }
+        .digital-gym-seal i {
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+
+        .sign-line {
+            width: 170px;
+            border-top: 1px solid #cbd5e1;
+            padding-top: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        /* Terms & Operating Decorum */
+        .policy-block {
+            background: #f8fafc;
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 16px 20px;
+            font-size: 10px;
+            color: #64748b;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .policy-block strong.title {
+            color: var(--brand-primary);
+            font-size: 10.5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .policy-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 20px;
+        }
+
+        .policy-item {
+            display: flex;
+            gap: 6px;
+        }
+
+        .policy-item i {
+            color: var(--brand-accent);
+            margin-top: 2px;
+        }
+
+        /* Print Mode Override */
         @media print {
             body {
-                margin: 0;
-                background: var(--glass-bg);
+                background: #ffffff !important;
+                padding: 0 !important;
+                margin: 0 !important;
             }
-            .actions-wrapper {
-                display: none;
+            .actions-toolbar {
+                display: none !important;
             }
-            .invoice-container {
-                border: none;
-                box-shadow: none;
-                padding: 0;
-                max-width: 100%;
+            .invoice-sheet {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 20px 25px !important;
+                max-width: 100% !important;
+                border-radius: 0 !important;
             }
-            .invoice-container::before {
-                display: none;
+            .invoice-sheet::before {
+                display: none !important;
+            }
+            .sheet-watermark {
+                opacity: 0.04 !important;
             }
         }
     </style>
 </head>
 <body>
-    <div class="actions-wrapper">
-        <button class="btn-print" onclick="window.print()">
-            <span style="font-size: 14px;">⎙</span> PRINT
-        </button>
-        <button class="btn-print btn-download" onclick="downloadPDF()">
-            <span style="font-size: 14px;">⬇</span> DOWNLOAD PDF
-        </button>
-        <button class="btn-print btn-whatsapp" onclick="sendWhatsAppReceipt()" id="btn-wa">
-            <span style="font-size: 14px;">💬</span> SEND TO WHATSAPP
-        </button>
+
+    <!-- Actions Toolbar (Hidden on Print & PDF) -->
+    <div class="actions-toolbar">
+        <a href="invoices.php" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> Back to Invoices Ledger
+        </a>
+        <div class="btn-group-actions">
+            <button class="btn-action btn-print" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> Print Official Receipt
+            </button>
+            <button class="btn-action btn-pdf" onclick="downloadPDF()">
+                <i class="fa-solid fa-file-arrow-down"></i> Download Clean PDF
+            </button>
+            <button class="btn-action btn-whatsapp" onclick="sendWhatsAppReceipt()" id="btn-wa">
+                <i class="fa-brands fa-whatsapp"></i> Send via WhatsApp
+            </button>
+        </div>
     </div>
 
-    <div class="invoice-container">
-        <!-- Gym Logo Watermark Background -->
-        <img class="watermark-bg" src="../../images/watermark.png" alt="" />
+    <!-- Main Clean Printable Invoice Sheet -->
+    <div class="invoice-sheet">
+        
+        <!-- Gym Brand Watermark Background -->
+        <?php 
+        $wm_path = file_exists('../../images/watermark.png') ? '../../images/watermark.png' : '../../images/logo.png';
+        ?>
+        <img class="sheet-watermark" src="<?php echo htmlspecialchars($wm_path); ?>" alt="" />
 
-        <!-- Verification Stamp -->
-        <div class="watermark-stamp">
-            PAID
-            <span>✓ VERIFIED</span>
-        </div>
-
-        <!-- Header -->
-        <div class="invoice-header">
-            <div class="gym-brand">
-                <img class="gym-logo" src="<?php echo htmlspecialchars($gym['gym_logo']); ?>" alt="Gym Logo" />
-                <div class="gym-details">
-                    <h3><?php echo htmlspecialchars($gym['gym_name']); ?></h3>
-                    <div class="gym-quote">Your transformation begins from today</div>
-                    <p><?php echo htmlspecialchars($gym['gym_address']); ?></p>
-                    <p>Phone: <?php echo htmlspecialchars($gym['gym_contact']); ?> | Email: <?php echo htmlspecialchars($gym['gym_email']); ?></p>
+        <!-- Top Header Grid -->
+        <div class="header-grid">
+            <div class="gym-branding">
+                <div class="gym-logo-frame">
+                    <img src="<?php echo htmlspecialchars($gym['gym_logo']); ?>" alt="Gym Logo" />
+                </div>
+                <div class="gym-identity">
+                    <span class="location-pill">Khamgaon • Premier Fitness &amp; Strength Hub</span>
+                    <h1><?php echo htmlspecialchars($gym['gym_name']); ?></h1>
+                    <p><i class="fa-solid fa-location-dot" style="color:var(--brand-accent);"></i> <?php echo htmlspecialchars($gym['gym_address']); ?></p>
+                    <p><i class="fa-solid fa-phone" style="color:#0284c7;"></i> <?php echo htmlspecialchars($gym['gym_contact']); ?> &nbsp;|&nbsp; <i class="fa-solid fa-envelope" style="color:#10b981;"></i> <?php echo htmlspecialchars($gym['gym_email']); ?></p>
                 </div>
             </div>
-            <div class="receipt-badge">
-                <h2>Payment Memo</h2>
-                <p><strong>Receipt ID:</strong> #<?php echo 100 + intval($row['et_id']); ?></p>
-                <p><strong>Date:</strong> <?php echo htmlspecialchars($row['paid_date']); ?></p>
-            </div>
-        </div>
 
-        <!-- Client info -->
-        <div class="client-section">
-            <h4>Billing Information</h4>
-            <div class="client-grid">
-                <div class="client-col">
-                    <strong>Member Name:</strong> <span><?php echo htmlspecialchars($row['username']); ?></span><br>
-                    <strong>Membership ID:</strong> <span><?php echo htmlspecialchars($row['userid']); ?></span><br>
-                    <strong>Starting Date:</strong> <span><?php echo htmlspecialchars($row['paid_date']); ?></span>
+            <!-- Invoice Metadata Box -->
+            <div class="invoice-meta-card">
+                <div class="meta-invoice-title">Tax Invoice &amp; Payment Receipt</div>
+                <div class="meta-invoice-no">#SF-<?php echo date('Y', strtotime($row['paid_date'])); ?>-<?php echo str_pad($row['et_id'], 4, '0', STR_PAD_LEFT); ?></div>
+                <div class="meta-invoice-date">
+                    <strong>Date:</strong> <?php echo date('d M, Y', strtotime($row['paid_date'])); ?>
                 </div>
-                <div class="client-col">
-                    <strong>Contact Phone:</strong> <span><?php echo htmlspecialchars($row['mobile']); ?></span><br>
-                    <strong>Email Address:</strong> <span><?php echo htmlspecialchars($row['email']); ?></span>
+                <div class="status-pill-paid">
+                    <i class="fa-solid fa-circle-check"></i> Paid &amp; Verified
                 </div>
             </div>
         </div>
 
-        <!-- Items Table -->
-        <table class="table-invoice">
-            <thead>
-                <tr>
-                    <th style="width: 45%;">Membership Plan Details</th>
-                    <th style="width: 25%;">Validity Period</th>
-                    <th style="width: 15%;">Payment Mode</th>
-                    <th style="text-align: right; width: 15%;">Amount</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <span class="plan-name"><?php echo htmlspecialchars($row['planName']); ?></span>
-                        <span class="plan-desc"><?php echo htmlspecialchars($row['description']); ?></span>
-                    </td>
-                    <td>
-                        <strong><?php echo htmlspecialchars($row['validity']); ?> Month(s)</strong><br>
-                        <span style="font-size: 12px; color: var(--text-light);">Expires: <?php echo htmlspecialchars($row['expire']); ?></span>
-                    </td>
-                    <td>
-                        <span class="mode-badge"><?php echo htmlspecialchars($row['payment_mode']); ?></span>
-                    </td>
-                    <td style="text-align: right; font-weight: 600; font-size: 15px;">₹<?php echo htmlspecialchars($row['amount']); ?></td>
-                </tr>
-                <?php if ($has_pt): ?>
-                <tr>
-                    <td>
-                        <span class="plan-name">Personal Training (PT)</span>
-                        <span class="plan-desc">Trainer: <strong><?php echo htmlspecialchars($pt_row['trainer_name']); ?></strong></span>
-                    </td>
-                    <td>
-                        <strong>Expires: <?php echo htmlspecialchars($pt_row['expire_date']); ?></strong>
-                    </td>
-                    <td>
-                        <span class="mode-badge"><?php echo htmlspecialchars($pt_row['payment_mode']); ?></span>
-                    </td>
-                    <td style="text-align: right; font-weight: 600; font-size: 15px;">₹<?php echo htmlspecialchars($pt_row['amount']); ?></td>
-                </tr>
-                <?php endif; ?>
+        <!-- Member & Billing Information Grid -->
+        <div class="info-grid">
+            
+            <!-- Left Card: Member Particulars -->
+            <div class="info-card accent-card">
+                <div class="info-card-label">
+                    <i class="fa-solid fa-id-card"></i> Member Information
+                </div>
+                <div class="member-title"><?php echo htmlspecialchars($row['username']); ?></div>
+                <div class="detail-row">
+                    <span class="lbl">Membership ID:</span>
+                    <span class="val val-mono"><?php echo htmlspecialchars($row['userid']); ?></span>
+                </div>
+                <div class="detail-row">
+                    <span class="lbl">Contact Mobile:</span>
+                    <span class="val">+91 <?php echo htmlspecialchars($row['mobile']); ?></span>
+                </div>
+                <div class="detail-row">
+                    <span class="lbl">Email Address:</span>
+                    <span class="val"><?php echo htmlspecialchars($row['email'] ?: 'member@sudarshanfitness.de'); ?></span>
+                </div>
+                <div class="detail-row">
+                    <span class="lbl">Gender &amp; Shift:</span>
+                    <span class="val"><?php echo ucfirst(htmlspecialchars($row['gender'] ?? 'Male')); ?> • General Training</span>
+                </div>
+            </div>
+
+            <!-- Right Card: Subscription & Terminal Clearance -->
+            <div class="info-card blue-card">
+                <div class="info-card-label">
+                    <i class="fa-solid fa-shield-halved"></i> Subscription &amp; Gate Access
+                </div>
+                <div class="member-title" style="font-size:16px; color:#0284c7;"><?php echo htmlspecialchars($row['planName']); ?></div>
+                <div class="detail-row">
+                    <span class="lbl">Active Period:</span>
+                    <span class="val"><?php echo date('d M Y', strtotime($row['paid_date'])); ?> ➔ <?php echo date('d M Y', strtotime($row['expire'])); ?></span>
+                </div>
+                <div class="detail-row">
+                    <span class="lbl">Payment Method:</span>
+                    <span class="val"><span class="badge-mode"><?php echo strtoupper(htmlspecialchars($row['payment_mode'])); ?></span></span>
+                </div>
+                <div class="detail-row">
+                    <span class="lbl">Biometric Gate PIN:</span>
+                    <span class="val"><span class="gate-access-pill"><i class="fa-solid fa-key"></i> PIN: <?php echo htmlspecialchars($row['entry_code']); ?></span></span>
+                </div>
+                <div class="detail-row">
+                    <span class="lbl">Entrance Status:</span>
+                    <span class="val" style="color:#10b981;"><i class="fa-solid fa-bolt"></i> Terminal Authorized</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Items Breakdown Table -->
+        <div class="table-invoice-wrapper">
+            <table class="invoice-table">
+                <thead>
+                    <tr>
+                        <th style="width: 45%;">Plan / Service Description</th>
+                        <th style="width: 20%;">Validity Period</th>
+                        <th style="width: 15%;">Payment Mode</th>
+                        <th style="width: 20%;">Line Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="item-main-title"><?php echo htmlspecialchars($row['planName']); ?></div>
+                            <div class="item-sub-desc"><?php echo htmlspecialchars($row['description'] ?: 'Full access to weight room, cardio stations & locker rooms.'); ?></div>
+                        </td>
+                        <td>
+                            <strong><?php echo htmlspecialchars($row['validity']); ?> Month(s)</strong><br>
+                            <span style="font-size: 11.5px; color: var(--text-muted);">Valid thru: <?php echo date('d M Y', strtotime($row['expire'])); ?></span>
+                        </td>
+                        <td>
+                            <span class="badge-mode"><?php echo strtoupper(htmlspecialchars($row['payment_mode'])); ?></span>
+                        </td>
+                        <td style="text-align: right; font-weight: 800; font-family: 'JetBrains Mono', monospace; font-size: 15px; color: var(--brand-primary);">
+                            ₹<?php echo number_format($row['amount']); ?>
+                        </td>
+                    </tr>
+                    <?php if ($has_pt): ?>
+                    <tr>
+                        <td>
+                            <div class="item-main-title">Personal Training (PT)</div>
+                            <div class="item-sub-desc">Dedicated Coach: <strong><?php echo htmlspecialchars($pt_row['trainer_name']); ?></strong></div>
+                        </td>
+                        <td>
+                            <strong>Thru: <?php echo htmlspecialchars($pt_row['expire_date']); ?></strong>
+                        </td>
+                        <td>
+                            <span class="badge-mode"><?php echo strtoupper(htmlspecialchars($pt_row['payment_mode'])); ?></span>
+                        </td>
+                        <td style="text-align: right; font-weight: 800; font-family: 'JetBrains Mono', monospace; font-size: 15px; color: var(--brand-primary);">
+                            ₹<?php echo number_format($pt_row['amount']); ?>
+                        </td>
+                    </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Settlement & Financial Summary Section -->
+        <div class="settlement-grid">
+            
+            <!-- Left: Verification Callout & QR -->
+            <div class="verification-callout">
+                <div class="verification-qr">
+                    <?php 
+                    $verify_qr_url = "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=" . urlencode("https://sudarshanfitness.de/dashboard/admin/gen_invoice.php?id=" . $uid . "&etid=" . $etid . "&pid=" . $pid);
+                    ?>
+                    <img src="<?php echo $verify_qr_url; ?>" alt="Verification QR" />
+                </div>
+                <div class="verification-text">
+                    <h4>Official Digital Verification</h4>
+                    <p>Scan this QR code to verify the cryptographic authenticity of this payment record on the secure Sudarshan Fitness Portal.</p>
+                    <div style="font-size: 10px; color: #94a3b8; font-weight: 600;">
+                        ENGINEERED BY DRDO, MINISTRY OF DEFENCE
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Financial Calculation Box -->
+            <div class="financial-summary-card">
+                <div class="calc-row">
+                    <span class="label">Gross Plan Fee:</span>
+                    <span class="figure">₹<?php echo number_format($plan_price); ?></span>
+                </div>
+
                 <?php if ($discount > 0): ?>
-                <tr>
-                    <td colspan="2"></td>
-                    <td style="text-align: right; font-weight: 600; color: var(--text-light); padding-top: 12px;">Discount:</td>
-                    <td style="text-align: right; font-weight: 600; color: #ef4444; padding-top: 12px;">- ₹<?php echo $discount; ?></td>
-                </tr>
+                <div class="calc-row discount">
+                    <span class="label">Special Privilege Discount:</span>
+                    <span class="figure">- ₹<?php echo number_format($discount); ?></span>
+                </div>
                 <?php endif; ?>
-                <tr class="total-row">
-                    <td colspan="2" style="border: none; padding-top: 15px; vertical-align: top; text-align: left;">
-                        <div class="upi-pay-card" style="display: inline-flex; align-items: center; gap: 15px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); padding: 12px 20px; border-radius: 12px; max-width: 320px; text-align: left; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;">
-                            <div style="background: #22c55e; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">
-                                ✓
-                            </div>
-                            <div>
-                                <span style="display: block; font-size: 13px; font-weight: 700; color: #166534; text-transform: uppercase; letter-spacing: 0.5px;">Payment Verified</span>
-                                <span style="display: block; font-size: 11px; color: #15803d; margin-top: 2px;">Thank you for your payment.</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td style="text-align: right; font-weight: 600; color: var(--text-light); padding-top: 15px; vertical-align: top;">Total Paid:</td>
-                    <td style="text-align: right; padding-top: 15px; vertical-align: top;">
-                        <div class="total-amount-box" style="<?php echo (isset($row['balance']) && $row['balance'] > 0) ? 'background-color: #fef2f2; border: 1px solid #fecaca;' : ''; ?>">
-                            <span class="total-amount" style="<?php echo (isset($row['balance']) && $row['balance'] > 0) ? 'color: #ef4444;' : ''; ?>">₹<?php echo $total_paid; ?></span>
-                            <?php if (isset($row['balance']) && $row['balance'] > 0): ?>
-                                <span style="display: block; font-size: 13px; color: #dc2626; margin-top: 5px; font-weight: 600;">Pending: ₹<?php echo $row['balance']; ?></span>
-                                <span style="display: block; font-size: 11px; color: #ef4444; margin-top: 2px;">Due: <?php echo date('d M, Y', strtotime($row['balance_due_date'])); ?></span>
-                            <?php endif; ?>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
 
-        <!-- Motivational Quotes -->
-        <div style="text-align: center; margin: 25px 0 15px 0; border-top: 1px dashed rgba(226, 232, 240, 0.9); padding-top: 20px;">
-            <h4 style="margin: 0; color: var(--accent); font-weight: 700; font-style: italic; font-size: 14px; letter-spacing: 0.5px;">Be strong : be fit : be you</h4>
-            <p style="margin: 4px 0 0 0; color: var(--text-main); font-size: 12px; font-weight: 600;">Lets build a strong tomorrow, together</p>
-        </div>
+                <div class="calc-divider"></div>
 
-        <!-- Received By / Signature -->
-        <div class="received-badge">
-            Payment Received By: <strong><?php echo htmlspecialchars($row['received_by'] ? $row['received_by'] : 'Super Admin'); ?></strong>
-        </div>
+                <div class="grand-total-row">
+                    <span class="lbl">Net Paid:</span>
+                    <span class="sum">₹<?php echo number_format($total_paid); ?></span>
+                </div>
 
-        <div class="footer-receipt">
-            <div style="font-size: 11.5px; color: var(--text-light); line-height: 1.5; max-width: 480px;">
-                * Thank you for being a valued member of the Sudarshan Fitness Family!<br>
-                Access your member portal anytime at: <strong>https://sudarshanfitness.de</strong><br>
-                System Engineered by DRDO, Ministry of Defence (Anurag Bawaskar)<br>Please keep this receipt for future reference or plan renewal requests.
+                <?php if (isset($row['balance']) && $row['balance'] > 0): ?>
+                <div class="pending-due-card">
+                    <span><i class="fa-solid fa-triangle-exclamation"></i> Balance Due:</span>
+                    <span>₹<?php echo number_format($row['balance']); ?> (By: <?php echo date('d M Y', strtotime($row['balance_due_date'])); ?>)</span>
+                </div>
+                <?php else: ?>
+                <div style="margin-top: 10px; font-size: 11.5px; color: #15803d; font-weight: 700; text-align: right;">
+                    <i class="fa-solid fa-circle-check"></i> Zero Dues • Paid in Full
+                </div>
+                <?php endif; ?>
             </div>
-            <div class="signature-block">
-                <div class="digital-seal">[ SUDARSHAN FITNESS ]</div>
-                <div class="signature-line">Authorized Sign</div>
+
+        </div>
+
+        <!-- Official Signatory & Seal Row -->
+        <div class="signatory-section">
+            <div class="received-agent">
+                Payment Authorized &amp; Logged By: <strong><?php echo htmlspecialchars($row['received_by'] ? $row['received_by'] : 'Admin Central Desk'); ?></strong><br>
+                Official Member Support: <strong>info@sudarshanfitness.de</strong> | Member Hub: <strong>https://sudarshanfitness.de</strong>
+            </div>
+
+            <div class="official-seal-wrap">
+                <div class="digital-gym-seal">
+                    <i class="fa-solid fa-stamp"></i>
+                    <span>VERIFIED<br><?php echo date('Y'); ?></span>
+                </div>
+                <div class="sign-line">Authorized Signatory</div>
             </div>
         </div>
 
-        <!-- Terms & Conditions waiver block (Only appears in PDF/Print view) -->
-        <div class="terms-section" style="margin-top: 35px; font-size: 10px; color: #94a3b8; line-height: 1.5; border-top: 1px solid rgba(226, 232, 240, 0.8); padding-top: 15px;">
-            <strong style="color: #64748b; font-size: 10.5px; display: block; margin-bottom: 5px; text-transform: uppercase;">Terms &amp; Conditions:</strong>
-            1. **Equipment Damage Recovery**: If any member causes damage to the gym machinery, weights, or equipment, 100% of the replacement or repair cost will be recovered directly from the member.<br>
-            2. **Health &amp; Liability Waiver**: In the event of any physical injury, health issues, or medical emergency during training within the gym premises, the gym management will not be held responsible.<br>
-            3. **Membership Fees**: Gym registration, membership, and personal training fees are strictly non-refundable and non-transferable under any circumstances.<br>
-            4. **Safety &amp; Decorum**: Members must wear clean athletic attire, indoor-only training shoes, and wipe down machines after use. Always return weights to their proper racks.
+        <!-- Terms of Service & Club Decorum Policy -->
+        <div class="policy-block">
+            <strong class="title"><i class="fa-solid fa-file-contract"></i> Membership Terms, Safety &amp; Legal Policies:</strong>
+            <div class="policy-grid">
+                <div class="policy-item">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <div><strong>Equipment Liability:</strong> Members causing intentional or negligent damage to gym machinery, dumbbells, or facility assets will be billed 100% of replacement or repair costs.</div>
+                </div>
+                <div class="policy-item">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                    <div><strong>Health &amp; Liability Waiver:</strong> Members exercise at their own discretion. The gym management, trainers, and staff are indemnified against any personal health complications or injuries.</div>
+                </div>
+                <div class="policy-item">
+                    <i class="fa-solid fa-ban"></i>
+                    <div><strong>Fee Non-Refundability:</strong> All registration, personal training, and subscription dues paid are strictly non-refundable and non-transferable under all circumstances.</div>
+                </div>
+                <div class="policy-item">
+                    <i class="fa-solid fa-shoe-prints"></i>
+                    <div><strong>Facility Decorum:</strong> Clean, indoor-only athletic footwear and sweat towels are strictly mandatory. Always return all weights and dumbbells to designated racks.</div>
+                </div>
+            </div>
         </div>
+
     </div>
 
     <script>
     function downloadPDF() {
-        const element = document.querySelector('.invoice-container');
+        const element = document.querySelector('.invoice-sheet');
         const opt = {
-            margin:       [8, 8, 8, 8],
-            filename:     'Sudarshan_Fitness_Receipt_#' + '<?php echo 100 + intval($row['et_id']); ?>' + '.pdf',
+            margin:       [6, 6, 6, 6],
+            filename:     'Sudarshan_Fitness_Tax_Invoice_#SF-' + '<?php echo date('Y', strtotime($row['paid_date'])); ?>' + '-' + '<?php echo str_pad($row['et_id'], 4, '0', STR_PAD_LEFT); ?>' + '.pdf',
             image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true },
+            html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
             jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
-        // Print/Save PDF using html2pdf.js
         html2pdf().set(opt).from(element).save();
     }
 
@@ -590,7 +982,7 @@ $total_paid = $paid_amount;
         const btn = document.getElementById('btn-wa');
         const origText = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = '<span style="font-size: 14px;">⌛</span> SENDING...';
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
         
         const url = '../../api/resend_whatsapp_receipt.php?uid=<?php echo urlencode($uid); ?>&etid=<?php echo urlencode($etid); ?>&type=membership';
         
@@ -600,7 +992,7 @@ $total_paid = $paid_amount;
                 btn.disabled = false;
                 btn.innerHTML = origText;
                 if (data.success) {
-                    alert('✓ ' + data.message);
+                    alert('✅ ' + data.message);
                 } else {
                     alert('❌ ' + data.message);
                 }
@@ -609,7 +1001,7 @@ $total_paid = $paid_amount;
                 console.error('Error sending receipt:', error);
                 btn.disabled = false;
                 btn.innerHTML = origText;
-                alert('❌ Connection failed. Check network or server status.');
+                alert('❌ Network error. Please verify server connection.');
             });
     }
 
