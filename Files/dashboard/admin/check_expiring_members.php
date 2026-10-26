@@ -16,58 +16,80 @@ if (!$is_cli) {
 
 if (!function_exists('send_automated_expiry_email')) {
     function send_automated_expiry_email($con, $email, $name, $planName, $expire, $daysLeft, $gym_name, $gym_email) {
-        $subject = "Membership Expiry Notice - $gym_name";
-        
-        // Compute message text
+        require_once __DIR__ . '/../../include/smtp_mailer.php';
         $day_word = ($daysLeft === 1) ? "day" : "days";
-        
-        // Cyberpunk/Futuristic HTML email template
-        $mail_body = "
-        <html>
-        <head>
-            <style>
-                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
-                .container { background-color: var(--glass-bg); border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(255,255,255,0.05); position: relative; overflow: hidden; }
-                .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #ff6b00, #ff8c00); }
-                h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
-                p { font-size: 14px; line-height: 1.6; color: #475569; }
-                .warning-box { background-color: rgba(255, 107, 0, 0.05); border: 1px dashed rgba(255, 107, 0, 0.3); padding: 25px; margin: 25px 0; border-radius: 12px; font-size: 14px; line-height: 1.6; }
-                .warning-box strong { color: #ff6b00; }
-                .warning-box code { background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
-                .renew-msg { font-size: 16px; font-weight: bold; color: #ff6b00; text-align: center; margin: 20px 0; border: 1px solid rgba(255,107,0,0.2); padding: 15px; border-radius: 8px; background: rgba(255,107,0,0.02); }
-                .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
-            </style>
-        </head>
-        <body>
-            <div class='container'>
-                <div class='top-line'></div>
-                <h2>Membership Expiry Alert</h2>
-                <p>Dear <strong>$name</strong>,</p>
-                <p>This is an automated notification from <strong>$gym_name</strong> to inform you that your gym membership is expiring soon.</p>
-                
-                <div class='warning-box'>
-                    <strong>Active Subscription Details:</strong><br>
-                    Current Plan: <code>$planName</code><br>
-                    Time Remaining: <strong>$daysLeft $day_word</strong><br>
-                    Expiration Date: <code>$expire</code>
+        $urgency_label = $daysLeft === 0 ? 'TODAY' : ($daysLeft === 1 ? 'TOMORROW' : "IN $daysLeft DAYS");
+
+        $tpl = function_exists('get_email_template') ? get_email_template($con, 'expiry_reminder') : null;
+        if ($tpl && function_exists('render_email_template_html')) {
+            $gym = get_gym_details($con);
+            $tpl_custom = $tpl;
+            if ($daysLeft <= 2) {
+                $tpl_custom['accent_color'] = '#ef4444';
+                $tpl_custom['badge_title'] = "EXPIRES " . $urgency_label;
+            } elseif ($daysLeft <= 4) {
+                $tpl_custom['accent_color'] = '#f59e0b';
+                $tpl_custom['badge_title'] = "EXPIRES " . $urgency_label;
+            }
+            $rendered = render_email_template_html($tpl_custom, [
+                '{member_name}' => $name,
+                '{userid}'      => '',
+                '{plan_name}'   => $planName,
+                '{expire_date}' => date('d M Y', strtotime($expire)),
+                '{days_left}'   => "$daysLeft $day_word ($urgency_label)",
+                '{qr_image_url}'=> ''
+            ], $gym);
+            $subject = $rendered['subject'];
+            $mail_body = $rendered['html'];
+        } else {
+            $subject = "Membership Expiry Notice - $gym_name";
+            // Fallback HTML template
+            $mail_body = "
+            <html>
+            <head>
+                <style>
+                    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 30px; margin: 0; }
+                    .container { background-color: var(--glass-bg); border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 20px rgba(255,255,255,0.05); position: relative; overflow: hidden; }
+                    .top-line { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #ff6b00, #ff8c00); }
+                    h2 { color: #ff6b00; font-size: 22px; font-weight: 700; margin-top: 10px; margin-bottom: 20px; }
+                    p { font-size: 14px; line-height: 1.6; color: #475569; }
+                    .warning-box { background-color: rgba(255, 107, 0, 0.05); border: 1px dashed rgba(255, 107, 0, 0.3); padding: 25px; margin: 25px 0; border-radius: 12px; font-size: 14px; line-height: 1.6; }
+                    .warning-box strong { color: #ff6b00; }
+                    .warning-box code { background-color: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-weight: bold; }
+                    .renew-msg { font-size: 16px; font-weight: bold; color: #ff6b00; text-align: center; margin: 20px 0; border: 1px solid rgba(255,107,0,0.2); padding: 15px; border-radius: 8px; background: rgba(255,107,0,0.02); }
+                    .footer { margin-top: 35px; font-size: 12px; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; line-height: 1.5; }
+                </style>
+            </head>
+            <body>
+                <div class='container'>
+                    <div class='top-line'></div>
+                    <h2>Membership Expiry Alert</h2>
+                    <p>Dear <strong>$name</strong>,</p>
+                    <p>This is an automated notification from <strong>$gym_name</strong> to inform you that your gym membership is expiring soon.</p>
+                    
+                    <div class='warning-box'>
+                        <strong>Active Subscription Details:</strong><br>
+                        Current Plan: <code>$planName</code><br>
+                        Time Remaining: <strong>$daysLeft $day_word</strong><br>
+                        Expiration Date: <code>$expire</code>
+                    </div>
+                    
+                    <div class='renew-msg'>
+                        renew on date = $expire
+                    </div>
+                    
+                    <p>To prevent any service interruption at the front gate scanner, please renewal your membership package on or before the expiration date.</p>
+                    
+                    <div class='footer'>
+                        This is an automated notification from $gym_name.<br>
+                        Need assistance? Contact us at: <a href='mailto:$gym_email' style='color: #ff6b00; text-decoration: none;'>$gym_email</a>
+                    </div>
                 </div>
-                
-                <div class='renew-msg'>
-                    renew on date = $expire
-                </div>
-                
-                <p>To prevent any service interruption at the front gate scanner, please renewal your membership package on or before the expiration date.</p>
-                
-                <div class='footer'>
-                    This is an automated notification from $gym_name.<br>
-                    Need assistance? Contact us at: <a href='mailto:$gym_email' style='color: #ff6b00; text-decoration: none;'>$gym_email</a>
-                </div>
-            </div>
-        </body>
-        </html>";
+            </body>
+            </html>";
+        }
 
         // 1. Send SMTP if configured, else fall back to native PHP email
-        require_once __DIR__ . '/../../include/smtp_mailer.php';
         $sent = send_smtp_email($email, $name, $subject, $mail_body);
 
         $headers  = "MIME-Version: 1.0\r\n";

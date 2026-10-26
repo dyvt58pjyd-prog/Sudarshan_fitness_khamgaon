@@ -29,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_reminders'])) {
 
     $gym = get_gym_details($con);
     $gym_name = htmlspecialchars($gym['gym_name'] ?? 'Sudarshan Fitness');
+    $tpl = function_exists('get_email_template') ? get_email_template($con, 'expiry_reminder') : null;
 
     while ($row = mysqli_fetch_assoc($q)) {
         if (empty($row['email'])) { $no_email++; continue; }
@@ -43,7 +44,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_reminders'])) {
         $urgency_color = $days_left <= 2 ? '#dc2626' : ($days_left <= 4 ? '#f59e0b' : '#3b82f6');
         $urgency_label = $days_left === 0 ? 'TODAY' : ($days_left === 1 ? 'TOMORROW' : "IN $days_left DAYS");
 
-        $html = "
+        if ($tpl && function_exists('render_email_template_html')) {
+            $tpl_custom = $tpl;
+            if ($days_left <= 2) {
+                $tpl_custom['accent_color'] = '#ef4444';
+                $tpl_custom['badge_title'] = "EXPIRES " . $urgency_label;
+            } elseif ($days_left <= 4) {
+                $tpl_custom['accent_color'] = '#f59e0b';
+                $tpl_custom['badge_title'] = "EXPIRES " . $urgency_label;
+            }
+
+            $rendered = render_email_template_html($tpl_custom, [
+                '{member_name}' => $row['username'],
+                '{userid}'      => $row['userid'],
+                '{plan_name}'   => $row['planName'],
+                '{expire_date}' => $expire_fmt,
+                '{days_left}'   => "$days_left days ($urgency_label)",
+                '{qr_image_url}'=> "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=" . urlencode($row['userid'])
+            ], $gym);
+
+            $html = $rendered['html'];
+            $subject = $rendered['subject'];
+        } else {
+            $html = "
 <!DOCTYPE html>
 <html>
 <head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'></head>
@@ -101,7 +124,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_reminders'])) {
 </body>
 </html>";
 
-        $subject = "⚠️ Your {$gym_name} Membership Expires $urgency_label — Renew Now!";
+            $subject = "⚠️ Your {$gym_name} Membership Expires $urgency_label — Renew Now!";
+        }
         
         try {
             $result = send_smtp_email($row['email'], $row['username'], $subject, $html);
@@ -214,7 +238,12 @@ $count_7 = count($expiring);
             </div>
         </div>
 
-        <h2>📧 Send Renewal Reminder Emails</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 10px;">
+            <h2 style="margin: 0;">📧 Send Renewal Reminder Emails</h2>
+            <a href="email_templates.php?template=expiry_reminder" style="background: rgba(255,107,0,0.15); border: 1.5px solid #ff6b00; color: #ff6b00; padding: 9px 18px; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 13px; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;" onmouseover="this.style.background='#ff6b00'; this.style.color='#fff';" onmouseout="this.style.background='rgba(255,107,0,0.15)'; this.style.color='#ff6b00';">
+                <span style="font-size:16px;">🎨</span> Customize Template & Stickers
+            </a>
+        </div>
         <hr />
 
         <!-- Result Toast -->

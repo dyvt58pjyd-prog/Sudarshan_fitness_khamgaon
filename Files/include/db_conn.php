@@ -1169,6 +1169,118 @@ if (!function_exists('check_and_upgrade_db')) {
 
         // Set default pass_key '268724' for owner and super_admin accounts
         mysqli_query($con, "UPDATE admin SET pass_key = '268724', pin_setup_completed = 1 WHERE (role = 'super_admin' OR role = 'owner' OR username = 'admin' OR username = 'sudarshan') AND (pass_key = '070726' OR pass_key = 'admin' OR pass_key = '1234' OR pass_key = '' OR pass_key IS NULL)");
+
+        // Email Templates Table Schema & Auto-Seeding
+        $email_tpl_sql = "CREATE TABLE IF NOT EXISTS email_templates (
+            id INT(11) NOT NULL AUTO_INCREMENT,
+            template_key VARCHAR(50) NOT NULL UNIQUE,
+            template_name VARCHAR(100) NOT NULL,
+            subject VARCHAR(255) NOT NULL,
+            badge_title VARCHAR(100) NOT NULL,
+            badge_icon VARCHAR(50) DEFAULT '🏋️',
+            accent_color VARCHAR(20) DEFAULT '#ff6b00',
+            greeting VARCHAR(255) DEFAULT 'Hello, {member_name}! 👋',
+            intro_text TEXT,
+            body_content TEXT,
+            promo_banner TEXT,
+            cta_text VARCHAR(100) DEFAULT 'OPEN MEMBER PORTAL',
+            cta_url VARCHAR(255) DEFAULT 'https://sudarshanfitness.de',
+            footer_text TEXT,
+            animated_sticker VARCHAR(50) DEFAULT 'fitness_fire',
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+        mysqli_query($con, $email_tpl_sql);
+
+        // Seed default templates if empty
+        $chk_tpl = mysqli_query($con, "SELECT COUNT(*) as cnt FROM email_templates");
+        if ($chk_tpl && ($r_tpl = mysqli_fetch_assoc($chk_tpl)) && intval($r_tpl['cnt']) == 0) {
+            $default_templates = [
+                [
+                    'key' => 'member_qr_pass',
+                    'name' => 'Digital Entrance QR Pass & Welcome',
+                    'subject' => '📷 Your Official Gym Entrance QR Pass - {gym_name} (ID: {userid})',
+                    'badge_title' => 'DIGITAL ENTRANCE QR PASS',
+                    'badge_icon' => '📷',
+                    'accent_color' => '#ff6b00',
+                    'greeting' => 'Hello, {member_name}! 👋',
+                    'intro_text' => 'Welcome to the Sudarshan Fitness family! Below is your official Digital Entrance QR Pass for seamless gate access.',
+                    'body_content' => 'Scan your QR pass at the gym entrance terminal for instant, sub-second check-in and check-out. You can save this email, download the QR image, or view your live pass anytime in the member app.',
+                    'promo_banner' => '⭐ <strong>Pro-Tip:</strong> Install our native mobile app to access your smart wallet pass, 3D workout plans, and track your attendance streak!',
+                    'cta_text' => '📲 INSTALL MEMBER APP (DIRECT 1-CLICK APK)',
+                    'cta_url' => 'https://sudarshanfitness.de/download_app.php',
+                    'footer_text' => 'Please do not share your personal QR pass with non-members. Need assistance? Contact reception or reply to this email.',
+                    'animated_sticker' => 'fitness_fire'
+                ],
+                [
+                    'key' => 'expiry_reminder',
+                    'name' => 'Membership Expiry Alert & Renewal',
+                    'subject' => '⚠️ Urgent: Your Gym Membership is Expiring Soon - {gym_name}',
+                    'badge_title' => 'MEMBERSHIP EXPIRING SOON',
+                    'badge_icon' => '⚠️',
+                    'accent_color' => '#ef4444',
+                    'greeting' => 'Dear {member_name},',
+                    'intro_text' => 'This is an automated notification from {gym_name} to inform you that your gym membership subscription will expire in {days_left}.',
+                    'body_content' => 'To prevent any service interruption or lockouts at the front entrance gate scanner, please renew your membership package on or before your expiration date ({expire_date}).',
+                    'promo_banner' => '🔥 <strong>Early Renewal Special:</strong> Renew before your expiry date to lock in your current package rates and keep your workout streak alive!',
+                    'cta_text' => '💳 RENEW MEMBERSHIP ONLINE NOW',
+                    'cta_url' => 'https://sudarshanfitness.de/dashboard/member/payment.php',
+                    'footer_text' => 'If you have already renewed with the reception staff, please disregard this automated notification.',
+                    'animated_sticker' => 'timer_alert'
+                ],
+                [
+                    'key' => 'payment_receipt',
+                    'name' => 'Official Payment Receipt & Confirmation',
+                    'subject' => '🧾 Payment Receipt Confirmation - {gym_name} (Receipt #{receipt_no})',
+                    'badge_title' => 'OFFICIAL PAYMENT RECEIPT',
+                    'badge_icon' => '🧾',
+                    'accent_color' => '#10b981',
+                    'greeting' => 'Hello, {member_name}! Thank you for your payment.',
+                    'intro_text' => 'Your membership transaction of Rs. {amount} has been successfully processed and verified in our financial ledger.',
+                    'body_content' => 'Your new subscription plan ({plan_name}) is now fully active through {expire_date}. Your entrance gate scanner permissions have been renewed.',
+                    'promo_banner' => '✅ <strong>GST Audited & Verified:</strong> This digital receipt is an official tax-compliant acknowledgment of fee receipt.',
+                    'cta_text' => '📑 OPEN DIGITAL INVOICE & RECEIPT',
+                    'cta_url' => 'https://sudarshanfitness.de/dashboard/member/',
+                    'footer_text' => 'For billing questions or corporate reimbursement invoice copies, contact gym administration.',
+                    'animated_sticker' => 'trophy_win'
+                ],
+                [
+                    'key' => 'birthday_wish',
+                    'name' => 'Birthday Celebration & VIP Gift',
+                    'subject' => '🎂 Happy Birthday, {member_name}! A Special Celebration Gift from {gym_name} 🎉',
+                    'badge_title' => 'HAPPY BIRTHDAY VIP MEMBER',
+                    'badge_icon' => '🎉',
+                    'accent_color' => '#8b5cf6',
+                    'greeting' => 'Happy Birthday, {member_name}! 🎂🎈',
+                    'intro_text' => 'The entire fitness family and coaching staff at {gym_name} wish you a powerhouse birthday filled with health, strength, and joy!',
+                    'body_content' => 'As a token of our appreciation for your dedication, visit the front desk this week to claim your complimentary birthday workout shake and specialized fitness milestone review!',
+                    'promo_banner' => '🎁 <strong>Birthday Bonus:</strong> Bring a workout partner along with you for a free guest day pass all week!',
+                    'cta_text' => '🎁 CLAIM YOUR BIRTHDAY WORKOUT PASS',
+                    'cta_url' => 'https://sudarshanfitness.de/member_app/',
+                    'footer_text' => 'Keep crushing your goals! — Team Sudarshan Fitness',
+                    'animated_sticker' => 'party_sparkles'
+                ]
+            ];
+
+            foreach ($default_templates as $t) {
+                $k = mysqli_real_escape_string($con, $t['key']);
+                $n = mysqli_real_escape_string($con, $t['name']);
+                $s = mysqli_real_escape_string($con, $t['subject']);
+                $b = mysqli_real_escape_string($con, $t['badge_title']);
+                $bi = mysqli_real_escape_string($con, $t['badge_icon']);
+                $ac = mysqli_real_escape_string($con, $t['accent_color']);
+                $g = mysqli_real_escape_string($con, $t['greeting']);
+                $it = mysqli_real_escape_string($con, $t['intro_text']);
+                $bc = mysqli_real_escape_string($con, $t['body_content']);
+                $pb = mysqli_real_escape_string($con, $t['promo_banner']);
+                $ct = mysqli_real_escape_string($con, $t['cta_text']);
+                $cu = mysqli_real_escape_string($con, $t['cta_url']);
+                $ft = mysqli_real_escape_string($con, $t['footer_text']);
+                $as = mysqli_real_escape_string($con, $t['animated_sticker']);
+
+                mysqli_query($con, "INSERT INTO email_templates (template_key, template_name, subject, badge_title, badge_icon, accent_color, greeting, intro_text, body_content, promo_banner, cta_text, cta_url, footer_text, animated_sticker) VALUES ('$k', '$n', '$s', '$b', '$bi', '$ac', '$g', '$it', '$bc', '$pb', '$ct', '$cu', '$ft', '$as')");
+            }
+        }
     }
 }
 
