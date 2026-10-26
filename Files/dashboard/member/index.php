@@ -12,7 +12,7 @@ $gym = get_gym_details($con);
 $userid = $_SESSION['user_data'];
 
 // Fetch user subscription details (get the latest subscription)
-$sql = "SELECT u.username, u.email, u.trainer_id, u.xp_points, u.gym_rank, e.paid_date, e.expire, p.planName, p.amount 
+$sql = "SELECT u.username, u.email, u.trainer_id, u.xp_points, u.gym_rank, u.face_descriptor, u.face_enrolled_at, e.paid_date, e.expire, p.planName, p.amount 
         FROM users u 
         LEFT JOIN enrolls_to e ON u.userid = e.uid 
         LEFT JOIN plan p ON e.pid = p.pid 
@@ -71,6 +71,8 @@ $amount = isset($user_info['amount']) ? "₹" . $user_info['amount'] : 'N/A';
 $expire = isset($user_info['expire']) ? $user_info['expire'] : 'N/A';
 $member_xp = isset($user_info['xp_points']) ? intval($user_info['xp_points']) : 0;
 $member_rank = !empty($user_info['gym_rank']) ? $user_info['gym_rank'] : 'Beginner';
+$has_face_id = !empty($user_info['face_descriptor']);
+$face_enrolled_at = !empty($user_info['face_enrolled_at']) ? date('d M Y, h:i A', strtotime($user_info['face_enrolled_at'])) : '';
 
 // ── Expiry Warning Calculation ───────────────────────────────────────────────
 $show_expiry_warning = false;
@@ -548,6 +550,27 @@ function dismissWarning() {
 								<span>WhatsApp AI Coach:</span>
 								<span style="color: <?php echo $is_expired ? '#ef4444' : '#10b981'; ?>; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
 									<span style="display:inline-block; width:6px; height:6px; background:<?php echo $is_expired ? '#ef4444' : '#10b981'; ?>; border-radius:50%;"></span> <?php echo $is_expired ? 'Blocked (Renew)' : 'Active'; ?>
+								</span>
+							</div>
+							<div style="font-size: 13px; color: #ffffff; display: flex; align-items: center; justify-content: space-between; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 8px; margin-top: 8px;">
+								<span style="display: inline-flex; align-items: center; gap: 5px;">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H5a2 2 0 0 0-2 2v2M17 3h2a2 2 0 0 1 2 2v2M3 17v2a2 2 0 0 0 2 2h2M21 17v2a2 2 0 0 1-2 2h-2"/><circle cx="9" cy="9" r="1"/><circle cx="15" cy="9" r="1"/><path d="M10 13a3 3 0 0 0 4 0"/></svg>
+									In-App Face ID:
+								</span>
+								<span id="faceid-status-badge">
+								<?php if ($has_face_id): ?>
+									<span style="display: inline-flex; align-items: center; gap: 6px;">
+										<span style="color: #10b981; font-weight: 700; font-size: 12px; display: inline-flex; align-items: center; gap: 4px;">
+											<span style="width: 7px; height: 7px; background: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 6px #10b981;"></span> Active
+										</span>
+										<button type="button" onclick="openMemberFaceIdEnrollModal()" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px; cursor: pointer;">Re-scan</button>
+									</span>
+								<?php else: ?>
+									<span style="display: inline-flex; align-items: center; gap: 6px;">
+										<span style="color: #f59e0b; font-weight: 700; font-size: 12px;">Not Set</span>
+										<button type="button" onclick="openMemberFaceIdEnrollModal()" style="background: linear-gradient(135deg, #0ea5e9, #38bdf8); border: none; color: #04101d; font-weight: 800; font-size: 11px; padding: 4px 10px; border-radius: 6px; cursor: pointer; box-shadow: 0 2px 8px rgba(14,165,233,0.3);">Enroll Face</button>
+									</span>
+								<?php endif; ?>
 								</span>
 							</div>
 						</div>
@@ -1456,6 +1479,235 @@ function dismissWarning() {
                 });
             }
         });
+    </script>
+
+    <!-- ========================================== -->
+    <!-- APPLE FACE ID BIOMETRIC ENROLLMENT MODAL   -->
+    <!-- ========================================== -->
+    <style>
+        @keyframes laserSweepAnim {
+            0% { top: 4%; opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { top: 92%; opacity: 0.2; }
+        }
+    </style>
+    <div id="faceid-enroll-modal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(3, 7, 18, 0.85); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); align-items:center; justify-content:center; padding:16px;">
+        <div style="background:linear-gradient(145deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98)); border:1px solid rgba(56, 189, 248, 0.35); box-shadow:0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(14, 165, 233, 0.2); border-radius:24px; max-width:440px; width:100%; overflow:hidden; position:relative; text-align:center; padding:32px 24px; color:#f8fafc; font-family:-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;">
+            
+            <button type="button" onclick="closeMemberFaceIdEnrollModal()" style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.08); border:none; color:#94a3b8; width:34px; height:34px; border-radius:50%; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s;">
+                ✕
+            </button>
+
+            <div style="width:60px; height:60px; margin:0 auto 14px; border-radius:18px; background:linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(56, 189, 248, 0.05)); border:1px solid rgba(56, 189, 248, 0.4); display:flex; align-items:center; justify-content:center; box-shadow:0 8px 24px rgba(14, 165, 233, 0.25);">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 3H5a2 2 0 0 0-2 2v2M17 3h2a2 2 0 0 1 2 2v2M3 17v2a2 2 0 0 0 2 2h2M21 17v2a2 2 0 0 1-2 2h-2"/>
+                    <circle cx="9" cy="9" r="1.2" fill="#38bdf8"/>
+                    <circle cx="15" cy="9" r="1.2" fill="#38bdf8"/>
+                    <path d="M10 13a3 3 0 0 0 4 0"/>
+                </svg>
+            </div>
+
+            <h3 style="margin:0 0 6px; font-size:20px; font-weight:800; letter-spacing:-0.5px; color:#ffffff;">Biometric Face ID Setup</h3>
+            <p style="margin:0 0 20px; font-size:13px; color:#94a3b8; line-height:1.4;">
+                Position your face inside the circle. Offline local AI extracts your unique 128-d biometric identity for instant login.
+            </p>
+
+            <div style="position:relative; width:220px; height:220px; margin:0 auto 20px; border-radius:50%; overflow:hidden; border:2px solid rgba(56, 189, 248, 0.4); box-shadow:0 0 25px rgba(14, 165, 233, 0.3); background:#020617;">
+                <video id="faceid-enroll-video" autoplay muted playsinline style="width:100%; height:100%; object-fit:cover; transform:scaleX(-1);"></video>
+                <canvas id="faceid-enroll-canvas" style="position:absolute; top:0; left:0; width:100%; height:100%; transform:scaleX(-1); pointer-events:none;"></canvas>
+                <div id="faceid-enroll-laser" style="position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg, transparent, #38bdf8, #00f0ff, transparent); box-shadow:0 0 12px #38bdf8; display:none; animation:laserSweepAnim 1.8s ease-in-out infinite alternate;"></div>
+            </div>
+
+            <div id="faceid-enroll-status" style="font-size:13.5px; font-weight:600; color:#38bdf8; margin-bottom:18px; min-height:22px;">
+                Ready to initialize optical sensor...
+            </div>
+
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <button type="button" id="faceid-enroll-start-btn" onclick="startMemberFaceScan()" style="background:linear-gradient(135deg, #0284c7, #0ea5e9); color:#ffffff; font-weight:700; font-size:13px; padding:10px 22px; border:none; border-radius:12px; cursor:pointer; box-shadow:0 4px 15px rgba(14,165,233,0.35); transition:all 0.2s;">
+                    ⚡ Start Face Scan
+                </button>
+                <button type="button" onclick="closeMemberFaceIdEnrollModal()" style="background:rgba(255,255,255,0.06); color:#cbd5e1; font-weight:600; font-size:13px; padding:10px 18px; border:1px solid rgba(255,255,255,0.12); border-radius:12px; cursor:pointer;">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/face-api/face-api.min.js"></script>
+    <script>
+    let memberFaceStream = null;
+    let memberModelsLoaded = false;
+    let memberScanInterval = null;
+
+    function openMemberFaceIdEnrollModal() {
+        const modal = document.getElementById('faceid-enroll-modal');
+        if (modal) modal.style.display = 'flex';
+        document.getElementById('faceid-enroll-status').innerText = 'Initializing local vision models...';
+        document.getElementById('faceid-enroll-status').style.color = '#38bdf8';
+        document.getElementById('faceid-enroll-start-btn').style.display = 'inline-block';
+        document.getElementById('faceid-enroll-laser').style.display = 'none';
+        
+        loadMemberModels().then(() => {
+            document.getElementById('faceid-enroll-status').innerText = '⚡ Sensors Ready. Click "Start Face Scan" to begin.';
+        });
+    }
+
+    function closeMemberFaceIdEnrollModal() {
+        if (memberScanInterval) {
+            clearInterval(memberScanInterval);
+            memberScanInterval = null;
+        }
+        if (memberFaceStream) {
+            memberFaceStream.getTracks().forEach(t => t.stop());
+            memberFaceStream = null;
+        }
+        const video = document.getElementById('faceid-enroll-video');
+        if (video) video.srcObject = null;
+        const modal = document.getElementById('faceid-enroll-modal');
+        if (modal) modal.style.display = 'none';
+    }
+
+    async function loadMemberModels() {
+        if (memberModelsLoaded) return;
+        const localPath = '../../js/face-api/models_v2';
+        try {
+            await Promise.all([
+                faceapi.nets.tinyFaceDetector.loadFromUri(localPath),
+                faceapi.nets.faceLandmark68TinyNet.loadFromUri(localPath),
+                faceapi.nets.faceRecognitionNet.loadFromUri(localPath)
+            ]);
+            memberModelsLoaded = true;
+        } catch (e) {
+            console.error('Error loading face models:', e);
+            document.getElementById('faceid-enroll-status').innerText = 'Sensor load failed. Refresh and retry.';
+            document.getElementById('faceid-enroll-status').style.color = '#ef4444';
+        }
+    }
+
+    async function startMemberFaceScan() {
+        const statusEl = document.getElementById('faceid-enroll-status');
+        const startBtn = document.getElementById('faceid-enroll-start-btn');
+        const laser = document.getElementById('faceid-enroll-laser');
+        const video = document.getElementById('faceid-enroll-video');
+        const canvas = document.getElementById('faceid-enroll-canvas');
+
+        startBtn.style.display = 'none';
+        statusEl.innerText = 'Starting camera...';
+        statusEl.style.color = '#38bdf8';
+
+        if (!memberModelsLoaded) {
+            await loadMemberModels();
+        }
+
+        try {
+            memberFaceStream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
+                audio: false
+            });
+            video.srcObject = memberFaceStream;
+            laser.style.display = 'block';
+
+            video.onplay = () => {
+                const displaySize = { width: video.clientWidth || 220, height: video.clientHeight || 220 };
+                faceapi.matchDimensions(canvas, displaySize);
+                statusEl.innerText = 'Position your face in the circle...';
+
+                let validSamples = 0;
+                let descriptors = [];
+
+                memberScanInterval = setInterval(async () => {
+                    const opt = new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.35 });
+                    let detection = null;
+                    try {
+                        detection = await faceapi.detectSingleFace(video, opt).withFaceLandmarks(true).withFaceDescriptor();
+                    } catch (err) {
+                        // ignore dropped frames
+                    }
+
+                    if (detection && detection.descriptor) {
+                        validSamples++;
+                        descriptors.push(Array.from(detection.descriptor));
+                        statusEl.innerText = `Analyzing Biometrics... ${validSamples}/4`;
+                        statusEl.style.color = '#38bdf8';
+
+                        // Visual feedback on canvas
+                        const ctx = canvas.getContext('2d');
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        const resized = faceapi.resizeResults(detection, displaySize);
+                        faceapi.draw.drawDetections(canvas, resized);
+
+                        if (validSamples >= 4) {
+                            clearInterval(memberScanInterval);
+                            memberScanInterval = null;
+                            laser.style.display = 'none';
+                            statusEl.innerText = '⚡ Encrypting and saving profile...';
+
+                            // Average the multi-frame biometric vectors for high fidelity
+                            const avgDescriptor = new Array(128).fill(0);
+                            for (let d of descriptors) {
+                                for (let i = 0; i < 128; i++) {
+                                    avgDescriptor[i] += d[i] / descriptors.length;
+                                }
+                            }
+
+                            // Post to server
+                            saveMemberFaceDescriptor(avgDescriptor);
+                        }
+                    } else {
+                        statusEl.innerText = 'Looking for face... Please center yourself';
+                        statusEl.style.color = '#f59e0b';
+                    }
+                }, 400);
+            };
+        } catch (err) {
+            console.error('Camera access error:', err);
+            statusEl.innerText = 'Camera access denied: ' + err.message;
+            statusEl.style.color = '#ef4444';
+            startBtn.style.display = 'inline-block';
+            startBtn.innerText = 'Retry';
+        }
+    }
+
+    async function saveMemberFaceDescriptor(descriptor) {
+        const statusEl = document.getElementById('faceid-enroll-status');
+        try {
+            const resp = await fetch('../../api/enroll_face.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ descriptor: descriptor })
+            });
+            const res = await resp.json();
+
+            if (res.success) {
+                statusEl.innerText = '✅ Biometric Face ID Active!';
+                statusEl.style.color = '#10b981';
+
+                const badge = document.getElementById('faceid-status-badge');
+                if (badge) {
+                    badge.innerHTML = `
+                        <span style="display: inline-flex; align-items: center; gap: 6px;">
+                            <span style="color: #10b981; font-weight: 700; font-size: 12px; display: inline-flex; align-items: center; gap: 4px;">
+                                <span style="width: 7px; height: 7px; background: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 6px #10b981;"></span> Active
+                            </span>
+                            <button type="button" onclick="openMemberFaceIdEnrollModal()" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px; cursor: pointer;">Re-scan</button>
+                        </span>
+                    `;
+                }
+
+                setTimeout(() => {
+                    closeMemberFaceIdEnrollModal();
+                }, 1600);
+            } else {
+                throw new Error(res.error || 'Server error');
+            }
+        } catch (err) {
+            statusEl.innerText = 'Enrollment failed: ' + err.message;
+            statusEl.style.color = '#ef4444';
+            const startBtn = document.getElementById('faceid-enroll-start-btn');
+            startBtn.style.display = 'inline-block';
+            startBtn.innerText = 'Try Again';
+        }
+    }
     </script>
 <?php include '../../include/dev_credit.php'; ?>
 </body>

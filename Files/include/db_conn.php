@@ -1103,6 +1103,25 @@ if (!function_exists('check_and_upgrade_db')) {
         
         $cols = mysqli_query($con, "SHOW COLUMNS FROM users LIKE 'partner_uid'");
         if(mysqli_num_rows($cols) == 0) mysqli_query($con, "ALTER TABLE users ADD COLUMN partner_uid VARCHAR(20) NULL DEFAULT NULL");
+
+        // Biometric Face ID Engine Schema for Members and Admin
+        $chk_u_face = mysqli_query($con, "SHOW COLUMNS FROM users LIKE 'face_descriptor'");
+        if ($chk_u_face && mysqli_num_rows($chk_u_face) == 0) {
+            @mysqli_query($con, "ALTER TABLE users ADD COLUMN face_descriptor MEDIUMTEXT DEFAULT NULL");
+            @mysqli_query($con, "ALTER TABLE users ADD COLUMN face_enrolled_at DATETIME DEFAULT NULL");
+        }
+
+        $chk_a_face = mysqli_query($con, "SHOW COLUMNS FROM admin LIKE 'face_descriptor'");
+        if ($chk_a_face && mysqli_num_rows($chk_a_face) == 0) {
+            @mysqli_query($con, "ALTER TABLE admin ADD COLUMN face_descriptor MEDIUMTEXT DEFAULT NULL");
+            @mysqli_query($con, "ALTER TABLE admin ADD COLUMN face_enrolled_at DATETIME DEFAULT NULL");
+        }
+
+        // Migrate any pre-existing webauthn_credential into face_descriptor if needed
+        $chk_a_webauthn = mysqli_query($con, "SHOW COLUMNS FROM admin LIKE 'webauthn_credential'");
+        if ($chk_a_webauthn && mysqli_num_rows($chk_a_webauthn) > 0) {
+            @mysqli_query($con, "UPDATE admin SET face_descriptor = webauthn_credential WHERE (face_descriptor IS NULL OR face_descriptor = '') AND webauthn_credential IS NOT NULL AND webauthn_credential != ''");
+        }
         
         $workout_logs_sql = "CREATE TABLE IF NOT EXISTS workout_logs (
             id INT(11) NOT NULL AUTO_INCREMENT,

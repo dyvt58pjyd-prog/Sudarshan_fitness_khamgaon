@@ -8,27 +8,51 @@ if (empty($user) || empty($token)) {
     die("Invalid enrollment link.");
 }
 
-// Verify the token
+// Verify the token for either Admin or Member
+$display_name = '';
+$is_admin = false;
+
 $query = "SELECT securekey, Full_name FROM admin WHERE username='$user' AND role IN ('owner', 'super_admin', 'reception', 'trainer')";
 $result = mysqli_query($con, $query);
 
-if (mysqli_num_rows($result) !== 1) {
-    die("Owner not found.");
-}
-
-$row = mysqli_fetch_assoc($result);
-$expected_token = hash('sha256', $user . $row['securekey']);
-
-if (!hash_equals($expected_token, $token)) {
-    die("Invalid or expired token.");
+if ($result && mysqli_num_rows($result) === 1) {
+    $row = mysqli_fetch_assoc($result);
+    $expected_token = hash('sha256', $user . $row['securekey']);
+    if (!hash_equals($expected_token, $token)) {
+        die("Invalid or expired enrollment token.");
+    }
+    $display_name = $row['Full_name'];
+    $is_admin = true;
+} else {
+    // Check members table
+    $query_m = "SELECT userid, username, password FROM users WHERE userid='$user'";
+    $result_m = mysqli_query($con, $query_m);
+    if ($result_m && mysqli_num_rows($result_m) === 1) {
+        $row_m = mysqli_fetch_assoc($result_m);
+        $expected_token = hash('sha256', $user . $row_m['password']);
+        if (!hash_equals($expected_token, $token)) {
+            die("Invalid or expired enrollment token.");
+        }
+        $display_name = $row_m['username'];
+        $is_admin = false;
+    } else {
+        die("User profile not found or enrollment link is invalid.");
+    }
 }
 
 // Generate a random challenge
 $challenge = bin2hex(random_bytes(32));
 
-// Save challenge to session to verify later in the API
-session_start();
-$_SESSION['webauthn_enroll_user'] = $user;
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if ($is_admin) {
+    $_SESSION['webauthn_enroll_user'] = $user;
+    $_SESSION['role'] = 'owner';
+} else {
+    $_SESSION['user_data'] = $user;
+    $_SESSION['role'] = 'member';
+}
 $_SESSION['webauthn_enroll_challenge'] = $challenge;
 ?>
 <!DOCTYPE html>
@@ -113,7 +137,7 @@ $_SESSION['webauthn_enroll_challenge'] = $challenge;
     <div class="card">
         <div class="icon" id="statusIcon">📱🔐</div>
         <h2>Setup Face ID</h2>
-        <p>Welcome, <strong><?php echo htmlspecialchars($row['Full_name']); ?></strong>.</p>
+        <p>Welcome, <strong><?php echo htmlspecialchars($display_name); ?></strong>.</p>
         <p>This will use advanced computer vision to scan your face. Please ensure you are in a well-lit area.</p>
 
         <div class="video-container" id="videoContainer">
@@ -138,31 +162,19 @@ $_SESSION['webauthn_enroll_challenge'] = $challenge;
 
         async function loadModels() {
             if (modelsLoaded) return;
-            statusMsg.innerText = "⚡ Loading Ultra-Fast AI Sensors...";
-            const cdnUri = 'https://justadudewhohacks.github.io/face-api.js/models';
+            statusMsg.innerText = "⚡ Loading Optical Sensors...";
             const localUri = 'js/face-api/models_v2';
             try {
                 await Promise.all([
-                    faceapi.nets.tinyFaceDetector.loadFromUri(cdnUri),
-                    faceapi.nets.faceLandmark68TinyNet.loadFromUri(cdnUri),
-                    faceapi.nets.faceRecognitionNet.loadFromUri(cdnUri)
+                    faceapi.nets.tinyFaceDetector.loadFromUri(localUri),
+                    faceapi.nets.faceLandmark68TinyNet.loadFromUri(localUri),
+                    faceapi.nets.faceRecognitionNet.loadFromUri(localUri)
                 ]);
                 modelsLoaded = true;
-                statusMsg.innerText = "⚡ Ultra-Fast AI Models Loaded! Ready to scan.";
+                statusMsg.innerText = "⚡ Sensors Ready! Ready to scan.";
             } catch (err) {
-                console.warn("CDN primary load failed, trying local fallback...", err);
-                try {
-                    await Promise.all([
-                        faceapi.nets.tinyFaceDetector.loadFromUri(localUri),
-                        faceapi.nets.faceLandmark68TinyNet.loadFromUri(localUri),
-                        faceapi.nets.faceRecognitionNet.loadFromUri(localUri)
-                    ]);
-                    modelsLoaded = true;
-                    statusMsg.innerText = "⚡ AI Models Loaded! Ready to scan.";
-                } catch (e) {
-                    console.warn("Local fallback error:", e);
-                    modelsLoaded = true;
-                }
+                console.warn("Local face model load error:", err);
+                statusMsg.innerText = "Model loading error. Please refresh.";
             }
         }
 
@@ -243,10 +255,14 @@ $_SESSION['webauthn_enroll_challenge'] = $challenge;
 
         async function saveToDatabase(descriptorArray) {
             try {
-                const res = await fetch('api/webauthn_register.php', {
+                const res = await fetch('api/enroll_face.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ descriptor: descriptorArray })
+                    body: JSON.stringify({ 
+                        descriptor: descriptorArray,
+                        u: '<?php echo addslashes($user); ?>',
+                        token: '<?php echo addslashes($token); ?>'
+                    })
                 });
 
                 const result = await res.json();

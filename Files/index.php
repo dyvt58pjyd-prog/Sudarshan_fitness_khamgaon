@@ -232,6 +232,154 @@ if (substr($logo_path, 0, 6) === '../../') {
         border: 1px solid rgba(255,123,0,0.2) !important;
         transition: all 0.3s ease !important;
     }
+
+    /* Ultra-Fast Luxury Apple Face ID Styles */
+    .btn-faceid-scan {
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px !important;
+        margin-top: 14px !important;
+        background: linear-gradient(135deg, rgba(255, 107, 0, 0.12), rgba(15, 23, 42, 0.75)) !important;
+        border: 1.5px solid rgba(255, 107, 0, 0.35) !important;
+        color: #ffffff !important;
+        padding: 13px 20px !important;
+        border-radius: 14px !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 13.5px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.5px !important;
+        cursor: pointer !important;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 4px 18px rgba(255, 107, 0, 0.12) !important;
+        backdrop-filter: blur(8px) !important;
+    }
+    .btn-faceid-scan:hover {
+        background: linear-gradient(135deg, rgba(255, 107, 0, 0.25), rgba(15, 23, 42, 0.95)) !important;
+        border-color: #ff6b00 !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 24px rgba(255, 107, 0, 0.25) !important;
+    }
+    .faceid-glyph {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #ff6b00;
+        transition: transform 0.3s ease;
+    }
+    .btn-faceid-scan:hover .faceid-glyph {
+        transform: scale(1.1);
+        color: #ff9500;
+    }
+
+    /* Face ID Scanning Overlay HUD */
+    #faceScanContainer {
+        display: none;
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(8, 12, 22, 0.94);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        z-index: 99999;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .faceid-hud-card {
+        background: rgba(15, 23, 42, 0.88);
+        border: 1.5px solid rgba(255, 255, 255, 0.12);
+        border-radius: 28px;
+        padding: 35px 30px;
+        max-width: 420px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 107, 0, 0.15);
+        position: relative;
+    }
+
+    .faceid-hud-title {
+        color: #ffffff;
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: -0.3px;
+        margin: 0 0 6px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .faceid-hud-subtitle {
+        color: #94a3b8;
+        font-size: 12px;
+        margin: 0 0 16px 0;
+    }
+
+    .faceid-viewfinder-wrap {
+        position: relative;
+        width: 240px;
+        height: 240px;
+        border-radius: 50%;
+        margin: 10px auto 20px auto;
+        overflow: hidden;
+        border: 3px solid rgba(255, 107, 0, 0.4);
+        box-shadow: 0 0 30px rgba(255, 107, 0, 0.25);
+        transition: all 0.3s ease;
+    }
+    .faceid-viewfinder-wrap.success {
+        border-color: #10b981 !important;
+        box-shadow: 0 0 40px rgba(16, 185, 129, 0.5) !important;
+    }
+    .faceid-viewfinder-wrap.error {
+        border-color: #ef4444 !important;
+        box-shadow: 0 0 40px rgba(239, 68, 68, 0.5) !important;
+    }
+
+    .faceid-laser-sweep {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #ff6b00, #38bdf8, transparent);
+        box-shadow: 0 0 12px #ff6b00;
+        animation: laserScan 2s ease-in-out infinite alternate;
+        z-index: 5;
+    }
+    @keyframes laserScan {
+        0% { top: 8%; opacity: 0.3; }
+        50% { opacity: 1; }
+        100% { top: 92%; opacity: 0.3; }
+    }
+
+    .faceid-status-text {
+        color: #e2e8f0;
+        font-size: 13.5px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        min-height: 20px;
+    }
+
+    .btn-faceid-cancel {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #94a3b8;
+        padding: 9px 24px;
+        border-radius: 12px;
+        font-size: 12.5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-faceid-cancel:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+    }
     </style>
 </head>
 <body id="titan-login-body" class="page-body login-page login-form-fall">
@@ -343,24 +491,47 @@ if (substr($logo_path, 0, 6) === '../../') {
                                 Sign In
                             </button>
                             
-                            <!-- Action Grid for Self Registration & Quick Portals -->
-                            <button type="button" id="faceIdLoginBtn" class="btn btn-success" style="width: 100%; display: block; margin-top: 12px; background: linear-gradient(135deg, #ffd700, #ff6b00); border: 1px solid #ff6b00; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; font-weight: 900; box-shadow: 0 0 25px rgba(255,215,0,0.6);" onclick="loginWithFaceID()">
-                                <i class="entypo-camera"></i>
-                                SHARINGAN BIOMETRIC SCAN
+                            <!-- Action Button for Fast In-App Face ID -->
+                            <button type="button" id="faceIdLoginBtn" class="btn-faceid-scan" onclick="loginWithFaceID()">
+                                <span class="faceid-glyph">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                                        <circle cx="9" cy="9" r="1" fill="currentColor"/>
+                                        <circle cx="15" cy="9" r="1" fill="currentColor"/>
+                                        <path d="M9.5 15a3.5 3.5 0 0 0 5 0M12 11v2.5"/>
+                                    </svg>
+                                </span>
+                                <span>Sign In with Face ID</span>
                             </button>
                         </div>
 
-                    <!-- Add face-api.js script -->
+                    <!-- Face-api.js script -->
                     <script defer src="js/face-api/face-api.min.js"></script>
 
-                    <!-- Face Scan UI Container -->
-                    <div id="faceScanContainer" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,10,5,0.95); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
-                        <h2 style="color: #ff6b00; margin-bottom: 20px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">[ SHARINGAN BIOMETRIC SCAN ]</h2>
-                        <div style="position: relative; width: 300px; height: 300px; border-radius: 50%; overflow: hidden; border: 4px solid #ff6b00; box-shadow: 0 0 40px #ff6b00;">
-                            <video id="loginVideo" autoplay muted playsinline style="width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1);"></video>
+                    <!-- Face Scan UI Container (Apple Executive Biometric HUD) -->
+                    <div id="faceScanContainer">
+                        <div class="faceid-hud-card">
+                            <div class="faceid-hud-title">
+                                <span class="faceid-glyph" style="color:#ff6b00;">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                                        <circle cx="9" cy="9" r="1" fill="currentColor"/>
+                                        <circle cx="15" cy="9" r="1" fill="currentColor"/>
+                                        <path d="M9.5 15a3.5 3.5 0 0 0 5 0M12 11v2.5"/>
+                                    </svg>
+                                </span>
+                                <span>Face ID Verification</span>
+                            </div>
+                            <div class="faceid-hud-subtitle">Look directly into the sensor circle</div>
+
+                            <div class="faceid-viewfinder-wrap" id="faceViewfinder">
+                                <video id="loginVideo" autoplay muted playsinline style="width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1);"></video>
+                                <div class="faceid-laser-sweep" id="faceLaser"></div>
+                            </div>
+
+                            <div id="loginStatusMsg" class="faceid-status-text">⚡ Sensors Ready • Position face in circle</div>
+                            <button type="button" class="btn-faceid-cancel" onclick="cancelFaceLogin()">Cancel</button>
                         </div>
-                        <p id="loginStatusMsg" style="color: #cbd5e1; margin-top: 20px; font-size: 16px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">Awakening Divine...</p>
-                        <button type="button" class="btn btn-danger" style="margin-top: 20px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;" onclick="cancelFaceLogin()">CANCEL JUTSU</button>
                     </div>
 
                     <script>
@@ -430,30 +601,26 @@ if (substr($logo_path, 0, 6) === '../../') {
                         draw();
                     }
 
+                    // Blazing-Fast Local Face Model Loader (Zero CDN Lag)
                     async function loadLoginModels() {
                         if (loginModelsLoaded || loginModelsLoading) return;
                         loginModelsLoading = true;
-                        const cdnUri = 'https://justadudewhohacks.github.io/face-api.js/models';
                         const localUri = 'js/face-api/models_v2';
                         try {
-                            await Promise.all([
-                                faceapi.nets.tinyFaceDetector.loadFromUri(cdnUri),
-                                faceapi.nets.faceLandmark68TinyNet.loadFromUri(cdnUri),
-                                faceapi.nets.faceRecognitionNet.loadFromUri(cdnUri)
-                            ]);
-                            loginModelsLoaded = true;
-                        } catch (err) {
-                            console.warn("CDN primary load failed, trying local fallback...", err);
-                            try {
+                            if (typeof faceapi === 'undefined') {
+                                await new Promise(r => setTimeout(r, 150));
+                            }
+                            if (typeof faceapi !== 'undefined') {
                                 await Promise.all([
                                     faceapi.nets.tinyFaceDetector.loadFromUri(localUri),
                                     faceapi.nets.faceLandmark68TinyNet.loadFromUri(localUri),
                                     faceapi.nets.faceRecognitionNet.loadFromUri(localUri)
                                 ]);
                                 loginModelsLoaded = true;
-                            } catch (e) {
-                                console.warn("Models load error:", e);
+                                console.log("⚡ Face ID local neural models loaded successfully.");
                             }
+                        } catch (err) {
+                            console.warn("Local face model load error:", err);
                         } finally {
                             loginModelsLoading = false;
                         }
@@ -472,14 +639,10 @@ if (substr($logo_path, 0, 6) === '../../') {
                         }
 
                         const pwfield = document.getElementById('pwfield');
-                        if (role === 'member') {
-                            pwfield.placeholder = 'Enter 6-Digit Security PIN';
-                        } else {
-                            pwfield.placeholder = 'Enter 6-Digit Security PIN';
-                        }
+                        pwfield.placeholder = 'Enter 6-Digit Security PIN';
 
                         const faceBtn = document.getElementById('faceIdLoginBtn');
-                        if (faceBtn) faceBtn.style.display = 'block';
+                        if (faceBtn) faceBtn.style.display = 'flex';
                         loadLoginModels();
                     }
 
@@ -487,56 +650,78 @@ if (substr($logo_path, 0, 6) === '../../') {
                         const scanContainer = document.getElementById('faceScanContainer');
                         const video = document.getElementById('loginVideo');
                         const statusMsg = document.getElementById('loginStatusMsg');
+                        const viewfinder = document.getElementById('faceViewfinder');
 
+                        if (viewfinder) viewfinder.className = 'faceid-viewfinder-wrap';
                         scanContainer.style.display = 'flex';
-                        statusMsg.textContent = '⚡ Activating Ultra-Fast Sensors...';
+                        statusMsg.innerHTML = '⚡ Initializing camera sensor...';
 
                         try {
                             if (!loginModelsLoaded) {
-                                statusMsg.textContent = '⚡ Loading System Face Sensors...';
+                                statusMsg.innerHTML = '⚡ Priming optical neural models...';
                                 await loadLoginModels();
                             }
 
-                            loginStream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' } });
+                            loginStream = await navigator.mediaDevices.getUserMedia({ 
+                                video: { 
+                                    width: { ideal: 480 }, 
+                                    height: { ideal: 480 }, 
+                                    facingMode: 'user' 
+                                },
+                                audio: false
+                            });
                             video.srcObject = loginStream;
-                            statusMsg.textContent = '🔍 Scanning Face Biometrics... Position face in frame.';
+                            statusMsg.innerHTML = '🔍 Align your face inside the circle...';
 
                             let isProcessing = false;
                             loginScanInterval = setInterval(async () => {
                                 if (!video.paused && !video.ended && !isProcessing) {
                                     isProcessing = true;
                                     try {
-                                        const options = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.2 });
-                                        const detection = await faceapi.detectSingleFace(video, options).withFaceLandmarks().withFaceDescriptor();
+                                        // High-speed tiny detector running at 224x224
+                                        const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.45 });
+                                        const detection = await faceapi.detectSingleFace(video, options).withFaceLandmarks(true).withFaceDescriptor();
+                                        
                                         if (detection) {
-                                            statusMsg.textContent = '⚡ Face Detected! Verifying Identity...';
+                                            statusMsg.innerHTML = '<span style="color:#ff9500;">⚡ Face detected! Verifying biometric identity...</span>';
                                             clearInterval(loginScanInterval);
                                             
                                             const descriptorArray = Array.from(detection.descriptor);
+                                            const roleVal = document.getElementById('login_role').value || 'member';
                                             
                                             fetch('face_login_verify.php', {
                                                 method: 'POST',
                                                 headers: { 'Content-Type': 'application/json' },
-                                                body: JSON.stringify({ descriptor: descriptorArray })
+                                                body: JSON.stringify({ 
+                                                    descriptor: descriptorArray,
+                                                    requested_role: roleVal
+                                                })
                                             })
                                             .then(res => res.json())
                                             .then(data => {
                                                 if (data.status === 'success') {
-                                                    statusMsg.textContent = '✅ Access Granted! Entering System...';
+                                                    if (viewfinder) viewfinder.classList.add('success');
+                                                    statusMsg.innerHTML = '<span style="color:#10b981; font-weight:800;">✅ Verified: Welcome, ' + (data.member_name || 'Member') + '!</span>';
                                                     setTimeout(() => {
                                                         cancelFaceLogin();
                                                         window.location.href = data.redirect || './dashboard/member/';
-                                                    }, 300);
+                                                    }, 500);
                                                 } else {
-                                                    statusMsg.textContent = '❌ ' + (data.message || 'Face Not Verified');
+                                                    if (viewfinder) viewfinder.classList.add('error');
+                                                    statusMsg.innerHTML = '<span style="color:#ef4444; font-weight:700;">❌ ' + (data.message || 'Face Not Recognized') + '</span>';
                                                     setTimeout(() => {
-                                                        cancelFaceLogin();
-                                                    }, 2000);
+                                                        if (viewfinder) viewfinder.classList.remove('error');
+                                                        // Resume scanning if modal still active
+                                                        if (scanContainer.style.display !== 'none') {
+                                                            loginWithFaceID();
+                                                        }
+                                                    }, 2200);
                                                 }
                                             })
                                             .catch(err => {
-                                                statusMsg.textContent = 'System Verification Error.';
-                                                setTimeout(cancelFaceLogin, 2000);
+                                                if (viewfinder) viewfinder.classList.add('error');
+                                                statusMsg.innerHTML = '<span style="color:#ef4444;">Verification network error.</span>';
+                                                setTimeout(cancelFaceLogin, 2500);
                                             });
                                         }
                                     } catch (e) {
@@ -545,16 +730,19 @@ if (substr($logo_path, 0, 6) === '../../') {
                                         isProcessing = false;
                                     }
                                 }
-                            }, 150);
+                            }, 120);
 
                         } catch (err) {
-                            alert('Camera Access Error: ' + err.message);
+                            alert('Camera Notice: ' + err.message + '\nPlease grant camera permissions to use Face ID login.');
                             cancelFaceLogin();
                         }
                     }
 
                     function cancelFaceLogin() {
-                        if (loginScanInterval) clearInterval(loginScanInterval);
+                        if (loginScanInterval) {
+                            clearInterval(loginScanInterval);
+                            loginScanInterval = null;
+                        }
                         if (loginStream) {
                             loginStream.getTracks().forEach(track => track.stop());
                             loginStream = null;
