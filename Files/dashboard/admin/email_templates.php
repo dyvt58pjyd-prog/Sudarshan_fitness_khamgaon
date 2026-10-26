@@ -395,7 +395,7 @@ $stickers = get_animated_stickers_catalog();
     <!-- Template Switcher Tabs -->
     <div class="tabs-nav">
         <a href="?tpl=member_qr_pass" class="tab-btn <?php echo $selected_key === 'member_qr_pass' ? 'active' : ''; ?>">
-            <span>📷</span> Digital QR Entrance Pass &amp; Welcome
+            <span>🎫</span> Digital Entrance Pass &amp; Welcome
         </a>
         <a href="?tpl=expiry_reminder" class="tab-btn <?php echo $selected_key === 'expiry_reminder' ? 'active' : ''; ?>">
             <span>⚠️</span> Membership Expiry Alert
@@ -496,6 +496,7 @@ $stickers = get_animated_stickers_catalog();
                         <span class="tag-chip" onclick="insertTag('inp_intro_text', '{days_left}')">{days_left}</span>
                         <span class="tag-chip" onclick="insertTag('inp_intro_text', '{amount}')">{amount}</span>
                         <span class="tag-chip" onclick="insertTag('inp_intro_text', '{receipt_no}')">{receipt_no}</span>
+                        <span class="tag-chip" onclick="insertTag('inp_intro_text', '{payment_mode}')">{payment_mode}</span>
                     </div>
                 </div>
 
@@ -506,6 +507,8 @@ $stickers = get_animated_stickers_catalog();
                     <div class="tag-chips">
                         <span class="tag-chip" onclick="insertTag('inp_body_content', '{expire_date}')">{expire_date}</span>
                         <span class="tag-chip" onclick="insertTag('inp_body_content', '{gym_name}')">{gym_name}</span>
+                        <span class="tag-chip" onclick="insertTag('inp_body_content', '{whatsapp_button}')">💬 {whatsapp_button}</span>
+                        <span class="tag-chip" onclick="insertTag('inp_body_content', '{whatsapp_group_link}')">🔗 {whatsapp_group_link}</span>
                     </div>
                 </div>
 
@@ -567,7 +570,15 @@ $stickers = get_animated_stickers_catalog();
                 <span style="font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);">
                     👁️ Real-Time Email Preview
                 </span>
-                <div style="display: flex; gap: 8px;">
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <div style="display: inline-flex; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 2px;">
+                        <button type="button" class="tab-btn active" id="btnGenderMale" style="padding: 4px 8px; font-size: 11px; border: none; border-radius: 6px;" onclick="setGenderPreview('male')">
+                            👨 Male Member
+                        </button>
+                        <button type="button" class="tab-btn" id="btnGenderFemale" style="padding: 4px 8px; font-size: 11px; border: none; border-radius: 6px;" onclick="setGenderPreview('female')">
+                            👩 Female Member
+                        </button>
+                    </div>
                     <button type="button" class="tab-btn" id="btnModeDesktop" style="padding: 6px 12px; font-size: 12px;" onclick="setPreviewMode('desktop')">
                         <i class="fa-solid fa-desktop"></i> Desktop
                     </button>
@@ -591,7 +602,7 @@ $stickers = get_animated_stickers_catalog();
                 <!-- Sender / Metadata Simulation -->
                 <div style="background: #131d33; padding: 12px 18px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 11.5px; color: #94a3b8; display: flex; justify-content: space-between;">
                     <div>From: <strong style="color: #fff;"><?php echo htmlspecialchars($gym['gym_name']); ?></strong> &lt;notifications@sudarshanfitness.de&gt;</div>
-                    <div>To: <span style="color: #38bdf8;">Rahul Sharma &lt;member@domain.com&gt;</span></div>
+                    <div>To: <span style="color: #38bdf8;" id="prevRecipientHeader">Rahul Sharma &lt;member@domain.com&gt;</span></div>
                 </div>
 
                 <!-- Inner HTML Email Container -->
@@ -610,6 +621,27 @@ $stickers = get_animated_stickers_catalog();
         const gymName = "<?php echo addslashes($gym['gym_name']); ?>";
         const gymAddress = "<?php echo addslashes($gym['gym_address'] ?? 'Station Road, Khamgaon'); ?>";
         const gymPhone = "<?php echo addslashes($gym['gym_contact'] ?? '9325205075'); ?>";
+        const maleWaLink = "<?php echo addslashes(!empty($gym['whatsapp_group_male']) ? $gym['whatsapp_group_male'] : 'https://chat.whatsapp.com/LMkWJql6kT91P5X59caDI0?s=sw&p=i&ilr=0'); ?>";
+        const femaleWaLink = "<?php echo addslashes(!empty($gym['whatsapp_group_female']) ? $gym['whatsapp_group_female'] : 'https://chat.whatsapp.com/ISk4F5HqcJhBK477gJ55Ee?s=sw&p=i&ilr=0'); ?>";
+
+        let previewGender = 'male';
+
+        function setGenderPreview(gender) {
+            previewGender = gender;
+            const btnM = document.getElementById('btnGenderMale');
+            const btnF = document.getElementById('btnGenderFemale');
+            const recHeader = document.getElementById('prevRecipientHeader');
+            if (gender === 'female') {
+                btnF.classList.add('active');
+                btnM.classList.remove('active');
+                if (recHeader) recHeader.innerHTML = 'Priya Sharma &lt;priya@domain.com&gt;';
+            } else {
+                btnM.classList.add('active');
+                btnF.classList.remove('active');
+                if (recHeader) recHeader.innerHTML = 'Rahul Sharma &lt;rahul@domain.com&gt;';
+            }
+            updateLivePreview();
+        }
 
         function insertTag(fieldId, tag) {
             const el = document.getElementById(fieldId);
@@ -654,15 +686,22 @@ $stickers = get_animated_stickers_catalog();
 
         function replacePlaceholders(text) {
             if (!text) return '';
+            const isFemale = (previewGender === 'female');
+            const memberName = isFemale ? "Priya Sharma" : "Rahul Sharma";
+            const memberId = isFemale ? "MEM-F204" : "MEM-M108";
+            const waLink = isFemale ? femaleWaLink : maleWaLink;
+
             return text
                 .replace(/{gym_name}/g, gymName)
-                .replace(/{member_name}/g, "Rahul Sharma")
-                .replace(/{userid}/g, "MEM-108")
+                .replace(/{member_name}/g, memberName)
+                .replace(/{userid}/g, memberId)
                 .replace(/{plan_name}/g, "12 Month Elite Muscle Building")
                 .replace(/{expire_date}/g, "15-Nov-2026")
                 .replace(/{days_left}/g, "5 Days")
                 .replace(/{amount}/g, "12,500")
-                .replace(/{receipt_no}/g, "REC-2026-8941");
+                .replace(/{receipt_no}/g, "REC-2026-8941")
+                .replace(/{payment_mode}/g, "UPI / Google Pay")
+                .replace(/{whatsapp_group_link}/g, waLink);
         }
 
         function updateLivePreview() {
@@ -685,20 +724,48 @@ $stickers = get_animated_stickers_catalog();
             const sticker = stickerCatalog[stickerKey] || stickerCatalog['fitness_fire'];
             const stickerHtml = sticker ? sticker.icon_html : '🔥';
 
-            let qrBoxHtml = '';
-            if (currentTemplateKey === 'member_qr_pass') {
-                qrBoxHtml = `
-                <div style="background: #ffffff; padding: 20px; border-radius: 18px; display: inline-block; box-shadow: 0 12px 30px rgba(0,0,0,0.5); margin: 18px 0;">
-                    <img src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=MEM_108" alt="QR" style="width: 200px; height: 200px; display: block; margin: 0 auto;">
-                    <div style="color: #0f172a; font-weight: 800; font-size: 12px; margin-top: 8px; text-transform: uppercase;">${gymName}</div>
-                </div>`;
-            }
+            const isFemale = (previewGender === 'female');
+            const memberName = isFemale ? "Priya Sharma" : "Rahul Sharma";
+            const memberId = isFemale ? "MEM-F204" : "MEM-M108";
+            const waTitle = isFemale ? "Women's Fitness Community" : "Men's Fitness Community";
+            const waLabel = isFemale ? "🌸 Join Women's WhatsApp Group" : "💪 Join Men's WhatsApp Group";
+            const waDesc = isFemale 
+                ? "Connect with female trainers, schedule nutrition checkups, and get daily motivation in our exclusive women's group."
+                : "Connect with coaches, workout routines, heavy-lifting tips, and gym announcements in our exclusive men's group.";
+            const waLink = isFemale ? femaleWaLink : maleWaLink;
+
+            const waCardHtml = `
+            <div style="background: linear-gradient(135deg, rgba(37, 211, 102, 0.12) 0%, rgba(37, 211, 102, 0.04) 100%); border: 1.5px solid #25d366; border-radius: 14px; padding: 18px; margin: 20px 0; text-align: center; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.15);">
+                <div style="font-size: 24px; margin-bottom: 5px;">💬</div>
+                <div style="color: #25d366; font-size: 14px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px;">${waTitle}</div>
+                <p style="color: #cbd5e1; font-size: 12px; line-height: 1.6; margin: 0 0 14px 0;">${waDesc}</p>
+                <a href="${waLink}" target="_blank" style="display: inline-block; background: #25d366; color: #ffffff; text-decoration: none; padding: 10px 22px; border-radius: 10px; font-size: 13px; font-weight: 800; letter-spacing: 0.5px; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35); text-transform: uppercase;">
+                    ${waLabel} &rarr;
+                </a>
+            </div>`;
 
             let promoHtml = '';
             if (promoBanner.trim() !== '') {
                 promoHtml = `
                 <div style="background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border: 1.5px dashed ${accentColor}; border-radius: 14px; padding: 14px 18px; margin: 18px 0; font-size: 13px; color: #f8fafc; line-height: 1.6; text-align: left;">
                     ${replacePlaceholders(promoBanner)}
+                </div>`;
+            }
+
+            let receiptRowsHtml = '';
+            if (currentTemplateKey === 'payment_receipt') {
+                receiptRowsHtml = `
+                <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 12.5px;">
+                    <span style="color: #94a3b8; font-weight: 600;">Receipt Number</span>
+                    <span style="color: #10b981; font-weight: 800;">REC-2026-8941</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 12.5px;">
+                    <span style="color: #94a3b8; font-weight: 600;">Amount Received</span>
+                    <span style="color: #ffffff; font-weight: 800;">₹12,500 (Paid in Full)</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 12.5px;">
+                    <span style="color: #94a3b8; font-weight: 600;">Payment Mode</span>
+                    <span style="color: #38bdf8; font-weight: 700;">UPI / Google Pay</span>
                 </div>`;
             }
 
@@ -722,19 +789,18 @@ $stickers = get_animated_stickers_catalog();
                         ${replacePlaceholders(introText)}
                     </p>
 
-                    ${qrBoxHtml}
-
                     <div style="background: rgba(0,0,0,0.35); border-radius: 12px; padding: 15px; margin: 16px 0; border: 1px solid rgba(255,255,255,0.08); text-align: left;">
                         <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 12.5px;">
                             <span style="color: #94a3b8; font-weight: 600;">Member Name</span>
-                            <span style="color: #ffffff; font-weight: 700;">Rahul Sharma</span>
+                            <span style="color: #ffffff; font-weight: 700;">${memberName}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 12.5px;">
                             <span style="color: #94a3b8; font-weight: 600;">Membership ID</span>
-                            <span style="color: #38bdf8; font-weight: 800;">MEM-108</span>
+                            <span style="color: #38bdf8; font-weight: 800;">${memberId}</span>
                         </div>
+                        ${receiptRowsHtml}
                         <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 12.5px;">
-                            <span style="color: #94a3b8; font-weight: 600;">Plan / Tier</span>
+                            <span style="color: #94a3b8; font-weight: 600;">Subscription Plan</span>
                             <span style="color: #ffffff; font-weight: 700;">12 Month Elite Muscle Building</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 12.5px;">
@@ -746,6 +812,8 @@ $stickers = get_animated_stickers_catalog();
                     <p style="font-size:13px; color:#cbd5e1; line-height:1.6; margin:0 0 16px 0; text-align:left;">
                         ${replacePlaceholders(bodyContent)}
                     </p>
+
+                    ${waCardHtml}
 
                     ${promoHtml}
 

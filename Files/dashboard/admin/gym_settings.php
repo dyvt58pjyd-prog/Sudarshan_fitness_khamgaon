@@ -80,6 +80,9 @@ if (isset($_POST['submit'])) {
     $women_batch_start = mysqli_real_escape_string($con, $_POST['women_batch_start']);
     $women_batch_end = mysqli_real_escape_string($con, $_POST['women_batch_end']);
 
+    $whatsapp_group_male = mysqli_real_escape_string($con, trim($_POST['whatsapp_group_male'] ?? ''));
+    $whatsapp_group_female = mysqli_real_escape_string($con, trim($_POST['whatsapp_group_female'] ?? ''));
+
     $update_query = "UPDATE gym_details SET 
         gym_name = '$gym_name', 
         gym_address = '$gym_address', 
@@ -94,7 +97,9 @@ if (isset($_POST['submit'])) {
         bank_holder = '$bank_holder',
         women_batch_enabled = '$women_batch_enabled',
         women_batch_start = '$women_batch_start',
-        women_batch_end = '$women_batch_end'
+        women_batch_end = '$women_batch_end',
+        whatsapp_group_male = '$whatsapp_group_male',
+        whatsapp_group_female = '$whatsapp_group_female'
         WHERE id = 1";
 
     if (mysqli_query($con, $update_query)) {
@@ -284,6 +289,27 @@ if (isset($_POST['batch_action'])) {
                             <div class="col-sm-6">
                                 <label>Account Holder Name (Optional)</label>
                                 <input type="text" name="bank_holder" class="form-control-premium" value="<?php echo isset($gym['bank_holder']) ? htmlspecialchars($gym['bank_holder']) : ''; ?>" placeholder="e.g. Sudarshan Fitness">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Official Members WhatsApp Community Groups -->
+                    <div style="background: rgba(37, 211, 102, 0.08); padding: 20px; border-radius: 14px; border: 1.5px solid #25d366; margin-top: 15px; margin-bottom: 25px;">
+                        <h4 style="margin-top: 0; color: #25d366; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">
+                            💬 Official Members WhatsApp Community Groups
+                        </h4>
+                        <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4; margin-bottom: 15px;">
+                            Members will automatically receive the appropriate WhatsApp invite link in their welcome email and receipts based on their gender.
+                        </p>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label style="font-weight: 700; color: #38bdf8;">💪 Men's WhatsApp Community Invite Link</label>
+                                <input type="url" name="whatsapp_group_male" class="form-control-premium" value="<?php echo htmlspecialchars($gym['whatsapp_group_male'] ?? 'https://chat.whatsapp.com/LMkWJql6kT91P5X59caDI0?s=sw&p=i&ilr=0'); ?>" placeholder="https://chat.whatsapp.com/..." style="border-color: rgba(37,211,102,0.4);">
+                            </div>
+                            <div class="col-sm-6">
+                                <label style="font-weight: 700; color: #ec4899;">🌸 Women's WhatsApp Community Invite Link</label>
+                                <input type="url" name="whatsapp_group_female" class="form-control-premium" value="<?php echo htmlspecialchars($gym['whatsapp_group_female'] ?? 'https://chat.whatsapp.com/ISk4F5HqcJhBK477gJ55Ee?s=sw&p=i&ilr=0'); ?>" placeholder="https://chat.whatsapp.com/..." style="border-color: rgba(37,211,102,0.4);">
                             </div>
                         </div>
                     </div>

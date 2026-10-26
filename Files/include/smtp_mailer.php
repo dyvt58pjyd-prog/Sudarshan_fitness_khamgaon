@@ -287,6 +287,33 @@ if (!function_exists('get_animated_stickers_catalog')) {
     }
 }
 
+if (!function_exists('get_member_whatsapp_details')) {
+    function get_member_whatsapp_details($con, $gender = '') {
+        $gym = function_exists('get_gym_details') ? get_gym_details($con) : [];
+        $male_link = !empty($gym['whatsapp_group_male']) ? $gym['whatsapp_group_male'] : "https://chat.whatsapp.com/LMkWJql6kT91P5X59caDI0?s=sw&p=i&ilr=0";
+        $female_link = !empty($gym['whatsapp_group_female']) ? $gym['whatsapp_group_female'] : "https://chat.whatsapp.com/ISk4F5HqcJhBK477gJ55Ee?s=sw&p=i&ilr=0";
+
+        $g = strtolower(trim((string)$gender));
+        if ($g === 'female' || $g === 'f' || $g === 'women' || $g === 'woman') {
+            return [
+                'gender' => 'Female',
+                'link' => $female_link,
+                'title' => "Women's Fitness Community",
+                'label' => "🌸 Join Women's WhatsApp Group",
+                'desc' => "Connect with female trainers, schedule nutrition checkups, and get daily motivation in our exclusive women's group."
+            ];
+        } else {
+            return [
+                'gender' => 'Male',
+                'link' => $male_link,
+                'title' => "Men's Fitness Community",
+                'label' => "💪 Join Men's WhatsApp Group",
+                'desc' => "Connect with coaches, workout routines, heavy-lifting tips, and gym announcements in our exclusive men's group."
+            ];
+        }
+    }
+}
+
 if (!function_exists('get_email_template')) {
     function get_email_template($con, $template_key) {
         $key_esc = mysqli_real_escape_string($con, $template_key);
@@ -295,23 +322,75 @@ if (!function_exists('get_email_template')) {
             return mysqli_fetch_assoc($q);
         }
         
-        // Fallback defaults
-        return [
-            'template_key' => $template_key,
-            'template_name' => ucwords(str_replace('_', ' ', $template_key)),
-            'subject' => "Notification from {gym_name}",
-            'badge_title' => "OFFICIAL GYM NOTIFICATION",
-            'badge_icon' => "🏋️",
-            'accent_color' => "#ff6b00",
-            'greeting' => "Hello, {member_name}! 👋",
-            'intro_text' => "Important update regarding your membership account at {gym_name}.",
-            'body_content' => "Please review the updated information and contact gym reception if you have any questions.",
-            'promo_banner' => "⭐ Check out our latest fitness routines and track your streak in the member app!",
-            'cta_text' => "OPEN MEMBER PORTAL",
-            'cta_url' => "https://sudarshanfitness.de",
-            'footer_text' => "Engineered by Sudarshan Fitness System. Do not share personal access credentials.",
-            'animated_sticker' => "fitness_fire"
+        // Comprehensive fallback defaults per template_key
+        $all_defaults = [
+            'member_qr_pass' => [
+                'template_key' => 'member_qr_pass',
+                'template_name' => 'Digital Entrance Pass & Welcome',
+                'subject' => '🎫 Your Official Gym Entrance Pass - {gym_name} (ID: {userid})',
+                'badge_title' => 'DIGITAL ENTRANCE PASS',
+                'badge_icon' => '🎫',
+                'accent_color' => '#ff6b00',
+                'greeting' => 'Hello, {member_name}! 👋',
+                'intro_text' => 'Welcome to the Sudarshan Fitness family! Below is your official Digital Entrance Pass for seamless gym access.',
+                'body_content' => 'Your membership credentials are fully active. Scan in using your Membership ID at the front terminal and join your community group below!',
+                'promo_banner' => '⭐ <strong>Pro-Tip:</strong> Install our native mobile app to track your daily workout plans, streaks, and attendance!',
+                'cta_text' => '📲 INSTALL MEMBER APP (DIRECT 1-CLICK APK)',
+                'cta_url' => 'https://sudarshanfitness.de/download_app.php',
+                'footer_text' => 'Welcome aboard! Need assistance? Contact gym reception or reply to this email.',
+                'animated_sticker' => 'fitness_fire'
+            ],
+            'expiry_reminder' => [
+                'template_key' => 'expiry_reminder',
+                'template_name' => 'Membership Expiry Alert & Renewal',
+                'subject' => '⚠️ Urgent: Your Gym Membership is Expiring Soon - {gym_name}',
+                'badge_title' => 'MEMBERSHIP EXPIRING SOON',
+                'badge_icon' => '⚠️',
+                'accent_color' => '#ef4444',
+                'greeting' => 'Dear {member_name},',
+                'intro_text' => 'This is an automated notification from {gym_name} to inform you that your gym membership subscription will expire in {days_left}.',
+                'body_content' => 'To prevent any service interruption or lockouts at the front entrance gate scanner, please renew your membership package on or before your expiration date ({expire_date}).',
+                'promo_banner' => '🔥 <strong>Early Renewal Special:</strong> Renew before your expiry date to lock in your current package rates and keep your workout streak alive!',
+                'cta_text' => '💳 RENEW MEMBERSHIP ONLINE NOW',
+                'cta_url' => 'https://sudarshanfitness.de/dashboard/member/payment.php',
+                'footer_text' => 'If you have already renewed with the reception staff, please disregard this automated notification.',
+                'animated_sticker' => 'timer_alert'
+            ],
+            'payment_receipt' => [
+                'template_key' => 'payment_receipt',
+                'template_name' => 'Official Payment Receipt & Billing Confirmation',
+                'subject' => '🧾 Payment Receipt Confirmation - {gym_name} (Receipt #{receipt_no})',
+                'badge_title' => 'OFFICIAL PAYMENT RECEIPT',
+                'badge_icon' => '🧾',
+                'accent_color' => '#10b981',
+                'greeting' => 'Hello, {member_name}! Thank you for your payment.',
+                'intro_text' => 'Your membership transaction of ₹{amount} has been successfully processed and verified in our financial records.',
+                'body_content' => 'Your subscription plan ({plan_name}) is fully active through {expire_date}. Your entrance scanner permissions and locker clearance have been updated.',
+                'promo_banner' => '✅ <strong>Tax Audited & Verified:</strong> This digital receipt is an official tax-compliant acknowledgment of gym subscription fee payment.',
+                'cta_text' => '📑 VIEW INVOICE & RECEIPT IN PORTAL',
+                'cta_url' => 'https://sudarshanfitness.de/dashboard/member/',
+                'footer_text' => 'For billing questions or corporate reimbursement invoice copies, contact gym administration.',
+                'animated_sticker' => 'trophy_win'
+            ],
+            'birthday_wish' => [
+                'template_key' => 'birthday_wish',
+                'template_name' => 'Birthday Celebration & VIP Gift',
+                'subject' => '🎂 Happy Birthday, {member_name}! A Special Celebration Gift from {gym_name} 🎉',
+                'badge_title' => 'HAPPY BIRTHDAY VIP MEMBER',
+                'badge_icon' => '🎉',
+                'accent_color' => '#8b5cf6',
+                'greeting' => 'Happy Birthday, {member_name}! 🎂🎈',
+                'intro_text' => 'The entire fitness family and coaching staff at {gym_name} wish you a powerhouse birthday filled with health, strength, and joy!',
+                'body_content' => 'As a token of our appreciation for your dedication, visit the front desk this week to claim your complimentary birthday workout shake and specialized fitness milestone review!',
+                'promo_banner' => '🎁 <strong>Birthday Bonus:</strong> Bring a workout partner along with you for a free guest day pass all week!',
+                'cta_text' => '🎁 CLAIM YOUR BIRTHDAY WORKOUT PASS',
+                'cta_url' => 'https://sudarshanfitness.de/member_app/',
+                'footer_text' => 'Keep crushing your goals! — Team Sudarshan Fitness',
+                'animated_sticker' => 'party_sparkles'
+            ]
         ];
+
+        return $all_defaults[$template_key] ?? $all_defaults['member_qr_pass'];
     }
 }
 
@@ -322,28 +401,49 @@ if (!function_exists('render_email_template_html')) {
             $gym = function_exists('get_gym_details') ? get_gym_details($con) : [];
         }
 
+        global $con;
         $gym_name    = !empty($gym['gym_name']) ? $gym['gym_name'] : 'Sudarshan Fitness Khamgaon';
         $gym_address = !empty($gym['gym_address']) ? $gym['gym_address'] : 'Station Road, Khamgaon';
         $gym_phone   = !empty($gym['gym_contact']) ? $gym['gym_contact'] : '9325205075';
         $gym_email   = !empty($gym['gym_email']) ? $gym['gym_email'] : 'sudarshan.fitness.khm@gmail.com';
         $logo_url    = !empty($gym['gym_logo']) ? $gym['gym_logo'] : 'https://sudarshanfitness.de/logo192.png';
 
+        // Member gender determination for proper WhatsApp group assignment
+        $member_gender = $placeholders['{gender}'] ?? $placeholders['gender'] ?? 'Male';
+        $wa_data = get_member_whatsapp_details($con, $member_gender);
+        $whatsapp_link = $wa_data['link'];
+        $whatsapp_label = $wa_data['label'];
+        $whatsapp_desc = $wa_data['desc'];
+
+        $whatsapp_card_html = "
+        <div style='background: linear-gradient(135deg, rgba(37, 211, 102, 0.12) 0%, rgba(37, 211, 102, 0.04) 100%); border: 1.5px solid #25d366; border-radius: 16px; padding: 20px; margin: 24px 0; text-align: center; box-shadow: 0 8px 24px rgba(37, 211, 102, 0.15);'>
+            <div style='font-size: 28px; margin-bottom: 6px;'>💬</div>
+            <div style='color: #25d366; font-size: 15px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px;'>{$wa_data['title']}</div>
+            <p style='color: #cbd5e1; font-size: 12.5px; line-height: 1.6; margin: 0 0 14px 0;'>{$whatsapp_desc}</p>
+            <a href='{$whatsapp_link}' target='_blank' style='display: inline-block; background: #25d366; color: #ffffff; text-decoration: none; padding: 12px 26px; border-radius: 12px; font-size: 13.5px; font-weight: 800; letter-spacing: 0.5px; box-shadow: 0 6px 18px rgba(37, 211, 102, 0.35); text-transform: uppercase;'>
+                {$whatsapp_label} &rarr;
+            </a>
+        </div>";
+
         // Standard merge values
         $defaults = [
-            '{gym_name}'    => $gym_name,
-            '{gym_address}' => $gym_address,
-            '{gym_phone}'   => $gym_phone,
-            '{gym_email}'   => $gym_email,
-            '{logo_url}'    => $logo_url,
-            '{member_name}' => 'Valued Member',
-            '{userid}'      => 'MEM-001',
-            '{plan_name}'   => 'Annual Fitness Tier',
-            '{expire_date}' => date('d-M-Y', strtotime('+30 days')),
-            '{days_left}'   => '5 Days',
-            '{amount}'      => '8,000',
-            '{receipt_no}'  => 'REC-' . date('Ymd') . '-01',
-            '{qr_image_url}'=> 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=DEMO_PASS',
-            '{current_year}'=> date('Y')
+            '{gym_name}'            => $gym_name,
+            '{gym_address}'         => $gym_address,
+            '{gym_phone}'           => $gym_phone,
+            '{gym_email}'           => $gym_email,
+            '{logo_url}'            => $logo_url,
+            '{member_name}'         => 'Valued Member',
+            '{userid}'              => 'MEM-001',
+            '{gender}'              => $wa_data['gender'],
+            '{plan_name}'           => 'Annual Fitness Tier',
+            '{expire_date}'         => date('d-M-Y', strtotime('+30 days')),
+            '{days_left}'           => '5 Days',
+            '{amount}'              => '8,000',
+            '{receipt_no}'          => 'REC-' . date('Ymd') . '-01',
+            '{payment_mode}'        => 'UPI / Cash',
+            '{whatsapp_group_link}' => $whatsapp_link,
+            '{whatsapp_button}'     => $whatsapp_card_html,
+            '{current_year}'        => date('Y')
         ];
 
         $merged = array_merge($defaults, $placeholders);
@@ -369,15 +469,8 @@ if (!function_exists('render_email_template_html')) {
         $sticker_data = $stickers[$sticker_key] ?? $stickers['fitness_fire'];
         $sticker_icon_html = $sticker_data['icon_html'];
 
-        // Determine if QR card should show
+        // Note: QR code graphic removed as requested by gym administrator
         $qr_card_html = '';
-        if (isset($merged['{qr_image_url}']) && !empty($merged['{qr_image_url}']) && ($template['template_key'] ?? '') === 'member_qr_pass') {
-            $qr_card_html = "
-            <div style='background: #ffffff; padding: 22px; border-radius: 18px; display: inline-block; box-shadow: 0 12px 30px rgba(0,0,0,0.5); margin: 20px 0;'>
-                <img src='{$merged['{qr_image_url}']}' alt='Entrance QR Pass' style='width: 220px; height: 220px; display: block; margin: 0 auto;'>
-                <div style='color: #0f172a; font-weight: 800; font-size: 13px; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.5px;'>{$gym_name}</div>
-            </div>";
-        }
 
         // Details breakdown table
         $details_box_html = "
@@ -390,6 +483,16 @@ if (!function_exists('render_email_template_html')) {
                 <span style='color: #94a3b8; font-weight: 600;'>Membership ID</span>
                 <span style='color: #38bdf8; font-weight: 800;'>{$merged['{userid}']}</span>
             </div>
+            " . (!empty($merged['{receipt_no}']) && ($template['template_key'] ?? '') === 'payment_receipt' ? "
+            <div style='display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13px;'>
+                <span style='color: #94a3b8; font-weight: 600;'>Receipt Number</span>
+                <span style='color: #10b981; font-weight: 800;'>{$merged['{receipt_no}']}</span>
+            </div>
+            <div style='display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13px;'>
+                <span style='color: #94a3b8; font-weight: 600;'>Amount Received</span>
+                <span style='color: #ffffff; font-weight: 800;'>₹{$merged['{amount}']}</span>
+            </div>
+            " : "") . "
             <div style='display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13px;'>
                 <span style='color: #94a3b8; font-weight: 600;'>Active Subscription</span>
                 <span style='color: #ffffff; font-weight: 700;'>{$merged['{plan_name}']}</span>
@@ -399,6 +502,12 @@ if (!function_exists('render_email_template_html')) {
                 <span style='color: #10b981; font-weight: 800;'>{$merged['{expire_date}']}</span>
             </div>
         </div>";
+
+        // WhatsApp community card integration (shown on digital entrance & welcome or when tag used)
+        $whatsapp_integrated_html = '';
+        if (strpos($body_content, '{whatsapp_button}') === false && (($template['template_key'] ?? '') === 'member_qr_pass' || ($template['template_key'] ?? '') === 'payment_receipt')) {
+            $whatsapp_integrated_html = $whatsapp_card_html;
+        }
 
         // Promo Banner HTML
         $promo_banner_html = "";
@@ -451,13 +560,13 @@ if (!function_exists('render_email_template_html')) {
                                         {$intro_text}
                                     </p>
 
-                                    {$qr_card_html}
-
                                     {$details_box_html}
 
                                     <p style='font-size:13.5px; color:#cbd5e1; line-height:1.7; margin:0 0 20px 0; text-align:left;'>
                                         {$body_content}
                                     </p>
+
+                                    {$whatsapp_integrated_html}
 
                                     {$promo_banner_html}
 
@@ -500,15 +609,20 @@ if (!function_exists('send_member_qr_pass_email')) {
         $template = get_email_template($con, 'member_qr_pass');
         $gym = get_gym_details($con);
 
-        $qr_image_url = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=" . urlencode($userid);
+        $gender = 'Male';
+        $u_res = mysqli_query($con, "SELECT gender FROM users WHERE userid = '" . mysqli_real_escape_string($con, $userid) . "' LIMIT 1");
+        if ($u_res && $u_row = mysqli_fetch_assoc($u_res)) {
+            $gender = $u_row['gender'] ?? 'Male';
+        }
+
         $expire_fmt = ($expire_date !== 'N/A' && !empty($expire_date)) ? date('d-M-Y', strtotime($expire_date)) : 'Active';
 
         $rendered = render_email_template_html($template, [
             '{member_name}' => $to_name,
             '{userid}'      => $userid,
+            '{gender}'      => $gender,
             '{plan_name}'   => $plan_name,
-            '{expire_date}' => $expire_fmt,
-            '{qr_image_url}'=> $qr_image_url
+            '{expire_date}' => $expire_fmt
         ], $gym);
 
         $sent = send_smtp_email($to_email, $to_name, $rendered['subject'], $rendered['html']);

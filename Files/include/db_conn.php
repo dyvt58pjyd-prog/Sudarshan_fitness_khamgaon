@@ -1192,78 +1192,90 @@ if (!function_exists('check_and_upgrade_db')) {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
         mysqli_query($con, $email_tpl_sql);
 
-        // Seed default templates if empty
-        $chk_tpl = mysqli_query($con, "SELECT COUNT(*) as cnt FROM email_templates");
-        if ($chk_tpl && ($r_tpl = mysqli_fetch_assoc($chk_tpl)) && intval($r_tpl['cnt']) == 0) {
-            $default_templates = [
-                [
-                    'key' => 'member_qr_pass',
-                    'name' => 'Digital Entrance QR Pass & Welcome',
-                    'subject' => '📷 Your Official Gym Entrance QR Pass - {gym_name} (ID: {userid})',
-                    'badge_title' => 'DIGITAL ENTRANCE QR PASS',
-                    'badge_icon' => '📷',
-                    'accent_color' => '#ff6b00',
-                    'greeting' => 'Hello, {member_name}! 👋',
-                    'intro_text' => 'Welcome to the Sudarshan Fitness family! Below is your official Digital Entrance QR Pass for seamless gate access.',
-                    'body_content' => 'Scan your QR pass at the gym entrance terminal for instant, sub-second check-in and check-out. You can save this email, download the QR image, or view your live pass anytime in the member app.',
-                    'promo_banner' => '⭐ <strong>Pro-Tip:</strong> Install our native mobile app to access your smart wallet pass, 3D workout plans, and track your attendance streak!',
-                    'cta_text' => '📲 INSTALL MEMBER APP (DIRECT 1-CLICK APK)',
-                    'cta_url' => 'https://sudarshanfitness.de/download_app.php',
-                    'footer_text' => 'Please do not share your personal QR pass with non-members. Need assistance? Contact reception or reply to this email.',
-                    'animated_sticker' => 'fitness_fire'
-                ],
-                [
-                    'key' => 'expiry_reminder',
-                    'name' => 'Membership Expiry Alert & Renewal',
-                    'subject' => '⚠️ Urgent: Your Gym Membership is Expiring Soon - {gym_name}',
-                    'badge_title' => 'MEMBERSHIP EXPIRING SOON',
-                    'badge_icon' => '⚠️',
-                    'accent_color' => '#ef4444',
-                    'greeting' => 'Dear {member_name},',
-                    'intro_text' => 'This is an automated notification from {gym_name} to inform you that your gym membership subscription will expire in {days_left}.',
-                    'body_content' => 'To prevent any service interruption or lockouts at the front entrance gate scanner, please renew your membership package on or before your expiration date ({expire_date}).',
-                    'promo_banner' => '🔥 <strong>Early Renewal Special:</strong> Renew before your expiry date to lock in your current package rates and keep your workout streak alive!',
-                    'cta_text' => '💳 RENEW MEMBERSHIP ONLINE NOW',
-                    'cta_url' => 'https://sudarshanfitness.de/dashboard/member/payment.php',
-                    'footer_text' => 'If you have already renewed with the reception staff, please disregard this automated notification.',
-                    'animated_sticker' => 'timer_alert'
-                ],
-                [
-                    'key' => 'payment_receipt',
-                    'name' => 'Official Payment Receipt & Confirmation',
-                    'subject' => '🧾 Payment Receipt Confirmation - {gym_name} (Receipt #{receipt_no})',
-                    'badge_title' => 'OFFICIAL PAYMENT RECEIPT',
-                    'badge_icon' => '🧾',
-                    'accent_color' => '#10b981',
-                    'greeting' => 'Hello, {member_name}! Thank you for your payment.',
-                    'intro_text' => 'Your membership transaction of Rs. {amount} has been successfully processed and verified in our financial ledger.',
-                    'body_content' => 'Your new subscription plan ({plan_name}) is now fully active through {expire_date}. Your entrance gate scanner permissions have been renewed.',
-                    'promo_banner' => '✅ <strong>GST Audited & Verified:</strong> This digital receipt is an official tax-compliant acknowledgment of fee receipt.',
-                    'cta_text' => '📑 OPEN DIGITAL INVOICE & RECEIPT',
-                    'cta_url' => 'https://sudarshanfitness.de/dashboard/member/',
-                    'footer_text' => 'For billing questions or corporate reimbursement invoice copies, contact gym administration.',
-                    'animated_sticker' => 'trophy_win'
-                ],
-                [
-                    'key' => 'birthday_wish',
-                    'name' => 'Birthday Celebration & VIP Gift',
-                    'subject' => '🎂 Happy Birthday, {member_name}! A Special Celebration Gift from {gym_name} 🎉',
-                    'badge_title' => 'HAPPY BIRTHDAY VIP MEMBER',
-                    'badge_icon' => '🎉',
-                    'accent_color' => '#8b5cf6',
-                    'greeting' => 'Happy Birthday, {member_name}! 🎂🎈',
-                    'intro_text' => 'The entire fitness family and coaching staff at {gym_name} wish you a powerhouse birthday filled with health, strength, and joy!',
-                    'body_content' => 'As a token of our appreciation for your dedication, visit the front desk this week to claim your complimentary birthday workout shake and specialized fitness milestone review!',
-                    'promo_banner' => '🎁 <strong>Birthday Bonus:</strong> Bring a workout partner along with you for a free guest day pass all week!',
-                    'cta_text' => '🎁 CLAIM YOUR BIRTHDAY WORKOUT PASS',
-                    'cta_url' => 'https://sudarshanfitness.de/member_app/',
-                    'footer_text' => 'Keep crushing your goals! — Team Sudarshan Fitness',
-                    'animated_sticker' => 'party_sparkles'
-                ]
-            ];
+        // Self-healing: Ensure WhatsApp community group columns exist in gym_details
+        $chk_wam = mysqli_query($con, "SHOW COLUMNS FROM gym_details LIKE 'whatsapp_group_male'");
+        if (!$chk_wam || mysqli_num_rows($chk_wam) == 0) {
+            @mysqli_query($con, "ALTER TABLE gym_details ADD COLUMN whatsapp_group_male VARCHAR(255) DEFAULT 'https://chat.whatsapp.com/LMkWJql6kT91P5X59caDI0?s=sw&p=i&ilr=0'");
+        }
+        $chk_waf = mysqli_query($con, "SHOW COLUMNS FROM gym_details LIKE 'whatsapp_group_female'");
+        if (!$chk_waf || mysqli_num_rows($chk_waf) == 0) {
+            @mysqli_query($con, "ALTER TABLE gym_details ADD COLUMN whatsapp_group_female VARCHAR(255) DEFAULT 'https://chat.whatsapp.com/ISk4F5HqcJhBK477gJ55Ee?s=sw&p=i&ilr=0'");
+        }
 
-            foreach ($default_templates as $t) {
-                $k = mysqli_real_escape_string($con, $t['key']);
+        // Clean up any old QR wording from digital entrance pass
+        @mysqli_query($con, "UPDATE email_templates SET template_name = 'Digital Entrance Pass & Welcome', badge_title = 'DIGITAL ENTRANCE PASS', badge_icon = '🎫' WHERE template_key = 'member_qr_pass' AND badge_title LIKE '%QR%'");
+
+        $default_templates = [
+            [
+                'key' => 'member_qr_pass',
+                'name' => 'Digital Entrance Pass & Welcome',
+                'subject' => '🎫 Your Official Gym Entrance Pass - {gym_name} (ID: {userid})',
+                'badge_title' => 'DIGITAL ENTRANCE PASS',
+                'badge_icon' => '🎫',
+                'accent_color' => '#ff6b00',
+                'greeting' => 'Hello, {member_name}! 👋',
+                'intro_text' => 'Welcome to the Sudarshan Fitness family! Below is your official Digital Entrance Pass for seamless gym access.',
+                'body_content' => 'Your membership credentials are active. Check in using your Membership ID at the entrance terminal and connect with your fitness community via the WhatsApp group below!',
+                'promo_banner' => '⭐ <strong>Pro-Tip:</strong> Install our native mobile app to access your smart wallet pass, 3D workout plans, and track your attendance streak!',
+                'cta_text' => '📲 INSTALL MEMBER APP (DIRECT 1-CLICK APK)',
+                'cta_url' => 'https://sudarshanfitness.de/download_app.php',
+                'footer_text' => 'Welcome aboard! Need assistance? Contact reception or reply to this email.',
+                'animated_sticker' => 'fitness_fire'
+            ],
+            [
+                'key' => 'expiry_reminder',
+                'name' => 'Membership Expiry Alert & Renewal',
+                'subject' => '⚠️ Urgent: Your Gym Membership is Expiring Soon - {gym_name}',
+                'badge_title' => 'MEMBERSHIP EXPIRING SOON',
+                'badge_icon' => '⚠️',
+                'accent_color' => '#ef4444',
+                'greeting' => 'Dear {member_name},',
+                'intro_text' => 'This is an automated notification from {gym_name} to inform you that your gym membership subscription will expire in {days_left}.',
+                'body_content' => 'To prevent any service interruption or lockouts at the front entrance gate scanner, please renew your membership package on or before your expiration date ({expire_date}).',
+                'promo_banner' => '🔥 <strong>Early Renewal Special:</strong> Renew before your expiry date to lock in your current package rates and keep your workout streak alive!',
+                'cta_text' => '💳 RENEW MEMBERSHIP ONLINE NOW',
+                'cta_url' => 'https://sudarshanfitness.de/dashboard/member/payment.php',
+                'footer_text' => 'If you have already renewed with the reception staff, please disregard this automated notification.',
+                'animated_sticker' => 'timer_alert'
+            ],
+            [
+                'key' => 'payment_receipt',
+                'name' => 'Official Payment Receipt & Confirmation',
+                'subject' => '🧾 Payment Receipt Confirmation - {gym_name} (Receipt #{receipt_no})',
+                'badge_title' => 'OFFICIAL PAYMENT RECEIPT',
+                'badge_icon' => '🧾',
+                'accent_color' => '#10b981',
+                'greeting' => 'Hello, {member_name}! Thank you for your payment.',
+                'intro_text' => 'Your membership transaction of Rs. {amount} has been successfully processed and verified in our financial ledger.',
+                'body_content' => 'Your subscription plan ({plan_name}) is now fully active through {expire_date}. Your entrance scanner permissions and locker clearance have been updated.',
+                'promo_banner' => '✅ <strong>Tax Audited & Verified:</strong> This digital receipt is an official tax-compliant acknowledgment of gym subscription fee payment.',
+                'cta_text' => '📑 VIEW INVOICE & RECEIPT IN PORTAL',
+                'cta_url' => 'https://sudarshanfitness.de/dashboard/member/',
+                'footer_text' => 'For billing questions or corporate reimbursement invoice copies, contact gym administration.',
+                'animated_sticker' => 'trophy_win'
+            ],
+            [
+                'key' => 'birthday_wish',
+                'name' => 'Birthday Celebration & VIP Gift',
+                'subject' => '🎂 Happy Birthday, {member_name}! A Special Celebration Gift from {gym_name} 🎉',
+                'badge_title' => 'HAPPY BIRTHDAY VIP MEMBER',
+                'badge_icon' => '🎉',
+                'accent_color' => '#8b5cf6',
+                'greeting' => 'Happy Birthday, {member_name}! 🎂🎈',
+                'intro_text' => 'The entire fitness family and coaching staff at {gym_name} wish you a powerhouse birthday filled with health, strength, and joy!',
+                'body_content' => 'As a token of our appreciation for your dedication, visit the front desk this week to claim your complimentary birthday workout shake and specialized fitness milestone review!',
+                'promo_banner' => '🎁 <strong>Birthday Bonus:</strong> Bring a workout partner along with you for a free guest day pass all week!',
+                'cta_text' => '🎁 CLAIM YOUR BIRTHDAY WORKOUT PASS',
+                'cta_url' => 'https://sudarshanfitness.de/member_app/',
+                'footer_text' => 'Keep crushing your goals! — Team Sudarshan Fitness',
+                'animated_sticker' => 'party_sparkles'
+            ]
+        ];
+
+        foreach ($default_templates as $t) {
+            $k = mysqli_real_escape_string($con, $t['key']);
+            $chk_exists = mysqli_query($con, "SELECT id FROM email_templates WHERE template_key = '$k' LIMIT 1");
+            if (!$chk_exists || mysqli_num_rows($chk_exists) == 0) {
                 $n = mysqli_real_escape_string($con, $t['name']);
                 $s = mysqli_real_escape_string($con, $t['subject']);
                 $b = mysqli_real_escape_string($con, $t['badge_title']);
@@ -1342,10 +1354,13 @@ if (!function_exists('send_member_email')) {
         
         $whatsapp_link = "";
         $is_transgender = false;
+        $male_wa = !empty($gym['whatsapp_group_male']) ? $gym['whatsapp_group_male'] : "https://chat.whatsapp.com/LMkWJql6kT91P5X59caDI0?s=sw&p=i&ilr=0";
+        $female_wa = !empty($gym['whatsapp_group_female']) ? $gym['whatsapp_group_female'] : "https://chat.whatsapp.com/ISk4F5HqcJhBK477gJ55Ee?s=sw&p=i&ilr=0";
+
         if ($gender_str === 'male' || $gender_str === 'm') {
-            $whatsapp_link = "https://chat.whatsapp.com/LMkWJql6kT91P5X59caDI0?s=sw&p=i&ilr=0";
+            $whatsapp_link = $male_wa;
         } elseif ($gender_str === 'female' || $gender_str === 'f') {
-            $whatsapp_link = "https://chat.whatsapp.com/ISk4F5HqcJhBK477gJ55Ee?s=sw&p=i&ilr=0";
+            $whatsapp_link = $female_wa;
         } elseif ($gender_str === 'transgender' || $gender_str === 't') {
             $is_transgender = true;
         }
@@ -1534,8 +1549,8 @@ if (!function_exists('send_payment_email')) {
             $gender_str = strtolower(trim($gender_row['gender'] ?? ''));
         }
 
-        $male_group_link = "https://chat.whatsapp.com/LMkWJql6kT91P5X59caDI0?s=sw&p=i&ilr=0";
-        $female_group_link = "https://chat.whatsapp.com/ISk4F5HqcJhBK477gJ55Ee?s=sw&p=i&ilr=0";
+        $male_group_link = !empty($gym['whatsapp_group_male']) ? $gym['whatsapp_group_male'] : "https://chat.whatsapp.com/LMkWJql6kT91P5X59caDI0?s=sw&p=i&ilr=0";
+        $female_group_link = !empty($gym['whatsapp_group_female']) ? $gym['whatsapp_group_female'] : "https://chat.whatsapp.com/ISk4F5HqcJhBK477gJ55Ee?s=sw&p=i&ilr=0";
 
         if ($gender_str === 'female' || $gender_str === 'f') {
             $whatsapp_section = "
