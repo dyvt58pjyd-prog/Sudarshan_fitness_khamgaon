@@ -1006,6 +1006,11 @@ if (!function_exists('page_protect')) {
 if (!function_exists('get_gym_details')) {
     function get_gym_details($con)
     {
+        static $cached_gym = null;
+        if ($cached_gym !== null && empty($_GET['refresh_gym_details'])) {
+            return $cached_gym;
+        }
+
         $sql = "SELECT * FROM gym_details WHERE id = 1";
         $result = mysqli_query($con, $sql);
         if ($result && mysqli_num_rows($result) > 0) {
@@ -1019,9 +1024,10 @@ if (!function_exists('get_gym_details')) {
             if (!isset($row['bank_ifsc'])) $row['bank_ifsc'] = '';
             if (!isset($row['bank_name'])) $row['bank_name'] = '';
             if (!isset($row['bank_holder'])) $row['bank_holder'] = '';
-            return $row;
+            $cached_gym = $row;
+            return $cached_gym;
         }
-        return [
+        $cached_gym = [
             'gym_name' => 'SUDARSHAN FITNESS',
             'gym_address' => 'Station Road, Khamgaon',
             'gym_contact' => '9325205075',
@@ -1034,6 +1040,7 @@ if (!function_exists('get_gym_details')) {
             'bank_name' => '',
             'bank_holder' => ''
         ];
+        return $cached_gym;
     }
 }
 
@@ -1052,6 +1059,13 @@ if (!function_exists('get_member_rank')) {
 if (!function_exists('check_and_upgrade_db')) {
     function check_and_upgrade_db($con) {
         if (!$con || !($con instanceof mysqli)) return;
+
+        // Fast Schema Cache Gate: bypass 25+ heavy DDL queries on every page hit
+        $schema_flag = __DIR__ . '/.db_schema_v2.flag';
+        if (file_exists($schema_flag) && empty($_GET['force_db_upgrade'])) {
+            return;
+        }
+
         // Super Security System Tables
         @mysqli_query($con, "CREATE TABLE IF NOT EXISTS login_attempts (
             id INT(11) NOT NULL AUTO_INCREMENT,
@@ -1312,6 +1326,7 @@ if (!function_exists('check_and_upgrade_db')) {
                 mysqli_query($con, "INSERT INTO email_templates (template_key, template_name, subject, badge_title, badge_icon, accent_color, greeting, intro_text, body_content, promo_banner, cta_text, cta_url, footer_text, animated_sticker) VALUES ('$k', '$n', '$s', '$b', '$bi', '$ac', '$g', '$it', '$bc', '$pb', '$ct', '$cu', '$ft', '$as')");
             }
         }
+        @file_put_contents($schema_flag, date('Y-m-d H:i:s'));
     }
 }
 

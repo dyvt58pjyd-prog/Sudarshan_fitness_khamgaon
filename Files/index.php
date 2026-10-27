@@ -506,7 +506,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                         </div>
 
                     <!-- Face-api.js script -->
-                    <script defer src="js/face-api/face-api.min.js"></script>
+                    <script src="js/face-api/face-api.min.js"></script>
 
                     <!-- Face Scan UI Container (Apple Executive Biometric HUD) -->
                     <div id="faceScanContainer">
@@ -607,13 +607,11 @@ if (substr($logo_path, 0, 6) === '../../') {
                         loginModelsLoading = true;
                         const localUri = 'js/face-api/models_v2';
                         try {
-                            if (typeof faceapi === 'undefined') {
-                                await new Promise(r => setTimeout(r, 150));
-                            }
                             if (typeof faceapi !== 'undefined') {
                                 await Promise.all([
                                     faceapi.nets.tinyFaceDetector.loadFromUri(localUri),
                                     faceapi.nets.faceLandmark68TinyNet.loadFromUri(localUri),
+                                    faceapi.nets.faceLandmark68Net.loadFromUri(localUri),
                                     faceapi.nets.faceRecognitionNet.loadFromUri(localUri)
                                 ]);
                                 loginModelsLoaded = true;
@@ -652,7 +650,10 @@ if (substr($logo_path, 0, 6) === '../../') {
                         const statusMsg = document.getElementById('loginStatusMsg');
                         const viewfinder = document.getElementById('faceViewfinder');
 
-                        if (viewfinder) viewfinder.className = 'faceid-viewfinder-wrap';
+                        if (viewfinder) {
+                            viewfinder.className = 'faceid-viewfinder-wrap';
+                            viewfinder.style.borderColor = 'rgba(255, 107, 0, 0.4)';
+                        }
                         scanContainer.style.display = 'flex';
                         statusMsg.innerHTML = '⚡ Initializing camera sensor...';
 
@@ -662,67 +663,119 @@ if (substr($logo_path, 0, 6) === '../../') {
                                 await loadLoginModels();
                             }
 
+                            if (loginStream) {
+                                loginStream.getTracks().forEach(t => t.stop());
+                                loginStream = null;
+                            }
+
                             loginStream = await navigator.mediaDevices.getUserMedia({ 
                                 video: { 
-                                    width: { ideal: 480 }, 
+                                    width: { ideal: 640 }, 
                                     height: { ideal: 480 }, 
                                     facingMode: 'user' 
                                 },
                                 audio: false
                             });
                             video.srcObject = loginStream;
+                            
+                            // Explicitly play video to ensure playback state is active
+                            await video.play().catch(e => console.warn("Video play error:", e));
+
                             statusMsg.innerHTML = '🔍 Align your face inside the circle...';
 
+                            // Ensure video has loaded dimensions before detector attempts frame analysis
+                            if (video.readyState < 2) {
+                                await new Promise(resolve => {
+                                    video.onloadedmetadata = () => resolve();
+                                    setTimeout(resolve, 400);
+                                });
+                            }
+
                             let isProcessing = false;
+                            let consecutiveDetections = 0;
+                            let descriptorSamples = [];
+
+                            if (loginScanInterval) clearInterval(loginScanInterval);
+
                             loginScanInterval = setInterval(async () => {
-                                if (!video.paused && !video.ended && !isProcessing) {
+                                if (!video.paused && !video.ended && video.videoWidth > 0 && !isProcessing) {
                                     isProcessing = true;
                                     try {
-                                        // High-speed tiny detector running at 224x224
-                                        const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.45 });
-                                        const detection = await faceapi.detectSingleFace(video, options).withFaceLandmarks(true).withFaceDescriptor();
-                                        
-                                        if (detection) {
-                                            statusMsg.innerHTML = '<span style="color:#ff9500;">⚡ Face detected! Verifying biometric identity...</span>';
-                                            clearInterval(loginScanInterval);
-                                            
-                                            const descriptorArray = Array.from(detection.descriptor);
-                                            const roleVal = document.getElementById('login_role').value || 'member';
-                                            
-                                            fetch('face_login_verify.php', {
-                                                method: 'POST',
-                                                headers: { 'Content-Type': 'application/json' },
-                                                body: JSON.stringify({ 
-                                                    descriptor: descriptorArray,
-                                                    requested_role: roleVal
-                                                })
-                                            })
-                                            .then(res => res.json())
-                                            .then(data => {
-                                                if (data.status === 'success') {
-                                                    if (viewfinder) viewfinder.classList.add('success');
-                                                    statusMsg.innerHTML = '<span style="color:#10b981; font-weight:800;">✅ Verified: Welcome, ' + (data.member_name || 'Member') + '!</span>';
-                                                    setTimeout(() => {
-                                                        cancelFaceLogin();
-                                                        window.location.href = data.redirect || './dashboard/member/';
-                                                    }, 500);
-                                                } else {
-                                                    if (viewfinder) viewfinder.classList.add('error');
-                                                    statusMsg.innerHTML = '<span style="color:#ef4444; font-weight:700;">❌ ' + (data.message || 'Face Not Recognized') + '</span>';
-                                                    setTimeout(() => {
-                                                        if (viewfinder) viewfinder.classList.remove('error');
-                                                        // Resume scanning if modal still active
-                                                        if (scanContainer.style.display !== 'none') {
-                                                            loginWithFaceID();
-                                                        }
-                                                    }, 2200);
+                                        // Adaptive detector: inputSize 320 & scoreThreshold 0.20 for lightning response in any ambient light
+                                        const tinyOptions = new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.20 });
+                                        let detection = null;
+
+                                        try {
+                                            detection = await faceapi.detectSingleFace(video, tinyOptions).withFaceLandmarks(true).withFaceDescriptor();
+                                        } catch (err) {
+                                            try {
+                                                detection = await faceapi.detectSingleFace(video, tinyOptions).withFaceLandmarks().withFaceDescriptor();
+                                            } catch (err2) {
+                                                detection = null;
+                                            }
+                                        }
+
+                                        if (detection && detection.descriptor) {
+                                            consecutiveDetections++;
+                                            descriptorSamples.push(Array.from(detection.descriptor));
+                                            if (viewfinder) viewfinder.style.borderColor = '#ff9500';
+                                            statusMsg.innerHTML = '<span style="color:#ff9500;">⚡ Scanning Face... (' + consecutiveDetections + '/2)</span>';
+
+                                            if (consecutiveDetections >= 2) {
+                                                clearInterval(loginScanInterval);
+                                                loginScanInterval = null;
+                                                statusMsg.innerHTML = '<span style="color:#38bdf8;">⚡ Verifying Biometric Passkey...</span>';
+
+                                                // Average descriptors for highest matching precision
+                                                const finalDescriptor = new Array(128).fill(0);
+                                                for (let d of descriptorSamples) {
+                                                    for (let i = 0; i < 128; i++) finalDescriptor[i] += d[i] / descriptorSamples.length;
                                                 }
-                                            })
-                                            .catch(err => {
-                                                if (viewfinder) viewfinder.classList.add('error');
-                                                statusMsg.innerHTML = '<span style="color:#ef4444;">Verification network error.</span>';
-                                                setTimeout(cancelFaceLogin, 2500);
-                                            });
+
+                                                const roleVal = document.getElementById('login_role').value || 'member';
+
+                                                fetch('face_login_verify.php', {
+                                                    method: 'POST',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify({ 
+                                                        descriptor: finalDescriptor,
+                                                        requested_role: roleVal
+                                                    })
+                                                })
+                                                .then(res => res.json())
+                                                .then(data => {
+                                                    if (data.status === 'success') {
+                                                        if (viewfinder) viewfinder.className = 'faceid-viewfinder-wrap success';
+                                                        statusMsg.innerHTML = '<span style="color:#10b981; font-weight:800;">✅ Verified: Welcome, ' + (data.member_name || 'Member') + '!</span>';
+                                                        setTimeout(() => {
+                                                            cancelFaceLogin();
+                                                            window.location.href = data.redirect || './dashboard/member/';
+                                                        }, 400);
+                                                    } else {
+                                                        if (viewfinder) viewfinder.className = 'faceid-viewfinder-wrap error';
+                                                        statusMsg.innerHTML = '<span style="color:#ef4444; font-weight:700;">❌ ' + (data.message || 'Face Not Recognized') + '</span>';
+                                                        setTimeout(() => {
+                                                            if (viewfinder) {
+                                                                viewfinder.className = 'faceid-viewfinder-wrap';
+                                                                viewfinder.style.borderColor = 'rgba(255, 107, 0, 0.4)';
+                                                            }
+                                                            if (scanContainer.style.display !== 'none') {
+                                                                loginWithFaceID();
+                                                            }
+                                                        }, 2000);
+                                                    }
+                                                })
+                                                .catch(err => {
+                                                    if (viewfinder) viewfinder.className = 'faceid-viewfinder-wrap error';
+                                                    statusMsg.innerHTML = '<span style="color:#ef4444;">Verification network error.</span>';
+                                                    setTimeout(cancelFaceLogin, 2500);
+                                                });
+                                            }
+                                        } else {
+                                            consecutiveDetections = 0;
+                                            descriptorSamples = [];
+                                            if (viewfinder) viewfinder.style.borderColor = 'rgba(255, 107, 0, 0.4)';
+                                            statusMsg.innerHTML = '🔍 Align your face inside the circle...';
                                         }
                                     } catch (e) {
                                         console.warn("Scan frame error:", e);
@@ -730,7 +783,7 @@ if (substr($logo_path, 0, 6) === '../../') {
                                         isProcessing = false;
                                     }
                                 }
-                            }, 120);
+                            }, 100);
 
                         } catch (err) {
                             alert('Camera Notice: ' + err.message + '\nPlease grant camera permissions to use Face ID login.');
@@ -779,11 +832,38 @@ if (substr($logo_path, 0, 6) === '../../') {
                         if (modal) modal.style.display = 'none';
                     }
 
+                    function clearClientCache() {
+                        if (confirm("Clear local application cache and reload latest version?")) {
+                            if ('caches' in window) {
+                                caches.keys().then(names => Promise.all(names.map(name => caches.delete(name))));
+                            }
+                            if ('serviceWorker' in navigator) {
+                                navigator.serviceWorker.getRegistrations().then(regs => {
+                                    for (let reg of regs) reg.unregister();
+                                });
+                            }
+                            try { localStorage.clear(); } catch(e) {}
+                            try { sessionStorage.clear(); } catch(e) {}
+                            window.location.href = window.location.pathname + '?nocache=' + Date.now();
+                        }
+                    }
+
                     document.addEventListener('DOMContentLoaded', () => {
                         selectRole('<?php echo $selected_role; ?>');
                         setTimeout(loadLoginModels, 500);
 
                         const urlParams = new URLSearchParams(window.location.search);
+                        if (urlParams.has('clear_cache')) {
+                            if ('caches' in window) {
+                                caches.keys().then(names => Promise.all(names.map(name => caches.delete(name))));
+                            }
+                            if ('serviceWorker' in navigator) {
+                                navigator.serviceWorker.getRegistrations().then(regs => {
+                                    for (let reg of regs) reg.unregister();
+                                });
+                            }
+                            window.history.replaceState({}, document.title, window.location.pathname);
+                        }
                         if (urlParams.has('install_pwa')) {
                             const modal = document.getElementById('pwaInstallModal');
                             if (modal) modal.style.display = 'flex';
@@ -818,6 +898,11 @@ if (substr($logo_path, 0, 6) === '../../') {
                         </div>
                         <div style="font-size: 11px; color: var(--accent-primary); font-weight: 700; font-family: 'Inter', sans-serif; margin-top: 6px; letter-spacing: 1px;">
                             POWERED BY SUDARSHAN FITNESS v2.0
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <button type="button" onclick="clearClientCache()" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #94a3b8; font-size: 11px; padding: 4px 12px; border-radius: 9999px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.color='#fff'; this.style.borderColor='var(--accent-primary)';" onmouseout="this.style.color='#94a3b8'; this.style.borderColor='rgba(255,255,255,0.12)';">
+                                ⚡ Clear Cache &amp; Refresh
+                            </button>
                         </div>
                     </div>
 

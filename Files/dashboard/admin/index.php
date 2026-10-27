@@ -868,6 +868,15 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Generate Face ID enrollment links for Owners</span>
 								</div>
 							</a>
+
+							<a href="javascript:void(0)" onclick="purgeSystemCache()" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">⚡🧹</div>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Purge Cache</h4>
+									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Flush OPcache, DB queries &amp; boost speed</span>
+								</div>
+							</a>
 							<?php endif; ?>
 
 							<?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
@@ -2752,6 +2761,34 @@ function triggerOutboxRetry() {
             alert('Failed to connect to trigger outbox API.');
             btn.disabled = false;
             btn.innerText = originalText;
+        });
+}
+
+function purgeSystemCache() {
+    if (!confirm("⚡ PURGE ALL SYSTEM CACHES & BOOST SPEED?\n\nThis will:\n1. Flush server OPcache bytecode\n2. Optimize database tables & indexes\n3. Clear PWA / browser cached files\n4. Remove temporary log files\n\nProceed?")) return;
+    
+    // Purge browser Service Worker caches
+    if ('caches' in window) {
+        caches.keys().then(names => Promise.all(names.map(name => caches.delete(name))));
+    }
+    
+    fetch('../../api/clear_system_cache.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("🚀 Performance Optimization Complete!\n\n" +
+                      "• OPcache Reset: " + (data.opcache_cleared ? "Active" : "Not Required") + "\n" +
+                      "• Tables Optimized: " + data.tables_optimized.length + " (" + data.tables_optimized.join(', ') + ")\n" +
+                      "• Junk Files Removed: " + data.junk_files_deleted + "\n\n" +
+                      "The system is now operating at peak performance.");
+                window.location.reload();
+            } else {
+                alert("Optimization Notice: " + (data.error || "Failed to complete purge."));
+            }
+        })
+        .catch(err => {
+            console.error("Cache purge error:", err);
+            alert("Error communicating with cache purge API: " + err.message);
         });
 }
 </script>
