@@ -1249,9 +1249,9 @@ if (!function_exists('check_and_upgrade_db')) {
                 'greeting' => 'Hello, {member_name}! 👋',
                 'intro_text' => 'Welcome to the Sudarshan Fitness family! Below is your official Digital Entrance Pass for seamless gym access.',
                 'body_content' => 'Your membership credentials are active. Check in using your Membership ID at the entrance terminal and connect with your fitness community via the WhatsApp group below!',
-                'promo_banner' => '⭐ <strong>Pro-Tip:</strong> Install our native mobile app to access your smart wallet pass, 3D workout plans, and track your attendance streak!',
-                'cta_text' => '📲 INSTALL MEMBER APP (DIRECT 1-CLICK APK)',
-                'cta_url' => 'https://sudarshanfitness.de/download_app.php',
+                'promo_banner' => '⭐ <strong>Pro-Tip:</strong> Access your member portal to view your smart digital pass, 3D workout plans, and track your attendance streak!',
+                'cta_text' => '📲 OPEN MEMBER PORTAL',
+                'cta_url' => 'https://sudarshanfitness.de/',
                 'footer_text' => 'Welcome aboard! Need assistance? Contact reception or reply to this email.',
                 'animated_sticker' => 'fitness_fire'
             ],
@@ -1502,8 +1502,8 @@ if (!function_exists('send_member_email')) {
                     </table>
 
                     <div style='text-align: center; margin-top: 40px;'>
-                        <p style='color: #94a3b8; font-size: 11px; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 2px;'>> INSTALL NEURAL UPLINK APP</p>
-                        <a href='https://sudarshanfitness.de/Files/download_app.php' class='btn-glow'>INITIALIZE DOWNLOAD</a>
+                        <p style='color: #94a3b8; font-size: 11px; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 2px;'>ACCESS MEMBER PORTAL</p>
+                        <a href='https://sudarshanfitness.de/' class='btn-glow'>OPEN MEMBER PORTAL</a>
                     </div>
                     
                     <div class='footer'>

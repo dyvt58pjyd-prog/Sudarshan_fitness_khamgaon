@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /include/
+Disallow: /api/
+Allow: /
+Allow: /index.php
+Allow: /privacy.html
+Allow: /terms.html

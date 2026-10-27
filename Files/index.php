@@ -879,27 +879,32 @@ if (substr($logo_path, 0, 6) === '../../') {
                             <p style="color: #94a3b8; font-size: 13px; line-height: 1.5; margin-bottom: 25px;">
                                 Install Sudarshan Fitness directly to your phone home screen for 1-click access, instant biometric check-ins, and live workout tracking!
                             </p>
-                            <button id="pwaDirectInstallBtn" onclick="triggerChromeInstall()" style="width: 100%; background: linear-gradient(135deg, #ff6b00, #ffd700); color: #ffffff; border: none; padding: 15px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; letter-spacing: 0.5px; box-shadow: 0 5px 20px rgba(255,107,0,0.5); margin-bottom: 10px;">
-                                📲 INSTALL CHROME PWA APP
+                            <button id="pwaDirectInstallBtn" onclick="triggerChromeInstall()" style="width: 100%; background: linear-gradient(135deg, #ff6b00, #ffd700); color: #ffffff; border: none; padding: 15px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; letter-spacing: 0.5px; box-shadow: 0 5px 20px rgba(255,107,0,0.5); margin-bottom: 12px;">
+                                📲 ADD APP TO HOME SCREEN
                             </button>
-                            <a href="download_app.php" style="width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; text-decoration: none; display: block; padding: 15px 20px; border-radius: 12px; font-weight: 800; font-size: 14px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, sans-serif; letter-spacing: 0.5px; box-shadow: 0 5px 20px rgba(16,185,129,0.4); margin-bottom: 12px;">
-                                ⬇️ DOWNLOAD DIRECT ANDROID APK (5.3 MB)
-                            </a>
-                            <button onclick="closePwaModal()" style="background: transparent; color: #64748b; border: none; font-size: 12px; cursor: pointer; text-decoration: underline;">
+                            <div style="font-size: 11px; color: #64748b; margin-bottom: 15px; line-height: 1.4;">
+                                On iOS/Safari: Tap <strong>Share (⎙)</strong> then tap <strong>'Add to Home Screen'</strong>
+                            </div>
+                            <button onclick="closePwaModal()" style="background: transparent; color: #94a3b8; border: none; font-size: 12px; cursor: pointer; text-decoration: underline;">
                                 Continue in Browser
                             </button>
                         </div>
                     </div>
 
-                    <!-- Official Copyright Footer -->
+                    <!-- Official Copyright & Compliance Footer -->
                     <div style="text-align: center; margin-top: 25px; border-top: 1px solid var(--card-border); padding-top: 15px;">
                         <div style="font-size: 12px; color: var(--text-muted); font-family: 'Inter', sans-serif; letter-spacing: 0.5px;">
                             © <?php echo date('Y'); ?> <?php echo htmlspecialchars($gym['gym_name']); ?>. All Rights Reserved.
                         </div>
                         <div style="font-size: 11px; color: var(--accent-primary); font-weight: 700; font-family: 'Inter', sans-serif; margin-top: 6px; letter-spacing: 1px;">
-                            POWERED BY SUDARSHAN FITNESS v2.0
+                            OFFICIAL VERIFIED MEMBER PORTAL &bull; SUDARSHAN FITNESS
                         </div>
-                        <div style="margin-top: 10px;">
+                        <div style="margin-top: 10px; font-size: 11px; color: var(--text-muted);">
+                            <a href="privacy.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent-primary)'" onmouseout="this.style.color='#94a3b8'">Privacy Policy</a> &bull;
+                            <a href="terms.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent-primary)'" onmouseout="this.style.color='#94a3b8'">Terms of Service</a> &bull;
+                            <a href="mailto:admin@sudarshanfitness.de" style="color: #94a3b8; text-decoration: none; margin: 0 8px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent-primary)'" onmouseout="this.style.color='#94a3b8'">Support</a>
+                        </div>
+                        <div style="margin-top: 12px;">
                             <button type="button" onclick="clearClientCache()" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #94a3b8; font-size: 11px; padding: 4px 12px; border-radius: 9999px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.color='#fff'; this.style.borderColor='var(--accent-primary)';" onmouseout="this.style.color='#94a3b8'; this.style.borderColor='rgba(255,255,255,0.12)';">
                                 ⚡ Clear Cache &amp; Refresh
                             </button>

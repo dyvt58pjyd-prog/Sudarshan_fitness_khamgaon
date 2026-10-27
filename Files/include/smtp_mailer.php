@@ -334,9 +334,9 @@ if (!function_exists('get_email_template')) {
                 'greeting' => 'Hello, {member_name}! 👋',
                 'intro_text' => 'Welcome to the Sudarshan Fitness family! Below is your official Digital Entrance Pass for seamless gym access.',
                 'body_content' => 'Your membership credentials are fully active. Scan in using your Membership ID at the front terminal and join your community group below!',
-                'promo_banner' => '⭐ <strong>Pro-Tip:</strong> Install our native mobile app to track your daily workout plans, streaks, and attendance!',
-                'cta_text' => '📲 INSTALL MEMBER APP (DIRECT 1-CLICK APK)',
-                'cta_url' => 'https://sudarshanfitness.de/download_app.php',
+                'promo_banner' => '⭐ <strong>Pro-Tip:</strong> Access your member portal to view your smart digital pass, 3D workout plans, and track your attendance streak!',
+                'cta_text' => '📲 OPEN MEMBER PORTAL',
+                'cta_url' => 'https://sudarshanfitness.de/',
                 'footer_text' => 'Welcome aboard! Need assistance? Contact gym reception or reply to this email.',
                 'animated_sticker' => 'fitness_fire'
             ],
