@@ -90,3 +90,14 @@ RewriteRule ^(.*)$ https://sudarshanfitness.de/$1 [L,R=301]
         Deny from all
     </IfModule>
 </FilesMatch>
+
+# Block all APK and raw executable binary downloads
+<FilesMatch "\.(apk|exe|bin|sh|bat)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>

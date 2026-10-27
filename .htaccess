@@ -16,7 +16,23 @@ RewriteRule ^css/?(.*)$ /Files/css/$1 [L,QSA]
 RewriteRule ^images/?(.*)$ /Files/images/$1 [L,QSA]
 RewriteRule ^privacy/?$ privacy.html [L,QSA]
 RewriteRule ^privacy_policy/?$ privacy.html [L,QSA]
+RewriteRule ^terms/?$ /Files/terms.html [L,QSA]
+RewriteRule ^terms_of_service/?$ /Files/terms.html [L,QSA]
+RewriteRule ^download_app/?$ /Files/index.php [R=301,L]
+RewriteRule ^Files/download_app.php/?$ /Files/index.php [R=301,L]
+RewriteRule ^.*\.apk$ /Files/index.php [R=301,L]
 RewriteRule ^api/?(.*)$ /Files/api/$1 [L,QSA]
+
+# Block direct access to APKs and binary executables
+<FilesMatch "\.(apk|exe|bin|sh|bat)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
 
 # Route ALL other requests to the biometric listener if the file doesn't exist
 RewriteCond %{REQUEST_FILENAME} !-f
