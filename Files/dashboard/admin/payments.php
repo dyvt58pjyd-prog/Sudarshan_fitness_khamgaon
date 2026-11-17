@@ -137,19 +137,26 @@ page_protect();
             $current_filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
             ?>
             <!-- Status Filter Shortcuts -->
-            <div style="display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap;">
-                <a href="?tab=plan&filter=all" class="a1-btn" style="padding: 7px 16px; font-size: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; <?php echo $current_filter === 'all' ? 'background: #2563eb; color: #fff;' : 'background: rgba(255,255,255,0.06); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1);'; ?>">
-                    All Members
-                </a>
-                <a href="?tab=plan&filter=expired" class="a1-btn" style="padding: 7px 16px; font-size: 12px; border-radius: 8px; text-decoration: none; font-weight: 700; <?php echo $current_filter === 'expired' ? 'background: #dc2626; color: #fff;' : 'background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.3);'; ?>">
-                    🚨 Expired Members (Overdue)
-                </a>
-                <a href="?tab=plan&filter=expiring" class="a1-btn" style="padding: 7px 16px; font-size: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; <?php echo $current_filter === 'expiring' ? 'background: #d97706; color: #fff;' : 'background: rgba(245,158,11,0.1); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3);'; ?>">
-                    ⏳ Expiring Soon (≤ 5 Days)
-                </a>
-                <a href="?tab=plan&filter=active" class="a1-btn" style="padding: 7px 16px; font-size: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; <?php echo $current_filter === 'active' ? 'background: #059669; color: #fff;' : 'background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.3);'; ?>">
-                    🟢 Active Members
-                </a>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 18px;">
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <a href="?tab=plan&filter=all" class="a1-btn" style="padding: 7px 16px; font-size: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; <?php echo $current_filter === 'all' ? 'background: #2563eb; color: #fff;' : 'background: rgba(255,255,255,0.06); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1);'; ?>">
+                        All Members
+                    </a>
+                    <a href="?tab=plan&filter=expired" class="a1-btn" style="padding: 7px 16px; font-size: 12px; border-radius: 8px; text-decoration: none; font-weight: 700; <?php echo $current_filter === 'expired' ? 'background: #dc2626; color: #fff;' : 'background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.3);'; ?>">
+                        🚨 Expired Members (Overdue)
+                    </a>
+                    <a href="?tab=plan&filter=expiring" class="a1-btn" style="padding: 7px 16px; font-size: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; <?php echo $current_filter === 'expiring' ? 'background: #d97706; color: #fff;' : 'background: rgba(245,158,11,0.1); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3);'; ?>">
+                        ⏳ Expiring Soon (≤ 5 Days)
+                    </a>
+                    <a href="?tab=plan&filter=active" class="a1-btn" style="padding: 7px 16px; font-size: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; <?php echo $current_filter === 'active' ? 'background: #059669; color: #fff;' : 'background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.3);'; ?>">
+                        🟢 Active Members
+                    </a>
+                </div>
+                <div>
+                    <a href="../../desk/" target="_blank" class="a1-btn" style="background: linear-gradient(135deg, #ff6b00 0%, #d95700 100%); color: #fff; font-weight: 800; font-size: 12px; padding: 8px 16px; border-radius: 8px; text-decoration: none; box-shadow: 0 4px 12px rgba(255,107,0,0.3);">
+                        ⚡ Open Fast Desk Portal
+                    </a>
+                </div>
             </div>
 
             <!-- Membership Plan Payments Tab -->
@@ -248,15 +255,16 @@ page_protect();
                                 $sno++;
                                 
                                 echo "<td>
-                                    <div style='display: flex; gap: 8px;'>
+                                    <div style='display: flex; gap: 6px; flex-wrap: wrap;'>
+                                        <a href='../../desk/?renew_uid=" . urlencode($uid) . "' target='_blank' class='a1-btn' style='padding: 6px 10px !important; font-size: 11px; background: linear-gradient(135deg, #ff6b00 0%, #e05d00 100%); color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 700;'>⚡ Fast Renew</a>
                                         <form action='make_payments.php' method='post' style='margin: 0; display: inline;'>
                                             <input type='hidden' name='userID' value='" . $uid . "'/>
                                             <input type='hidden' name='planID' value='" . $planid . "'/>
-                                            <input type='submit' class='a1-btn a1-blue' style='padding: 6px 10px !important; font-size: 11px;' value='Renew Membership'/>
+                                            <input type='submit' class='a1-btn a1-blue' style='padding: 6px 10px !important; font-size: 11px;' value='Classic Renew'/>
                                         </form>
                                         <form action='enroll_pt.php' method='post' style='margin: 0; display: inline;'>
                                             <input type='hidden' name='userID' value='" . $uid . "'/>
-                                            <input type='submit' class='a1-btn' style='padding: 6px 10px !important; font-size: 11px; background-color: #ff6b00; border-color: #ff6b00; color: #ffffff;' value='PT Payment'/>
+                                            <input type='submit' class='a1-btn' style='padding: 6px 10px !important; font-size: 11px; background-color: #4b5563; border-color: #4b5563; color: #ffffff;' value='PT'/>
                                         </form>
                                     </div>
                                 </td></tr>";

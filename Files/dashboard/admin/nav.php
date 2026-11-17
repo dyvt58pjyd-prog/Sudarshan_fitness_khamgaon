@@ -159,6 +159,9 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
     <a href="index.php" class="btn-dashboard-home">
         <i class="entypo-layout"></i> Dashboard Hub
     </a>
+    <a href="../../desk/" target="_blank" class="btn-dashboard-home" style="border-color: #ff6b00; color: #ff6b00; font-weight: 700;">
+        ⚡ Desk Portal (Reg &amp; Renewal)
+    </a>
 </div>
 
 

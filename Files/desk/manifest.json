@@ -1,0 +1,16 @@
+{
+  "name": "Sudarshan Fitness - Front Desk",
+  "short_name": "SF Desk",
+  "description": "Express Member Registration & Direct Renewal Portal",
+  "start_url": "index.php",
+  "display": "standalone",
+  "background_color": "#090d16",
+  "theme_color": "#ff6b00",
+  "icons": [
+    {
+      "src": "../logo192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

@@ -587,6 +587,15 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 						</h3>
 						<div class="dashboard-grid">
 							
+							<a href="../../desk/" target="_blank" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.25) 0%, rgba(255, 107, 0, 0.08) 100%); border: 2.5px solid #ff6b00; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(255,107,0,0.2);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">⚡🖥️</div>
+									<h4 style="color: var(--text-main); font-weight: 900; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Desk Portal (Reg &amp; Renewal)</h4>
+									<span style="color: var(--text-muted); font-size: 11.5px;">Express 1-click counter website</span>
+								</div>
+							</a>
+
 							<a href="new_entry.php" style="text-decoration: none;">
 								<div style="background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(255, 107, 0, 0.05) 100%); border: 2px solid #ff6b00; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
 								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
