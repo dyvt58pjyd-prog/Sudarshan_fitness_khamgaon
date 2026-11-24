@@ -473,21 +473,21 @@ if ($partner_user) {
         let dashQrRem = <?php echo intval($live_qr_rem); ?>;
 
         // Generate Rotating Gate QR Code
-        var qr = new QRious({
+        var qr = (typeof QRious !== 'undefined') ? new QRious({
             element: document.getElementById('qrcode-canvas'),
             value: <?php echo json_encode((string)$live_qr_token); ?>,
             size: 250,
             background: 'white',
             foreground: 'black',
             level: 'M'
-        });
+        }) : null;
 
         async function refreshDashQr() {
             try {
                 const res = await fetch(`../api/get_live_qr.php?uid=${encodeURIComponent(DASH_UID)}&sig=${encodeURIComponent(DASH_SIG)}`, { cache: 'no-store' });
                 const data = await res.json();
                 if (data.success && data.token) {
-                    qr.value = data.token;
+                    if (qr) qr.value = data.token;
                     dashQrRem = data.expires_in || 60;
                     const t = document.getElementById('dashQrTimer');
                     if (t) t.textContent = dashQrRem;

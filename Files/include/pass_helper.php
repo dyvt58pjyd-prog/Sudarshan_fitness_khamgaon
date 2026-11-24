@@ -89,8 +89,8 @@ if (!function_exists('build_signed_wallet_pass_url')) {
         $exp_int = intval($exp);
         $sig = sign_pass_url_signature($con, $uid_str, $exp_int);
 
-        $req_uri = $_SERVER['REQUEST_URI'] ?? ($_SERVER['SCRIPT_NAME'] ?? '');
-        $base_prefix = (strpos($req_uri, '/Files/') !== false || php_sapi_name() === 'cli') ? '/Files' : '';
+        $has_files_prefix = (strpos($_SERVER['SCRIPT_NAME'] ?? '', '/Files/') !== false || strpos($_SERVER['REQUEST_URI'] ?? '', '/Files/') !== false || php_sapi_name() === 'cli');
+        $base_prefix = $has_files_prefix ? '/Files' : '';
 
         $path = $base_prefix . '/member_app/wallet_pass.php?uid=' . urlencode($uid_str) . '&sig=' . urlencode($sig);
         if ($exp_int > 0) {
@@ -493,8 +493,8 @@ if (!function_exists('resolve_gym_logo_url')) {
             $host = $_SERVER['HTTP_HOST'] ?? 'sudarshanfitness.de';
             $is_local_host = (strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false || preg_match('/^(192\.168\.|10\.|172\.)/', $host));
             $scheme = $is_https ? 'https' : ($is_local_host ? 'http' : 'https');
-            $req_uri = $_SERVER['REQUEST_URI'] ?? ($_SERVER['SCRIPT_NAME'] ?? '');
-            $base_prefix = (strpos($req_uri, '/Files/') !== false || php_sapi_name() === 'cli') ? '/Files' : '';
+            $has_files_prefix = (strpos($_SERVER['SCRIPT_NAME'] ?? '', '/Files/') !== false || strpos($_SERVER['REQUEST_URI'] ?? '', '/Files/') !== false || php_sapi_name() === 'cli');
+            $base_prefix = $has_files_prefix ? '/Files' : '';
             return $scheme . '://' . $host . $base_prefix . '/' . $rel;
         }
 

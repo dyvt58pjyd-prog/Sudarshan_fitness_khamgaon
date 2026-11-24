@@ -520,31 +520,61 @@ const INITIAL_LOGS = <?php echo json_encode($recent_logs, JSON_INVALID_UTF8_SUBS
 
 let activeStatusFilter = 'all';
 let activePlatform = 'apple';
-let selectedUid = MEMBERS_DATA.length ? MEMBERS_DATA[0].userid : '';
+let selectedUid = MEMBERS_DATA.length ? String(MEMBERS_DATA[0].userid) : '';
 const bulkSelected = new Set();
 
-const previewQr = new QRious({
-    element: document.getElementById('previewQrCanvas'),
-    value: 'SFQ1:PREVIEW',
-    size: 118,
-    background: 'white',
-    foreground: 'black',
-    level: 'M'
-});
+let previewQr = null;
+let counterQr = null;
+if (typeof QRious !== 'undefined') {
+    previewQr = new QRious({
+        element: document.getElementById('previewQrCanvas'),
+        value: 'SFQ1:PREVIEW',
+        size: 118,
+        background: 'white',
+        foreground: 'black',
+        level: 'M'
+    });
+    counterQr = new QRious({
+        element: document.getElementById('counterHandoffQr'),
+        value: 'https://sudarshanfitness.de',
+        size: 230,
+        background: 'white',
+        foreground: 'black',
+        level: 'M'
+    });
+}
 
-const counterQr = new QRious({
-    element: document.getElementById('counterHandoffQr'),
-    value: 'https://sudarshanfitness.de',
-    size: 230,
-    background: 'white',
-    foreground: 'black',
-    level: 'M'
-});
+function setQrDisplay(canvasId, qrInstance, value, size) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas || !canvas.parentElement) return;
+    if (qrInstance) {
+        qrInstance.value = value;
+        canvas.style.display = 'block';
+        const oldFallback = canvas.parentElement.querySelector('img.qr-fallback-img');
+        if (oldFallback) oldFallback.remove();
+        return;
+    }
+    canvas.style.display = 'none';
+    let img = canvas.parentElement.querySelector('img.qr-fallback-img');
+    if (!img) {
+        img = document.createElement('img');
+        img.className = 'qr-fallback-img';
+        img.alt = 'QR Code';
+        img.width = size;
+        img.height = size;
+        img.style.display = 'block';
+        canvas.parentElement.appendChild(img);
+    }
+    img.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(value)}`;
+}
 
 function esc(str) {
-    const d = document.createElement('div');
-    d.textContent = str == null ? '' : String(str);
-    return d.innerHTML;
+    return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 function getFilteredMembers() {
@@ -573,18 +603,19 @@ function renderMemberList() {
     }
 
     container.innerHTML = list.map(m => {
-        const isSel = m.userid === selectedUid;
+        const uidStr = String(m.userid);
+        const isSel = uidStr === String(selectedUid);
         const badgeCls = m.status_key === 'expiring' ? 'badge-expiring' : (m.is_active ? 'badge-active' : 'badge-expired');
         const badgeTxt = m.status_key === 'expiring' ? `${m.days_left}d left` : (m.is_active ? 'ACTIVE' : 'EXPIRED');
         const issueTxt = m.issue_cnt > 0 ? `🎟️ ${m.issue_cnt}x (${m.last_platform})` : 'Not issued';
-        const checked = bulkSelected.has(m.userid) ? 'checked' : '';
-        const uidArg = esc(JSON.stringify(String(m.userid)));
+        const checked = bulkSelected.has(uidStr) ? 'checked' : '';
+        const safeUid = esc(uidStr);
         return `
-            <div class="m-row ${isSel ? 'selected' : ''}" onclick="selectMember(${uidArg})">
-                <input type="checkbox" ${checked} onclick="event.stopPropagation(); toggleBulk(${uidArg}, this.checked)" style="width:16px;height:16px;accent-color:#ff6b00;cursor:pointer;">
-                <img src="${esc(m.photo_url)}" alt="" class="m-avatar">
+            <div class="m-row ${isSel ? 'selected' : ''}" data-uid="${safeUid}">
+                <input type="checkbox" class="bulk-chk" data-uid="${safeUid}" ${checked} style="width:16px;height:16px;accent-color:#ff6b00;cursor:pointer;">
+                <img src="${esc(m.photo_url)}" alt="" class="m-avatar" loading="lazy">
                 <div class="m-meta">
-                    <div class="m-name">#${esc(m.userid)} &bull; ${esc(m.username)}</div>
+                    <div class="m-name">#${safeUid} &bull; ${esc(m.username)}</div>
                     <div class="m-sub">${esc(m.plan_name)} &bull; ${esc(m.mobile || 'No mobile')} &bull; ${esc(issueTxt)}</div>
                 </div>
                 <span class="badge ${badgeCls}">${esc(badgeTxt)}</span>
@@ -594,14 +625,15 @@ function renderMemberList() {
 }
 
 function selectMember(uid) {
-    selectedUid = uid;
+    selectedUid = String(uid);
     renderMemberList();
     renderPreview();
 }
 
 function toggleBulk(uid, checked) {
-    if (checked) bulkSelected.add(uid);
-    else bulkSelected.delete(uid);
+    const uidStr = String(uid);
+    if (checked) bulkSelected.add(uidStr);
+    else bulkSelected.delete(uidStr);
     const bar = document.getElementById('bulkBar');
     bar.style.display = bulkSelected.size > 0 ? 'flex' : 'none';
     document.getElementById('bulkCountLabel').textContent = `${bulkSelected.size} selected`;
@@ -611,6 +643,18 @@ function clearSelection() {
     bulkSelected.clear();
     document.getElementById('bulkBar').style.display = 'none';
     renderMemberList();
+}
+
+function bumpStatCounters(count = 1) {
+    const t = document.getElementById('statToday');
+    if (t) t.textContent = String((parseInt(t.textContent, 10) || 0) + count);
+    if (activePlatform === 'apple') {
+        const a = document.getElementById('statApple');
+        if (a) a.textContent = String((parseInt(a.textContent, 10) || 0) + count);
+    } else if (activePlatform === 'android') {
+        const n = document.getElementById('statAndroid');
+        if (n) n.textContent = String((parseInt(n.textContent, 10) || 0) + count);
+    }
 }
 
 function setStatusFilter(filter, btn) {
@@ -638,7 +682,7 @@ function setPlatform(plat) {
 }
 
 function getSelectedMember() {
-    return MEMBERS_DATA.find(m => m.userid === selectedUid) || null;
+    return MEMBERS_DATA.find(m => String(m.userid) === String(selectedUid)) || null;
 }
 
 function renderPreview() {
@@ -657,7 +701,9 @@ function renderPreview() {
 
     card.className = 'preview-card' + (!m.is_active ? ' theme-expired' : (activePlatform === 'apple' ? ' theme-apple' : ''));
     document.getElementById('selectedMemberBadge').textContent = `#${m.userid} • ${m.username}`;
-    document.getElementById('pvAvatar').src = m.photo_url;
+    const av = document.getElementById('pvAvatar');
+    av.onerror = () => { av.src = '../images/default_avatar.png'; };
+    av.src = m.photo_url || '../images/default_avatar.png';
     document.getElementById('pvName').textContent = m.username;
     document.getElementById('pvUid').textContent = `MEMBER ID #${m.userid}`;
     document.getElementById('pvPlan').textContent = m.plan_name;
@@ -669,7 +715,16 @@ function renderPreview() {
     pill.textContent = m.is_active ? '🟢 ACTIVE' : '🔴 EXPIRED';
     pill.className = 'badge ' + (m.is_active ? 'badge-active' : 'badge-expired');
 
-    previewQr.value = m.rotating_qr;
+    setQrDisplay('previewQrCanvas', previewQr, m.rotating_qr, 118);
+}
+
+async function parseApiResponse(res) {
+    const text = await res.text();
+    try {
+        return JSON.parse(text);
+    } catch (e) {
+        return { success: false, message: `Server returned non-JSON response (HTTP ${res.status}). Please re-login if session expired.` };
+    }
 }
 
 function showToast(ok, text) {
@@ -703,7 +758,7 @@ async function issuePass(channel) {
                 note: note
             })
         });
-        const data = await res.json();
+        const data = await parseApiResponse(res);
         if (!data.success) {
             showToast(false, data.message || 'Pass issuance failed.');
             if (data.wa_direct_url) {
@@ -715,6 +770,7 @@ async function issuePass(channel) {
 
         m.issue_cnt = (m.issue_cnt || 0) + 1;
         m.last_platform = activePlatform;
+        bumpStatCounters(1);
         renderMemberList();
         reloadLogs();
 
@@ -724,7 +780,7 @@ async function issuePass(channel) {
         } else if (channel === 'counter_qr') {
             document.getElementById('cmMemberName').textContent = `${m.username} (#${m.userid})`;
             document.getElementById('cmPlatformBadge').textContent = activePlatform === 'apple' ? '🍎 Apple iPhone Pass Link' : (activePlatform === 'android' ? '🤖 Android Pass Link' : '📲 Signed Pass Link');
-            counterQr.value = data.signed_url;
+            setQrDisplay('counterHandoffQr', counterQr, data.signed_url, 230);
             document.getElementById('counterQrModal').style.display = 'flex';
             showToast(true, '📱 Counter scan QR ready for member camera.');
         } else {
@@ -759,8 +815,9 @@ async function bulkIssue(channel) {
                 note: note
             })
         });
-        const data = await res.json();
+        const data = await parseApiResponse(res);
         if (data.success) {
+            if (data.sent_count > 0) bumpStatCounters(data.sent_count);
             showToast(true, `✅ Issued ${data.sent_count} pass(es). Skipped: ${data.skipped_count}.`);
             clearSelection();
             reloadLogs();
@@ -772,11 +829,40 @@ async function bulkIssue(channel) {
     }
 }
 
-function openLivePassTab() {
+async function openLivePassTab() {
     const m = getSelectedMember();
-    if (!m) return;
-    const url = activePlatform === 'apple' ? m.apple_url : (activePlatform === 'android' ? m.android_url : m.universal_url);
-    window.open(url, '_blank');
+    if (!m) { showToast(false, 'Please select a member first.'); return; }
+    const validity = document.getElementById('validitySelect').value;
+    if (validity === 'permanent') {
+        const url = activePlatform === 'apple' ? m.apple_url : (activePlatform === 'android' ? m.android_url : m.universal_url);
+        window.open(url, '_blank');
+        return;
+    }
+    const win = window.open('about:blank', '_blank');
+    try {
+        const res = await fetch('api/issue_pass.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'issue_single',
+                uid: m.userid,
+                platform: activePlatform,
+                channel: 'copy_link',
+                validity: validity,
+                note: 'Opened pass card preview'
+            })
+        });
+        const data = await parseApiResponse(res);
+        if (data.success && data.signed_url) {
+            if (win) win.location.href = data.signed_url;
+            else window.open(data.signed_url, '_blank');
+            bumpStatCounters(1);
+            reloadLogs();
+            return;
+        }
+    } catch (e) {}
+    const fallbackUrl = activePlatform === 'apple' ? m.apple_url : (activePlatform === 'android' ? m.android_url : m.universal_url);
+    if (win) win.location.href = fallbackUrl;
 }
 
 function closeCounterModal() {
@@ -811,12 +897,28 @@ async function reloadLogs() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'recent_logs' })
         });
-        const data = await res.json();
+        const data = await parseApiResponse(res);
         if (data.success && data.logs) {
             renderLogs(data.logs);
         }
     } catch (e) {}
 }
+
+const memberListEl = document.getElementById('memberListContainer');
+memberListEl.addEventListener('click', (e) => {
+    if (e.target.closest('input.bulk-chk')) return;
+    const row = e.target.closest('.m-row[data-uid]');
+    if (row) selectMember(row.dataset.uid);
+});
+memberListEl.addEventListener('change', (e) => {
+    const chk = e.target.closest('input.bulk-chk[data-uid]');
+    if (chk) toggleBulk(chk.dataset.uid, chk.checked);
+});
+memberListEl.addEventListener('error', (e) => {
+    if (e.target && e.target.tagName === 'IMG') {
+        e.target.src = '../images/default_avatar.png';
+    }
+}, true);
 
 document.getElementById('memberSearchInput').addEventListener('input', renderMemberList);
 renderMemberList();

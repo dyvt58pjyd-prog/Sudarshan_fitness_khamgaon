@@ -474,29 +474,33 @@ $wa_url = "https://wa.me/?text=" . urlencode($wa_text);
             localStorage.setItem('sf_pass_expire', <?php echo json_encode((string)$expire_date); ?>);
         } catch (e) {}
 
-        const qr = new QRious({
-            element: document.getElementById('qrCanvas'),
-            value: currentQrToken,
-            size: 150,
-            background: 'white',
-            foreground: 'black',
-            level: 'M'
-        });
+        let qr = null;
+        let largeQr = null;
+        if (typeof QRious !== 'undefined') {
+            qr = new QRious({
+                element: document.getElementById('qrCanvas'),
+                value: currentQrToken,
+                size: 150,
+                background: 'white',
+                foreground: 'black',
+                level: 'M'
+            });
 
-        const largeQr = new QRious({
-            element: document.getElementById('largeQrCanvas'),
-            value: currentQrToken,
-            size: 240,
-            background: 'white',
-            foreground: 'black',
-            level: 'M'
-        });
+            largeQr = new QRious({
+                element: document.getElementById('largeQrCanvas'),
+                value: currentQrToken,
+                size: 240,
+                background: 'white',
+                foreground: 'black',
+                level: 'M'
+            });
+        }
 
         function renderQrToken(token, secondsLeft) {
             currentQrToken = token;
             qrSecondsLeft = secondsLeft;
-            qr.value = token;
-            largeQr.value = token;
+            if (qr) qr.value = token;
+            if (largeQr) largeQr.value = token;
             const t1 = document.getElementById('qrTimerNum');
             const t2 = document.getElementById('largeQrTimerNum');
             if (t1) t1.textContent = qrSecondsLeft;

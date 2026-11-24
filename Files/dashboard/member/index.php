@@ -1475,7 +1475,7 @@ function dismissWarning() {
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const canvas = document.getElementById('desktop-qr-canvas');
-            if (!canvas) return;
+            if (!canvas || typeof QRious === 'undefined') return;
             const dUid = <?php echo json_encode((string)$userid); ?>;
             const dSig = <?php echo json_encode((string)sign_pass_url_signature($con, $userid, 0)); ?>;
             let dRem = <?php echo intval(get_rotating_qr_remaining_seconds()); ?>;
