@@ -36,21 +36,24 @@ function euclideanDistance($arr1, $arr2) {
 $requestedRole = isset($input['requested_role']) ? $input['requested_role'] : null;
 
 // Fetch all registered faces for roles that support Face ID
-$query = "SELECT username, Full_name, role, webauthn_credential FROM admin WHERE role IN ('owner', 'super_admin', 'reception', 'trainer') AND webauthn_credential IS NOT NULL AND webauthn_credential != ''";
+$query = "SELECT username, Full_name, role, face_descriptor, webauthn_credential FROM admin WHERE role IN ('owner', 'super_admin', 'reception', 'trainer') AND ((face_descriptor IS NOT NULL AND face_descriptor != '') OR (webauthn_credential IS NOT NULL AND webauthn_credential != ''))";
 $result = mysqli_query($con, $query);
 
 $bestMatch = null;
 $bestDistance = 0.55; // Relaxed threshold for facial recognition (0.55 is recommended for ssdMobilenetv1 in varying lighting)
 
-while ($row = mysqli_fetch_assoc($result)) {
-    $storedDescriptor = json_decode($row['webauthn_credential'], true);
-    
-    if (is_array($storedDescriptor) && count($storedDescriptor) === 128) {
-        $distance = euclideanDistance($liveDescriptor, $storedDescriptor);
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $rawDesc = !empty($row['face_descriptor']) ? $row['face_descriptor'] : $row['webauthn_credential'];
+        $storedDescriptor = json_decode($rawDesc, true);
         
-        if ($distance < $bestDistance) {
-            $bestDistance = $distance;
-            $bestMatch = $row;
+        if (is_array($storedDescriptor) && count($storedDescriptor) === 128) {
+            $distance = euclideanDistance($liveDescriptor, $storedDescriptor);
+            
+            if ($distance < $bestDistance) {
+                $bestDistance = $distance;
+                $bestMatch = $row;
+            }
         }
     }
 }

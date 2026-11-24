@@ -61,7 +61,8 @@ if (isset($_POST['submit_payment'])) {
                     if ($plan_q && mysqli_num_rows($plan_q) > 0) {
                         $plan_data = mysqli_fetch_assoc($plan_q);
                         $amount = intval($plan_data['amount']);
-                        $validity = intval($plan_data['validity']);
+                        $validity = $plan_data['validity'];
+                        $validity_months = (stripos($validity, 'd') === false) ? intval($validity) : 0;
                         
                         // Apply Discount Logic for Pre-Booking
                         $mem_count_q = mysqli_query($con, "SELECT COUNT(*) as count FROM users");
@@ -71,9 +72,9 @@ if (isset($_POST['submit_payment'])) {
                         
                         $discount_amount = 0;
                         if ($discount_active) {
-                            if ($validity == 12) {
+                            if ($validity_months == 12) {
                                 $discount_amount = 2000;
-                            } elseif ($validity == 6) {
+                            } elseif ($validity_months == 6) {
                                 $discount_amount = 1000;
                             }
                         }
@@ -92,6 +93,7 @@ if (isset($_POST['submit_payment'])) {
                             $launch_date = '2026-07-08';
                             $cdate = ($cdate < $launch_date) ? $launch_date : $cdate;
                             $d = calculate_expiration_date($cdate, $validity);
+                            if (!$d) $d = strtotime('+1 Month', strtotime($cdate));
                             $expiredate = date("Y-m-d", $d);
                             
                             $payment_mode = 'UPI';
@@ -112,8 +114,10 @@ if (isset($_POST['submit_payment'])) {
                             require_once '../../include/smtp_mailer.php';
                             
                             $mem_q = mysqli_query($con, "SELECT username, email, entry_code FROM users WHERE userid='$userid'");
-                            $mem_data = mysqli_fetch_assoc($mem_q);
-                            $planName = mysqli_fetch_assoc(mysqli_query($con, "SELECT planName FROM plan WHERE pid='$pid'"))['planName'];
+                            $mem_data = ($mem_q && mysqli_num_rows($mem_q) > 0) ? mysqli_fetch_assoc($mem_q) : ['email' => '', 'username' => $userid, 'entry_code' => ''];
+                            $plan_q_name = mysqli_query($con, "SELECT planName FROM plan WHERE pid='$pid'");
+                            $plan_row_name = ($plan_q_name && mysqli_num_rows($plan_q_name) > 0) ? mysqli_fetch_assoc($plan_q_name) : null;
+                            $planName = $plan_row_name ? $plan_row_name['planName'] : $pid;
                             
                             send_payment_email($con, $mem_data['email'], $mem_data['username'], $userid, $planName, $amount, $expiredate, $payment_mode, $received_by, $mem_data['entry_code'], $discount_amount, $amount);
                             
@@ -566,10 +570,10 @@ if (isset($_POST['submit_payment'])) {
                         });
                         qrImg.src = canvas.toDataURL('image/png');
                     } else {
-                        qrImg.src = `https://chart.googleapis.com/chart?chs=220x220&cht=qr&chl=${encodeURIComponent(upiUrl)}`;
+                        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiUrl)}`;
                     }
                 } catch (e) {
-                    qrImg.src = `https://chart.googleapis.com/chart?chs=220x220&cht=qr&chl=${encodeURIComponent(upiUrl)}`;
+                    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiUrl)}`;
                 }
 
                 qrImg.style.display = 'inline-block';

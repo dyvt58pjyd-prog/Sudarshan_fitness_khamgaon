@@ -8,7 +8,7 @@ $preview_title = isset($_GET['preview_title']) ? $_GET['preview_title'] : 'Happy
 $title = $preview_title;
 if ($campaign_id > 0) {
     $res = mysqli_query($con, "SELECT campaign_name FROM festival_campaigns WHERE id = $campaign_id");
-    if ($row = mysqli_fetch_assoc($res)) {
+    if ($res && ($row = mysqli_fetch_assoc($res))) {
         $title = $row['campaign_name'];
     }
 }
@@ -47,7 +47,7 @@ function downloadFont($url, $path) {
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
     $data = curl_exec($ch);
     curl_close($ch);
     if ($data) @file_put_contents($path, $data);
@@ -120,11 +120,18 @@ if (file_exists($logo_path)) {
 }
 
 // Output
-header('Content-Type: image/png');
-// If saving flag is passed, save it instead of rendering
 if (isset($_GET['save_path'])) {
-    imagepng($image, $_GET['save_path']);
+    $requested_path = str_replace('\\', '/', $_GET['save_path']);
+    if (preg_match('/^(?:\.\.\/images\/)?(campaign_\d+\.png)$/', $requested_path, $m)) {
+        header('Content-Type: image/png');
+        imagepng($image, '../images/' . $m[1]);
+    } else {
+        http_response_code(400);
+        header('Content-Type: text/plain');
+        echo "Invalid save_path.";
+    }
 } else {
+    header('Content-Type: image/png');
     imagepng($image);
 }
 imagedestroy($image);

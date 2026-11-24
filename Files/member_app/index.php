@@ -7,15 +7,10 @@ if (isset($_POST['login'])) {
     $userid = mysqli_real_escape_string($con, trim($_POST['userid']));
     $mobile = mysqli_real_escape_string($con, trim($_POST['mobile']));
     
-    $query = "SELECT * FROM users WHERE (userid='$userid' OR mobile='$userid') AND (mobile='$mobile' OR userid='$mobile')";
+    $query = "SELECT * FROM users WHERE (userid='$userid' AND mobile='$mobile') OR (mobile='$userid' AND userid='$mobile') LIMIT 1";
     $res = mysqli_query($con, $query);
     
-    if (!$res || mysqli_num_rows($res) == 0) {
-        $query = "SELECT * FROM users WHERE userid='$userid' OR mobile='$mobile'";
-        $res = mysqli_query($con, $query);
-    }
-    
-    if (mysqli_num_rows($res) >= 1) {
+    if ($res && mysqli_num_rows($res) >= 1) {
         $row = mysqli_fetch_assoc($res);
         
         // Check if this user is part of a couple

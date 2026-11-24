@@ -298,7 +298,7 @@ for ($days = 1; $days <= 5; $days++) {
                                                 </td>
                                                 <td style="border-color: var(--glass-border); padding: 15px; text-align: center;">
                                                     <button class="btn btn-primary" style="padding: 6px 12px; border-radius: 6px;" 
-                                                            onclick="sendManualAlert('<?php echo htmlspecialchars($member['mobile']); ?>', '<?php echo htmlspecialchars($member['username']); ?>', '<?php echo htmlspecialchars($member['planName']); ?>', '<?php echo htmlspecialchars($member['expire']); ?>', <?php echo $member['days_left']; ?>, this)">
+                                                            onclick='sendManualAlert(<?php echo json_encode($member['mobile']); ?>, <?php echo json_encode($member['username']); ?>, <?php echo json_encode($member['planName']); ?>, <?php echo json_encode($member['expire']); ?>, <?php echo intval($member['days_left']); ?>, this)'>
                                                         <i class="entypo-paper-plane"></i> Send Alert
                                                     </button>
                                                 </td>
@@ -356,6 +356,36 @@ for ($days = 1; $days <= 5; $days++) {
         // Poll every 5 seconds
         setInterval(checkWhatsAppStatus, 5000);
         checkWhatsAppStatus();
+
+        async function sendManualAlert(mobile, name, plan, expire, daysLeft, btn) {
+            if (!mobile) {
+                alert('Member mobile number is missing.');
+                return;
+            }
+            const origHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = 'Sending...';
+            try {
+                const res = await fetch('whatsapp_setup.php?ajax=send_manual', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mobile, name, plan, expire, days_left: daysLeft })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    btn.className = 'btn btn-success';
+                    btn.innerHTML = '<i class="entypo-check"></i> Sent';
+                } else {
+                    alert('Failed: ' + (data.message || 'Unknown error'));
+                    btn.disabled = false;
+                    btn.innerHTML = origHtml;
+                }
+            } catch (e) {
+                alert('Network error sending WhatsApp alert.');
+                btn.disabled = false;
+                btn.innerHTML = origHtml;
+            }
+        }
     </script>
     <script src="../../neon/js/bootstrap.js"></script>
     <style>

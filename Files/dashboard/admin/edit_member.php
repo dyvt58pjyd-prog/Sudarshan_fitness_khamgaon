@@ -103,12 +103,13 @@ if ($memid) {
 			<hr/>
 			<?php
 	    
+				    $memid_esc = mysqli_real_escape_string($con, $memid);
 				    $query  = "SELECT u.*, a.streetName, a.state, a.city, a.zipcode, 
 				                      h.calorie, h.height, h.weight, h.fat, h.remarks
 				               FROM users u 
 				               LEFT JOIN address a ON u.userid=a.id
 				               LEFT JOIN health_status h ON u.userid=h.uid
-				               WHERE u.userid='$memid'
+				               WHERE u.userid='$memid_esc'
 				               ORDER BY h.hid DESC LIMIT 1";
 				    $result = mysqli_query($con, $query);
 				    $sno    = 1;
@@ -159,7 +160,7 @@ if ($memid) {
 				    	 echo mysqli_error($con);
 				    }
 
-				    $pass_res = mysqli_query($con, "SELECT pass_key FROM admin WHERE username='$memid'");
+				    $pass_res = mysqli_query($con, "SELECT pass_key FROM admin WHERE username='$memid_esc'");
 				    $user_pass = "";
 				    if ($pass_res && mysqli_num_rows($pass_res) > 0) {
 				        $pass_row = mysqli_fetch_assoc($pass_res);
@@ -334,7 +335,7 @@ if ($memid) {
                                         <div class="form-group">
                                             <label class="form-label">Link to Partner ID (For Couple Plan):</label>
                                             <input class="form-control-custom" type="text" name="partner_uid" value="<?php 
-                                                $q_part = mysqli_query($con, "SELECT partner_uid FROM users WHERE userid='$memid'");
+                                                $q_part = mysqli_query($con, "SELECT partner_uid FROM users WHERE userid='$memid_esc'");
                                                 if ($q_part && mysqli_num_rows($q_part) > 0) {
                                                     $r_part = mysqli_fetch_assoc($q_part);
                                                     echo htmlspecialchars($r_part['partner_uid'] ?? '');
@@ -398,7 +399,7 @@ if ($memid) {
                                             <select class="form-control-custom" name="pool_group_id">
                                                 <option value="">-- No Pool (Individual) --</option>
                                                 <?php
-                                                    $q_pool = "SELECT userid, username FROM users WHERE userid != '$memid'";
+                                                    $q_pool = "SELECT userid, username FROM users WHERE userid != '$memid_esc'";
                                                     $res_pool = mysqli_query($con, $q_pool);
                                                     if ($res_pool && mysqli_num_rows($res_pool) > 0) {
                                                         while ($row_p = mysqli_fetch_assoc($res_pool)) {
@@ -418,7 +419,7 @@ if ($memid) {
                                                     $res_plans = mysqli_query($con, $q_plans);
                                                     
                                                     $current_pid = "";
-                                                    $q_curr = "SELECT pid FROM enrolls_to WHERE uid='$memid' AND renewal='yes' ORDER BY expire DESC LIMIT 1";
+                                                    $q_curr = "SELECT pid FROM enrolls_to WHERE uid='$memid_esc' AND renewal='yes' ORDER BY expire DESC LIMIT 1";
                                                     $res_curr = mysqli_query($con, $q_curr);
                                                     if ($res_curr && mysqli_num_rows($res_curr) > 0) {
                                                         $row_curr = mysqli_fetch_assoc($res_curr);

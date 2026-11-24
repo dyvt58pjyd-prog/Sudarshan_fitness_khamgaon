@@ -819,7 +819,7 @@ $pt_receipt_no = '#PT-' . date('Y', strtotime($row['enroll_date'])) . '-' . str_
             <div class="verification-callout">
                 <div class="verification-qr">
                     <?php 
-                    $verify_qr_url = "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=" . urlencode("https://sudarshanfitness.de/dashboard/admin/gen_pt_invoice.php?ptid=" . $pt_id);
+                    $verify_qr_url = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" . urlencode("https://sudarshanfitness.de/dashboard/admin/gen_pt_invoice.php?ptid=" . $pt_id);
                     ?>
                     <img src="<?php echo $verify_qr_url; ?>" alt="Verification QR" />
                 </div>

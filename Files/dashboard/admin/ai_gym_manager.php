@@ -1,5 +1,6 @@
 <?php
 require '../../include/db_conn.php';
+require '../../include/gemini_config.php';
 page_protect();
 
 if ($_SESSION['role'] !== 'super_admin' && $_SESSION['role'] !== 'owner') {
@@ -10,47 +11,69 @@ if ($_SESSION['role'] !== 'super_admin' && $_SESSION['role'] !== 'owner') {
 
 $gym = get_gym_details($con);
 $today = date('Y-m-d');
+$next_7 = date('Y-m-d', strtotime('+7 days'));
 
 // Fetch live gym performance stats
-$m_total_res = mysqli_query($con, "SELECT COUNT(*) as c FROM users");
-$m_total = mysqli_fetch_assoc($m_total_res)['c'] ?? 0;
+$m_total_res = mysqli_query($con, "SELECT COUNT(*) as c FROM users WHERE userid != 'PENDING'");
+$m_total = ($m_total_res && $r = mysqli_fetch_assoc($m_total_res)) ? intval($r['c']) : 0;
 
 $m_active_res = mysqli_query($con, "SELECT COUNT(DISTINCT uid) as c FROM enrolls_to WHERE expire >= '$today'");
-$m_active = mysqli_fetch_assoc($m_active_res)['c'] ?? 0;
+$m_active = ($m_active_res && $r = mysqli_fetch_assoc($m_active_res)) ? intval($r['c']) : 0;
 
-$rev_res = mysqli_query($con, "SELECT SUM(paid_amount) as total FROM enrolls_to");
-$total_rev = mysqli_fetch_assoc($rev_res)['total'] ?? 0;
+$rev_res = mysqli_query($con, "SELECT COALESCE(SUM(paid_amount), 0) as total FROM enrolls_to");
+$total_rev = ($rev_res && $r = mysqli_fetch_assoc($rev_res)) ? intval($r['total']) : 0;
 
-$exp_res = mysqli_query($con, "SELECT SUM(amount) as total FROM expenses");
-$total_exp = mysqli_fetch_assoc($exp_res)['total'] ?? 0;
+$exp_res = mysqli_query($con, "SELECT COALESCE(SUM(amount), 0) as total FROM expenses");
+$total_exp = ($exp_res && $r = mysqli_fetch_assoc($exp_res)) ? intval($r['total']) : 0;
+
+$expiring_res = mysqli_query($con, "SELECT COUNT(*) as c FROM enrolls_to WHERE expire BETWEEN '$today' AND '$next_7' AND renewal = 'yes'");
+$expiring_count = ($expiring_res && $r = mysqli_fetch_assoc($expiring_res)) ? intval($r['c']) : 0;
+
+$dues_res = mysqli_query($con, "SELECT COUNT(*) as c, COALESCE(SUM(balance), 0) as amt FROM enrolls_to WHERE balance > 0");
+$dues_row = $dues_res ? mysqli_fetch_assoc($dues_res) : ['c' => 0, 'amt' => 0];
+$dues_count = intval($dues_row['c'] ?? 0);
+$dues_amount = intval($dues_row['amt'] ?? 0);
 
 $net_profit = $total_rev - $total_exp;
 
 // Handle AI Owner Prompt Engine
-$query = isset($_POST['query']) ? strtolower(trim($_POST['query'])) : '';
+$raw_query = isset($_POST['query']) ? trim($_POST['query']) : '';
+$query = strtolower($raw_query);
 $ai_answer = "";
 
-if (!empty($query)) {
-    if (strpos($query, 'performing') !== false || strpos($query, 'performance') !== false || strpos($query, 'business') !== false) {
+if (!empty($raw_query)) {
+    $sys = "You are the executive AI business advisor for {$gym['gym_name']} in Khamgaon, Maharashtra. Provide sharp, practical, data-driven gym operations and retention advice based ONLY on the supplied live metrics.";
+    $context_prompt = "Live Gym Metrics as of $today:\n"
+                    . "- Total Members: $m_total\n"
+                    . "- Active Subscriptions: $m_active\n"
+                    . "- Expiring in Next 7 Days: $expiring_count\n"
+                    . "- Pending Balance Dues: $dues_count members totaling ₹" . number_format($dues_amount) . "\n"
+                    . "- Total Membership Revenue: ₹" . number_format($total_rev) . "\n"
+                    . "- Total Expenses: ₹" . number_format($total_exp) . "\n"
+                    . "- Net Profit: ₹" . number_format($net_profit) . "\n\n"
+                    . "Owner Question: $raw_query";
+
+    $live_ai = query_gemini_ai($context_prompt, $sys);
+    if (!empty($live_ai)) {
+        $ai_answer = $live_ai;
+    } elseif (strpos($query, 'performing') !== false || strpos($query, 'performance') !== false || strpos($query, 'business') !== false) {
         $ai_answer = "📈 **Sudarshan AI Gym Manager Overview:**\n\n" .
                      "• **Total Registered Members**: $m_total Athletes\n" .
                      "• **Active Subscriptions**: $m_active Members\n" .
+                     "• **Expiring Next 7 Days**: $expiring_count Members\n" .
                      "• **Total Revenue Earned**: ₹" . number_format($total_rev) . "\n" .
                      "• **Total Expenses**: ₹" . number_format($total_exp) . "\n" .
-                     "• **Net Profit**: ₹" . number_format($net_profit) . "\n\n" .
-                     "💡 *Key Insight: Business retention rate is currently strong at 92%! Recommended action: Nudge 14 expiring members this week.*";
+                     "• **Net Profit**: ₹" . number_format($net_profit);
     } elseif (strpos($query, 'today') !== false || strpos($query, 'action') !== false || strpos($query, 'do') !== false) {
         $ai_answer = "📋 **Today's Executive Priorities for Owner:**\n\n" .
-                     "1. **Follow up with 8 Expiring Members**: Send 1-click WhatsApp renewal alerts.\n" .
-                     "2. **Contact 5 Inactive Members**: High risk of churn (>12 days absent).\n" .
-                     "3. **Review 3 Pending Trial Registrations**: Convert visitors to full members.\n" .
-                     "4. **Collect Outstanding Dues**: 2 members have pending balance due.\n" .
-                     "5. **Conduct Goal Review**: Schedule Day 30 goal checks for 4 new members.";
+                     "1. **Follow up with $expiring_count Expiring Members** (next 7 days).\n" .
+                     "2. **Collect Outstanding Dues**: $dues_count members owe ₹" . number_format($dues_amount) . ".\n" .
+                     "3. **Review Churn Radar**: Check inactive members and trigger WhatsApp retention nudges.";
     } elseif (strpos($query, 'churn') !== false || strpos($query, 'risk') !== false) {
         $ai_answer = "⚠️ **Member Churn Intelligence:**\n\n" .
-                     "• **At Risk (High)**: 12 Members haven't checked in over 12 days.\n" .
-                     "• **Needs Attention (Medium)**: 8 Members absent for 6-10 days.\n\n" .
-                     "👉 *Click on Churn Risk Analytics in your sidebar to trigger automated WhatsApp retention nudges!*";
+                     "• **Expiring within 7 days**: $expiring_count Members\n" .
+                     "• **Active vs Total**: $m_active active out of $m_total total members.\n\n" .
+                     "👉 Open Churn Radar in your sidebar to send WhatsApp retention nudges!";
     } else {
         $ai_answer = "🤖 **AI Gym Manager Assistant:**\n\nHow can I help you manage **{$gym['gym_name']}** today?\n\nTry asking:\n" .
                      "• *How is my gym performing this month?*\n" .
@@ -121,7 +144,7 @@ if (!empty($query)) {
             </form>
 
             <?php if ($ai_answer): ?>
-                <div class="ai-box"><?php echo $ai_answer; ?></div>
+                <div class="ai-box"><?php echo htmlspecialchars($ai_answer); ?></div>
             <?php endif; ?>
         </div>
     </div>

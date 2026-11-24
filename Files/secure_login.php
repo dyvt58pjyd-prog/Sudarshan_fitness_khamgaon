@@ -5,7 +5,7 @@ $user_id_auth = isset($_POST['user_id_auth']) ? ltrim(rtrim($_POST['user_id_auth
 $pass_key = isset($_POST['pass_key']) ? ltrim(rtrim($_POST['pass_key'])) : '';
 $login_role = isset($_POST['login_role']) ? $_POST['login_role'] : 'member';
 
-$valid_roles = ['member', 'reception', 'trainer', 'owner', 'super_admin', 'auditor'];
+$valid_roles = ['member', 'reception', 'trainer', 'owner', 'super_admin', 'auditor', 'nutrition_partner'];
 if (!in_array($login_role, $valid_roles)) {
     $login_role = 'member';
 }

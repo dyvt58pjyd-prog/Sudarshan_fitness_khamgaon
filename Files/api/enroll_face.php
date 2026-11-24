@@ -71,12 +71,12 @@ elseif (!empty($input['u']) && !empty($input['token'])) {
         }
     }
     
-    // Check users
+    // Check users (member password is stored in admin.pass_key)
     if (!$target_table) {
-        $q_usr = mysqli_query($con, "SELECT userid, password FROM users WHERE userid='$user'");
+        $q_usr = mysqli_query($con, "SELECT u.userid, a.pass_key FROM users u LEFT JOIN admin a ON a.username = u.userid WHERE u.userid='$user' LIMIT 1");
         if ($q_usr && mysqli_num_rows($q_usr) === 1) {
             $row = mysqli_fetch_assoc($q_usr);
-            if (hash_equals(hash('sha256', $user . $row['password']), $token)) {
+            if (!empty($row['pass_key']) && hash_equals(hash('sha256', $user . $row['pass_key']), $token)) {
                 $target_table = 'users';
                 $id_col = 'userid';
                 $target_id = $user;
@@ -94,8 +94,11 @@ $now = date('Y-m-d H:i:s');
 $update_sql = "UPDATE $target_table SET face_descriptor = '$descriptor_json', face_enrolled_at = '$now' WHERE $id_col = '$target_id'";
 
 if ($target_table === 'admin') {
-    // Keep webauthn_credential in sync for legacy compatibility
-    $update_sql = "UPDATE admin SET face_descriptor = '$descriptor_json', webauthn_credential = '$descriptor_json', face_enrolled_at = '$now' WHERE username = '$target_id'";
+    $chk_webauthn = mysqli_query($con, "SHOW COLUMNS FROM admin LIKE 'webauthn_credential'");
+    if ($chk_webauthn && mysqli_num_rows($chk_webauthn) > 0) {
+        // Keep webauthn_credential in sync for legacy compatibility
+        $update_sql = "UPDATE admin SET face_descriptor = '$descriptor_json', webauthn_credential = '$descriptor_json', face_enrolled_at = '$now' WHERE username = '$target_id'";
+    }
 }
 
 if (mysqli_query($con, $update_sql)) {

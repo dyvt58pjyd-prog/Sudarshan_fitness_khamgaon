@@ -10,12 +10,12 @@ if (!isset($_SESSION['user_data']) || $_SESSION['role'] !== 'member') {
     exit();
 }
 
-$user_id = $_SESSION['user_data'];
+$user_id = mysqli_real_escape_string($con, $_SESSION['user_data']);
 $gym = get_gym_details($con);
 
 // Fetch Member Details
 $res_m = mysqli_query($con, "SELECT * FROM users WHERE userid = '$user_id'");
-$member = mysqli_fetch_assoc($res_m);
+$member = $res_m ? mysqli_fetch_assoc($res_m) : null;
 
 $msg = '';
 
@@ -37,9 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                   VALUES ('$order_code', '$user_id', '$m_name', '$m_mobile', $product_id, '$p_name', $price, 'pending', '$notes')";
 
         if (mysqli_query($con, $q_ins)) {
-            $gym_wa = !empty($gym['phone']) ? preg_replace('/[^0-9]/', '', $gym['phone']) : '919325205075';
+            $gym_wa = !empty($gym['gym_contact']) ? preg_replace('/[^0-9]/', '', $gym['gym_contact']) : '9325205075';
+            if (strlen($gym_wa) === 10) {
+                $gym_wa = '91' . $gym_wa;
+            }
             $wa_text = "Hello " . $gym['gym_name'] . "! I would like to order/inquire about the nutrition product:\n\n*Product*: " . $p['product_name'] . "\n*Price*: ₹" . number_format($price) . "\n*Order Code*: " . $order_code . "\n*Member*: " . $member['username'] . " (ID: #" . $user_id . ")\n\nPlease confirm availability and delivery!";
-            $wa_url = "https://wa.me/91" . $gym_wa . "?text=" . urlencode($wa_text);
+            $wa_url = "https://wa.me/" . $gym_wa . "?text=" . urlencode($wa_text);
 
             header("Location: " . $wa_url);
             exit();

@@ -16,16 +16,16 @@ $output = "";
 
 if ($res && mysqli_num_rows($res) > 0) {
     while ($row = mysqli_fetch_assoc($res)) {
-        $cmd_id = $row['id'];
+        $cmd_id = intval($row['id']);
         $type = $row['command_type'];
-        $uid = $row['target_uid'];
+        $uid = preg_replace('/[\r\n\t]/', '', (string)$row['target_uid']);
         $payload = json_decode($row['payload'], true);
         
         $cmd_str = "";
         
         if ($type === 'UPDATE_USERINFO') {
-            $name = isset($payload['name']) ? $payload['name'] : 'User';
-            $pin = isset($payload['pin']) ? $payload['pin'] : $uid; // entry_code or uid
+            $name_raw = isset($payload['name']) ? (string)$payload['name'] : 'User';
+            $name = preg_replace('/[\r\n\t]/', ' ', $name_raw);
             // Format: DATA UPDATE USERINFO PIN=xyz Name=xyz
             $cmd_str = "DATA UPDATE USERINFO PIN={$uid}\tName={$name}";
             // Note: We use target_uid as PIN in ZKTeco to match biometric_id.

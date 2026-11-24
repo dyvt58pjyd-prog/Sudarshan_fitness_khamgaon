@@ -26,11 +26,13 @@ if (isset($_POST['approve_id'])) {
         $gender = $req['gender'];
         
         // Fetch plan details
-        $plan_q = mysqli_query($con, "SELECT planName, validity, amount FROM plan WHERE pid = '$pid'");
+        $pid_esc = mysqli_real_escape_string($con, $pid);
+        $uid_esc = mysqli_real_escape_string($con, $uid);
+        $plan_q = mysqli_query($con, "SELECT planName, validity, amount FROM plan WHERE pid = '$pid_esc'");
         if ($plan_q && mysqli_num_rows($plan_q) > 0) {
             $plan_data = mysqli_fetch_assoc($plan_q);
             $plan_name = $plan_data['planName'];
-            $validity = intval($plan_data['validity']);
+            $validity = $plan_data['validity'];
             $plan_amount = intval($plan_data['amount']);
             
             $discount_amt = 0;
@@ -39,21 +41,22 @@ if (isset($_POST['approve_id'])) {
             }
             
             // Set other plans for this user to renewal = 'no'
-            mysqli_query($con, "UPDATE enrolls_to SET renewal = 'no' WHERE uid = '$uid'");
+            mysqli_query($con, "UPDATE enrolls_to SET renewal = 'no' WHERE uid = '$uid_esc'");
             
             // Calculate active subscription dates
             date_default_timezone_set("Asia/Calcutta");
             $today = date('Y-m-d');
             $cdate = ($today < '2026-07-08') ? '2026-07-08' : $today;
             $d = calculate_expiration_date($cdate, $validity);
+            if (!$d) $d = strtotime('+1 Month', strtotime($cdate));
             $expiredate = date("Y-m-d", $d);
             
             $payment_mode = 'UPI';
-            $received_by = 'Approved by ' . (isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Admin');
+            $received_by = mysqli_real_escape_string($con, 'Approved by ' . (isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Admin'));
             
             // Insert active subscription into enrolls_to
             $ins_q = "INSERT INTO enrolls_to (pid, uid, paid_date, expire, renewal, payment_mode, received_by, discount_amount, paid_amount) 
-                      VALUES ('$pid', '$uid', '$cdate', '$expiredate', 'yes', '$payment_mode', '$received_by', $discount_amt, $amount)";
+                      VALUES ('$pid_esc', '$uid_esc', '$cdate', '$expiredate', 'yes', '$payment_mode', '$received_by', $discount_amt, $amount)";
             
             if (mysqli_query($con, $ins_q)) {
                 // Update payment request status to approved
@@ -61,18 +64,18 @@ if (isset($_POST['approve_id'])) {
                 
                 // Rotate/generate gate entry code
                 $new_entry_code = strval(rand(100000, 999999));
-                mysqli_query($con, "UPDATE users SET entry_code = '$new_entry_code' WHERE userid = '$uid'");
+                mysqli_query($con, "UPDATE users SET entry_code = '$new_entry_code' WHERE userid = '$uid_esc'");
                 
                 // Check if this is their first subscription or a renewal
-                $check_q = mysqli_query($con, "SELECT COUNT(*) as cnt FROM enrolls_to WHERE uid = '$uid'");
-                $row_check = mysqli_fetch_assoc($check_q);
-                $is_new = ($row_check['cnt'] <= 1);
+                $check_q = mysqli_query($con, "SELECT COUNT(*) as cnt FROM enrolls_to WHERE uid = '$uid_esc'");
+                $row_check = $check_q ? mysqli_fetch_assoc($check_q) : ['cnt' => 0];
+                $is_new = (intval($row_check['cnt']) <= 1);
                 
                 if ($is_new) {
                     // Fetch user chosen password
-                    $pass_q = mysqli_query($con, "SELECT pass_key FROM admin WHERE username = '$uid'");
-                    $pass_row = mysqli_fetch_assoc($pass_q);
-                    $password = $pass_row['pass_key'];
+                    $pass_q = mysqli_query($con, "SELECT pass_key FROM admin WHERE username = '$uid_esc'");
+                    $pass_row = $pass_q ? mysqli_fetch_assoc($pass_q) : null;
+                    $password = $pass_row['pass_key'] ?? '1234';
                     
                     // Send welcome confirmation email (which auto-sends welcome WhatsApp message with PDF receipt)
                     send_member_email($con, $email, $username, $uid, $password, $plan_name, $amount, $expiredate, $new_entry_code, 0, $amount, $gender);

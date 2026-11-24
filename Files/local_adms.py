@@ -44,8 +44,11 @@ class ADMSHandler(http.server.BaseHTTPRequestHandler):
         self._send_response()
 
     def do_POST(self):
-        content_length = int(self.headers.get('Content-Length', 0))
-        post_data = self.rfile.read(content_length).decode('utf-8')
+        try:
+            content_length = int(self.headers.get('Content-Length') or 0)
+        except ValueError:
+            content_length = 0
+        post_data = self.rfile.read(content_length).decode('utf-8', errors='replace') if content_length > 0 else ''
         
         print(f"[{datetime.now().strftime('%H:%M:%S')}] PUNCH RECEIVED from Machine!")
         
@@ -104,7 +107,11 @@ print("5. Restart the machine and punch your finger!")
 print("================================================================\n")
 print(f"Listening for machine punches on port {PORT}...")
 
-with socketserver.TCPServer(("", PORT), ADMSHandler) as httpd:
+class ReusableTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    allow_reuse_address = True
+
+
+with ReusableTCPServer(("", PORT), ADMSHandler) as httpd:
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

@@ -14,6 +14,9 @@ if ($auth !== $secret) {
     exit();
 }
 
+// Recover stale messages stuck in 'processing' for > 5 minutes (e.g. if Node daemon crashed mid-send)
+mysqli_query($con, "UPDATE whatsapp_outbox SET status = 'pending' WHERE status = 'processing' AND last_attempt IS NOT NULL AND last_attempt < DATE_SUB(NOW(), INTERVAL 5 MINUTE)");
+
 // Fetch pending or failed messages (up to 10 at a time)
 $q = mysqli_query($con, "SELECT * FROM whatsapp_outbox WHERE status IN ('pending', 'failed') AND attempts < 3 ORDER BY created_at ASC LIMIT 10");
 $messages = [];
@@ -27,9 +30,9 @@ if ($q && mysqli_num_rows($q) > 0) {
             'filePath' => $row['file_path']
         ];
         
-        // Mark as processing so the next poll cycle doesn't grab it before it's sent
-        $id = $row['id'];
-        mysqli_query($con, "UPDATE whatsapp_outbox SET status = 'processing' WHERE id = $id");
+        // Mark as processing and stamp last_attempt so stale recovery works reliably
+        $id = intval($row['id']);
+        mysqli_query($con, "UPDATE whatsapp_outbox SET status = 'processing', last_attempt = NOW() WHERE id = $id");
     }
 }
 

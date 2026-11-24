@@ -12,7 +12,8 @@ if (!isset($_SESSION['user_data']) && !isset($_SESSION['userid'])) {
     exit();
 }
 
-$userid = isset($_SESSION['userid']) ? $_SESSION['userid'] : ($_SESSION['user_data']['userid'] ?? '');
+$userid = isset($_SESSION['userid']) ? $_SESSION['userid'] : (is_string($_SESSION['user_data'] ?? null) ? $_SESSION['user_data'] : ($_SESSION['user_data']['userid'] ?? ''));
+$userid_esc = mysqli_real_escape_string($con, $userid);
 $input = json_decode(file_get_contents('php://input'), true);
 $query = strtolower(trim($input['query'] ?? ''));
 
@@ -22,8 +23,8 @@ if (empty($query)) {
 }
 
 // Fetch member context
-$user_q = mysqli_query($con, "SELECT username, gender, fitness_goal, weight, height, xp_points, gym_rank FROM users WHERE userid = '$userid'");
-$user_info = mysqli_fetch_assoc($user_q) ?: [
+$user_q = mysqli_query($con, "SELECT u.username, u.gender, u.fitness_goal, h.weight, h.height, u.xp_points, u.gym_rank FROM users u LEFT JOIN health_status h ON u.userid = h.uid WHERE u.userid = '$userid_esc' ORDER BY h.hid DESC LIMIT 1");
+$user_info = ($user_q ? mysqli_fetch_assoc($user_q) : null) ?: [
     'username' => 'Hunter',
     'gender' => 'Male',
     'fitness_goal' => 'General Fitness',
@@ -40,12 +41,12 @@ $xp   = intval($user_info['xp_points']);
 
 require_once __DIR__ . '/../include/gemini_config.php';
 
-// Intent Analysis & Gemini AI Response Generation
-$system_instruction = "You are Sudarshan AI Fitness Coach for gym member '$name' (Gender: {$user_info['gender']}, Goal: $goal, Rank: $rank, EXP: $xp). Provide friendly, highly practical gym workout, Indian nutrition, and fitness advice.";
+// Intent Analysis & AI Response Generation
+$system_instruction = "You are Sudarshan AI Fitness Coach for gym member '$name' (Gender: {$user_info['gender']}, Goal: $goal, Rank: $rank, EXP: $xp, Weight: {$user_info['weight']}kg, Height: {$user_info['height']}cm). Provide friendly, highly practical gym workout, Indian nutrition, and fitness advice.";
 $ai_response = query_gemini_ai("Member query: " . $input['query'], $system_instruction);
 
 if (!empty($ai_response)) {
-    $reply = "🤖 **Sudarshan AI Coach (Powered by Gemini):**\n\n" . $ai_response;
+    $reply = "🤖 **Sudarshan AI Coach:**\n\n" . $ai_response;
 } else {
     // Intelligent Fallback
     if (strpos($query, 'workout today') !== false || strpos($query, 'today workout') !== false || strpos($query, 'routine') !== false) {

@@ -784,10 +784,10 @@ if (isset($_POST['submit_registration'])) {
                         });
                         qrImg.src = canvas.toDataURL('image/png');
                     } else {
-                        qrImg.src = `https://chart.googleapis.com/chart?chs=220x220&cht=qr&chl=${encodeURIComponent(upiUrl)}`;
+                        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiUrl)}`;
                     }
                 } catch (e) {
-                    qrImg.src = `https://chart.googleapis.com/chart?chs=220x220&cht=qr&chl=${encodeURIComponent(upiUrl)}`;
+                    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiUrl)}`;
                 }
                 
                 qrImg.style.display = 'inline-block';

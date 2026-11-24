@@ -33,6 +33,20 @@ if (!$res || mysqli_num_rows($res) === 0) {
 }
 
 $receipt = mysqli_fetch_assoc($res);
+
+// Require either authenticated staff or the matching logged-in member
+$staff_roles = ['super_admin', 'owner', 'reception', 'trainer', 'auditor'];
+$session_role = strtolower(trim($_SESSION['role'] ?? ''));
+$is_staff = isset($_SESSION['user_data'], $_SESSION['logged']) && in_array($session_role, $staff_roles);
+$is_owner_member = (
+    (isset($_SESSION['user_data'], $_SESSION['logged']) && strval($_SESSION['user_data']) === strval($receipt['uid'])) ||
+    (isset($_SESSION['member_uid']) && strval($_SESSION['member_uid']) === strval($receipt['uid']))
+);
+if (!$is_staff && !$is_owner_member) {
+    http_response_code(403);
+    die("Unauthorized: Please log in as staff or the receipt owner to view this receipt.");
+}
+
 $gym = get_gym_details($con);
 
 $is_new = ($receipt['joining_date'] === $receipt['paid_date']);
@@ -346,7 +360,7 @@ if (substr($logo_path, 0, 6) === '../../') {
             <div class="gym-info">
                 <h1><?php echo htmlspecialchars($gym['gym_name']); ?></h1>
                 <p><?php echo htmlspecialchars($gym['gym_address'] ?? 'Khamgaon, Dist. Buldhana, Maharashtra - 444303'); ?></p>
-                <p>Phone: <?php echo htmlspecialchars($gym['gym_phone'] ?? '+91 94221 00000'); ?> | Email: <?php echo htmlspecialchars($gym['gym_email'] ?? 'info@sudarshanfitness.com'); ?></p>
+                <p>Phone: <?php echo htmlspecialchars($gym['gym_contact'] ?? '9325205075'); ?> | Email: <?php echo htmlspecialchars($gym['gym_email'] ?? 'sudarshan.fitness.khm@gmail.com'); ?></p>
             </div>
             <div>
                 <img src="<?php echo htmlspecialchars($logo_path); ?>" alt="Logo" class="logo-img">

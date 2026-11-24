@@ -4,8 +4,13 @@ page_protect();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['et_id']) && isset($_POST['collect_amount'])) {
     $et_id = mysqli_real_escape_string($con, $_POST['et_id']);
-    $collect_amount = floatval($_POST['collect_amount']);
+    $collect_amount = max(0, floatval($_POST['collect_amount']));
     $payment_mode = isset($_POST['payment_mode']) ? mysqli_real_escape_string($con, $_POST['payment_mode']) : 'Cash';
+    if ($collect_amount <= 0) {
+        echo "<head><script>alert('Invalid collection amount.');</script></head></html>";
+        echo "<meta http-equiv='refresh' content='0; url=pending_dues.php'>";
+        exit();
+    }
     
     // Fetch the current enrollment
     $query = "SELECT e.*, u.username, u.mobile, u.email, p.planName 
@@ -36,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['et_id']) && isset($_PO
         if (mysqli_query($con, $update_query)) {
             // Log into the balance collections ledger
             $today = date('Y-m-d');
-            $received_by = isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'System';
+            $received_by = mysqli_real_escape_string($con, isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'System');
             $ledger_query = "INSERT INTO balance_collections (et_id, amount, payment_mode, collection_date, received_by) 
                              VALUES ('$et_id', '$collect_amount', '$payment_mode', '$today', '$received_by')";
             mysqli_query($con, $ledger_query);
@@ -59,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['et_id']) && isset($_PO
             
             $msg .= "\nThank you!\n-$gym_name";
             
-            queue_whatsapp_message($con, $row['mobile'], $msg, null);
+            enqueue_whatsapp_message($con, $row['mobile'], $msg, null);
             
             // Send Email Receipt
             require_once '../../include/smtp_mailer.php';
@@ -126,5 +131,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['et_id']) && isset($_PO
     }
 } else {
     header("Location: pending_dues.php");
+    exit();
 }
 ?>

@@ -3,17 +3,20 @@ require '../../include/db_conn.php';
 page_protect();
     
     
-   $uid=$_POST['uid'];
-   $uname=$_POST['uname'];
-   $gender=$_POST['gender'];
-   $mobile=$_POST['phone'];
-   $email=$_POST['email'];
-   $dob=$_POST['dob'];
-   $jdate=$_POST['jdate'];
-   $stname=$_POST['stname'];
-   $state=$_POST['state'];
-   $city=$_POST['city'];
-   $zipcode=$_POST['zipcode'];
+   $uid     = mysqli_real_escape_string($con, trim($_POST['uid'] ?? ''));
+   $uname   = mysqli_real_escape_string($con, trim($_POST['uname'] ?? ''));
+   $gender  = mysqli_real_escape_string($con, trim($_POST['gender'] ?? ''));
+   $mobile  = mysqli_real_escape_string($con, trim($_POST['phone'] ?? ''));
+   $email   = mysqli_real_escape_string($con, trim($_POST['email'] ?? ''));
+   $dob     = mysqli_real_escape_string($con, trim($_POST['dob'] ?? ''));
+   $jdate   = mysqli_real_escape_string($con, trim($_POST['jdate'] ?? ''));
+   $stname  = mysqli_real_escape_string($con, trim($_POST['stname'] ?? ''));
+   $state   = mysqli_real_escape_string($con, trim($_POST['state'] ?? ''));
+   $city    = mysqli_real_escape_string($con, trim($_POST['city'] ?? ''));
+   $zipcode = mysqli_real_escape_string($con, trim($_POST['zipcode'] ?? ''));
+   $raw_uname = trim($_POST['uname'] ?? '');
+   $raw_email = trim($_POST['email'] ?? '');
+   $raw_uid   = trim($_POST['uid'] ?? '');
    $routine = !empty($_POST['routine']) ? (int)$_POST['routine'] : "NULL";
    $biometric_batch = mysqli_real_escape_string($con, $_POST['biometric_batch']);
    $pool_group_id = isset($_POST['pool_group_id']) && !empty($_POST['pool_group_id']) ? mysqli_real_escape_string($con, $_POST['pool_group_id']) : '';
@@ -51,13 +54,14 @@ page_protect();
               $q_p = mysqli_query($con, "SELECT * FROM plan WHERE pid='$plan'");
               if ($q_p && mysqli_num_rows($q_p) > 0) {
                   $plan_data = mysqli_fetch_assoc($q_p);
-                  $validity = intval($plan_data['validity']); // In months
+                  $validity = $plan_data['validity'];
                   
                   date_default_timezone_set("Asia/Calcutta"); 
                   $cdate = isset($_SESSION['working_year']) ? ($_SESSION['working_year'] . '-' . date('m-d')) : date('Y-m-d');
                   $launch_date = '2026-07-08';
                   $cdate = ($cdate < $launch_date) ? $launch_date : $cdate;
                   $d = calculate_expiration_date($cdate, $validity);
+                  if (!$d) $d = strtotime('+1 Month', strtotime($cdate));
                   $expiredate = date("Y-m-d", $d);
                   
                   $payment_mode = 'Cash';
@@ -80,7 +84,7 @@ page_protect();
                                       VALUES ('$plan', '$uid', '$transaction_date', '$expiredate', 'yes', '$payment_mode', '$received_by', $discount, $paid_amount)");
 
                   // Send Payment/New Membership Confirmation Email
-                  send_payment_email($con, $email, $uname, $uid, $plan_data['planName'], $plan_data['amount'], $expiredate, $payment_mode, $received_by, $new_entry_code, $discount, $paid_amount);
+                  send_payment_email($con, $raw_email, $raw_uname, $raw_uid, $plan_data['planName'], $plan_data['amount'], $expiredate, $payment_mode, $received_by, $new_entry_code, $discount, $paid_amount);
               }
           }
       }

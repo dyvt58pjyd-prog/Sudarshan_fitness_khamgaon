@@ -23,8 +23,10 @@ $filepath = $backup_dir . $filename;
 // Simple pure PHP database dumper
 $tables = array();
 $result = mysqli_query($con, "SHOW TABLES");
-while ($row = mysqli_fetch_row($result)) {
-    $tables[] = $row[0];
+if ($result) {
+    while ($row = mysqli_fetch_row($result)) {
+        $tables[] = $row[0];
+    }
 }
 
 $sql_dump = "-- Sudarshan Fitness Encrypted Backup\n";
@@ -32,21 +34,28 @@ $sql_dump .= "-- Generated at: " . date('Y-m-d H:i:s') . "\n\n";
 
 foreach ($tables as $table) {
     $result = mysqli_query($con, "SELECT * FROM `$table`");
+    $create_res = mysqli_query($con, "SHOW CREATE TABLE `$table`");
+    if (!$result || !$create_res) {
+        continue;
+    }
+    $row2 = mysqli_fetch_row($create_res);
+    if (!$row2 || !isset($row2[1])) {
+        continue;
+    }
     $num_fields = mysqli_num_fields($result);
 
     $sql_dump .= "DROP TABLE IF EXISTS `$table`;\n";
-    $row2 = mysqli_fetch_row(mysqli_query($con, "SHOW CREATE TABLE `$table`"));
     $sql_dump .= $row2[1] . ";\n\n";
 
     while ($row = mysqli_fetch_row($result)) {
         $sql_dump .= "INSERT INTO `$table` VALUES(";
         for ($j = 0; $j < $num_fields; $j++) {
-            $row[$j] = addslashes($row[$j]);
-            $row[$j] = preg_replace("/\n/", "\\n", $row[$j]);
-            if (isset($row[$j])) {
-                $sql_dump .= '"' . $row[$j] . '"';
+            if ($row[$j] !== null) {
+                $val = addslashes($row[$j]);
+                $val = preg_replace("/\n/", "\\n", $val);
+                $sql_dump .= '"' . $val . '"';
             } else {
-                $sql_dump .= '""';
+                $sql_dump .= 'NULL';
             }
             if ($j < ($num_fields - 1)) {
                 $sql_dump .= ',';

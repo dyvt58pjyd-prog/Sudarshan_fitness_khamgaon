@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_reminders'])) {
 
     $q = mysqli_query($con, "
         SELECT u.userid, u.username, u.email, u.mobile,
-               e.expire, p.planName, e.amount
+               e.expire, p.planName, p.amount
         FROM users u
         INNER JOIN enrolls_to e ON u.userid = e.uid
         INNER JOIN plan p ON e.pid = p.pid
@@ -31,7 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_reminders'])) {
     $gym_name = htmlspecialchars($gym['gym_name'] ?? 'Sudarshan Fitness');
     $tpl = function_exists('get_email_template') ? get_email_template($con, 'expiry_reminder') : null;
 
-    while ($row = mysqli_fetch_assoc($q)) {
+    if ($q) {
+        while ($row = mysqli_fetch_assoc($q)) {
         if (empty($row['email'])) { $no_email++; continue; }
 
         $expire_dt  = new DateTime($row['expire']);
@@ -60,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_reminders'])) {
                 '{plan_name}'   => $row['planName'],
                 '{expire_date}' => $expire_fmt,
                 '{days_left}'   => "$days_left days ($urgency_label)",
-                '{qr_image_url}'=> "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=" . urlencode($row['userid'])
+                '{qr_image_url}'=> "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" . urlencode($row['userid'])
             ], $gym);
 
             $html = $rendered['html'];
@@ -139,6 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_reminders'])) {
             . mysqli_real_escape_string($con, $row['userid']) . "','" 
             . mysqli_real_escape_string($con, $row['email']) . "',$days_left, NOW()) 
             ON DUPLICATE KEY UPDATE sent_at = NOW()");
+        }
     }
 
     $response = ['sent' => $sent, 'failed' => $failed, 'no_email' => $no_email];
@@ -168,9 +170,11 @@ for ($d = 1; $d <= 7; $d++) {
         INNER JOIN plan p ON e.pid = p.pid
         WHERE e.expire = '$date' AND e.renewal = 'yes'
     ");
-    while ($r = mysqli_fetch_assoc($q)) {
-        $r['days_left'] = $d;
-        $expiring[] = $r;
+    if ($q) {
+        while ($r = mysqli_fetch_assoc($q)) {
+            $r['days_left'] = $d;
+            $expiring[] = $r;
+        }
     }
 }
 

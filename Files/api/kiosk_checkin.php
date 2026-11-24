@@ -105,7 +105,7 @@ if ($q_att && mysqli_num_rows($q_att) > 0) {
             if (!empty($mobile)) {
                 $wa_msg = "👋 *Goodbye from {$gym_name}!* 👋\n\n" .
                            "Hello *{$name}*,\n\n" .
-                           "You checked out at * " . date('h:i A', strtotime($log_time)) . "*.\n\n" .
+                           "You checked out at *" . date('h:i A', strtotime($log_time)) . "*.\n\n" .
                            "Great session today! Keep up the consistency. See you next time! 🔌";
                            
                 enqueue_whatsapp_message($con, $mobile, $wa_msg);
@@ -168,7 +168,7 @@ if ($q_att && mysqli_num_rows($q_att) > 0) {
         if (!empty($mobile)) {
             $wa_msg = "🏋️ *Welcome to {$gym_name}!* 🏋️\n\n" .
                        "Hello *{$name}*,\n\n" .
-                       "You checked in at * " . date('h:i A', strtotime($log_time)) . "*.\n" .
+                       "You checked in at *" . date('h:i A', strtotime($log_time)) . "*.\n" .
                        "🔥 *Check-In Streak:* *{$streak} days!*\n\n";
                        
             if ($is_milestone) {

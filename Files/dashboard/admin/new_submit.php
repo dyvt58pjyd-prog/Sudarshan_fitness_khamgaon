@@ -334,7 +334,7 @@ $query="INSERT INTO users(username,gender,mobile,email,dob,joining_date,userid,t
                 }
 
                 // Send Confirmation Email with entry code and discount details
-                send_member_email($con, $email, $uname, $memID, $password, $value[1], $value[4], $expiredate, $entry_code, $discount, $paid_amount, $gender);
+                send_member_email($con, $email, $uname, $memID, $password, $value[1], $value[4], $expiredate, $entry_code, $discount, $paid_now, $gender);
 
                 if (!empty($linked_existing_id)) {
                     $ex_name_esc = addslashes($ex_row['username'] ?? "Member #$linked_existing_id");

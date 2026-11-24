@@ -28,7 +28,7 @@ mysqli_query($con, "CREATE TABLE IF NOT EXISTS biometric_gate_logs (
     error_reason VARCHAR(255) NULL
 )");
 
-if ($biometric_id <= 0) {
+if (!is_numeric($biometric_id) || intval($biometric_id) <= 0) {
     http_response_code(400);
     echo json_encode([
         'success' => false,
@@ -58,6 +58,9 @@ $biometric_enabled = isset($user['biometric_enabled']) ? intval($user['biometric
 
 // Parse time and date
 $time_parsed = !empty($timestamp) ? strtotime($timestamp) : time();
+if ($time_parsed === false) {
+    $time_parsed = time();
+}
 $log_date = date('Y-m-d', $time_parsed);
 $log_time = date('H:i:s', $time_parsed);
 
@@ -99,47 +102,51 @@ if ($max_expire && strtotime($max_expire) < strtotime($log_date)) {
     exit();
 }
 
-// 3. Three-Session Shift Biometric Access Restriction Check
+// 3. Dynamic Session Shift Biometric Access Restriction Check
 $gym_info = get_gym_details($con);
 $current_time_str = $log_time; // HH:ii:ss
 
 // Retrieve member's selected batch choice (Default to Batch 1 if not set)
-$biometric_batch = isset($user['biometric_batch']) ? $user['biometric_batch'] : '1';
-
-// Batch Timing Definitions:
-// Batch 1: 6:00 AM to 11:00 AM (General Session 1)
-// Batch 2: 4:00 PM to 5:00 PM (Women Only Session 2)
-// Batch 3: 5:00 PM to 10:00 PM (General Session 3)
-$batch1_start = '06:00:00';
-$batch1_end   = '11:00:00';
-
-$batch2_start = '16:00:00';
-$batch2_end   = '17:00:00';
-
-$batch3_start = '17:00:00';
-$batch3_end   = '22:00:00';
+$biometric_batch = isset($user['biometric_batch']) && trim($user['biometric_batch']) !== '' ? trim($user['biometric_batch']) : '1';
+$batch_id_int = intval($biometric_batch);
 
 $is_allowed_by_batch = false;
-$batch_name = "Batch 1";
-$batch_hours = "06:00 AM - 11:00 AM";
+$is_women_only_batch = false;
+$batch_name = "Batch $biometric_batch";
+$batch_hours = "Scheduled Hours";
 
-if ($biometric_batch === '1') {
-    $batch_name = "Batch 1 (General)";
-    $batch_hours = "06:00 AM - 11:00 AM";
-    if ($current_time_str >= $batch1_start && $current_time_str <= $batch1_end) {
-        $is_allowed_by_batch = true;
+// Prefer dynamic schedule from biometric_batches table configured in gym_settings.php
+$batch_found = false;
+if ($batch_id_int > 0) {
+    $q_batch = @mysqli_query($con, "SELECT batch_name, start_time, end_time FROM biometric_batches WHERE id = $batch_id_int LIMIT 1");
+    if ($q_batch && mysqli_num_rows($q_batch) > 0) {
+        $b_row = mysqli_fetch_assoc($q_batch);
+        $batch_found = true;
+        $batch_name = $b_row['batch_name'];
+        $b_start = $b_row['start_time'];
+        $b_end = $b_row['end_time'];
+        $batch_hours = date('h:i A', strtotime($b_start)) . " - " . date('h:i A', strtotime($b_end));
+        if ($current_time_str >= $b_start && $current_time_str <= $b_end) {
+            $is_allowed_by_batch = true;
+        }
+        if (stripos($batch_name, 'women') !== false) {
+            $is_women_only_batch = true;
+        }
     }
-} elseif ($biometric_batch === '2') {
-    $batch_name = "Batch 2 (Women Only)";
-    $batch_hours = "04:00 PM - 05:00 PM";
-    if ($current_time_str >= $batch2_start && $current_time_str <= $batch2_end) {
-        $is_allowed_by_batch = true;
-    }
-} elseif ($biometric_batch === '3') {
-    $batch_name = "Batch 3 (Evening General)";
-    $batch_hours = "05:00 PM - 10:00 PM";
-    if ($current_time_str >= $batch3_start && $current_time_str <= $batch3_end) {
-        $is_allowed_by_batch = true;
+}
+
+// Fallback to legacy default shifts if biometric_batches row was missing
+if (!$batch_found) {
+    $defaults = [
+        '1' => ['Batch 1 (General)', '06:00:00', '11:00:00', '06:00 AM - 11:00 AM', false],
+        '2' => ['Batch 2 (Women Only)', '16:00:00', '17:00:00', '04:00 PM - 05:00 PM', true],
+        '3' => ['Batch 3 (Evening General)', '17:00:00', '22:00:00', '05:00 PM - 10:00 PM', false],
+    ];
+    if (isset($defaults[$biometric_batch])) {
+        [$batch_name, $b_start, $b_end, $batch_hours, $is_women_only_batch] = $defaults[$biometric_batch];
+        if ($current_time_str >= $b_start && $current_time_str <= $b_end) {
+            $is_allowed_by_batch = true;
+        }
     }
 }
 
@@ -156,17 +163,22 @@ if (!$is_allowed_by_batch) {
     exit();
 }
 
-// 4. Exclusive Women-Only Batch Biometric Access Restriction Check (Batch 2)
-// If the current time is between 4 PM and 5 PM (Batch 2):
-if ($current_time_str >= $batch2_start && $current_time_str <= $batch2_end) {
+// 4. Exclusive Women-Only Batch Biometric Access Restriction Check
+$women_window_active = $is_women_only_batch;
+if (!empty($gym_info['women_batch_enabled']) && !empty($gym_info['women_batch_start']) && !empty($gym_info['women_batch_end'])) {
+    if ($current_time_str >= $gym_info['women_batch_start'] && $current_time_str <= $gym_info['women_batch_end']) {
+        $women_window_active = true;
+    }
+}
+if ($women_window_active) {
     $member_gender = strtolower(trim($user['gender']));
     
-    // STRICT RULE: If the member attempting to check-in is NOT a woman (e.g. male), block them immediately
+    // STRICT RULE: If the member attempting to check-in is NOT a woman, block them immediately
     if ($member_gender !== 'female' && $member_gender !== 'f') {
         mysqli_query($con, "INSERT INTO biometric_gate_logs (uid, timestamp, status, type, error_reason) VALUES ('$userid_esc', '$log_date_esc $log_time_esc', 'failed', 'access-denied', 'Strict Women-Only Hour block')");
         echo json_encode([
             'success' => false,
-            'message' => "Access Denied: 04:00 PM - 05:00 PM is a strict Women-Only Batch. Males are not permitted during this hour.",
+            'message' => "Access Denied: This is a strict Women-Only Batch ($batch_hours). Males are not permitted during this hour.",
             'member_id' => $userid,
             'name' => $username,
             'action' => 'access-denied'
@@ -192,7 +204,7 @@ if ($q_att && mysqli_num_rows($q_att) > 0) {
         if (!empty($mobile)) {
             $wa_msg = "👋 *Goodbye from {$gym_name}!* 👋\n\n" .
                        "Hello *{$username}*,\n\n" .
-                       "You checked out at * " . date('h:i A', strtotime($log_time)) . "*.\n\n" .
+                       "You checked out at *" . date('h:i A', strtotime($log_time)) . "*.\n\n" .
                        "Great session today! Keep up the consistency. See you next time! 🔌";
                        
             enqueue_whatsapp_message($con, $mobile, $wa_msg);
@@ -232,7 +244,7 @@ if ($q_att && mysqli_num_rows($q_att) > 0) {
         if (!empty($mobile)) {
             $wa_msg = "🏋️ *Welcome to {$gym_name}!* 🏋️\n\n" .
                        "Hello *{$username}*,\n\n" .
-                       "You checked in at * " . date('h:i A', strtotime($log_time)) . "*.\n" .
+                       "You checked in at *" . date('h:i A', strtotime($log_time)) . "*.\n" .
                        "🔥 *Check-In Streak:* *{$streak} days!*\n\n";
                        
             if ($is_milestone) {

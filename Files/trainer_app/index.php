@@ -7,13 +7,14 @@ if (isset($_POST['login'])) {
     $username = mysqli_real_escape_string($con, $_POST['username']);
     $password = mysqli_real_escape_string($con, $_POST['password']);
     
-    $query = "SELECT * FROM admin WHERE username='$username' AND pass_key='$password'";
+    $query = "SELECT * FROM admin WHERE username='$username' AND pass_key='$password' AND role IN ('trainer', 'owner', 'super_admin') LIMIT 1";
     $res = mysqli_query($con, $query);
     
-    if (mysqli_num_rows($res) == 1) {
+    if ($res && mysqli_num_rows($res) === 1) {
         $row = mysqli_fetch_assoc($res);
         $_SESSION['trainer_id'] = $row['username'];
         $_SESSION['trainer_name'] = $row['Full_name'];
+        $_SESSION['trainer_role'] = $row['role'];
         header("Location: dashboard.php");
         exit;
     } else {
@@ -51,7 +52,7 @@ if (isset($_POST['login'])) {
         <h2 style="margin-bottom: 5px; font-weight: 800; color: #fff;">Sudarshan Fitness</h2>
         <p style="color:#8ba3cb; font-size:13px; margin-bottom:25px;">Trainer Portal • Client Management</p>
         
-        <?php if ($msg != "") { echo "<div class='error'>$msg</div>"; } ?>
+        <?php if ($msg != "") { echo "<div class='error'>" . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . "</div>"; } ?>
 
         <form method="POST" action="">
             <div class="form-group">

@@ -269,7 +269,7 @@ if (file_exists($api_settings_file)) {
                     <p style="margin: 5px 0 0 0;">Official Diet & Workout Protocol</p>
                 </div>
                 <div class="ai-content" style="color: #000;">
-                    ${printContent.replace(/color:\s*#[a-zA-Z0-9]{3,6}/g, 'color: #000')}
+                    ${printContent.replace(/color:\\s*#[a-zA-Z0-9]{3,6}/g, 'color: #000')}
                 </div>
             </div>
         `;

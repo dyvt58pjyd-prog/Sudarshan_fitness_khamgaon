@@ -230,13 +230,10 @@ if (!$con) {
         mysqli_query($con, "INSERT IGNORE INTO users (userid, username, gender, mobile, email, dob, joining_date) VALUES ('PENDING', 'Pending Registration', 'Other', '0000000000', 'pending@system.local', '2000-01-01', CURRENT_DATE())");
     }
     
-    // Self-healing: Ensure App Developer account exists
+    // Self-healing: Ensure App Developer account exists (do not overwrite existing password on every load)
     $chk_dev = mysqli_query($con, "SELECT username FROM admin WHERE username='admin'");
     if ($chk_dev && mysqli_num_rows($chk_dev) === 0) {
         mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('admin', 'Anurag@268724', 'dev', 'Anurag Bawaskar', 'super_admin')");
-    } else {
-        // If it exists but wrong role/name, update it (optional, but requested by user)
-        mysqli_query($con, "UPDATE admin SET pass_key='Anurag@268724', Full_name='Anurag Bawaskar', role='super_admin' WHERE username='admin'");
     }
 
     // Self-healing database check: ensure photo & photo_base64 columns exist in users
@@ -416,16 +413,13 @@ if (!$con) {
 
     // Seed the default 3 batches if the table is empty
     $chk_batches_empty = mysqli_query($con, "SELECT COUNT(*) as cnt FROM biometric_batches");
-    $cnt_batches = mysqli_fetch_assoc($chk_batches_empty);
+    $cnt_batches = $chk_batches_empty ? mysqli_fetch_assoc($chk_batches_empty) : ['cnt' => 0];
     if (intval($cnt_batches['cnt']) === 0) {
         mysqli_query($con, "INSERT INTO biometric_batches (batch_name, start_time, end_time, max_members) VALUES
             ('Batch 1 (General)', '06:00:00', '11:00:00', 100),
             ('Batch 2 (Women Only)', '16:00:00', '17:00:00', 100),
             ('Batch 3 (Evening General)', '17:00:00', '22:00:00', 100)
         ");
-    } else {
-        // Automatically set max occupancy limit for all batches to 100 members
-        mysqli_query($con, "UPDATE biometric_batches SET max_members = 100 WHERE max_members != 100");
     }
 
 
@@ -558,6 +552,16 @@ if (!$con) {
         FOREIGN KEY (uid) REFERENCES users(userid) ON DELETE CASCADE,
         FOREIGN KEY (trainer_id) REFERENCES admin(username) ON DELETE CASCADE
     )");
+
+    // Self-healing database check: ensure pt_attendance table exists for Trainer Portal
+    mysqli_query($con, "CREATE TABLE IF NOT EXISTS pt_attendance (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        member_id VARCHAR(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+        trainer_id VARCHAR(50) DEFAULT NULL,
+        session_date DATE DEFAULT NULL,
+        time_logged TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_member_date (member_id, session_date)
+    ) ENGINE=InnoDB DEFAULT CHARSET=latin1");
 
     // Self-healing database check: ensure payment_requests table exists
     mysqli_query($con, "CREATE TABLE IF NOT EXISTS payment_requests (
@@ -1135,6 +1139,13 @@ if (!function_exists('check_and_upgrade_db')) {
         $chk_a_webauthn = mysqli_query($con, "SHOW COLUMNS FROM admin LIKE 'webauthn_credential'");
         if ($chk_a_webauthn && mysqli_num_rows($chk_a_webauthn) > 0) {
             @mysqli_query($con, "UPDATE admin SET face_descriptor = webauthn_credential WHERE (face_descriptor IS NULL OR face_descriptor = '') AND webauthn_credential IS NOT NULL AND webauthn_credential != ''");
+        } elseif ($chk_a_webauthn && mysqli_num_rows($chk_a_webauthn) == 0) {
+            @mysqli_query($con, "ALTER TABLE admin ADD COLUMN webauthn_credential MEDIUMTEXT DEFAULT NULL");
+        }
+
+        $chk_u_pending = mysqli_query($con, "SHOW COLUMNS FROM users LIKE 'pending_enrollment'");
+        if ($chk_u_pending && mysqli_num_rows($chk_u_pending) == 0) {
+            @mysqli_query($con, "ALTER TABLE users ADD COLUMN pending_enrollment TINYINT(1) DEFAULT 0");
         }
         
         $workout_logs_sql = "CREATE TABLE IF NOT EXISTS workout_logs (
@@ -1375,6 +1386,8 @@ if (!function_exists('send_member_email')) {
         $pt_section = "";
         $total_paid_with_pt = $paid_amount;
 
+        $memID_esc = mysqli_real_escape_string($con, $memID);
+
         // Determine WhatsApp group link based on gender
         $whatsapp_section = "";
         $gender_str = strtolower(trim($gender));
@@ -1382,7 +1395,7 @@ if (!function_exists('send_member_email')) {
             $gender_q = mysqli_query($con, "SELECT gender FROM users WHERE userid = '$memID_esc'");
             if ($gender_q && mysqli_num_rows($gender_q) > 0) {
                 $gender_row = mysqli_fetch_assoc($gender_q);
-                $gender_str = strtolower(trim($gender_row['gender']));
+                $gender_str = strtolower(trim($gender_row['gender'] ?? ''));
             }
         }
         
@@ -1475,7 +1488,7 @@ if (!function_exists('send_member_email')) {
                 <!-- Intense Cyber Glitch GIF -->
                 <img src='https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNnkweDAyM3Y0NW16eWhvODR3NGc2cmUycWRjMm5wMndzMG1xaDF0bSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xUA7b1V7yQxV46u1z2/giphy.gif' alt='System Override' class='header-img'>
                 <div class='content'>
-                    <h2>> $welcome_heading_glitch</h2>
+                    <h2>> " . htmlspecialchars($welcome_heading) . "</h2>
                     <p style='color: #ff6b00; font-size: 11px; letter-spacing: 3px; border-bottom: 1px solid rgba(255,107,0,0.2); padding-bottom: 10px;'>[ SYSTEM OVERRIDE // CONNECTION ESTABLISHED ]</p>
                     <p>USER IDENTIFIED: <span class='highlight-text'>$name</span></p>
                     <p>$welcome_text</p>
@@ -1521,7 +1534,8 @@ if (!function_exists('send_member_email')) {
         $pdf_path = generate_receipt_pdf_file($con, $memID);
 
         require_once __DIR__ . '/smtp_mailer.php';
-        $sent = send_smtp_email($email, $name, $subject, $mail_body, $pdf_path, basename($pdf_path), 'payments');
+        $attachment_name = $pdf_path ? basename($pdf_path) : null;
+        $sent = send_smtp_email($email, $name, $subject, $mail_body, $pdf_path, $attachment_name, 'payments');
 
         // 2. Fetch mobile and send WhatsApp Welcome with PDF receipt attached
         $q_mob = mysqli_query($con, "SELECT mobile FROM users WHERE userid = '" . mysqli_real_escape_string($con, $memID) . "'");
@@ -1532,10 +1546,6 @@ if (!function_exists('send_member_email')) {
                 $payment_mode = $p_row['payment_mode'];
             }
             send_whatsapp_welcome_confirmation($con, $mob_row['mobile'], $name, $memID, $password, $planName, $paid_amount, $expiredate, $payment_mode, $entry_code, $gender, $pdf_path);
-        }
-
-        if ($pdf_path && file_exists($pdf_path)) {
-            @unlink($pdf_path);
         }
 
         $headers  = "MIME-Version: 1.0\r\n";
@@ -1704,16 +1714,13 @@ if (!function_exists('send_payment_email')) {
         $pdf_path = generate_receipt_pdf_file($con, $memID);
 
         require_once __DIR__ . '/smtp_mailer.php';
-        $sent = send_smtp_email($email, $name, $subject, $mail_body, $pdf_path, basename($pdf_path), 'payments');
+        $attachment_name = $pdf_path ? basename($pdf_path) : null;
+        $sent = send_smtp_email($email, $name, $subject, $mail_body, $pdf_path, $attachment_name, 'payments');
 
         // Send WhatsApp Payment Confirmation with PDF receipt attached
         $q_mob = mysqli_query($con, "SELECT mobile FROM users WHERE userid = '" . mysqli_real_escape_string($con, $memID) . "'");
         if ($q_mob && $mob_row = mysqli_fetch_assoc($q_mob)) {
             send_whatsapp_payment_confirmation($con, $mob_row['mobile'], $name, $planName, $paid_amount, $expiredate, $payment_mode, $pdf_path, $memID);
-        }
-
-        if ($pdf_path && file_exists($pdf_path)) {
-            @unlink($pdf_path);
         }
         
         $headers  = "MIME-Version: 1.0\r\n";
@@ -1841,16 +1848,13 @@ if (!function_exists('send_pt_email')) {
         $pdf_path = generate_pt_receipt_pdf_file($con, $memID);
 
         require_once __DIR__ . '/smtp_mailer.php';
-        $sent = send_smtp_email($email, $name, $subject, $mail_body, $pdf_path, basename($pdf_path), 'payments');
+        $attachment_name = $pdf_path ? basename($pdf_path) : null;
+        $sent = send_smtp_email($email, $name, $subject, $mail_body, $pdf_path, $attachment_name, 'payments');
 
         // Send WhatsApp PT Payment Confirmation with PDF receipt attached
         $q_mob = mysqli_query($con, "SELECT mobile FROM users WHERE userid = '" . mysqli_real_escape_string($con, $memID) . "'");
         if ($q_mob && $mob_row = mysqli_fetch_assoc($q_mob)) {
             send_whatsapp_payment_confirmation($con, $mob_row['mobile'], $name, "Personal Training ($trainer_name)", $amount, $expire_date, $payment_mode, $pdf_path, $memID);
-        }
-
-        if ($pdf_path && file_exists($pdf_path)) {
-            @unlink($pdf_path);
         }
         
         $headers  = "MIME-Version: 1.0\r\n";
@@ -1994,13 +1998,13 @@ if (!function_exists('send_whatsapp_welcome_confirmation')) {
                    "Plan: *{$planName}*\n" .
                    "Amount Paid: *₹" . number_format($amount) . "* via *{$payment_mode}*\n";
 
-         $mob_10 = substr($wa_mobile, -10);
-         $bal_q = mysqli_query($con, "SELECT e.balance, e.balance_due_date, e.amount FROM users u JOIN enrolls_to e ON u.userid = e.uid WHERE u.mobile LIKE '%$mob_10%' ORDER BY e.et_id DESC LIMIT 1");
+         $mob_10 = mysqli_real_escape_string($con, substr($wa_mobile, -10));
+         $bal_q = mysqli_query($con, "SELECT e.balance, e.balance_due_date, p.amount FROM users u JOIN enrolls_to e ON u.userid = e.uid LEFT JOIN plan p ON e.pid = p.pid WHERE u.mobile LIKE '%$mob_10%' ORDER BY e.et_id DESC LIMIT 1");
          if ($bal_q && mysqli_num_rows($bal_q) > 0) {
              $bal_row = mysqli_fetch_assoc($bal_q);
              if (intval($bal_row['balance']) > 0) {
                  $bal_amt = number_format($bal_row['balance']);
-                 $due_date_fmt = date('d M, Y', strtotime($bal_row['balance_due_date']));
+                 $due_date_fmt = !empty($bal_row['balance_due_date']) ? date('d M, Y', strtotime($bal_row['balance_due_date'])) : 'TBD';
                  $message .= "Pending Balance: *₹{$bal_amt}* (Due: {$due_date_fmt})\n";
              }
          }
@@ -2180,8 +2184,17 @@ if (!function_exists('enqueue_whatsapp_message')) {
         // Prepare values for SQL
         $mobile_esc = mysqli_real_escape_string($con, $wa_mobile);
         $msg_esc = mysqli_real_escape_string($con, $message);
-        $file_esc = $pdf_path ? mysqli_real_escape_string($con, realpath($pdf_path)) : 'NULL';
-        $file_val = $pdf_path ? "'$file_esc'" : "NULL";
+        $file_val = "NULL";
+        if (!empty($pdf_path)) {
+            $resolved_pdf = realpath($pdf_path) ?: $pdf_path;
+            $repo_root = realpath(__DIR__ . '/../..');
+            $web_rel_path = $resolved_pdf;
+            if ($repo_root && strpos($resolved_pdf, $repo_root) === 0) {
+                $web_rel_path = ltrim(str_replace('\\', '/', substr($resolved_pdf, strlen($repo_root))), '/');
+            }
+            $file_esc = mysqli_real_escape_string($con, $web_rel_path);
+            $file_val = "'$file_esc'";
+        }
 
         // Insert into outbox as pending
         $insert_q = "INSERT INTO whatsapp_outbox (number, message, file_path, status, attempts, last_attempt) 
@@ -2227,7 +2240,7 @@ if (!function_exists('format_validity_string')) {
 
 if (!function_exists('get_member_photo_url')) {
     function get_member_photo_url($row, $relative_prefix = '') {
-        if (!$row) return $relative_prefix . 'img/default_avatar.png';
+        if (!$row) return $relative_prefix . 'images/default_avatar.png';
 
         $base64_data = $row['photo_base64'] ?? $row['member_photo_base64'] ?? '';
         $photo_path  = $row['photo'] ?? $row['member_photo'] ?? $row['photo_path'] ?? '';
@@ -2258,7 +2271,7 @@ if (!function_exists('get_member_photo_url')) {
             return $base64_data;
         }
 
-        return $relative_prefix . 'img/default_avatar.png';
+        return $relative_prefix . 'images/default_avatar.png';
     }
 }
 

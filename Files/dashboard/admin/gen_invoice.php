@@ -876,7 +876,7 @@ $total_paid = $paid_amount;
             <div class="verification-callout">
                 <div class="verification-qr">
                     <?php 
-                    $verify_qr_url = "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=" . urlencode("https://sudarshanfitness.de/dashboard/admin/gen_invoice.php?id=" . $uid . "&etid=" . $etid . "&pid=" . $pid);
+                    $verify_qr_url = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" . urlencode("https://sudarshanfitness.de/dashboard/admin/gen_invoice.php?id=" . $uid . "&etid=" . $etid . "&pid=" . $pid);
                     ?>
                     <img src="<?php echo $verify_qr_url; ?>" alt="Verification QR" />
                 </div>

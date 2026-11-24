@@ -1,0 +1,18 @@
+<?php
+/**
+ * AI Provider Configuration Template
+ * Copy this file to 'ai_config.php' in Files/include/ and insert your key,
+ * or set the DEPLOY_API_KEY / GEMINI_API_KEY environment variables.
+ */
+if (!defined('DEPLOY_API_KEY')) {
+    define('DEPLOY_API_KEY', 'YOUR_DEPLOY_COM_API_KEY');
+}
+if (!defined('DEPLOY_API_BASE')) {
+    define('DEPLOY_API_BASE', 'https://api.deploy.com/api/v1');
+}
+if (!defined('DEPLOY_MODEL')) {
+    define('DEPLOY_MODEL', 'deepseek-ai/deepseek-v4.1-flash-1017');
+}
+if (!defined('DEPLOY_FALLBACK_MODEL')) {
+    define('DEPLOY_FALLBACK_MODEL', 'zai-org/glm-5.3-flash');
+}

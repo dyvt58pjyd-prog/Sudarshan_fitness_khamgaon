@@ -15,7 +15,7 @@ app.listen(PORT, () => console.log(`[Express] Health check server listening on p
 
 // Configuration
 const HOSTINGER_URL = process.env.HOSTINGER_URL || 'https://sudarshanfitness.de';
-const API_SECRET = 'TITAN_GYM_SECRET_KEY_123';
+const API_SECRET = process.env.API_SECRET || 'TITAN_GYM_SECRET_KEY_123';
 const POLL_INTERVAL_MS = 10000; // 10 seconds
 
 // Push Architecture Setup for QR Code Exposure
@@ -120,11 +120,15 @@ function initWhatsAppClient() {
 }
 
 let isPolling = false;
+let pollingTimer = null;
 
 async function startPolling() {
+    if (pollingTimer) {
+        return; // Prevent duplicate overlapping pollers across reconnects
+    }
     console.log(`[WhatsApp Poller] Started polling ${HOSTINGER_URL} every ${POLL_INTERVAL_MS / 1000}s`);
 
-    setInterval(async () => {
+    pollingTimer = setInterval(async () => {
         if (clientState !== 'CONNECTED' || isPolling) return;
         isPolling = true;
 
@@ -146,9 +150,9 @@ async function startPolling() {
             }
         } catch (error) {
             console.error(`[WhatsApp Poller] HTTP Error checking Hostinger:`, error.message);
+        } finally {
+            isPolling = false;
         }
-
-        isPolling = false;
     }, POLL_INTERVAL_MS);
 }
 

@@ -25,7 +25,7 @@ RewriteRule ^.*\.apk$ /Files/index.php [R=301,L]
 RewriteRule ^api/?(.*)$ /Files/api/$1 [L,QSA]
 
 # Block direct access to APKs and binary executables
-<FilesMatch "\.(apk|exe|bin|sh|bat)$">
+<FilesMatch "\.(apk|exe|bin|sh|bat|txt|log)$">
     <IfModule mod_authz_core.c>
         Require all denied
     </IfModule>
@@ -34,8 +34,3 @@ RewriteRule ^api/?(.*)$ /Files/api/$1 [L,QSA]
         Deny from all
     </IfModule>
 </FilesMatch>
-
-# Route ALL other requests to the biometric listener if the file doesn't exist
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ /Files/api/bio_listener.php [L,QSA]

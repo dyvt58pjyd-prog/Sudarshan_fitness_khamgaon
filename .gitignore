@@ -37,3 +37,15 @@ android_twa/upload_cert.pem
 *.apk
 *.aab
 Files/include/license_data.json
+
+# Local secrets, configs, and runtime logs (never commit to GitHub)
+.env
+.env.*
+Files/include/ai_config.php
+Files/include/db_config.php
+Files/include/email_log.txt
+Files/include/php_error_log.txt
+Files/api/bio_log.txt
+Files/api/whatsapp_status.json
+Files/biometric_sync.log
+whatsapp_service/server.log

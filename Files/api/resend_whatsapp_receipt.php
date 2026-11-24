@@ -58,11 +58,9 @@ if ($type === 'pt') {
                 $amount, 
                 $expire_date, 
                 $payment_mode, 
-                $pdf_path
+                $pdf_path,
+                $uid_clean
             );
-            
-            // Cleanup PDF from disk
-            @unlink($pdf_path);
             
             if ($sent) {
                 echo json_encode(['success' => true, 'message' => 'PT Receipt sent successfully via WhatsApp!']);
@@ -79,7 +77,7 @@ if ($type === 'pt') {
     // Default to membership receipt
     $etid_clean = isset($_GET['etid']) ? mysqli_real_escape_string($con, $_GET['etid']) : '';
     
-    $sql = "SELECT e.*, u.username, u.mobile, p.planName FROM users u 
+    $sql = "SELECT e.*, u.username, u.mobile, p.planName, p.amount AS plan_amount FROM users u 
             INNER JOIN enrolls_to e ON u.userid = e.uid 
             INNER JOIN plan p ON p.pid = e.pid 
             WHERE u.userid = '$uid_clean'" . (!empty($etid_clean) ? " AND e.et_id = '$etid_clean'" : "") . "
@@ -96,7 +94,7 @@ if ($type === 'pt') {
         $actual_etid = $row['et_id'];
         
         $discount = isset($row['discount_amount']) ? intval($row['discount_amount']) : 0;
-        $paid_amount = (isset($row['paid_amount']) && $row['paid_amount'] !== null) ? intval($row['paid_amount']) : intval($row['amount']);
+        $paid_amount = (isset($row['paid_amount']) && $row['paid_amount'] !== null) ? intval($row['paid_amount']) : intval($row['plan_amount'] ?? 0);
         $total_paid = $paid_amount;
         
         // Generate Membership receipt PDF
@@ -111,11 +109,9 @@ if ($type === 'pt') {
                 $total_paid, 
                 $expire_date, 
                 $payment_mode, 
-                $pdf_path
+                $pdf_path,
+                $uid_clean
             );
-            
-            // Cleanup PDF from disk
-            @unlink($pdf_path);
             
             if ($sent) {
                 echo json_encode(['success' => true, 'message' => 'Receipt sent successfully via WhatsApp!']);

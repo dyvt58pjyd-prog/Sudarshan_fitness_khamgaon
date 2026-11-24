@@ -7,22 +7,28 @@ if (!isset($_SESSION['member_uid'])) {
     exit;
 }
 
+$uid_esc = mysqli_real_escape_string($con, $_SESSION['member_uid']);
 $uid = $_SESSION['member_uid'];
 
 // Fetch member details
-$q = mysqli_query($con, "SELECT * FROM users WHERE userid='$uid'");
-$user = mysqli_fetch_assoc($q);
+$q = mysqli_query($con, "SELECT * FROM users WHERE userid='$uid_esc'");
+$user = ($q && mysqli_num_rows($q) > 0) ? mysqli_fetch_assoc($q) : null;
+if (!$user) {
+    session_destroy();
+    header("Location: index.php");
+    exit;
+}
 
 // Fetch Partner details if couple account
 $partner_user = null;
 if (!empty($user['partner_uid'])) {
-    $p_id = $user['partner_uid'];
+    $p_id = mysqli_real_escape_string($con, $user['partner_uid']);
     $qp = mysqli_query($con, "SELECT * FROM users WHERE userid='$p_id'");
     if ($qp && mysqli_num_rows($qp) > 0) {
         $partner_user = mysqli_fetch_assoc($qp);
     }
 } else {
-    $m_id = $user['userid'];
+    $m_id = mysqli_real_escape_string($con, $user['userid']);
     $qp = mysqli_query($con, "SELECT * FROM users WHERE partner_uid='$m_id'");
     if ($qp && mysqli_num_rows($qp) > 0) {
         $partner_user = mysqli_fetch_assoc($qp);
@@ -30,12 +36,12 @@ if (!empty($user['partner_uid'])) {
 }
 
 // Fetch active plan & payments
-$q_plan = mysqli_query($con, "SELECT p.planName, e.expire, e.paid_date, e.paid FROM enrolls_to e INNER JOIN plan p ON e.pid = p.pid WHERE e.uid='$uid' AND e.renewal='yes' ORDER BY e.expire DESC LIMIT 5");
+$q_plan = mysqli_query($con, "SELECT p.planName, e.expire, e.paid_date, e.paid_amount AS paid FROM enrolls_to e INNER JOIN plan p ON e.pid = p.pid WHERE e.uid='$uid_esc' AND e.renewal='yes' ORDER BY e.expire DESC LIMIT 5");
 $plan_name = "No Active Plan";
 $expire_date = "N/A";
 $is_expired_member = false;
 $payments = [];
-if (mysqli_num_rows($q_plan) > 0) {
+if ($q_plan && mysqli_num_rows($q_plan) > 0) {
     $first = true;
     while ($row = mysqli_fetch_assoc($q_plan)) {
         if ($first) {
@@ -444,7 +450,7 @@ if ($partner_user) {
         // Generate QR Code
         var qr = new QRious({
             element: document.getElementById('qrcode-canvas'),
-            value: '<?php echo $uid; ?>',
+            value: <?php echo json_encode((string)$uid); ?>,
             size: 250,
             background: 'white',
             foreground: 'black'

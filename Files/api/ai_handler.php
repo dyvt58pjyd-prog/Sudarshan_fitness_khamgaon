@@ -1,6 +1,18 @@
 <?php
-require '../../include/db_conn.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+require_once __DIR__ . '/../include/db_conn.php';
+require_once __DIR__ . '/../include/gemini_config.php';
+page_protect();
 header('Content-Type: application/json');
+
+$allowed_roles = ['super_admin', 'owner', 'reception', 'trainer'];
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $allowed_roles)) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'error' => 'Unauthorized access']);
+    exit;
+}
 
 if (isset($_POST['action']) && $_POST['action'] === 'generate_and_save') {
     
@@ -199,27 +211,46 @@ if (isset($_POST['action']) && $_POST['action'] === 'generate_and_save') {
 
     $greeting = "## SUDARSHAN FITNESS - OFFICIAL PROTOCOL";
     $stats = "**Member:** {$name} | **Weight:** {$weight}kg | **Height:** {$height}cm | **Goal:** {$goal}";
-    $med = $medical !== 'None' ? "
-**Medical Note:** {$medical} - Please consult doctor before high-intensity training." : "";
+    $med = $medical !== 'None' && $medical !== '' ? "\n**Medical Note:** {$medical} - Please consult doctor before high-intensity training." : "";
 
     if ($language === 'Marathi') {
         $greeting = "## सुदर्शन फिटनेस - अधिकृत आहार आणि व्यायाम योजना";
         $stats = "**सदस्य:** {$name} | **वजन:** {$weight}kg | **उंची:** {$height}cm | **उद्दिष्ट:** {$goal}";
-        $med = $medical !== 'None' ? "
-**वैद्यकीय नोंद:** {$medical} - कृपया व्यायाम सुरू करण्यापूर्वी डॉक्टरांचा सल्ला घ्या." : "";
+        $med = $medical !== 'None' && $medical !== '' ? "\n**वैद्यकीय नोंद:** {$medical} - कृपया व्यायाम सुरू करण्यापूर्वी डॉक्टरांचा सल्ला घ्या." : "";
     } elseif ($language === 'Hindi') {
         $greeting = "## सुदर्शन फिटनेस - आधिकारिक डाइट और वर्कआउट प्लान";
         $stats = "**सदस्य:** {$name} | **वजन:** {$weight}kg | **ऊंचाई:** {$height}cm | **लक्ष्य:** {$goal}";
-        $med = $medical !== 'None' ? "
-**मेडिकल नोट:** {$medical} - कृपया व्यायाम से पहले डॉक्टर की सलाह लें।" : "";
+        $med = $medical !== 'None' && $medical !== '' ? "\n**मेडिकल नोट:** {$medical} - कृपया व्यायाम से पहले डॉक्टर की सलाह लें।" : "";
     }
 
-    $final_markdown = "{$greeting}
-{$stats}{$med}
+    // Try live AI generation via Deploy.com (fall back to built-in protocols above if unavailable)
+    $w_num = floatval($weight);
+    $h_num = floatval($height);
+    $bmi_str = ($w_num > 0 && $h_num > 0) ? strval(round($w_num / (($h_num / 100) * ($h_num / 100)), 1)) : 'N/A';
 
-" . $selected_diet . "
+    $ai_system = "You are the head fitness & Indian nutrition specialist at Sudarshan Fitness (Khamgaon, India). Always provide practical, affordable Indian home-friendly meals with realistic macro estimates and safe training advice.";
+    $ai_prompt = "Create a personalized Indian Diet Chart and 7-Day Gym Workout Protocol in **{$language}** language.\n"
+               . "Member: {$name} | Weight: {$weight}kg | Height: {$height}cm | BMI: {$bmi_str}\n"
+               . "Goal: {$goal} | Diet Preference: {$diet_type} | Medical Notes: {$medical}\n\n"
+               . "Return exact Markdown with ONLY two sections:\n"
+               . "1) A diet section starting with '### Diet Plan' (or localized equivalent) listing Morning, Breakfast, Mid-Morning, Lunch, Pre/Post-Workout Snack, Dinner, Daily Target Calories & Protein.\n"
+               . "2) A workout section starting with '### 7-Day Workout Protocol' (or localized equivalent) covering Monday through Sunday with exercises, sets x reps, and medical accommodations if applicable.\n"
+               . "Keep it concise, crisp, and formatted cleanly in Markdown.";
 
-" . $workout;
+    $ai_text = query_gemini_ai($ai_prompt, $ai_system);
+    if (!empty($ai_text)) {
+        // Split AI response into diet and workout parts for DB storage if possible
+        $parts = preg_split('/(?=^###\s+.*?(?:Workout|व्यायाम|वर्कआउट))/mi', $ai_text, 2);
+        if (count($parts) === 2) {
+            $selected_diet = trim($parts[0]);
+            $workout = trim($parts[1]);
+        } else {
+            $selected_diet = trim($ai_text);
+        }
+        $final_markdown = "{$greeting}\n{$stats}{$med}\n\n" . trim($ai_text);
+    } else {
+        $final_markdown = "{$greeting}\n{$stats}{$med}\n\n" . $selected_diet . "\n\n" . $workout;
+    }
 
     // SAVE TO DATABASE
     // Check if member already has a routine
@@ -227,7 +258,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'generate_and_save') {
     $safe_diet = mysqli_real_escape_string($con, $selected_diet);
     $safe_workout = mysqli_real_escape_string($con, $workout);
 
-    $admin_user = isset($_SESSION['user_data']) ? $_SESSION['user_data'] : 'system';
+    $admin_user = mysqli_real_escape_string($con, isset($_SESSION['user_data']) ? $_SESSION['user_data'] : 'system');
 
     if($chk && mysqli_num_rows($chk) > 0) {
         $q = "UPDATE member_routines SET diet_plan = '$safe_diet', workout_plan = '$safe_workout', trainer_id = '$admin_user', updated_at = CURRENT_TIMESTAMP WHERE uid = '".mysqli_real_escape_string($con, $uid)."'";
@@ -236,9 +267,6 @@ if (isset($_POST['action']) && $_POST['action'] === 'generate_and_save') {
         $q = "INSERT INTO member_routines (uid, diet_plan, workout_plan, trainer_id) VALUES ('".mysqli_real_escape_string($con, $uid)."', '$safe_diet', '$safe_workout', '$admin_user')";
         mysqli_query($con, $q);
     }
-
-    // Simulate thinking time for effect
-    sleep(1);
 
     echo json_encode(['success' => true, 'text' => $final_markdown]);
     exit;

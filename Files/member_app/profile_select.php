@@ -8,24 +8,26 @@ if (!isset($_SESSION['login_auth_uid'])) {
 }
 
 $auth_uid = $_SESSION['login_auth_uid'];
+$auth_uid_esc = mysqli_real_escape_string($con, $auth_uid);
 
 // Find both users in the couple
 $u1 = null;
 $u2 = null;
 
-$q = mysqli_query($con, "SELECT * FROM users WHERE userid='$auth_uid'");
-if (mysqli_num_rows($q) > 0) {
+$q = mysqli_query($con, "SELECT * FROM users WHERE userid='$auth_uid_esc'");
+if ($q && mysqli_num_rows($q) > 0) {
     $row = mysqli_fetch_assoc($q);
     if (!empty($row['partner_uid'])) {
         $u1 = $row;
-        $q2 = mysqli_query($con, "SELECT * FROM users WHERE userid='{$row['partner_uid']}'");
-        if (mysqli_num_rows($q2) > 0) {
+        $partner_uid_esc = mysqli_real_escape_string($con, $row['partner_uid']);
+        $q2 = mysqli_query($con, "SELECT * FROM users WHERE userid='$partner_uid_esc'");
+        if ($q2 && mysqli_num_rows($q2) > 0) {
             $u2 = mysqli_fetch_assoc($q2);
         }
     } else {
         $u2 = $row;
-        $q1 = mysqli_query($con, "SELECT * FROM users WHERE partner_uid='$auth_uid'");
-        if (mysqli_num_rows($q1) > 0) {
+        $q1 = mysqli_query($con, "SELECT * FROM users WHERE partner_uid='$auth_uid_esc'");
+        if ($q1 && mysqli_num_rows($q1) > 0) {
             $u1 = mysqli_fetch_assoc($q1);
         }
     }

@@ -102,14 +102,11 @@ if (isset($_GET['delete'])) {
                                 <textarea name="message_text" id="message_text" class="form-control" rows="4" required style="background: var(--bg-darker); color: var(--text-main); border: 1px solid var(--glass-border);">Wishing you a very happy and prosperous festival from everyone here at Sudarshan Fitness Khamgaon! 💪 Let's stay fit and healthy!</textarea>
                             </div>
                             
-                            <!-- Gemini AI Generator -->
+                            <!-- Server-side AI Generator -->
                             <div style="margin-top: 15px; padding: 15px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px;">
-                                <label style="color: #10b981; font-weight: bold;"><i class="entypo-light-bulb"></i> AI Message Generator (Gemini)</label>
-                                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 10px;">Enter your free Google Gemini API Key to automatically generate engaging, gym-themed festival messages.</p>
-                                <div style="display: flex; gap: 10px;">
-                                    <input type="password" id="gemini_api_key" class="form-control" placeholder="Paste Gemini API Key here" style="background: var(--bg-darker); color: var(--text-main); border: 1px solid var(--glass-border);">
-                                    <button type="button" onclick="generateWithGemini()" id="btn-gemini" class="btn btn-success" style="white-space: nowrap;">✨ Generate</button>
-                                </div>
+                                <label style="color: #10b981; font-weight: bold;"><i class="entypo-light-bulb"></i> AI Message Generator</label>
+                                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 10px;">Automatically generate an engaging, gym-themed festival message using your configured server AI.</p>
+                                <button type="button" onclick="generateWithGemini()" id="btn-gemini" class="btn btn-success" style="white-space: nowrap;">✨ Generate AI Message</button>
                             </div>
                             
                             <button type="submit" class="btn btn-primary" style="margin-top: 20px; width: 100%; background: var(--accent-primary); color: white; border: none; padding: 12px; font-weight: bold;">
@@ -169,12 +166,6 @@ if (isset($_GET['delete'])) {
         </div>
     </div>
     <script>
-        // Load saved API key
-        document.addEventListener("DOMContentLoaded", function() {
-            const savedKey = localStorage.getItem('gemini_api_key');
-            if(savedKey) document.getElementById('gemini_api_key').value = savedKey;
-        });
-
         let timeout = null;
         function updatePreview() {
             clearTimeout(timeout);
@@ -185,41 +176,31 @@ if (isset($_GET['delete'])) {
         }
 
         async function generateWithGemini() {
-            const apiKey = document.getElementById('gemini_api_key').value.trim();
             const festival = document.getElementById('campaign_name').value.trim();
-            
-            if(!apiKey) return alert("Please enter your Gemini API Key first.");
             if(!festival) return alert("Please enter a Festival/Campaign Name first.");
-            
-            // Save key
-            localStorage.setItem('gemini_api_key', apiKey);
             
             const btn = document.getElementById('btn-gemini');
             btn.innerHTML = "⏳ Generating...";
             btn.disabled = true;
 
-            const prompt = `Write a short, engaging 2-3 sentence promotional WhatsApp/Email message for a gym called 'Sudarshan Fitness Khamgaon' for the occasion of '${festival}'. Include emojis. Do not use hashtags. Keep it motivational. Start with a warm greeting.`;
-
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                const response = await fetch('../../api/campaign_ai_generate.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }]
-                    })
+                    body: JSON.stringify({ campaign_name: festival })
                 });
                 
                 const data = await response.json();
-                if(data.error) {
-                    alert("API Error: " + data.error.message);
-                } else if(data.candidates && data.candidates[0].content) {
-                    document.getElementById('message_text').value = data.candidates[0].content.parts[0].text.trim();
+                if (!data.success) {
+                    alert("AI Error: " + (data.error || 'Failed to generate'));
+                } else if (data.message) {
+                    document.getElementById('message_text').value = data.message.trim();
                 }
             } catch(e) {
-                alert("Failed to connect to Gemini API. Check your internet or API key.");
+                alert("Failed to reach server AI generator.");
             }
             
-            btn.innerHTML = "✨ Generate";
+            btn.innerHTML = "✨ Generate AI Message";
             btn.disabled = false;
         }
     </script>

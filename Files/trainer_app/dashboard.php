@@ -8,6 +8,7 @@ if (!isset($_SESSION['trainer_id'])) {
 }
 
 $trainer_id = $_SESSION['trainer_id'];
+$trainer_id_esc = mysqli_real_escape_string($con, $trainer_id);
 $trainer_name = $_SESSION['trainer_name'];
 
 // Handle quick log
@@ -17,10 +18,10 @@ if (isset($_POST['log_session'])) {
     $session_date = date('Y-m-d');
     
     $check = mysqli_query($con, "SELECT id FROM pt_attendance WHERE member_id='$uid' AND session_date='$session_date'");
-    if (mysqli_num_rows($check) > 0) {
+    if ($check && mysqli_num_rows($check) > 0) {
         $msg = "Session already logged today for this client.";
     } else {
-        $insert = "INSERT INTO pt_attendance (member_id, trainer_id, session_date) VALUES ('$uid', '$trainer_id', '$session_date')";
+        $insert = "INSERT INTO pt_attendance (member_id, trainer_id, session_date) VALUES ('$uid', '$trainer_id_esc', '$session_date')";
         if (mysqli_query($con, $insert)) {
             $msg = "Session logged successfully!";
         } else {
@@ -68,7 +69,7 @@ if (isset($_POST['log_session'])) {
     </div>
 
     <div class="content">
-        <?php if ($msg != "") { echo "<div class='alert'>$msg</div>"; } ?>
+        <?php if ($msg != "") { echo "<div class='alert'>" . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . "</div>"; } ?>
         
         <h3 style="margin-bottom: 15px; font-size: 16px;">My Active Clients</h3>
         
@@ -80,11 +81,11 @@ if (isset($_POST['log_session'])) {
                          (SELECT COUNT(*) FROM pt_attendance a WHERE a.member_id = p.uid) as sessions_logged
                   FROM pt_enrollments p 
                   INNER JOIN users u ON p.uid = u.userid 
-                  WHERE p.trainer_id = '$trainer_id' AND p.expire_date >= '$today'
+                  WHERE p.trainer_id = '$trainer_id_esc' AND p.expire_date >= '$today'
                   ORDER BY p.expire_date ASC";
         $result = mysqli_query($con, $query);
 
-        if (mysqli_num_rows($result) > 0) {
+        if ($result && mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_assoc($result)) {
                 ?>
                 <div class="card">

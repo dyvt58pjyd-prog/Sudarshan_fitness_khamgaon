@@ -19,7 +19,7 @@ $user = mysqli_real_escape_string($con, $_GET['u']);
 $query = "SELECT webauthn_credential FROM admin WHERE username='$user' AND role IN ('owner', 'super_admin') LIMIT 1";
 $result = mysqli_query($con, $query);
 
-if (mysqli_num_rows($result) === 1) {
+if ($result && mysqli_num_rows($result) === 1) {
     $row = mysqli_fetch_assoc($result);
     if (!empty($row['webauthn_credential'])) {
         $cred = json_decode($row['webauthn_credential'], true);

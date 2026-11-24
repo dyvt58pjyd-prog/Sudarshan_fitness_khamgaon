@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_test_email'])) {
             '{days_left}'   => '5 Days',
             '{amount}'      => '12,500',
             '{receipt_no}'  => 'TEST-REC-2026',
-            '{qr_image_url}'=> 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' . urlencode('TEST_MEM_777')
+            '{qr_image_url}'=> 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' . urlencode('TEST_MEM_777')
         ];
 
         $test_result = send_dynamic_template_email($con, $test_email, 'Gym Admin Tester', $tpl_key, $sample_data);

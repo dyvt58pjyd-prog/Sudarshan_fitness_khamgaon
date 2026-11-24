@@ -1,5 +1,10 @@
-# Block direct browser access to sensitive log, json, sql and text files in include directory
-<FilesMatch "\.(txt|log|json|sql|bak|config)$">
-    Order Allow,Deny
-    Deny from all
+# Block direct browser access to sensitive log, json, sql, example, and text files in include directory
+<FilesMatch "\.(txt|log|json|sql|bak|config|example)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order Allow,Deny
+        Deny from all
+    </IfModule>
 </FilesMatch>

@@ -252,15 +252,17 @@ if (file_exists(__DIR__ . '/../../include/pdf_generator.php')) {
     }
 }
 
-// Send Welcome Email
+// Send Welcome Email (also enqueues WhatsApp Welcome + PDF receipt)
+$welcome_dispatched = false;
 if (!empty($email) && function_exists('send_member_email')) {
     try {
         @send_member_email($con, $email, $uname, $memID, $default_pass, $plan_row['planName'], $plan_row['amount'], $expiredate, $entry_code, $discount, $paid_now, $gender);
+        $welcome_dispatched = true;
     } catch (\Throwable $e) {}
 }
 
-// Send WhatsApp Welcome Receipt
-if (!empty($phn) && function_exists('send_whatsapp_welcome_confirmation')) {
+// Fallback: Send WhatsApp Welcome Receipt if email was empty or email helper skipped
+if (!$welcome_dispatched && !empty($phn) && function_exists('send_whatsapp_welcome_confirmation')) {
     try {
         @send_whatsapp_welcome_confirmation($con, $phn, $uname, $memID, $default_pass, $plan_row['planName'], $paid_now, $expiredate, $payment_mode, $entry_code, $gender, $pdf_file);
     } catch (\Throwable $e) {}

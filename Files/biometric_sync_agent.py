@@ -66,6 +66,12 @@ class MockAttendance:
 # Simulated Device Database class
 class SimulatedDevice:
     def __init__(self, filepath="simulated_device.json"):
+        if not os.path.isabs(filepath):
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            repo_dir = os.path.dirname(script_dir)
+            repo_candidate = os.path.join(repo_dir, filepath)
+            script_candidate = os.path.join(script_dir, filepath)
+            filepath = repo_candidate if os.path.exists(repo_candidate) else script_candidate
         self.filepath = filepath
         self.data = {
             "users": [],
@@ -223,19 +229,25 @@ class MockZK:
 # Core Agent Middleware Class
 class BiometricSyncAgent:
     def __init__(self, config_path="biometric_config.json"):
-        self.config_path = config_path
+        self.base_dir = os.path.dirname(os.path.abspath(__file__))
+        self.config_path = config_path if os.path.isabs(config_path) else os.path.join(self.base_dir, config_path)
         self.config = {
             "device_ip": "192.168.1.201",
             "device_port": 4370,
-            "api_sync_url": "http://localhost/api/biometric_sync.php",
-            "api_log_url": "http://localhost/api/log_attendance.php",
+            "api_sync_url": "http://localhost/Files/api/biometric_sync.php",
+            "api_log_url": "http://localhost/Files/api/log_attendance.php",
             "sync_interval_seconds": 10,
             "simulation_mode": True,
             "templates_cache_dir": "templates_cache",
             "checkpoint_file": "sync_checkpoint.txt"
         }
         self.load_config()
-        
+
+        # Resolve relative paths relative to script directory so launching from repo root works reliably
+        for key in ("templates_cache_dir", "checkpoint_file"):
+            if not os.path.isabs(self.config[key]):
+                self.config[key] = os.path.join(self.base_dir, self.config[key])
+
         # Ensure directories exist
         if not os.path.exists(self.config["templates_cache_dir"]):
             os.makedirs(self.config["templates_cache_dir"])

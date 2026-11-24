@@ -162,15 +162,17 @@ if (file_exists(__DIR__ . '/../../include/pdf_generator.php')) {
     }
 }
 
-// Send Email Receipt
+// Send Email Receipt (also enqueues WhatsApp Receipt + PDF)
+$receipt_dispatched = false;
 if (!empty($user_row['email']) && function_exists('send_payment_email')) {
     try {
         @send_payment_email($con, $user_row['email'], $user_row['username'], $memID, $plan_row['planName'], $plan_row['amount'], $expiredate, $payment_mode, $received_by, $new_entry_code, $discount, $paid_now);
+        $receipt_dispatched = true;
     } catch (\Throwable $e) {}
 }
 
-// Send WhatsApp Receipt with PDF
-if (!empty($user_row['mobile']) && function_exists('send_whatsapp_payment_confirmation')) {
+// Fallback: Send WhatsApp Receipt with PDF if member has no email
+if (!$receipt_dispatched && !empty($user_row['mobile']) && function_exists('send_whatsapp_payment_confirmation')) {
     try {
         @send_whatsapp_payment_confirmation($con, $user_row['mobile'], $user_row['username'], $plan_row['planName'], $paid_now, $expiredate, $payment_mode, $pdf_file, $memID);
     } catch (\Throwable $e) {}

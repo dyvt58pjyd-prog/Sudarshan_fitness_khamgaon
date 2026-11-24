@@ -8,10 +8,11 @@ if (!isset($_SESSION['member_uid'])) {
 }
 
 $uid = $_SESSION['member_uid'];
+$uid_esc = mysqli_real_escape_string($con, $uid);
 
 // Fetch member details
-$q = mysqli_query($con, "SELECT * FROM users WHERE userid='$uid'");
-$user = mysqli_fetch_assoc($q);
+$q = mysqli_query($con, "SELECT * FROM users WHERE userid='$uid_esc'");
+$user = ($q && mysqli_num_rows($q) > 0) ? mysqli_fetch_assoc($q) : null;
 
 // Calculate Leaderboard (Top attendees this month)
 // This query groups attendance by user for the current month and sorts them
@@ -24,16 +25,18 @@ $q_leaderboard = mysqli_query($con, "
     FROM attendance a
     JOIN users u ON a.uid = u.userid
     WHERE MONTH(a.date) = '$current_month' AND YEAR(a.date) = '$current_year'
-    GROUP BY a.uid
+    GROUP BY a.uid, u.username
     ORDER BY total_scans DESC
     LIMIT 10
 ");
 
 $leaderboard = [];
 $rank = 1;
-while ($row = mysqli_fetch_assoc($q_leaderboard)) {
-    $row['rank'] = $rank++;
-    $leaderboard[] = $row;
+if ($q_leaderboard) {
+    while ($row = mysqli_fetch_assoc($q_leaderboard)) {
+        $row['rank'] = $rank++;
+        $leaderboard[] = $row;
+    }
 }
 ?>
 <!DOCTYPE html>

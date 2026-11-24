@@ -17,17 +17,18 @@ $exp_res = mysqli_query($con, $exp_sql);
 
 if ($exp_res && mysqli_num_rows($exp_res) > 0) {
     while ($row = mysqli_fetch_assoc($exp_res)) {
-        $uid = $row['userid'];
+        $uid = mysqli_real_escape_string($con, $row['userid']);
         $bio_id = $row['biometric_id'];
+        $bio_id_esc = mysqli_real_escape_string($con, (string)$bio_id);
         
         // 1. Disable access in DB
         mysqli_query($con, "UPDATE users SET biometric_enabled = 0 WHERE userid = '$uid'");
         
         // 2. Queue command to wipe/block on machine
         if (!empty($bio_id)) {
-            $cmd_payload = json_encode(['reason' => 'membership_expired']);
+            $cmd_payload = mysqli_real_escape_string($con, json_encode(['reason' => 'membership_expired']));
             mysqli_query($con, "INSERT INTO biometric_commands (command_type, target_uid, payload, status) 
-                                VALUES ('DELETE_USER', '$bio_id', '$cmd_payload', 'pending')");
+                                VALUES ('BLOCK_MEMBER', '$bio_id_esc', '$cmd_payload', 'pending')");
         }
     }
     echo "Biometric Expiration Sync: Disabled " . mysqli_num_rows($exp_res) . " expired members.<br>";
@@ -41,7 +42,7 @@ $today = date('Y-m-d');
 $sql = "SELECT * FROM festival_campaigns WHERE scheduled_date = '$today' AND status = 'Pending'";
 $res = mysqli_query($con, $sql);
 
-if (mysqli_num_rows($res) == 0) {
+if (!$res || mysqli_num_rows($res) == 0) {
     echo "No pending campaigns for today.<br>";
     exit();
 }
@@ -76,18 +77,20 @@ while ($campaign = mysqli_fetch_assoc($res)) {
     
     $message = "Hey " . "Member" . ",\n\n" . $campaign['message_text'] . "\n\nWarm Regards,\n" . $gym['gym_name'];
     
-    while ($member = mysqli_fetch_assoc($members_res)) {
-        // Send WhatsApp
-        if (!empty($member['mobile'])) {
-            $personalized_msg = str_replace("Member", $member['username'], $message);
-            send_meta_whatsapp_image($con, $member['mobile'], $personalized_msg, $image_url);
+    if ($members_res) {
+        while ($member = mysqli_fetch_assoc($members_res)) {
+            // Send WhatsApp
+            if (!empty($member['mobile'])) {
+                $personalized_msg = str_replace("Member", $member['username'], $message);
+                send_meta_whatsapp_image($con, $member['mobile'], $personalized_msg, $image_url);
+            }
+            
+            // Send Email (if they have smtp_mailer configured, we can include it)
+            // require_once '../include/smtp_mailer.php';
+            // if (!empty($member['email'])) {
+            //     smtp_mailer($member['email'], $campaign['campaign_name'], $personalized_msg); 
+            // }
         }
-        
-        // Send Email (if they have smtp_mailer configured, we can include it)
-        // require_once '../include/smtp_mailer.php';
-        // if (!empty($member['email'])) {
-        //     smtp_mailer($member['email'], $campaign['campaign_name'], $personalized_msg); 
-        // }
     }
     
     // Mark as Sent
