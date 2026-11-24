@@ -1515,6 +1515,8 @@ if (!function_exists('send_member_email')) {
                         <tr><th>SYS_TERMINATION</th><td style='color:#ff6b00;'>$expiredate</td></tr>
                     </table>
 
+                    " . (function_exists('build_google_wallet_email_block') ? build_google_wallet_email_block($con, $memID, ['plan_name' => $planName, 'expire_date' => $expiredate], true) : '') . "
+
                     <div style='text-align: center; margin-top: 40px;'>
                         <p style='color: #94a3b8; font-size: 11px; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 2px;'>ACCESS MEMBER PORTAL</p>
                         <a href='https://sudarshanfitness.de/' class='btn-glow'>OPEN MEMBER PORTAL</a>
@@ -1697,6 +1699,8 @@ if (!function_exists('send_payment_email')) {
                         <tr><th>SYS_TERMINATION</th><td style='color:#ff6b00;'>$expiredate</td></tr>
                         <tr><th>AUTHORIZED_BY</th><td>$received_by</td></tr>
                     </table>
+
+                    " . (function_exists('build_google_wallet_email_block') ? build_google_wallet_email_block($con, $memID, ['plan_name' => $planName, 'expire_date' => $expiredate], true) : '') . "
 
                     $whatsapp_section
 

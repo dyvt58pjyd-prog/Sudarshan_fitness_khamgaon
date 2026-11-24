@@ -443,6 +443,7 @@ if (!function_exists('render_email_template_html')) {
             '{payment_mode}'        => 'UPI / Cash',
             '{whatsapp_group_link}' => $whatsapp_link,
             '{whatsapp_button}'     => $whatsapp_card_html,
+            '{google_wallet_section}' => '',
             '{current_year}'        => date('Y')
         ];
 
@@ -566,6 +567,8 @@ if (!function_exists('render_email_template_html')) {
                                         {$body_content}
                                     </p>
 
+                                    {$merged['{google_wallet_section}']}
+
                                     {$whatsapp_integrated_html}
 
                                     {$promo_banner_html}
@@ -617,12 +620,17 @@ if (!function_exists('send_member_qr_pass_email')) {
 
         $expire_fmt = ($expire_date !== 'N/A' && !empty($expire_date)) ? date('d-M-Y', strtotime($expire_date)) : 'Active';
 
+        $gw_html = function_exists('build_google_wallet_email_block')
+            ? build_google_wallet_email_block($con, $userid, ['plan_name' => $plan_name, 'expire_date' => $expire_date], true)
+            : '';
+
         $rendered = render_email_template_html($template, [
-            '{member_name}' => $to_name,
-            '{userid}'      => $userid,
-            '{gender}'      => $gender,
-            '{plan_name}'   => $plan_name,
-            '{expire_date}' => $expire_fmt
+            '{member_name}'           => $to_name,
+            '{userid}'                => $userid,
+            '{gender}'                => $gender,
+            '{plan_name}'             => $plan_name,
+            '{expire_date}'           => $expire_fmt,
+            '{google_wallet_section}' => $gw_html
         ], $gym);
 
         $sent = send_smtp_email($to_email, $to_name, $rendered['subject'], $rendered['html']);

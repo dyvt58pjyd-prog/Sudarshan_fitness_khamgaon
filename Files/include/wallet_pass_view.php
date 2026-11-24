@@ -405,6 +405,15 @@ $wa_url = "https://wa.me/?text=" . urlencode($wa_text);
             🟢 Send Signed Pass to WhatsApp
         </a>
 
+        <?php if (function_exists('is_google_wallet_configured') && is_google_wallet_configured()): ?>
+            <?php $gw_save_url = build_google_wallet_save_url($con, $member['userid'], [], false); ?>
+            <?php if (!empty($gw_save_url)): ?>
+                <a href="<?php echo htmlspecialchars($gw_save_url); ?>" target="_blank" class="btn-action" style="background: #020617; color: #ffffff; border: 1.5px solid #e2e8f0; text-decoration: none; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);">
+                    💳 Add to Google Wallet (Android)
+                </a>
+            <?php endif; ?>
+        <?php endif; ?>
+
         <button type="button" onclick="openInstallModal()" class="btn-action" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);">
             📲 Pin Pass to iPhone / Android Home Screen
         </button>

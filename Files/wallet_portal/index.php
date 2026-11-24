@@ -352,6 +352,7 @@ if ($q_logs) {
             <button type="button" class="top-btn" onclick="location.reload()">↻ Sync Members</button>
             <a href="../desk/" class="top-btn">⚡ Desk Portal</a>
             <?php if ($current_staff_role === 'super_admin' || $current_staff_role === 'owner'): ?>
+                <a href="google_setup.php" class="top-btn" style="border-color:#4285F4;color:#93c5fd;">💳 Google Wallet Setup</a>
                 <a href="../dashboard/admin/index.php" class="top-btn">⚙️ Admin Hub</a>
             <?php endif; ?>
             <a href="logout.php" class="top-btn" style="color:#f87171;">Logout</a>
@@ -477,6 +478,9 @@ if ($q_logs) {
                     </button>
                     <button type="button" class="issue-btn" id="btnCounterQr" onclick="issuePass('counter_qr')" style="background:linear-gradient(135deg,#ff6b00,#ea580c);">
                         📱 Show Counter Scan QR on Screen
+                    </button>
+                    <button type="button" class="issue-btn" id="btnGoogleWallet" onclick="issuePass('google_wallet')" style="background:#020617;border:1.5px solid #4285F4;">
+                        💳 Generate Google Wallet Save Link
                     </button>
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
                         <button type="button" class="issue-btn" onclick="issuePass('copy_link')" style="background:#334155;font-size:12px;">
@@ -823,6 +827,13 @@ async function issuePass(channel) {
             setQrDisplay('counterHandoffQr', counterQr, data.signed_url, 230);
             document.getElementById('counterQrModal').style.display = 'flex';
             showToast(true, '📱 Counter scan QR ready for member camera.');
+        } else if (channel === 'google_wallet') {
+            if (navigator.clipboard && data.google_wallet_url) await navigator.clipboard.writeText(data.google_wallet_url).catch(() => {});
+            showToast(true, `💳 ${data.message}`);
+            if (data.google_wallet_url) {
+                waBox.style.display = 'block';
+                waBox.innerHTML = `<a href="${esc(data.google_wallet_url)}" target="_blank" style="color:#93c5fd;font-weight:800;">↗️ Open Native "Add to Google Wallet" Link</a>`;
+            }
         } else {
             showToast(true, `✅ ${data.message}`);
             if (data.wa_direct_url && channel === 'whatsapp') {

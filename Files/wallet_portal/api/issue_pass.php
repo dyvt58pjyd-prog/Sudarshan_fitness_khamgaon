@@ -109,7 +109,7 @@ if ($action === 'bulk_issue') {
 // Single pass issue
 $uid = trim((string)($input['uid'] ?? ''));
 $channel = strtolower(trim((string)($input['channel'] ?? 'copy_link')));
-if (!in_array($channel, ['whatsapp', 'email', 'counter_qr', 'copy_link'], true)) {
+if (!in_array($channel, ['whatsapp', 'email', 'counter_qr', 'copy_link', 'google_wallet'], true)) {
     $channel = 'copy_link';
 }
 if ($uid === '') {
@@ -158,6 +158,19 @@ if ($channel === 'whatsapp') {
     $channel_msg = "Branded Wallet Pass emailed to {$ctx['user']['email']}!";
 } elseif ($channel === 'counter_qr') {
     $channel_msg = "Counter QR handoff issued for {$ctx['user']['username']}.";
+} elseif ($channel === 'google_wallet') {
+    if (!function_exists('is_google_wallet_configured') || !is_google_wallet_configured()) {
+        http_response_code(422);
+        echo json_encode(['success' => false, 'message' => 'Google Wallet Issuer ID & Service Account JSON not configured yet. Open Google Wallet Setup first.']);
+        exit();
+    }
+    $gw_url = build_google_wallet_save_url($con, $ctx['user']['userid'], [], true);
+    if (!$gw_url) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'Unable to sign Google Wallet pass JWT. Check OpenSSL key configuration.']);
+        exit();
+    }
+    $channel_msg = "Google Wallet Save Link generated & synced for {$ctx['user']['username']}!";
 } else {
     $channel_msg = "Signed pass link generated for {$ctx['user']['username']}.";
 }
@@ -165,12 +178,13 @@ if ($channel === 'whatsapp') {
 log_wallet_pass_issuance($con, $ctx['user']['userid'], $platform, $channel, $current_staff_user, $current_staff_role, $exp_ts, $note);
 
 echo json_encode([
-    'success'       => true,
-    'uid'           => $ctx['user']['userid'],
-    'platform'      => $platform,
-    'channel'       => $channel,
-    'signed_url'    => $signed_url,
-    'rotating_qr'   => $rotating_qr,
+    'success'           => true,
+    'uid'               => $ctx['user']['userid'],
+    'platform'          => $platform,
+    'channel'           => $channel,
+    'signed_url'        => $signed_url,
+    'google_wallet_url' => $gw_url ?? null,
+    'rotating_qr'       => $rotating_qr,
     'wa_direct_url' => $wa_direct_url,
     'expires_label' => ($exp_ts > 0 ? date('d M Y h:i A', $exp_ts) : 'Never (Linked to Active Status)'),
     'message'       => $channel_msg

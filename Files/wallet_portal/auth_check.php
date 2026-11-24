@@ -4,6 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require_once __DIR__ . '/../include/db_conn.php';
+require_once __DIR__ . '/../include/google_wallet_helper.php';
 
 $wallet_portal_allowed_roles = ['super_admin', 'owner', 'reception'];
 $is_api_request = defined('WALLET_PORTAL_API') && WALLET_PORTAL_API === true;

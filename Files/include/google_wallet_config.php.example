@@ -1,0 +1,21 @@
+<?php
+/**
+ * Google Wallet Pass Configuration Template (Safe for Git).
+ *
+ * Recommended setup: Open Wallet Pass Counter -> Google Wallet Setup
+ * (or create ignored Files/include/google_wallet_config.json & google_wallet_key.json).
+ *
+ * Required from Google Pay & Wallet Console (https://pay.google.com/business/console/):
+ *   1. Issuer ID (numeric string, e.g. "3388000000012345678")
+ *   2. Google Cloud Service Account JSON key with "Google Wallet API" enabled
+ *      and that Service Account email granted Admin/Developer access in Wallet Console.
+ *
+ * Optionally copy this file to Files/include/google_wallet_config.php (gitignored):
+ */
+return [
+    'issuer_id'           => 'YOUR_GOOGLE_WALLET_ISSUER_ID',
+    'class_suffix'        => 'sudarshan_fitness_member_v1',
+    'service_account_json'=> __DIR__ . '/google_wallet_key.json',
+    'base_url'            => 'https://sudarshanfitness.de',
+    'card_color'          => '#0f172a',
+];

@@ -180,6 +180,20 @@ if (!function_exists('resolve_checkin_identifier')) {
             return ['ok' => true, 'uid' => $qr_uid, 'verified_qr' => true];
         }
 
+        if (strpos($val, 'SFG1:') === 0) {
+            $parts = explode(':', $val);
+            if (count($parts) !== 3) {
+                return ['ok' => false, 'reason' => 'Malformed Google Wallet QR code.'];
+            }
+            $qr_uid = trim($parts[1]);
+            $sig = trim($parts[2]);
+            $expected = substr(hash_hmac('sha256', "GW_QR|{$qr_uid}", get_pass_hmac_secret($con)), 0, 16);
+            if ($sig === '' || !hash_equals($expected, $sig)) {
+                return ['ok' => false, 'reason' => 'Forged or invalid Google Wallet QR signature.'];
+            }
+            return ['ok' => true, 'uid' => $qr_uid, 'verified_qr' => true];
+        }
+
         if (strpos($val, 'MEMBER_ID:') === 0) {
             return ['ok' => true, 'lookup' => trim(substr($val, 10)), 'verified_qr' => false];
         }
@@ -690,6 +704,9 @@ if (!function_exists('send_wallet_pass_branded_email')) {
                 : '<strong>Phone Setup:</strong> Open in Safari (iPhone) or Chrome (Android) and tap <strong>Add to Home Screen</strong> for instant 1-tap gate entry.');
 
         $qr_img = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' . urlencode($signed_url);
+        $gw_block = function_exists('build_google_wallet_email_block')
+            ? build_google_wallet_email_block($con, $user['userid'], ['plan_name' => $ctx['plan_name'], 'expire_date' => $ctx['expire_date']], true)
+            : '';
         $subject = ($gym['gym_name'] ?? 'Sudarshan Fitness') . " — Your Official Digital Gym Wallet Pass (#{$user['userid']})";
 
         $html = "<!DOCTYPE html><html><body style='margin:0;padding:24px;background:#0f172a;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;color:#f8fafc;'>
@@ -709,6 +726,7 @@ if (!function_exists('send_wallet_pass_branded_email')) {
                     <div><strong>Batch:</strong> {$batch}</div>
                     <div><strong>Coach:</strong> {$coach}</div>
                 </div>
+                {$gw_block}
                 <div style='text-align:center;margin:20px 0;'>
                     <a href='{$pass_href}' style='display:inline-block;background:#10b981;color:#fff;text-decoration:none;font-weight:800;font-size:15px;padding:14px 26px;border-radius:12px;'>📲 Open My Signed Digital Pass</a>
                 </div>
@@ -739,4 +757,8 @@ if (!function_exists('send_wallet_pass_branded_email')) {
 
         return ['sent' => (bool)$sent, 'reason' => $sent ? '' : 'SMTP / PHP mail failed (check SMTP settings).'];
     }
+}
+
+if (file_exists(__DIR__ . '/google_wallet_helper.php')) {
+    require_once __DIR__ . '/google_wallet_helper.php';
 }

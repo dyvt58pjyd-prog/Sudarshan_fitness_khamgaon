@@ -43,6 +43,9 @@ Files/include/license_data.json
 .env.*
 Files/include/ai_config.php
 Files/include/db_config.php
+Files/include/google_wallet_config.php
+Files/include/google_wallet_config.json
+Files/include/google_wallet_key.json
 Files/include/*.flag
 Files/include/email_log.txt
 Files/include/php_error_log.txt
