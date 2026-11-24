@@ -51,14 +51,39 @@ if (!$con) {
     }
 }
 
-// Fetch members safely with SELECT u.* (avoids breaking if optional columns differ)
+// Fetch lightweight member columns (never load photo_base64 LONGTEXT blobs in bulk)
 $members = [];
 $stats = ['total' => 0, 'active' => 0, 'issued_today' => 0, 'apple_count' => 0, 'android_count' => 0];
+$files_root_dir = realpath(__DIR__ . '/..');
 
-$q_m = $con ? mysqli_query($con, "SELECT u.* FROM users u WHERE u.userid != 'PENDING' ORDER BY CAST(u.userid AS UNSIGNED) DESC, u.username ASC") : false;
+$q_m = false;
+if ($con) {
+    $q_m = @mysqli_query($con, "SELECT u.userid, u.username, u.mobile, u.email, u.joining_date, u.trainer_id, u.biometric_batch, u.partner_uid, u.photo, u.member_photo FROM users u WHERE u.userid != 'PENDING' ORDER BY CAST(u.userid AS UNSIGNED) DESC, u.username ASC");
+    if (!$q_m) {
+        $q_m = mysqli_query($con, "SELECT u.userid, u.username, u.mobile, u.email, u.joining_date, u.trainer_id, u.biometric_batch, u.partner_uid FROM users u WHERE u.userid != 'PENDING' ORDER BY CAST(u.userid AS UNSIGNED) DESC, u.username ASC");
+    }
+}
 if (!$q_m && $con && $db_sync_error === '') {
     $db_sync_error = 'Member sync query failed: ' . mysqli_error($con);
 }
+
+$resolve_light_avatar = function($row) use ($files_root_dir) {
+    $safe_uid = preg_replace('/[^a-zA-Z0-9_\-]/', '', (string)($row['userid'] ?? ''));
+    if ($files_root_dir && $safe_uid !== '' && file_exists($files_root_dir . '/uploads/member_photos/mem_' . $safe_uid . '.jpg')) {
+        return '../uploads/member_photos/mem_' . $safe_uid . '.jpg';
+    }
+    foreach (['member_photo', 'photo'] as $col) {
+        if (!empty($row[$col]) && $files_root_dir) {
+            $rel = ltrim(str_replace(['../', './'], '', $row[$col]), '/');
+            if (file_exists($files_root_dir . '/' . $rel)) {
+                return '../' . str_replace(' ', '%20', $rel);
+            }
+        }
+    }
+    return 'api/member_avatar.php?uid=' . urlencode((string)($row['userid'] ?? ''));
+};
+
+$pass_base_url = preg_replace('/\?.*$/', '', build_signed_wallet_pass_url($con, 'UID_PLACEHOLDER', 0, false, 'universal'));
 
 if ($q_m) {
     while ($row = mysqli_fetch_assoc($q_m)) {
@@ -110,9 +135,6 @@ if ($q_m) {
         $batch_label = ($batch_id !== null && isset($batches_map[$batch_id])) ? $batches_map[$batch_id] : 'General Batch (06:00 AM - 10:00 PM)';
         $trainer_label = (!empty($row['trainer_id']) && isset($trainers_map[$row['trainer_id']])) ? $trainers_map[$row['trainer_id']] : 'General Floor Coach';
 
-        $photo_url = function_exists('get_member_photo_url') ? get_member_photo_url($row, '../') : '../images/default_avatar.png';
-        $sig = sign_pass_url_signature($con, $uid_val, 0);
-
         $members[] = [
             'userid'        => $uid_val,
             'username'      => $row['username'] ?: 'Member',
@@ -127,25 +149,21 @@ if ($q_m) {
             'status_key'    => $status_key,
             'trainer_name'  => $trainer_label,
             'batch_name'    => $batch_label,
-            'photo_url'     => $photo_url,
+            'photo_url'     => $resolve_light_avatar($row),
             'rotating_qr'   => generate_rotating_qr_payload($con, $uid_val),
-            'apple_url'     => build_signed_wallet_pass_url($con, $uid_val, 0, false, 'apple'),
-            'android_url'   => build_signed_wallet_pass_url($con, $uid_val, 0, false, 'android'),
-            'universal_url' => build_signed_wallet_pass_url($con, $uid_val, 0, false, 'universal'),
-            'sig'           => $sig,
+            'sig'           => sign_pass_url_signature($con, $uid_val, 0),
             'issue_cnt'     => $iss ? intval($iss['issue_cnt']) : 0,
-            'last_issued'   => $iss ? date('d M, h:i A', strtotime($iss['last_issued'])) : '',
             'last_platform' => $iss ? $iss['last_platform'] : ''
         ];
     }
 }
 
-$q_today = mysqli_query($con, "SELECT COUNT(*) as c FROM wallet_pass_logs WHERE DATE(created_at) = '$today_str'");
-if ($q_today && $r = mysqli_fetch_assoc($q_today)) $stats['issued_today'] = intval($r['c']);
-$q_ap = mysqli_query($con, "SELECT COUNT(*) as c FROM wallet_pass_logs WHERE platform = 'apple'");
-if ($q_ap && $r = mysqli_fetch_assoc($q_ap)) $stats['apple_count'] = intval($r['c']);
-$q_an = mysqli_query($con, "SELECT COUNT(*) as c FROM wallet_pass_logs WHERE platform = 'android'");
-if ($q_an && $r = mysqli_fetch_assoc($q_an)) $stats['android_count'] = intval($r['c']);
+$q_agg = $con ? @mysqli_query($con, "SELECT SUM(DATE(created_at) = '$today_str') AS issued_today, SUM(platform = 'apple') AS apple_count, SUM(platform = 'android') AS android_count FROM wallet_pass_logs") : false;
+if ($q_agg && $ag = mysqli_fetch_assoc($q_agg)) {
+    $stats['issued_today']  = intval($ag['issued_today'] ?? 0);
+    $stats['apple_count']   = intval($ag['apple_count'] ?? 0);
+    $stats['android_count'] = intval($ag['android_count'] ?? 0);
+}
 
 $recent_logs = [];
 $q_logs = mysqli_query($con, "SELECT l.*, u.username FROM wallet_pass_logs l LEFT JOIN users u ON l.uid = u.userid ORDER BY l.id DESC LIMIT 20");
@@ -163,7 +181,7 @@ if ($q_logs) {
     <title>Wallet Pass Issuance Portal | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
     <link rel="shortcut icon" href="<?php echo htmlspecialchars($gym_logo); ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js" defer></script>
     <style>
         :root {
             --bg: #070b14;
@@ -517,31 +535,46 @@ if ($q_logs) {
 <script>
 const MEMBERS_DATA = <?php echo json_encode($members, JSON_INVALID_UTF8_SUBSTITUTE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?: '[]'; ?>;
 const INITIAL_LOGS = <?php echo json_encode($recent_logs, JSON_INVALID_UTF8_SUBSTITUTE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?: '[]'; ?>;
+const PASS_URL_BASE = <?php echo json_encode($pass_base_url, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>;
 
 let activeStatusFilter = 'all';
 let activePlatform = 'apple';
 let selectedUid = MEMBERS_DATA.length ? String(MEMBERS_DATA[0].userid) : '';
+let renderLimit = 60;
 const bulkSelected = new Set();
 
 let previewQr = null;
 let counterQr = null;
-if (typeof QRious !== 'undefined') {
-    previewQr = new QRious({
-        element: document.getElementById('previewQrCanvas'),
-        value: 'SFQ1:PREVIEW',
-        size: 118,
-        background: 'white',
-        foreground: 'black',
-        level: 'M'
-    });
-    counterQr = new QRious({
-        element: document.getElementById('counterHandoffQr'),
-        value: 'https://sudarshanfitness.de',
-        size: 230,
-        background: 'white',
-        foreground: 'black',
-        level: 'M'
-    });
+function initQrInstances() {
+    if (typeof QRious === 'undefined') return;
+    if (!previewQr) {
+        previewQr = new QRious({
+            element: document.getElementById('previewQrCanvas'),
+            value: 'SFQ1:PREVIEW',
+            size: 118,
+            background: 'white',
+            foreground: 'black',
+            level: 'M'
+        });
+    }
+    if (!counterQr) {
+        counterQr = new QRious({
+            element: document.getElementById('counterHandoffQr'),
+            value: 'https://sudarshanfitness.de',
+            size: 230,
+            background: 'white',
+            foreground: 'black',
+            level: 'M'
+        });
+    }
+}
+
+function getMemberPassUrl(m, plat) {
+    let u = `${PASS_URL_BASE}?uid=${encodeURIComponent(m.userid)}&sig=${encodeURIComponent(m.sig || '')}`;
+    if (plat === 'apple' || plat === 'android') {
+        u += `&platform=${encodeURIComponent(plat)}`;
+    }
+    return u;
 }
 
 function setQrDisplay(canvasId, qrInstance, value, size) {
@@ -602,7 +635,8 @@ function renderMemberList() {
         return;
     }
 
-    container.innerHTML = list.map(m => {
+    const slice = list.slice(0, renderLimit);
+    let html = slice.map(m => {
         const uidStr = String(m.userid);
         const isSel = uidStr === String(selectedUid);
         const badgeCls = m.status_key === 'expiring' ? 'badge-expiring' : (m.is_active ? 'badge-active' : 'badge-expired');
@@ -622,6 +656,11 @@ function renderMemberList() {
             </div>
         `;
     }).join('');
+
+    if (list.length > slice.length) {
+        html += `<button type="button" class="top-btn show-more-btn" style="width:100%;text-align:center;margin-top:6px;">Show More (${list.length - slice.length} remaining)</button>`;
+    }
+    container.innerHTML = html;
 }
 
 function selectMember(uid) {
@@ -659,6 +698,7 @@ function bumpStatCounters(count = 1) {
 
 function setStatusFilter(filter, btn) {
     activeStatusFilter = filter;
+    renderLimit = 60;
     document.querySelectorAll('.filter-row .f-btn').forEach(b => b.classList.remove('active'));
     if (btn) btn.classList.add('active');
     renderMemberList();
@@ -834,8 +874,7 @@ async function openLivePassTab() {
     if (!m) { showToast(false, 'Please select a member first.'); return; }
     const validity = document.getElementById('validitySelect').value;
     if (validity === 'permanent') {
-        const url = activePlatform === 'apple' ? m.apple_url : (activePlatform === 'android' ? m.android_url : m.universal_url);
-        window.open(url, '_blank');
+        window.open(getMemberPassUrl(m, activePlatform), '_blank');
         return;
     }
     const win = window.open('about:blank', '_blank');
@@ -861,7 +900,7 @@ async function openLivePassTab() {
             return;
         }
     } catch (e) {}
-    const fallbackUrl = activePlatform === 'apple' ? m.apple_url : (activePlatform === 'android' ? m.android_url : m.universal_url);
+    const fallbackUrl = getMemberPassUrl(m, activePlatform);
     if (win) win.location.href = fallbackUrl;
 }
 
@@ -906,6 +945,11 @@ async function reloadLogs() {
 
 const memberListEl = document.getElementById('memberListContainer');
 memberListEl.addEventListener('click', (e) => {
+    if (e.target.closest('button.show-more-btn')) {
+        renderLimit += 60;
+        renderMemberList();
+        return;
+    }
     if (e.target.closest('input.bulk-chk')) return;
     const row = e.target.closest('.m-row[data-uid]');
     if (row) selectMember(row.dataset.uid);
@@ -920,7 +964,15 @@ memberListEl.addEventListener('error', (e) => {
     }
 }, true);
 
-document.getElementById('memberSearchInput').addEventListener('input', renderMemberList);
+document.getElementById('memberSearchInput').addEventListener('input', () => {
+    renderLimit = 60;
+    renderMemberList();
+});
+window.addEventListener('DOMContentLoaded', () => {
+    initQrInstances();
+    renderPreview();
+});
+initQrInstances();
 renderMemberList();
 renderPreview();
 renderLogs(INITIAL_LOGS);

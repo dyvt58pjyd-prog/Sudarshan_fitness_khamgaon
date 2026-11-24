@@ -24,11 +24,14 @@ if (!function_exists('get_pass_hmac_secret')) {
         }
 
         if ($con && $con instanceof mysqli) {
-            $chk = @mysqli_query($con, "SHOW COLUMNS FROM gym_details LIKE 'pass_secret'");
-            if ($chk && mysqli_num_rows($chk) === 0) {
-                @mysqli_query($con, "ALTER TABLE gym_details ADD COLUMN pass_secret VARCHAR(128) DEFAULT NULL");
-            }
             $res = @mysqli_query($con, "SELECT id, pass_secret FROM gym_details LIMIT 1");
+            if (!$res) {
+                $chk = @mysqli_query($con, "SHOW COLUMNS FROM gym_details LIKE 'pass_secret'");
+                if ($chk && mysqli_num_rows($chk) === 0) {
+                    @mysqli_query($con, "ALTER TABLE gym_details ADD COLUMN pass_secret VARCHAR(128) DEFAULT NULL");
+                }
+                $res = @mysqli_query($con, "SELECT id, pass_secret FROM gym_details LIMIT 1");
+            }
             if ($res && $row = mysqli_fetch_assoc($res)) {
                 if (!empty($row['pass_secret'])) {
                     $cached_secret = $row['pass_secret'];
@@ -507,7 +510,11 @@ if (!function_exists('ensure_wallet_pass_logs_table')) {
      * Self-healing audit table for reception/admin/owner wallet pass issuances.
      */
     function ensure_wallet_pass_logs_table($con) {
-        if (!$con || !($con instanceof mysqli)) return;
+        static $checked = false;
+        if ($checked || !$con || !($con instanceof mysqli)) return;
+        $checked = true;
+        $probe = @mysqli_query($con, "SELECT 1 FROM wallet_pass_logs LIMIT 1");
+        if ($probe !== false) return;
         @mysqli_query($con, "CREATE TABLE IF NOT EXISTS wallet_pass_logs (
             id INT AUTO_INCREMENT PRIMARY KEY,
             uid VARCHAR(50) NOT NULL,

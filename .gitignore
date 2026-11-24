@@ -43,6 +43,7 @@ Files/include/license_data.json
 .env.*
 Files/include/ai_config.php
 Files/include/db_config.php
+Files/include/*.flag
 Files/include/email_log.txt
 Files/include/php_error_log.txt
 Files/api/bio_log.txt

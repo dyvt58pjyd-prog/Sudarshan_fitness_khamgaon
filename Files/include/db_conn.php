@@ -127,22 +127,26 @@ if (!$con) {
     // Enforce UTF-8 MB4 for emoji & Unicode character support
     @mysqli_set_charset($con, "utf8mb4");
 
+    // Throttled lightweight periodic maintenance (at most once per 15 minutes)
+    $maint_flag = __DIR__ . '/.db_maint.flag';
+    if (!file_exists($maint_flag) || (time() - @filemtime($maint_flag)) > 900) {
+        @file_put_contents($maint_flag, strval(time()));
+        try {
+            @mysqli_query($con, "UPDATE attendance SET exit_time = '23:59:00' WHERE (date < CURRENT_DATE() OR (date = CURRENT_DATE() AND CURRENT_TIME() > '23:59:00')) AND (exit_time IS NULL OR exit_time = '' OR exit_time = '00:00:00')");
+            @mysqli_query($con, "DELETE FROM whatsapp_outbox WHERE status = 'sent' AND created_at < DATE_SUB(NOW(), INTERVAL 90 DAY)");
+        } catch (Exception $e) {}
+    }
+
+    // Fast Startup Schema Gate: bypass 50+ DDL/backfill queries after initial bootstrap
+    $bootstrap_flag = __DIR__ . '/.db_bootstrap_v3.flag';
+    if (!file_exists($bootstrap_flag) || !empty($_GET['force_db_upgrade'])) {
+
     // Self-healing database performance indexes
     try {
         @mysqli_query($con, "ALTER TABLE users ADD INDEX idx_mobile (mobile)");
         @mysqli_query($con, "ALTER TABLE users ADD INDEX idx_partner (partner_uid)");
         @mysqli_query($con, "ALTER TABLE enrolls_to ADD INDEX idx_uid_expire (uid, expire)");
         @mysqli_query($con, "ALTER TABLE attendance ADD INDEX idx_uid_date (uid, date)");
-    } catch (Exception $e) {}
-
-    // Auto-checkout members who forgot to check out (after 11:59 PM)
-    try {
-        mysqli_query($con, "UPDATE attendance SET exit_time = '23:59:00' WHERE (date < CURRENT_DATE() OR (date = CURRENT_DATE() AND CURRENT_TIME() > '23:59:00')) AND (exit_time IS NULL OR exit_time = '' OR exit_time = '00:00:00')");
-    } catch (Exception $e) {}
-
-    // Self-healing database check: auto-prune sent WhatsApp outbox logs older than 90 days to keep DB fast
-    try {
-        @mysqli_query($con, "DELETE FROM whatsapp_outbox WHERE status = 'sent' AND created_at < DATE_SUB(NOW(), INTERVAL 90 DAY)");
     } catch (Exception $e) {}
 
     // Self-healing database check: ensure payment_qr column exists in gym_details
@@ -311,18 +315,12 @@ if (!$con) {
     // Self-healing database check: ensure dob column in users is VARCHAR(50) to allow different date formats from CSV
     $chk_dob = mysqli_query($con, "SHOW COLUMNS FROM users LIKE 'dob'");
     
-    // Self-healing: Ensure all users have a login account in the admin table
-    $users_q = mysqli_query($con, "SELECT userid, username FROM users");
-    if ($users_q) {
-        while ($u_row = mysqli_fetch_assoc($users_q)) {
-            $uid = $u_row['userid'];
-            $uname = $u_row['username'];
-            $chk_admin_user = mysqli_query($con, "SELECT username FROM admin WHERE username='$uid'");
-            if ($chk_admin_user && mysqli_num_rows($chk_admin_user) == 0) {
-                mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role) VALUES ('$uid', '1234', 'member', '$uname', 'member')");
-            }
-        }
-    }
+    // Self-healing: Ensure all users have a login account in the admin table (single-query backfill)
+    @mysqli_query($con, "INSERT INTO admin (username, pass_key, securekey, Full_name, role)
+                         SELECT u.userid, '1234', 'member', COALESCE(NULLIF(u.username, ''), u.userid), 'member'
+                         FROM users u
+                         LEFT JOIN admin a ON u.userid = a.username
+                         WHERE a.username IS NULL AND u.userid != 'PENDING'");
     if ($chk_dob && $row_dob = mysqli_fetch_assoc($chk_dob)) {
         if (strpos($row_dob['Type'], 'varchar(10)') !== false) {
             mysqli_query($con, "ALTER TABLE users MODIFY COLUMN dob VARCHAR(50) NOT NULL");
@@ -847,6 +845,9 @@ if (!$con) {
         ('Monohydrate Creatine (250g)', 'Muscle Gain', 'Micronized Pure Creatine Monohydrate for explosive strength, power, and muscle volume.', 'Increases Power Output | Cell Volumization | 100% Pure', 1299, 999, 'in_stock'),
         ('BCAA 2:1:1 Recovery Formula', 'Recovery', 'Essential Branched Chain Amino Acids for muscle endurance, hydration, and intra-workout energy.', 'Prevents Muscle Breakdown | Electrolyte Blend | Refreshing Flavor', 1899, 1499, 'in_stock')");
     }
+
+    @file_put_contents($bootstrap_flag, date('Y-m-d H:i:s'));
+    } // end fast startup schema gate
 }
 ?>
 <?php

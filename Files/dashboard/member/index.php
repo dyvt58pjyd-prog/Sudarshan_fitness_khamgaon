@@ -1561,7 +1561,7 @@ function dismissWarning() {
         </div>
     </div>
 
-    <script src="../../js/face-api/face-api.min.js"></script>
+    <script src="../../js/face-api/face-api.min.js" defer></script>
     <script>
     let memberFaceStream = null;
     let memberModelsLoaded = false;
