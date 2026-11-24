@@ -78,6 +78,12 @@ $today_str = date('Y-m-d');
                     <span id="themeToggleIcon">☀️</span>
                 </button>
 
+                <?php if ($current_staff_role === 'super_admin' || $current_staff_role === 'owner' || $current_staff_role === 'reception'): ?>
+                    <a href="../wallet_portal/" class="btn-icon" title="Issue Apple & Android Wallet Passes">
+                        <span>🎟️ Wallet Passes</span>
+                    </a>
+                <?php endif; ?>
+
                 <?php if ($current_staff_role === 'super_admin' || $current_staff_role === 'owner'): ?>
                     <a href="../dashboard/admin/index.php" class="btn-icon" title="Return to Full Admin Suite">
                         <span>⚙️ Admin Hub</span>

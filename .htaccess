@@ -11,6 +11,7 @@ RewriteRule ^iclock/devicecmd/?$ /Files/iclock/devicecmd.php [L,QSA]
 
 # Route Core App Folders cleanly to /Files/
 RewriteRule ^desk/?(.*)$ /Files/desk/$1 [L,QSA]
+RewriteRule ^wallet_portal/?(.*)$ /Files/wallet_portal/$1 [L,QSA]
 RewriteRule ^member_app/?(.*)$ /Files/member_app/$1 [L,QSA]
 RewriteRule ^dashboard/?(.*)$ /Files/dashboard/$1 [L,QSA]
 RewriteRule ^css/?(.*)$ /Files/css/$1 [L,QSA]

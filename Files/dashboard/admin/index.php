@@ -751,6 +751,15 @@ if (isset($_GET['send_reminder']) && isset($_GET['uid'])) {
 								</div>
 							</a>
 
+							<a href="../../wallet_portal/" target="_blank" style="text-decoration: none;">
+								<div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(56, 189, 248, 0.08) 100%); border: 2px solid #10b981; border-radius: 18px; padding: 22px; text-align: center; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 10px 20px rgba(0,0,0,0.15);" 
+								     onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+									<div style="font-size: 40px; margin-bottom: 10px;">🎟️📱</div>
+									<h4 style="color: var(--text-main, var(--text-main)); font-weight: 800; font-size: 15px; margin: 0 0 5px 0; text-transform: uppercase;">Wallet Pass Portal</h4>
+									<span style="color: var(--text-muted, #64748b); font-size: 11.5px;">Issue Apple iPhone &amp; Android Passes</span>
+								</div>
+							</a>
+
 
 							<?php if ($current_role === 'super_admin' || $current_role === 'owner'): ?>
 							<a href="biometric_logs.php" style="text-decoration: none;">

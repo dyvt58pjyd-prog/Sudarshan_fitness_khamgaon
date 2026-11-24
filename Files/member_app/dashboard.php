@@ -122,15 +122,23 @@ if ($q_health && mysqli_num_rows($q_health) > 0) {
 
 // Fetch User's Attendance
 $att_status = "Not Checked In";
-$q_att = mysqli_query($con, "SELECT * FROM attendance WHERE uid='$uid' AND date='$today' ORDER BY id DESC LIMIT 1");
+$att_state = "none";
+$q_att = mysqli_query($con, "SELECT * FROM attendance WHERE uid='$uid_esc' AND date='$today' ORDER BY id DESC LIMIT 1");
 if ($q_att && mysqli_num_rows($q_att) > 0) {
     $att_row = mysqli_fetch_assoc($q_att);
     if (empty($att_row['exit_time']) || $att_row['exit_time'] == '00:00:00') {
         $att_status = "Checked In at " . date('h:i A', strtotime($att_row['entry_time']));
+        $att_state = "checked_in";
     } else {
         $att_status = "Left at " . date('h:i A', strtotime($att_row['exit_time']));
+        $att_state = "completed";
     }
 }
+
+$signed_pass_sig = sign_pass_url_signature($con, $uid, 0);
+$signed_pass_href = "wallet_pass.php?uid=" . urlencode($uid) . "&sig=" . urlencode($signed_pass_sig);
+$live_qr_token = generate_rotating_qr_payload($con, $uid);
+$live_qr_rem = get_rotating_qr_remaining_seconds();
 
 // Fetch Partner's Attendance for Couple Dashboard
 $partner_att_status = "Not Checked In";
@@ -271,10 +279,18 @@ if ($partner_user) {
                 <div style="font-size: 14px; font-weight: 600; color: #10b981; background: rgba(16, 185, 129, 0.1); padding: 8px 12px; border-radius: 8px; display: inline-block;">
                     Valid till: <?php echo htmlspecialchars($expire_date); ?>
                 </div>
-                <a href="wallet_pass.php" style="background: linear-gradient(135deg, #38bdf8, #0284c7); color: #fff; text-decoration: none; padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(56,189,248,0.4);">
-                    📲 Smart Pass
-                </a>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <?php if (!$is_expired_member): ?>
+                        <button type="button" id="dashOneTapBtn" onclick="triggerDashCheckin()" style="background: <?php echo $att_state === 'checked_in' ? 'linear-gradient(135deg, #f59e0b, #d97706)' : ($att_state === 'completed' ? 'rgba(16,185,129,0.2)' : 'linear-gradient(135deg, #ff6b00, #ea580c)'); ?>; color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer;">
+                            <?php echo $att_state === 'checked_in' ? '👋 Check Out' : ($att_state === 'completed' ? '✅ Done Today' : '⚡ 1-Tap Check-In'); ?>
+                        </button>
+                    <?php endif; ?>
+                    <a href="<?php echo htmlspecialchars($signed_pass_href); ?>" style="background: linear-gradient(135deg, #38bdf8, #0284c7); color: #fff; text-decoration: none; padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(56,189,248,0.4);">
+                        📲 Smart Pass
+                    </a>
+                </div>
             </div>
+            <div id="dashCheckinMsg" style="display: none; margin-top: 10px; font-size: 12px; font-weight: 700;"></div>
         </div>
 
         <!-- INDIVIDUAL BMI & HEALTH TRACKER -->
@@ -405,9 +421,14 @@ if ($partner_user) {
         <!-- ENTRANCE QR PASS CARD -->
         <div class="card" style="text-align: center; border: 1px dashed rgba(255,107,0,0.4); background: linear-gradient(135deg, rgba(255, 107, 0, 0.08) 0%, rgba(30, 41, 59, 0.9) 100%);">
             <div class="card-title" style="color: #ff6b00; margin-bottom: 5px;">📷 Gym Entrance Digital QR Pass</div>
-            <p style="font-size: 11px; color: #94a3b8; margin-bottom: 15px;">Show this QR code to the entrance gate scanner to check in / out</p>
+            <p style="font-size: 11px; color: #94a3b8; margin-bottom: 15px;">Dynamic anti-screenshot QR rotates every 60 seconds</p>
             <div style="background: #fff; padding: 15px; border-radius: 16px; display: inline-block; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
                 <canvas id="qrcode-canvas"></canvas>
+            </div>
+            <div style="margin-top: 10px;">
+                <span style="display: inline-block; padding: 4px 12px; border-radius: 999px; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.35); color: #34d399; font-size: 11px; font-weight: 700;">
+                    🔒 Live Pass • Refreshes in <span id="dashQrTimer"><?php echo intval($live_qr_rem); ?></span>s
+                </span>
             </div>
             <div style="font-size: 13px; font-weight: 800; color: #fff; margin-top: 10px; text-transform: uppercase;">
                 <?php echo htmlspecialchars($user['username']); ?> (ID: <?php echo htmlspecialchars($user['userid']); ?>)
@@ -447,14 +468,90 @@ if ($partner_user) {
     </div>
 
     <script>
-        // Generate QR Code
+        const DASH_UID = <?php echo json_encode((string)$uid); ?>;
+        const DASH_SIG = <?php echo json_encode((string)$signed_pass_sig); ?>;
+        let dashQrRem = <?php echo intval($live_qr_rem); ?>;
+
+        // Generate Rotating Gate QR Code
         var qr = new QRious({
             element: document.getElementById('qrcode-canvas'),
-            value: <?php echo json_encode((string)$uid); ?>,
+            value: <?php echo json_encode((string)$live_qr_token); ?>,
             size: 250,
             background: 'white',
-            foreground: 'black'
+            foreground: 'black',
+            level: 'M'
         });
+
+        async function refreshDashQr() {
+            try {
+                const res = await fetch(`../api/get_live_qr.php?uid=${encodeURIComponent(DASH_UID)}&sig=${encodeURIComponent(DASH_SIG)}`, { cache: 'no-store' });
+                const data = await res.json();
+                if (data.success && data.token) {
+                    qr.value = data.token;
+                    dashQrRem = data.expires_in || 60;
+                    const t = document.getElementById('dashQrTimer');
+                    if (t) t.textContent = dashQrRem;
+                }
+            } catch (e) {
+                dashQrRem = 15;
+            }
+        }
+
+        setInterval(() => {
+            dashQrRem -= 1;
+            if (dashQrRem <= 0) {
+                refreshDashQr();
+                return;
+            }
+            const t = document.getElementById('dashQrTimer');
+            if (t) t.textContent = dashQrRem;
+        }, 1000);
+
+        async function triggerDashCheckin() {
+            const btn = document.getElementById('dashOneTapBtn');
+            const msgBox = document.getElementById('dashCheckinMsg');
+            if (!btn) return;
+            btn.disabled = true;
+            const prev = btn.textContent;
+            btn.textContent = '⏳ Logging...';
+            try {
+                const res = await fetch('../api/pwa_checkin.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uid: DASH_UID, sig: DASH_SIG, exp: 0 })
+                });
+                const data = await res.json();
+                msgBox.style.display = 'block';
+                if (data.success) {
+                    msgBox.style.color = data.action === 'cooldown' ? '#fbbf24' : '#34d399';
+                    msgBox.textContent = data.message;
+                    if (data.action === 'check-in') {
+                        btn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+                        btn.textContent = '👋 Check Out';
+                    } else if (data.action === 'check-out' || data.action === 'already-logged') {
+                        btn.style.background = 'rgba(16,185,129,0.2)';
+                        btn.textContent = '✅ Done Today';
+                    } else {
+                        btn.textContent = prev;
+                    }
+                } else {
+                    msgBox.style.color = '#f87171';
+                    msgBox.textContent = data.message || 'Check-in failed.';
+                    btn.textContent = prev;
+                }
+            } catch (e) {
+                msgBox.style.display = 'block';
+                msgBox.style.color = '#f87171';
+                msgBox.textContent = 'Connection error.';
+                btn.textContent = prev;
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(() => {});
+        }
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {

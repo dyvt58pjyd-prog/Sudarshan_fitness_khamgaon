@@ -660,7 +660,12 @@ function dismissWarning() {
 
                         <div style="text-align: center; background: #ffffff; padding: 15px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
                             <canvas id="desktop-qr-canvas"></canvas>
-                            <div style="font-size: 11px; font-weight: 800; color: #0f172a; margin-top: 8px; text-transform: uppercase;">SUDARSHAN FITNESS</div>
+                            <div style="font-size: 11px; font-weight: 800; color: #059669; margin-top: 8px; text-transform: uppercase;">
+                                🔒 Live Pass (<span id="desktopQrTimer"><?php echo get_rotating_qr_remaining_seconds(); ?></span>s)
+                            </div>
+                            <a href="wallet_pass.php?uid=<?php echo urlencode($userid); ?>&sig=<?php echo urlencode(sign_pass_url_signature($con, $userid, 0)); ?>" style="display: inline-block; margin-top: 8px; background: #0f172a; color: #fff; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; text-decoration: none;">
+                                ⚡ Smart Pass / 1-Tap Check-In
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -1164,11 +1169,11 @@ function dismissWarning() {
                     scales: {
                         x: {
                             grid: { color: 'rgba(255,255,255,0.03)' },
-                            ticks: { color: '#a3a3a3', font: { family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif } }
+                            ticks: { color: '#a3a3a3', font: { family: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" } }
                         },
                         y: {
                             grid: { color: 'rgba(255,255,255,0.03)' },
-                            ticks: { color: '#a3a3a3', font: { family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif } }
+                            ticks: { color: '#a3a3a3', font: { family: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" } }
                         }
                     }
                 }
@@ -1204,11 +1209,11 @@ function dismissWarning() {
                     scales: {
                         x: {
                             grid: { color: 'rgba(255,255,255,0.03)' },
-                            ticks: { color: '#a3a3a3', font: { family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif } }
+                            ticks: { color: '#a3a3a3', font: { family: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" } }
                         },
                         y: {
                             grid: { color: 'rgba(255,255,255,0.03)' },
-                            ticks: { color: '#a3a3a3', font: { family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif } }
+                            ticks: { color: '#a3a3a3', font: { family: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" } }
                         }
                     }
                 }
@@ -1469,15 +1474,38 @@ function dismissWarning() {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            if (document.getElementById('desktop-qr-canvas')) {
-                new QRious({
-                    element: document.getElementById('desktop-qr-canvas'),
-                    value: '<?php echo htmlspecialchars($userid); ?>',
-                    size: 160,
-                    background: 'white',
-                    foreground: 'black'
-                });
-            }
+            const canvas = document.getElementById('desktop-qr-canvas');
+            if (!canvas) return;
+            const dUid = <?php echo json_encode((string)$userid); ?>;
+            const dSig = <?php echo json_encode((string)sign_pass_url_signature($con, $userid, 0)); ?>;
+            let dRem = <?php echo intval(get_rotating_qr_remaining_seconds()); ?>;
+            const dQr = new QRious({
+                element: canvas,
+                value: <?php echo json_encode((string)generate_rotating_qr_payload($con, $userid)); ?>,
+                size: 160,
+                background: 'white',
+                foreground: 'black',
+                level: 'M'
+            });
+            setInterval(async () => {
+                dRem -= 1;
+                const el = document.getElementById('desktopQrTimer');
+                if (dRem <= 0) {
+                    try {
+                        const r = await fetch(`../../api/get_live_qr.php?uid=${encodeURIComponent(dUid)}&sig=${encodeURIComponent(dSig)}`, { cache: 'no-store' });
+                        const j = await r.json();
+                        if (j.success && j.token) {
+                            dQr.value = j.token;
+                            dRem = j.expires_in || 60;
+                        } else {
+                            dRem = 15;
+                        }
+                    } catch (e) {
+                        dRem = 15;
+                    }
+                }
+                if (el) el.textContent = dRem;
+            }, 1000);
         });
     </script>
 

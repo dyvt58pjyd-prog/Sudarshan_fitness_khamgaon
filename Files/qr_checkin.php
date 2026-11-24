@@ -9,7 +9,7 @@ $gym = get_gym_details($con);
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>QR Gate Terminal | <?php echo htmlspecialchars($gym['gym_name']); ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <style>
         :root {
             --bg-color: #0b0f19;
@@ -482,8 +482,9 @@ $gym = get_gym_details($con);
         }
 
         let isProcessing = false;
+        let closeTimerHandle = null;
 
-        function submitCheckin(customId) {
+        function submitCheckin(customId, scanSource = 'manual') {
             if (isProcessing) return;
             const identifier = customId || inputElem.value.trim();
             if (!identifier) return;
@@ -493,7 +494,7 @@ $gym = get_gym_details($con);
             fetch('./api/kiosk_checkin.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ identifier: identifier })
+                body: JSON.stringify({ identifier: identifier, source: scanSource })
             })
             .then(res => res.json().then(data => ({ status: res.status, body: data })))
             .then(resObj => {
@@ -531,7 +532,7 @@ $gym = get_gym_details($con);
                 iconBox.textContent = isCheckOut ? '👋' : '✓';
 
                 nameElem.textContent = data.name || 'Member';
-                idElem.textContent = `Member ID: ${data.uid} | Plan: ${data.plan}`;
+                idElem.textContent = `Member ID: ${data.uid} | Plan: ${data.plan}${data.verified_qr ? ' • 🔒 Live Smart Pass' : ''}`;
                 msgElem.textContent = isCheckOut ? `Checked Out at ${data.time}` : `Checked In at ${data.time} (Streak: ${data.streak} Days)`;
 
                 // Format Expiry Banner
@@ -553,27 +554,32 @@ $gym = get_gym_details($con);
                 iconBox.className = 'modal-status-icon expired';
                 iconBox.textContent = '✕';
 
-                nameElem.textContent = data.name || 'Access Denied';
+                nameElem.textContent = data.name || (data.expired_qr ? 'QR Screenshot Expired' : 'Access Denied');
                 idElem.textContent = data.uid ? `Member ID: ${data.uid} | ${data.plan}` : 'Gym Entrance Terminal';
                 msgElem.textContent = data.message || 'Membership inactive or expired.';
 
                 expBox.className = 'expiry-banner expired-style';
-                expDateElem.textContent = data.expiry || 'EXPIRED';
+                expDateElem.textContent = data.expired_qr ? 'REFRESH PASS' : (data.expiry || 'EXPIRED');
                 daysBadgeElem.className = 'days-badge expired-badge';
-                daysBadgeElem.textContent = data.days_expired ? `🚨 Expired ${data.days_expired} Days Ago` : '🚨 Membership Expired';
+                daysBadgeElem.textContent = data.expired_qr
+                    ? '🔒 Dynamic 60s QR Expired — Open Live Pass'
+                    : (data.invalid_qr ? '🔒 Invalid QR Signature' : (data.days_expired ? `🚨 Expired ${data.days_expired} Days Ago` : '🚨 Access Denied'));
 
                 document.getElementById('sound-error').play().catch(() => {});
-                speakMessage(`Access denied. Membership expired. Please renew.`);
+                speakMessage(data.expired_qr ? 'Q R code expired. Please open your live Smart Pass.' : 'Access denied. Please check with reception.');
             }
 
             // Auto Hide after 4s
+            if (closeTimerHandle) clearInterval(closeTimerHandle);
             let countdown = 4;
             const timerElem = document.getElementById('close-timer');
-            const timerInterval = setInterval(() => {
+            timerElem.textContent = `Auto closing in ${countdown}s...`;
+            closeTimerHandle = setInterval(() => {
                 countdown--;
                 timerElem.textContent = `Auto closing in ${countdown}s...`;
                 if (countdown <= 0) {
-                    clearInterval(timerInterval);
+                    clearInterval(closeTimerHandle);
+                    closeTimerHandle = null;
                     modal.style.display = 'none';
                 }
             }, 1000);
@@ -588,7 +594,7 @@ $gym = get_gym_details($con);
                 if (devices && devices.length) {
                     const cameraId = devices[0].id;
                     html5QrCode.start(cameraId, config, (decodedText, decodedResult) => {
-                        submitCheckin(decodedText);
+                        submitCheckin(decodedText, 'qr');
                     });
                 }
             }).catch(err => {

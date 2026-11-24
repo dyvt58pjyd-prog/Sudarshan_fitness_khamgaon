@@ -96,6 +96,16 @@ if (strpos($msg_upper, 'EXPIRY') !== false || strpos($msg_upper, 'VALIDITY') !==
     } else {
         $reply = "🥗 Custom diet & workout plans are available for all registered members. Join us today!\nhttps://sudarshanfitness.de/Files/prebook.php";
     }
+} elseif (strpos($msg_upper, 'PASS') !== false || strpos($msg_upper, 'QR') !== false || strpos($msg_upper, 'CHECKIN') !== false) {
+    if ($user) {
+        $signed_pass = build_signed_wallet_pass_url($con, $user['userid'], 0);
+        $reply = "🎟️ *Sudarshan Fitness — Signed Digital Pass*\n\n"
+               . "👤 Athlete: *" . $user['username'] . "* (#" . $user['userid'] . ")\n"
+               . "📋 Plan: *" . $plan_name . "* (" . ($is_expired ? "🔴 Expired" : "🟢 Active till " . $expire_date) . ")\n\n"
+               . "📲 *Open Live Gate QR & 1-Tap Check-In:*\n" . $signed_pass;
+    } else {
+        $reply = "🎟️ Digital Gate Passes are linked to your registered mobile number. Pre-book or join here:\nhttps://sudarshanfitness.de/Files/prebook.php";
+    }
 } elseif (strpos($msg_upper, 'STORE') !== false || strpos($msg_upper, 'SUPPLEMENT') !== false || strpos($msg_upper, 'PROTEIN') !== false) {
     $reply = "💊 *Sudarshan Nutrition & Supplement Store*\n\n"
            . "100% Authentic Whey Protein, Creatine, Pre-Workouts & Gym Apparel at discounted member prices!\n\n"

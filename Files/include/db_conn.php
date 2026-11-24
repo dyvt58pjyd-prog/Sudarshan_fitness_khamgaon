@@ -2275,6 +2275,8 @@ if (!function_exists('get_member_photo_url')) {
     }
 }
 
+require_once __DIR__ . '/pass_helper.php';
+
 if ($con && $con instanceof mysqli) {
     check_and_upgrade_db($con);
 }
