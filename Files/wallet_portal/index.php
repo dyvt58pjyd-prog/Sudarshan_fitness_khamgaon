@@ -35,31 +35,38 @@ if ($q_iss) {
     }
 }
 
-// Fetch members with latest plan
+// Fetch latest enrollment per member cleanly (ordered by expiry DESC, et_id DESC)
+$db_sync_error = '';
+$latest_plans = [];
+if (!$con) {
+    $db_sync_error = 'Database connection failed: ' . mysqli_connect_error();
+} else {
+    $q_enr = mysqli_query($con, "SELECT e.uid, e.expire, p.planName FROM enrolls_to e LEFT JOIN plan p ON e.pid = p.pid ORDER BY e.expire DESC, e.et_id DESC");
+    if ($q_enr) {
+        while ($er = mysqli_fetch_assoc($q_enr)) {
+            if (!isset($latest_plans[$er['uid']])) {
+                $latest_plans[$er['uid']] = $er;
+            }
+        }
+    }
+}
+
+// Fetch members safely with SELECT u.* (avoids breaking if optional columns differ)
 $members = [];
 $stats = ['total' => 0, 'active' => 0, 'issued_today' => 0, 'apple_count' => 0, 'android_count' => 0];
 
-$q_m = mysqli_query($con, "
-    SELECT u.userid, u.username, u.mobile, u.email, u.joining_date, u.trainer_id, u.biometric_batch,
-           u.photo, u.member_photo, u.photo_path, u.photo_base64,
-           p.planName, e.expire
-    FROM users u
-    LEFT JOIN (
-        SELECT e1.uid, e1.pid, e1.expire
-        FROM enrolls_to e1
-        INNER JOIN (
-            SELECT uid, MAX(et_id) as max_et FROM enrolls_to GROUP BY uid
-        ) e2 ON e1.et_id = e2.max_et
-    ) e ON u.userid = e.uid
-    LEFT JOIN plan p ON e.pid = p.pid
-    ORDER BY CAST(u.userid AS UNSIGNED) DESC, u.username ASC
-");
+$q_m = $con ? mysqli_query($con, "SELECT u.* FROM users u WHERE u.userid != 'PENDING' ORDER BY CAST(u.userid AS UNSIGNED) DESC, u.username ASC") : false;
+if (!$q_m && $con && $db_sync_error === '') {
+    $db_sync_error = 'Member sync query failed: ' . mysqli_error($con);
+}
 
 if ($q_m) {
     while ($row = mysqli_fetch_assoc($q_m)) {
         $stats['total']++;
         $uid_val = $row['userid'];
-        $expire_raw = $row['expire'] ?? '';
+        $plan_row = $latest_plans[$uid_val] ?? null;
+        $expire_raw = $plan_row['expire'] ?? '';
+        $plan_name_val = !empty($plan_row['planName']) ? $plan_row['planName'] : 'No Plan';
         $is_active = false;
         $days_left = 0;
         $status_key = 'expired';
@@ -71,9 +78,31 @@ if ($q_m) {
             $days_left = intval(ceil($diff / 86400));
             if ($diff >= 0) {
                 $is_active = true;
-                $stats['active']++;
                 $status_key = ($days_left <= 7) ? 'expiring' : 'active';
             }
+        }
+
+        // Check couple partner plan if member's own plan row is absent/expired
+        if (!$is_active && !empty($row['partner_uid']) && isset($latest_plans[$row['partner_uid']])) {
+            $p_row = $latest_plans[$row['partner_uid']];
+            $p_exp = $p_row['expire'] ?? '';
+            if (!empty($p_exp)) {
+                $p_diff = strtotime($p_exp) - strtotime($today_str);
+                if ($p_diff >= 0) {
+                    $is_active = true;
+                    $expire_raw = $p_exp;
+                    $expire_fmt = date('d M Y', strtotime($p_exp));
+                    $days_left = intval(ceil($p_diff / 86400));
+                    $status_key = ($days_left <= 7) ? 'expiring' : 'active';
+                    if (!empty($p_row['planName'])) {
+                        $plan_name_val = $p_row['planName'] . ' (Couple)';
+                    }
+                }
+            }
+        }
+
+        if ($is_active) {
+            $stats['active']++;
         }
 
         $iss = $issued_summary[$uid_val] ?? null;
@@ -90,7 +119,7 @@ if ($q_m) {
             'mobile'        => $row['mobile'] ?? '',
             'email'         => $row['email'] ?? '',
             'joining_date'  => !empty($row['joining_date']) ? date('d M Y', strtotime($row['joining_date'])) : 'N/A',
-            'plan_name'     => $row['planName'] ?: 'No Plan',
+            'plan_name'     => $plan_name_val,
             'expire_fmt'    => $expire_fmt,
             'expire_iso'    => $expire_raw,
             'days_left'     => $days_left,
@@ -302,6 +331,7 @@ if ($q_logs) {
         </div>
         <div class="nav-actions">
             <span class="pill">👤 <?php echo htmlspecialchars($current_staff_name); ?> (<?php echo htmlspecialchars(strtoupper($current_staff_role)); ?>)</span>
+            <button type="button" class="top-btn" onclick="location.reload()">↻ Sync Members</button>
             <a href="../desk/" class="top-btn">⚡ Desk Portal</a>
             <?php if ($current_staff_role === 'super_admin' || $current_staff_role === 'owner'): ?>
                 <a href="../dashboard/admin/index.php" class="top-btn">⚙️ Admin Hub</a>
@@ -310,8 +340,14 @@ if ($q_logs) {
         </div>
     </div>
 
+    <?php if ($db_sync_error !== ''): ?>
+        <div style="background:rgba(239,68,68,0.16);border:1px solid rgba(239,68,68,0.45);color:#fca5a5;padding:12px 16px;border-radius:14px;margin-bottom:16px;font-size:13px;font-weight:700;">
+            ⚠️ Member Sync Warning: <?php echo htmlspecialchars($db_sync_error); ?>
+        </div>
+    <?php endif; ?>
+
     <div class="stats-row">
-        <div class="stat-card"><div class="stat-lbl">Active Members</div><div class="stat-val" style="color:#34d399;"><?php echo $stats['active']; ?></div></div>
+        <div class="stat-card"><div class="stat-lbl">Active / Total Members</div><div class="stat-val" style="color:#34d399;"><?php echo $stats['active']; ?> <span style="font-size:14px;color:var(--muted);font-weight:700;">/ <?php echo $stats['total']; ?></span></div></div>
         <div class="stat-card"><div class="stat-lbl">Passes Issued Today</div><div class="stat-val" style="color:#fbbf24;" id="statToday"><?php echo $stats['issued_today']; ?></div></div>
         <div class="stat-card"><div class="stat-lbl">Apple iPhone Passes</div><div class="stat-val" style="color:#e2e8f0;" id="statApple"><?php echo $stats['apple_count']; ?></div></div>
         <div class="stat-card"><div class="stat-lbl">Android Passes</div><div class="stat-val" style="color:#38bdf8;" id="statAndroid"><?php echo $stats['android_count']; ?></div></div>
@@ -479,8 +515,8 @@ if ($q_logs) {
 </div>
 
 <script>
-const MEMBERS_DATA = <?php echo json_encode($members, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>;
-const INITIAL_LOGS = <?php echo json_encode($recent_logs, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>;
+const MEMBERS_DATA = <?php echo json_encode($members, JSON_INVALID_UTF8_SUBSTITUTE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?: '[]'; ?>;
+const INITIAL_LOGS = <?php echo json_encode($recent_logs, JSON_INVALID_UTF8_SUBSTITUTE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?: '[]'; ?>;
 
 let activeStatusFilter = 'all';
 let activePlatform = 'apple';

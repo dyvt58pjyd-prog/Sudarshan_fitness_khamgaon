@@ -571,6 +571,21 @@ if (!function_exists('fetch_wallet_pass_member_context')) {
                 $days_left = intval(ceil($diff / 86400));
             }
         }
+        if (!$is_active && !empty($user['partner_uid'])) {
+            $p_esc = mysqli_real_escape_string($con, $user['partner_uid']);
+            $q_p = mysqli_query($con, "SELECT p.planName, p.validity, e.expire FROM enrolls_to e INNER JOIN plan p ON e.pid = p.pid WHERE e.uid='$p_esc' ORDER BY e.expire DESC LIMIT 1");
+            if ($q_p && mysqli_num_rows($q_p) > 0) {
+                $p_row = mysqli_fetch_assoc($q_p);
+                $p_diff = strtotime($p_row['expire']) - strtotime($today_str);
+                if ($p_diff >= 0) {
+                    $is_active = true;
+                    $plan_name = $p_row['planName'] . ' (Couple)';
+                    $expire_iso = $p_row['expire'];
+                    $expire_date = date('d M Y', strtotime($p_row['expire']));
+                    $days_left = intval(ceil($p_diff / 86400));
+                }
+            }
+        }
 
         $trainer_name = "General Floor Coach";
         if (!empty($user['trainer_id'])) {
