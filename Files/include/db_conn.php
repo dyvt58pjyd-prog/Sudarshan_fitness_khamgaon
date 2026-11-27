@@ -144,6 +144,8 @@ if (!$con) {
     // Self-healing database performance indexes
     try {
         @mysqli_query($con, "ALTER TABLE users ADD INDEX idx_mobile (mobile)");
+        @mysqli_query($con, "ALTER TABLE users ADD INDEX idx_username (username)");
+        @mysqli_query($con, "ALTER TABLE users ADD INDEX idx_email (email)");
         @mysqli_query($con, "ALTER TABLE users ADD INDEX idx_partner (partner_uid)");
         @mysqli_query($con, "ALTER TABLE enrolls_to ADD INDEX idx_uid_expire (uid, expire)");
         @mysqli_query($con, "ALTER TABLE attendance ADD INDEX idx_uid_date (uid, date)");

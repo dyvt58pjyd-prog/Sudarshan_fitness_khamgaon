@@ -160,6 +160,9 @@ $watermark_text = isset($_SESSION['user_data']) ? $_SESSION['user_data'] . " (" 
         <i class="entypo-layout"></i> Dashboard Hub
     </a>
     <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <a href="../../attendance/" target="_blank" class="btn-dashboard-home" style="border-color: #06b6d4; color: #06b6d4; font-weight: 700;">
+            ⚡ Attendance Portal
+        </a>
         <a href="../../wallet_portal/" target="_blank" class="btn-dashboard-home" style="border-color: #10b981; color: #10b981; font-weight: 700;">
             🎟️ Wallet Pass Portal
         </a>

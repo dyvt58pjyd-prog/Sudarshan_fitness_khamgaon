@@ -78,6 +78,10 @@ $today_str = date('Y-m-d');
                     <span id="themeToggleIcon">☀️</span>
                 </button>
 
+                <a href="../attendance/" class="btn-icon" style="color: #06b6d4; border-color: rgba(6, 182, 212, 0.4);" title="Open Gate Attendance Terminal">
+                    <span>⚡ Attendance</span>
+                </a>
+
                 <?php if ($current_staff_role === 'super_admin' || $current_staff_role === 'owner' || $current_staff_role === 'reception'): ?>
                     <a href="../wallet_portal/" class="btn-icon" title="Issue Apple & Android Wallet Passes">
                         <span>🎟️ Wallet Passes</span>

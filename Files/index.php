@@ -900,6 +900,8 @@ if (substr($logo_path, 0, 6) === '../../') {
                             OFFICIAL VERIFIED MEMBER PORTAL &bull; SUDARSHAN FITNESS
                         </div>
                         <div style="margin-top: 10px; font-size: 11px; color: var(--text-muted);">
+                            <a href="attendance/" style="color: #06b6d4; font-weight: 700; text-decoration: none; margin: 0 8px; transition: color 0.2s;">⚡ Gate Attendance</a> &bull;
+                            <a href="desk/" style="color: #ff6b00; font-weight: 700; text-decoration: none; margin: 0 8px; transition: color 0.2s;">⚡ Front Desk</a> &bull;
                             <a href="privacy.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent-primary)'" onmouseout="this.style.color='#94a3b8'">Privacy Policy</a> &bull;
                             <a href="terms.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent-primary)'" onmouseout="this.style.color='#94a3b8'">Terms of Service</a> &bull;
                             <a href="mailto:admin@sudarshanfitness.de" style="color: #94a3b8; text-decoration: none; margin: 0 8px; transition: color 0.2s;" onmouseover="this.style.color='var(--accent-primary)'" onmouseout="this.style.color='#94a3b8'">Support</a>
